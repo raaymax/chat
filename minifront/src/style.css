@@ -1,0 +1,27 @@
+html {
+  background-color: black;
+  color: gray;
+}
+body, html {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+*, :after, :before {
+  box-sizing: inherit;
+}
+.workspace-layout {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.message-list {
+  background-color: rgb(26, 29, 33);
+  flex: 1;
+}
+#input-container {
+  background-color: rgb(34, 37, 41);
+  height: 100px;
+}

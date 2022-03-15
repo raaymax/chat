@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Chat</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#000000">
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="https://unpkg.com/quill-emoji@0.2.0/dist/quill-emoji.css" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+  </head>
+	<body>
+    <template id="message-template">
+      <div class="message">
+        <div class="author">
+          <slot name="message-author">Author</slot>
+        </div>
+        <div class="content">
+          <slot name="message-content">Message text</slot>
+        </div>
+      </div>
+    </template>
+    <div id="root" class="workspace-layout">
+      <div class="message-list">
+      </div>     
+      <div id="input-container"></div>     
+    </div>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="https://unpkg.com/quill-emoji@0.2.0/dist/quill-emoji.js"></script>
+    <script type="module" src="/app.js"></script>
+	</body>
+</html>
