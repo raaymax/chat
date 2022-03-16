@@ -5,14 +5,18 @@ const wss = new WebSocket.Server({ port: 8000 });
 
 const connections = {};
 
+const users = {
+  melisa: {id: "7ed5c52c-35f8-4a27-929d-ff5eb1a74924", password: "123", name: "Melisa"},
+  mateusz: {id: "c3875674-61f1-4793-a558-a733293f3527", password: "123", name: "Mateusz"},
+}
+
 const broadcast = (msg) => {
-  Object.values(connections).forEach(con => {
-    if (con.ws.readyState === WebSocket.OPEN) {
+  Object.values(connections).forEach(con => { 
+    if (con.user && con.ws.readyState === WebSocket.OPEN) {
       con.ws.send(msg.toString())
     }
   });
 }
-
 
 const handleCommands = (self, msg) => {
   const {args} = msg.command;
@@ -23,24 +27,37 @@ const handleCommands = (self, msg) => {
       msg.author = args[0];
       return sysBroadcast(`User ${prev} changed name to ${args[0]}`);
     case 'help':
-      return self.ws.send(JSON.stringify({
-        author: 'System',
-        createdAt: new Date().toISOString(),
-        private: true,
-        message: [
-          {text: "/name <name> - to change your name"}, {br: true},
-          {text: "/help - display this help"}, {br: true},
-        ]
-      }));
+      return self.ws.send(sysMsg([
+        {text: "/name <name> - to change your name"}, {br: true},
+        {text: "/login <name> <password> - login to your account"}, {br: true},
+        {text: "/help - display this help"}, {br: true},
+      ], true));
+    case 'login':
+      const user = users[args[0]];
+      if(user.password !== args[1]){
+        return self.ws.send(sysMsg([
+          {text: "Login failed"}, {br: true},
+        ], true));
+      }
+      self.user = user;
+      self.author = user.name;
+      return self.ws.send(sysMsg([
+        {text: "Login successfull"}, {br: true},
+        {text: `Welcome ${user.name}`}, {br: true},
+      ], true));
   }
 }
 const sysBroadcast = (text) => {
-  return broadcast(JSON.stringify({
+  return broadcast(sysMsg([{text}]));
+}
+const sysMsg = (data, private = false) => {
+  return JSON.stringify({
     id: uuid(),
     createdAt: new Date().toISOString(), 
     author: "System", 
-    message: [{text}],
-  }));
+    private,
+    message: data,
+  });
 }
 
 const sendWelcomeMessage = (ws) => {
@@ -48,7 +65,11 @@ const sendWelcomeMessage = (ws) => {
     createdAt: new Date().toISOString(), 
     author: "System", 
     private: true,
-    message: [{text: "Hello! " + new Date().toISOString()}],
+    message: [
+      {text: "Hello!"}, {emoji: "wave"}, {br: true},
+      {text: 'You can use "/help" to get more info'}, {br: true},
+      {text: 'You won\'t be able to send any messages until you login'}, {br: true},
+    ],
   }));
 }
 

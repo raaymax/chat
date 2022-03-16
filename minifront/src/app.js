@@ -1,3 +1,10 @@
+import {h,t} from '/utils.js';
+
+const emojiPromise = (async () => {
+  const res = await fetch('/assets/emoji_list.json');
+  return await res.json();
+})();
+
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js', {
     scope: '/'
@@ -7,7 +14,8 @@ if ('serviceWorker' in navigator) {
 }
 
 const createConnection = async (handler) => {
-  const connect = () => {
+  const connect = async () => {
+    window.EMOJI = await emojiPromise;
     console.log("Connecting to ",'ws://localhost:8000/ws')
     const ws = new WebSocket('ws://localhost:8000/ws');
     handler(ws);
@@ -45,7 +53,7 @@ const message = (params = {}, slots = {}) => {
         slots.date,
         ...(slots.debug ? [h('span', {class: 'toggle-debug'}, [
           h('i', {class: 'fa-regular fa-circle-question'}),
-          h('span', {class: 'spacy'}, [document.createTextNode('debug')]),
+          h('span', {class: 'spacy'}, [t('debug')]),
         ])] : []),
       ]),
       h('div', {class: 'content'}, slots.content ? [slots.content] : []),
@@ -62,16 +70,14 @@ const getTime = (raw) => {
   return `${date.getHours()}:${date.getMinutes()}`
 } 
   
-import {h} from '/utils.js';
-import {build } from '/build.js';
 (async () => {
   window.WS = await createConnection((ws) => {
     ws.addEventListener('message', (raw)=>{
       const msg = JSON.parse(raw.data);
       const m = message({class: msg.private ? ['private'] : []}, {
-        author: h('span', {class: 'spacy'}, [document.createTextNode(msg.author)]),
+        author: h('span', {class: 'spacy author'}, [t(msg.author)]),
         content: h('span', {}, buildHtmlFromMessage(msg.message)),
-        date: h('span', {class: 'spacy'}, [document.createTextNode(getTime(msg.createdAt))]),
+        date: h('span', {class: 'spacy time'}, [t(getTime(msg.createdAt))]),
       })
       messages.appendChild(m);
       messages.scrollTo(0,messages.scrollHeight);
@@ -119,16 +125,14 @@ function buildMessage(data) {
         if(op.insert === '\n'){
           return [{br:true}];
         }
-        if(op.attributes?.bold){
-          return [{bold: makeLines(op)}];
-        }
-        if(op.attributes?.italic){
-          return [{italic: makeLines(op)}];
-        }
-        if(op.attributes?.underline){
-          return [{underline: makeLines(op)}];
-        }
-        return makeLines(op)
+        return Object.keys(op.attributes || {}).reduce((acc, attr) => {
+          switch(attr) {
+            case 'bold': return [{bold: acc}];
+            case 'italic': return [{italic: acc}];
+            case 'underline': return [{underline: acc}];
+            case 'link': return [{link: {children: acc, href: op.attributes.link}}];
+          }
+        }, makeLines(op))
       }).flat()
   };
 }
@@ -155,14 +159,21 @@ function isEmpty(data) {
 
 function buildHtmlFromMessage(msg) {
   if(msg){
-    return msg.map(part => {
-      if(part.text) return document.createTextNode(part.text);
+    return [msg].flat().map(part => {
+    Object.keys(part)
+      if(part.text) return t(part.text);
       if(part.br) return h("br");
       if(part.bold) return h("b", {}, buildHtmlFromMessage(part.bold));
       if(part.italic) return h("em", {}, buildHtmlFromMessage(part.italic));
       if(part.underline) return h("u", {}, buildHtmlFromMessage(part.underline));
+      if(part.link) return h("a", {href: part.link.href}, buildHtmlFromMessage(part.link.children));
+      if(part.emoji){
+        const emoji = EMOJI.find(e =>e.name == part.emoji);
+        if(!emoji) return t("");
+        return t(String.fromCodePoint(parseInt(emoji.unicode, 16)));
+      }
       if(part.text === "") return null;
-      return document.createTextNode("Unknown part: " + JSON.stringify(part));
+      return t("Unknown part: " + JSON.stringify(part));
     }).filter(v => v !== null);
   }
 }

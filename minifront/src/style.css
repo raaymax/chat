@@ -12,6 +12,18 @@ body, html {
 *, :after, :before {
   box-sizing: inherit;
 }
+
+a {
+  color: rgb(29,155,209);
+}
+
+a:link {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration:underline;
+}
+
 .spacy {
   padding: 0 4px;
 }
@@ -56,6 +68,7 @@ body, html {
     background-color: rgba(249,249,249,0)
   }
 }
+
 .message {
   font-family: 'Roboto', sans-serif;
   animation-name: fade;

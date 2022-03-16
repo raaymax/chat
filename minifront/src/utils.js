@@ -6,3 +6,4 @@ export const h = (name, attr = {}, children = []) => {
   children.forEach(child => el.appendChild(child))
   return el;
 }
+export const t = (text) => document.createTextNode(text);

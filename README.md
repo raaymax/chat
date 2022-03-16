@@ -22,13 +22,21 @@ x underline formating
 x fix input size
 x style messages "only for me"
 x create commands help message 
-- link formatting
+x link formatting
+x displaying emojis
+x link styling
+x login to server by "/login <user> <password>"
+x hardcoded users
 - link detection
+- link preview
 - list formatting
 - code formatting
-- displaying emojis
-- login to server by "/login <user> <password>"
 - avatar placeholder?
 - save login info in localstorage
 - messages persistence 
-- hardcoded users
+- if message is only emoji make it bigger
+- days separated by something
+- searching messages
+- infinite scroll
+- display messages that failed to send
+- other icon for system user
