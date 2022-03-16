@@ -1,6 +1,7 @@
 html {
+  font-family: 'Roboto', sans-serif;
   background-color: black;
-  color: gray;
+  color: rgb(209,210,211);
 }
 body, html {
   box-sizing: border-box;
@@ -11,6 +12,9 @@ body, html {
 *, :after, :before {
   box-sizing: inherit;
 }
+.spacy {
+  padding: 0 4px;
+}
 .workspace-layout {
   width: 100vw;
   height: 100vh;
@@ -19,9 +23,73 @@ body, html {
 }
 .message-list {
   background-color: rgb(26, 29, 33);
+  overflow-y: scroll;
   flex: 1;
 }
-#input-container {
+
+.input-container {
   background-color: rgb(34, 37, 41);
   height: 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+#input {
+  flex: 1;
+}
+
+.input-container .ql-toolbar.ql-snow{
+  border: 0;
+  border-top: 1px solid #565856;
+}
+
+.input-container .ql-container.ql-snow {
+  border: 0;
+}
+
+@keyframes fade {
+  from {
+    background-color: rgba(249,249,249,0.1)
+  }
+
+  to {
+    background-color: rgba(249,249,249,0)
+  }
+}
+.message {
+  font-family: 'Roboto', sans-serif;
+  animation-name: fade;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  margin: 0;
+  padding: 0;
+}
+
+.message.private{
+  border-left: 10px solid #a27321; 
+}
+
+.message .header {
+  padding-bottom: 5px;
+}
+.message .author {
+  font-weight: bold;
+}
+.message .time {
+  font-weight: 200;
+}
+.message .content {
+  font-weight: 300;
+}
+.message .body {
+  padding: 10px 30px;
+}
+.message.private .body {
+  padding: 10px 30px 10px 20px;
+}
+.message .toggle-debug {
+  cursor: pointer;
+}
+.message:hover {
+    background-color: rgba(249,249,249,0.05)
 }

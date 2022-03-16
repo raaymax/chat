@@ -14,11 +14,10 @@ export function build(data) {
   console.log(lines);
   const elements = lines.map(l => [...l.ops.map(op => document.createTextNode(op.insert)), h("br")]).flat();
   console.log(elements);
-  return [
-    ...elements,
+  return {elements, debug: [
     h('pre',{}, [document.createTextNode(JSON.stringify(lines, null, 4))]),
     h('pre',{}, [document.createTextNode(JSON.stringify(data, null, 4))])
-  ];
+  ]};
 }
 
 function processInsert(lines, op) {
