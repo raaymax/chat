@@ -73,22 +73,50 @@ const getTime = (raw) => {
 (async () => {
   window.WS = await createConnection((ws) => {
     ws.addEventListener('message', (raw)=>{
-      const msg = JSON.parse(raw.data);
-      const m = message({class: msg.private ? ['private'] : []}, {
-        author: h('span', {class: 'spacy author'}, [t(msg.author)]),
-        content: h('span', {}, buildHtmlFromMessage(msg.message)),
-        date: h('span', {class: 'spacy time'}, [t(getTime(msg.createdAt))]),
-      })
-      messages.appendChild(m);
-      messages.scrollTo(0,messages.scrollHeight);
+      try{
+        const msg = JSON.parse(raw.data);
+        console.log(msg);
+        if(msg.op) {
+          if(msg.op.type === 'set:session') {
+            localStorage.setItem('session', JSON.stringify(msg.op.session));
+          }
+          if(msg.op.type === 'set:channel') {
+            messages.innerHTML = '';
+            WS.send(JSON.stringify({op: {type: 'load', channel: msg.op.channel}}));
+          }
+          return;
+        }
+        const m = message({class: msg.private ? ['private'] : []}, {
+          author: h('span', {class: 'spacy author'}, [t(msg.user?.name || 'Guest')]),
+          content: h('span', {}, buildHtmlFromMessage(msg.message)),
+          date: h('span', {class: 'spacy time'}, [t(getTime(msg.createdAt))]),
+        })
+        messages.appendChild(m);
+        messages.scrollTo(0,messages.scrollHeight);
+      } catch(err) {
+        console.error(err);
+        console.log(raw);
+      }
     });
   });
+
+  try{
+    WS.send(JSON.stringify({op: {type: 'load', channel: 'main'}}));
+    const session = JSON.parse(localStorage.getItem('session'));
+    console.log(session);
+    if(session){
+      WS.send(JSON.stringify({op: {type: 'restore', session}}));
+    }
+  }catch(err){
+    console.error(err);
+  }
 })();
 
 Quill.register("modules/emoji", QuillEmoji);
 var quill = new Quill('#input', {
   theme: 'snow',
   modules: {
+    toolbar: [['bold', 'italic', 'underline', 'link'], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['blockquote', 'code', 'code-block'], ['image'],['clean']],
     "emoji-toolbar": true,
     "emoji-textarea": true,
     "emoji-shortname": true,
@@ -107,7 +135,7 @@ var quill = new Quill('#input', {
     },
   }
 });
-
+quill.focus();
 
 function buildMessage(data) {
   if(isEmpty(data)) {
@@ -119,28 +147,64 @@ function buildMessage(data) {
     const m = line.replace('\n', '').slice(1).split(' ');
     return {command: {name: m[0], args: m.splice(1)}}
   }
-  return {
-    message: data.ops
-      .map(op => {
-        if(op.insert === '\n'){
-          return [{br:true}];
+
+  const elements = data.ops
+    .map(op => {
+      if(op.insert === '\n'){
+        return [{br:true, attributes: op.attributes}];
+      }
+      return Object.keys(op.attributes || {}).reduce((acc, attr) => {
+        switch(attr) {
+          case 'bold': return [{bold: acc}];
+          case 'italic': return [{italic: acc}];
+          case 'underline': return [{underline: acc}];
+          case 'link': return [{link: {children: acc, href: op.attributes.link}}];
         }
-        return Object.keys(op.attributes || {}).reduce((acc, attr) => {
-          switch(attr) {
-            case 'bold': return [{bold: acc}];
-            case 'italic': return [{italic: acc}];
-            case 'underline': return [{underline: acc}];
-            case 'link': return [{link: {children: acc, href: op.attributes.link}}];
+      }, splitLines(op))
+    }).flat();
+  
+  console.log('elements', JSON.stringify(elements, null, 4));
+
+  const buf = [];
+  let currentList = null;
+  let current = {line: []};
+
+  elements.forEach(element => {
+    current.line.push(element);
+    if(element.br) {
+      const attr = element.attributes;
+      if (attr && attr.list) {
+          if(!currentList) currentList = {[attr.list]: []};
+          if(currentList && !currentList[attr.list]) {
+            buf.push(currentList);
+            currentList = {[attr.list]: []};
           }
-        }, makeLines(op))
-      }).flat()
+          currentList[attr.list].push({item: current.line});
+      }else{
+        if(currentList) {
+          buf.push(currentList);
+          currentList = null;
+        }
+        buf.push(current);
+      }
+      current = {line: []}
+    }
+  })
+  if(currentList) {
+    buf.push(currentList);
+    currentList = null;
+  }
+  
+  return {
+    message: buf
   };
 }
 
-function makeLines(op) {
+function splitLines(op) {
   if(typeof op.insert === 'string'){
     return separate({br: true}, op.insert.split('\n')
-      .map(l => (l !== '' ? [{text: l}] : []))
+      //.map(l => (l !== '' ? [{text: l}] : []))
+      .map(l => ({text: l}))
       .flat())
   }else{
     return op.insert;
@@ -160,7 +224,10 @@ function isEmpty(data) {
 function buildHtmlFromMessage(msg) {
   if(msg){
     return [msg].flat().map(part => {
-    Object.keys(part)
+      if(part.bullet) return h('ul',{}, buildHtmlFromMessage(part.bullet));
+      if(part.ordered) return h('ol',{}, buildHtmlFromMessage(part.ordered));
+      if(part.item) return h('li',{}, buildHtmlFromMessage(part.item));
+      if(part.line) return buildHtmlFromMessage(part.line);
       if(part.text) return t(part.text);
       if(part.br) return h("br");
       if(part.bold) return h("b", {}, buildHtmlFromMessage(part.bold));
@@ -174,6 +241,6 @@ function buildHtmlFromMessage(msg) {
       }
       if(part.text === "") return null;
       return t("Unknown part: " + JSON.stringify(part));
-    }).filter(v => v !== null);
+    }).filter(v => v !== null).flat();
   }
 }
