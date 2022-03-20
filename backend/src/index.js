@@ -1,43 +1,33 @@
-const WebSocket = require('ws');
-const {v4: uuid} = require('uuid');
-const initUsers = require('./user/user');
-const {handleCommands} = require('./commands');
-const {handleOps} = require('./ops');
-const {handleMessages} = require('./messages');
+const messageController = require('./message/messageController');
+const userController = require('./user/userController');
+const pushController = require('./push/pushController');
 
 require('./database/init')();
 
 const App = require('./app');
 
-const sendWelcomeMessage = (srv, self) => {
-  return self.send(srv.sysMsg([
+App({port: 8000})
+  .on('start', (srv) => console.log('Server is listening on port:', srv.port))
+  .on('connection', (self) => self.sys([
     {text: "Hello!"}, {emoji: "wave"}, {br: true},
     {text: 'You can use "/help" to get more info'}, {br: true},
     {text: 'You won\'t be able to send any messages until you login'}, {br: true},
-  ], true));
-}
-
-const setServerConfig = (srv, self) => {
-  return self.send({
-    op: {
-      type: 'set:config',
-      config: {
-        applicationServerKey: 'BGTwhjsNigOPRARlhED0yiBgRouVuNX_iQXm4aXdj6Q2KyRfgjFjDei95yAKRLvbVIV_vExFVZQVZjYCiKeuMo0',// process.env.VAPID_PUBLIC
-      }
-    }
-  })
-} 
-
-App({port: 8000})
-  .on('start', (srv) => console.log('Server is listening on port:', srv.port))
-  .on('start', async (srv) => {
-    srv.users = require('./user/user')
-  })
-  .on('connection', sendWelcomeMessage)
-  .on('connection', setServerConfig)
-  //.on('packet', (srv, self, raw) => console.log(raw))
-  .on('op', handleOps)
-  .on('command', handleCommands)
-  .on('message', handleMessages)
+  ], true))
+  .on('connection', pushController.sendConfig)
+  //.on('packet', (self, raw) => console.log(raw))
+  .on('op:load', messageController.load)
+  .on('op:restore', userController.restore)
+  .on('op:setNotifications', pushController.setNotifications)
+  .on('command:help', (self) => self.sys([
+      {text: "/channel <name> - change current channel"}, {br: true},
+      {text: "/name <name> - to change your name"}, {br: true},
+      {text: "/login <name> <password> - login to your account"}, {br: true},
+      {text: "/help - display this help"}, {br: true},
+    ], true))
+  .on('command:name', userController.changeName)
+  .on('command:login', userController.login)
+  .on('command:channel', messageController.changeChannel)
+  .on('message', messageController.handle)
+  .on('packet:sent', pushController.notify)
   .start()
 

@@ -48,6 +48,9 @@ x feat: sort messages by date
 x bug: minutes in time are 1 digit
 x feat: top heading with channel information
 x feat: push notifications
+x bug: system is displayed as Guest
+x refactor: server: better folder structure
+x improvement: updated node to 17
 - style: list style
 - style: blockquote
 - style: avatar placeholder?
@@ -66,15 +69,15 @@ x feat: push notifications
 - feat: milestone: emoji reactions 
 - feat: milestone: ability to paste images
 - feat: focus input on any key press
-- feat: formula (KaTex) formating
 - feat: deleting messages
 - feat: input popups
 - feat: better emoji selector after typing ":..."
-- feat: code formatting when between tildas
-- feat: codeblock formatting when between 3tildas
+- feat: formatting: formula (KaTex) formating
+- feat: formatting: code formatting when between tildas
+- feat: formatting: codeblock formatting when between 3tildas
+- feat: formatting: make ':)' and others translate to emoji
 - feat: is person typing?
 - feat: change channels by url param
-- bug: system is displayed as Guest
-- bug: input is not scaling size
 - feat: generate gcs upload link for storing files
-- feat: make ':*' translate to emoji
+- feat: add short message in push notification
+- bug: input is not scaling size

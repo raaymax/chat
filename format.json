@@ -1,4 +1,6 @@
 {
+  "type": "message|op|command",
+  "subtype": "help",
   "id": "89240698-79e3-4580-8727-98c1bbf8fedf",
   "createdAt": "date",
   "op": {

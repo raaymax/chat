@@ -19,39 +19,9 @@ const App = (conf = {}) => {
       };
     }
     const com = {
-      sysMsg,
-      broadcastChannel: (channel, msg) => {
-        const raw = JSON.stringify(msg);
-        Object.values(connections)
-          .filter(con => con.channels.include(channel))
-          .forEach(con => { 
-            if (con.ws.readyState === WebSocket.OPEN) {
-              con.send(raw)
-              con.sendNotification({
-                title: 'Message from '+ (msg.user.name || 'Guest'),
-                description: msg.flat,
-              })
-            }
-          });
-      },
       broadcast: (msg) => {
-        const raw = JSON.stringify(msg);
-        Object.values(connections).forEach(con => { 
-          if (con.ws.readyState === WebSocket.OPEN) {
-            con.send(raw)
-            con.sendNotification({
-              title: 'Message from '+ (msg.user.name || 'Guest'),
-              description: msg.flat,
-            })
-          }
-        });
-      },
-      send: (conId, msg) => {
-        const raw = JSON.stringify(msg);
-        const con = connections[conId];
-        if (con.ws.readyState === WebSocket.OPEN) {
-          con.ws.send(raw)
-        }
+        msg._raw = JSON.stringify(msg);
+        return Promise.all(Object.values(connections).map(con => con.send(msg)));
       }
     }
     const srv = {
@@ -64,39 +34,56 @@ const App = (conf = {}) => {
 
     await notify('start', srv);
 
+
     wss.on('connection', async (ws) => {
       const id = uuid();
+      const send = async (msg) => {
+        const raw = msg._raw ? msg._raw : JSON.stringify(msg);
+        if (ws.readyState === WebSocket.OPEN) {
+          ws.send(raw)
+          await notify('packet:sent', self, msg);
+        }
+      }
       const self = connections[id] = {
         id,
         ws,
         channel: 'main',
         author: 'Unknown',
-        send: (msg) => {
-          const raw = typeof msg === 'string' ? msg : JSON.stringify(msg);
-          ws.send(raw)
+        send,
+        broadcast: (msg) => {
+          msg.senderId = self.id;
+          return srv.broadcast(msg)
         },
-        op: (msg) => {
-          const raw = JSON.stringify({op: msg});
-          ws.send(raw)
-        }
+        sys: (data, private) => send({
+          id: uuid(),
+          createdAt: new Date().toISOString(), 
+          user: {name: "System"},
+          private,
+          message: data,
+        }),
+        op: (msg) => send({op: msg}),
       };
     
       self.sendNotification = (payload) => self.sub && push.sendNotification(self.sub, JSON.stringify(payload));
-      await notify('connection', srv, self);
+      await notify('connection', self);
 
       ws.on('message', async (raw) => {
         try{ 
-          await notify('packet', srv, self, raw.toString());
+          await notify('packet', self, raw.toString());
           const msg = JSON.parse(raw);
-          if(msg.op) await notify('op', srv, self, msg);
-          else if(msg.command) await notify('command', srv, self, msg);
-          else if(msg.message) await notify('message', srv, self, msg);
+          if(msg.op){ 
+            await notify('op', self, msg);
+            await notify('op:'+msg.op.type, self, msg);
+          } else if(msg.command){
+            await notify('command', self, msg);
+            await notify('command:'+msg.command.name, self, msg);
+          } else if(msg.message) await notify('message', self, msg);
         } catch(err) {
           console.error(err);
         }
       })
       ws.on('close', async () => {
-        await notify('disconnect', srv, self);
+        await notify('disconnect', self);
         delete connections[id];
       });
     })

@@ -8,7 +8,7 @@ module.exports = {
     .where({channel})
     .orderBy('messages.createdAt')
     .limit(100),
-  insert: async (msg) => console.log('save msg', JSON.stringify(msg, null, 4)) || knex('messages').insert(msg).returning('*'),
+  insert: async (msg) => knex('messages').insert(msg).returning('*'),
 }
 
 

@@ -17,7 +17,7 @@ function subscribeNotifications() {
         console.log(subscription);
         WS.send({
           op: {
-            type: 'set:notifications',
+            type: 'setNotifications',
             subscription,
           }
         })
