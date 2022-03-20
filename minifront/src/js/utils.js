@@ -7,3 +7,10 @@ export const h = (name, attr = {}, children = []) => {
   return el;
 }
 export const t = (text) => document.createTextNode(text);
+
+export const formatTime = (raw) => {
+  const date = new Date(raw);
+	let minutes = date.getMinutes().toString();
+	if(minutes.length == 1) minutes = `0${minutes}`;
+  return `${date.getHours()}:${minutes}`
+} 

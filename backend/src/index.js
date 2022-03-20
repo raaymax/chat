@@ -17,12 +17,25 @@ const sendWelcomeMessage = (srv, self) => {
   ], true));
 }
 
+const setServerConfig = (srv, self) => {
+  return self.send({
+    op: {
+      type: 'set:config',
+      config: {
+        applicationServerKey: 'BGTwhjsNigOPRARlhED0yiBgRouVuNX_iQXm4aXdj6Q2KyRfgjFjDei95yAKRLvbVIV_vExFVZQVZjYCiKeuMo0',// process.env.VAPID_PUBLIC
+      }
+    }
+  })
+} 
+
 App({port: 8000})
   .on('start', (srv) => console.log('Server is listening on port:', srv.port))
   .on('start', async (srv) => {
     srv.users = require('./user/user')
   })
   .on('connection', sendWelcomeMessage)
+  .on('connection', setServerConfig)
+  //.on('packet', (srv, self, raw) => console.log(raw))
   .on('op', handleOps)
   .on('command', handleCommands)
   .on('message', handleMessages)

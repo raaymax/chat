@@ -44,3 +44,23 @@ self.addEventListener('activate', (event) => {
     await Promise.all(ASSETS.map(asset => cache.delete(asset)))
   })
 })
+
+
+self.addEventListener('push', function(e) {
+  console.log('[SW] notification', e);
+  const data = e.data.json();
+  e.waitUntil(
+    self.registration.showNotification(data.title, {
+      body: data.description,
+      vibrate: [100, 50, 100],
+      data: {
+        dateOfArrival: Date.now(),
+        primaryKey: '2'
+      },
+      actions: [
+        {action: 'explore', title: 'Explore this new world'},
+        {action: 'close', title: 'Close'},
+      ]
+    })
+  );
+});

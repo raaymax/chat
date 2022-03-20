@@ -25,16 +25,12 @@ async function login(login, password) {
 }
 
 async function sessionRestore({series, secret}) {
-  console.log(series);
   const session = await sessionRepo.get({series});
-  console.log(session);
   if(session){
     if(session.token === genHash(secret)){
-      console.log('ok');
       const newSession = await refreshSession(session);
       return {session: newSession, user: session.user};
     }else {
-      console.log('nok');
       await sessionRepo.delete({userId: session.userId});
       return null;
     }

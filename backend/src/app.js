@@ -1,5 +1,6 @@
 const WebSocket = require('ws');
 const {v4: uuid} = require('uuid');
+const push = require('./push');
 
 const App = (conf = {}) => {
   const handlers = {};
@@ -25,7 +26,11 @@ const App = (conf = {}) => {
           .filter(con => con.channels.include(channel))
           .forEach(con => { 
             if (con.ws.readyState === WebSocket.OPEN) {
-              con.ws.send(raw)
+              con.send(raw)
+              con.sendNotification({
+                title: 'Message from '+ (msg.user.name || 'Guest'),
+                description: msg.flat,
+              })
             }
           });
       },
@@ -33,7 +38,11 @@ const App = (conf = {}) => {
         const raw = JSON.stringify(msg);
         Object.values(connections).forEach(con => { 
           if (con.ws.readyState === WebSocket.OPEN) {
-            con.ws.send(raw)
+            con.send(raw)
+            con.sendNotification({
+              title: 'Message from '+ (msg.user.name || 'Guest'),
+              description: msg.flat,
+            })
           }
         });
       },
@@ -63,7 +72,7 @@ const App = (conf = {}) => {
         channel: 'main',
         author: 'Unknown',
         send: (msg) => {
-          const raw = JSON.stringify(msg);
+          const raw = typeof msg === 'string' ? msg : JSON.stringify(msg);
           ws.send(raw)
         },
         op: (msg) => {
@@ -71,12 +80,14 @@ const App = (conf = {}) => {
           ws.send(raw)
         }
       };
+    
+      self.sendNotification = (payload) => self.sub && push.sendNotification(self.sub, JSON.stringify(payload));
       await notify('connection', srv, self);
 
       ws.on('message', async (raw) => {
         try{ 
+          await notify('packet', srv, self, raw.toString());
           const msg = JSON.parse(raw);
-          await notify('packet', srv, self, msg);
           if(msg.op) await notify('op', srv, self, msg);
           else if(msg.command) await notify('command', srv, self, msg);
           else if(msg.message) await notify('message', srv, self, msg);

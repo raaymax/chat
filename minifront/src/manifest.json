@@ -6,6 +6,7 @@
   "orientation": "portrait",
   "background_color": "#fff",
   "theme_color": "#673ab8",
+  "gcm_sender_id": "codecat-161113",
   "icons": [
     {
       "src": "/assets/icons/android-chrome-192x192.png",
