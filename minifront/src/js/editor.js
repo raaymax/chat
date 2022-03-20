@@ -1,4 +1,5 @@
 import {buildMessage} from '/js/formatter.js';
+import con from '/js/connection.js';
 
 Quill.register("modules/emoji", QuillEmoji);
 var quill = new Quill('#input', {
@@ -16,7 +17,7 @@ var quill = new Quill('#input', {
             const msg = buildMessage(this.quill.getContents());
             msg.channel = channel;
             console.log('msg', JSON.stringify(msg, null, 4));
-            if(msg) WS.send(msg);
+            if(msg) con.send(msg);
             this.quill.setContents([]);
           }
         }

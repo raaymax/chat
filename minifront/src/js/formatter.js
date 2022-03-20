@@ -1,6 +1,7 @@
 import {h,t} from '/js/utils.js';
 
 export function buildMessage(data) {
+  console.log(data);
   if(isEmpty(data)) {
     return;
   }

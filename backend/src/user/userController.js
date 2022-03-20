@@ -9,7 +9,7 @@ module.exports = {
     const {session, user} = restored;
     self.user = user;
     await self.op({
-      type: 'set:session',
+      type: 'setSession',
       session,
     });
   },
@@ -33,7 +33,7 @@ module.exports = {
     self.user = user;
     self.author = user.name;
     await self.op({
-      type: 'set:session',
+      type: 'setSession',
       session,
     });
     return self.sys([

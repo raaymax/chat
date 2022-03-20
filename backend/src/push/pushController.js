@@ -1,3 +1,4 @@
+const pushService = require('./pushService');
 
 module.exports = {
   setNotifications: async (self, msg) => {
@@ -5,26 +6,27 @@ module.exports = {
     if(!op.subscription) return;
     if(!self.user) return;
     self.sub = op.subscription;
-    console.log('save sub', self.sub);
 
     //pushRepository.insert({userId, self.user.id, })
   },
+
   sendConfig: async (self) => {
     return self.send({
       op: {
-        type: 'set:config',
+        type: 'setConfig',
         config: {
           applicationServerKey: process.env.VAPID_PUBLIC
         }
       }
     });
   },
+
   notify: async (self, msg) => {
-    if(msg.notify && msg.senderId !== self.id) {
-      self.sendNotification({
+    if(self.sub && msg.notify && msg.senderId !== self.id) {
+      push.sendNotification(self.sub, JSON.stringify({
         title: 'Message from '+ (msg.user?.name || 'Guest'),
         description: msg.flat,
-      });
+      }))
     }
   }
 }

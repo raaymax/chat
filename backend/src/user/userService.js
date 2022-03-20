@@ -26,6 +26,7 @@ async function login(login, password) {
 
 async function sessionRestore({series, secret}) {
   const session = await sessionRepo.get({series});
+  console.log(session);
   if(session){
     if(session.token === genHash(secret)){
       const newSession = await refreshSession(session);

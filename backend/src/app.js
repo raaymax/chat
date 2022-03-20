@@ -1,6 +1,5 @@
 const WebSocket = require('ws');
 const {v4: uuid} = require('uuid');
-const push = require('./push');
 
 const App = (conf = {}) => {
   const handlers = {};
@@ -64,7 +63,6 @@ const App = (conf = {}) => {
         op: (msg) => send({op: msg}),
       };
     
-      self.sendNotification = (payload) => self.sub && push.sendNotification(self.sub, JSON.stringify(payload));
       await notify('connection', self);
 
       ws.on('message', async (raw) => {

@@ -12,7 +12,7 @@ module.exports = {
     const {args} = msg.command;
     self.channel = args[0];
     await self.op({
-      type: 'set:channel',
+      type: 'setChannel',
       channel: self.channel,
     });
   },

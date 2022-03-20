@@ -101,6 +101,16 @@ pre:after {
     width: calc(100% + 2px);
 }
 
+ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: .25em;
+    margin-block-end: .25em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 30px;
+}
+
 .spacy {
   padding: 0 4px;
 }
