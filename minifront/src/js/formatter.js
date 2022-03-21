@@ -1,4 +1,4 @@
-import {h,t} from '/js/utils.js';
+import {html, h,t} from '/js/utils.js';
 
 export function buildMessage(data) {
   console.log(data);
@@ -108,29 +108,31 @@ function isEmpty(data) {
   return data.ops.length == 1 && data.ops[0].insert === '\n';
 }
 
-export function buildHtmlFromMessage(msg) {
+function build(msg) {
   if(msg){
     return [msg].flat().map(part => {
-      if(part.bullet) return h('ul',{}, buildHtmlFromMessage(part.bullet));
-      if(part.ordered) return h('ol',{}, buildHtmlFromMessage(part.ordered));
-      if(part.item) return h('li',{}, buildHtmlFromMessage(part.item));
-      if(part.codeblock) return h('codeblock',{}, buildHtmlFromMessage(part.codeblock));
-      if(part.blockquote) return h('pre',{}, buildHtmlFromMessage(part.blockquote));
-      if(part.code) return h('code',{}, buildHtmlFromMessage(part.code));
-      if(part.line) return buildHtmlFromMessage(part.line);
-      if(part.text) return t(part.text);
-      if(part.br) return h("br");
-      if(part.bold) return h("b", {}, buildHtmlFromMessage(part.bold));
-      if(part.italic) return h("em", {}, buildHtmlFromMessage(part.italic));
-      if(part.underline) return h("u", {}, buildHtmlFromMessage(part.underline));
-      if(part.link) return h("a", {href: part.link.href}, buildHtmlFromMessage(part.link.children));
+      if(part.bullet) return html`<ul>${build(part.bullet)}</ul>`;
+      if(part.ordered) return html`<ol>${build(part.ordered)}</ol>`;
+      if(part.item) return html`<li>${build(part.item)}</li>`;
+      if(part.codeblock) return html`<codeblock>${build(part.codeblock)}</codeblock>`;
+      if(part.blockquote) return html`<pre>${build(part.blockquote)}</pre>`;
+      if(part.code) return html`<code>${build(part.code)}</code>`;
+      if(part.line) return build(part.line);
+      if(part.text) return part.text;
+      if(part.br) return html`<br />`;
+      if(part.bold) return html`<b>${build(part.bold)}</b>`;
+      if(part.italic) return html`<em>${build(part.italic)}</em>`;
+      if(part.underline) return html`<u>${build(part.underline)}</u>`;
+      if(part.link) return html`<a href='${part.link.href}'>${build(part.link.children)}</a>`;
       if(part.emoji){
         const emoji = EMOJI.find(e =>e.name == part.emoji);
-        if(!emoji) return t("");
-        return t(String.fromCodePoint(parseInt(emoji.unicode, 16)));
+        if(!emoji) return "";
+        return String.fromCodePoint(parseInt(emoji.unicode, 16));
       }
       if(part.text === "") return null;
       return t("Unknown part: " + JSON.stringify(part));
     }).filter(v => v !== null).flat();
   }
 }
+
+export const buildHtmlFromMessage = build;

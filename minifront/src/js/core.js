@@ -1,5 +1,5 @@
-import {h,t, formatTime} from '/js/utils.js';
-import {message} from '/js/message.js';
+import {html, h,t, formatTime} from '/js/utils.js';
+import {Message} from '/js/message.js';
 import {buildHtmlFromMessage} from '/js/formatter.js';
 import {setConfig, getConfig} from '/js/store/config.js';
 import {insertMessage, getMessage, clearMessages} from '/js/store/messages.js';
@@ -20,7 +20,7 @@ con.on('ready', connectionReady)
 
 function connectionReady(srv) {
   try{
-    document.getElementById('workspace-header').innerHTML = channel;
+    //document.getElementById('workspace-header').innerHTML = channel;
     srv.send({op: {type: 'load', channel}});
     const session = JSON.parse(localStorage.getItem('session'));
     if(session){
@@ -78,13 +78,13 @@ function clear() {
 
 function createMessage(srv, msg) {
   insertMessage(msg);
-  const m = message({class: msg.private ? ['private'] : [], 'data-id': msg.id}, {
-    author: h('span', {class: 'spacy author'}, [t(msg.user?.name || 'Guest')]),
-    content: h('div', {}, buildHtmlFromMessage(msg.message)),
-    date: h('span', {class: 'spacy time'}, [t(formatTime(msg.createdAt))]),
-  })
-  insertInOrder(messages, m);
-  messages.scrollTo(0,messages.scrollHeight);
+ // const m = message({class: msg.private ? ['private'] : [], 'data-id': msg.id}, {
+ //   author: msg.user?.name || 'Guest',
+ //   content: buildHtmlFromMessage(msg.message),
+ //   date: formatTime(msg.createdAt),
+ // })
+ // insertInOrder(messages, m);
+ // messages.scrollTo(0,messages.scrollHeight);
 }
 
 function insertInOrder(messages, m){
