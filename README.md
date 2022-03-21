@@ -1,57 +1,56 @@
 
 
 ## TODO
-x - completed.  
-- x feat: milestone: initial pwa 
-- x feat: messages scroll  
-- x style: highlight on hover 
-- x feat: clear input on submit 
-- x feat: scroll down on message
-- x style: highlight new message 
-- x feat: add messsage time
-- x style: names bold 
-- x style: better font
-- x improvement: make external resources cache forever 
-- x style: make message time human readable
-- x bug: on disconnect remove ws from list 
-- x feat: reconnect on frontend 
-- x feat: message formatting 
-- x feat: transform message format before send
-- x feat: bold formating
-- x feat: italic formating
-- x feat: underline formating
-- x bug: fix input size
-- x style: style messages "only for me"
-- x feat: create commands help message 
-- x feat: link formatting
-- x feat: milestone: displaying emojis
-- x style: link styling
-- x feat: login to server by "/login <user> <password>"
-- x feat: hardcoded users
-- x feat: list formatting - bullet and ordered
-- x feat: memory messages persistence 
-- x feat: save login info in localstorage
-- x feat: user session
-- x feat: milestone: messages in channels
-- x improvement: remove headings from formatting
-- x improvement: focus on text field
-- x feat: database integration
-- x feat: sessions persistence
-- x bug: broken dates on Guest messages
-- x bug: refresh session on reconnect to server
-- x feat: quote formatting
-- x feat: code formatting
-- x feat: codeblock formatting
-- x style: codeblock # stolen from slack
-- x style: code # stolen from slack
-- x feat: sort messages by date
-- x bug: minutes in time are 1 digit
-- x feat: top heading with channel information
-- x feat: push notifications
-- x bug: system is displayed as Guest
-- x refactor: server: better folder structure
-- x improvement: updated node to 17
-- x refactor: frontend similar to backend massage handling
+- ~~feat: milestone: initial pwa~~
+- ~~feat: messages scroll~~ 
+- ~~style: highlight on hover~~ 
+- ~~feat: clear input on submit~~ 
+- ~~feat: scroll down on message~~
+- ~~style: highlight new message ~~
+- ~~feat: add messsage time~~
+- ~~style: names bold ~~
+- ~~style: better font~~
+- ~~improvement: make external resources cache forever ~~
+- ~~style: make message time human readable~~
+- ~~bug: on disconnect remove ws from list ~~
+- ~~feat: reconnect on frontend ~~
+- ~~feat: message formatting ~~
+- ~~feat: transform message format before send~~
+- ~~feat: bold formating~~
+- ~~feat: italic formating~~
+- ~~feat: underline formating~~
+- ~~bug: fix input size~~
+- ~~style: style messages "only for me"~~
+- ~~feat: create commands help message ~~
+- ~~feat: link formatting~~
+- ~~feat: milestone: displaying emojis~~
+- ~~style: link styling~~
+- ~~feat: login to server by "/login <user> <password>"~~
+- ~~feat: hardcoded users~~
+- ~~feat: list formatting - bullet and ordered~~
+- ~~feat: memory messages persistence ~~
+- ~~feat: save login info in localstorage~~
+- ~~feat: user session~~
+- ~~feat: milestone: messages in channels~~
+- ~~improvement: remove headings from formatting~~
+- ~~improvement: focus on text field~~
+- ~~feat: database integration~~
+- ~~feat: sessions persistence~~
+- ~~bug: broken dates on Guest messages~~
+- ~~bug: refresh session on reconnect to server~~
+- ~~feat: quote formatting~~
+- ~~feat: code formatting~~
+- ~~feat: codeblock formatting~~
+- ~~style: codeblock # stolen from slack~~
+- ~~style: code # stolen from slack~~
+- ~~feat: sort messages by date~~
+- ~~bug: minutes in time are 1 digit~~
+- ~~feat: top heading with channel information~~
+- ~~feat: push notifications~~
+- ~~bug: system is displayed as Guest~~
+- ~~refactor: server: better folder structure~~
+- ~~improvement: updated node to 17~~
+- ~~refactor: frontend similar to backend massage handling~~
 - style: list style
 - style: blockquote
 - style: avatar placeholder?
