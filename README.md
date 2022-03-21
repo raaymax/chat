@@ -6,29 +6,29 @@
 - ~~style: highlight on hover~~ 
 - ~~feat: clear input on submit~~ 
 - ~~feat: scroll down on message~~
-- ~~style: highlight new message ~~
+- ~~style: highlight new message~~
 - ~~feat: add messsage time~~
-- ~~style: names bold ~~
+- ~~style: names bold~~
 - ~~style: better font~~
-- ~~improvement: make external resources cache forever ~~
+- ~~improvement: make external resources cache forever~~
 - ~~style: make message time human readable~~
-- ~~bug: on disconnect remove ws from list ~~
-- ~~feat: reconnect on frontend ~~
-- ~~feat: message formatting ~~
+- ~~bug: on disconnect remove ws from list~~
+- ~~feat: reconnect on frontend~~
+- ~~feat: message formatting~~
 - ~~feat: transform message format before send~~
 - ~~feat: bold formating~~
 - ~~feat: italic formating~~
 - ~~feat: underline formating~~
 - ~~bug: fix input size~~
 - ~~style: style messages "only for me"~~
-- ~~feat: create commands help message ~~
+- ~~feat: create commands help message~~
 - ~~feat: link formatting~~
 - ~~feat: milestone: displaying emojis~~
 - ~~style: link styling~~
 - ~~feat: login to server by "/login <user> <password>"~~
 - ~~feat: hardcoded users~~
 - ~~feat: list formatting - bullet and ordered~~
-- ~~feat: memory messages persistence ~~
+- ~~feat: memory messages persistence~~
 - ~~feat: save login info in localstorage~~
 - ~~feat: user session~~
 - ~~feat: milestone: messages in channels~~
