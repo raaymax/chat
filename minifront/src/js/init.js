@@ -19,5 +19,6 @@ if ('serviceWorker' in navigator) {
 
 (async () => {
   window.EMOJI = []
-  window.EMOJI = await emojiPromise;
-})()
+  const res = await fetch('/assets/emoji_list.json');
+  window.EMOJI = await res.json();
+})();
