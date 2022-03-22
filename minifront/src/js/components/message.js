@@ -39,7 +39,6 @@ export const Message = (props = {}) => html`
       <div class='header'>
         <i class='fa-regular fa-user'></i>
         <span class='spacy author'>${props.author}</span>
-        <i class='fa-regular fa-clock'></i>
         <span class='spacy time'>${formatTime(props.date)}</span>
       </div>
       <div class='content'>${build(props.content)}</div>
