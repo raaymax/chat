@@ -1,4 +1,4 @@
-import {html, h,t} from '/js/utils.js';
+import {html} from '/js/utils.js';
 
 export function buildMessage(data) {
   console.log(data);
@@ -130,7 +130,7 @@ function build(msg) {
         return String.fromCodePoint(parseInt(emoji.unicode, 16));
       }
       if(part.text === "") return null;
-      return t("Unknown part: " + JSON.stringify(part));
+      return html`Unknown part: ${JSON.stringify(part)}`;
     }).filter(v => v !== null).flat();
   }
 }

@@ -1,28 +1,24 @@
-import {html, h,t, formatTime} from '/js/utils.js';
-import {Message} from '/js/message.js';
-import {buildHtmlFromMessage} from '/js/formatter.js';
 import {setConfig, getConfig} from '/js/store/config.js';
+import {getChannel, setChannel} from '/js/store/channel.js';
+import {getSession, setSession} from '/js/store/session.js';
 import {insertMessage, getMessage, clearMessages} from '/js/store/messages.js';
 import con from '/js/connection.js';
 
-window.channel = 'main';
-const messages = document.querySelector('#root > .message-list')
 
 con.on('ready', connectionReady)
   .on('packet', (srv, raw) => {
     const msg = JSON.parse(raw.data);
     if(msg.op) console.log(msg.op.type, msg.op);
   })
-  .on('op:setSession', setSession)
+  .on('op:setSession', handleSession)
   .on('op:setConfig', (srv, msg) => setConfig(msg.op.config))
-  .on('op:setChannel', setChannel)
-  .on('message', createMessage)
+  .on('op:setChannel', handleChannel)
+  .on('message', (srv, msg) => insertMessage(msg));
 
 function connectionReady(srv) {
   try{
-    //document.getElementById('workspace-header').innerHTML = channel;
-    srv.send({op: {type: 'load', channel}});
-    const session = JSON.parse(localStorage.getItem('session'));
+    srv.send({op: {type: 'load', channel: getChannel()}});
+    const session = getSession();
     if(session){
       srv.send({op: {type: 'restore', session}});
     }
@@ -30,17 +26,21 @@ function connectionReady(srv) {
     console.error(err);
   }
 }
-function setSession(srv, msg) {
-  console.log('setSession', msg);
-  localStorage.setItem('session', JSON.stringify(msg.op.session));
+function handleSession(srv, msg) {
+  setSession(msg.op.session)
   subscribeNotifications();
 }
 
-function setChannel(srv, msg) {
+function handleMessage(srv, msg) {
+  if(msg.channel === getChannel()){
+    insertMessage(msg);
+  }
+}
+
+function handleChannel(srv, msg) {
   clear();
-  channel = msg.op.channel;
-  document.getElementById('workspace-header').innerHTML = channel;
-  srv.send({op: {type: 'load', channel: msg.op.channel}});
+  setChannel(msg.op.channel);
+  srv.send({op: {type: 'load', channel: getChannel()}});
 }
 
 
@@ -72,33 +72,6 @@ function subscribeNotifications() {
 }
 
 function clear() {
-  messages.innerHTML = '';
   clearMessages();
 }
 
-function createMessage(srv, msg) {
-  insertMessage(msg);
- // const m = message({class: msg.private ? ['private'] : [], 'data-id': msg.id}, {
- //   author: msg.user?.name || 'Guest',
- //   content: buildHtmlFromMessage(msg.message),
- //   date: formatTime(msg.createdAt),
- // })
- // insertInOrder(messages, m);
- // messages.scrollTo(0,messages.scrollHeight);
-}
-
-function insertInOrder(messages, m){
-	const date = getMessage(m.getAttribute('data-id')).createdAt;
-	if(messages.children.length === 0) {
-		messages.appendChild(m);
-	}	else {
-		for (const m2 of messages.children) {
-			const date2 = getMessage(m2.getAttribute('data-id')).createdAt;
-			if(date2 > date){
-				messages.insertBefore(m, m2);
-				return;
-			}
-		}
-		messages.appendChild(m);
-	}
-}

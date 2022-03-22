@@ -1,4 +1,4 @@
-const pushService = require('./pushService');
+const push = require('./pushService');
 
 module.exports = {
   setNotifications: async (self, msg) => {
