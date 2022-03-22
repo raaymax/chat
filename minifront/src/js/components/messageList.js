@@ -16,13 +16,15 @@ export function MessageList (props) {
 
   return html`
     <div class="message-list" ref=${list}>
-      ${messages.map(msg => Message({
-        class: msg.private ? ['private'] : [], 
-        'data-id': msg.id,
-        author: msg.user?.name || 'Guest',
-        content: msg.message,
-        date: msg.createdAt,
-      }))}
+      ${messages.map(msg => html`
+        <${Message} 
+          class=${msg.private ? ['private'] : []} 
+          data-id=${msg.id}
+          author=${msg.user?.name || 'Guest'}
+          content=${msg.message}
+          date=${msg.createdAt}
+        /> 
+      `)}
     </div>
   `;
 }
