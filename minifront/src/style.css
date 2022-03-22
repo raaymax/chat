@@ -196,6 +196,7 @@ ul {
 }
 .message .time {
   font-weight: 200;
+  font-size: .8em;
 }
 .message .content {
   font-weight: 300;
