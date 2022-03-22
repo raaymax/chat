@@ -49,18 +49,18 @@ function applyLineModifiers(lines) {
 function applyInline(ops){
   return ops.map(op => {
     if(op.insert === '\n') return {attributes: op.attributes, text: op.insert};
-
-    return Object.keys(op.attributes || {}).reduce((acc, attr) => {
+    const {attributes, insert, ...rest} = op;
+    return Object.keys(attributes || {}).reduce((acc, attr) => {
       switch(attr) {
         case 'bold': return {bold: acc};
         case 'code': return {code: acc};
         case 'italic': return {italic: acc};
         case 'strike': return {strike: acc};
         case 'underline': return {underline: acc};
-        case 'link': return {link: {children: acc, href: op.attributes.link}};
+        case 'link': return {link: {children: acc, href: attributes.link}};
         default: return acc
       }
-    }, {text: op.insert})
+    }, {...rest, text: insert})
   })
 }
 
