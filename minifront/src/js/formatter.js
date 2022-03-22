@@ -107,32 +107,3 @@ function separate(separator, arr) {
 function isEmpty(data) {
   return data.ops.length == 1 && data.ops[0].insert === '\n';
 }
-
-function build(msg) {
-  if(msg){
-    return [msg].flat().map(part => {
-      if(part.bullet) return html`<ul>${build(part.bullet)}</ul>`;
-      if(part.ordered) return html`<ol>${build(part.ordered)}</ol>`;
-      if(part.item) return html`<li>${build(part.item)}</li>`;
-      if(part.codeblock) return html`<codeblock>${build(part.codeblock)}</codeblock>`;
-      if(part.blockquote) return html`<pre>${build(part.blockquote)}</pre>`;
-      if(part.code) return html`<code>${build(part.code)}</code>`;
-      if(part.line) return build(part.line);
-      if(part.text) return part.text;
-      if(part.br) return html`<br />`;
-      if(part.bold) return html`<b>${build(part.bold)}</b>`;
-      if(part.italic) return html`<em>${build(part.italic)}</em>`;
-      if(part.underline) return html`<u>${build(part.underline)}</u>`;
-      if(part.link) return html`<a href='${part.link.href}'>${build(part.link.children)}</a>`;
-      if(part.emoji){
-        const emoji = EMOJI.find(e =>e.name == part.emoji);
-        if(!emoji) return "";
-        return String.fromCodePoint(parseInt(emoji.unicode, 16));
-      }
-      if(part.text === "") return null;
-      return html`Unknown part: ${JSON.stringify(part)}`;
-    }).filter(v => v !== null).flat();
-  }
-}
-
-export const buildHtmlFromMessage = build;
