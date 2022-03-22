@@ -51,6 +51,7 @@
 - ~~refactor: server: better folder structure~~
 - ~~improvement: updated node to 17~~
 - ~~refactor: frontend similar to backend massage handling~~
+- ~~bug: only first 100 where loaded~~
 - style: list style
 - style: blockquote
 - style: avatar placeholder?

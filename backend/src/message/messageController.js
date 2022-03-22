@@ -26,6 +26,13 @@ module.exports = {
     }
     msg.channel = msg.channel || self.channel;
     msg.notify = true;
+    console.log('save', {
+      id: msg.id,
+      createdAt: msg.createdAt,
+      userId: msg.userId,
+      channel: msg.channel,
+      message: JSON.stringify(msg.message),
+    });
     await messageRepository.insert({
       id: msg.id,
       createdAt: msg.createdAt,

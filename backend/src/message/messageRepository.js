@@ -6,7 +6,7 @@ module.exports = {
     .select(knex.raw('to_jsonb(??.*) as ??', ['user', 'user']))
     .leftJoin('users as user', 'messages.userId', 'user.id')
     .where({channel})
-    .orderBy('messages.createdAt')
+    .orderBy('messages.createdAt', 'desc')
     .limit(100),
   insert: async (msg) => knex('messages').insert(msg).returning('*'),
 }
