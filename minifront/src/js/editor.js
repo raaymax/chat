@@ -1,6 +1,7 @@
-import {buildMessage} from '/js/formatter.js';
+import {build} from '/js/formatter.js';
 import {getChannel} from '/js/store/channel.js'
 import con from '/js/connection.js';
+import {toJSON} from '/js/domToJson.js';
 
 Quill.register("modules/emoji", QuillEmoji);
 export function initQuill() {
@@ -16,7 +17,7 @@ export function initQuill() {
           submit: {
             key: 'enter', 
             handler: function(range, context) {
-              const msg = buildMessage(this.quill.getContents());
+              const msg = build(this.quill.getContents());
               msg.channel = getChannel();
               console.log('msg', JSON.stringify(msg, null, 4));
               if(msg) con.send(msg);

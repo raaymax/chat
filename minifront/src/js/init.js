@@ -1,4 +1,3 @@
-import {emojiPromise } from '/js/emoji.js';
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js', {
