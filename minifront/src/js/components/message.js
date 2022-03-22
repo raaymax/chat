@@ -22,9 +22,10 @@ const TYPES = {
   line: (props) => build(props.data),
   text: props => props.data,
   br: () => html`<br />`,
-  bold: (props) => html`<b>${build(props.bold)}</b>`,
-  italic: (props) => html`<em>${build(props.italic)}</em>`,
-  underline: (props) => html`<u>${build(props.underline)}</u>`,
+  bold: (props) => html`<b>${build(props.data)}</b>`,
+  italic: (props) => html`<em>${build(props.data)}</em>`,
+  underline: (props) => html`<u>${build(props.data)}</u>`,
+  strike: (props) => html`<s>${build(props.data)}</s>`,
   link: (props) => html`<a href='${props.data.href}'>${build(props.data.children)}</a>`,
   emoji: (props) => {
     const emoji = EMOJI.find(e =>e.name == props.data);

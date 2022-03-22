@@ -53,6 +53,7 @@
 - ~~refactor: frontend similar to backend massage handling~~
 - ~~bug: only first 100 where loaded~~
 - ~~bug: push notifications not working~~
+- ~~feat: strike formatting~~
 - style: list style
 - style: blockquote
 - style: avatar placeholder?

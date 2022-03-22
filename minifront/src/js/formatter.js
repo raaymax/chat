@@ -55,6 +55,7 @@ function applyInline(ops){
         case 'bold': return {bold: acc};
         case 'code': return {code: acc};
         case 'italic': return {italic: acc};
+        case 'strike': return {strike: acc};
         case 'underline': return {underline: acc};
         case 'link': return {link: {children: acc, href: op.attributes.link}};
         default: return acc
