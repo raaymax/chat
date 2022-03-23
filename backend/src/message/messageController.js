@@ -4,8 +4,10 @@ const {v4: uuid} = require('uuid');
 module.exports = {
   load: async (self, msg) => {
     const {op} = msg;
-    const messages = await messageRepository.getAll(op.channel);
+    const messages = await messageRepository.getAll(op);
+    console.log(messages.length);
     messages.forEach(msg => self.send(msg));
+    msg.ok()
   },
 
   changeChannel: async (self, msg) => {
@@ -33,7 +35,8 @@ module.exports = {
       channel: msg.channel,
       message: JSON.stringify(msg.message),
     });
-    return self.broadcast(msg);
+    await self.broadcast(msg);
+    return msg.ok(msg);
   }
 }
 

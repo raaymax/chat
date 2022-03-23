@@ -54,6 +54,8 @@
 - ~~bug: only first 100 where loaded~~
 - ~~bug: push notifications not working~~
 - ~~feat: strike formatting~~
+- ~~feat: messages with responses~~
+- ~~feat: infinite scroll~~
 - style: list style
 - style: blockquote
 - style: avatar placeholder?
@@ -65,7 +67,6 @@
 - feat: if message is only emoji make it bigger
 - feat: days separated by something
 - feat: searching messages
-- feat: infinite scroll
 - feat: display messages that failed to send
 - feat: display connection status if cannot connect
 - feat: add send button

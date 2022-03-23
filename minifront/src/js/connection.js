@@ -1,3 +1,5 @@
+import {initRequests} from '/js/requests.js';
+
 const handlers = {};
 const notify = (ev, ...args) => (handlers[ev] || []).forEach(h => h(...args));
 const watch = (ev, fn) => (handlers[ev] = handlers[ev] || []).push(fn);
@@ -10,7 +12,9 @@ const connect = () => {
       try{
         notify('packet', srv, raw);
         const msg = JSON.parse(raw.data);
-        if(msg.op) notify('op:'+msg.op.type, srv, msg);
+        console.log('recv', msg);
+        if(msg.resp) notify('resp', srv, msg);
+        else if(msg.op) notify('op:'+msg.op.type, srv, msg);
         else notify('message', srv, msg);
       } catch(err) {
         notify('packet:error', srv, raw, err);
@@ -36,7 +40,8 @@ const getCon = async () => {
 }
 
 const srv = {
-  send: async (msg) => {
+  send: async (msg, cb) => {
+    console.log('send', msg);
     msg._raw = msg._raw ? msg._raw : JSON.stringify(msg);
     const con = await getCon();
     con.send(msg._raw);
@@ -46,5 +51,6 @@ const srv = {
     return srv;
   }
 }
+initRequests(srv);
 
 export default srv;

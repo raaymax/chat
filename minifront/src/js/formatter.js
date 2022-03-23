@@ -1,6 +1,15 @@
 import {html} from '/js/utils.js';
 
 export function build(data) {
+  if(isEmpty(data)) {
+    return;
+  }
+  const line =  data.ops[0].insert;
+  if(typeof line === 'string' && line.startsWith('/')) {
+    const m = line.replace('\n', '').slice(1).split(' ');
+    return {command: {name: m[0], args: m.splice(1)}}
+  }
+
   let norm = normalize(data);
   norm = applyInline(norm);
   norm = groupLines(norm);
@@ -100,3 +109,6 @@ function separate(separator, arr) {
   return newArr;
 }
 
+function isEmpty(data) {
+  return data.ops.length == 1 && data.ops[0].insert === '\n';
+}
