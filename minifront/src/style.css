@@ -140,9 +140,11 @@ ul {
   font-weight: 600;
 }
 .message-list {
+  position: relative;
   background-color: rgb(26, 29, 33);
   overflow-y: scroll;
   flex: 1;
+  overscroll-behavior: contain;
 }
 
 .input-container {

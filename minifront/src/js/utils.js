@@ -2,7 +2,7 @@ import * as preact from 'https://unpkg.com/preact@latest?module';
 import htm from 'https://unpkg.com/htm?module';
 import * as hooks from 'https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module';
 
-export const {useEffect, useState, useRef} = hooks;
+export const {useEffect, useState, useMemo, useRef} = hooks;
 export const Component = preact.Component;
 export const render = preact.render;
 export const h = preact.h;

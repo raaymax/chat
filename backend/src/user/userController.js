@@ -3,15 +3,16 @@ const service = require('./userService');
 module.exports = {
   restore: async (self, msg) => {
     const {op} = msg;
-    if(!op.session) return;
+    if(!op.session) return msg.error({code: 'SESSION_NOT_EXISTS'});
     const restored = await service.sessionRestore(op.session);
-    if(!restored) return;
+    if(!restored) return msg.error({code: 'SESSION_NOT_RESTORED'});
     const {session, user} = restored;
     self.user = user;
     await self.op({
       type: 'setSession',
       session,
     });
+    await msg.ok(session);
   },
 
   name: async (self, msg) => {
@@ -32,6 +33,7 @@ module.exports = {
     }
     self.user = user;
     self.author = user.name;
+    await msg.ok(session);
     await self.op({
       type: 'setSession',
       session,

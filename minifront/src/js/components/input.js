@@ -1,9 +1,11 @@
+import {html, useEffect} from '/js/utils.js';
 import {build} from '/js/formatter.js';
 import {getChannel} from '/js/store/channel.js'
 import con from '/js/connection.js';
 
 Quill.register("modules/emoji", QuillEmoji);
-export function initQuill() {
+
+function initQuill() {
   var quill = new Quill('#input', {
     theme: 'snow',
     modules: {
@@ -19,7 +21,7 @@ export function initQuill() {
               const msg = build(this.quill.getContents());
               msg.channel = getChannel();
               console.log('msg', JSON.stringify(msg, null, 4));
-              if(msg) con.send(msg);
+              if(msg) con.req(msg);
               this.quill.setContents([]);
             }
           }
@@ -30,3 +32,11 @@ export function initQuill() {
   quill.focus();
 }
 
+export const Input = (props) => {
+  useEffect(() => initQuill(), []);
+  return html`
+    <div class="input-container">
+      <div id="input"></div>
+    </div>     
+  `;
+}

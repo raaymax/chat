@@ -2,6 +2,7 @@ import {setConfig, getConfig} from '/js/store/config.js';
 import {getChannel, setChannel} from '/js/store/channel.js';
 import {getSession, setSession} from '/js/store/session.js';
 import {insertMessage, getMessage, clearMessages} from '/js/store/messages.js';
+import {load} from '/js/services/messages.js';
 import con from '/js/connection.js';
 
 
@@ -17,10 +18,10 @@ con.on('ready', connectionReady)
 
 function connectionReady(srv) {
   try{
-    srv.send({op: {type: 'load', channel: getChannel()}});
+    load().then(() => console.log("Messages loaded"));
     const session = getSession();
     if(session){
-      srv.send({op: {type: 'restore', session}});
+      srv.req({op: {type: 'restore', session}});
     }
   }catch(err){
     console.error(err);
@@ -40,7 +41,7 @@ function handleMessage(srv, msg) {
 function handleChannel(srv, msg) {
   clear();
   setChannel(msg.op.channel);
-  srv.send({op: {type: 'load', channel: getChannel()}});
+  load();
 }
 
 
