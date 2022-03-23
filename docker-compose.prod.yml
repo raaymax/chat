@@ -49,6 +49,7 @@ services:
     - chat
     - webgateway
     environment:
+    - TEST=1
     - NODE_ENV=production
     - DATABASE_URL=postgres://chat:chat@chat_db:5432/chat
     volumes:
