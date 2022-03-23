@@ -1,98 +1,94 @@
-import {h,t} from '/js/utils.js';
+import {html} from '/js/utils.js';
 
-export function buildMessage(data) {
-  console.log(data);
-  if(isEmpty(data)) {
-    return;
-  }
-  const line =  data.ops[0].insert;
-  if(typeof line === 'string' && line.startsWith('/')) {
-    const m = line.replace('\n', '').slice(1).split(' ');
-    return {command: {name: m[0], args: m.splice(1)}}
-  }
+export function build(data) {
+  let norm = normalize(data);
+  norm = applyInline(norm);
+  norm = groupLines(norm);
+  norm = applyLineModifiers(norm);
+  norm = applyMultilineModifiers(norm);
+  return {message: norm};
+}
 
-  const elements = data.ops
-    .map(op => {
-      if(op.insert === '\n'){
-        return [{br:true, attributes: op.attributes}];
+function applyMultilineModifiers(lines) {
+  const groups = [];
+  const last = () => (groups.length ? groups[groups.length -1] : {});
+  lines.forEach(line => {
+    if(!line.attributes) return groups.push(line);
+    console.log(line);
+    return Object.keys(line.attributes || {}).find((attr) => {
+      switch(attr) {
+        case 'list':
+          if(last()[line.attributes[attr]])
+            last()[line.attributes[attr]].push(line);
+          else groups.push({[line.attributes[attr]]: [line]});
+        return;
+        case 'code-block':
+        case 'blockquote':
+          if(last()[attr])
+            last()[attr].push(line);
+          else groups.push({[attr]: [line]});
+        return;
+        default: groups.push(line);
       }
-      return Object.keys(op.attributes || {}).reduce((acc, attr) => {
-        switch(attr) {
-          case 'bold': return [{bold: acc}];
-          case 'code': return [{code: acc}];
-          case 'italic': return [{italic: acc}];
-          case 'underline': return [{underline: acc}];
-          case 'link': return [{link: {children: acc, href: op.attributes.link}}];
-        }
-      }, splitLines(op))
-    }).flat();
-  
+    })
+  });
+  return groups;
+}
 
-  const buf = [];
-  let currentList = null;
-  let currentQuote = null;
-  let currentCodeBlock = null;
-  let current = {line: []};
-
-  elements.forEach(element => {
-    current.line.push(element);
-    if(element.br) {
-      const attr = element.attributes;
-      if (attr && attr.list) {
-          if(!currentList) currentList = {[attr.list]: []};
-          if(currentList && !currentList[attr.list]) {
-            buf.push(currentList);
-            currentList = {[attr.list]: []};
-          }
-          currentList[attr.list].push({item: current.line});
-      }else if (attr && attr.blockquote) {
-          if(!currentQuote) currentQuote = {blockquote: []};
-          currentQuote.blockquote.push(current);
-      }else if (attr && attr['code-block']) {
-          if(!currentCodeBlock) currentCodeBlock = {codeblock: []};
-          currentCodeBlock.codeblock.push(current);
-      }else{
-        if(currentList) {
-          buf.push(currentList);
-          currentList = null;
-        }
-        if(currentQuote) {
-          buf.push(currentQuote);
-          currentQuote = null;
-        }
-        if(currentCodeBlock) {
-          buf.push(currentCodeBlock);
-          currentCodeBlock = null;
-        }
-        buf.push(current);
+function applyLineModifiers(lines) {
+  return lines.map(line => {
+    return Object.keys(line.attributes || {}).reduce((acc, attr) => {
+      switch(attr) {
+        case 'list': return {attributes: line.attributes, item: acc.line};
+        default: return acc
       }
-      current = {line: []}
+    }, line)
+  })
+}
+
+function applyInline(ops){
+  return ops.map(op => {
+    if(op.insert === '\n') return {attributes: op.attributes, text: op.insert};
+    const {attributes, insert, ...rest} = op;
+    return Object.keys(attributes || {}).reduce((acc, attr) => {
+      switch(attr) {
+        case 'bold': return {bold: acc};
+        case 'code': return {code: acc};
+        case 'italic': return {italic: acc};
+        case 'strike': return {strike: acc};
+        case 'underline': return {underline: acc};
+        case 'link': return {link: {children: acc, href: attributes.link}};
+        default: return acc
+      }
+    }, {...rest, text: insert})
+  })
+}
+
+function groupLines(ops) {
+  const lines = [];
+  let group = {line: []};
+  ops.forEach(item => {
+    if(item.text === '\n'){
+      if(item.attributes) group.attributes = item.attributes;
+      lines.push(group);
+      group = {line: []};
+    }else{
+      group.line.push(item);
     }
   })
-  if(currentList) {
-    buf.push(currentList);
-    currentList = null;
-  }
-  if(currentQuote) {
-    buf.push(currentQuote);
-    currentQuote = null;
-  }
-  
-  if(currentCodeBlock) {
-    buf.push(currentCodeBlock);
-    currentCodeBlock = null;
-  }
-  return {
-    message: buf
-  };
+  if(group.length > 0)     lines.push(group);
+  return lines;
+}
+
+function normalize(data) {
+  return data.ops.map(op => splitLines(op)).flat();
 }
 
 function splitLines(op) {
   if(typeof op.insert === 'string'){
-    return separate({br: true}, op.insert.split('\n')
-      //.map(l => (l !== '' ? [{text: l}] : []))
-      .map(l => ({text: l}))
-      .flat())
+    return separate({...op, insert: '\n'}, op.insert.split('\n')
+      .map(l => ({...op, insert: l}))
+      .flat()).filter(item => item.insert !== '')
   }else{
     return op.insert;
   }
@@ -104,33 +100,3 @@ function separate(separator, arr) {
   return newArr;
 }
 
-function isEmpty(data) {
-  return data.ops.length == 1 && data.ops[0].insert === '\n';
-}
-
-export function buildHtmlFromMessage(msg) {
-  if(msg){
-    return [msg].flat().map(part => {
-      if(part.bullet) return h('ul',{}, buildHtmlFromMessage(part.bullet));
-      if(part.ordered) return h('ol',{}, buildHtmlFromMessage(part.ordered));
-      if(part.item) return h('li',{}, buildHtmlFromMessage(part.item));
-      if(part.codeblock) return h('codeblock',{}, buildHtmlFromMessage(part.codeblock));
-      if(part.blockquote) return h('pre',{}, buildHtmlFromMessage(part.blockquote));
-      if(part.code) return h('code',{}, buildHtmlFromMessage(part.code));
-      if(part.line) return buildHtmlFromMessage(part.line);
-      if(part.text) return t(part.text);
-      if(part.br) return h("br");
-      if(part.bold) return h("b", {}, buildHtmlFromMessage(part.bold));
-      if(part.italic) return h("em", {}, buildHtmlFromMessage(part.italic));
-      if(part.underline) return h("u", {}, buildHtmlFromMessage(part.underline));
-      if(part.link) return h("a", {href: part.link.href}, buildHtmlFromMessage(part.link.children));
-      if(part.emoji){
-        const emoji = EMOJI.find(e =>e.name == part.emoji);
-        if(!emoji) return t("");
-        return t(String.fromCodePoint(parseInt(emoji.unicode, 16)));
-      }
-      if(part.text === "") return null;
-      return t("Unknown part: " + JSON.stringify(part));
-    }).filter(v => v !== null).flat();
-  }
-}

@@ -5,7 +5,7 @@ let cooldown = null;
 
 const notify = () => {
   if(cooldown) clearTimeout(cooldown)
-  cooldown = setTimeout(() => listeners.forEach(l => l()), 10);
+  cooldown = setTimeout(() => listeners.forEach(l => l(list)), 10);
 }
 
 export const getMessage = (id) => map[id];
@@ -14,7 +14,8 @@ export const getMessages = () => list;
 
 export const insertMessage = (msg) => {
   map[msg.id] = msg;
-  const pos = list.findIndex(m => m.createdAt > msg.createdAt);
+  let pos = list.findIndex(m => m.createdAt > msg.createdAt);
+  if(pos === -1 && list.some(m => m.createdAt < msg.createdAt)) pos = list.length;
   list = [
     ...list.slice(0,pos),
     msg,

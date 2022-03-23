@@ -1,4 +1,3 @@
-import {emojiPromise } from '/js/emoji.js';
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js', {
@@ -19,5 +18,6 @@ if ('serviceWorker' in navigator) {
 
 (async () => {
   window.EMOJI = []
-  window.EMOJI = await emojiPromise;
-})()
+  const res = await fetch('/assets/emoji_list.json');
+  window.EMOJI = await res.json();
+})();
