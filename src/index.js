@@ -1,13 +1,19 @@
+const http = require('http');
 const messageController = require('./message/messageController');
 const userController = require('./user/userController');
 const pushController = require('./push/pushController');
 
 require('./database/init')();
 
-const App = require('./app');
+const app = require('./app');
+const wss = require('./wss');
 
-App({port: 8000})
-  .on('start', (srv) => console.log('Server is listening on port:', srv.port))
+const PORT = 8080;
+
+const server = http.createServer(app);
+
+wss({server})
+  .on('start', (srv) => console.log('[WSS] Server is listening on port:', srv.port))
   .on('connection', (self) => self.sys([
     {text: "Hello!"}, {emoji: "wave"}, {br: true},
     {text: 'You can use "/help" to get more info'}, {br: true},
@@ -31,3 +37,7 @@ App({port: 8000})
   .on('packet:sent', pushController.notify)
   .start()
 
+
+server.listen(PORT, () => {
+  console.log('Server is listening on port:', PORT)
+})

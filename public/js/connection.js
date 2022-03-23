@@ -7,7 +7,7 @@ let conPromise = null;
 
 const connect = () => {
   conPromise = new Promise(resolve => {
-    const ws = new WebSocket('ws://localhost:8000/ws');
+    const ws = new WebSocket('ws://localhost:8080/ws');
     ws.addEventListener('message', (raw)=>{
       try{
         notify('packet', srv, raw);

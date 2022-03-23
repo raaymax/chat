@@ -5,8 +5,7 @@ const App = (conf = {}) => {
   const handlers = {};
   const notify = (name, ...args) => Promise.all((handlers[name] || []).map(h => h(...args)));
   async function start() {
-    const port = conf.port || 8000;
-    const wss = new WebSocket.Server({ port });
+    const wss = new WebSocket.Server(conf);
     const connections = {}
     const sysMsg = (data, private = false) => {
       return {
@@ -24,7 +23,6 @@ const App = (conf = {}) => {
       }
     }
     const srv = {
-      port,
       ...com,
       sysBroadcast: (text) => {
         return com.broadcast(sysMsg([{text}]));
