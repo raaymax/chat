@@ -11,7 +11,7 @@ const connect = () => {
     if(document.location.protocol === 'https:'){
       protocol = 'wss:';
     }
-    const ws = new WebSocket(protocol+'//localhost:8080/ws');
+    const ws = new WebSocket(`${protocol}//${document.location.host}/ws`);
     ws.addEventListener('message', (raw)=>{
       try{
         notify('packet', srv, raw);
