@@ -64,11 +64,9 @@ const App = (conf = {}) => {
       await notify('connection', self);
 
       ws.on('message', async (raw) => {
-        console.log({raw});
         try{ 
           await notify('packet', self, raw.toString());
           const msg = JSON.parse(raw);
-          console.log({msg});
           if(msg.seqId) {
             msg.ok = (data) => send({seqId: msg.seqId,  resp: {status: 'ok', data}});
             msg.error = (data) => send({seqId: msg.seqId, resp: {status: 'error', data}});

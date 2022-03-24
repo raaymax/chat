@@ -49,9 +49,7 @@ services:
     - chat
     - webgateway
     environment:
-    - OTHER=$$COMMIT_HASH
-    - "COMMIT=${COMMIT_HASH}"
-    - TEST=${COMMIT_HASH}
+    - COMMIT=${COMMIT_HASH}
     - NODE_ENV=production
     - DATABASE_URL=postgres://chat:chat@chat_db:5432/chat
     volumes:

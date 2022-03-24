@@ -21,7 +21,11 @@ module.exports = {
   },
 
   handle: async (self, msg) => { 
-    if(!self.user) return msg.error({code: "ACCESS_DENIED"});
+    if(!self.user) {
+      console.log('User not exist - access denied');
+      console.log({msg});
+      return msg.error({code: "ACCESS_DENIED"});
+    }
     msg.id = uuid();
     msg.createdAt = new Date();
     if(self.user){
