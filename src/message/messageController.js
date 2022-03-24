@@ -17,9 +17,15 @@ module.exports = {
       type: 'setChannel',
       channel: self.channel,
     });
+    msg.ok();
   },
 
   handle: async (self, msg) => { 
+    if(!self.user) {
+      console.log('User not exist - access denied');
+      console.log({msg});
+      return msg.error({code: "ACCESS_DENIED"});
+    }
     msg.id = uuid();
     msg.createdAt = new Date();
     if(self.user){
