@@ -49,11 +49,12 @@ services:
     - chat
     - webgateway
     environment:
-    - TEST=1
+    - TEST=2
     - NODE_ENV=production
     - DATABASE_URL=postgres://chat:chat@chat_db:5432/chat
     volumes:
     - .:/home/node/app
+    - ../env:/home/node/app/.envrc
     command: "npm start"
     deploy:
       labels:
