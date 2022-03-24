@@ -3,6 +3,8 @@ const messageController = require('./message/messageController');
 const userController = require('./user/userController');
 const pushController = require('./push/pushController');
 
+console.log(process.env);
+
 require('./database/init')();
 
 const app = require('./app');
