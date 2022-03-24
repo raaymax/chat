@@ -7,7 +7,11 @@ let conPromise = null;
 
 const connect = () => {
   conPromise = new Promise(resolve => {
-    const ws = new WebSocket('ws://localhost:8080/ws');
+    let protocol = 'ws:';
+    if(document.location.protocol === 'https:'){
+      protocol = 'wss:';
+    }
+    const ws = new WebSocket(protocol+'//localhost:8080/ws');
     ws.addEventListener('message', (raw)=>{
       try{
         notify('packet', srv, raw);
