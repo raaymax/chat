@@ -19,9 +19,14 @@ con
   .on('message', (srv, msg) => insertMessage(msg));
 
 setInterval(async () => {
-  console.time('ping');
-  await con.req({op: {type: 'ping'}})
-  console.timeEnd('ping');
+  try{
+    console.time('ping');
+    await con.req({op: {type: 'ping'}})
+  }catch(err){
+    console.error(err);
+  }finally {
+    console.timeEnd('ping');
+  }
 }, 10000);
 
 function connectionReady(srv) {
