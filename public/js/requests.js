@@ -11,7 +11,7 @@ const register = (seqId, source) => {
     waiting[seqId] = (msg) => {
       msg.source = source;
       clearTimeout(timeout);
-      if(msg.status = 'ok') {
+      if(msg.resp.status == 'ok') {
         resolve(msg);
       }else{
         reject(msg);
