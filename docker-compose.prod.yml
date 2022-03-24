@@ -68,6 +68,7 @@ services:
         traefik.http.routers.chat.entrypoints: https
         traefik.http.routers.chat.middlewares: unwww@file
         traefik.http.routers.chat.service: chat
+        traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto: https
         traefik.http.services.chat.loadbalancer.server.port: 8080
       restart_policy:
         condition: on-failure
