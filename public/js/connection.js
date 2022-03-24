@@ -48,7 +48,7 @@ const srv = {
     console.log('send', msg);
     msg._raw = msg._raw ? msg._raw : JSON.stringify(msg);
     const con = await getCon();
-    con.send(msg._raw);
+    return con.send(msg._raw);
   },
   on: (...arg) => {
     watch(...arg);

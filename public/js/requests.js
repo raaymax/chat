@@ -1,12 +1,15 @@
 const waiting = {}
-const register = (seqId) => {
+const register = (seqId, source) => {
   let timeout = null;
   return new Promise((resolve, reject) => {
     timeout = setTimeout(() => {
       delete waiting[seqId];
+      const err = new Error('TIMEOUT');
+      err.source = source;
       reject(new Error('timeout'));
     }, 1000)
     waiting[seqId] = (msg) => {
+      msg.source = source;
       clearTimeout(timeout);
       if(msg.status = 'ok') {
         resolve(msg);
@@ -27,7 +30,7 @@ export function initRequests(con) {
   const req =  async (msg) => {
     msg.seqId = ID + ':' + (nextSeq++);
     con.send(msg);
-    return register(msg.seqId)
+    return register(msg.seqId, msg)
   };
 
   Object.assign(con, { ID, req });

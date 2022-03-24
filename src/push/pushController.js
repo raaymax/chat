@@ -3,9 +3,10 @@ const push = require('./pushService');
 module.exports = {
   setNotifications: async (self, msg) => {
     const {op} = msg;
-    if(!op.subscription) return;
-    if(!self.user) return;
+    if(!op.subscription) return msg.error({code: "MISSING_SUBSCRIPTION"});
+    if(!self.user) return msg.error({code: "ACCESS_DENIED"});
     self.sub = op.subscription;
+    msg.ok();
 
     //pushRepository.insert({userId, self.user.id, })
   },
