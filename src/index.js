@@ -24,7 +24,7 @@ wss({server})
     {text: 'You won\'t be able to send any messages until you login'}, {br: true},
   ], true))
   .on('op:load', messageController.load)
-  .on('op:ping', (self, msg) => msg.ok())
+  .on('op:ping', (self, msg) => console.log('ping') || msg.ok())
   .on('op:restore', userController.restore)
   .on('op:setNotifications', pushController.setNotifications)
   .on('command:help', (self, msg) => msg.ok().then(() => self.sys([
