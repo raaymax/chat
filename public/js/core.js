@@ -18,7 +18,7 @@ con
   .on('op:setChannel', handleChannel)
   .on('message', (srv, msg) => insertMessage(msg));
 
-setInterval(() => {
+setInterval(async () => {
   console.time('ping');
   await con.req({op: {type: 'ping'}})
   console.timeEnd('ping');
