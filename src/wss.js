@@ -68,11 +68,11 @@ const App = (conf = {}) => {
           await notify('packet', self, raw.toString());
           const msg = JSON.parse(raw);
           if(msg.seqId) {
-            msg.ok = (data) => send({seqId: msg.seqId,  resp: {status: 'ok', data}});
-            msg.error = (data) => send({seqId: msg.seqId, resp: {status: 'error', data}});
+            msg.ok = async (data) => send({seqId: msg.seqId,resp: {status: 'ok', data}});
+            msg.error = async (data) => send({seqId: msg.seqId, resp: {status: 'error', data}});
           }else{
-            msg.ok = () => {};
-            msg.error = () => {};
+            msg.ok = async () => {};
+            msg.error = async () => {};
           }
           if(msg.op){ 
             await notify('op', self, msg);
