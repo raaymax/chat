@@ -56,6 +56,11 @@
 - ~~feat: strike formatting~~
 - ~~feat: messages with responses~~
 - ~~feat: infinite scroll~~
+- ~~feat: add ping mesages for additional checking~~
+- ~~improvement: don't send welcome message if it was sent in current session~~
+- ~~improvement: add debug what message timeouted~~
+- ~~bug: help seccessfully send message but always timeout~~
+- ~~bug: guest should not be able to send messages~~
 - style: list style
 - style: blockquote
 - style: avatar placeholder?
@@ -88,3 +93,4 @@
 - bug: input is not scaling size
 - bug: cannot ctrl-v text with emojis from slack
 - improvement: make unknown calls throw error
+- feat: store push subscription in database

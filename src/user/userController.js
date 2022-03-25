@@ -20,6 +20,7 @@ module.exports = {
     const prev = self.author;
     self.author = args[0];
     msg.author = args[0];
+    msg.ok();
     return sysBroadcast(`User ${prev} changed name to ${args[0]}`);
   },
 

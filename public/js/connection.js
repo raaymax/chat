@@ -7,7 +7,11 @@ let conPromise = null;
 
 const connect = () => {
   conPromise = new Promise(resolve => {
-    const ws = new WebSocket('ws://localhost:8000/ws');
+    let protocol = 'ws:';
+    if(document.location.protocol === 'https:'){
+      protocol = 'wss:';
+    }
+    const ws = new WebSocket(`${protocol}//${document.location.host}/ws`);
     ws.addEventListener('message', (raw)=>{
       try{
         notify('packet', srv, raw);
@@ -44,7 +48,7 @@ const srv = {
     console.log('send', msg);
     msg._raw = msg._raw ? msg._raw : JSON.stringify(msg);
     const con = await getCon();
-    con.send(msg._raw);
+    return con.send(msg._raw);
   },
   on: (...arg) => {
     watch(...arg);

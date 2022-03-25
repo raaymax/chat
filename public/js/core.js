@@ -5,8 +5,10 @@ import {insertMessage, getMessage, clearMessages} from '/js/store/messages.js';
 import {load} from '/js/services/messages.js';
 import con from '/js/connection.js';
 
-
-con.on('ready', connectionReady)
+let greet = true;
+con
+  .on('ready', connectionReady)
+  .on('ready', (srv) => greet && srv.send({op: {type: 'greet'}}).then(() => greet = false) )
   .on('packet', (srv, raw) => {
     const msg = JSON.parse(raw.data);
     if(msg.op) console.log(msg.op.type, msg.op);
@@ -15,6 +17,17 @@ con.on('ready', connectionReady)
   .on('op:setConfig', (srv, msg) => setConfig(msg.op.config))
   .on('op:setChannel', handleChannel)
   .on('message', (srv, msg) => insertMessage(msg));
+
+setInterval(async () => {
+  try{
+    console.time('ping');
+    await con.req({op: {type: 'ping'}})
+  }catch(err){
+    console.error(err);
+  }finally {
+    console.timeEnd('ping');
+  }
+}, 10000);
 
 function connectionReady(srv) {
   try{

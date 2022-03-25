@@ -1,0 +1,85 @@
+version: '3.7'
+
+x-logging:
+  &default-logging
+  options:
+    max-size: '12m'
+    max-file: '5'
+  driver: json-file
+
+services:
+  chat_db:
+    logging: *default-logging
+    image: postgres:14-alpine
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    networks:
+    - chat
+    environment:
+      POSTGRES_DB: chat
+      POSTGRES_USER: chat
+      POSTGRES_PASSWORD: chat
+    volumes:
+      - chat-db:/var/lib/postgresql/data
+
+  chat_init:
+    image: node:17-alpine
+    logging: *default-logging
+    user: "node"
+    working_dir: /home/node/app
+    networks:
+    - chat
+    environment:
+    - NODE_ENV=production
+    - DATABASE_URL=postgres://chat:chat@chat_db:5432/chat
+    volumes:
+    - .:/home/node/app
+    command: "sh .deploy/install.sh"
+
+  chat:
+    image: node:17-alpine
+    logging: *default-logging
+    user: "node"
+    working_dir: /home/node/app
+    networks:
+    - chat
+    - webgateway
+    environment:
+    - COMMIT=${COMMIT_HASH}
+    - NODE_ENV=production
+    - DATABASE_URL=postgres://chat:chat@chat_db:5432/chat
+    volumes:
+    - .:/home/node/app
+    - ../env:/home/node/app/.envrc
+    command: "npm start"
+    deploy:
+      labels:
+        traefik.enable: "true"
+        traefik.http.routers.chat.tls: "true"
+        traefik.http.routers.chat.tls.certresolver: cc
+        traefik.http.routers.chat.tls.domains[0].main: chat.codecat.io
+        traefik.http.routers.chat.tls.domains[0].sans: www.chat.codecat.io
+        traefik.http.routers.chat.rule: Host(`chat.codecat.io`, `(sub:.*).chat.codecat.io`)
+        traefik.http.routers.chat.priority: 30
+        traefik.http.routers.chat.entrypoints: https
+        traefik.http.routers.chat.middlewares: unwww@file
+        traefik.http.routers.chat.service: chat
+        traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto: https
+        traefik.http.services.chat.loadbalancer.server.port: 8080
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+networks:
+  chat:
+    driver: overlay
+  webgateway:
+    external: true
+volumes:
+  chat-db:
