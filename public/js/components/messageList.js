@@ -1,57 +1,30 @@
-import {html, useState, useEffect, useRef, useMemo} from '/js/utils.js';
+import {html, useState, useEffect, useRef, useMemo, createCooldown} from '/js/utils.js';
 import {watchMessages, deleteBefore} from '/js/store/messages.js';
 import {Message} from '/js/components/message.js';
+import {Notification} from '/js/components/notification.js';
 import {loadPrevious} from '/js/services/messages.js';
+
+const loadPrev = createCooldown(loadPrevious, 100);
+let init = true;
 
 export function MessageList (props) {
   const [messages, setMessages] = useState([]);
-  const [H, setH] = useState(10);
-  const [posB, setPosB] = useState(0);
-
   const list = useRef(null);
-  function onResize() {
-    if(list.current) {
-      setH(parseInt(window.getComputedStyle(list.current).height.split(' ')[0]));
-      console.log('H', H);
-    }
-  }
-  useEffect(() => {
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
+  const stop = useRef(null);
 
-  useEffect(() => onResize(),[]);
+  const getH = () => parseInt(window.getComputedStyle(list.current).height.split(' ')[0]);
 
-
-  let cooldown = false;
-  const exec = (fn) => {
-    return Promise.resolve().then(() => {
-      if (!cooldown) {
-        cooldown = true;
-        setTimeout(() => cooldown = false, 100);
-        return fn();
-      }
-    })
-  } 
-  let lastScroll;
-  let dir = 0;
   function onScroll(e) {
-    let delta = lastScroll - e.srcElement.scrollTop;
-    lastScroll = e.srcElement.scrollTop;
-    if(delta < 0) dir = 1; else dir = 0; 
+    init = false;
     const msgs = [...list.current.querySelectorAll('.message')];
+    const H = getH()
     const current = msgs.findLast(el => (el.offsetTop < e.srcElement.scrollTop + H - 20));
-    const position = list.current.scrollHeight - H - e.srcElement.scrollTop;
-    setPosB(position);
-    if(e.srcElement.scrollTop < 10) {
-      exec(loadPrevious);
+    if(e.srcElement.scrollTop < 5) {
+      loadPrev()
     }else {
       if(current){
         const id = current.getAttribute('data-id');
-        if(dir == 1) {
-          console.log('deleteBefore');
-          deleteBefore(id);
-        }
+        deleteBefore(id);
       }
     }
   }
@@ -59,25 +32,37 @@ export function MessageList (props) {
   useEffect(() => {
     list.current.addEventListener('scroll', onScroll);
     return () => list.current.removeEventListener('scroll', onScroll);
-  }, [H]);
-  
-  useEffect(() => {
-    list.current.scrollTo(0, list.current.scrollHeight - H - posB);
-  }, [messages, H]);
+  }, []);
 
-  watchMessages((m) => setMessages(m || []));
+  watchMessages((m) => {
+    const position = list.current.scrollHeight - getH() - list.current.scrollTop;
+    setMessages([...(m || [])]); // fixme: hack for refreshing 
+    setTimeout(() => {
+      if(init || position < 10) {
+        stop.current.scrollIntoView();
+      }else{
+        list.current.scrollTo(0, list.current.scrollHeight - getH() - position);
+      }
+    },0)
+  });
 
+  console.log('refresh');
   return html`
     <div class="message-list" ref=${list}>
-      ${messages.map(msg => html`
-        <${Message} 
-          class=${msg.private ? ['private'] : []} 
-          data-id=${msg.id}
-          author=${msg.user?.name || 'Guest'}
-          content=${msg.message}
-          date=${msg.createdAt}
-        /> 
-      `)}
+      ${messages.map(msg => msg.notif 
+        ? html`<${Notification} className=${[msg.notifType]}>${msg.notif}<//>` 
+        : html`
+          <${Message} 
+            class=${msg.private ? ['private'] : []} 
+            data-id=${msg.id}
+            key=${msg.id}
+            author=${msg.user?.name || 'Guest'}
+            info=${msg.info}
+            content=${msg.message}
+            date=${msg.createdAt}
+          />`
+      )}
+      <div id='scroll-stop' ref=${stop}></div>
     </div>
   `;
 }

@@ -11,6 +11,10 @@ module.exports = {
     await self.op({
       type: 'setSession',
       session,
+      user: {
+        id: user.id,
+        name: user.name,
+      }
     });
     await msg.ok(session);
   },
@@ -38,6 +42,10 @@ module.exports = {
     await self.op({
       type: 'setSession',
       session,
+      user: {
+        id: user.id,
+        name: user.name,
+      }
     });
     return self.sys([
       {text: "Login successfull"}, {br: true},

@@ -7,7 +7,7 @@ const register = (seqId, source) => {
       const err = new Error('TIMEOUT');
       err.source = source;
       reject(new Error('timeout'));
-    }, 1000)
+    }, 5000)
     waiting[seqId] = (msg) => {
       msg.source = source;
       clearTimeout(timeout);

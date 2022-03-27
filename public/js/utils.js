@@ -14,3 +14,32 @@ export const formatTime = (raw) => {
   return `${date.getHours()}:${minutes}`
 } 
 export const html = htm.bind(h);
+
+export const createCounter = (prefix) => {
+  let counter = 0;
+  return () => prefix + ':' + (counter++);
+}
+
+export const createNotifier = () => {
+  const listeners = [];
+  let cooldown = null;
+
+  const notify = (data) => {
+    if(cooldown) clearTimeout(cooldown)
+    cooldown = setTimeout(() => listeners.forEach(l => l(data)), 10);
+  }
+  const watch = (handler) => listeners.push(handler);
+
+  return {notify, watch};
+}
+
+export const createCooldown = (fn, time) => {
+  let cooldown = false;
+  return async () => {
+    if (!cooldown) {
+      cooldown = true;
+      setTimeout(() => cooldown = false, time);
+      return fn();
+    }
+  } 
+}

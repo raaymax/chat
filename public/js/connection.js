@@ -16,7 +16,7 @@ const connect = () => {
       try{
         notify('packet', srv, raw);
         const msg = JSON.parse(raw.data);
-        console.log('recv', msg);
+        console.log('recv',msg);
         if(msg.resp) notify('resp', srv, msg);
         else if(msg.op) notify('op:'+msg.op.type, srv, msg);
         else notify('message', srv, msg);
@@ -27,7 +27,7 @@ const connect = () => {
     });
     ws.addEventListener('open', () => resolve(ws));
     ws.addEventListener('close', () => {
-      console.log('Disconnected - reconect attempt in 1s');
+      notify('disconnect', srv);
       setTimeout(() => connect(), 1000);
     });
   }).then((ws) => {
@@ -45,9 +45,10 @@ const getCon = async () => {
 
 const srv = {
   send: async (msg, cb) => {
-    console.log('send', msg);
+    console.log('send',msg);
     msg._raw = msg._raw ? msg._raw : JSON.stringify(msg);
     const con = await getCon();
+    notify('beforeSend', srv, msg);
     return con.send(msg._raw);
   },
   on: (...arg) => {
