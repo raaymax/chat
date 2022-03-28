@@ -4,9 +4,7 @@ const register = (seqId, source) => {
   return new Promise((resolve, reject) => {
     timeout = setTimeout(() => {
       delete waiting[seqId];
-      const err = new Error('TIMEOUT');
-      err.source = source;
-      reject(new Error('timeout'));
+      reject({seqId: source.id, resp: { status: 'timeout', source }});
     }, 5000)
     waiting[seqId] = (msg) => {
       msg.source = source;

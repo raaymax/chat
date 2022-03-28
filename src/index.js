@@ -3,7 +3,6 @@ const messageController = require('./message/messageController');
 const userController = require('./user/userController');
 const pushController = require('./push/pushController');
 
-console.log(process.env);
 
 require('./database/init')();
 
@@ -17,7 +16,6 @@ const server = http.createServer(app);
 wss({server})
   .on('start', (srv) => console.log('[WSS] Server is listening on port:', srv.port))
   .on('connection', pushController.sendConfig)
-  //.on('packet', (self, raw) => console.log(raw))
   .on('op:greet', (self) => self.sys([
     {text: "Hello!"}, {emoji: "wave"}, {br: true},
     {text: 'You can use "/help" to get more info'}, {br: true},
@@ -27,7 +25,7 @@ wss({server})
   .on('op:ping', (self, msg) => msg.ok())
   .on('op:restore', userController.restore)
   .on('op:typing', messageController.isTyping)
-  .on('op:setNotifications', pushController.setNotifications)
+  .on('op:setupPushNotifications', pushController.setupPushNotifications)
   .on('command:help', (self, msg) => msg.ok().then(() => self.sys([
       {text: "/channel <name> - change current channel"}, {br: true},
       {text: "/name <name> - to change your name"}, {br: true},
@@ -38,10 +36,11 @@ wss({server})
   .on('command:login', userController.login)
   .on('command:channel', messageController.changeChannel)
   .on('message', messageController.handle)
-  .on('packet:sent', pushController.notify)
+  .on('broadcast:after', pushController.notifyOther)
   .start()
 
 
 server.listen(PORT, () => {
   console.log('Server is listening on port:', PORT)
 })
+

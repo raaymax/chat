@@ -1,6 +1,6 @@
 import {setConfig, getConfig} from '/js/store/config.js';
 import {getChannel, setChannel} from '/js/store/channel.js';
-import {getSession, setSession} from '/js/store/session.js';
+import {getSession, setSession, clearSession} from '/js/store/session.js';
 import {setInfo} from '/js/store/info.js';
 import {setUser} from '/js/store/user.js';
 import {insertMessage, getMessage, clearMessages} from '/js/store/messages.js';
@@ -9,7 +9,7 @@ import con from '/js/connection.js';
 
 con
   .on('ready', connectionReady)
-  .on('ready', (srv) => !getSession() && srv.send({op: {type: 'greet'}}).then(() => greet = false) )
+  .on('ready', (srv) => !getSession() && srv.send({op: {type: 'greet'}}))
   .on('packet', (srv, raw) => {
     const msg = JSON.parse(raw.data);
     if(msg.op) console.log(msg.op.type, msg.op);
@@ -37,22 +37,23 @@ setInterval(async () => {
 }, 10000);
 
 
-function connectionReady(srv) {
+async function connectionReady(srv) {
+  setInfo(null);
   try{
-    setInfo(null);
-    load().then(() => console.log("Messages loaded"));
     const session = getSession();
     if(session){
-      srv.req({op: {type: 'restore', session}});
+      await srv.req({op: {type: 'restore', session}});
     }
   }catch(err){
-    console.error(err);
+    clearSession();
   }
 }
-function handleSession(srv, msg) {
+async function handleSession(srv, msg) {
   setSession(msg.op.session);
   setUser(msg.op.user);
-  subscribeNotifications();
+  await subscribeNotifications();
+  clearMessages();
+  await load();
 }
 
 function handleMessage(srv, msg) {
@@ -68,23 +69,22 @@ function handleChannel(srv, msg) {
 }
 
 
-function subscribeNotifications() {
+async function subscribeNotifications() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.ready.then(async function(reg) {
+    await navigator.serviceWorker.ready.then(async function(reg) {
       const cfg = await getConfig();
-      console.log(cfg);
       reg.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: cfg.applicationServerKey,
       }).then(function(subscription) {
-        console.log(subscription);
-        con.send({
+        return con.req({
           op: {
-            type: 'setNotifications',
+            type: 'setupPushNotifications',
             subscription,
           }
         })
-      }).catch(function(e) {
+      })
+      .catch(function(e) {
         if (Notification.permission === 'denied') {
           console.warn('Permission for notifications was denied');
         } else {

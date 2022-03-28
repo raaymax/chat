@@ -25,7 +25,6 @@ function notifyTyping(){
   queue = false;
   con.send({op: {type: 'typing'}});
   setTimeout(() => {
-    console.log('unlock');
     cooldown = false;
     if(queue) {
       notifyTyping();

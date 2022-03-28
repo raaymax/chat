@@ -19,7 +19,7 @@ const App = (conf = {}) => {
     const com = {
       broadcast: (msg) => {
         msg._raw = JSON.stringify(msg);
-        return Promise.all(Object.values(connections).map(con => con.send(msg)));
+        return Promise.all(Object.values(connections).map(con => con.user && con.send(msg)));
       }
     }
     const srv = {
@@ -47,9 +47,11 @@ const App = (conf = {}) => {
         channel: 'main',
         author: 'Unknown',
         send,
-        broadcast: (msg) => {
+        broadcast: async (msg) => {
           msg.senderId = self.id;
-          return srv.broadcast(msg)
+          const ret = await srv.broadcast(msg)
+          await notify('broadcast:after', self, msg);
+          return ret;
         },
         sys: (data, private) => send({
           id: uuid(),
@@ -67,7 +69,6 @@ const App = (conf = {}) => {
         try{ 
           await notify('packet', self, raw.toString());
           const msg = JSON.parse(raw);
-          console.log(msg);
           if(msg.seqId) {
             msg.ok = async (data) => send({seqId: msg.seqId,resp: {status: 'ok', data}});
             msg.error = async (data) => send({seqId: msg.seqId, resp: {status: 'error', data}});

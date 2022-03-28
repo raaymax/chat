@@ -231,7 +231,7 @@ ul {
   animation-iteration-count: 1;
   margin: 0;
   padding: 5px 20px;
-  font-weight: 200;
+  font-weight: 400;
   font-size: .7em;
 }
 .notification.debug{

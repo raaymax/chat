@@ -1,5 +1,3 @@
-import {html} from '/js/utils.js';
-
 export function build(data) {
   if(isEmpty(data)) {
     return;
