@@ -43,6 +43,7 @@ export const Message = (props = {}) => html`
         <span class='spacy time'>${formatTime(props.date)}</span>
       </div>
       <div class='content'>${build(props.content)}</div>
+      ${props.info && html`<div class=${['info', props.info.type].join(' ')}>${props.info.msg}</div>`}
     </div>
   </div>
 `;

@@ -61,6 +61,19 @@
 - ~~improvement: add debug what message timeouted~~
 - ~~bug: help seccessfully send message but always timeout~~
 - ~~bug: guest should not be able to send messages~~
+- ~~feat: store flat message in database~~
+- ~~bug: notifications from self when more than one session~~
+- ~~bug: not always scrolling to bottom~~
+- ~~bug: failed message user is Guest~~
+- ~~bug: failed message info is not refreshing immediately~~
+- ~~feat: add send button~~
+- ~~feat: is person typing?~~
+- ~~feat: one line notifications in messagelist~~
+- ~~bug: messages dupplication on reconnect~~
+- ~~improvement: move disconnected info to info box~~
+- ~~feat: display connection status if cannot connect~~
+- ~~improvement: show greet only if not logged in~~
+- ~~feat: display messages that failed to send~~
 - style: list style
 - style: blockquote
 - style: avatar placeholder?
@@ -72,9 +85,6 @@
 - feat: if message is only emoji make it bigger
 - feat: days separated by something
 - feat: searching messages
-- feat: display messages that failed to send
-- feat: display connection status if cannot connect
-- feat: add send button
 - feat: milestone: threads in messages
 - feat: milestone: emoji reactions 
 - feat: milestone: ability to paste images
@@ -86,11 +96,12 @@
 - feat: formatting: code formatting when between tildas
 - feat: formatting: codeblock formatting when between 3tildas
 - feat: formatting: make ':)' and others translate to emoji
-- feat: is person typing?
 - feat: change channels by url param
 - feat: generate gcs upload link for storing files
 - feat: add short message in push notification
 - bug: input is not scaling size
 - bug: cannot ctrl-v text with emojis from slack
 - improvement: make unknown calls throw error
+- feat: click on failed to resend
 - feat: store push subscription in database
+

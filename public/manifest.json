@@ -1,10 +1,10 @@
 {
-  "name": "frontend",
-  "short_name": "frontend",
+  "name": "Chat",
+  "short_name": "chat",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#fff",
+  "background_color": "#1a1d21",
   "theme_color": "#673ab8",
   "gcm_sender_id": "codecat-161113",
   "icons": [

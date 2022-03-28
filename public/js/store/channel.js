@@ -1,17 +1,13 @@
-let channel = 'main';
-const listeners = [];
-let cooldown = null;
+import {createNotifier} from '/js/utils.js';
+const {notify, watch} = createNotifier();
 
-const notify = () => {
-  if(cooldown) clearTimeout(cooldown)
-  cooldown = setTimeout(() => listeners.forEach(l => l(channel)), 10);
-}
+let channel = 'main';
 
 export const getChannel = () => channel;
 
 export const setChannel = (c) => {
   channel = c;
-  notify();
+  notify(channel);
 };
 
-export const watchChannel = (handler) => listeners.push(handler);
+export const watchChannel = watch

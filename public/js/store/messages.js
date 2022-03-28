@@ -1,12 +1,8 @@
+import {createNotifier} from '/js/utils.js';
+const {notify, watch} = createNotifier();
+
 let list = [];
 let map = {};
-const listeners = [];
-let cooldown = null;
-
-const notify = () => {
-  if(cooldown) clearTimeout(cooldown)
-  cooldown = setTimeout(() => listeners.forEach(l => l(list)), 10);
-}
 
 export const getEarliestDate = () => list[0].createdAt;
 
@@ -17,6 +13,11 @@ export const getMessage = (id) => map[id];
 export const getMessages = () => list;
 
 export const insertMessage = (msg) => {
+  if(map[msg.id]){
+    Object.assign(map[msg.id], msg);
+    return;
+  }
+  msg.createdAt = new Date(msg.createdAt);
   map[msg.id] = msg;
   let pos = list.findIndex(m => m.createdAt > msg.createdAt);
   if(pos === -1 && list.some(m => m.createdAt < msg.createdAt)) pos = list.length;
@@ -25,27 +26,48 @@ export const insertMessage = (msg) => {
     msg,
     ...list.slice(pos)
   ];
-  notify();
+  notify(list);
 };
+
+export const removeMessage = (id) => {
+  if(!map[id]) return;
+  delete map[id];
+  let pos = list.findIndex(m => m.id === id);
+  list = [
+    ...list.slice(0,pos),
+    ...list.slice(pos+1)
+  ];
+  notify(list);
+}
+export const updateMessage = (id, data) => {
+  if(!map[id]) return;
+  Object.assign(map[id], data);
+  notify(list);
+}
 
 const SPAN = 20;
 
 export const deleteBefore = (id) => {
+  const len = list.length;
   const idx = list.findIndex(m => m.id === id);
-  console.log(idx);
   if(idx === -1) return;
   if(idx - SPAN <= 0) return 
+  const remove = list.slice(0, idx-SPAN);
   list = [
     ...list.slice(idx-SPAN,idx),
     ...list.slice(idx)
   ];
-  notify();
+  remove.forEach(m => {delete map[m.id];});
+  if(len !== list.length){
+    console.log('notif');
+    notify(list);
+  }
 }
 
-export const   clearMessages = () => {
+export const clearMessages = async () => {
   map = {};
   list = [];
-  notify();
+  notify(list);
 };
 
-export const watchMessages = (handler) => listeners.push(handler);
+export const watchMessages = watch;

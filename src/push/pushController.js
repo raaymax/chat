@@ -23,7 +23,7 @@ module.exports = {
   },
 
   notify: async (self, msg) => {
-    if(self.sub && msg.notify && msg.senderId !== self.id) {
+    if(self.sub && msg.notify && msg.user.id !== self.user.id) {
       push.sendNotification(self.sub, JSON.stringify({
         title: 'Message from '+ (msg.user?.name || 'Guest'),
         description: msg.flat,
