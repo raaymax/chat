@@ -78,6 +78,8 @@
 - ~~feat: store push subscription in database~~
 - ~~feat: clicking notification should go to chat~~
 - ~~bug: input is not scaling size~~
+- ~~feat: change channels by url hash~~
+- ~~bug: clicking/taping below input should focus input~~
 - style: list style
 - style: blockquote
 - style: avatar placeholder?
@@ -100,7 +102,6 @@
 - feat: formatting: code formatting when between tildas
 - feat: formatting: codeblock formatting when between 3tildas
 - feat: formatting: make ':)' and others translate to emoji
-- feat: change channels by url param
 - feat: generate gcs upload link for storing files
 - feat: click on failed to resend
 - feat: define web share target for sharing
@@ -109,6 +110,5 @@
 - improvement: hide message author if previous message was from same
 - improvement: is message from other date display date
 - bug: cannot ctrl-v text with emojis from slack
-- bug: clicking/taping below input should focus input
 - bug: emojis select box is below input/screen
 

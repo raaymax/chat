@@ -36,6 +36,12 @@ setInterval(async () => {
   }
 }, 10000);
 
+window.addEventListener('hashchange', () => {
+  const name = location.hash.slice(1);
+  console.log('hash changed', name);
+  con.send({command: {name: 'channel', args: [name]}});
+}, false);
+
 
 async function connectionReady(srv) {
   setInfo(null);
