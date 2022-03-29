@@ -1,5 +1,5 @@
-
 const webpush = require('web-push');
+
 webpush.setGCMAPIKey(process.env.GCM_API_KEY);
 webpush.setVapidDetails(
   'mailto:push@codecat.io',

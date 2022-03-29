@@ -1,6 +1,6 @@
-module.exports = sys => {
-  require('./greet.spec.js')(sys);
-  require('./ping.spec.js')(sys);
-  require('./typing.spec.js')(sys);
-  require('./restore.spec.js')(sys);
-}
+module.exports = (sys) => {
+  require('./greet.spec')(sys);
+  require('./ping.spec')(sys);
+  require('./typing.spec')(sys);
+  require('./restore.spec')(sys);
+};

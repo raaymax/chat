@@ -1,11 +1,10 @@
-import {html, useEffect, useRef} from '/js/utils.js';
-import {build} from '/js/formatter.js';
-import {Info} from '/js/components/info.js';
-import {getChannel} from '/js/store/channel.js'
-import con from '/js/connection.js';
-import {send as sendMessage} from '/js/services/messages.js';
+import { html, useEffect, useRef } from '../utils.js';
+import { build } from '../formatter.js';
+import { Info } from './info.js';
+import con from '../connection.js';
+import { send as sendMessage } from '../services/messages.js';
 
-Quill.register("modules/emoji", QuillEmoji);
+Quill.register('modules/emoji', QuillEmoji);
 
 let submit = () => {};
 let toggle = () => {};
@@ -18,73 +17,71 @@ const send = () => submit();
 const toggleToolbar = () => toggle();
 const focus = () => quillFocus();
 
-function notifyTyping(){
-  if(cooldown){
+function notifyTyping() {
+  if (cooldown) {
     queue = true;
     return;
   }
   cooldown = true;
   queue = false;
-  con.send({op: {type: 'typing'}});
+  con.send({ op: { type: 'typing' } });
   setTimeout(() => {
     cooldown = false;
-    if(queue) {
+    if (queue) {
       notifyTyping();
     }
   }, 1000);
-};
+}
 
 function initQuill() {
-  var quill = new Quill('#input', {
+  const quill = new Quill('#input', {
     theme: 'snow',
     modules: {
-      toolbar: [['bold', 'italic', 'underline', 'strike', 'link'], ['emoji'], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['blockquote', 'code', 'code-block'],['clean']].flat(),
-      "emoji-toolbar": true,
-      "emoji-shortname": true,
+      toolbar: [['bold', 'italic', 'underline', 'strike', 'link'], ['emoji'], [{ list: 'ordered' }, { list: 'bullet' }], ['blockquote', 'code', 'code-block'], ['clean']].flat(),
+      'emoji-toolbar': true,
+      'emoji-shortname': true,
       keyboard: {
         bindings: {
           submit: {
-            key: 'enter', 
-            handler: function(range, context) {
-              if(navigator.userAgentData.mobile){
+            key: 'enter',
+            handler() {
+              if (navigator.userAgentData.mobile) {
                 return true;
               }
               submit();
               return false;
-            }
-          }
-        }
+            },
+          },
+        },
       },
-    }
+    },
   });
 
   quill.focus();
   quillFocus = () => quill.focus();
 
-  submit = function submit() {
+  submit = () => {
     sendMessage(build(quill.getContents()));
     setTimeout(() => {
       document.getElementById('scroll-stop').scrollIntoView();
-    }, 1)
+    }, 1);
     quill.setContents([]);
     quill.focus();
-  }
+  };
   let visible = true;
-  toggle = function toggle() {
-    if(visible){
+  toggle = () => {
+    if (visible) {
       document.getElementsByClassName('ql-toolbar')[0].style = 'display: none;';
-    }else{
+    } else {
       document.getElementsByClassName('ql-toolbar')[0].style = '';
     }
     visible = !visible;
     quill.focus();
-  }
+  };
 }
 
-
-export const Input = (props) => {
-  const input = useRef(null)
-  const container = useRef(null)
+export const Input = () => {
+  const input = useRef(null);
   useEffect(() => initQuill(), []);
   useEffect(() => toggleToolbar(), []);
   useEffect(() => {
@@ -106,5 +103,4 @@ export const Input = (props) => {
       </div>
     </div>     
   `;
-}
-
+};

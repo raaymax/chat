@@ -1,6 +1,5 @@
-
-let set = null
-let config = new Promise((resolve) => set = resolve);
+let set = null;
+const config = new Promise((resolve) => { set = resolve; });
 
 export const getConfig = () => config;
-export const setConfig = (c) => set(c); 
+export const setConfig = (c) => set(c);

@@ -1,6 +1,6 @@
-module.exports = sys => {
-  require('./login.spec.js')(sys);
-  require('./changeName.spec.js')(sys);
-  require('./help.spec.js')(sys);
-  require('./channel.spec.js')(sys);
-}
+module.exports = (sys) => {
+  require('./login.spec')(sys);
+  require('./changeName.spec')(sys);
+  require('./help.spec')(sys);
+  require('./channel.spec')(sys);
+};

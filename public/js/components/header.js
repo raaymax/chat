@@ -1,6 +1,5 @@
-import {html, useState} from '/js/utils.js';
-import {watchChannel, getChannel} from '/js/store/channel.js';
-
+import { html, useState } from '../utils.js';
+import { watchChannel, getChannel } from '../store/channel.js';
 
 export const Header = () => {
   const [channel, setChannel] = useState(getChannel());
@@ -11,5 +10,5 @@ export const Header = () => {
       <div class="channel">${channel}</div>     
       ${channel !== 'main' && html`<div class="back"><a href='#main'>back to main</a></div>`}
     </div>
-  `
-}
+  `;
+};

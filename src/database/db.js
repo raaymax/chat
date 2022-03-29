@@ -8,9 +8,9 @@ module.exports = {
       types.setTypeParser(1082, (val) => val);
       client = Knex({
         client: 'pg',
-        connection: process.env.DATABASE_URL || 'postgres://chat:chat@localhost:5433/chat'
+        connection: process.env.DATABASE_URL || 'postgres://chat:chat@localhost:5433/chat',
       });
     }
     return client;
-  }
-}
+  },
+};

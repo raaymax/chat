@@ -8,36 +8,39 @@ const {
 module.exports = (sys) => {
   describe('/login <name> <pass>', () => {
     it('should return ACCESS_DENIED for failed', async () => {
-      match(await sys.req({command: {name: 'login', args: ['mateusz', 'wrong']}}), [
+      match(await sys.req({ command: { name: 'login', args: ['mateusz', 'wrong'] } }), [
         partial({
           resp: {
             status: 'error',
             data: {
               code: 'ACCESS_DENIED',
-            }
-          }
-        })
-      ])
-    })
+            },
+          },
+        }),
+      ]);
+    });
     it('should return successfull message', async () => {
-      match(await sys.req({command: {name: 'login', args: ['mateusz', '123']}}), [
-        partial({op: {type: 'setSession',
-          user: full({
-            id: anyString(),
-            name: 'Mateusz'
-          }),
-          session: full({
-            id: anyString(),
-            secret: anyString()
-          })
-        }}),
+      match(await sys.req({ command: { name: 'login', args: ['mateusz', '123'] } }), [
         partial({
-          private: true,
-          user: {name: 'System'},
+          op: {
+            type: 'setSession',
+            user: full({
+              id: anyString(),
+              name: 'Mateusz',
+            }),
+            session: full({
+              id: anyString(),
+              secret: anyString(),
+            }),
+          },
+        }),
+        partial({
+          priv: true,
+          user: { name: 'System' },
           message: [
-            {text: "Login successfull"}, {br: true},
-            {text: `Welcome Mateusz`}, {br: true},
-          ]
+            { text: 'Login successfull' }, { br: true },
+            { text: 'Welcome Mateusz' }, { br: true },
+          ],
         }),
         partial({
           resp: {
@@ -45,18 +48,16 @@ module.exports = (sys) => {
             data: {
               session: full({
                 id: anyString(),
-                secret: anyString()
+                secret: anyString(),
               }),
               user: full({
                 id: anyString(),
-                name: 'Mateusz'
-              })
-            }
-          }
-        })
-      ])
-    })
+                name: 'Mateusz',
+              }),
+            },
+          },
+        }),
+      ]);
+    });
   });
-
-}
-
+};

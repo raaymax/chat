@@ -1,23 +1,22 @@
-
+/* eslint-disable no-console */
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js', {
-    scope: '/'
+    scope: '/',
   }).then((reg) => {
-    console.log('SW zarejestrowany! Scope:', reg.scope );
-  }).catch(function(err) {
+    console.log('SW zarejestrowany! Scope:', reg.scope);
+  }).catch((err) => {
     console.log('Service Worker registration failed: ', err);
   });
 
-
   if ('Notification' in window && navigator.serviceWorker) {
-    Notification.requestPermission(function(status) {
+    Notification.requestPermission((status) => {
       console.log('Notification permission status:', status);
     });
   }
 }
 
 (async () => {
-  window.EMOJI = []
+  window.EMOJI = [];
   const res = await fetch('/assets/emoji_list.json');
   window.EMOJI = await res.json();
 })();

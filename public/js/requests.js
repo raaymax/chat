@@ -1,22 +1,24 @@
-const waiting = {}
+const waiting = {};
 const register = (seqId, source) => {
   let timeout = null;
   return new Promise((resolve, reject) => {
     timeout = setTimeout(() => {
       delete waiting[seqId];
-      reject({seqId: source.id, resp: { status: 'timeout', source }});
-    }, 5000)
+      const err = new Error('TIMEOUT');
+      Object.assign(err, { seqId: source.id, resp: { status: 'timeout', source } });
+      reject(err);
+    }, 5000);
     waiting[seqId] = (msg) => {
       msg.source = source;
       clearTimeout(timeout);
-      if(msg.resp.status == 'ok') {
+      if (msg.resp.status === 'ok') {
         resolve(msg);
-      }else{
+      } else {
         reject(msg);
       }
-    }
-  })
-}
+    };
+  });
+};
 const done = (msg) => waiting[msg.seqId] && waiting[msg.seqId](msg);
 
 export function initRequests(con) {
@@ -25,14 +27,14 @@ export function initRequests(con) {
   const ID = (Math.random() + 1).toString(36);
   let nextSeq = 0;
 
-  const genSeqId = () => ID + ':' + (nextSeq++);
+  const genSeqId = () => `${ID}:${nextSeq++}`;
 
-  const req =  async (msg) => {
-    if(!msg.seqId) {
+  const req = async (msg) => {
+    if (!msg.seqId) {
       msg.seqId = genSeqId();
     }
     con.send(msg);
-    return register(msg.seqId, msg)
+    return register(msg.seqId, msg);
   };
 
   Object.assign(con, { ID, req, genSeqId });
