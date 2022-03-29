@@ -6,7 +6,9 @@
   "scripts": {
     "start": ". .envrc && node src/index.js",
     "dev": "nodemon src/index.js",
-    "test": "mocha --watch --file tests/index.spec.js --ui bdd"
+    "test": "mocha --watch --file tests/index.spec.js --ui bdd",
+    "lint:ci": "eslint .",
+    "test:ci": "mocha --file tests/index.spec.js --ui bdd"
   },
   "author": "",
   "license": "ISC",

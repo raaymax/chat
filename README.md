@@ -1,4 +1,5 @@
-
+# Quack
+Messaging app
 
 ## TODO
 - ~~feat: milestone: initial pwa~~
@@ -80,11 +81,13 @@
 - ~~bug: input is not scaling size~~
 - ~~feat: change channels by url hash~~
 - ~~bug: clicking/taping below input should focus input~~
+- ~~bug: message list refreshing is slow?~~
+- ~~improvement: add eslint to project~~
+- ~~style: hide formatting and add toggle button~~
 - style: list style
 - style: blockquote
 - style: avatar placeholder?
 - style: other icon for system user
-- style: hide formatting and add toggle button
 - style: make same style in editor and in messages
 - feat: link detection
 - feat: link preview
@@ -107,11 +110,9 @@
 - feat: define web share target for sharing
 - feat: mark unread messages
 - improvement: make unknown calls throw error
-- improvement: add eslint to project
 - improvement: hide message author if previous message was from same
 - improvement: is message from other date display date
 - bug: cannot ctrl-v text with emojis from slack
 - bug: emojis select box is below input/screen
-- bug: message list refreshing is slow?
 - bug: link creation popup is closing on click
 
