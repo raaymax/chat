@@ -17,7 +17,7 @@ module.exports = {
     await self.op({
       type: 'setChannel',
       channel: self.channel,
-    });
+    }, msg.seqId);
     msg.ok();
   },
 

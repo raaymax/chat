@@ -18,7 +18,7 @@ const createCounter = (prefix) => {
   return () => prefix + ':' + (counter++);
 }
 
-const tempId = createCounter('temp');
+const tempId = createCounter('temp:'+(Math.random() + 1).toString(36));
 
 export const send = async (msg) => {
   if(msg.command) return sendCommand(msg);
@@ -43,16 +43,15 @@ const sendMessage = async (msg) => {
     return;
   }
   msg.channel = getChannel();
-  msg.id = tempId();
+  msg.clientId = tempId();
   msg.user = getUser();
   msg.createdAt = new Date();
+  console.log(msg);
   insertMessage(msg);
   try{
-    const {resp: {data: update}} = await con.req(msg);
-    removeMessage(msg.id);
-    insertMessage(update);
+    await con.req(msg);
   }catch(errr){
     console.log('timeout');
-    updateMessage(msg.id, {info: {msg: "Sending message failed", type: 'error'}})
+    updateMessageC({clientId: msg.clientId, info: {msg: "Sending message failed", type: 'error'}})
   }
 }

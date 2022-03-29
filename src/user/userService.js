@@ -1,3 +1,4 @@
+const {knex} = require('../database/db');
 const {genToken, genHash} = require('../tools');
 const sessionRepo = require('./sessionRepository');
 const userRepo = require('./userRepository');
@@ -18,24 +19,34 @@ async function refreshSession(session) {
 
 async function login(login, password) {
   const user = await userRepo.get({login, password: genHash(password)});
-  if(!user) return;
+  if(!user) return {};
   const session = await createSession(user.id);
   return { session, user };
 }
 
-async function sessionRestore({id, secret}) {
-  const session = await sessionRepo.get({id});
-  if(session){
-    if(session.token === genHash(secret)){
-      const newSession = await refreshSession(session);
-      return {session: newSession, user: session.user};
-    }else {
-      await sessionRepo.delete({userId: session.userId});
-      return null;
+async function sessionRestore({id = '', secret}) {
+  try{
+    //console.log(id, secret);
+    //console.log(await knex('sessions').select());
+    //console.log(sessionRepo.get({id}).toString());
+    const session = await sessionRepo.get({id});
+    //console.log(session);
+    if(session){
+      if(session.token === genHash(secret)){
+        const newSession = await refreshSession(session);
+        return {session: newSession, user: session.user};
+      }else {
+        await sessionRepo.delete({userId: session.userId});
+        return null;
+      }
     }
+    return null;
+  }catch(err){
+    console.error(err);
+    return null;
   }
-  return null;
 }
+
 
 module.exports = {
   sessionRestore,

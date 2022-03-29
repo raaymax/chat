@@ -25,11 +25,15 @@ export function initRequests(con) {
   const ID = (Math.random() + 1).toString(36);
   let nextSeq = 0;
 
+  const genSeqId = () => ID + ':' + (nextSeq++);
+
   const req =  async (msg) => {
-    msg.seqId = ID + ':' + (nextSeq++);
+    if(!msg.seqId) {
+      msg.seqId = genSeqId();
+    }
     con.send(msg);
     return register(msg.seqId, msg)
   };
 
-  Object.assign(con, { ID, req });
+  Object.assign(con, { ID, req, genSeqId });
 }
