@@ -16,9 +16,8 @@ const TYPES = {
   codeblock: (props) => html`<pre>${build(props.data)}</pre>`,
   blockquote: (props) => html`<blockquote>${build(props.data)}</blockquote>`,
   code: (props) => html`<code>${build(props.data)}</code>`,
-  line: (props) => build(props.data),
+  line: (props) => html`${build(props.data)}<br/>`,
   text: (props) => props.data,
-  br: () => html`<br />`,
   bold: (props) => html`<b>${build(props.data)}</b>`,
   italic: (props) => html`<em>${build(props.data)}</em>`,
   underline: (props) => html`<u>${build(props.data)}</u>`,
@@ -33,10 +32,12 @@ const TYPES = {
 
 export const Message = (props = {}) => html`
   <div ...${props} class=${['message', ...props.class].join(' ')}>
+    <div class='avatar'>
+      <img src=${props.avatarUrl}/>
+    </div>
     <div class='body'>
       <div class='header'>
-        <i class='fa-regular fa-user'></i>
-        <span class='spacy author'>${props.author}</span>
+        <span class='author'>${props.author}</span>
         <span class='spacy time'>${formatTime(props.date)}</span>
       </div>
       <div class='content'>${build(props.content)}</div>

@@ -7,11 +7,38 @@ const EXTERNAL_ASSETS = [
 ];
 
 const ASSETS = [
+  '/',
   '/style.css',
+  '/assets/fontawesome/css/all.css',
+  '/app.js',
+  '/js/init.js',
+  '/js/core.js',
+  '/js/pages/chat.js',
+  '/js/store/config.js',
+  '/js/store/channel.js',
+  '/js/store/session.js',
+  '/js/store/info.js',
+  '/js/store/user.js',
+  '/js/services/messages.js',
+  '/js/store/messages.js',
+  '/js/connection.js',
+  '/js/utils.js',
+  '/js/components/chat.js',
+  '/js/requests.js',
+  '/js/components/messageList.js',
+  '/js/components/header.js',
+  '/js/components/input.js',
+  '/js/components/message.js',
+  '/js/components/notification.js',
+  '/js/formatter.js',
+  '/js/components/info.js',
+  '/assets/emoji_list.json',
+  '/assets/fontawesome/webfonts/fa-solid-900.woff2',
+  '/manifest.json',
+  '/assets/icons/android-chrome-192x192.png',
+  '/sw.js',
   '/index.html',
   '/assets/favicon.ico',
-  '/assets/fontawesome/css/all.css',
-  '/',
 ];
 
 self.addEventListener('install', (event) => {
@@ -33,6 +60,11 @@ self.addEventListener('fetch', (event) => {
           }
           return fetch(event.request);
         }),
+    );
+  } else if (ASSETS.includes(event.request.url)) {
+    event.respondWith(
+      fetch(event.request)
+        .catch(() => caches.match(event.request)),
     );
   } else {
     event.respondWith(fetch(event.request));

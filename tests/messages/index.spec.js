@@ -2,6 +2,7 @@ const { knex } = require('../../src/database/db');
 const {
   anyString,
   match,
+  any,
   partial,
 } = require('../helpers');
 
@@ -34,7 +35,11 @@ module.exports = (sys) => {
               flat: 'some message',
               message: [{ text: 'some message' }],
               notify: true,
-              user: { id: anyString(), name: 'Mateusz' },
+              user: {
+                id: anyString(),
+                name: 'Mateusz',
+                avatarUrl: any(),
+              },
               userId: anyString(),
             },
           },

@@ -29,7 +29,7 @@ async function sessionRestore({ id = '', secret }) {
     // console.log(await knex('sessions').select());
     // console.log(sessionRepo.get({id}).toString());
     const session = await sessionRepo.get({ id });
-    // console.log(session);
+    // console.log('session: ', session);
     if (session) {
       if (session.token === genHash(secret)) {
         const newSession = await refreshSession(session);

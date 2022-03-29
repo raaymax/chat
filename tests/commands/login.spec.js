@@ -2,6 +2,7 @@ const {
   anyString,
   match,
   full,
+  any,
   partial,
 } = require('../helpers');
 
@@ -27,6 +28,7 @@ module.exports = (sys) => {
             user: full({
               id: anyString(),
               name: 'Mateusz',
+              avatarUrl: any(),
             }),
             session: full({
               id: anyString(),
@@ -53,6 +55,7 @@ module.exports = (sys) => {
               user: full({
                 id: anyString(),
                 name: 'Mateusz',
+                avatarUrl: any(),
               }),
             },
           },

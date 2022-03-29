@@ -41,7 +41,11 @@ module.exports = {
     msg.id = uuid();
     msg.createdAt = new Date();
     if (self.user) {
-      msg.user = { id: self.user.id, name: self.user.name };
+      msg.user = {
+        id: self.user.id,
+        name: self.user.name,
+        avatarUrl: self.user.avatarUrl,
+      };
       msg.userId = self.user.id;
     }
     msg.channel = msg.channel || self.channel;

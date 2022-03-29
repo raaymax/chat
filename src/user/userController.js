@@ -1,3 +1,4 @@
+const userRepository = require('./userRepository');
 const service = require('./userService');
 
 module.exports = {
@@ -16,6 +17,7 @@ module.exports = {
       user: {
         id: user.id,
         name: user.name,
+        avatarUrl: user.avatarUrl,
       },
     }, msg.seqId);
     return msg.ok({ session, user });
@@ -25,7 +27,15 @@ module.exports = {
     if (!self.user) return msg.error({ code: 'ACCESS_DENIED' });
     const [name] = msg.command.args;
     self.user.name = name;
-    // TODO: pertist the name
+    await userRepository.update(self.user.id, { name });
+    return msg.ok();
+  },
+
+  changeAvatar: async (self, msg) => {
+    if (!self.user) return msg.error({ code: 'ACCESS_DENIED' });
+    const [avatarUrl] = msg.command.args;
+    self.user.avatarUrl = avatarUrl;
+    await userRepository.update(self.user.id, { avatarUrl });
     return msg.ok();
   },
 
@@ -47,13 +57,22 @@ module.exports = {
       user: {
         id: user.id,
         name: user.name,
+        avatarUrl: user.avatarUrl,
       },
     }, msg.seqId);
     await self.sys([
       { text: 'Login successfull' }, { br: true },
       { text: `Welcome ${user.name}` }, { br: true },
     ], true, msg.seqId);
-    return msg.ok({ session, user: { id: user.id, name: user.name } });
+
+    return msg.ok({
+      session,
+      user: {
+        id: user.id,
+        name: user.name,
+        avatarUrl: user.avatarUrl,
+      },
+    });
   },
 
 };

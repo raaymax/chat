@@ -55,6 +55,7 @@ export function MessageList() {
             class=${msg.priv ? ['private'] : []} 
             data-id=${msg.id}
             key=${msg.id}
+            avatarUrl=${msg.user?.avatarUrl}
             author=${msg.user?.name || 'Guest'}
             info=${msg.info}
             content=${msg.message}
