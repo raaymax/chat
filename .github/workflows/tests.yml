@@ -6,6 +6,19 @@ on:
   pull_request:
     branches: [ master ]
 
+services:
+  postgres:
+    image: postgres:14-alpine
+    env:
+      POSTGRES_USER: chat
+      POSTGRES_PASSWORD: chat
+      POSTGRES_DB: chat
+    options: >-
+      --health-cmd pg_isready
+      --health-interval 10s
+      --health-timeout 5s
+      --health-retries 5
+
 jobs:
   tests:
     runs-on: ubuntu-latest
@@ -19,3 +32,5 @@ jobs:
     - run: npm ci
     - run: npm run lint:ci
     - run: npm run test:ci
+      env:
+        DATABASE_URL: postgres://chat:chat@postgres:5432/chat
