@@ -2,6 +2,7 @@ const service = require('./userService');
 
 module.exports = {
   restore: async (self, msg) => {
+    //console.log(msg);
     const {op} = msg;
     if(!op.session) return msg.error({code: 'SESSION_NOT_EXISTS'});
     const restored = await service.sessionRestore(op.session);
@@ -16,31 +17,30 @@ module.exports = {
         id: user.id,
         name: user.name,
       }
-    });
-    await msg.ok(session);
+    }, msg.seqId);
+    await msg.ok({session, user});
   },
 
-  name: async (self, msg) => {
+  changeName: async (self, msg) => {
     const {args} = msg.command;
     const prev = self.author;
     self.author = args[0];
     msg.author = args[0];
     msg.ok();
-    return sysBroadcast(`User ${prev} changed name to ${args[0]}`);
   },
 
   login: async (self, msg) => {
     const {args} = msg.command;
     const {user, session} = await service.login(args[0], args[1]);
     if(!user){
-      return self.sys([
+      await self.sys([
         {text: "Login failed"}, {br: true},
       ], true);
+      return msg.error({code: 'ACCESS_DENIED'});
     }
     self.user = user;
     self.session = session;
     self.author = user.name;
-    await msg.ok(session);
     await self.op({
       type: 'setSession',
       session,
@@ -48,11 +48,13 @@ module.exports = {
         id: user.id,
         name: user.name,
       }
-    });
-    return self.sys([
+    }, msg.seqId);
+    await self.sys([
       {text: "Login successfull"}, {br: true},
       {text: `Welcome ${user.name}`}, {br: true},
-    ], true);
+    ], true, msg.seqId);
+    await msg.ok({session, user: {id: user.id, name: user.name}});
+    return;
   },
 
 }

@@ -1,6 +1,6 @@
 {
-  "name": "Chat",
-  "short_name": "chat",
+  "name": "Quack",
+  "short_name": "quack",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",

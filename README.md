@@ -105,10 +105,13 @@
 - feat: generate gcs upload link for storing files
 - feat: click on failed to resend
 - feat: define web share target for sharing
+- feat: mark unread messages
 - improvement: make unknown calls throw error
 - improvement: add eslint to project
 - improvement: hide message author if previous message was from same
 - improvement: is message from other date display date
 - bug: cannot ctrl-v text with emojis from slack
 - bug: emojis select box is below input/screen
+- bug: message list refreshing is slow?
+- bug: link creation popup is closing on click
 

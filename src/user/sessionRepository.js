@@ -4,7 +4,7 @@ const prefixKeys = (prefix) => (obj) => Object.entries(obj).reduce((acc, e) => (
 const fromSessions = prefixKeys('sessions');
 
 module.exports = {
-  get: async (session) => knex('sessions')
+  get: (session) => knex('sessions')
     .first('sessions.*', knex.raw('to_jsonb(??.*) as ??', ['user', 'user']))
     .leftJoin('users as user', 'sessions.userId', 'user.id')
     .where(fromSessions(session)),

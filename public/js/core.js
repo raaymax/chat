@@ -2,7 +2,7 @@ import {setConfig, getConfig} from '/js/store/config.js';
 import {getChannel, setChannel} from '/js/store/channel.js';
 import {getSession, setSession, clearSession} from '/js/store/session.js';
 import {setInfo} from '/js/store/info.js';
-import {setUser} from '/js/store/user.js';
+import {setUser, getUser} from '/js/store/user.js';
 import {insertMessage, getMessage, clearMessages} from '/js/store/messages.js';
 import {load} from '/js/services/messages.js';
 import con from '/js/connection.js';
@@ -12,12 +12,12 @@ con
   .on('ready', (srv) => !getSession() && srv.send({op: {type: 'greet'}}))
   .on('packet', (srv, raw) => {
     const msg = JSON.parse(raw.data);
-    if(msg.op) console.log(msg.op.type, msg.op);
+    if(window.debug && msg.op) console.log(msg.op.type, msg.op);
   })
   .on('op:setSession', handleSession)
   .on('op:setConfig', (srv, msg) => setConfig(msg.op.config))
   .on('op:setChannel', handleChannel)
-  .on('op:typing', (srv, msg) => setInfo({msg: msg.user.name + " is typing", type: 'info'}, 1000))
+  .on('op:typing', (srv, msg) => msg.user.id !== getUser().id && setInfo({msg: msg.user.name + " is typing", type: 'info'}, 1000))
   .on('message', (srv, msg) => insertMessage(msg))
   .on('disconnect', (srv) => {
     setInfo({msg: "Disconnected - reconnect attempt in 1s", type: 'error'});
@@ -36,6 +36,7 @@ setInterval(async () => {
   }
 }, 10000);
 
+
 window.addEventListener('hashchange', () => {
   const name = location.hash.slice(1);
   console.log('hash changed', name);
@@ -43,24 +44,31 @@ window.addEventListener('hashchange', () => {
 }, false);
 
 
+
 async function connectionReady(srv) {
   setInfo(null);
+  console.log('connectionReady');
   try{
     const session = getSession();
     if(session){
       await srv.req({op: {type: 'restore', session}});
     }
   }catch(err){
-    clearSession();
+    console.error(err);
+      insertMessage({notifType: 'warning', notif: "User session not restored", createdAt: new Date()})
+
   }
 }
+
 async function handleSession(srv, msg) {
+  console.log('handleSession', msg);
   setSession(msg.op.session);
   setUser(msg.op.user);
   await subscribeNotifications();
   clearMessages();
   await load();
 }
+
 
 function handleMessage(srv, msg) {
   if(msg.channel === getChannel()){

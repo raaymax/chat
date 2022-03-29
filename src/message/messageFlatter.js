@@ -23,7 +23,7 @@ const flat = (datas) => {
     const key = Object.keys(data).find(f => KEYS.includes(f));
     if(!key) return '';
     return type(key, data[key]);
-  }).join(' ');
+  }).join('');
 }
 
 

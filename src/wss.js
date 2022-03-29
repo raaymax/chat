@@ -7,30 +7,14 @@ const App = (conf = {}) => {
   async function start() {
     const wss = new WebSocket.Server(conf);
     const connections = {}
-    const sysMsg = (data, private = false) => {
-      return {
-        id: uuid(),
-        createdAt: new Date().toISOString(), 
-        author: "System", 
-        private,
-        message: data,
-      };
-    }
-    const com = {
+    const srv = {
       broadcast: (msg) => {
         msg._raw = JSON.stringify(msg);
         return Promise.all(Object.values(connections).map(con => con.user && con.send(msg)));
       }
     }
-    const srv = {
-      ...com,
-      sysBroadcast: (text) => {
-        return com.broadcast(sysMsg([{text}]));
-      },
-    }
 
     await notify('start', srv);
-
 
     wss.on('connection', async (ws) => {
       const id = uuid();
@@ -53,14 +37,15 @@ const App = (conf = {}) => {
           await notify('broadcast:after', self, msg);
           return ret;
         },
-        sys: (data, private) => send({
+        sys: (data, private, seqId) => send({
           id: uuid(),
+          seqId,
           createdAt: new Date().toISOString(), 
           user: {name: "System"},
           private,
           message: data,
         }),
-        op: (msg) => send({op: msg}),
+        op: (msg, seqId) => send({seqId, op: msg}),
       };
     
       await notify('connection', self);
@@ -94,8 +79,10 @@ const App = (conf = {}) => {
     })
   }
   const app = {
-    on: (prop, handler) => {
-      handlers[prop] = [...(handlers[prop] || []), handler];
+    on: (prop, ...handler) => {
+      const h = (...args) => handler.reverse()
+        .reduce((acc, fn) => async () => fn(...args, acc), ()=>{})()
+      handlers[prop] = [...(handlers[prop] || []), h];
       return app;
     },
     start,

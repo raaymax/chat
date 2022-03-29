@@ -16,7 +16,7 @@ const connect = () => {
       try{
         notify('packet', srv, raw);
         const msg = JSON.parse(raw.data);
-        console.log('recv',msg);
+        //console.log('recv',msg);
         if(msg.resp) notify('resp', srv, msg);
         else if(msg.op) notify('op:'+msg.op.type, srv, msg);
         else notify('message', srv, msg);
@@ -45,7 +45,7 @@ const getCon = async () => {
 
 const srv = {
   send: async (msg, cb) => {
-    console.log('send',msg);
+    //console.log('send',msg);
     msg._raw = msg._raw ? msg._raw : JSON.stringify(msg);
     const con = await getCon();
     notify('beforeSend', srv, msg);
