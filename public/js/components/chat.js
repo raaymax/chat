@@ -1,15 +1,10 @@
+import { html } from '../utils.js';
+import { MessageList } from './messageList.js';
+import { Header } from './header.js';
+import { Input } from './input.js';
 
-import {html} from '/js/utils.js';
-import {MessageList} from '/js/components/messageList.js';
-import {Header} from '/js/components/header.js';
-import {Input} from '/js/components/input.js';
-
-
-export const Chat = (props) => {
-  return html`
+export const Chat = () => html`
     <${Header} />    
     <${MessageList} />
     <${Input} />
   `;
-}
-

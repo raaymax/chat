@@ -1,7 +1,8 @@
-import {createNotifier} from '/js/utils.js';
-const {notify, watch} = createNotifier();
+import { createNotifier } from '../utils.js';
 
-let channel = location.hash.slice(1) || 'main';
+const { notify, watch } = createNotifier();
+
+let channel = window.location.hash.slice(1) || 'main';
 
 export const getChannel = () => channel;
 
@@ -10,4 +11,4 @@ export const setChannel = (c) => {
   notify(channel);
 };
 
-export const watchChannel = watch
+export const watchChannel = watch;

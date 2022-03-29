@@ -1,35 +1,34 @@
-const {knex} = require('../src/database/db');
+const { knex } = require('../src/database/db');
 const server = require('../src/server');
 const {
-  connect, 
+  connect,
   request,
 } = require('./helpers');
 
-require('./helpers.spec.js');
+require('./helpers.spec');
 
 describe('server', () => {
-  let sys = {};
+  const sys = {};
   before((done) => server.listen(done));
   after(() => {
     server.close();
     return knex.destroy();
   });
 
-  beforeEach(async () => { 
+  beforeEach(async () => {
     sys.ws = await connect();
     sys.req = request(sys.ws);
   });
 
   afterEach(() => sys.ws.close());
 
-
   describe('ops', () => {
-    require('./ops/index.spec.js')(sys);
+    require('./ops/index.spec')(sys);
   });
   describe('commands', () => {
-    require('./commands/index.spec.js')(sys);
-  })
-  describe('messages', () => {
-    require('./messages/index.spec.js')(sys);
+    require('./commands/index.spec')(sys);
   });
-})
+  describe('messages', () => {
+    require('./messages/index.spec')(sys);
+  });
+});
