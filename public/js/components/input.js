@@ -9,12 +9,14 @@ Quill.register("modules/emoji", QuillEmoji);
 
 let submit = () => {};
 let toggle = () => {};
+let quillFocus = () => {};
 
 let cooldown = false;
 let queue = false;
 
 const send = () => submit();
 const toggleToolbar = () => toggle();
+const focus = () => quillFocus();
 
 function notifyTyping(){
   if(cooldown){
@@ -25,7 +27,6 @@ function notifyTyping(){
   queue = false;
   con.send({op: {type: 'typing'}});
   setTimeout(() => {
-    console.log('unlock');
     cooldown = false;
     if(queue) {
       notifyTyping();
@@ -58,6 +59,7 @@ function initQuill() {
   });
 
   quill.focus();
+  quillFocus = () => quill.focus();
 
   submit = function submit() {
     sendMessage(build(quill.getContents()));
@@ -82,6 +84,7 @@ function initQuill() {
 
 export const Input = (props) => {
   const input = useRef(null)
+  const container = useRef(null)
   useEffect(() => initQuill(), []);
   useEffect(() => toggleToolbar(), []);
   useEffect(() => {
@@ -89,7 +92,7 @@ export const Input = (props) => {
     return () => input.current.removeEventListener('keydown', notifyTyping);
   }, []);
   return html`
-    <div class="input-container">
+    <div class="input-container" onclick=${focus} >
       <div id="input" ref=${input}></div>
       <div class='actionbar'>
         <${Info} />

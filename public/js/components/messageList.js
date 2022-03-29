@@ -46,11 +46,10 @@ export function MessageList (props) {
     },0)
   });
 
-  console.log('refresh');
   return html`
     <div class="message-list" ref=${list}>
       ${messages.map(msg => msg.notif 
-        ? html`<${Notification} className=${[msg.notifType]}>${msg.notif}<//>` 
+        ? html`<${Notification} key=${msg.id} className=${[msg.notifType]}>${msg.notif}<//>` 
         : html`
           <${Message} 
             class=${msg.private ? ['private'] : []} 
@@ -62,7 +61,7 @@ export function MessageList (props) {
             date=${msg.createdAt}
           />`
       )}
-      <div id='scroll-stop' ref=${stop}></div>
+      <div key='bottom' id='scroll-stop' ref=${stop}></div>
     </div>
   `;
 }

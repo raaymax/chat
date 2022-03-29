@@ -124,20 +124,30 @@ ul {
   flex-direction: column;
 }
 #workspace-header {
+  position: relative;
   background-color: rgb(26, 29, 33);
   background-color: #1a1d21;
+  border-bottom: 1px solid #565856;
+  height: 50px;
+}
+
+#workspace-header .back {
+  position: absolute;
+  bottom: 15px;
+  right: 30px;
+}
+
+#workspace-header .channel {
   height: 50px;
   padding-left: 30px;
   line-height: 50px;
   vertical-align: middle;
-  border-bottom: 1px solid #565856;
   font-size: 20px;
   font-weight: bold;
 }
 
-#workspace-header:before {
+#workspace-header .channel:before {
   content: '#';
-  background-color: rgb(26, 29, 33);
   padding-right: 10px;
   line-height: 50px;
   vertical-align: middle;
@@ -231,7 +241,7 @@ ul {
   animation-iteration-count: 1;
   margin: 0;
   padding: 5px 20px;
-  font-weight: 200;
+  font-weight: 400;
   font-size: .7em;
 }
 .notification.debug{

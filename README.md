@@ -74,6 +74,12 @@
 - ~~feat: display connection status if cannot connect~~
 - ~~improvement: show greet only if not logged in~~
 - ~~feat: display messages that failed to send~~
+- ~~feat: add short message in push notification~~
+- ~~feat: store push subscription in database~~
+- ~~feat: clicking notification should go to chat~~
+- ~~bug: input is not scaling size~~
+- ~~feat: change channels by url hash~~
+- ~~bug: clicking/taping below input should focus input~~
 - style: list style
 - style: blockquote
 - style: avatar placeholder?
@@ -96,12 +102,13 @@
 - feat: formatting: code formatting when between tildas
 - feat: formatting: codeblock formatting when between 3tildas
 - feat: formatting: make ':)' and others translate to emoji
-- feat: change channels by url param
 - feat: generate gcs upload link for storing files
-- feat: add short message in push notification
-- bug: input is not scaling size
-- bug: cannot ctrl-v text with emojis from slack
-- improvement: make unknown calls throw error
 - feat: click on failed to resend
-- feat: store push subscription in database
+- feat: define web share target for sharing
+- improvement: make unknown calls throw error
+- improvement: add eslint to project
+- improvement: hide message author if previous message was from same
+- improvement: is message from other date display date
+- bug: cannot ctrl-v text with emojis from slack
+- bug: emojis select box is below input/screen
 

@@ -15,6 +15,7 @@ export const getMessages = () => list;
 export const insertMessage = (msg) => {
   if(map[msg.id]){
     Object.assign(map[msg.id], msg);
+    notify(list);
     return;
   }
   msg.createdAt = new Date(msg.createdAt);
@@ -59,7 +60,6 @@ export const deleteBefore = (id) => {
   ];
   remove.forEach(m => {delete map[m.id];});
   if(len !== list.length){
-    console.log('notif');
     notify(list);
   }
 }

@@ -1,7 +1,7 @@
 import {createNotifier} from '/js/utils.js';
 const {notify, watch} = createNotifier();
 
-let channel = 'main';
+let channel = location.hash.slice(1) || 'main';
 
 export const getChannel = () => channel;
 

@@ -10,3 +10,7 @@ export const getSession = () => {
 export const setSession = (session) => {
   localStorage.setItem('session', JSON.stringify(session));
 }
+
+export const clearSession = () => {
+  localStorage.removeItem('session');
+}

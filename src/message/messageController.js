@@ -4,9 +4,9 @@ const {v4: uuid} = require('uuid');
 
 module.exports = {
   load: async (self, msg) => {
+    if(!self.user) return msg.error("Not logged in")
     const {op} = msg;
     const messages = await messageRepository.getAll(op);
-    console.log(messages.length);
     messages.forEach(msg => self.send(msg));
     msg.ok()
   },
@@ -23,8 +23,6 @@ module.exports = {
 
   isTyping: async (self, msg) => {
     if(!self.user) {
-      console.log('User not exist - access denied');
-      console.log({msg});
       return msg.error({code: "ACCESS_DENIED"});
     }
     if(self.user){
@@ -37,8 +35,6 @@ module.exports = {
 
   handle: async (self, msg) => { 
     if(!self.user) {
-      console.log('User not exist - access denied');
-      console.log({msg});
       return msg.error({code: "ACCESS_DENIED"});
     }
     //await new Promise(resolve => setTimeout(resolve, 10000));
@@ -50,13 +46,14 @@ module.exports = {
     }
     msg.channel = msg.channel || self.channel;
     msg.notify = true;
+    msg.flat = messageFlatter.flat(msg.message);
     await messageRepository.insert({
       id: msg.id,
       createdAt: msg.createdAt,
       userId: msg.userId,
       channel: msg.channel,
       message: JSON.stringify(msg.message),
-      flat: messageFlatter.flat(msg.message),
+      flat: msg.flat,
     });
     await self.broadcast(msg);
     return msg.ok(msg);

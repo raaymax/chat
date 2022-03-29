@@ -3,18 +3,17 @@ const sessionRepo = require('./sessionRepository');
 const userRepo = require('./userRepository');
 
 async function createSession(userId) {
-  const series = genToken();
   const secret = genToken();
   const token = genHash(secret);
-  await sessionRepo.insert({series, token, userId});
-  return {series, secret};
+  const [session] = await sessionRepo.insert({token, userId});
+  return {id: session.id, secret};
 }
 async function refreshSession(session) {
-  const series = session.series;
+  const id = session.id;
   const secret = genToken();
   const token = genHash(secret);
-  await sessionRepo.update(series, {token});
-  return {series, secret};
+  await sessionRepo.update(id, {token});
+  return {id, secret};
 }
 
 async function login(login, password) {
@@ -24,8 +23,8 @@ async function login(login, password) {
   return { session, user };
 }
 
-async function sessionRestore({series, secret}) {
-  const session = await sessionRepo.get({series});
+async function sessionRestore({id, secret}) {
+  const session = await sessionRepo.get({id});
   if(session){
     if(session.token === genHash(secret)){
       const newSession = await refreshSession(session);

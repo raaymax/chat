@@ -8,6 +8,7 @@ module.exports = {
     if(!restored) return msg.error({code: 'SESSION_NOT_RESTORED'});
     const {session, user} = restored;
     self.user = user;
+    self.session = session;
     await self.op({
       type: 'setSession',
       session,
@@ -37,6 +38,7 @@ module.exports = {
       ], true);
     }
     self.user = user;
+    self.session = session;
     self.author = user.name;
     await msg.ok(session);
     await self.op({
@@ -51,5 +53,6 @@ module.exports = {
       {text: "Login successfull"}, {br: true},
       {text: `Welcome ${user.name}`}, {br: true},
     ], true);
-  }
+  },
+
 }
