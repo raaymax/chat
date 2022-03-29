@@ -30,6 +30,9 @@ jobs:
         node-version: 17.x
         cache: 'npm'
     - run: npm ci
+    - run: npx knex migrate:latest
+      env:
+        DATABASE_URL: postgres://chat:chat@postgres:5432/chat
     - run: npm run lint:ci
     - run: npm run test:ci
       env:
