@@ -1,4 +1,5 @@
-
+# Quack
+Messaging app
 
 ## TODO
 - ~~feat: milestone: initial pwa~~
