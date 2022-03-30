@@ -1,4 +1,4 @@
-import { html, formatTime } from '../utils.js';
+import { html, formatTime, formatDate } from '../utils.js';
 
 const build = (datas) => [datas].flat().map((data) => {
   if (typeof data === 'string') return html(data);
@@ -30,17 +30,33 @@ const TYPES = {
   },
 };
 
+const isToday = (date) => {
+  const someDate = new Date(date);
+  const today = new Date()
+  return someDate.getDate() === today.getDate()
+    && someDate.getMonth() === today.getMonth()
+    && someDate.getFullYear() === today.getFullYear()
+}
+
+const isOnlyEmoji = (message) => message 
+    && message.length === 1 
+    && message[0].line
+    && message[0].line.length === 1 
+    && message[0].line[0].emoji;
+
 export const Message = (props = {}) => html`
   <div ...${props} class=${['message', ...props.class].join(' ')}>
-    <div class='avatar'>
-      <img src=${props.avatarUrl}/>
-    </div>
+    ${!props.sameUser 
+      ? html`<div class='avatar'><img src=${props.avatarUrl}/></div>`
+      : html`<div class='spacy side-time'>${formatTime(props.date)}</div>`
+    }
     <div class='body'>
-      <div class='header'>
+      ${!props.sameUser && html`<div class='header'>
         <span class='author'>${props.author}</span>
         <span class='spacy time'>${formatTime(props.date)}</span>
-      </div>
-      <div class='content'>${build(props.content)}</div>
+        ${!isToday(props.date) && html`<span class='spacy time'>${formatDate(props.date)}</span>`}
+      </div>`}
+      <div class=${['content', ...(isOnlyEmoji(props.content) ? ['emoji'] : [])].join(' ')}>${build(props.content)}</div>
       ${props.info && html`<div class=${['info', props.info.type].join(' ')}>${props.info.msg}</div>`}
     </div>
   </div>

@@ -86,6 +86,7 @@ self.addEventListener('push', (e) => {
       body: data.description,
       tag: data.channel,
       vibrate: [100, 50, 100],
+      silent: false,
       data: {
         dateOfArrival: Date.now(),
         primaryKey: '2',

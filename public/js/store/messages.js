@@ -49,7 +49,7 @@ export const updateMessage = (id, data) => {
   notify(list);
 };
 
-const SPAN = 20;
+const SPAN = 50;
 
 export const deleteBefore = (id) => {
   if (!id) return;

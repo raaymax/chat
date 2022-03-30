@@ -84,14 +84,15 @@ Messaging app
 - ~~bug: message list refreshing is slow?~~
 - ~~improvement: add eslint to project~~
 - ~~style: hide formatting and add toggle button~~
+- ~~feat: if message is only emoji make it bigger~~
+- ~~improvement: is message from other date display date~~
+- ~~style: avatar placeholder?~~
 - style: list style
 - style: blockquote
-- style: avatar placeholder?
 - style: other icon for system user
 - style: make same style in editor and in messages
 - feat: link detection
 - feat: link preview
-- feat: if message is only emoji make it bigger
 - feat: days separated by something
 - feat: searching messages
 - feat: milestone: threads in messages
@@ -111,8 +112,7 @@ Messaging app
 - feat: mark unread messages
 - improvement: make unknown calls throw error
 - improvement: hide message author if previous message was from same
-- improvement: is message from other date display date
 - bug: cannot ctrl-v text with emojis from slack
 - bug: emojis select box is below input/screen
 - bug: link creation popup is closing on click
-
+- improvement: try flex-direction: column-reverse;
