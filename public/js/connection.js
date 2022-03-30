@@ -12,7 +12,8 @@ const connect = () => {
     if (document.location.protocol === 'https:') {
       protocol = 'wss:';
     }
-    const ws = new WebSocket(`${protocol}//${document.location.host}/ws`);
+    //const ws = new WebSocket(`${protocol}//${document.location.host}/ws`);
+    const ws = new WebSocket(`wss://chat.codecat.io/ws`);
     ws.addEventListener('message', (raw) => {
       try {
         notify('packet', srv, raw);

@@ -13,6 +13,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@capacitor/android": "3.4.3",
+    "@capacitor/core": "3.4.3",
+    "@capacitor/local-notifications": "1.1.0",
     "express": "4.17.3",
     "joi": "17.6.0",
     "knex": "1.0.4",
@@ -22,11 +25,13 @@
     "ws": "8.5.0"
   },
   "devDependencies": {
+    "@capacitor/cli": "3.4.3",
     "chai": "4.3.6",
     "eslint": "8.12.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-plugin-import": "2.25.4",
     "mocha": "9.2.2",
-    "nodemon": "2.0.15"
+    "nodemon": "2.0.15",
+    "preact-cli": "3.3.5"
   }
 }
