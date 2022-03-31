@@ -31,7 +31,6 @@
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-plugin-import": "2.25.4",
     "mocha": "9.2.2",
-    "nodemon": "2.0.15",
-    "preact-cli": "3.3.5"
+    "nodemon": "2.0.15"
   }
 }
