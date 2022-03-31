@@ -1,6 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyPlugin = require("copy-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
 
 module.exports = {
@@ -10,15 +10,15 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin(),
-    new HtmlWebpackPlugin({ 
+    new HtmlWebpackPlugin({
       template: './public/index.html',
       inject: 'body',
       excludeChunks: ['sw'],
     }),
     new CopyPlugin({
       patterns: [
-        { from: "./src/assets", to: "assets" },
-        { from: "./src/manifest.json", to: "." },
+        { from: './src/assets', to: 'assets' },
+        { from: './src/manifest.json', to: '.' },
       ],
     }),
   ],
@@ -26,7 +26,7 @@ module.exports = {
     rules: [
       {
         test: /\.css$/i,
-        use: [MiniCssExtractPlugin.loader, "css-loader"],
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
     ],
   },

@@ -1,7 +1,13 @@
 import { initRequests } from './requests.js';
 
 const handlers = {};
-const notify = (ev, ...args) => (handlers[ev] || []).forEach((h) => h(...args));
+const notify = (ev, ...args) => Promise.all((handlers[ev] || []).map(async (h) => {
+  try { 
+    await h(...args)
+  } catch(err) {
+    console.error(err);
+  }
+}));
 // eslint-disable-next-line no-return-assign
 const watch = (ev, fn) => (handlers[ev] = handlers[ev] || []).push(fn);
 let conPromise = null;
@@ -12,13 +18,13 @@ const connect = () => {
     if (document.location.protocol === 'https:') {
       protocol = 'wss:';
     }
-    //const ws = new WebSocket(`${protocol}//${document.location.host}/ws`);
-    const ws = new WebSocket(`wss://chat.codecat.io/ws`);
+    const ws = new WebSocket(`${protocol}//${document.location.host}/ws`);
+    //const ws = new WebSocket(`wss://chat.codecat.io/ws`);
     ws.addEventListener('message', (raw) => {
       try {
         notify('packet', srv, raw);
         const msg = JSON.parse(raw.data);
-        // console.log('recv',msg);
+        console.log('recv',msg);
         if (msg.resp) notify('resp', srv, msg);
         else if (msg.op) notify(`op:${msg.op.type}`, srv, msg);
         else notify('message', srv, msg);
@@ -38,7 +44,6 @@ const connect = () => {
     return ws;
   });
 };
-connect();
 
 const getCon = async () => {
   const con = await conPromise;
@@ -48,7 +53,7 @@ const getCon = async () => {
 
 const srv = {
   send: async (msg) => {
-    // console.log('send',msg);
+    console.log('send',msg);
     msg._raw = msg._raw ? msg._raw : JSON.stringify(msg);
     const con = await getCon();
     notify('beforeSend', srv, msg);
@@ -58,6 +63,10 @@ const srv = {
     watch(...arg);
     return srv;
   },
+  init: () => {
+    connect();
+    return srv;
+  }
 };
 initRequests(srv);
 

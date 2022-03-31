@@ -12,7 +12,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['public/sw.js'],
+      files: ['web/src/sw.js'],
       env: {
         serviceworker: true,
         browser: true,
@@ -32,7 +32,7 @@ module.exports = {
       },
     },
     {
-      files: ['public/tests/**/*.js'],
+      files: ['web/tests/**/*.js'],
       env: {
         mocha: true,
         browser: true,
@@ -62,7 +62,7 @@ module.exports = {
       },
     },
     {
-      files: ['public/**/*.js'],
+      files: ['web/**/*.js'],
       env: {
         browser: true,
         es2021: true,

@@ -14,7 +14,7 @@ module.exports = {
     return msg.ok();
   },
 
-  sendConfig: async (self) => self.send({
+  sendConfig: async (self) => console.log('connection!') || self.send({
     op: {
       type: 'setConfig',
       config: {

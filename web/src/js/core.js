@@ -22,7 +22,8 @@ con
   .on('message', handleMessage)
   .on('disconnect', () => {
     setInfo({ msg: 'Disconnected - reconnect attempt in 1s', type: 'error' });
-  });
+  })
+  .init();
 
 setInterval(async () => {
   const start = new Date();
