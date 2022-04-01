@@ -26,21 +26,6 @@ services:
     volumes:
       - chat-db:/var/lib/postgresql/data
 
-  chat_init:
-    image: node:17-alpine
-    logging: *default-logging
-    user: "node"
-    working_dir: /home/node/app
-    networks:
-    - chat
-    environment:
-    - COMMIT=${COMMIT_HASH}
-    - NODE_ENV=production
-    - DATABASE_URL=postgres://chat:chat@chat_db:5432/chat
-    volumes:
-    - .:/home/node/app
-    command: "sh .deploy/install.sh"
-
   chat:
     image: node:17-alpine
     logging: *default-logging
@@ -56,7 +41,7 @@ services:
     volumes:
     - .:/home/node/app
     - ../env:/home/node/app/.envrc
-    command: "npm start"
+    command: "sh .deploy/install.sh"
     deploy:
       labels:
         traefik.enable: "true"

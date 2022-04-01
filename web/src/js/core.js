@@ -44,7 +44,7 @@ function handleConfig(srv, msg) {
   console.log('handleConfig', APP_VERSION, msg);
   // eslint-disable-next-line no-undef
   if (msg.op.config.appVersion !== APP_VERSION) {
-    //window.location.reload(true);
+    window.location.reload(true);
     insertMessage({
       id: 'version',
       createdAt: new Date(),
