@@ -6,11 +6,11 @@ import {
 } from '../store/messages.js';
 import { getChannel } from '../store/channel.js';
 import { getUser } from '../store/user.js';
-import con from '../connection.js';
+import client from '../client';
 
-export const loadPrevious = () => con.req({ op: { type: 'load', channel: getChannel(), before: getEarliestDate() } });
-export const loadNext = () => con.req({ op: { type: 'load', channel: getChannel(), after: getLatestDate() } });
-export const load = () => con.req({ op: { type: 'load', channel: getChannel() } });
+export const loadPrevious = () => client.req({ op: { type: 'load', channel: getChannel(), before: getEarliestDate() } });
+export const loadNext = () => client.req({ op: { type: 'load', channel: getChannel(), after: getLatestDate() } });
+export const load = () => client.req({ op: { type: 'load', channel: getChannel() } });
 
 const createCounter = (prefix) => {
   let counter = 0;
@@ -30,7 +30,7 @@ export const sendCommand = async (msg) => {
     id, notifType: 'info', notif: `${msg.command.name} sent`, createdAt: new Date(),
   });
   try {
-    await con.req(msg);
+    await client.req(msg);
     insertMessage({
       id, notifType: 'success', notif: `${msg.command.name} executed successfully`, createdAt: new Date(),
     });
@@ -55,7 +55,7 @@ const sendMessage = async (msg) => {
   msg.createdAt = new Date();
   insertMessage(msg);
   try {
-    await con.req(msg);
+    await client.req(msg);
   } catch (errr) {
     updateMessage(msg.clientId, { info: { msg: 'Sending message failed', type: 'error' } });
   }

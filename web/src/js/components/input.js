@@ -1,8 +1,8 @@
 import { html, useEffect, useRef } from '../utils.js';
 import { build } from '../formatter.js';
 import { Info } from './info.js';
-import con from '../connection.js';
-import { send as sendMessage } from '../services/messages.js';
+import { send as sendMessage} from '../services/messages.js';
+import { notifyTyping } from '../services/typing';
 
 Quill.register('modules/emoji', QuillEmoji);
 
@@ -10,28 +10,9 @@ let submit = () => {};
 let toggle = () => {};
 let quillFocus = () => {};
 
-let cooldown = false;
-let queue = false;
-
 const send = () => submit();
 const toggleToolbar = () => toggle();
 const focus = () => quillFocus();
-
-function notifyTyping() {
-  if (cooldown) {
-    queue = true;
-    return;
-  }
-  cooldown = true;
-  queue = false;
-  con.send({ op: { type: 'typing' } });
-  setTimeout(() => {
-    cooldown = false;
-    if (queue) {
-      notifyTyping();
-    }
-  }, 1000);
-}
 
 function initQuill() {
   const quill = new Quill('#input', {

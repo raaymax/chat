@@ -5,30 +5,24 @@ import { setInfo } from './store/info.js';
 import { setUser, getUser } from './store/user.js';
 import { insertMessage, clearMessages } from './store/messages.js';
 import { load } from './services/messages.js';
-import con from './connection.js';
+import client from './client';
 
-con
-  .on('ready', connectionReady)
-  .on('ready', (srv) => !getSession() && srv.send({ op: { type: 'greet' } }))
-  .on('packet', (srv, raw) => {
-    const msg = JSON.parse(raw.data);
-    // eslint-disable-next-line no-console
-    if (window.debug && msg.op) console.log(msg.op.type, msg.op);
-  })
+client
+  .on('con:open', connectionReady)
+  .on('con:open', (srv) => !getSession() && srv.send({ op: { type: 'greet' } }))
   .on('op:setSession', handleSession)
   .on('op:setConfig', (srv, msg) => setConfig(msg.op.config))
   .on('op:setChannel', handleChannel)
   .on('op:typing', (srv, msg) => msg.user.id !== getUser().id && setInfo({ msg: `${msg.user.name} is typing`, type: 'info' }, 1000))
   .on('message', handleMessage)
-  .on('disconnect', () => {
+  .on('con:close', () => {
     setInfo({ msg: 'Disconnected - reconnect attempt in 1s', type: 'error' });
-  })
-  .init();
+  });
 
 setInterval(async () => {
   const start = new Date();
   try {
-    await con.req({ op: { type: 'ping' } });
+    await client.req({ op: { type: 'ping' } });
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
@@ -41,7 +35,7 @@ setInterval(async () => {
 
 window.addEventListener('hashchange', () => {
   const name = window.location.hash.slice(1);
-  con.send({ command: { name: 'channel', args: [name] } });
+  client.send({ command: { name: 'channel', args: [name] } });
 }, false);
 
 async function connectionReady(srv) {
@@ -85,7 +79,7 @@ async function subscribeNotifications() {
       reg.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: cfg.applicationServerKey,
-      }).then((subscription) => con.req({
+      }).then((subscription) => client.req({
         op: {
           type: 'setupPushNotifications',
           subscription,
