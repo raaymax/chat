@@ -41,8 +41,7 @@ services:
     - .:/home/node/app
     command: "sh .deploy/install.sh"
     deploy:
-      restart_policy:
-        condition: "no"
+      restart_policy: "no"
 
   chat:
     image: node:17-alpine
