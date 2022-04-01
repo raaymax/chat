@@ -60,6 +60,7 @@ export const createEventListener = () => {
         try {
           await listener(...args);
         } catch (err) {
+          // eslint-disable-next-line no-console
           console.error(err);
         }
       }),

@@ -61,7 +61,7 @@ async function handleSession(srv, msg) {
 }
 
 function handleMessage(srv, msg) {
-  if (msg.channel === getChannel()) {
+  if (msg.priv || msg.channel === getChannel()) {
     insertMessage(msg);
   }
 }

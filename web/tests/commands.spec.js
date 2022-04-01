@@ -1,4 +1,4 @@
-import con from '../js/connection.js';
+import con from '../src/js/client.js';
 
 const { expect } = chai;
 

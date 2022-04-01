@@ -13,6 +13,7 @@ export const getMessage = (id) => list.find((m) => m.id === id || m.clientId ===
 export const getMessages = () => list;
 
 export const insertMessage = (msg) => {
+  if(msg.priv) console.log('add', msg);
   msg.createdAt = new Date(msg.createdAt);
   const existing = list.find((m) => (m.id && m.id === msg.id)
     || (m.clientId && m.clientId === msg.clientId));

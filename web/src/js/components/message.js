@@ -17,6 +17,7 @@ const TYPES = {
   blockquote: (props) => html`<blockquote>${build(props.data)}</blockquote>`,
   code: (props) => html`<code>${build(props.data)}</code>`,
   line: (props) => html`${build(props.data)}<br/>`,
+  br: (props) => html`<br/>`,
   text: (props) => props.data,
   bold: (props) => html`<b>${build(props.data)}</b>`,
   italic: (props) => html`<em>${build(props.data)}</em>`,
@@ -47,7 +48,7 @@ const isOnlyEmoji = (message) => message
 export const Message = (props = {}) => html`
   <div ...${props} class=${['message', ...props.class].join(' ')}>
     ${!props.sameUser
-    ? html`<div class='avatar'><img src=${props.avatarUrl}/></div>`
+    ? html`<div class='avatar'>${props.avatarUrl && html`<img src=${props.avatarUrl}/>`}</div>`
     : html`<div class='spacy side-time'>${formatTime(props.date)}</div>`
 }
     <div class='body'>

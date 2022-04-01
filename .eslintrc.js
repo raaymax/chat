@@ -10,6 +10,9 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest',
   },
+  ignorePatterns: [
+    'web/dist',
+  ],
   overrides: [
     {
       files: ['web/src/sw.js'],

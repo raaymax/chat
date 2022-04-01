@@ -1,7 +1,7 @@
 import { html, useEffect, useRef } from '../utils.js';
 import { build } from '../formatter.js';
 import { Info } from './info.js';
-import { send as sendMessage} from '../services/messages.js';
+import { send as sendMessage } from '../services/messages.js';
 import { notifyTyping } from '../services/typing';
 
 Quill.register('modules/emoji', QuillEmoji);
