@@ -42,10 +42,7 @@ services:
     command: "sh .deploy/install.sh"
     deploy:
       restart_policy:
-        condition: no
-        delay: 5s
-        max_attempts: 3
-        window: 120s
+        condition: "no"
 
   chat:
     image: node:17-alpine
