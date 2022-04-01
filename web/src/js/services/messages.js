@@ -56,7 +56,9 @@ const sendMessage = async (msg) => {
   insertMessage(msg);
   try {
     await client.req(msg);
-  } catch (errr) {
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
     updateMessage(msg.clientId, { info: { msg: 'Sending message failed', type: 'error' } });
   }
 };

@@ -18,6 +18,7 @@ module.exports = {
     op: {
       type: 'setConfig',
       config: {
+        appVersion: process.env.COMMIT, 
         applicationServerKey: process.env.VAPID_PUBLIC,
       },
     },

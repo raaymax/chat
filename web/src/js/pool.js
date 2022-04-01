@@ -40,6 +40,7 @@ export function createPool(address) {
 
   createConnection();
   return {
+    cons,
     onOpen: (cb) => watch('open', cb),
     onClose: (cb) => watch('close', cb),
     onError: (cb) => watch('error', cb),

@@ -7,6 +7,7 @@ const EXTERNAL_ASSETS = [
 ];
 
 const ASSETS = [
+  '/assets/sound.mp3',
   '/assets/icons/favicon-16x16.png',
   '/assets/icons/mstile-150x150.png',
   '/assets/icons/favicon-32x32.png',
@@ -73,21 +74,32 @@ self.addEventListener('push', (e) => {
   // eslint-disable-next-line no-console
   console.log('[SW] notification', e);
   const data = e.data.json();
-  e.waitUntil(
-    self.registration.showNotification(data.title, {
-      body: data.description,
-      tag: data.channel,
-      vibrate: [100, 50, 100],
-      silent: false,
-      data: {
-        dateOfArrival: Date.now(),
-        primaryKey: '2',
-      },
-      actions: [
-        { action: 'open', title: 'Go to message' },
-      ],
-    }),
-  );
+  console.log('notif', data);
+  e.waitUntil((async () => {
+    try {
+      await self.registration.showNotification(data.title, {
+        body: data.description,
+        tag: data.channel,
+        vibrate: [100, 50, 100],
+        silent: false,
+        data: {
+          dateOfArrival: Date.now(),
+          primaryKey: '2',
+        },
+        actions: [
+          { action: 'open', title: 'Go to message' },
+        ],
+      });
+    } catch(err) {
+      console.error(err);
+    }
+    console.log('fire');
+    const client = await getOpenClient();
+    console.log('client', client);
+    await client.postMessage({
+      type: 'sound',
+    });
+  })());
 });
 
 self.addEventListener('notificationclick', (event) => {
@@ -105,3 +117,12 @@ self.addEventListener('notificationclick', (event) => {
     if (clients.openWindow) return clients.openWindow('/');
   }));
 });
+
+function getOpenClient() {
+  return clients.matchAll({
+    type: 'window',
+  }).then((clientList) => {
+    console.log(clientList);
+    return clientList[0];
+  });
+}

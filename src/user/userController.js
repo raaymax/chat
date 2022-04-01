@@ -3,24 +3,28 @@ const service = require('./userService');
 
 module.exports = {
   restore: async (self, msg) => {
+    console.log('restore self.id=', self.id);
     // console.log(msg);
     const { op } = msg;
     if (!op.session) return msg.error({ code: 'SESSION_NOT_EXISTS' });
-    const restored = await service.sessionRestore(op.session);
-    if (!restored) return msg.error({ code: 'SESSION_NOT_RESTORED' });
-    const { session, user } = restored;
-    self.user = user;
-    self.session = session;
-    await self.op({
-      type: 'setSession',
-      session,
-      user: {
-        id: user.id,
-        name: user.name,
-        avatarUrl: user.avatarUrl,
-      },
-    }, msg.seqId);
-    return msg.ok({ session, user });
+    try {
+      const restored = await service.sessionRestore(op.session);
+      const { session, user } = restored;
+      self.user = user;
+      self.session = session;
+      await self.op({
+        type: 'setSession',
+        session,
+        user: {
+          id: user.id,
+          name: user.name,
+          avatarUrl: user.avatarUrl,
+        },
+      }, msg.seqId);
+      return msg.ok({ session, user });
+    } catch(err) {
+      return msg.error({ code: 'SESSION_NOT_RESTORED', reason: err.toString() });
+    }
   },
 
   changeName: async (self, msg) => {

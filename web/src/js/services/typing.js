@@ -1,8 +1,10 @@
 import client from '../client';
+import { getConfig } from '../store/config';
 
 let cooldown = false;
 let queue = false;
 export function notifyTyping() {
+  if (!getConfig) return;
   if (cooldown) {
     queue = true;
     return;

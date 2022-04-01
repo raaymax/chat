@@ -10,6 +10,8 @@ if (document.location.protocol === 'https:') {
 }
 const pool = createPool(`${protocol}//${document.location.host}/ws`);
 
+window.pool = pool;
+
 const client = {
   send: async (msg) => {
     // eslint-disable-next-line no-console

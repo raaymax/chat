@@ -6,18 +6,25 @@ import { setUser, getUser } from './store/user.js';
 import { insertMessage, clearMessages } from './store/messages.js';
 import { load } from './services/messages.js';
 import client from './client';
+import { play } from './services/sound';
+
+window.client = client;
 
 client
-  .on('con:open', connectionReady)
-  .on('con:open', (srv) => !getSession() && srv.send({ op: { type: 'greet' } }))
+  .on('op:setConfig', handleConfig)
   .on('op:setSession', handleSession)
-  .on('op:setConfig', (srv, msg) => setConfig(msg.op.config))
   .on('op:setChannel', handleChannel)
   .on('op:typing', (srv, msg) => msg.user.id !== getUser().id && setInfo({ msg: `${msg.user.name} is typing`, type: 'info' }, 1000))
   .on('message', handleMessage)
   .on('con:close', () => {
     setInfo({ msg: 'Disconnected - reconnect attempt in 1s', type: 'error' });
   });
+
+navigator.serviceWorker.addEventListener('message', (event) => {
+  console.log(event.data.msg, event.data.url);
+  navigator.vibrate([100, 30, 100]);
+  play();
+});
 
 setInterval(async () => {
   const start = new Date();
@@ -33,17 +40,41 @@ setInterval(async () => {
   }
 }, 10000);
 
+function handleConfig(srv, msg) {
+  console.log('handleConfig', APP_VERSION, msg);
+  // eslint-disable-next-line no-undef
+  if (msg.op.config.appVersion !== APP_VERSION) {
+    window.location.reload(true);
+    insertMessage({
+      id: 'version',
+      createdAt: new Date(),
+      user: {
+        name: 'System',
+      },
+      message: [
+        { line: { bold: { text: 'Your Quack version is outdated!!' } } },
+        { line: { text: 'Please reload the page to update' } },
+      ],
+    });
+    return;
+  }
+  setConfig(msg.op.config);
+  connectionReady();
+}
+
 window.addEventListener('hashchange', () => {
   const name = window.location.hash.slice(1);
   client.send({ command: { name: 'channel', args: [name] } });
 }, false);
 
-async function connectionReady(srv) {
+async function connectionReady() {
   setInfo(null);
   try {
     const session = getSession();
     if (session) {
-      await srv.req({ op: { type: 'restore', session } });
+      await client.req({ op: { type: 'restore', session } });
+    } else {
+      await client.send({ op: { type: 'greet' } });
     }
   } catch (err) {
     // eslint-disable-next-line no-console

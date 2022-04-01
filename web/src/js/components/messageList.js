@@ -38,27 +38,26 @@ export function MessageList() {
     setMessages([...(m || [])]); // fixme: hack for refreshing
   });
 
-  console.log(messages);
   let prev;
   return html`
     <div class="message-list" ref=${list}>
       <div key='bottom' id='scroll-stop' ref=${stop}></div>
       ${messages.map((msg) => {
-        let sameUser = false;
-        if(!msg.priv){
-          sameUser = prev
+    let sameUser = false;
+    if (!msg.priv) {
+      sameUser = prev
             && prev?.user?.id === msg?.user?.id
             && (new Date(msg.createdAt) - new Date(prev.createdAt)) < 60000;
-        }
-        prev = msg;
-        return (
-          msg.notif
-            ? html`<${Notification} 
+    }
+    prev = msg;
+    return (
+      msg.notif
+        ? html`<${Notification} 
                   key=${msg.id}
                   className=${[msg.notifType]}>
                   ${msg.notif}
                 <//>`
-            : html`
+        : html`
               <${Message} 
                 class=${msg.priv ? ['private'] : []} 
                 data-id=${msg.id}
@@ -70,8 +69,8 @@ export function MessageList() {
                 content=${msg.message}
                 date=${msg.createdAt}
               />`
-        );
-      }).reverse()}
+    );
+  }).reverse()}
     </div>
   `;
 }
