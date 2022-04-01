@@ -32,24 +32,24 @@ const TYPES = {
 
 const isToday = (date) => {
   const someDate = new Date(date);
-  const today = new Date()
+  const today = new Date();
   return someDate.getDate() === today.getDate()
     && someDate.getMonth() === today.getMonth()
-    && someDate.getFullYear() === today.getFullYear()
-}
+    && someDate.getFullYear() === today.getFullYear();
+};
 
-const isOnlyEmoji = (message) => message 
-    && message.length === 1 
+const isOnlyEmoji = (message) => message
+    && message.length === 1
     && message[0].line
-    && message[0].line.length === 1 
+    && message[0].line.length === 1
     && message[0].line[0].emoji;
 
 export const Message = (props = {}) => html`
   <div ...${props} class=${['message', ...props.class].join(' ')}>
-    ${!props.sameUser 
-      ? html`<div class='avatar'><img src=${props.avatarUrl}/></div>`
-      : html`<div class='spacy side-time'>${formatTime(props.date)}</div>`
-    }
+    ${!props.sameUser
+    ? html`<div class='avatar'><img src=${props.avatarUrl}/></div>`
+    : html`<div class='spacy side-time'>${formatTime(props.date)}</div>`
+}
     <div class='body'>
       ${!props.sameUser && html`<div class='header'>
         <span class='author'>${props.author}</span>

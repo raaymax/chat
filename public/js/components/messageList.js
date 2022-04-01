@@ -18,7 +18,7 @@ export function MessageList() {
   function onScroll(e) {
     const msgs = [...list.current.querySelectorAll('.message')];
     const H = getH();
-    const current = msgs.find((el) => (el.offsetTop-H+ 20 < e.srcElement.scrollTop));
+    const current = msgs.find((el) => (el.offsetTop - H + 20 < e.srcElement.scrollTop));
 
     const top = e.srcElement.scrollHeight - H + e.srcElement.scrollTop;
     if (top < 10) {
@@ -38,24 +38,23 @@ export function MessageList() {
     setMessages([...(m || [])]); // fixme: hack for refreshing
   });
 
-
   let prev;
   return html`
     <div class="message-list" ref=${list}>
       <div key='bottom' id='scroll-stop' ref=${stop}></div>
       ${messages.map((msg) => {
-        const sameUser = prev 
-          && prev?.user?.id === msg?.user?.id 
-          && ( new Date(msg.createdAt) - new Date(prev.createdAt)) < 60000;
-        prev = msg;
-        return (
-          msg.notif
-          ? html`<${Notification} 
+    const sameUser = prev
+          && prev?.user?.id === msg?.user?.id
+          && (new Date(msg.createdAt) - new Date(prev.createdAt)) < 60000;
+    prev = msg;
+    return (
+      msg.notif
+        ? html`<${Notification} 
               key=${msg.id}
               className=${[msg.notifType]}>
               ${msg.notif}
             <//>`
-          : html`
+        : html`
           <${Message} 
             class=${msg.priv ? ['private'] : []} 
             data-id=${msg.id}
@@ -67,8 +66,8 @@ export function MessageList() {
             content=${msg.message}
             date=${msg.createdAt}
           />`
-        );
-      }).reverse()}
+    );
+  }).reverse()}
     </div>
   `;
 }
