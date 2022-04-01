@@ -7,7 +7,6 @@ import { Notification } from './notification.js';
 import { loadPrevious } from '../services/messages.js';
 
 const loadPrev = createCooldown(loadPrevious, 100);
-let init = true;
 
 export function MessageList() {
   const [messages, setMessages] = useState([]);
@@ -17,11 +16,12 @@ export function MessageList() {
   const getH = () => parseInt(window.getComputedStyle(list.current).height.split(' ')[0], 10);
 
   function onScroll(e) {
-    init = false;
     const msgs = [...list.current.querySelectorAll('.message')];
     const H = getH();
-    const current = msgs.findLast((el) => (el.offsetTop < e.srcElement.scrollTop + H - 20));
-    if (e.srcElement.scrollTop < 5) {
+    const current = msgs.find((el) => (el.offsetTop - H + 20 < e.srcElement.scrollTop));
+
+    const top = e.srcElement.scrollHeight - H + e.srcElement.scrollTop;
+    if (top < 10) {
       loadPrev();
     } else if (current) {
       const id = current.getAttribute('data-id');
@@ -35,32 +35,39 @@ export function MessageList() {
   }, []);
 
   watchMessages((m) => {
-    const position = list.current.scrollHeight - getH() - list.current.scrollTop;
     setMessages([...(m || [])]); // fixme: hack for refreshing
-    setTimeout(() => {
-      if (init || position < 10) {
-        stop.current.scrollIntoView();
-      } else {
-        list.current.scrollTo(0, list.current.scrollHeight - getH() - position);
-      }
-    }, 0);
   });
 
+  let prev;
   return html`
     <div class="message-list" ref=${list}>
-      ${messages.map((msg) => (msg.notif
-    ? html`<${Notification} key=${msg.id} className=${[msg.notifType]}>${msg.notif}<//>`
-    : html`
+      <div key='bottom' id='scroll-stop' ref=${stop}></div>
+      ${messages.map((msg) => {
+    const sameUser = prev
+          && prev?.user?.id === msg?.user?.id
+          && (new Date(msg.createdAt) - new Date(prev.createdAt)) < 60000;
+    prev = msg;
+    return (
+      msg.notif
+        ? html`<${Notification} 
+              key=${msg.id}
+              className=${[msg.notifType]}>
+              ${msg.notif}
+            <//>`
+        : html`
           <${Message} 
             class=${msg.priv ? ['private'] : []} 
             data-id=${msg.id}
             key=${msg.id}
+            sameUser=${sameUser}
+            avatarUrl=${msg.user?.avatarUrl}
             author=${msg.user?.name || 'Guest'}
             info=${msg.info}
             content=${msg.message}
             date=${msg.createdAt}
-          />`))}
-      <div key='bottom' id='scroll-stop' ref=${stop}></div>
+          />`
+    );
+  }).reverse()}
     </div>
   `;
 }

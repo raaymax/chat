@@ -2,6 +2,7 @@ html {
   font-family: 'Roboto', sans-serif;
   background-color: rgb(26, 29, 33);
   color: rgb(209,210,211);
+  --font-size: 1.1em;
 }
 body, html {
   box-sizing: border-box;
@@ -157,6 +158,8 @@ ul {
 
 
 .message-list {
+  display: flex;
+  flex-direction: column-reverse;
   position: relative;
   background-color: rgb(26, 29, 33);
   overflow-y: scroll;
@@ -256,13 +259,47 @@ ul {
     background-color: rgba(249,249,249,0.05)
 }
 
+
+
 .message {
   position: relative;
+  display: flex;
+  flex-direction: row;
   animation-name: fade;
   animation-duration: 1s;
   animation-iteration-count: 1;
   margin: 0;
   padding: 0;
+  line-height: 24px;
+  vertical-align: middle;
+}
+
+.message .side-time {
+  margin-left: 30px;
+  flex: 0 44px;
+  width: 44px;
+  color: rgb(26, 29, 33);
+  font-weight: 200;
+  font-size: .8em;
+  text-align: center;
+}
+.message:hover .side-time {
+  color: rgb(209,210,211);
+}
+
+.message .avatar {
+  flex: 0 44px;
+  margin-left: 30px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  height: 44px;
+  width: 44px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.message .avatar img {
+  height: 100%;
+  width: 100%;
 }
 
 .message.private{
@@ -279,7 +316,9 @@ ul {
 }
 
 .message .header {
-  padding-bottom: 5px;
+  --line-height: 24px;
+  --padding-top: 5px;
+  --padding-bottom: 0px;
 }
 .message .author {
   font-weight: bold;
@@ -291,8 +330,13 @@ ul {
 .message .content {
   font-weight: 300;
 }
+.message .content.emoji {
+  font-size: 30px;
+  line-height: 35px;
+}
 .message .body {
-  padding: 10px 30px;
+  flex: 1;
+  padding: 0px 10px;
 }
 .message.private .body {
   padding: 10px 30px 10px 20px;
@@ -303,3 +347,11 @@ ul {
 .message:hover {
     background-color: rgba(249,249,249,0.05)
 }
+
+#scroll-stop {
+  height: 10px;
+}
+#scroll-stop:after {
+  content: '.';
+}
+

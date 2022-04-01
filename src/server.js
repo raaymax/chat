@@ -46,10 +46,12 @@ wss({ server })
   .on('command:help', (self, msg) => self.sys([
     { text: '/channel <name> - change current channel' }, { br: true },
     { text: '/name <name> - to change your name' }, { br: true },
+    { text: '/avatar <url> - to change your avatar' }, { br: true },
     { text: '/login <name> <password> - login to your account' }, { br: true },
     { text: '/help - display this help' }, { br: true },
   ], true, msg.seqId).then(() => msg.ok()))
   .on('command:name', userController.changeName)
+  .on('command:avatar', userController.changeAvatar)
   .on('command:login', userController.login)
   .on('command:channel', messageController.changeChannel)
   .on('message', messageController.handle)

@@ -2,6 +2,7 @@ const assert = require('assert');
 const { knex } = require('../../src/database/db');
 const {
   anyString,
+  any,
   match,
 } = require('../helpers');
 
@@ -39,6 +40,7 @@ module.exports = (sys) => {
               user: {
                 id: anyString(),
                 name: 'Mateusz',
+                avatarUrl: any(),
               },
             },
           },

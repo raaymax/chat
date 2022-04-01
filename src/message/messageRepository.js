@@ -13,7 +13,7 @@ module.exports = {
       if (after) qb.andWhere('messages.createdAt', '>', after);
     })
     .orderBy('messages.createdAt', 'desc')
-    .limit(15)
+    .limit(50)
     .offset(offset),
   insert: async (msg) => knex('messages').insert(msg).returning('*'),
 };

@@ -10,6 +10,11 @@ export const { Component } = preact;
 export const { render } = preact;
 export const { h } = preact;
 
+export const formatDate = (raw) => {
+  const date = new Date(raw);
+  return date.toLocaleDateString('pl-PL');
+};
+
 export const formatTime = (raw) => {
   const date = new Date(raw);
   let minutes = date.getMinutes().toString();
