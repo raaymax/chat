@@ -34,11 +34,18 @@ services:
     networks:
     - chat
     environment:
+    - COMMIT=${COMMIT_HASH}
     - NODE_ENV=production
     - DATABASE_URL=postgres://chat:chat@chat_db:5432/chat
     volumes:
     - .:/home/node/app
     command: "sh .deploy/install.sh"
+    deploy:
+      restart_policy:
+        condition: no
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   chat:
     image: node:17-alpine
