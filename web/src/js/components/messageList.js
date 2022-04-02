@@ -6,7 +6,6 @@ import { Message } from './message.js';
 import { Notification } from './notification.js';
 import { loadPrevious } from '../services/messages.js';
 
-
 const loadPrev = createCooldown(loadPrevious, 100);
 
 export function MessageList() {
