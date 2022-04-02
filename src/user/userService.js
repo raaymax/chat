@@ -24,26 +24,16 @@ async function userLogin(login, password) {
 }
 
 async function sessionRestore({ id = '', secret }) {
-  try {
-    // console.log(id, secret);
-    // console.log(await knex('sessions').select());
-    // console.log(sessionRepo.get({id}).toString());
-    const session = await sessionRepo.get({ id });
-    // console.log('session: ', session);
-    if (session) {
-      if (session.token === genHash(secret)) {
-        const newSession = await refreshSession(session);
-        return { session: newSession, user: session.user };
-      }
-      await sessionRepo.delete({ userId: session.userId });
-      return null;
+  const session = await sessionRepo.get({ id });
+  if (session) {
+    if (session.token === genHash(secret)) {
+      const newSession = await refreshSession(session);
+      return { session: newSession, user: session.user };
     }
-    return null;
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(err);
-    return null;
+    await sessionRepo.delete({ userId: session.userId });
+    throw new Error('hack!');
   }
+  throw new Error('Not found');
 }
 
 module.exports = {

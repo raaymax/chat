@@ -338,11 +338,8 @@ ul {
   flex: 1;
   padding: 0px 10px;
 }
-.message.private .body {
-  padding: 10px 30px 10px 20px;
-}
-.message .toggle-debug {
-  cursor: pointer;
+.message.private .avatar {
+  margin-left: 20px;
 }
 .message:hover {
     background-color: rgba(249,249,249,0.05)

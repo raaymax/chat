@@ -5,29 +5,30 @@ import { setInfo } from './store/info.js';
 import { setUser, getUser } from './store/user.js';
 import { insertMessage, clearMessages } from './store/messages.js';
 import { load } from './services/messages.js';
-import con from './connection.js';
+import client from './client';
+import { play } from './services/sound';
 
-con
-  .on('ready', connectionReady)
-  .on('ready', (srv) => !getSession() && srv.send({ op: { type: 'greet' } }))
-  .on('packet', (srv, raw) => {
-    const msg = JSON.parse(raw.data);
-    // eslint-disable-next-line no-console
-    if (window.debug && msg.op) console.log(msg.op.type, msg.op);
-  })
+window.client = client;
+
+client
+  .on('op:setConfig', handleConfig)
   .on('op:setSession', handleSession)
-  .on('op:setConfig', (srv, msg) => setConfig(msg.op.config))
   .on('op:setChannel', handleChannel)
   .on('op:typing', (srv, msg) => msg.user.id !== getUser().id && setInfo({ msg: `${msg.user.name} is typing`, type: 'info' }, 1000))
   .on('message', handleMessage)
-  .on('disconnect', () => {
+  .on('con:close', () => {
     setInfo({ msg: 'Disconnected - reconnect attempt in 1s', type: 'error' });
   });
+
+navigator.serviceWorker.addEventListener('message', () => {
+  navigator.vibrate([100, 30, 100]);
+  play();
+});
 
 setInterval(async () => {
   const start = new Date();
   try {
-    await con.req({ op: { type: 'ping' } });
+    await client.req({ op: { type: 'ping' } });
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
@@ -38,17 +39,42 @@ setInterval(async () => {
   }
 }, 10000);
 
+function handleConfig(srv, msg) {
+  // eslint-disable-next-line no-console, no-undef
+  console.log('version check: ', APP_VERSION, msg.op.config.appVersion);
+  // eslint-disable-next-line no-undef
+  if (msg.op.config.appVersion !== APP_VERSION) {
+    window.location.reload(true);
+    insertMessage({
+      id: 'version',
+      createdAt: new Date(),
+      user: {
+        name: 'System',
+      },
+      message: [
+        { line: { bold: { text: 'Your Quack version is outdated!!' } } },
+        { line: { text: 'Please reload the page to update' } },
+      ],
+    });
+    return;
+  }
+  setConfig(msg.op.config);
+  connectionReady();
+}
+
 window.addEventListener('hashchange', () => {
   const name = window.location.hash.slice(1);
-  con.send({ command: { name: 'channel', args: [name] } });
+  client.send({ command: { name: 'channel', args: [name] } });
 }, false);
 
-async function connectionReady(srv) {
+async function connectionReady() {
   setInfo(null);
   try {
     const session = getSession();
     if (session) {
-      await srv.req({ op: { type: 'restore', session } });
+      await client.req({ op: { type: 'restore', session } });
+    } else {
+      await client.send({ op: { type: 'greet' } });
     }
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -66,7 +92,7 @@ async function handleSession(srv, msg) {
 }
 
 function handleMessage(srv, msg) {
-  if (msg.channel === getChannel()) {
+  if (msg.priv || msg.channel === getChannel()) {
     insertMessage(msg);
   }
 }
@@ -84,7 +110,7 @@ async function subscribeNotifications() {
       reg.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: cfg.applicationServerKey,
-      }).then((subscription) => con.req({
+      }).then((subscription) => client.req({
         op: {
           type: 'setupPushNotifications',
           subscription,

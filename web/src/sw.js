@@ -7,38 +7,31 @@ const EXTERNAL_ASSETS = [
 ];
 
 const ASSETS = [
-  '/',
-  '/style.css',
-  '/assets/fontawesome/css/all.css',
-  '/app.js',
-  '/js/init.js',
-  '/js/core.js',
-  '/js/pages/chat.js',
-  '/js/store/config.js',
-  '/js/store/channel.js',
-  '/js/store/session.js',
-  '/js/store/info.js',
-  '/js/store/user.js',
-  '/js/services/messages.js',
-  '/js/store/messages.js',
-  '/js/connection.js',
-  '/js/utils.js',
-  '/js/components/chat.js',
-  '/js/requests.js',
-  '/js/components/messageList.js',
-  '/js/components/header.js',
-  '/js/components/input.js',
-  '/js/components/message.js',
-  '/js/components/notification.js',
-  '/js/formatter.js',
-  '/js/components/info.js',
-  '/assets/emoji_list.json',
-  '/assets/fontawesome/webfonts/fa-solid-900.woff2',
-  '/manifest.json',
+  '/assets/sound.mp3',
+  '/assets/icons/favicon-16x16.png',
+  '/assets/icons/mstile-150x150.png',
+  '/assets/icons/favicon-32x32.png',
+  '/assets/icons/android-chrome-512x512.png',
+  '/assets/icons/apple-touch-icon.png',
   '/assets/icons/android-chrome-192x192.png',
-  '/sw.js',
-  '/index.html',
+  '/assets/emoji_list.json',
   '/assets/favicon.ico',
+  '/assets/fontawesome/webfonts/fa-v4compatibility.ttf',
+  '/assets/fontawesome/webfonts/fa-brands-400.woff2',
+  '/assets/fontawesome/webfonts/fa-solid-900.ttf',
+  '/assets/fontawesome/webfonts/fa-regular-400.ttf',
+  '/assets/fontawesome/webfonts/fa-solid-900.woff2',
+  '/assets/fontawesome/webfonts/fa-regular-400.woff2',
+  '/assets/fontawesome/webfonts/fa-brands-400.ttf',
+  '/assets/fontawesome/webfonts/fa-v4compatibility.woff2',
+  '/assets/fontawesome/css/all.css',
+  '/assets/fontawesome/css/all.min.css',
+  '/manifest.json',
+  '/sw.js',
+  '/index.css',
+  '/index.html',
+  '/index.js',
+  '/',
 ];
 
 self.addEventListener('install', (event) => {
@@ -81,26 +74,33 @@ self.addEventListener('push', (e) => {
   // eslint-disable-next-line no-console
   console.log('[SW] notification', e);
   const data = e.data.json();
-  e.waitUntil(
-    self.registration.showNotification(data.title, {
-      body: data.description,
-      tag: data.channel,
-      vibrate: [100, 50, 100],
-      silent: false,
-      data: {
-        dateOfArrival: Date.now(),
-        primaryKey: '2',
-      },
-      actions: [
-        { action: 'open', title: 'Go to message' },
-      ],
-    }),
-  );
+  e.waitUntil((async () => {
+    try {
+      await self.registration.showNotification(data.title, {
+        body: data.description,
+        tag: data.channel,
+        vibrate: [100, 50, 100],
+        silent: false,
+        data: {
+          dateOfArrival: Date.now(),
+          primaryKey: '2',
+        },
+        actions: [
+          { action: 'open', title: 'Go to message' },
+        ],
+      });
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+    }
+    const client = await getOpenClient();
+    await client.postMessage({
+      type: 'sound',
+    });
+  })());
 });
 
 self.addEventListener('notificationclick', (event) => {
-  // eslint-disable-next-line no-console
-  console.log('On notification click: ', event.notification.tag);
   event.notification.close();
 
   event.waitUntil(clients.matchAll({
@@ -113,3 +113,9 @@ self.addEventListener('notificationclick', (event) => {
     if (clients.openWindow) return clients.openWindow('/');
   }));
 });
+
+function getOpenClient() {
+  return clients.matchAll({
+    type: 'window',
+  }).then((clientList) => clientList[0]);
+}

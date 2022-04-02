@@ -5,6 +5,11 @@ const App = (conf = {}) => {
   const handlers = {};
   const notify = (name, ...args) => Promise.all((handlers[name] || []).map((h) => h(...args)));
   async function start() {
+    if (process.env.NODE_ENV === 'production') {
+      // wait for http to make sure reload will be successful
+      // FIXME: this is just workaround
+      await new Promise((resolve) => { setTimeout(resolve, 1000); });
+    }
     const wss = new WebSocket.Server(conf);
     const connections = {};
     const srv = {
@@ -81,10 +86,8 @@ const App = (conf = {}) => {
     });
   }
   const app = {
-    on: (prop, ...handler) => {
-      const h = (...args) => handler.reverse()
-        .reduce((next, fn) => async () => fn(...args, next), () => {})();
-      handlers[prop] = [...(handlers[prop] || []), h];
+    on: (prop, handler) => {
+      handlers[prop] = [...(handlers[prop] || []), handler];
       return app;
     },
     start,

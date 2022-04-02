@@ -34,13 +34,13 @@ wss({ server })
   })
   .on('op:load', messageController.load)
   .on('op:ping', (self, msg) => msg.ok())
-  .on('op:restore', (srv, msg, next) => {
+  .on('op:restore', (srv, msg) => {
     const ret = sessionSchema.validate(msg.op.session);
     if (ret.error) {
       return msg.error({ code: 'VALIDATION_ERROR', message: ret.error.message });
     }
-    return next();
-  }, userController.restore)
+    return userController.restore(srv, msg);
+  })
   .on('op:typing', messageController.isTyping)
   .on('op:setupPushNotifications', pushController.setupPushNotifications)
   .on('command:help', (self, msg) => self.sys([

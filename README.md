@@ -116,3 +116,7 @@ Messaging app
 - bug: emojis select box is below input/screen
 - bug: link creation popup is closing on click
 - improvement: try flex-direction: column-reverse;
+- improvement: create native app with https://capacitorjs.com/
+- task: deploy app to google play
+- bug: char emojis are not bigger if only in message
+- bug: code-block is not working

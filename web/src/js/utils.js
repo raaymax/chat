@@ -51,3 +51,32 @@ export const createCooldown = (fn, time) => {
     }
   };
 };
+
+export const createEventListener = () => {
+  const handlers = {};
+  const notify = (ev, ...args) => Promise.all(
+    (handlers[ev] || [])
+      .map(async (listener) => {
+        try {
+          await listener(...args);
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.error(err);
+        }
+      }),
+  );
+  // eslint-disable-next-line no-return-assign
+  const watch = (ev, fn) => (handlers[ev] = handlers[ev] || []).push(fn);
+
+  return { watch, notify };
+};
+
+export const createOneShot = () => {
+  const next = [];
+  const fire = () => {
+    next.map((n) => n());
+    next.length = 0;
+  };
+  const charge = (event) => next.push(event);
+  return { fire, charge };
+};

@@ -21,8 +21,8 @@ const register = (seqId, source) => {
 };
 const done = (msg) => waiting[msg.seqId] && waiting[msg.seqId](msg);
 
-export function initRequests(con) {
-  con.on('resp', (srv, msg) => done(msg));
+export function initRequests(client) {
+  client.on('resp', (srv, msg) => done(msg));
 
   const ID = (Math.random() + 1).toString(36);
   let nextSeq = 0;
@@ -33,9 +33,9 @@ export function initRequests(con) {
     if (!msg.seqId) {
       msg.seqId = genSeqId();
     }
-    con.send(msg);
+    client.send(msg);
     return register(msg.seqId, msg);
   };
 
-  Object.assign(con, { ID, req, genSeqId });
+  Object.assign(client, { ID, req, genSeqId });
 }
