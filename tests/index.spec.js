@@ -16,11 +16,8 @@ describe('server', () => {
   });
 
   beforeEach(async () => {
-    try{
     sys.ws = await connect();
     sys.req = request(sys.ws);
-    }catch(err){
-    console.error(err);}
   });
 
   afterEach(() => sys.ws.close());
