@@ -21,8 +21,8 @@ client
   });
 
 navigator.serviceWorker.addEventListener('message', () => {
-  navigator.vibrate([100, 30, 100]);
   play();
+  navigator.vibrate([100, 30, 100]);
 });
 
 setInterval(async () => {

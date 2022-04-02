@@ -1,9 +1,14 @@
+import Quill from 'quill';
+import QuillEmoji from 'quill-emoji';
+import QuillAutoDetectUrl from 'quill-auto-detect-url';
+
 import { html, useEffect, useRef } from '../utils.js';
 import { Info } from './info.js';
 import { sendFromQuill } from '../services/messages.js';
 import { notifyTyping } from '../services/typing';
 
 Quill.register('modules/emoji', QuillEmoji);
+Quill.register('modules/autoDetectUrl', QuillAutoDetectUrl);
 
 let submit = () => {};
 let toggle = () => {};
@@ -17,6 +22,9 @@ function initQuill() {
   const quill = new Quill('#input', {
     theme: 'snow',
     modules: {
+      autoDetectUrl: {
+        urlRegularExpression: /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/i,
+      },
       toolbar: [['bold', 'italic', 'underline', 'strike', 'link'], ['emoji'], [{ list: 'ordered' }, { list: 'bullet' }], ['blockquote', 'code', 'code-block'], ['clean']].flat(),
       'emoji-toolbar': true,
       'emoji-shortname': true,
