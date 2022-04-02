@@ -26,8 +26,6 @@ Messaging app
 - feat: define web share target for sharing
 - feat: mark unread messages
 - improvement: make unknown calls throw error
-- improvement: hide message author if previous message was from same
-- improvement: try flex-direction: column-reverse;
 - improvement: create native app with https://capacitorjs.com/
 - bug: cannot ctrl-v text with emojis from slack
 - bug: emojis select box is below input/screen
