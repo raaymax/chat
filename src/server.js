@@ -43,7 +43,7 @@ wss({ server })
   })
   .on('op:typing', messageController.isTyping)
   .on('op:setupPushNotifications', pushController.setupPushNotifications)
-  .on('command:help', (a, c, next) => next(), (self, msg) => self.sys([
+  .on('command:help', (self, msg) => self.sys([
     { text: '/channel <name> - change current channel' }, { br: true },
     { text: '/name <name> - to change your name' }, { br: true },
     { text: '/avatar <url> - to change your avatar' }, { br: true },
