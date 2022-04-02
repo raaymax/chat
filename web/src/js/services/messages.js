@@ -45,14 +45,6 @@ const sendMessage = async (msg) => {
     });
     return;
   }
-<<<<<<< Updated upstream
-  msg.channel = getChannel();
-  msg.clientId = tempId();
-  msg.user = getUser();
-  msg.createdAt = new Date();
-  msg.info = null;
-=======
->>>>>>> Stashed changes
   insertMessage(msg);
   try {
     await client.req(msg);

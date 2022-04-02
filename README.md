@@ -29,7 +29,6 @@ Messaging app
 - improvement: hide message author if previous message was from same
 - improvement: try flex-direction: column-reverse;
 - improvement: create native app with https://capacitorjs.com/
-- bug: char emojis are not bigger if only in message
 - bug: cannot ctrl-v text with emojis from slack
 - bug: emojis select box is below input/screen
 - bug: link creation popup is closing on click

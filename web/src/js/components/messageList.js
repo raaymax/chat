@@ -65,12 +65,6 @@ export function MessageList() {
                 key=${msg.id}
                 sameUser=${sameUser}
                 data=${msg}
-                avatarUrl=${msg.user?.avatarUrl}
-                author=${msg.user?.name || 'Guest'}
-                info=${msg.info}
-                flat=${msg.flat}
-                content=${msg.message}
-                date=${msg.createdAt}
               />`
     );
   }).reverse()}
