@@ -23,4 +23,4 @@ COPY ./migrations ./migrations
 COPY ./knexfile.js ./knexfile.js
 COPY ./.deploy ./.deploy
 EXPOSE 8080
-CMD npm start
+CMD sh ./.deploy/startup.sh

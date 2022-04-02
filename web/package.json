@@ -9,13 +9,7 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "@capacitor/android": "3.4.3",
-    "@capacitor/core": "3.4.3",
-    "@capacitor/local-notifications": "1.1.0"
-  },
   "devDependencies": {
-    "@capacitor/cli": "3.4.3",
     "chai": "4.3.6",
     "copy-webpack-plugin": "10.2.4",
     "css-loader": "6.7.1",
