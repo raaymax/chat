@@ -5,8 +5,8 @@ const App = (conf = {}) => {
   const handlers = {};
   const notify = (name, ...args) => Promise.all((handlers[name] || []).map((h) => h(...args)));
   async function start() {
-    //wait for http
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // wait for http
+    await new Promise((resolve) => { setTimeout(resolve, 1000); });
     const wss = new WebSocket.Server(conf);
     const connections = {};
     const srv = {

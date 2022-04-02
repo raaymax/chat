@@ -15,7 +15,7 @@ window.pool = pool;
 const client = {
   send: async (msg) => {
     // eslint-disable-next-line no-console
-    //console.log('send', msg);
+    // console.log('send', msg);
     const raw = JSON.stringify(msg);
     await pool.send(raw);
   },
@@ -33,11 +33,10 @@ pool.onPacket((raw) => {
     const msg = JSON.parse(raw.data);
     notify('packet', msg);
     // eslint-disable-next-line no-console
-    //console.log('recv', msg);
-    if(msg.priv) console.log('recv', msg);
+    // console.log('recv', msg);
     if (msg.resp) notify('resp', client, msg);
     else if (msg.op) notify(`op:${msg.op.type}`, client, msg);
-    else  notify('message', client, msg);
+    else notify('message', client, msg);
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err, raw);

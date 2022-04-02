@@ -74,7 +74,6 @@ self.addEventListener('push', (e) => {
   // eslint-disable-next-line no-console
   console.log('[SW] notification', e);
   const data = e.data.json();
-  console.log('notif', data);
   e.waitUntil((async () => {
     try {
       await self.registration.showNotification(data.title, {
@@ -90,12 +89,11 @@ self.addEventListener('push', (e) => {
           { action: 'open', title: 'Go to message' },
         ],
       });
-    } catch(err) {
+    } catch (err) {
+      // eslint-disable-next-line no-console
       console.error(err);
     }
-    console.log('fire');
     const client = await getOpenClient();
-    console.log('client', client);
     await client.postMessage({
       type: 'sound',
     });
@@ -103,8 +101,6 @@ self.addEventListener('push', (e) => {
 });
 
 self.addEventListener('notificationclick', (event) => {
-  // eslint-disable-next-line no-console
-  console.log('On notification click: ', event.notification.tag);
   event.notification.close();
 
   event.waitUntil(clients.matchAll({
@@ -121,8 +117,5 @@ self.addEventListener('notificationclick', (event) => {
 function getOpenClient() {
   return clients.matchAll({
     type: 'window',
-  }).then((clientList) => {
-    console.log(clientList);
-    return clientList[0];
-  });
+  }).then((clientList) => clientList[0]);
 }

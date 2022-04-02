@@ -20,8 +20,7 @@ client
     setInfo({ msg: 'Disconnected - reconnect attempt in 1s', type: 'error' });
   });
 
-navigator.serviceWorker.addEventListener('message', (event) => {
-  console.log(event.data.msg, event.data.url);
+navigator.serviceWorker.addEventListener('message', () => {
   navigator.vibrate([100, 30, 100]);
   play();
 });
@@ -41,7 +40,8 @@ setInterval(async () => {
 }, 10000);
 
 function handleConfig(srv, msg) {
-  console.log('handleConfig', APP_VERSION, msg);
+  // eslint-disable-next-line no-console, no-undef
+  console.log('version check: ', APP_VERSION, msg.op.config.appVersion);
   // eslint-disable-next-line no-undef
   if (msg.op.config.appVersion !== APP_VERSION) {
     window.location.reload(true);

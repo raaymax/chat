@@ -3,8 +3,6 @@ const service = require('./userService');
 
 module.exports = {
   restore: async (self, msg) => {
-    console.log('restore self.id=', self.id);
-    // console.log(msg);
     const { op } = msg;
     if (!op.session) return msg.error({ code: 'SESSION_NOT_EXISTS' });
     try {
@@ -22,7 +20,7 @@ module.exports = {
         },
       }, msg.seqId);
       return msg.ok({ session, user });
-    } catch(err) {
+    } catch (err) {
       return msg.error({ code: 'SESSION_NOT_RESTORED', reason: err.toString() });
     }
   },
