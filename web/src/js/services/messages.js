@@ -53,6 +53,7 @@ const sendMessage = async (msg) => {
   msg.clientId = tempId();
   msg.user = getUser();
   msg.createdAt = new Date();
+  msg.info = null;
   insertMessage(msg);
   try {
     await client.req(msg);
