@@ -1,11 +1,21 @@
-export function build(data) {
+import { getChannel } from './store/channel';
+import { getUser } from './store/user';
+import { createCounter } from './utils';
+
+const tempId = createCounter(`temp:${(Math.random() + 1).toString(36)}`);
+
+export function fromQuill(data) {
   if (isEmpty(data)) {
     return;
   }
-  const line = data.ops[0].insert;
-  if (typeof line === 'string' && line.startsWith('/')) {
-    const m = line.replace('\n', '').slice(1).split(' ');
-    return { command: { name: m[0], args: m.splice(1) } };
+  if (data.ops.length === 1) {
+    const line = data.ops[0].insert;
+    if (line.indexOf('\n') === line.length - 1
+      && typeof line === 'string'
+      && line.startsWith('/')) {
+      const m = line.replace('\n', '').slice(1).split(' ');
+      return { command: { name: m[0], args: m.splice(1) } };
+    }
   }
 
   let norm = normalize(data);
@@ -13,7 +23,16 @@ export function build(data) {
   norm = groupLines(norm);
   norm = applyLineModifiers(norm);
   norm = applyMultilineModifiers(norm);
-  return { message: norm };
+  return build({ message: norm, flat: flat(norm) });
+}
+
+export function build(msg) {
+  msg.channel = getChannel();
+  msg.clientId = tempId();
+  msg.user = getUser();
+  msg.createdAt = new Date();
+  msg.info = null;
+  return msg;
 }
 
 function applyMultilineModifiers(lines) {
@@ -104,4 +123,41 @@ function separate(separator, arr) {
 
 function isEmpty(data) {
   return data.ops.length === 1 && data.ops[0].insert === '\n';
+}
+
+const KEYS = [
+  'bullet',
+  'ordered',
+  'item',
+  'codeblock',
+  'blockquote',
+  'code',
+  'line',
+  'text',
+  'br',
+  'bold',
+  'italic',
+  'underline',
+  'strike',
+  'link',
+  'emoji',
+];
+
+const flat = (datas) => [datas].flat().map((data) => {
+  if (typeof data === 'string') return data;
+
+  const key = Object.keys(data).find((f) => KEYS.includes(f));
+  if (!key) return '';
+  return type(key, data[key]);
+}).join('');
+
+function type(t, data) {
+  switch (t) {
+  case 'br':
+    return '';
+  case 'link':
+    return flat(data.children);
+  default:
+    return flat(data);
+  }
 }

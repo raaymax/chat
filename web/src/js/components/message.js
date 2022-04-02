@@ -1,5 +1,7 @@
 import { html, formatTime, formatDate } from '../utils.js';
 
+const EMOJI_MATCHER = () => /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/g;
+
 const build = (datas) => [datas].flat().map((data) => {
   if (typeof data === 'string') return html(data);
   const key = Object.keys(data).find((f) => TYPES[f]);
@@ -39,26 +41,33 @@ const isToday = (date) => {
     && someDate.getFullYear() === today.getFullYear();
 };
 
-const isOnlyEmoji = (message) => message
-    && message.length === 1
-    && message[0].line
-    && message[0].line.length === 1
-    && message[0].line[0].emoji;
+const isOnlyEmoji = (message, flat) => EMOJI_MATCHER().test(flat) || (
+  message
+  && message.length === 1
+  && message[0].line
+  && message[0].line.length === 1
+  && message[0].line[0].emoji
+);
 
-export const Message = (props = {}) => html`
-  <div ...${props} class=${['message', ...props.class].join(' ')}>
-    ${!props.sameUser
-    ? html`<div class='avatar'>${props.avatarUrl && html`<img src=${props.avatarUrl}/>`}</div>`
-    : html`<div class='spacy side-time'>${formatTime(props.date)}</div>`
+export const Message = (props = {}) => {
+  const {
+    info, message, flat, createdAt, user,
+  } = props.data;
+  return html`
+    <div ...${props} class=${['message', ...props.class].join(' ')}>
+      ${!props.sameUser
+    ? html`<div class='avatar'>${user.avatarUrl && html`<img src=${user.avatarUrl}/>`}</div>`
+    : html`<div class='spacy side-time'>${formatTime(createdAt)}</div>`
 }
-    <div class='body'>
-      ${!props.sameUser && html`<div class='header'>
-        <span class='author'>${props.author}</span>
-        <span class='spacy time'>${formatTime(props.date)}</span>
-        ${!isToday(props.date) && html`<span class='spacy time'>${formatDate(props.date)}</span>`}
-      </div>`}
-      <div class=${['content', ...(isOnlyEmoji(props.content) ? ['emoji'] : [])].join(' ')}>${build(props.content)}</div>
-      ${props.info && html`<div class=${['info', props.info.type].join(' ')}>${props.info.msg}</div>`}
+      <div class='body'>
+        ${!props.sameUser && html`<div class='header'>
+          <span class='author'>${user.name || 'Guest'}</span>
+          <span class='spacy time'>${formatTime(createdAt)}</span>
+          ${!isToday(createdAt) && html`<span class='spacy time'>${formatDate(createdAt)}</span>`}
+        </div>`}
+        <div class=${['content', ...(isOnlyEmoji(message, flat) ? ['emoji'] : [])].join(' ')}>${build(message)}</div>
+        ${info && html`<div class=${['info', info.type].join(' ')}>${info.msg}</div>`}
+      </div>
     </div>
-  </div>
-`;
+  `;
+};

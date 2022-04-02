@@ -5,19 +5,17 @@ import {
   updateMessage,
 } from '../store/messages.js';
 import { getChannel } from '../store/channel.js';
-import { getUser } from '../store/user.js';
 import client from '../client';
+import { fromQuill } from '../messageBuilder';
 
 export const loadPrevious = () => client.req({ op: { type: 'load', channel: getChannel(), before: getEarliestDate() } });
 export const loadNext = () => client.req({ op: { type: 'load', channel: getChannel(), after: getLatestDate() } });
 export const load = () => client.req({ op: { type: 'load', channel: getChannel() } });
 
-const createCounter = (prefix) => {
-  let counter = 0;
-  return () => `${prefix}:${counter++}`;
+export const sendFromQuill = async (delta) => {
+  const msg = fromQuill(delta);
+  send(msg);
 };
-
-const tempId = createCounter(`temp:${(Math.random() + 1).toString(36)}`);
 
 export const send = async (msg) => {
   if (msg.command) return sendCommand(msg);
@@ -25,35 +23,36 @@ export const send = async (msg) => {
 };
 
 export const sendCommand = async (msg) => {
-  const id = tempId();
-  insertMessage({
-    id, notifType: 'info', notif: `${msg.command.name} sent`, createdAt: new Date(),
-  });
+  const notif = {
+    clientId: msg.clientId,
+    notifType: 'info',
+    notif: `${msg.command.name} sent`,
+    createdAt: new Date(),
+  };
+  insertMessage(notif);
   try {
     await client.req(msg);
-    insertMessage({
-      id, notifType: 'success', notif: `${msg.command.name} executed successfully`, createdAt: new Date(),
-    });
+    insertMessage({ ...notif, notifType: 'success', notif: `${msg.command.name} executed successfully` });
   } catch (errr) {
-    insertMessage({
-      id, notifType: 'error', notif: `${msg.command.name} error`, createdAt: new Date(),
-    });
+    insertMessage({ ...notif, notifType: 'error', notif: `${msg.command.name} executed error` });
   }
 };
 
 const sendMessage = async (msg) => {
-  const user = getUser();
-  if (!user) {
+  if (!msg.user) {
     insertMessage({
       id: 'login', notifType: 'warning', notif: 'You must login first!', createdAt: new Date(),
     });
     return;
   }
+<<<<<<< Updated upstream
   msg.channel = getChannel();
   msg.clientId = tempId();
   msg.user = getUser();
   msg.createdAt = new Date();
   msg.info = null;
+=======
+>>>>>>> Stashed changes
   insertMessage(msg);
   try {
     await client.req(msg);

@@ -6,6 +6,7 @@ import { Message } from './message.js';
 import { Notification } from './notification.js';
 import { loadPrevious } from '../services/messages.js';
 
+
 const loadPrev = createCooldown(loadPrevious, 100);
 
 export function MessageList() {
@@ -63,9 +64,11 @@ export function MessageList() {
                 data-id=${msg.id}
                 key=${msg.id}
                 sameUser=${sameUser}
+                data=${msg}
                 avatarUrl=${msg.user?.avatarUrl}
                 author=${msg.user?.name || 'Guest'}
                 info=${msg.info}
+                flat=${msg.flat}
                 content=${msg.message}
                 date=${msg.createdAt}
               />`
