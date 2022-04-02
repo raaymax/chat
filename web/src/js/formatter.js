@@ -22,12 +22,13 @@ function applyMultilineModifiers(lines) {
   lines.forEach((line) => {
     if (!line.attributes) return groups.push(line);
     return Object.keys(line.attributes || {}).forEach((attr) => {
+      attr = attr.replace(/-/g, '');
       switch (attr) {
       case 'list':
         if (last()[line.attributes[attr]]) last()[line.attributes[attr]].push(line);
         else groups.push({ [line.attributes[attr]]: [line] });
         return;
-      case 'code-block':
+      case 'codeblock':
       case 'blockquote':
         if (last()[attr]) last()[attr].push(line);
         else groups.push({ [attr]: [line] });
