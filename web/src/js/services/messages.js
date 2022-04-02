@@ -6,7 +6,7 @@ import {
 } from '../store/messages.js';
 import { getChannel } from '../store/channel.js';
 import client from '../client';
-import { fromQuill } from '../messageBuilder';
+import { fromQuill } from '../MessageBuilder';
 
 export const loadPrevious = () => client.req({ op: { type: 'load', channel: getChannel(), before: getEarliestDate() } });
 export const loadNext = () => client.req({ op: { type: 'load', channel: getChannel(), after: getLatestDate() } });
