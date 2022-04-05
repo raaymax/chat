@@ -1,6 +1,5 @@
 const { v4: uuid } = require('uuid');
 const messageRepository = require('./messageRepository');
-const messageFlatter = require('./messageFlatter');
 
 module.exports = {
   load: async (self, msg) => {
@@ -50,7 +49,6 @@ module.exports = {
     }
     msg.channel = msg.channel || self.channel;
     msg.notify = true;
-    msg.flat = messageFlatter.flat(msg.message);
     await messageRepository.insert({
       id: msg.id,
       createdAt: msg.createdAt,

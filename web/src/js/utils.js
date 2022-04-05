@@ -70,13 +70,3 @@ export const createEventListener = () => {
 
   return { watch, notify };
 };
-
-export const createOneShot = () => {
-  const next = [];
-  const fire = () => {
-    next.map((n) => n());
-    next.length = 0;
-  };
-  const charge = (event) => next.push(event);
-  return { fire, charge };
-};

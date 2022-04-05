@@ -1,7 +1,6 @@
 import { html, useEffect, useRef } from '../utils.js';
-import { build } from '../formatter.js';
 import { Info } from './info.js';
-import { send as sendMessage } from '../services/messages.js';
+import { sendFromQuill } from '../services/messages.js';
 import { notifyTyping } from '../services/typing';
 
 Quill.register('modules/emoji', QuillEmoji);
@@ -42,7 +41,7 @@ function initQuill() {
   quillFocus = () => quill.focus();
 
   submit = () => {
-    sendMessage(build(quill.getContents()));
+    sendFromQuill(quill.getContents());
     setTimeout(() => {
       document.getElementById('scroll-stop').scrollIntoView();
     }, 1);
