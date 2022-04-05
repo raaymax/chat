@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unresolved */
-import * as preact from 'https://unpkg.com/preact@latest?module';
-import htm from 'https://unpkg.com/htm?module';
-import * as hooks from 'https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module';
+import * as preact from 'preact';
+import htm from 'htm';
+import * as hooks from 'preact/hooks';
 
 export const {
   useEffect, useState, useMemo, useRef,

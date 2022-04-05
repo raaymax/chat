@@ -66,6 +66,7 @@ module.exports = {
     },
     {
       files: ['web/**/*.js'],
+      extends: 'preact',
       env: {
         browser: true,
         es2021: true,
@@ -80,6 +81,7 @@ module.exports = {
         EMOJI: 'writable',
       },
       rules: {
+        'jest/no-deprecated-functions': 'off',
         'import/prefer-default-export': 'off',
         'import/extensions': ['off'],
       },

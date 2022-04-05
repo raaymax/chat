@@ -30,4 +30,5 @@ Messaging app
 - bug: cannot ctrl-v text with emojis from slack
 - bug: emojis select box is below input/screen
 - bug: link creation popup is closing on click
+- bug: database connection error - try to restore session multiple times
 - task: deploy app to google play

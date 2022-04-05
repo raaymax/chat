@@ -38,6 +38,11 @@ body, html {
   box-sizing: inherit;
 }
 
+p{
+  margin: 0;
+  padding: 0;
+}
+
 a {
   color: rgb(29,155,209);
 }
@@ -218,6 +223,11 @@ ul {
 
 #input {
   flex: 1;
+  border: 0;
+  padding: 10px 30px;
+}
+#input:focus-visible {
+  outline: none;
 }
 
 .input-container .ql-toolbar.ql-snow{
@@ -337,6 +347,7 @@ ul {
 .message .body {
   flex: 1;
   padding: 0px 10px;
+  line-break: anywhere;
 }
 .message.private .avatar {
   margin-left: 20px;

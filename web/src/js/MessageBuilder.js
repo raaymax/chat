@@ -161,3 +161,20 @@ function type(t, data) {
     return flat(data);
   }
 }
+
+const mapNodes = (dom) => !dom.childNodes ? [] : [...dom.childNodes].map(n => {
+  if (n.nodeName === '#text') return {text: n.nodeValue};
+  if (n.nodeName === 'U') return {underline: mapNodes(n)};
+  if (n.nodeName === 'B') return {bold: mapNodes(n)};
+  if (n.nodeName === 'I') return {italic: mapNodes(n)};
+  if (n.nodeName === 'S') return {strike: mapNodes(n)};
+  if (n.nodeName === 'BR') return {br: true};
+});
+
+export const fromDom = (dom) => {
+  console.log(dom.childNodes);
+
+
+  console.log(mapNodes(dom));
+  return build({message: mapNodes(dom), flat: dom.textContent});
+}

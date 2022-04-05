@@ -1,5 +1,6 @@
+import {h} from 'preact';
 import {
-  html, useState, useEffect, useRef, createCooldown,
+  useState, useEffect, useRef, createCooldown,
 } from '../utils.js';
 import { watchMessages, deleteBefore } from '../store/messages.js';
 import { Message } from './message.js';
@@ -39,34 +40,33 @@ export function MessageList() {
   });
 
   let prev;
-  return html`
-    <div class="message-list" ref=${list}>
-      <div key='bottom' id='scroll-stop' ref=${stop}></div>
-      ${messages.map((msg) => {
-    let sameUser = false;
-    if (!msg.priv) {
-      sameUser = prev
+  return (
+    <div class="message-list" ref={list}>
+      <div key='bottom' id='scroll-stop' ref={stop} />
+      {messages.map((msg) => {
+        let sameUser = false;
+        if (!msg.priv) {
+          sameUser = prev
             && prev?.user?.id === msg?.user?.id
             && (new Date(msg.createdAt) - new Date(prev.createdAt)) < 60000;
-    }
-    prev = msg;
-    return (
-      msg.notif
-        ? html`<${Notification} 
-                  key=${msg.id}
-                  className=${[msg.notifType]}>
-                  ${msg.notif}
-                <//>`
-        : html`
-              <${Message} 
-                class=${msg.priv ? ['private'] : []} 
-                data-id=${msg.id}
-                key=${msg.id}
-                sameUser=${sameUser}
-                data=${msg}
-              />`
-    );
-  }).reverse()}
+        }
+        prev = msg;
+        return (
+          msg.notif
+            ? <Notification
+              key={msg.id}
+              className={[msg.notifType]}>
+              {msg.notif}
+            </Notification>
+            : <Message
+              class={msg.priv ? ['private'] : []}
+              data-id={msg.id}
+              key={msg.id}
+              sameUser={sameUser}
+              data={msg}
+            />
+        );
+      }).reverse()}
     </div>
-  `;
+  )
 }

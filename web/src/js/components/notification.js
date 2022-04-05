@@ -1,7 +1,7 @@
-import { html } from '../utils.js';
+import {h} from 'preact';
 
-export const Notification = ({ children, className = [], ...props }) => html`
-  <div ...${props} class=${['notification', ...className].join(' ')}>
-    ${children}
+export const Notification = ({ children, className = [], ...props }) => (
+  <div {...props} class={['notification', ...className].join(' ')}>
+    {children}
   </div>
-`;
+);

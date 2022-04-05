@@ -1,0 +1,23 @@
+
+.command-menu {
+  position: absolute;
+  width: 200px;
+  height: auto;
+  background-color: black;
+  bottom: 70px;
+  left: 20px;
+}
+.command-menu.hidden {
+  display: none;
+}
+
+.command-menu ul{
+  display: flex;
+  list-style-type: none;
+  flex-direction: column-reverse;
+}
+
+.command-menu ul li.selected{
+  background-color: darkgrey;
+}
+
