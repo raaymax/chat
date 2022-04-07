@@ -1,0 +1,49 @@
+
+.emoji-menu {
+  position: absolute;
+  margin-top: -200px;
+  width: 300px;
+  height: 170px;
+  background-color: var(--primary_background);
+  bottom: 70px;
+  left: 20px;
+  font-size: 1.2em;
+  padding: 10px 0;
+  border-radius: 10px;
+  border: 1px solid var(--primary_border_color);
+}
+.emoji-menu.hidden {
+  display: none;
+}
+
+.emoji-menu ul{
+  padding: 0;
+  margin: 0;
+  display: flex;
+  list-style-type: none;
+  flex-direction: column-reverse;
+}
+
+.emoji-menu ul li {
+  height: 30px;
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+}
+.emoji-menu ul li:hover {
+  background-color: var(--primary_active_mask);
+}
+
+.emoji-menu ul li.selected{
+  background-color: var(--primary_active_mask);
+}
+
+.emoji-menu ul li span:first-child {
+  height: 30px;
+  width: 30px;
+}
+.emoji-menu ul li span {
+  line-height: 30px;
+  vertical-align: middle;
+  text-align: center;
+}

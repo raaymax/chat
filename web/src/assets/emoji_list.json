@@ -24,6 +24,14 @@
     "emoji_order": "1"
   },
   {
+    "name": "mindblown",
+    "unicode": "1f92f",
+    "shortname": ":mindblown:",
+    "code_decimal": "&#129327;",
+    "category": "p",
+    "emoji_order": "1"
+  },
+  {
     "name": "grin",
     "unicode": "1f601",
     "shortname": ":grin:",

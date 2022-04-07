@@ -36,7 +36,10 @@ export const createNotifier = () => {
     if (cooldown) clearTimeout(cooldown);
     cooldown = setTimeout(() => listeners.forEach((l) => l(data)), 10);
   };
-  const watch = (handler) => listeners.push(handler);
+  const watch = (handler) => {
+    listeners.push(handler);
+    return () => listeners.splice(listeners.indexOf(handler), 1);
+  }
 
   return { notify, watch };
 };

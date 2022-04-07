@@ -14,9 +14,3 @@ if ('serviceWorker' in navigator) {
     });
   }
 }
-
-(async () => {
-  window.EMOJI = [];
-  const res = await fetch('/assets/emoji_list.json');
-  window.EMOJI = await res.json();
-})();
