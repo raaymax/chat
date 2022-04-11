@@ -34,6 +34,7 @@ const onPaste = (event) => {
   } else {
     range.insertNode(document.createTextNode(paste));
   }
+  document.getSelection().collapseToEnd();
   event.preventDefault();
 }
 

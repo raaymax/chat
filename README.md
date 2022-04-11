@@ -28,8 +28,6 @@ Messaging app
 - bug: cannot ctrl-v text with emojis from slack
 - bug: formats are working everywhere not just in input box
 - bug: formats can't be toggled off
-- bug: pasted text is selected
-- bug: emoji-selector is not serialized properly
 
 ### Postponed
 - feat: define web share target for sharing

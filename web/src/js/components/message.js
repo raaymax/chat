@@ -29,7 +29,7 @@ const TYPES = {
   italic: (props) => <em>{build(props.data)}</em>,
   underline: (props) => <u>{build(props.data)}</u>,
   strike: (props) => <s>{build(props.data)}</s>,
-  link: (props) => <a href={props.data.href}>{build(props.data.children)}</a>,
+  link: (props) => <a target="_blank" rel="noreferrer" href={props.data.href}>{build(props.data.children)}</a>,
   emoji: (props) => {
     const emoji = Emojis.find((e) => e.name === props.data);
     if (!emoji) return `:${props.data}:`;
