@@ -78,21 +78,26 @@ async function connectionReady() {
     }
   } catch (err) {
     // eslint-disable-next-line no-console
-
     console.error(err);
-    insertMessage({ notifType: 'warning', notif: 'User session not restored', createdAt: new Date() });
   }
 }
 
 async function restoreSession(i = 1) {
   if (i > 10) throw new Error('SESSION_NOT_RESTORED');
+  // eslint-disable-next-line no-console
   console.log('Restore session attempt', i);
   try {
     const session = getSession();
     if (session) {
       await client.req({ op: { type: 'restore', session } });
+      insertMessage({
+        clientId: 'session', notifType: 'info', notif: 'Session restored', createdAt: new Date(),
+      });
     }
   } catch (err) {
+    insertMessage({
+      clientId: 'session', notifType: 'warning', notif: 'User session not restored', createdAt: new Date(),
+    });
     if (err?.resp?.data?.errorCode !== 'SESSION_TERMINATED') {
       return new Promise((resolve, reject) => {
         setTimeout(() => restoreSession(i + 1).then(resolve, reject), 2000);

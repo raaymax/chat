@@ -1,6 +1,5 @@
 /* eslint-disable import/no-unresolved */
 import * as preact from 'preact';
-import htm from 'htm';
 import * as hooks from 'preact/hooks';
 
 export const {
@@ -21,7 +20,6 @@ export const formatTime = (raw) => {
   if (minutes.length === 1) minutes = `0${minutes}`;
   return `${date.getHours()}:${minutes}`;
 };
-export const html = htm.bind(h);
 
 export const createCounter = (prefix) => {
   let counter = 0;
