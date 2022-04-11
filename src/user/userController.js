@@ -1,5 +1,6 @@
 const userRepository = require('./userRepository');
 const service = require('./userService');
+const Errors = require('../errors');
 
 module.exports = {
   restore: async (self, msg) => {
@@ -21,12 +22,12 @@ module.exports = {
       }, msg.seqId);
       return msg.ok({ session, user });
     } catch (err) {
-      return msg.error({ code: 'SESSION_NOT_RESTORED', reason: err.toString() });
+      return msg.error(err);
     }
   },
 
   changeName: async (self, msg) => {
-    if (!self.user) return msg.error({ code: 'ACCESS_DENIED' });
+    if (!self.user) return msg.error(Errors.AccessDenied());
     const [name] = msg.command.args;
     self.user.name = name;
     await userRepository.update(self.user.id, { name });
@@ -34,7 +35,7 @@ module.exports = {
   },
 
   changeAvatar: async (self, msg) => {
-    if (!self.user) return msg.error({ code: 'ACCESS_DENIED' });
+    if (!self.user) return msg.error(Errors.AccessDenied());
     const [avatarUrl] = msg.command.args;
     self.user.avatarUrl = avatarUrl;
     await userRepository.update(self.user.id, { avatarUrl });
@@ -48,7 +49,7 @@ module.exports = {
       await self.sys([
         { text: 'Login failed' }, { br: true },
       ], true);
-      return msg.error({ code: 'ACCESS_DENIED' });
+      return msg.error(Errors.AccessDenied());
     }
     self.user = user;
     self.session = session;

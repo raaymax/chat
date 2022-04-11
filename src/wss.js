@@ -62,7 +62,16 @@ const App = (conf = {}) => {
           const msg = JSON.parse(raw);
           if (msg.seqId) {
             msg.ok = async (data) => send({ seqId: msg.seqId, resp: { status: 'ok', data } });
-            msg.error = async (data) => send({ seqId: msg.seqId, resp: { status: 'error', data } });
+            msg.error = async (data) => send({
+              seqId: msg.seqId,
+              resp: {
+                status: 'error',
+                data: {
+                  ...data,
+                  errorCode: data.errorCode || 'UNEXPECTED_ERROR',
+                },
+              },
+            });
           } else {
             msg.ok = async () => {};
             msg.error = async () => {};

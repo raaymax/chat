@@ -1,6 +1,7 @@
 const { genToken, genHash } = require('../tools');
 const sessionRepo = require('./sessionRepository');
 const userRepo = require('./userRepository');
+const Errors = require('../errors');
 
 async function createSession(userId) {
   const secret = genToken();
@@ -31,10 +32,19 @@ async function sessionRestore({ id = '', secret }) {
       return { session: newSession, user: session.user };
     }
     await sessionRepo.delete({ userId: session.userId });
-    throw new Error('hack!');
+    throw Errors.SessionTerminated('Hack!?!');
   }
-  throw new Error('Not found');
+  throw Errors.SessionNotFound();
 }
+
+setTimeout(async () => {
+  try {
+    await userRepo.ping();
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
+  }
+}, 10000);
 
 module.exports = {
   sessionRestore,

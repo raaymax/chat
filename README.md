@@ -14,12 +14,8 @@ Messaging app
 - feat: deleting messages
 - feat: generate gcs upload link for storing files
 - feat: click on failed to resend
-- feat: define web share target for sharing
-- feat: mark unread messages
-- improvement: make unknown calls throw error
-- improvement: create native app with https://capacitorjs.com/
 - bug: database connection error - maybe try to restore session multiple times
-- task: deploy app to google play
+- bug: session lost...
 
 
 ### Message editor
@@ -33,6 +29,11 @@ Messaging app
 - bug: formats are working everywhere not just in input box
 - bug: formats can't be toggled off
 - bug: pasted text is selected
-- 
+- bug: emoji-selector is not serialized properly
 
-
+### Postponed
+- feat: define web share target for sharing
+- feat: mark unread messages
+- improvement: make unknown calls throw error
+- improvement: create native app with https://capacitorjs.com/
+- task: deploy app to google play
