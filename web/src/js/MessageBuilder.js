@@ -169,9 +169,10 @@ const mapNodes = (dom) => (!dom.childNodes ? [] : [...dom.childNodes].map((n) =>
   if (n.nodeName === 'B') return { bold: mapNodes(n) };
   if (n.nodeName === 'I') return { italic: mapNodes(n) };
   if (n.nodeName === 'S') return { strike: mapNodes(n) };
+  if (n.nodeName === 'SPAN') return mapNodes(n);
   if (n.nodeName === 'BR') return { br: true };
   return { text: '' };
-}));
+}).flat());
 
 export const fromDom = (dom) => {
   if (dom.childNodes.length === 0) return;

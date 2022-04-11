@@ -95,10 +95,13 @@ async function restoreSession(i = 1) {
       });
     }
   } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
     insertMessage({
       clientId: 'session', notifType: 'warning', notif: 'User session not restored', createdAt: new Date(),
     });
-    if (err?.resp?.data?.errorCode !== 'SESSION_TERMINATED') {
+    const errorCode = err?.resp?.data?.errorCode;
+    if (errorCode !== 'SESSION_TERMINATED' && errorCode !== 'SESSION_NOT_FOUND') {
       return new Promise((resolve, reject) => {
         setTimeout(() => restoreSession(i + 1).then(resolve, reject), 2000);
       });
