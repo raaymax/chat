@@ -1,6 +1,8 @@
 import {
   getEarliestDate,
   getLatestDate,
+  getMessage,
+  insertPendingMessage,
   insertMessage,
   updateMessage,
 } from '../store/messages.js';
@@ -20,6 +22,12 @@ export const sendFromDom = async (dom) => {
 export const send = async (msg) => {
   if (msg.command) return sendCommand(msg);
   sendMessage(msg);
+};
+
+export const resend = async (id) => {
+  const msg = getMessage(id);
+  msg.info = null;
+  return sendMessage(msg);
 };
 
 export const sendCommand = async (msg) => {
@@ -45,12 +53,18 @@ const sendMessage = async (msg) => {
     });
     return;
   }
-  insertMessage(msg);
+  insertPendingMessage(msg);
   try {
     await client.req(msg);
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
-    updateMessage(msg.clientId, { info: { msg: 'Sending message failed', type: 'error' } });
+    updateMessage(msg.clientId, {
+      info: {
+        msg: 'Sending message failed',
+        type: 'error',
+        action: () => resend(msg.clientId),
+      },
+    });
   }
 };

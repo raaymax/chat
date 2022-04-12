@@ -58,7 +58,7 @@ export const Message = (props = {}) => {
     info, message, flat, createdAt, user,
   } = props.data;
   return (
-    <div {...props} class={['message', ...props.class].join(' ')}>
+    <div {...props} class={['message', ...props.class].join(' ')} onclick={info && info.action ? info.action : () => {}}>
       {!props.sameUser
         ? <div class='avatar'>{user.avatarUrl && <img src={user.avatarUrl} />}</div>
         : <div class='spacy side-time'>{formatTime(createdAt)}</div>
@@ -67,7 +67,7 @@ export const Message = (props = {}) => {
         {!props.sameUser && <div class='header'>
           <span class='author'>{user.name || 'Guest'}</span>
           <span class='spacy time'>{formatTime(createdAt)}</span>
-          {!isToday(createdAt) && <span class='spacy time'>${formatDate(createdAt)}</span>}
+          {!isToday(createdAt) && <span class='spacy time'>{formatDate(createdAt)}</span>}
         </div>}
         <div class={['content', ...(isOnlyEmoji(message, flat) ? ['emoji'] : [])].join(' ')}>{build(message)}</div>
         {info && <div class={['info', info.type].join(' ')}>{info.msg}</div>}
