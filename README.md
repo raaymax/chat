@@ -13,10 +13,8 @@ Messaging app
 - feat: milestone: ability to paste images
 - feat: deleting messages
 - feat: generate gcs upload link for storing files
-- feat: click on failed to resend
-- bug: database connection error - maybe try to restore session multiple times
-- bug: session lost...
-
+- bug: database connection error
+- bug: session lost... ?
 
 ### Message editor
 - feat: focus input on any key press

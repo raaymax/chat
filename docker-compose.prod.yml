@@ -39,6 +39,7 @@ services:
     - DATABASE_URL=postgres://chat:chat@chat_db:5432/chat
     volumes:
     - ../env:/usr/src/app/.envrc
+    - ../secret.json:/usr/src/app/secret.json
     deploy:
       labels:
         traefik.enable: "true"

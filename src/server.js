@@ -3,6 +3,7 @@ const http = require('http');
 const messageController = require('./message/messageController');
 const userController = require('./user/userController');
 const pushController = require('./push/pushController');
+const fileController = require('./file/fileController');
 
 require('./database/init')();
 
@@ -33,6 +34,8 @@ wss({ server })
     await msg.ok();
   })
   .on('op:load', messageController.load)
+  .on('op:initUpload', fileController.initUpload)
+  .on('op:finalizeUpload', fileController.finalizeUpload)
   .on('op:ping', (self, msg) => msg.ok())
   .on('op:restore', (srv, msg) => {
     const ret = sessionSchema.validate(msg.op.session);
