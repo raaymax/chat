@@ -52,7 +52,7 @@ module.exports = (sys) => {
 
     it('should invalidate all sessions if secrets dont match', async () => {
       match(await sys.req({ op: { type: 'restore', session: { ...session, secret: 'wrong' } } }), [
-        { resp: { status: 'error', data: { code: 'SESSION_NOT_RESTORED' } } },
+        { resp: { status: 'error', data: { errorCode: 'SESSION_TERMINATED' } } },
       ]);
       const sessions = await knex('sessions').select().where({ userId: user.id });
       assert.equal(sessions.length, 0);

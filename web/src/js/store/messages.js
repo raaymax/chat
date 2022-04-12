@@ -2,7 +2,7 @@ import { createNotifier } from '../utils.js';
 
 const { notify, watch } = createNotifier();
 
-let pending = [];
+const pending = [];
 let list = [];
 
 export const getEarliestDate = () => (list.length ? list[0].createdAt : new Date());
@@ -24,9 +24,9 @@ export const insertMessage = (msg) => {
     || (m.clientId && m.clientId === msg.clientId));
 
   if (existing) {
-    if(msg.id && !existing.id) {
+    if (msg.id && !existing.id) {
       const idx = pending.findIndex((m) => m.clientId === msg.clientId);
-      if(idx > -1) {
+      if (idx > -1) {
         pending.splice(idx, 1);
       }
     }

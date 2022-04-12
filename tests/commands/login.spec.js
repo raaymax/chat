@@ -14,7 +14,7 @@ module.exports = (sys) => {
           resp: {
             status: 'error',
             data: {
-              code: 'ACCESS_DENIED',
+              errorCode: 'ACCESS_DENIED',
             },
           },
         }),

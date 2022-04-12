@@ -15,6 +15,7 @@ const wrap = (tagName) => (e) => {
 
 const onPaste = (event) => {
   const paste = (event.clipboardData || window.clipboardData).getData('text');
+  // eslint-disable-next-line no-useless-escape
   const urlCheck = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/i;
   const m = paste.match(urlCheck);
 

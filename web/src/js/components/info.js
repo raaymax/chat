@@ -7,6 +7,6 @@ export const Info = () => {
   watchInfo((m) => setInfo(m));
 
   return info && (
-    <div class={['info', info.type].join(' ')}>{info.msg}</div>     
+    <div class={['info', info.type].join(' ')}>{info.msg}</div>
   );
 };
