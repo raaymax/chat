@@ -7,7 +7,7 @@ const register = (seqId, source) => {
       const err = new Error('TIMEOUT');
       Object.assign(err, { seqId: source.id, resp: { status: 'timeout', source } });
       reject(err);
-    }, 5000);
+    }, 2000);
     waiting[seqId] = (msg) => {
       msg.source = source;
       clearTimeout(timeout);

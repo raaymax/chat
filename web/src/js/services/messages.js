@@ -1,25 +1,33 @@
 import {
   getEarliestDate,
   getLatestDate,
+  getMessage,
+  insertPendingMessage,
   insertMessage,
   updateMessage,
 } from '../store/messages.js';
 import { getChannel } from '../store/channel.js';
 import client from '../client';
-import { fromQuill } from '../MessageBuilder';
+import { fromDom } from '../MessageBuilder';
 
 export const loadPrevious = () => client.req({ op: { type: 'load', channel: getChannel(), before: getEarliestDate() } });
 export const loadNext = () => client.req({ op: { type: 'load', channel: getChannel(), after: getLatestDate() } });
 export const load = () => client.req({ op: { type: 'load', channel: getChannel() } });
 
-export const sendFromQuill = async (delta) => {
-  const msg = fromQuill(delta);
-  send(msg);
+export const sendFromDom = async (dom) => {
+  const msg = fromDom(dom);
+  if (msg) return send(msg);
 };
 
 export const send = async (msg) => {
   if (msg.command) return sendCommand(msg);
   sendMessage(msg);
+};
+
+export const resend = async (id) => {
+  const msg = getMessage(id);
+  msg.info = null;
+  return sendMessage(msg);
 };
 
 export const sendCommand = async (msg) => {
@@ -45,12 +53,18 @@ const sendMessage = async (msg) => {
     });
     return;
   }
-  insertMessage(msg);
+  insertPendingMessage(msg);
   try {
     await client.req(msg);
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
-    updateMessage(msg.clientId, { info: { msg: 'Sending message failed', type: 'error' } });
+    updateMessage(msg.clientId, {
+      info: {
+        msg: 'Sending message failed',
+        type: 'error',
+        action: () => resend(msg.clientId),
+      },
+    });
   }
 };

@@ -21,8 +21,8 @@ client
   });
 
 navigator.serviceWorker.addEventListener('message', () => {
-  navigator.vibrate([100, 30, 100]);
   play();
+  navigator.vibrate([100, 30, 100]);
 });
 
 setInterval(async () => {
@@ -44,7 +44,7 @@ function handleConfig(srv, msg) {
   console.log('version check: ', APP_VERSION, msg.op.config.appVersion);
   // eslint-disable-next-line no-undef
   if (msg.op.config.appVersion !== APP_VERSION) {
-    window.location.reload(true);
+    setTimeout(() => window.location.reload(true), 5000);
     insertMessage({
       id: 'version',
       createdAt: new Date(),
@@ -72,14 +72,41 @@ async function connectionReady() {
   try {
     const session = getSession();
     if (session) {
-      await client.req({ op: { type: 'restore', session } });
+      await restoreSession();
     } else {
       await client.send({ op: { type: 'greet' } });
     }
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
-    insertMessage({ notifType: 'warning', notif: 'User session not restored', createdAt: new Date() });
+  }
+}
+
+async function restoreSession(i = 1) {
+  if (i > 10) throw new Error('SESSION_NOT_RESTORED');
+  // eslint-disable-next-line no-console
+  console.log('Restore session attempt', i);
+  try {
+    const session = getSession();
+    if (session) {
+      await client.req({ op: { type: 'restore', session } });
+      insertMessage({
+        clientId: 'session', notifType: 'info', notif: 'Session restored', createdAt: new Date(),
+      });
+    }
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
+    insertMessage({
+      clientId: 'session', notifType: 'warning', notif: 'User session not restored', createdAt: new Date(),
+    });
+    const errorCode = err?.resp?.data?.errorCode;
+    if (errorCode !== 'SESSION_TERMINATED' && errorCode !== 'SESSION_NOT_FOUND') {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => restoreSession(i + 1).then(resolve, reject), 2000);
+      });
+    }
+    throw new Error('SESSION_NOT_RESTORED');
   }
 }
 

@@ -7,6 +7,7 @@ COPY web/package*.json ./web/
 RUN npm install --production=false
 RUN npm install -ws --production=false
 COPY web/webpack.config.js ./web/webpack.config.js
+COPY web/babel.config.js ./web/babel.config.js
 COPY ./web/src ./web/src
 COPY ./web/public ./web/public
 RUN npm run -w @quack/web build

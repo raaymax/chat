@@ -161,3 +161,28 @@ function type(t, data) {
     return flat(data);
   }
 }
+
+const mapNodes = (dom) => (!dom.childNodes ? [] : [...dom.childNodes].map((n) => {
+  if (n.nodeName === '#text') return { text: n.nodeValue };
+  if (n.nodeName === 'U') return { underline: mapNodes(n) };
+  if (n.nodeName === 'A') return { link: { href: n.attributes.href.nodeValue, children: mapNodes(n) } };
+  if (n.nodeName === 'B') return { bold: mapNodes(n) };
+  if (n.nodeName === 'I') return { italic: mapNodes(n) };
+  if (n.nodeName === 'S') return { strike: mapNodes(n) };
+  if (n.nodeName === 'SPAN') return mapNodes(n);
+  if (n.nodeName === 'BR') return { br: true };
+  return { text: '' };
+}).flat());
+
+export const fromDom = (dom) => {
+  if (dom.childNodes.length === 0) return;
+  if (dom.childNodes.length === 1 && dom.childNodes[0].nodeName === '#text') {
+    const line = dom.textContent;
+    if (line.startsWith('/')) {
+      const m = line.replace('\n', '').slice(1).split(' ');
+      return build({ command: { name: m[0], args: m.splice(1) } });
+    }
+  }
+
+  return build({message: mapNodes(dom), flat: dom.textContent});
+}

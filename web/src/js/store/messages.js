@@ -2,6 +2,7 @@ import { createNotifier } from '../utils.js';
 
 const { notify, watch } = createNotifier();
 
+const pending = [];
 let list = [];
 
 export const getEarliestDate = () => (list.length ? list[0].createdAt : new Date());
@@ -12,11 +13,23 @@ export const getMessage = (id) => list.find((m) => m.id === id || m.clientId ===
 
 export const getMessages = () => list;
 
+export const insertPendingMessage = (msg) => {
+  pending.push(msg);
+  return insertMessage(msg);
+}
+
 export const insertMessage = (msg) => {
   msg.createdAt = new Date(msg.createdAt);
   const existing = list.find((m) => (m.id && m.id === msg.id)
     || (m.clientId && m.clientId === msg.clientId));
+
   if (existing) {
+    if (msg.id && !existing.id) {
+      const idx = pending.findIndex((m) => m.clientId === msg.clientId);
+      if (idx > -1) {
+        pending.splice(idx, 1);
+      }
+    }
     Object.assign(existing, msg);
     return notify(list);
   }
@@ -67,7 +80,7 @@ export const deleteBefore = (id) => {
 };
 
 export const clearMessages = async () => {
-  list = [];
+  list = [...pending];
   notify(list);
 };
 

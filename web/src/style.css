@@ -1,6 +1,14 @@
 html {
+  --primary_border_color: #565856;
+  --primary_background: #1a1d21;
+  --secondary_background: #222529;
+  --primary_active_mask: rgba(249,249,249,0.05);
+
+  --primary_foreground: #d1d2d3;
+  --secondary_foreground: #38393b;
+
   font-family: 'Roboto', sans-serif;
-  background-color: rgb(26, 29, 33);
+  background-color: var(--primary_background);
   color: rgb(209,210,211);
   --font-size: 1.1em;
 }
@@ -9,6 +17,7 @@ body, html {
   width: 100%;
   margin: 0;
   padding: 0;
+
 
   --sk_foreground_min: 232,232,232;
   --sk_foreground_low: 232,232,232;
@@ -36,6 +45,11 @@ body, html {
 }
 *, :after, :before {
   box-sizing: inherit;
+}
+
+p{
+  margin: 0;
+  padding: 0;
 }
 
 a {
@@ -126,7 +140,7 @@ ul {
 }
 #workspace-header {
   position: relative;
-  background-color: rgb(26, 29, 33);
+  background-color: var(--primary_background);
   background-color: #1a1d21;
   border-bottom: 1px solid #565856;
   height: 50px;
@@ -161,7 +175,7 @@ ul {
   display: flex;
   flex-direction: column-reverse;
   position: relative;
-  background-color: rgb(26, 29, 33);
+  background-color: var(--primary_background);
   overflow-y: scroll;
   flex: 1;
   overscroll-behavior: contain;
@@ -169,10 +183,32 @@ ul {
 
 .input-container {
   border-top: 1px solid #565856;
-  background-color: rgb(34, 37, 41);
-  --height: 100px;
+  background-color: var(--secondary_background);
   display: flex;
   flex-direction: column;
+}
+.input-container .toolbar {
+  display: flex;
+  flex-direction: row;
+}
+
+.input-container .toolbar button:first-child {
+  margin-left: 30px;
+}
+
+.input-container .toolbar button {
+  color: var(--secondary_foreground);
+  margin: 2px 0 2px 2px;
+  width: 25px;
+  height: 25px;
+  border: 0;
+  padding: 1px 3px;
+  background: none;
+}
+
+.input-container .toolbar button:hover {
+  color: var(--primary_foreground);
+  background-color: var(--primary_active_mask);
 }
 
 .input-container .actionbar {
@@ -218,6 +254,11 @@ ul {
 
 #input {
   flex: 1;
+  border: 0;
+  padding: 5px 30px;
+}
+#input:focus-visible {
+  outline: none;
 }
 
 .input-container .ql-toolbar.ql-snow{
@@ -278,7 +319,7 @@ ul {
   margin-left: 30px;
   flex: 0 44px;
   width: 44px;
-  color: rgb(26, 29, 33);
+  color: var(--primary_background);
   font-weight: 200;
   font-size: .8em;
   text-align: center;
@@ -337,12 +378,13 @@ ul {
 .message .body {
   flex: 1;
   padding: 0px 10px;
+  line-break: anywhere;
 }
 .message.private .avatar {
   margin-left: 20px;
 }
 .message:hover {
-    background-color: rgba(249,249,249,0.05)
+    background-color: var(--primary_active_mask);
 }
 
 #scroll-stop {

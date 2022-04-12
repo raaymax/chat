@@ -9,7 +9,15 @@
   },
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "fuse.js": "6.5.3",
+    "preact": "10.7.0"
+  },
   "devDependencies": {
+    "@babel/core": "7.17.8",
+    "@babel/plugin-transform-react-jsx": "7.17.3",
+    "@babel/preset-env": "7.16.11",
+    "babel-loader": "8.2.4",
     "chai": "4.3.6",
     "copy-webpack-plugin": "10.2.4",
     "css-loader": "6.7.1",

@@ -1,7 +1,6 @@
 /* eslint-disable import/no-unresolved */
-import * as preact from 'https://unpkg.com/preact@latest?module';
-import htm from 'https://unpkg.com/htm?module';
-import * as hooks from 'https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module';
+import * as preact from 'preact';
+import * as hooks from 'preact/hooks';
 
 export const {
   useEffect, useState, useMemo, useRef,
@@ -21,7 +20,6 @@ export const formatTime = (raw) => {
   if (minutes.length === 1) minutes = `0${minutes}`;
   return `${date.getHours()}:${minutes}`;
 };
-export const html = htm.bind(h);
 
 export const createCounter = (prefix) => {
   let counter = 0;
@@ -36,7 +34,10 @@ export const createNotifier = () => {
     if (cooldown) clearTimeout(cooldown);
     cooldown = setTimeout(() => listeners.forEach((l) => l(data)), 10);
   };
-  const watch = (handler) => listeners.push(handler);
+  const watch = (handler) => {
+    listeners.push(handler);
+    return () => listeners.splice(listeners.indexOf(handler), 1);
+  }
 
   return { notify, watch };
 };
