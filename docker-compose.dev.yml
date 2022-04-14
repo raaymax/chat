@@ -12,6 +12,17 @@ services:
       POSTGRES_PASSWORD: chat
     volumes:
       - chat-db:/var/lib/postgresql/data
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+    - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: chat
+      MONGO_INITDB_ROOT_PASSWORD: chat
+    volumes:
+      - chat-mongo:/data/db
 
 volumes:
   chat-db:
+  chat-mongo:

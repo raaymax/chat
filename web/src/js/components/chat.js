@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import {h} from 'preact';
 import { MessageList } from './messageList.js';
 import { Header } from './header.js';

@@ -1,5 +1,5 @@
 const push = require('./pushService');
-const sessionRepository = require('../user/sessionRepository');
+const { sessionRepo } = require('../database/db');
 
 module.exports = {
   setupPushNotifications: async (self, msg) => {
@@ -7,7 +7,7 @@ module.exports = {
     if (!op.subscription) return msg.error({ code: 'MISSING_SUBSCRIPTION' });
     if (!self.user) return msg.error({ code: 'ACCESS_DENIED' });
     self.sub = op.subscription;
-    await sessionRepository.update(self.session.id, {
+    await sessionRepo.update(self.session.id, {
       pushSubscription: op.subscription,
     });
 
@@ -26,7 +26,7 @@ module.exports = {
 
   notifyOther: async (self, msg) => {
     if (!msg.message) return Promise.resolve();
-    const sess = await sessionRepository.getOther({ userId: self.user.id });
+    const sess = await sessionRepo.getOther({ userId: self.user.id });
     return Promise.all(sess.map((ses) => {
       if (!ses.pushSubscription) return;
       return push.sendNotification(ses.pushSubscription, JSON.stringify({
@@ -35,7 +35,7 @@ module.exports = {
         channel: msg.channel,
       })).catch((err) => {
         if (err.status === 410) {
-          return sessionRepository.update(ses.id, {
+          return sessionRepo.update(ses.id, {
             pushSubscription: null,
           });
         }

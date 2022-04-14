@@ -4,8 +4,9 @@ const messageController = require('./message/messageController');
 const userController = require('./user/userController');
 const pushController = require('./push/pushController');
 const fileController = require('./file/fileController');
+const Errors = require('./errors');
 
-require('./database/init')();
+require('./database/db').init();
 
 const app = require('./app');
 const wss = require('./wss');
@@ -13,11 +14,7 @@ const wss = require('./wss');
 const server = http.createServer(app);
 
 const sessionSchema = Joi.object({
-  id: Joi.string().guid({
-    version: [
-      'uuidv4',
-    ],
-  }).required(),
+  id: Joi.string().required(),
   secret: Joi.string().required(),
 });
 
@@ -40,7 +37,7 @@ wss({ server })
   .on('op:restore', (srv, msg) => {
     const ret = sessionSchema.validate(msg.op.session);
     if (ret.error) {
-      return msg.error({ code: 'VALIDATION_ERROR', message: ret.error.message });
+      return msg.error(Errors.ValidationError(ret.error.message));
     }
     return userController.restore(srv, msg);
   })

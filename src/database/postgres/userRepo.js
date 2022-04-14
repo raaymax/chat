@@ -1,4 +1,4 @@
-const { knex } = require('../database/db');
+const { knex } = require('./db');
 
 module.exports = {
   getAll: async () => knex('users').select(),

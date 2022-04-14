@@ -1,4 +1,3 @@
-const { knex } = require('../src/database/db');
 const server = require('../src/server');
 const {
   connect,
@@ -12,7 +11,6 @@ describe('server', () => {
   before((done) => server.listen(done));
   after(() => {
     server.close();
-    return knex.destroy();
   });
 
   beforeEach(async () => {

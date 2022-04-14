@@ -1,5 +1,5 @@
 const { knex } = require('./db');
-const { genHash } = require('../tools');
+const { genHash } = require('../../tools');
 
 module.exports = async () => {
   try {
