@@ -39,7 +39,7 @@ pool.onPacket((raw) => {
     else notify('message', client, msg);
   } catch (err) {
     // eslint-disable-next-line no-console
-    console.error(err, raw);
+    // console.error(err, raw);
     notify('packet:error', client, raw, err);
   }
 });

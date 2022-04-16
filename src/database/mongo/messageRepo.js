@@ -7,7 +7,8 @@ module.exports = {
     channel,
     ...(!before ? {} : { createdAt: { $lt: before } }),
     ...(!after ? {} : { createdAt: { $gt: after } }),
-  }, { sort: { createdAt: 1 } })
+  })
+    .sort({ createdAt: -1 })
     .skip(offset)
     .limit(50)
     .toArray()

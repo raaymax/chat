@@ -1,6 +1,7 @@
 import {h} from 'preact';
 import { formatTime, formatDate } from '../utils.js';
 import Emojis from '../services/emoji';
+import {Files} from './Files/Files';
 
 const EMOJI_MATCHER = () => /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/g;
 
@@ -55,7 +56,7 @@ const isOnlyEmoji = (message, flat) => EMOJI_MATCHER().test(flat) || (
 
 export const Message = (props = {}) => {
   const {
-    info, message, flat, createdAt, user,
+    info, message, attachments, flat, createdAt, user,
   } = props.data;
   return (
     <div {...props} class={['message', ...props.class].join(' ')} onclick={info && info.action ? info.action : () => {}}>
@@ -70,6 +71,7 @@ export const Message = (props = {}) => {
           {!isToday(createdAt) && <span class='spacy time'>{formatDate(createdAt)}</span>}
         </div>}
         <div class={['content', ...(isOnlyEmoji(message, flat) ? ['emoji'] : [])].join(' ')}>{build(message)}</div>
+        {attachments && <Files list={attachments} />}
         {info && <div class={['info', info.type].join(' ')}>{info.msg}</div>}
       </div>
     </div>

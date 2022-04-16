@@ -1,9 +1,11 @@
-import {h} from 'preact';
+import { h } from 'preact';
 import { useEffect, useRef, useState } from '../utils.js';
 import { Info } from './info.js';
 import { sendFromDom } from '../services/messages.js';
 import { notifyTyping } from '../services/typing';
 import { installEmojiSelector } from './EmojiSelector/EmojiSelector';
+import { Attachments } from './Attachments/Attachments';
+import * as files from '../store/file';
 
 const wrap = (tagName) => (e) => {
   const range = window.getSelection().getRangeAt(0);
@@ -40,12 +42,14 @@ const onPaste = (event) => {
 }
 
 const submit = async () => {
-  await sendFromDom(document.getElementById('input'));
-  document.getElementById('input').innerHTML = '';
+  if (document.getElementById('input').getAttribute('submitable') !== 'true') return;
+  if (files.areReady()) {
+    await sendFromDom(document.getElementById('input'));
+    document.getElementById('input').innerHTML = '';
+  }
 }
 
 const onSubmit = async (e) => {
-  if (document.getElementById('input').getAttribute('submitable') !== 'true') return;
   if (e.key === 'Enter' && e.shiftKey === false) {
     await submit();
     e.preventDefault();
@@ -79,6 +83,7 @@ export const Input = () => {
         <button onclick={wrap('s')}><i class='fa-solid fa-strikethrough' /></button>
       </div>}
       <div id="input" contenteditable='true' submitable='true' ref={input} />
+      <Attachments />
       <div class='actionbar' onclick={() => document.getElementById('input').focus()}>
         <Info />
         <div class='action' onclick={() => setToolbar(!toolbar)}>

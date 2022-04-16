@@ -4,7 +4,7 @@ Messaging app
 ## TODO
 
 ### Critical
-- bug: database connection error
+? bug: database connection error
 - bug: session lost... ?
 - bug: notifications should work always!
 - bug: fix paste of multiline text
@@ -27,6 +27,7 @@ Messaging app
 - bug: line wrapping in wrong place
 - feat: custom help messages for home information
 - fix: separate users from messages 
+- improvement: move link detection to message builder
 
 ### Message editor
 - feat: focus input on any key press
@@ -44,5 +45,4 @@ Messaging app
 ### Postponed
 - feat: define web share target for sharing
 - feat: mark unread messages
-- improvement: make unknown calls throw error
 

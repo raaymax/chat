@@ -35,11 +35,15 @@ module.exports = {
   },
 
   changeAvatar: async (self, msg) => {
-    if (!self.user) return msg.error(Errors.AccessDenied());
-    const [avatarUrl] = msg.command.args;
-    self.user.avatarUrl = avatarUrl;
-    await userRepo.update(self.user.id, { avatarUrl });
-    return msg.ok();
+    try {
+      if (!self.user) return msg.error(Errors.AccessDenied());
+      const [avatarUrl] = msg.command.args;
+      self.user.avatarUrl = avatarUrl;
+      await userRepo.update(self.user.id, { avatarUrl });
+      return msg.ok();
+    } catch (err) {
+      return msg.error(Errors.UnknownError(err));
+    }
   },
 
   login: async (self, msg) => {

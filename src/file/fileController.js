@@ -7,6 +7,7 @@ module.exports = {
       const dest = await fileRepository.createUploadUrl(op.contentType);
       return msg.ok(dest);
     } catch (err) {
+      console.error(err);
       return msg.error(err);
     }
   },
@@ -16,6 +17,16 @@ module.exports = {
       const dest = await fileRepository.finalizeUpload(op.fileId, op.fileName, op.contentType);
       return msg.ok(dest);
     } catch (err) {
+      return msg.error(err);
+    }
+  },
+  initDownload: async (self, msg) => {
+    const { op } = msg;
+    try {
+      const dest = await fileRepository.createDownloadUrl(op.fileId);
+      return msg.ok(dest);
+    } catch (err) {
+      console.error(err);
       return msg.error(err);
     }
   },

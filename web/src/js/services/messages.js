@@ -9,6 +9,7 @@ import {
 import { getChannel } from '../store/channel.js';
 import client from '../client';
 import { fromDom } from '../MessageBuilder';
+import * as files from '../store/file';
 
 export const loadPrevious = () => client.req({ op: { type: 'load', channel: getChannel(), before: getEarliestDate() } });
 export const loadNext = () => client.req({ op: { type: 'load', channel: getChannel(), after: getLatestDate() } });
@@ -16,7 +17,13 @@ export const load = () => client.req({ op: { type: 'load', channel: getChannel()
 
 export const sendFromDom = async (dom) => {
   const msg = fromDom(dom);
-  if (msg) return send(msg);
+  console.log('msg', msg);
+  if (msg) {
+    msg.attachments = [...files.getAll()];
+    if (msg.flat.length === 0 && msg.attachments.length === 0) return;
+    files.clear();
+    return send(msg);
+  }
 };
 
 export const send = async (msg) => {
@@ -41,8 +48,10 @@ export const sendCommand = async (msg) => {
   try {
     await client.req(msg);
     insertMessage({ ...notif, notifType: 'success', notif: `${msg.command.name} executed successfully` });
-  } catch (errr) {
-    insertMessage({ ...notif, notifType: 'error', notif: `${msg.command.name} executed error` });
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
+    insertMessage({ ...notif, notifType: 'error', notif: `${msg.command.name} error ${err.resp.data.message}` });
   }
 };
 

@@ -33,6 +33,7 @@ wss({ server })
   .on('op:load', messageController.load)
   .on('op:initUpload', fileController.initUpload)
   .on('op:finalizeUpload', fileController.finalizeUpload)
+  .on('op:initDownload', fileController.initDownload)
   .on('op:ping', (self, msg) => msg.ok())
   .on('op:restore', (srv, msg) => {
     const ret = sessionSchema.validate(msg.op.session);
@@ -54,8 +55,13 @@ wss({ server })
   .on('command:avatar', userController.changeAvatar)
   .on('command:login', userController.login)
   .on('command:channel', messageController.changeChannel)
+  .on('command:*', unknownCommand)
   .on('message', messageController.handle)
   .on('broadcast:after', pushController.notifyOther)
   .start();
+
+function unknownCommand(_self, msg) {
+  msg.error(Errors.UnknownCommand(msg.command.name));
+}
 
 module.exports = server;

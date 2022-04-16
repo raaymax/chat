@@ -9,6 +9,7 @@ export const upload = async (file) => {
     clientId: tempId(),
     fileName: file.name,
     contentType: file.type,
+    progress: 0,
   };
 
   add(local);
@@ -23,13 +24,23 @@ export const upload = async (file) => {
 
   update(local.clientId, {id: ret.resp.data.fileId});
 
-  await fetch(ret.resp.data.url, {
-    method: 'PUT',
-    body: file,
-    headers: {
-      'Content-Type': file.type,
-    },
-  })
+  try{
+    await uploadFile('PUT', ret.resp.data.url, {
+      file, 
+      clientId: local.clientId,
+      progress: (progress) => {
+        update(local.clientId, {progress});
+      }
+    });
+  }catch(err) {
+    update(local.clientId, {
+      error: err.message,
+      progress: 0,
+    });
+    console.error(err);
+  }
+  update(local.clientId, {progress: 100});
+  console.log('upload Finished');
 
   await client.req({
     op: {
@@ -38,5 +49,22 @@ export const upload = async (file) => {
       fileName: file.name,
       contentType: file.type,
     },
+  });
+}
+
+function uploadFile(method, url, {file, progress, clientId}) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', () => resolve(), {once: true});
+    xhr.upload.addEventListener('progress', (e) => {
+      if (e.lengthComputable) {
+        progress((e.loaded / e.total) * 100);
+      }
+    });
+    xhr.addEventListener('error', (e) => reject(e), {once: true});
+    xhr.open(method, url, true);
+    xhr.setRequestHeader('Content-Type', file.type);
+    update(clientId, {abort: () => xhr.abort()});
+    xhr.send(file);
   });
 }

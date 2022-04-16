@@ -14,7 +14,18 @@ module.exports = {
       contentType,
     };
 
-    const [url] = bucket.file(fileId).getSignedUrl(options);
+    const [url] = await bucket.file(fileId).getSignedUrl(options);
+
+    return { fileId, url };
+  },
+  createDownloadUrl: async (fileId) => {
+    const options = {
+      version: 'v4',
+      action: 'read',
+      expires: Date.now() + 1 * 60 * 1000,
+    };
+
+    const [url] = await bucket.file(fileId).getSignedUrl(options);
 
     return { fileId, url };
   },

@@ -9,7 +9,6 @@ module.exports = {
   get: async ({ id, ...user }) => (await db).collection('users')
     .findOne(id ? ({ _id: ObjectId(id), ...user }) : ({ ...user }))
     .then((i) => (i ? ({ ...i, id: i._id.toHexString() }) : null)),
-  update: async (_id, user) => (await db).collection('users')
-    .updateOne({ _id }, { $set: user })
-    .then((i) => (i ? ({ ...i, id: i._id.toHexString() }) : null)),
+  update: async (id, user) => (await db).collection('users')
+    .updateOne({ _id: ObjectId(id) }, { $set: user }),
 };

@@ -59,6 +59,7 @@ module.exports = {
       channel: msg.channel,
       message: msg.message,
       flat: msg.flat,
+      attachments: msg.attachments,
     });
     msg.id = id;
     await self.broadcast(msg);

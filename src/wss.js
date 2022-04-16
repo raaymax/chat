@@ -81,7 +81,11 @@ const App = (conf = {}) => {
             await notify(`op:${msg.op.type}`, self, msg);
           } else if (msg.command) {
             await notify('command', self, msg);
-            await notify(`command:${msg.command.name}`, self, msg);
+            if (handlers[`command:${msg.command.name}`]) {
+              await notify(`command:${msg.command.name}`, self, msg);
+            } else {
+              await notify('command:*', self, msg);
+            }
           } else if (msg.message) await notify('message', self, msg);
         } catch (err) {
           // eslint-disable-next-line no-console
