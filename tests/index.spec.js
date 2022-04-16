@@ -1,4 +1,5 @@
 const server = require('../src/server');
+const { close } = require('../src/database/db');
 const {
   connect,
   request,
@@ -9,8 +10,9 @@ require('./helpers.spec');
 describe('server', () => {
   const sys = {};
   before((done) => server.listen(done));
-  after(() => {
+  after(async () => {
     server.close();
+    await close();
   });
 
   beforeEach(async () => {

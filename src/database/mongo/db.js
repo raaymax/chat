@@ -8,4 +8,4 @@ async function run() {
   return client.db();
 }
 
-module.exports = { db: run(), ObjectId };
+module.exports = { db: run(), client, ObjectId };
