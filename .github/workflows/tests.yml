@@ -31,9 +31,6 @@ jobs:
         node-version: 17.x
         cache: 'npm'
     - run: npm ci
-    - run: npx knex migrate:latest
-      env:
-        DATABASE_URL: mongodb://chat:chat@localhost:27017/chat
     - run: npm run lint:ci
     - run: npm run test:ci
       env:
