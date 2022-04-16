@@ -4,7 +4,7 @@ import { Info } from './info.js';
 import { sendFromDom } from '../services/messages.js';
 import { notifyTyping } from '../services/typing';
 import { installEmojiSelector } from './EmojiSelector/EmojiSelector';
-import { Attachments } from './Attachments/Attachments';
+import { Attachments } from './Files/Attachments';
 import * as files from '../store/file';
 
 const wrap = (tagName) => (e) => {

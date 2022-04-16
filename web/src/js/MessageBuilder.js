@@ -8,7 +8,6 @@ export const fromDom = (dom) => {
   const command = dom.textContent.match(/^\/\w+( \S+)*/);
   if (command) {
     const m = dom.textContent.replace('\n', '').slice(1).split(/\s+/);
-    console.log(m);
     return build({
       command: { name: m[0], args: m.splice(1) },
       flat: dom.textContent,

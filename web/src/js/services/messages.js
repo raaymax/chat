@@ -17,7 +17,6 @@ export const load = () => client.req({ op: { type: 'load', channel: getChannel()
 
 export const sendFromDom = async (dom) => {
   const msg = fromDom(dom);
-  console.log('msg', msg);
   if (msg) {
     msg.attachments = [...files.getAll()];
     if (msg.flat.length === 0 && msg.attachments.length === 0) return;

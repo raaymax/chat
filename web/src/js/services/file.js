@@ -24,23 +24,23 @@ export const upload = async (file) => {
 
   update(local.clientId, {id: ret.resp.data.fileId});
 
-  try{
+  try {
     await uploadFile('PUT', ret.resp.data.url, {
-      file, 
+      file,
       clientId: local.clientId,
       progress: (progress) => {
         update(local.clientId, {progress});
-      }
+      },
     });
-  }catch(err) {
+  } catch (err) {
     update(local.clientId, {
       error: err.message,
       progress: 0,
     });
+    // eslint-disable-next-line no-console
     console.error(err);
   }
   update(local.clientId, {progress: 100});
-  console.log('upload Finished');
 
   await client.req({
     op: {
