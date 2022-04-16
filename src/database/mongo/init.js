@@ -7,14 +7,14 @@ module.exports = async () => {
     if (await (await db).collection('users').countDocuments() === 0) {
       await (await db).collection('users').insertMany([
         {
-          id: '7ed5c52c-35f8-4a27-929d-ff5eb1a74924',
+          clientId: '7ed5c52c-35f8-4a27-929d-ff5eb1a74924',
           login: 'melisa',
           password: genHash('123'),
           name: 'Melisa',
           avatarUrl: 'https://ca.slack-edge.com/TB72FRZKQ-U01RPU96LSV-ade06ecc19e3-512',
         },
         {
-          id: 'c3875674-61f1-4793-a558-a733293f3527',
+          clientId: 'c3875674-61f1-4793-a558-a733293f3527',
           login: 'mateusz',
           password: genHash('123'),
           name: 'Mateusz',

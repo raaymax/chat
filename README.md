@@ -10,8 +10,8 @@ Messaging app
 - bug: fix paste of multiline text
 - improvement: create native app with https://capacitorjs.com/
 - task: deploy app to google play
-- feat: generate gcs upload link for storing files - uploading files
-- feat: displaying files in messages - download possible
+x feat: generate gcs upload link for storing files - uploading files
+x feat: displaying files in messages - download possible
 - feat: displaying images in messages
 
 ### General

@@ -5,8 +5,8 @@ module.exports = {
     channel, before, after, offset = 0,
   }) => (await db).collection('messages').find({
     channel,
-    ...(!before ? {} : { createdAt: { $lt: before } }),
-    ...(!after ? {} : { createdAt: { $gt: after } }),
+    ...(!before ? {} : { createdAt: { $lt: new Date(before) } }),
+    ...(!after ? {} : { createdAt: { $gt: new Date(after) } }),
   })
     .sort({ createdAt: -1 })
     .skip(offset)
