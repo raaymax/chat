@@ -3,8 +3,10 @@ const http = require('http');
 const messageController = require('./message/messageController');
 const userController = require('./user/userController');
 const pushController = require('./push/pushController');
+const fileController = require('./file/fileController');
+const Errors = require('./errors');
 
-require('./database/init')();
+require('./database/db').init();
 
 const app = require('./app');
 const wss = require('./wss');
@@ -12,11 +14,7 @@ const wss = require('./wss');
 const server = http.createServer(app);
 
 const sessionSchema = Joi.object({
-  id: Joi.string().guid({
-    version: [
-      'uuidv4',
-    ],
-  }).required(),
+  id: Joi.string().required(),
   secret: Joi.string().required(),
 });
 
@@ -33,11 +31,14 @@ wss({ server })
     await msg.ok();
   })
   .on('op:load', messageController.load)
+  .on('op:initUpload', fileController.initUpload)
+  .on('op:finalizeUpload', fileController.finalizeUpload)
+  .on('op:initDownload', fileController.initDownload)
   .on('op:ping', (self, msg) => msg.ok())
   .on('op:restore', (srv, msg) => {
     const ret = sessionSchema.validate(msg.op.session);
     if (ret.error) {
-      return msg.error({ code: 'VALIDATION_ERROR', message: ret.error.message });
+      return msg.error(Errors.ValidationError(ret.error.message));
     }
     return userController.restore(srv, msg);
   })
@@ -54,8 +55,14 @@ wss({ server })
   .on('command:avatar', userController.changeAvatar)
   .on('command:login', userController.login)
   .on('command:channel', messageController.changeChannel)
+  .on('command:migrate', require('./migrate'))
+  .on('command:*', unknownCommand)
   .on('message', messageController.handle)
   .on('broadcast:after', pushController.notifyOther)
   .start();
+
+function unknownCommand(_self, msg) {
+  msg.error(Errors.UnknownCommand(msg.command.name));
+}
 
 module.exports = server;

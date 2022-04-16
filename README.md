@@ -2,6 +2,16 @@
 Messaging app
 
 ## TODO
+
+### Critical
+? bug: database connection error
+? bug: session lost... ?
+- bug: notifications should work always!
+- bug: fix paste of multiline text
+- improvement: create native app with https://capacitorjs.com/
+- task: deploy app to google play
+- feat: displaying images in messages
+
 ### General
 - style: list style
 - style: blockquote
@@ -12,11 +22,10 @@ Messaging app
 - feat: milestone: emoji reactions 
 - feat: milestone: ability to paste images
 - feat: deleting messages
-- feat: generate gcs upload link for storing files
-- feat: click on failed to resend
-- bug: database connection error - maybe try to restore session multiple times
-- bug: session lost...
-
+- bug: line wrapping in wrong place
+- feat: custom help messages for home information
+- fix: separate users from messages 
+- improvement: move link detection to message builder
 
 ### Message editor
 - feat: focus input on any key press
@@ -28,10 +37,12 @@ Messaging app
 - bug: cannot ctrl-v text with emojis from slack
 - bug: formats are working everywhere not just in input box
 - bug: formats can't be toggled off
+- bug: url formatter is breaking avatar change
+- bug: closing emoji selector with : when no emoji should insert : into text instead of space
+- bug: writing links by hand is broken by emoji selector
+- bug: link detection on phone is not working
 
 ### Postponed
 - feat: define web share target for sharing
 - feat: mark unread messages
-- improvement: make unknown calls throw error
-- improvement: create native app with https://capacitorjs.com/
-- task: deploy app to google play
+

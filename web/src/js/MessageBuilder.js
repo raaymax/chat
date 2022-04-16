@@ -4,6 +4,20 @@ import { createCounter } from './utils';
 
 const tempId = createCounter(`temp:${(Math.random() + 1).toString(36)}`);
 
+export const fromDom = (dom) => {
+  const command = dom.textContent.match(/^\/\w+( \S+)*/);
+  if (command) {
+    const m = dom.textContent.replace('\n', '').slice(1).split(/\s+/);
+    return build({
+      command: { name: m[0], args: m.splice(1) },
+      flat: dom.textContent,
+    });
+  }
+  if (dom.childNodes.length === 0) return build({message: [], flat: ''});
+
+  return build({message: mapNodes(dom), flat: dom.textContent});
+}
+
 export function fromQuill(data) {
   if (isEmpty(data)) {
     return;
@@ -173,16 +187,3 @@ const mapNodes = (dom) => (!dom.childNodes ? [] : [...dom.childNodes].map((n) =>
   if (n.nodeName === 'BR') return { br: true };
   return { text: '' };
 }).flat());
-
-export const fromDom = (dom) => {
-  if (dom.childNodes.length === 0) return;
-  if (dom.childNodes.length === 1 && dom.childNodes[0].nodeName === '#text') {
-    const line = dom.textContent;
-    if (line.startsWith('/')) {
-      const m = line.replace('\n', '').slice(1).split(' ');
-      return build({ command: { name: m[0], args: m.splice(1) } });
-    }
-  }
-
-  return build({message: mapNodes(dom), flat: dom.textContent});
-}

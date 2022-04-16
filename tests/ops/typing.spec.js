@@ -8,7 +8,7 @@ module.exports = (sys) => {
   describe('typing', () => {
     it('should respond with error if not logged in', async () => {
       match(await sys.req({ op: { type: 'typing' } }), [
-        partial({ resp: { status: 'error', data: { code: 'ACCESS_DENIED' } } }),
+        partial({ resp: { status: 'error', data: { errorCode: 'ACCESS_DENIED' } } }),
       ]);
     });
     it('should respond with ok and op:typing', async () => {

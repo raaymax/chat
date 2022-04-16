@@ -1,11 +1,11 @@
-const userRepository = require('./userRepository');
+const { userRepo } = require('../database/db');
 const service = require('./userService');
 const Errors = require('../errors');
 
 module.exports = {
   restore: async (self, msg) => {
     const { op } = msg;
-    if (!op.session) return msg.error({ code: 'SESSION_NOT_EXISTS' });
+    if (!op.session) return msg.error(Errors.SessionNotFound());
     try {
       const restored = await service.sessionRestore(op.session);
       const { session, user } = restored;
@@ -30,16 +30,20 @@ module.exports = {
     if (!self.user) return msg.error(Errors.AccessDenied());
     const [name] = msg.command.args;
     self.user.name = name;
-    await userRepository.update(self.user.id, { name });
+    await userRepo.update(self.user.id, { name });
     return msg.ok();
   },
 
   changeAvatar: async (self, msg) => {
-    if (!self.user) return msg.error(Errors.AccessDenied());
-    const [avatarUrl] = msg.command.args;
-    self.user.avatarUrl = avatarUrl;
-    await userRepository.update(self.user.id, { avatarUrl });
-    return msg.ok();
+    try {
+      if (!self.user) return msg.error(Errors.AccessDenied());
+      const [avatarUrl] = msg.command.args;
+      self.user.avatarUrl = avatarUrl;
+      await userRepo.update(self.user.id, { avatarUrl });
+      return msg.ok();
+    } catch (err) {
+      return msg.error(Errors.UnknownError(err));
+    }
   },
 
   login: async (self, msg) => {

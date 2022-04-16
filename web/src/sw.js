@@ -44,6 +44,9 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  if (event.request.method === 'PUT') {
+    return;
+  }
   if (EXTERNAL_ASSETS.includes(event.request.url)) {
     event.respondWith(
       caches.match(event.request)
@@ -94,9 +97,11 @@ self.addEventListener('push', (e) => {
       console.error(err);
     }
     const client = await getOpenClient();
-    await client.postMessage({
-      type: 'sound',
-    });
+    if (client) {
+      await client.postMessage({
+        type: 'sound',
+      });
+    }
   })());
 });
 

@@ -1,12 +1,17 @@
-const { v4: uuid } = require('uuid');
-const messageRepository = require('./messageRepository');
+const { messageRepo, userRepo } = require('../database/db');
+const Errors = require('../errors');
 
 module.exports = {
   load: async (self, msg) => {
     if (!self.user) return msg.error('Not logged in');
     const { op } = msg;
-    const messages = await messageRepository.getAll(op);
-    messages.forEach((m) => self.send(m));
+    const users = await userRepo.getAll();
+    const userMap = users.reduce((acc, u) => ({
+      ...acc,
+      [u.id]: { id: u.id, name: u.name, avatarUrl: u.avatarUrl },
+    }), {});
+    const messages = await messageRepo.getAll(op);
+    messages.forEach((m) => self.send({ ...m, user: userMap[m.userId] }));
     msg.ok();
   },
 
@@ -22,7 +27,7 @@ module.exports = {
 
   isTyping: async (self, msg) => {
     if (!self.user) {
-      return msg.error({ code: 'ACCESS_DENIED' });
+      return msg.error(Errors.AccessDenied());
     }
     if (self.user) {
       msg.user = { id: self.user.id, name: self.user.name };
@@ -34,10 +39,9 @@ module.exports = {
 
   handle: async (self, msg) => {
     if (!self.user) {
-      return msg.error({ code: 'ACCESS_DENIED' });
+      return msg.error(Errors.AccessDenied());
     }
     // await new Promise(resolve => setTimeout(resolve, 10000));
-    msg.id = uuid();
     msg.createdAt = new Date();
     if (self.user) {
       msg.user = {
@@ -49,14 +53,15 @@ module.exports = {
     }
     msg.channel = msg.channel || self.channel;
     msg.notify = true;
-    await messageRepository.insert({
-      id: msg.id,
+    const { id } = await messageRepo.insert({
       createdAt: msg.createdAt,
       userId: msg.userId,
       channel: msg.channel,
-      message: JSON.stringify(msg.message),
+      message: msg.message,
       flat: msg.flat,
+      attachments: msg.attachments,
     });
+    msg.id = id;
     await self.broadcast(msg);
     return msg.ok(msg);
   },

@@ -1,4 +1,3 @@
-const { knex } = require('../../src/database/db');
 const {
   anyString,
   match,
@@ -8,10 +7,6 @@ const {
 
 module.exports = (sys) => {
   describe('simple', () => {
-    after(async () => {
-      await knex('messages').delete();
-    });
-
     it('should respond with ok', async () => {
       await sys.req({ command: { name: 'login', args: ['mateusz', '123'] } });
       match(await sys.req({ message: [{ text: 'some message' }], flat: 'some message' }), [

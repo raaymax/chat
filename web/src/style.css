@@ -319,6 +319,7 @@ ul {
   margin-left: 30px;
   flex: 0 44px;
   width: 44px;
+  min-width: 44px;
   color: var(--primary_background);
   font-weight: 200;
   font-size: .8em;
@@ -337,6 +338,7 @@ ul {
   width: 44px;
   border-radius: 5px;
   overflow: hidden;
+  min-width: 44px;
 }
 .message .avatar img {
   height: 100%;
@@ -393,4 +395,83 @@ ul {
 #scroll-stop:after {
   content: '.';
 }
+.file {
+  height: 30px;
+  padding: 0;
+  margin: 3px 0px;
+  display: flex;
+  flex-direction: row;
+  border: 1px solid var(--saf-0);
+  cursor: pointer;
+}
+.file:hover {
+  background-color: var(--primary_active_mask);
+}
+.file .type {
+  line-height: 30px;
+  width: 30px;
+  text-align: center;
+  vertical-align: middle;
+}
+.file .type-text {
+  line-height: 30px;
+  text-align: end;
+  vertical-align: middle;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+  width: auto;
+  padding: 0 10px;
+}
+
+.file .name {
+  padding: 0 10px;
+  line-height: 30px;
+  vertical-align: middle;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.attachment {
+  position: relative;
+  height: 30px;
+  padding: 0;
+  margin: 3px 30px;
+  display: flex;
+  flex-direction: row;
+  border: 1px solid var(--saf-0);
+}
+.attachment .type {
+  line-height: 30px;
+  width: 30px;
+  text-align: center;
+  vertical-align: middle;
+}
+.attachment .name {
+  padding: 0 10px;
+  line-height: 30px;
+  vertical-align: middle;
+  flex: 1;
+}
+.attachment .remove {
+  color: #852007;
+  cursor: pointer;
+  line-height: 30px;
+  width: 30px;
+  text-align: center;
+  vertical-align: middle;
+}
+.attachment .remove:hover {
+  background-color: var(--primary_active_mask);
+}
+.attachment .progress {
+  background-color: green;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+}
+
+
 

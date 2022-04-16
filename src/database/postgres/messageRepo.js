@@ -1,4 +1,4 @@
-const { knex } = require('../database/db');
+const { knex } = require('./db');
 
 module.exports = {
   getAll: async ({
@@ -15,5 +15,5 @@ module.exports = {
     .orderBy('messages.createdAt', 'desc')
     .limit(50)
     .offset(offset),
-  insert: async (msg) => knex('messages').insert(msg).returning('*'),
+  insert: async (msg) => knex('messages').insert({ ...msg, message: JSON.stringify(msg.message) }).returning('*').then((a) => a[0]),
 };
