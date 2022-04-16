@@ -34,4 +34,4 @@ jobs:
     - run: npm run lint:ci
     - run: npm run test:ci
       env:
-        DATABASE_URL: mongodb://chat:chat@localhost:27017/chat
+        DATABASE_URL: mongodb://chat:chat@localhost:27017/chat?authSource=admin
