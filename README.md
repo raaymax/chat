@@ -5,13 +5,11 @@ Messaging app
 
 ### Critical
 ? bug: database connection error
-- bug: session lost... ?
+? bug: session lost... ?
 - bug: notifications should work always!
 - bug: fix paste of multiline text
 - improvement: create native app with https://capacitorjs.com/
 - task: deploy app to google play
-x feat: generate gcs upload link for storing files - uploading files
-x feat: displaying files in messages - download possible
 - feat: displaying images in messages
 
 ### General
@@ -41,6 +39,8 @@ x feat: displaying files in messages - download possible
 - bug: formats can't be toggled off
 - bug: url formatter is breaking avatar change
 - bug: closing emoji selector with : when no emoji should insert : into text instead of space
+- bug: writing links by hand is broken by emoji selector
+- bug: link detection on phone is not working
 
 ### Postponed
 - feat: define web share target for sharing

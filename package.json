@@ -12,7 +12,7 @@
     "dev:srv": "nodemon src/index.js",
     "dev": "run-p dev:srv dev:web",
     "test:postgres": "DATABASE_URL=postgres://chat:chat@localhost:5432/tests mocha --watch --file tests/index.spec.js --ui bdd",
-    "test:mongo": "DATABASE_URL='mongodb://chat:chat@localhost:27017/tests?authSource=admin' mocha --watch --file tests/index.spec.js --ui bdd",
+    "test": "DATABASE_URL='mongodb://chat:chat@localhost:27017/tests?authSource=admin' mocha --watch --file tests/index.spec.js --ui bdd",
     "lint:ci": "eslint .",
     "test:ci": "mocha --file tests/index.spec.js --ui bdd"
   },
