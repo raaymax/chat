@@ -37,8 +37,6 @@ Messaging app
 - bug: cannot ctrl-v text with emojis from slack
 - bug: formats are working everywhere not just in input box
 - bug: formats can't be toggled off
-- bug: url formatter is breaking avatar change
-- bug: closing emoji selector with : when no emoji should insert : into text instead of space
 - bug: writing links by hand is broken by emoji selector
 - bug: link detection on phone is not working
 

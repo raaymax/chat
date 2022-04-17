@@ -70,9 +70,9 @@ const close = () => {
   notify(state);
 }
 
-const onClose = (e) => {
+const onClose = (e, char = '\u00a0') => {
   const r = document.createRange();
-  const node = document.createTextNode('\u00a0')
+  const node = document.createTextNode(char)
   r.setStartAfter(state.container);
   r.setEndAfter(state.container);
   r.insertNode(node);
@@ -86,7 +86,7 @@ const onEnd = (e) => {
   const query = `=${state.container.textContent}:`;
   const [found] = emojiFuse.search(query, {limit: 1});
   if (!found) {
-    return onClose(e);
+    return onClose(e, ':');
   }
   const emoji = String.fromCodePoint(parseInt(found.item.unicode, 16));
   const node = document.createTextNode(emoji)
