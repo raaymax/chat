@@ -8,25 +8,6 @@ x-logging:
   driver: json-file
 
 services:
-  chat_db:
-    logging: *default-logging
-    image: postgres:14-alpine
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-        window: 120s
-    networks:
-    - chat
-    environment:
-      TEST: 1
-      POSTGRES_DB: chat
-      POSTGRES_USER: chat
-      POSTGRES_PASSWORD: chat
-    volumes:
-      - chat-db:/var/lib/postgresql/data
-
   chat:
     image: quack:latest
     logging: *default-logging
@@ -65,5 +46,3 @@ networks:
     driver: overlay
   webgateway:
     external: true
-volumes:
-  chat-db:

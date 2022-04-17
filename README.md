@@ -26,6 +26,7 @@ Messaging app
 - feat: custom help messages for home information
 - fix: separate users from messages 
 - improvement: move link detection to message builder
+- bug: clicking on notification is not taking to correct window
 
 ### Message editor
 - feat: focus input on any key press

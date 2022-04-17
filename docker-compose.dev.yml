@@ -1,17 +1,6 @@
 version: '3.7'
 
 services:
-  db:
-    image: postgres:14-alpine
-    restart: always
-    ports: 
-    - 5432:5432
-    environment:
-      POSTGRES_DB: chat
-      POSTGRES_USER: chat
-      POSTGRES_PASSWORD: chat
-    volumes:
-      - chat-db:/var/lib/postgresql/data
   mongo:
     image: mongo
     restart: always

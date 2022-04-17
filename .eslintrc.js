@@ -11,11 +11,12 @@ module.exports = {
     ecmaVersion: 'latest',
   },
   ignorePatterns: [
-    'web/dist',
+    'packages/app/dist',
+    'packages/app/android',
   ],
   overrides: [
     {
-      files: ['web/src/sw.js'],
+      files: ['packages/app/src/sw.js'],
       env: {
         serviceworker: true,
         browser: true,
@@ -35,7 +36,7 @@ module.exports = {
       },
     },
     {
-      files: ['web/tests/**/*.js'],
+      files: ['packages/app/tests/**/*.js'],
       env: {
         mocha: true,
         browser: true,
@@ -54,7 +55,7 @@ module.exports = {
       },
     },
     {
-      files: ['tests/**/*.js'],
+      files: ['packages/server/tests/**/*.js'],
       env: {
         mocha: true,
         commonjs: true,
@@ -65,7 +66,7 @@ module.exports = {
       },
     },
     {
-      files: ['web/**/*.js'],
+      files: ['packages/app/**/*.js'],
       extends: 'preact',
       env: {
         browser: true,

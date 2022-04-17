@@ -3,25 +3,23 @@ ARG commit
 ENV COMMIT=$commit
 WORKDIR /usr/src/app
 COPY package*.json ./
-COPY web/package*.json ./web/
+COPY packages/server/package*.json ./packages/server/
+COPY packages/app/package*.json ./packages/app/
 RUN npm install --production=false
-RUN npm install -ws --production=false
-COPY web/webpack.config.js ./web/webpack.config.js
-COPY web/babel.config.js ./web/babel.config.js
-COPY ./web/src ./web/src
-COPY ./web/public ./web/public
-RUN npm run -w @quack/web build
+COPY packages/app/webpack.config.js ./packages/app/webpack.config.js
+COPY packages/app/babel.config.js ./packages/app/babel.config.js
+COPY ./packages/app/src ./packages/app/src
+COPY ./packages/app/public ./packages/app/public
+RUN npm run -w @quack/app build
 
 FROM node:17-alpine
 WORKDIR /usr/src/app
 COPY package*.json ./
-COPY web/package*.json ./web/
+COPY packages/server/package*.json ./packages/server/
+COPY packages/app/package*.json ./packages/app/
 RUN npm install --production
-RUN npm install -ws --production
-COPY --from=appbuild /usr/src/app/web/dist ./web/dist
-COPY ./src ./src
-COPY ./migrations ./migrations
-COPY ./knexfile.js ./knexfile.js
+COPY --from=appbuild /usr/src/app/packages/app/dist ./packages/app/dist
+COPY ./packages/server/src ./packages/server/src
 COPY ./.deploy ./.deploy
 EXPOSE 8080
 CMD sh ./.deploy/startup.sh
