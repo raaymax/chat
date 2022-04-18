@@ -8,13 +8,13 @@ export const initNotifications = () => {
     }
   });
 
-  PushNotifications.addListener('registration', async (fcmToken) => {
+  PushNotifications.addListener('registration', async (token) => {
     console.log('Register FCM');
     try {
       await client.req({
         op: {
           type: 'setupFcm',
-          fcmToken,
+          fcmToken: token.value,
         },
       });
       console.log('Register FCM - done');

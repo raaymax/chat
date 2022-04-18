@@ -50,6 +50,20 @@ function handleConfig(srv, msg) {
     console.log('version check: ', APP_VERSION, msg.op.config.appVersion);
     // eslint-disable-next-line no-undef
     if (msg.op.config.appVersion !== APP_VERSION) {
+      if (Capacitor.isNativePlatform()) {
+        insertMessage({
+          id: 'version',
+          createdAt: new Date(),
+          user: {
+            name: 'System',
+          },
+          message: [
+            { line: { bold: { text: 'Your Quack app version is outdated!!' } } },
+            { line: { text: 'Please update' } },
+          ],
+        });
+        return;
+      }
       setTimeout(() => window.location.reload(true), 5000);
       insertMessage({
         id: 'version',

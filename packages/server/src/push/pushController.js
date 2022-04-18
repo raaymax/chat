@@ -42,16 +42,15 @@ module.exports = {
     const sess = await sessionRepo.getOther({ userId: self.user.id });
     return Promise.all(sess.map((ses) => {
       if (ses.fcmToken) {
-        const tokens = [ses.fcmToken];
         const message = {
           data: {
             title: `Message from ${msg.user?.name || 'Guest'}`,
             description: msg.flat,
             channel: msg.channel,
           },
-          tokens,
+          token: ses.fcmToken,
         };
-        return getMessaging().sendMulticast(message);
+        return getMessaging().send(message);
       } if (ses.pushSubscription) {
         return push.sendNotification(ses.pushSubscription, JSON.stringify({
           title: `Message from ${msg.user?.name || 'Guest'}`,
