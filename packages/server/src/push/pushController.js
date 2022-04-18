@@ -51,6 +51,7 @@ module.exports = {
             body: msg.flat,
           },
           android: {
+            collapse_key: msg.user.id,
             notification: {
               ...(self.user.avatarUrl ? {imageUrl: self.user.avatarUrl} : {}),
               icon: 'stock_ticker_update',
@@ -78,7 +79,6 @@ module.exports = {
             },
           });
         }
-        console.log(message);
         return getMessaging().send(message);
       } if (ses.pushSubscription) {
         return push.sendNotification(ses.pushSubscription, JSON.stringify({
