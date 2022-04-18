@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "857885813934",
+    "project_id": "codecat-quack",
+    "storage_bucket": "codecat-quack.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:857885813934:android:6616febb070736f6c1113f",
+        "android_client_info": {
+          "package_name": "io.codecat.chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "857885813934-3d9nnj8ocs2nj9u07e2m8dnjor00vg0l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkr-9N9hZljK8AKB73dv3gMSWNpQ38eBI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "857885813934-3d9nnj8ocs2nj9u07e2m8dnjor00vg0l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

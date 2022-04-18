@@ -44,6 +44,8 @@ wss({ server })
   })
   .on('op:typing', messageController.isTyping)
   .on('op:setupPushNotifications', pushController.setupPushNotifications)
+  .on('op:setupFcm', pushController.setupFcm)
+  .on('op:*', unknownOp)
   .on('command:help', (self, msg) => self.sys([
     { text: '/channel <name> - change current channel' }, { br: true },
     { text: '/name <name> - to change your name' }, { br: true },
@@ -64,4 +66,7 @@ function unknownCommand(_self, msg) {
   msg.error(Errors.UnknownCommand(msg.command.name));
 }
 
+function unknownOp(_self, msg) {
+  msg.error(Errors.UnknownOp(msg.op.type));
+}
 module.exports = server;

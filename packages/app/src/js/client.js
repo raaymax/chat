@@ -10,10 +10,12 @@ let protocol = 'ws:';
 if (document.location.protocol === 'https:') {
   protocol = 'wss:';
 }
-const URI = Capacitor.isNative
+
+const URI = Capacitor.isNativePlatform()
   ? 'wss://chat.codecat.io/ws'
   : `${protocol}//${document.location.host}/ws`;
 
+console.log("Connectiong to ", URI);
 const pool = createPool(URI);
 
 window.pool = pool;
@@ -21,7 +23,7 @@ window.pool = pool;
 const client = {
   send: async (msg) => {
     // eslint-disable-next-line no-console
-    // console.log('send', msg);
+    // console.log('send', JSON.stringify(msg, null, 4));
     const raw = JSON.stringify(msg);
     await pool.send(raw);
   },
@@ -39,7 +41,7 @@ pool.onPacket((raw) => {
     const msg = JSON.parse(raw.data);
     notify('packet', msg);
     // eslint-disable-next-line no-console
-    // console.log('recv', msg);
+    // console.log('recv', JSON.stringify(msg, null, 4));
     if (msg.resp) notify('resp', client, msg);
     else if (msg.op) notify(`op:${msg.op.type}`, client, msg);
     else notify('message', client, msg);

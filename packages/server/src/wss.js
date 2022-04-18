@@ -22,6 +22,7 @@ const App = (conf = {}) => {
     await notify('start', srv);
 
     wss.on('connection', async (ws) => {
+      console.log('conencti')
       const id = uuid();
       const send = async (msg) => {
         const raw = msg._raw ? msg._raw : JSON.stringify(msg);
@@ -79,6 +80,11 @@ const App = (conf = {}) => {
           if (msg.op) {
             await notify('op', self, msg);
             await notify(`op:${msg.op.type}`, self, msg);
+            if (handlers[`op:${msg.op.type}`]) {
+              await notify(`op:${msg.op.type}`, self, msg);
+            } else {
+              await notify('op:*', self, msg);
+            }
           } else if (msg.command) {
             await notify('command', self, msg);
             if (handlers[`command:${msg.command.name}`]) {

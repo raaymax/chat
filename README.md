@@ -8,8 +8,6 @@ Messaging app
 ? bug: session lost... ?
 - bug: notifications should work always!
 - bug: fix paste of multiline text
-- improvement: create native app with https://capacitorjs.com/
-- task: deploy app to google play
 - feat: displaying images in messages
 
 ### General
