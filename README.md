@@ -25,6 +25,9 @@ Messaging app
 - fix: separate users from messages 
 - improvement: move link detection to message builder
 - bug: clicking on notification is not taking to correct window
+- feat: generate icons for notifications
+- feat: set icon for app
+- feat: set splash screen for app
 
 ### Message editor
 - feat: focus input on any key press

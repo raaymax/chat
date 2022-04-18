@@ -44,12 +44,41 @@ module.exports = {
       if (ses.fcmToken) {
         const message = {
           data: {
-            title: `Message from ${msg.user?.name || 'Guest'}`,
-            description: msg.flat,
             channel: msg.channel,
+          },
+          notification: {
+            title: `Message from ${msg.user?.name || 'Guest'}`,
+            body: msg.flat,
+          },
+          android: {
+            notification: {
+              ...(self.user.avatarUrl ? {imageUrl: self.user.avatarUrl} : {}),
+              icon: 'stock_ticker_update',
+              color: '#7e55c3',
+            },
           },
           token: ses.fcmToken,
         };
+        if(self.user.avatarUrl) {
+          Object.assign(message, {
+            apns: {
+              payload: {
+                aps: {
+                  'mutable-content': 1,
+                },
+              },
+              fcm_options: {
+                image: self.user.avatarUrl,
+              },
+            },
+            webpush: {
+              headers: {
+                image: self.user.avatarUrl,
+              },
+            },
+          });
+        }
+        console.log(message);
         return getMessaging().send(message);
       } if (ses.pushSubscription) {
         return push.sendNotification(ses.pushSubscription, JSON.stringify({
