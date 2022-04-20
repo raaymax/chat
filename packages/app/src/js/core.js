@@ -136,7 +136,7 @@ async function handleSession(srv, msg) {
     subscribeNotifications();
     clearMessages();
     await load();
-  } catch(err) {
+  } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
   }

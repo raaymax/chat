@@ -32,7 +32,6 @@ async function sessionRestore({ id = '', secret }) {
       const newSession = await refreshSession(session);
       return { session: newSession, user };
     }
-    console.log('removing sessions');
     await sessionRepo.delete({ userId: session.userId });
     throw Errors.SessionTerminated('Hack!?!');
   }

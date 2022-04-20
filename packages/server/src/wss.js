@@ -22,7 +22,6 @@ const App = (conf = {}) => {
     await notify('start', srv);
 
     wss.on('connection', async (ws) => {
-      console.log('conencti')
       const id = uuid();
       const send = async (msg) => {
         const raw = msg._raw ? msg._raw : JSON.stringify(msg);

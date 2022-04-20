@@ -17,6 +17,7 @@ const URI = Capacitor.isNativePlatform()
   ? SERVER_URL
   : `${protocol}//${document.location.host}/ws`;
 
+// eslint-disable-next-line no-console
 console.log("Connectiong to ", URI);
 const pool = createPool(URI);
 

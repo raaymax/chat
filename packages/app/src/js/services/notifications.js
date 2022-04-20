@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { PushNotifications } from '@capacitor/push-notifications';
 import client from '../client';
 
@@ -9,7 +10,6 @@ export const initNotifications = () => {
   });
 
   PushNotifications.addListener('registration', async (token) => {
-    console.log('Register FCM');
     try {
       await client.req({
         op: {
@@ -17,9 +17,7 @@ export const initNotifications = () => {
           fcmToken: token.value,
         },
       });
-      console.log('Register FCM - done');
-    } catch(err) {
-      console.log('Register FCM - error');
+    } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
     }

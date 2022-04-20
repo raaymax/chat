@@ -1,4 +1,4 @@
-const admin = require('firebase-admin');
+// eslint-disable-next-line import/no-unresolved
 const { getMessaging } = require('firebase-admin/messaging');
 const push = require('./pushService');
 const { sessionRepo } = require('../database/db');
@@ -40,6 +40,7 @@ module.exports = {
   notifyOther: async (self, msg) => {
     if (!msg.message) return Promise.resolve();
     const sess = await sessionRepo.getOther({ userId: self.user.id });
+    // eslint-disable-next-line array-callback-return
     return Promise.all(sess.map((ses) => {
       if (ses.fcmToken) {
         const message = {
@@ -53,14 +54,14 @@ module.exports = {
           android: {
             collapse_key: msg.user.id,
             notification: {
-              ...(self.user.avatarUrl ? {imageUrl: self.user.avatarUrl} : {}),
+              ...(self.user.avatarUrl ? { imageUrl: self.user.avatarUrl } : {}),
               icon: 'stock_ticker_update',
               color: '#7e55c3',
             },
           },
           token: ses.fcmToken,
         };
-        if(self.user.avatarUrl) {
+        if (self.user.avatarUrl) {
           Object.assign(message, {
             apns: {
               payload: {
