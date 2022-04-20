@@ -11,9 +11,9 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      APP_VERSION: pack.version,
-      SERVER_URL: (process.env.SERVER_URL || 'wss://chat.codecat.io/ws'),
-      ENVIRONMENT: process.env.NODE_ENV || 'development',
+      APP_VERSION: JSON.stringify(pack.version),
+      SERVER_URL: JSON.stringify(process.env.SERVER_URL || 'wss://chat.codecat.io/ws'),
+      ENVIRONMENT: JSON.stringify(process.env.NODE_ENV || 'development'),
     }),
     new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({

@@ -7,6 +7,8 @@ import { createPool } from './pool';
 
 const { notify, watch } = createEventListener();
 
+console.log('test before');
+
 let protocol = 'ws:';
 if (document.location.protocol === 'https:') {
   protocol = 'wss:';
