@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { Capacitor } from '@capacitor/core';
 
 import { initRequests } from './requests.js';
@@ -11,9 +12,9 @@ if (document.location.protocol === 'https:') {
   protocol = 'wss:';
 }
 
+// eslint-disable-next-line no-nested-ternary
 const URI = Capacitor.isNativePlatform()
-//  ? 'wss://chat.codecat.io/ws'
-  ? 'ws://192.168.31.190:8080/ws'
+  ? SERVER_URL
   : `${protocol}//${document.location.host}/ws`;
 
 console.log("Connectiong to ", URI);
@@ -41,7 +42,7 @@ pool.onPacket((raw) => {
   try {
     const msg = JSON.parse(raw.data);
     notify('packet', msg);
-    if(msg.message) return notify('message', client, msg);
+    if (msg.message) return notify('message', client, msg);
     // eslint-disable-next-line no-console
     console.log('recv', JSON.stringify(msg, null, 4));
     if (msg.resp) notify('resp', client, msg);

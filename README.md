@@ -4,11 +4,12 @@ Messaging app
 ## TODO
 
 ### Critical
-? bug: database connection error
 ? bug: session lost... ?
 - bug: notifications should work always!
 - bug: fix paste of multiline text
 - feat: displaying images in messages
+- feat: ability to refresh native app
+
 
 ### General
 - style: list style
@@ -28,6 +29,7 @@ Messaging app
 - feat: generate icons for notifications
 - feat: set icon for app
 - feat: set splash screen for app
+- improvement: remove "session restored" message
 
 ### Message editor
 - feat: focus input on any key press

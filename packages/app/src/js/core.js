@@ -4,7 +4,7 @@ import { getChannel, setChannel } from './store/channel.js';
 import { getSession, setSession } from './store/session.js';
 import { setInfo } from './store/info.js';
 import { setUser, getUser } from './store/user.js';
-import { insertMessage, clearMessages } from './store/messages.js';
+import { insertMessage, clearMessages, removeMessage } from './store/messages.js';
 import { load } from './services/messages.js';
 import client from './client';
 import { play } from './services/sound';
@@ -111,9 +111,7 @@ async function restoreSession(i = 1) {
     const session = getSession();
     if (session) {
       await client.req({ op: { type: 'restore', session } });
-      insertMessage({
-        clientId: 'session', notifType: 'info', notif: 'Session restored', createdAt: new Date(),
-      });
+      removeMessage('session');
     }
   } catch (err) {
     // eslint-disable-next-line no-console
