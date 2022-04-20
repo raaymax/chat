@@ -26,7 +26,7 @@ jobs:
       env: 
         SERVER_URL: ${{ secrets.SERVER_URL }}
         NODE_ENV: production
-    - run: npx cap copy android
+    - run: npx cap sync
       working-directory: ./packages/app
     - name: Build with Gradle
       working-directory: ./packages/app/android
