@@ -63,8 +63,19 @@ jobs:
     - name: Assemble Release Bundle
       working-directory: ./packages/app/android
       run: ./gradlew bundleRelease
+    - uses: r0adkll/sign-android-release@v1
+      name: Sign app APK
+      id: sign_app
+      with:
+        releaseDirectory: ./packages/app/android/app/build/outputs/bundle/release
+        signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+        alias: ${{ secrets.ALIAS }}
+        keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+        keyPassword: ${{ secrets.KEY_PASSWORD }}
+      env:
+        BUILD_TOOLS_VERSION: "30.0.2"
     - name: Archive production artifacts
       uses: actions/upload-artifact@v3
       with:
         name: android-bundle
-        path: ./packages/app/android/app/build/outputs/bundle/release
+        path: ${{steps.sign_app.outputs.signedReleaseFile}}

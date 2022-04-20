@@ -4,12 +4,13 @@ Messaging app
 ## TODO
 
 ### Critical
-? bug: session lost... ?
 - bug: notifications should work always!
 - bug: fix paste of multiline text
 - feat: displaying images in messages
 - feat: ability to refresh native app
 
+### DevOps
+- add signing step for app build in github actions
 
 ### General
 - style: list style
@@ -32,6 +33,7 @@ Messaging app
 - improvement: remove "session restored" message
 - bug: file upload wrapps text in input box
 - bug: messages scrolling to sides
+- feat: switch to FCM notifications in web version
 
 ### Message editor
 - feat: focus input on any key press
