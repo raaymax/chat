@@ -12,6 +12,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
     - name: Use Node.js 17.x
       uses: actions/setup-node@v3
       with:
@@ -22,15 +26,8 @@ jobs:
       env: 
         SERVER_URL: ${{ secrets.SERVER_URL }}
         NODE_ENV: production
-
-    - run: npx cap copy
+    - run: npx cap copy android
       working-directory: ./packages/app
-
-    - name: set up JDK 1.8
-      uses: actions/setup-java@v1
-      with:
-        java-version: 1.8
-
     - name: Build with Gradle
       working-directory: ./packages/app/android
       run: ./gradlew build --warning-mode=all --stacktrace
