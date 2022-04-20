@@ -31,6 +31,7 @@ Messaging app
 - feat: set splash screen for app
 - improvement: remove "session restored" message
 - bug: file upload wrapps text in input box
+- bug: messages scrolling to sides
 
 ### Message editor
 - feat: focus input on any key press

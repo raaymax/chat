@@ -67,4 +67,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: android-bundle
-        path: app/build/outputs/bundle/release
+        path: ./packages/app/android/app/build/outputs/bundle/release
