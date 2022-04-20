@@ -2,6 +2,7 @@
 const { getMessaging } = require('firebase-admin/messaging');
 const push = require('./pushService');
 const { sessionRepo } = require('../database/db');
+const pack = require('../../package.json');
 
 module.exports = {
   setupPushNotifications: async (self, msg) => {
@@ -31,7 +32,7 @@ module.exports = {
     op: {
       type: 'setConfig',
       config: {
-        appVersion: process.env.COMMIT,
+        appVersion: pack.version,
         applicationServerKey: process.env.VAPID_PUBLIC,
       },
     },

@@ -1,6 +1,4 @@
 FROM node:17-alpine AS appbuild
-ARG commit
-ENV COMMIT=$commit
 ENV ENVIRONMENT=production
 WORKDIR /usr/src/app
 COPY package*.json ./
