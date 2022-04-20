@@ -30,6 +30,7 @@ Messaging app
 - feat: set icon for app
 - feat: set splash screen for app
 - improvement: remove "session restored" message
+- bug: file upload wrapps text in input box
 
 ### Message editor
 - feat: focus input on any key press

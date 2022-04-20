@@ -2,8 +2,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
-const package = require('./package.json');
-
+const pack = require('./package.json');
 
 module.exports = {
   entry: {
@@ -12,7 +11,7 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      APP_VERSION: package.version,
+      APP_VERSION: pack.version,
       SERVER_URL: (process.env.SERVER_URL || 'wss://chat.codecat.io/ws'),
       ENVIRONMENT: process.env.NODE_ENV || 'development',
     }),
