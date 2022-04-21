@@ -80,15 +80,23 @@ jobs:
         name: android-bundle
         path: ${{steps.sign_app.outputs.signedReleaseFile}}
 
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
     - name: Deploy to google app engine
       uses: actions-hub/gcloud@master
       env:
-       VAPID_PUBLIC: ${{ secrets.VAPID_PUBLIC }}
-       VAPID_SECRET: ${{ secrets.VAPID_SECRET }}
-       GCM_API_KEY: ${{ secrets.GCM_API_KEY }}
-       DATABASE_URL: ${{ secrets.DATABASE_URL }}
-       GCS_BUCKET: ${{ secrets.GCS_BUCKET }}
-       SERVER_URL: ${{ secrets.SERVER_URL }}
-       CLOUDSDK_CORE_DISABLE_PROMPTS: 1
+        PROJECT_ID: codecat-quack
+        APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        VAPID_PUBLIC: ${{ secrets.VAPID_PUBLIC }}
+        VAPID_SECRET: ${{ secrets.VAPID_SECRET }}
+        GCM_API_KEY: ${{ secrets.GCM_API_KEY }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        GCS_BUCKET: ${{ secrets.GCS_BUCKET }}
+        SERVER_URL: ${{ secrets.SERVER_URL }}
+        CLOUDSDK_CORE_DISABLE_PROMPTS: 1
       with:
        args: app deploy app.yaml
