@@ -8,7 +8,8 @@
     "packages/server"
   ],
   "scripts": {
-    "start": ". .envrc && npm run -w=@quack/server start ",
+    "postinstall": "npm run build",
+    "start": "npm run -w=@quack/server start ",
     "build": "npm run -w=@quack/app build",
     "dev:web": "npm run -w=@quack/app dev",
     "dev:srv": "npm run -w=@quack/server dev",
