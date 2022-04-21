@@ -1,4 +1,4 @@
-name: Quack CI
+name: Build
 
 on:
   push:
@@ -7,33 +7,6 @@ on:
     branches: [ master ]
 
 jobs:
-  tests:
-    runs-on: ubuntu-latest
-    services:
-      mongo:
-        image: mongo
-        env:
-          MONGO_INITDB_ROOT_USERNAME: chat
-          MONGO_INITDB_ROOT_PASSWORD: chat
-        options: >-
-          --health-cmd mongo
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 27017:27017
-    steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js 17.x
-      uses: actions/setup-node@v3
-      with:
-        node-version: 17.x
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run lint:ci
-    - run: npm run test:ci
-      env:
-        DATABASE_URL: mongodb://chat:chat@localhost:27017/chat?authSource=admin
   build:
     name: Build
     needs: tests
@@ -79,24 +52,3 @@ jobs:
       with:
         name: android-bundle
         path: ${{steps.sign_app.outputs.signedReleaseFile}}
-
-  deploy:
-    name: Deploy
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Deploy to google app engine
-      uses: actions-hub/gcloud@master
-      env:
-        PROJECT_ID: codecat-quack
-        APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-        VAPID_PUBLIC: ${{ secrets.VAPID_PUBLIC }}
-        VAPID_SECRET: ${{ secrets.VAPID_SECRET }}
-        GCM_API_KEY: ${{ secrets.GCM_API_KEY }}
-        DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        GCS_BUCKET: ${{ secrets.GCS_BUCKET }}
-        SERVER_URL: ${{ secrets.SERVER_URL }}
-        CLOUDSDK_CORE_DISABLE_PROMPTS: 1
-      with:
-       args: app deploy app.yaml

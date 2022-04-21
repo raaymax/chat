@@ -1,65 +1,24 @@
-name: Deploy to Alpha
-
-on:
-  push:
-    branches:
-      - release/
+name: Deploy
 
 jobs:
   deploy:
+    name: Deploy
+    needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 1.8
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
-
-      - name: Build
-        run: ./gradlew build
-
-      - name: Assemble Release Bundle
-        run: |
-          ./gradlew bundleRelease
-
-      - name: Sign Release
-        uses: r0adkll/sign-android-release@v1
-        with:
-          releaseDirectory: app/build/outputs/bundle/release
-          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
-          alias: ${{ secrets.ALIAS }}
-          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
-          keyPassword: ${{ secrets.KEY_PASSWORD }}
-
-      - name: Tag Release
-        run: |
-          version_name=${GITHUB_REF##*/}
-          echo "Tagging release with tag $version_name"
-          git tag $version_name release/$version_name
-          git push origin --tags
-
-      - name: Create service_account.json
-        run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > service_account.json
-
-      - name: Deploy to Alpha
-        uses: r0adkll/upload-google-play@v1
-        with:
-          serviceAccountJson: service_account.json
-          packageName: com.jshvarts.flows
-          releaseFile: app/build/outputs/bundle/release/app-release.aab
-          track: alpha
-          whatsNewDirectory: distribution/
-
-      - name: Deploy to google app engine
-        uses: actions-hub/gcloud@master
-        env:
-         VAPID_PUBLIC: ${{ secrets.VAPID_PUBLIC }}
-         VAPID_SECRET: ${{ secrets.VAPID_SECRET }}
-         GCM_API_KEY: ${{ secrets.GCM_API_KEY }}
-         DATABASE_URL: ${{ secrets.DATABASE_URL }}
-         GCS_BUCKET: ${{ secrets.GCS_BUCKET }}
-         SERVER_URL: ${{ secrets.SERVER_URL }}
-         CLOUDSDK_CORE_DISABLE_PROMPTS: 1
-        with:
-         args: app deploy app.yaml
+    - uses: actions/checkout@v3
+    - name: Deploy to google app engine
+      uses: actions-hub/gcloud@master
+      env:
+        PROJECT_ID: codecat-quack
+        APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        VAPID_PUBLIC: ${{ secrets.VAPID_PUBLIC }}
+        VAPID_SECRET: ${{ secrets.VAPID_SECRET }}
+        GCM_API_KEY: ${{ secrets.GCM_API_KEY }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        GCS_BUCKET: ${{ secrets.GCS_BUCKET }}
+        SERVER_URL: ${{ secrets.SERVER_URL }}
+        CLOUDSDK_CORE_DISABLE_PROMPTS: 1
+      with:
+       args: app deploy app.yaml
