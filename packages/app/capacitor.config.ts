@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'io.codecat.chat',
-  appName: '@quack/quack',
+  appName: 'Quack',
   webDir: 'dist',
   bundledWebRuntime: false
 };

@@ -78,7 +78,11 @@ const App = (conf = {}) => {
           }
           if (msg.op) {
             await notify('op', self, msg);
-            await notify(`op:${msg.op.type}`, self, msg);
+            if (handlers[`op:${msg.op.type}`]) {
+              await notify(`op:${msg.op.type}`, self, msg);
+            } else {
+              await notify('op:*', self, msg);
+            }
           } else if (msg.command) {
             await notify('command', self, msg);
             if (handlers[`command:${msg.command.name}`]) {

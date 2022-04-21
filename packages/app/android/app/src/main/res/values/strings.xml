@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">@quack/quack</string>
-    <string name="title_activity_main">@quack/quack</string>
+    <string name="app_name">Quack</string>
+    <string name="title_activity_main">Quack</string>
     <string name="package_name">io.codecat.chat</string>
     <string name="custom_url_scheme">io.codecat.chat</string>
 </resources>

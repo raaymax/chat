@@ -1,11 +1,10 @@
-name: Quack CI
+name: Tests
 
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-
 
 jobs:
   tests:

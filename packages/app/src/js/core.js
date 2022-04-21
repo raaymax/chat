@@ -1,12 +1,15 @@
+/* eslint-disable no-undef */
+import { Capacitor } from '@capacitor/core';
 import { setConfig, getConfig } from './store/config.js';
 import { getChannel, setChannel } from './store/channel.js';
 import { getSession, setSession } from './store/session.js';
 import { setInfo } from './store/info.js';
 import { setUser, getUser } from './store/user.js';
-import { insertMessage, clearMessages } from './store/messages.js';
+import { insertMessage, clearMessages, removeMessage } from './store/messages.js';
 import { load } from './services/messages.js';
 import client from './client';
 import { play } from './services/sound';
+import {initNotifications} from './services/notifications';
 
 window.client = client;
 
@@ -20,10 +23,12 @@ client
     setInfo({ msg: 'Disconnected - reconnect attempt in 1s', type: 'error' });
   });
 
-navigator.serviceWorker.addEventListener('message', () => {
-  play();
-  navigator.vibrate([100, 30, 100]);
-});
+if ( 'serviceWorker' in navigator ) {
+  navigator.serviceWorker.addEventListener('message', () => {
+    play();
+    navigator.vibrate([100, 30, 100]);
+  });
+}
 
 setInterval(async () => {
   const start = new Date();
@@ -40,25 +45,39 @@ setInterval(async () => {
 }, 10000);
 
 function handleConfig(srv, msg) {
-  // eslint-disable-next-line no-undef
   if (APP_VERSION) {
-    // eslint-disable-next-line no-console, no-undef
+    // eslint-disable-next-line no-console
     console.log('version check: ', APP_VERSION, msg.op.config.appVersion);
-    // eslint-disable-next-line no-undef
     if (msg.op.config.appVersion !== APP_VERSION) {
-      setTimeout(() => window.location.reload(true), 5000);
-      insertMessage({
-        id: 'version',
-        createdAt: new Date(),
-        user: {
-          name: 'System',
-        },
-        message: [
-          { line: { bold: { text: 'Your Quack version is outdated!!' } } },
-          { line: { text: 'Please reload the page to update' } },
-        ],
-      });
-      return;
+      if (Capacitor.isNativePlatform()) {
+        insertMessage({
+          id: 'version',
+          createdAt: new Date(),
+          user: {
+            name: 'System',
+          },
+          message: [
+            { line: { bold: { text: 'Your Quack app version is outdated!!' } } },
+            { line: { text: `Your app version: ${APP_VERSION}` } },
+            { line: { text: `Required version ${msg.op.config.appVersion}` } },
+            { line: { text: 'Please update' } },
+          ],
+        });
+      } else {
+        setTimeout(() => window.location.reload(true), 5000);
+        insertMessage({
+          id: 'version',
+          createdAt: new Date(),
+          user: {
+            name: 'System',
+          },
+          message: [
+            { line: { bold: { text: 'Your Quack version is outdated!!' } } },
+            { line: { text: 'Please reload the page to update' } },
+          ],
+        });
+        return;
+      }
     }
   }
   setConfig(msg.op.config);
@@ -93,9 +112,7 @@ async function restoreSession(i = 1) {
     const session = getSession();
     if (session) {
       await client.req({ op: { type: 'restore', session } });
-      insertMessage({
-        clientId: 'session', notifType: 'info', notif: 'Session restored', createdAt: new Date(),
-      });
+      removeMessage('session');
     }
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -114,11 +131,16 @@ async function restoreSession(i = 1) {
 }
 
 async function handleSession(srv, msg) {
-  setSession(msg.op.session);
-  setUser(msg.op.user);
-  await subscribeNotifications();
-  clearMessages();
-  await load();
+  try {
+    setSession(msg.op.session);
+    setUser(msg.op.user);
+    subscribeNotifications();
+    clearMessages();
+    await load();
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
+  }
 }
 
 function handleMessage(srv, msg) {
@@ -134,7 +156,8 @@ function handleChannel(srv, msg) {
 }
 
 async function subscribeNotifications() {
-  if ('serviceWorker' in navigator) {
+  if ( Capacitor.isNativePlatform() ) return initNotifications();
+  if ( 'serviceWorker' in navigator ) {
     await navigator.serviceWorker.ready.then(async (reg) => {
       const cfg = await getConfig();
       reg.pushManager.subscribe({

@@ -17,5 +17,6 @@ module.exports = {
   AccessDenied: (msg) => new AppError('ACCESS_DENIED', msg),
   ValidationError: (msg) => new AppError('VALIDATION_ERROR', msg),
   UnknownCommand: (msg) => new AppError('UNKNOWN_COMMAND', msg),
+  UnknownOp: (msg) => new AppError('UNKNOWN_OP', msg),
   UnknownError: (err) => new AppError('UNKNOWN_ERROR', err),
 };
