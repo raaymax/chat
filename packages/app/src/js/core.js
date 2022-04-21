@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { Capacitor } from '@capacitor/core';
 import { setConfig, getConfig } from './store/config.js';
 import { getChannel, setChannel } from './store/channel.js';
@@ -44,11 +45,9 @@ setInterval(async () => {
 }, 10000);
 
 function handleConfig(srv, msg) {
-  // eslint-disable-next-line no-undef
   if (APP_VERSION) {
-    // eslint-disable-next-line no-console, no-undef
+    // eslint-disable-next-line no-console
     console.log('version check: ', APP_VERSION, msg.op.config.appVersion);
-    // eslint-disable-next-line no-undef
     if (msg.op.config.appVersion !== APP_VERSION) {
       if (Capacitor.isNativePlatform()) {
         insertMessage({
@@ -64,21 +63,21 @@ function handleConfig(srv, msg) {
             { line: { text: 'Please update' } },
           ],
         });
+      } else {
+        setTimeout(() => window.location.reload(true), 5000);
+        insertMessage({
+          id: 'version',
+          createdAt: new Date(),
+          user: {
+            name: 'System',
+          },
+          message: [
+            { line: { bold: { text: 'Your Quack version is outdated!!' } } },
+            { line: { text: 'Please reload the page to update' } },
+          ],
+        });
         return;
       }
-      setTimeout(() => window.location.reload(true), 5000);
-      insertMessage({
-        id: 'version',
-        createdAt: new Date(),
-        user: {
-          name: 'System',
-        },
-        message: [
-          { line: { bold: { text: 'Your Quack version is outdated!!' } } },
-          { line: { text: 'Please reload the page to update' } },
-        ],
-      });
-      return;
     }
   }
   setConfig(msg.op.config);
