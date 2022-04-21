@@ -8,13 +8,13 @@ Messaging app
 - bug: fix paste of multiline text
 - feat: displaying images in messages
 - feat: ability to refresh native app
+- deploy: server compatible with mobile app
 
 ### DevOps
+- fix production deployment 
 - add signing step for app build in github actions
 
 ### General
-- style: list style
-- style: blockquote
 - feat: link preview
 - feat: days separated by something
 - feat: searching messages
@@ -22,18 +22,19 @@ Messaging app
 - feat: milestone: emoji reactions 
 - feat: milestone: ability to paste images
 - feat: deleting messages
-- bug: line wrapping in wrong place
 - feat: custom help messages for home information
-- fix: separate users from messages 
-- improvement: move link detection to message builder
-- bug: clicking on notification is not taking to correct window
 - feat: generate icons for notifications
 - feat: set icon for app
 - feat: set splash screen for app
+- feat: switch to FCM notifications in web version
+- improvement: move link detection to message builder
 - improvement: remove "session restored" message
+- improvement: separate users from messages 
+- bug: line wrapping in wrong place
+- bug: clicking on notification is not taking to correct window
 - bug: file upload wrapps text in input box
 - bug: messages scrolling to sides
-- feat: switch to FCM notifications in web version
+- bug: paste loosing part of text 
 
 ### Message editor
 - feat: focus input on any key press

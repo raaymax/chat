@@ -59,6 +59,8 @@ function handleConfig(srv, msg) {
           },
           message: [
             { line: { bold: { text: 'Your Quack app version is outdated!!' } } },
+            { line: { text: `Your app version: ${APP_VERSION}` } },
+            { line: { text: `Required version ${msg.op.config.appVersion}` } },
             { line: { text: 'Please update' } },
           ],
         });
