@@ -13,6 +13,7 @@ Messaging app
 ### DevOps
 - fix production deployment 
 - add signing step for app build in github actions
+- define deploy checklist
 
 ### General
 - feat: link preview
