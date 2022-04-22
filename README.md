@@ -2,12 +2,12 @@
 ![quack](https://github.com/codecat-io/chat/raw/master/packages/app/resources/icon.png)
 Messaging app
 
-## Motivation
+## Objectives
 
-Create fully private messaging application. 
-It needs to be cheep and work reliably.
-Goal is to minimize consts as much as possible.
-Do not exceed 20USD / month!!
+- Create fully private messaging application. 
+- It needs to work reliably.
+- Minimize consts as much as possible.
+- Do not exceed 20USD / month!!
 
 ## Decisions
 
@@ -15,10 +15,10 @@ Do not exceed 20USD / month!!
 Serverless mongodb instance because it's reliable and we pay only for what we used.
 
 ### Server
-It would be nice to have a serverless solution but for now cheepest GCE is used.
-No idea how to propagate messages to other serverless instances. 
-mongo, redis, postgres need to be hosted to be able to watch for messages.
-Maybe pub/sub would work but it seems complicated.
+It would be nice to have a serverless solution but for now cheepest GCE is used.  
+No idea how to propagate messages to other serverless instances.  
+mongo, redis, postgres need to be hosted to be able to watch for messages.  
+Maybe pub/sub would work but it seems complicated.  
 
 ## TODO
 
