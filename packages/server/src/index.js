@@ -1,7 +1,7 @@
+console.log(process.env);
 const admin = require('firebase-admin');
 const server = require('./server');
 
-console.log(process.env);
 
 const PORT = process.env.PORT || 8080;
 
