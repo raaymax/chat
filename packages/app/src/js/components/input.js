@@ -6,6 +6,7 @@ import { notifyTyping } from '../services/typing';
 import { installEmojiSelector } from './EmojiSelector/EmojiSelector';
 import { Attachments } from './Files/Attachments';
 import * as files from '../store/file';
+import {upload} from '../services/file';
 
 const wrap = (tagName) => (e) => {
   const range = window.getSelection().getRangeAt(0);
@@ -15,8 +16,18 @@ const wrap = (tagName) => (e) => {
   e.preventDefault();
 }
 
-const onPaste = (event) => {
-  const paste = (event.clipboardData || window.clipboardData).getData('text');
+const onPaste = async (event) => {
+  const cbData = (event.clipboardData || window.clipboardData);
+  if (cbData.files) {
+    event.preventDefault();
+    const { files } = cbData;
+    for (let i = 0, file; i < files.length; i++) {
+      file = files.item(i);
+      await upload(file);
+    }
+    return;
+  }
+  const paste = cbData.getData('text');
   // eslint-disable-next-line no-useless-escape
   const urlCheck = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/i;
   const m = paste.match(urlCheck);

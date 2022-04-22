@@ -11,7 +11,6 @@ export const upload = async (file) => {
     contentType: file.type,
     progress: 0,
   };
-
   add(local);
 
   const ret = await client.req({
@@ -21,7 +20,6 @@ export const upload = async (file) => {
       contentType: file.type,
     },
   });
-
   update(local.clientId, {id: ret.resp.data.fileId});
 
   try {

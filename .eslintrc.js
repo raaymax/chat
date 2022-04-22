@@ -89,6 +89,7 @@ module.exports = {
     },
   ],
   rules: {
+    'no-await-in-loop': 'off',
     'consistent-return': 'off',
     'no-use-before-define': 'off',
     'no-underscore-dangle': 'off',

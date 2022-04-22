@@ -404,6 +404,16 @@ ul {
   border: 1px solid var(--saf-0);
   cursor: pointer;
 }
+
+.file.image {
+  height: auto;
+  width: 100%;
+  max-width: 100%;
+}
+.file.image img {
+  max-width: 100%;
+}
+
 .file:hover {
   background-color: var(--primary_active_mask);
 }

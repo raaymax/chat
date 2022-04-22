@@ -28,6 +28,7 @@ Maybe pub/sub would work but it seems complicated.
 - feat: displaying images in messages
 - feat: ability to refresh native app
 - deploy: server compatible with mobile app
+- bug: different notification sound on mobile
 
 ### DevOps
 - fix production deployment 
