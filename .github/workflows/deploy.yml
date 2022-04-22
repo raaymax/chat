@@ -9,6 +9,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Use Node.js 16.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16.x
+        cache: 'npm'
+    - run: npm i --production=false
+    - run: npm run build
+      env: 
+        SERVER_URL: ${{ secrets.SERVER_URL }}
+        NODE_ENV: production
     - name: Deploy to google app engine
       uses: actions-hub/gcloud@master
       env:

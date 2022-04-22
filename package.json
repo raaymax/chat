@@ -12,7 +12,6 @@
     "npm": "8.5.x"
   },
   "scripts": {
-    "postinstall": "npm run build",
     "start": "npm run -w=@quack/server start ",
     "build": "npm run -w=@quack/app build",
     "dev:web": "npm run -w=@quack/app dev",
