@@ -7,8 +7,6 @@ import { createPool } from './pool';
 
 const { notify, watch } = createEventListener();
 
-console.log('test before');
-
 let protocol = 'ws:';
 if (document.location.protocol === 'https:') {
   protocol = 'wss:';
@@ -28,7 +26,7 @@ window.pool = pool;
 const client = {
   send: async (msg) => {
     // eslint-disable-next-line no-console
-    console.log('send', JSON.stringify(msg, null, 4));
+    // console.log('send', JSON.stringify(msg, null, 4));
     const raw = JSON.stringify(msg);
     await pool.send(raw);
   },
@@ -47,7 +45,7 @@ pool.onPacket((raw) => {
     notify('packet', msg);
     if (msg.message) return notify('message', client, msg);
     // eslint-disable-next-line no-console
-    console.log('recv', JSON.stringify(msg, null, 4));
+    // console.log('recv', JSON.stringify(msg, null, 4));
     if (msg.resp) notify('resp', client, msg);
     else if (msg.op) notify(`op:${msg.op.type}`, client, msg);
     else notify('message', client, msg);
