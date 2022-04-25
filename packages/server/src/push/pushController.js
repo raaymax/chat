@@ -58,6 +58,7 @@ module.exports = {
               ...(self.user.avatarUrl ? { imageUrl: self.user.avatarUrl } : {}),
               icon: 'stock_ticker_update',
               color: '#7e55c3',
+              sound: 'https://chat.codecat.io/assets/sound.mp3',
             },
           },
           token: ses.fcmToken,

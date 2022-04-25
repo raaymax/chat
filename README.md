@@ -23,12 +23,10 @@ Maybe pub/sub would work but it seems complicated.
 ## TODO
 
 ### Critical
-- bug: notifications should work always!
+? bug: notifications should work always!
 - bug: fix paste of multiline text
-- feat: displaying images in messages
 - feat: ability to refresh native app
-- deploy: server compatible with mobile app
-- bug: different notification sound on mobile
+? bug: different notification sound on mobile
 
 ### DevOps
 - fix production deployment 
@@ -53,8 +51,6 @@ Maybe pub/sub would work but it seems complicated.
 - improvement: separate users from messages 
 - bug: line wrapping in wrong place
 - bug: clicking on notification is not taking to correct window
-- bug: file upload wrapps text in input box
-- bug: messages scrolling to sides
 - bug: paste loosing part of text 
 - bug: send ping only if connected
 

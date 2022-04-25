@@ -18,7 +18,7 @@ const wrap = (tagName) => (e) => {
 
 const onPaste = async (event) => {
   const cbData = (event.clipboardData || window.clipboardData);
-  if (cbData.files) {
+  if (cbData.files?.length > 0) {
     event.preventDefault();
     const { files } = cbData;
     for (let i = 0, file; i < files.length; i++) {

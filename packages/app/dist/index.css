@@ -7187,6 +7187,7 @@ ul {
   position: relative;
   background-color: var(--primary_background);
   overflow-y: scroll;
+  overflow-x: hidden;
   flex: 1;
   overscroll-behavior: contain;
 }
@@ -7390,7 +7391,8 @@ ul {
 .message .body {
   flex: 1;
   padding: 0px 10px;
-  line-break: anywhere;
+  line-break: auto;
+  hyphens: auto;
 }
 .message.private .avatar {
   margin-left: 20px;
@@ -7402,17 +7404,26 @@ ul {
 #scroll-stop {
   height: 10px;
 }
+
 #scroll-stop:after {
   content: '.';
 }
+
+.attachment {
+  position: relative;
+}
+
 .file {
+  cursor: pointer;
+}
+
+.attachment, .file {
   height: 30px;
   padding: 0;
   margin: 3px 0px;
   display: flex;
   flex-direction: row;
   border: 1px solid var(--saf-0);
-  cursor: pointer;
 }
 
 .file.image {
@@ -7420,6 +7431,7 @@ ul {
   width: 100%;
   max-width: 100%;
 }
+
 .file.image img {
   max-width: 100%;
 }
@@ -7427,23 +7439,15 @@ ul {
 .file:hover {
   background-color: var(--primary_active_mask);
 }
-.file .type {
+
+.attachment .type, .file .type {
   line-height: 30px;
   width: 30px;
   text-align: center;
   vertical-align: middle;
 }
-.file .type-text {
-  line-height: 30px;
-  text-align: end;
-  vertical-align: middle;
-  white-space: nowrap;
-  flex-wrap: nowrap;
-  width: auto;
-  padding: 0 10px;
-}
 
-.file .name {
+.attachment .name, .file .name {
   padding: 0 10px;
   line-height: 30px;
   vertical-align: middle;
@@ -7453,27 +7457,6 @@ ul {
   text-overflow: ellipsis;
 }
 
-.attachment {
-  position: relative;
-  height: 30px;
-  padding: 0;
-  margin: 3px 30px;
-  display: flex;
-  flex-direction: row;
-  border: 1px solid var(--saf-0);
-}
-.attachment .type {
-  line-height: 30px;
-  width: 30px;
-  text-align: center;
-  vertical-align: middle;
-}
-.attachment .name {
-  padding: 0 10px;
-  line-height: 30px;
-  vertical-align: middle;
-  flex: 1;
-}
 .attachment .remove {
   color: #852007;
   cursor: pointer;
@@ -7482,9 +7465,11 @@ ul {
   text-align: center;
   vertical-align: middle;
 }
+
 .attachment .remove:hover {
   background-color: var(--primary_active_mask);
 }
+
 .attachment .progress {
   background-color: green;
   position: absolute;

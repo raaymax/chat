@@ -10,8 +10,7 @@ const download = async (fileId) => {
 export const File = ({data: {fileName, contentType, id}}) => (
   <div class='file' data-id={id} onclick={() => download(id)}>
     <div class='type'><i class='fa-solid fa-file' /></div>
-    <div class='name'>{fileName}</div>
-    <div class='type-text'>{contentType}</div>
+    <div class='name'>{fileName} [{contentType}]</div>
   </div>
 )
 
@@ -27,10 +26,10 @@ export const Image = ({data: {fileName, id}}) => {
   });
   return (
     <div class='file image' data-id={id} onclick={() => download(id)}>
-    {url 
-      ? <img src={url} alt={fileName} />
-      : <div>Loaging image</div>
-    }
+      {url
+        ? <img src={url} alt={fileName} />
+        : <div>Loaging image</div>
+      }
     </div>
   );
 }
