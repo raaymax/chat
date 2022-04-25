@@ -21,7 +21,7 @@ export const Image = ({data: {fileName, id}}) => {
       op: {
         type: 'initDownload',
         fileId: id,
-      }
+      },
     }).then((file) => setUrl(file.resp.data.url));
   });
   return (
