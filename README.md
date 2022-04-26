@@ -23,10 +23,11 @@ Maybe pub/sub would work but it seems complicated.
 ## TODO
 
 ### Critical
-? bug: notifications should work always!
+- ? bug: notifications should work always!
 - bug: fix paste of multiline text
 - feat: ability to refresh native app
-? bug: different notification sound on mobile
+- ? bug: different notification sound on mobile
+- feat: sending files from native app
 
 ### DevOps
 - fix production deployment 
