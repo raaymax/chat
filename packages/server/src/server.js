@@ -27,7 +27,7 @@ wss({ server })
       { text: 'Hello!' }, { emoji: 'wave' }, { br: true },
       { text: 'You can use "/help" to get more info' }, { br: true },
       { text: 'You won\'t be able to send any messages until you login' }, { br: true },
-    ], true, msg.seqId);
+    ], { priv: true, seqId: msg.seqId, msgId: 'greet' });
     await msg.ok();
   })
   .on('op:load', messageController.load)
@@ -52,7 +52,7 @@ wss({ server })
     { text: '/avatar <url> - to change your avatar' }, { br: true },
     { text: '/login <name> <password> - login to your account' }, { br: true },
     { text: '/help - display this help' }, { br: true },
-  ], true, msg.seqId).then(() => msg.ok()))
+  ], { priv: true, seqId: msg.seqId, msgId: 'help' }).then(() => msg.ok()))
   .on('command:name', userController.changeName)
   .on('command:avatar', userController.changeAvatar)
   .on('command:login', userController.login)

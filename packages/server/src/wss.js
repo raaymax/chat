@@ -42,8 +42,8 @@ const App = (conf = {}) => {
           await notify('broadcast:after', self, msg);
           return ret;
         },
-        sys: (data, priv, seqId) => send({
-          id: uuid(),
+        sys: (data, { priv, seqId, msgId = uuid() }) => send({
+          id: msgId,
           seqId,
           createdAt: new Date().toISOString(),
           user: { name: 'System' },
