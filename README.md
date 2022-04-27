@@ -29,6 +29,7 @@ Maybe pub/sub would work but it seems complicated.
 
 ### DevOps
 - define deploy checklist
+- create script for version update
 
 ### General
 - feat: link preview
