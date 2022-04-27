@@ -19,6 +19,7 @@ function handleConfig(client, msg) {
       if (Capacitor.isNativePlatform()) {
         insertMessage({
           id: 'version',
+          priv: true,
           createdAt: new Date(),
           user: {
             name: 'System',
@@ -34,6 +35,7 @@ function handleConfig(client, msg) {
         setTimeout(() => window.location.reload(true), 5000);
         insertMessage({
           id: 'version',
+          priv: true,
           createdAt: new Date(),
           user: {
             name: 'System',

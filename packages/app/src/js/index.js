@@ -20,19 +20,13 @@ client
   .on('con:close', () => setInfo({ msg: 'Disconnected - reconnect attempt in 1s', type: 'error' }))
   .on('message', handleMessage)
   .on('message:remove', handleMessageRemove)
-
-if ( 'serviceWorker' in navigator ) {
-  navigator.serviceWorker.addEventListener('message', () => {
-    play();
-    navigator.vibrate([100, 30, 100]);
-  });
-}
+  .on('notification', () => navigator.vibrate([100, 30, 100]))
+  .on('notification', () => play())
 
 window.addEventListener('hashchange', () => {
   const name = window.location.hash.slice(1);
   client.send({ command: { name: 'channel', args: [name] } });
 }, false);
-
 
 function handleMessage(_, msg) {
   if (msg.priv || msg.channel === getChannel()) {

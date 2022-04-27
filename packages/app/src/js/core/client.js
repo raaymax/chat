@@ -26,7 +26,7 @@ const client = {
   isOpen: false,
   send: async (msg) => {
     // eslint-disable-next-line no-console
-    //console.log('send', JSON.stringify(msg, null, 4));
+    // console.log('send', JSON.stringify(msg, null, 4));
     const raw = JSON.stringify(msg);
     await pool.send(raw);
   },
@@ -34,6 +34,7 @@ const client = {
     watch(ev, cb);
     return client;
   },
+  // eslint-disable-next-line no-console
   emit: async (name, ...data) => console.log(name, data) || notify(name, client, ...data),
 };
 

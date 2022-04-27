@@ -17,7 +17,7 @@ export const Image = ({data: {fileName, id}}) => {
   const [url, setUrl] = useState(null);
   useEffect(() => {
     getUrl(id).then((ret) => setUrl(ret));
-  });
+  }, [id]);
   return (
     <div class='file image' data-id={id} onclick={() => download(id)}>
       {url

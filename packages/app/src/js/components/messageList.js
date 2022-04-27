@@ -54,14 +54,14 @@ export function MessageList() {
         return (
           msg.notif
             ? <Notification
-              key={msg.id}
+              key={msg.id || msg.clientId}
               className={[msg.notifType]}>
               {msg.notif}
             </Notification>
             : <Message
               class={msg.priv ? ['private'] : []}
               data-id={msg.id}
-              key={msg.id}
+              key={msg.id || msg.clientId}
               sameUser={sameUser}
               data={msg}
             />

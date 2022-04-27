@@ -1,4 +1,3 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
@@ -6,8 +5,9 @@ const pack = require('./package.json');
 
 module.exports = {
   entry: {
-    index: './src/index.js',
+    app: './src/index.js',
     sw: './src/sw.js',
+    'firebase-messaging-sw': './src/fcm-sw.js',
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -16,15 +16,11 @@ module.exports = {
       ENVIRONMENT: JSON.stringify(process.env.NODE_ENV || 'development'),
     }),
     new MiniCssExtractPlugin(),
-    new HtmlWebpackPlugin({
-      template: './public/index.html',
-      inject: 'body',
-      excludeChunks: ['sw'],
-    }),
     new CopyPlugin({
       patterns: [
         { from: './src/assets', to: 'assets' },
         { from: './src/manifest.json', to: '.' },
+        { from: './src/index.html', to: '.' },
       ],
     }),
   ],

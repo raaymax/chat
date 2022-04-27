@@ -16,7 +16,10 @@ module.exports = {
   ],
   overrides: [
     {
-      files: ['packages/app/src/sw.js'],
+      files: [
+        'packages/app/src/sw.js',
+        'packages/app/src/fcm-sw.js',
+      ],
       env: {
         serviceworker: true,
         browser: true,

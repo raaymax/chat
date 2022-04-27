@@ -1,3 +1,10 @@
+const Err = (code, msg) => new class extends Error {
+  constructor() {
+    super(`[${code}] ${msg}`);
+    this.errorCode = code;
+  }
+}();
+
 const session = {
   get: () => {
     try {
@@ -31,7 +38,11 @@ async function connectionReady(client) {
       await client.emit('auth:none');
     }
   } catch (err) {
-    await client.emit('auth:error', err);
+    if (err.errorCode === 'SESSION_NOT_RESTORED') {
+      await client.emit('auth:none');
+    } else {
+      await client.emit('auth:error', err);
+    }
   } finally {
     await client.emit('auth:ready');
   }
@@ -43,7 +54,7 @@ async function handleSession(client, msg) {
 }
 
 async function restoreSession(client, i = 1) {
-  if (i > 10) throw new Error('SESSION_NOT_RESTORED');
+  if (i > 10) throw Err('SESSION_RETRY_FAILED');
   // eslint-disable-next-line no-console
   console.log('Restore session attempt', i);
   try {
@@ -56,7 +67,11 @@ async function restoreSession(client, i = 1) {
     // eslint-disable-next-line no-console
     console.error(err);
     await client.emit('message', {
-      clientId: 'session', notifType: 'warning', notif: 'User session not restored', createdAt: new Date(),
+      priv: true,
+      clientId: 'session',
+      notifType: 'warning',
+      notif: 'User session not restored',
+      createdAt: new Date(),
     });
     const errorCode = err?.resp?.data?.errorCode;
     if (errorCode !== 'SESSION_TERMINATED' && errorCode !== 'SESSION_NOT_FOUND') {
@@ -64,6 +79,7 @@ async function restoreSession(client, i = 1) {
         setTimeout(() => restoreSession(client, i + 1).then(resolve, reject), 2000);
       });
     }
-    throw new Error('SESSION_NOT_RESTORED');
+    session.clear();
+    throw Err('SESSION_NOT_RESTORED');
   }
 }
