@@ -1,6 +1,5 @@
 FROM node:17-alpine AS appbuild
 ENV ENVIRONMENT=production
-ENV =production
 WORKDIR /usr/src/app
 COPY package*.json ./
 COPY packages/server/package*.json ./packages/server/
