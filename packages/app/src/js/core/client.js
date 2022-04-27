@@ -1,8 +1,7 @@
 /* eslint-disable no-undef */
 import { Capacitor } from '@capacitor/core';
 
-import { initRequests } from './requests.js';
-import { createEventListener } from './utils';
+import { createEventListener } from '../utils';
 import { createPool } from './pool';
 
 const { notify, watch } = createEventListener();
@@ -24,9 +23,10 @@ const pool = createPool(URI);
 window.pool = pool;
 
 const client = {
+  isOpen: false,
   send: async (msg) => {
     // eslint-disable-next-line no-console
-    // console.log('send', JSON.stringify(msg, null, 4));
+    //console.log('send', JSON.stringify(msg, null, 4));
     const raw = JSON.stringify(msg);
     await pool.send(raw);
   },
@@ -34,10 +34,17 @@ const client = {
     watch(ev, cb);
     return client;
   },
+  emit: async (name, ...data) => console.log(name, data) || notify(name, client, ...data),
 };
 
-pool.onOpen(() => notify('con:open', client));
-pool.onClose(() => notify('con:close', client));
+pool.onOpen(() => {
+  client.isOpen = true;
+  return notify('con:open', client)
+});
+pool.onClose(() => {
+  client.isOpen = false;
+  return notify('con:close', client)
+});
 pool.onError(() => notify('con:error', client));
 pool.onPacket((raw) => {
   try {
@@ -55,7 +62,5 @@ pool.onPacket((raw) => {
     notify('packet:error', client, raw, err);
   }
 });
-
-initRequests(client);
 
 export default client;

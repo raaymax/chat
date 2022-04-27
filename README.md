@@ -23,15 +23,11 @@ Maybe pub/sub would work but it seems complicated.
 ## TODO
 
 ### Critical
-- ? bug: notifications should work always!
 - bug: fix paste of multiline text
 - feat: ability to refresh native app
 - ? bug: different notification sound on mobile
-- feat: sending files from native app
 
 ### DevOps
-- fix production deployment 
-- add signing step for app build in github actions
 - define deploy checklist
 
 ### General
@@ -44,16 +40,13 @@ Maybe pub/sub would work but it seems complicated.
 - feat: deleting messages
 - feat: custom help messages for home information
 - feat: generate icons for notifications
-- feat: set icon for app
-- feat: set splash screen for app
 - feat: switch to FCM notifications in web version
 - improvement: move link detection to message builder
-- improvement: remove "session restored" message
 - improvement: separate users from messages 
+- improvement: remove temporary files from gcs after abort
 - bug: line wrapping in wrong place
 - bug: clicking on notification is not taking to correct window
 - bug: paste loosing part of text 
-- bug: send ping only if connected
 
 ### Message editor
 - feat: focus input on any key press

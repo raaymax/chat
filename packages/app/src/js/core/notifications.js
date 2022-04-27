@@ -1,8 +1,31 @@
-/* eslint-disable no-console */
+import { Capacitor } from '@capacitor/core';
 import { PushNotifications } from '@capacitor/push-notifications';
-import {client} from '../core';
 
-export const initNotifications = () => {
+export const initNotifications = (client) => {
+  client.on('auth:user', subscribeNotifications);
+}
+
+async function subscribeNotifications(client) {
+  if ( Capacitor.isNativePlatform() ) return initNativeNotifications();
+  if ( 'serviceWorker' in navigator ) {
+    await navigator.serviceWorker.ready.then(async (reg) => {
+      const cfg = await client.getConfig();
+      reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: cfg.applicationServerKey,
+      }).then((subscription) => client.req({
+        op: {
+          type: 'setupPushNotifications',
+          subscription,
+        },
+      // eslint-disable-next-line no-console
+      })).catch((e) => console.error(e));
+    });
+  }
+  client.emit('notifications:ready');
+}
+
+export const initNativeNotifications = (client) => {
   PushNotifications.requestPermissions().then((result) => {
     if (result.receive === 'granted') {
       PushNotifications.register();

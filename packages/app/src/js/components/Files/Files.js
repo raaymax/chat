@@ -1,10 +1,9 @@
-import {h} from 'preact';
-import {useState, useEffect} from 'preact/hooks';
-import client from '../../client';
+import { h } from 'preact';
+import { useState, useEffect } from 'preact/hooks';
+import { getUrl } from '../../services/file';
 
 const download = async (fileId) => {
-  const file = await client.req({op: {type: 'initDownload', fileId}});
-  window.open(file.resp.data.url);
+  window.open(await getUrl(fileId));
 }
 
 export const File = ({data: {fileName, contentType, id}}) => (
@@ -17,12 +16,7 @@ export const File = ({data: {fileName, contentType, id}}) => (
 export const Image = ({data: {fileName, id}}) => {
   const [url, setUrl] = useState(null);
   useEffect(() => {
-    client.req({
-      op: {
-        type: 'initDownload',
-        fileId: id,
-      },
-    }).then((file) => setUrl(file.resp.data.url));
+    getUrl(id).then((ret) => setUrl(ret));
   });
   return (
     <div class='file image' data-id={id} onclick={() => download(id)}>

@@ -1,4 +1,4 @@
-import client from '../client';
+import { client } from '../core';
 import { createCounter } from '../utils';
 import { add, update } from '../store/file';
 
@@ -48,6 +48,16 @@ export const upload = async (file) => {
       contentType: file.type,
     },
   });
+}
+
+export const getUrl = async (id) => {
+  const file = await client.req({
+    op: {
+      type: 'initDownload',
+      fileId: id,
+    },
+  });
+  return file.resp.data.url;
 }
 
 function uploadFile(method, url, {file, progress, clientId}) {
