@@ -1,4 +1,5 @@
 import { client } from '../core';
+import { setInfo } from '../store/info';
 import { createCounter } from '../utils';
 import { add, update } from '../store/file';
 
@@ -30,7 +31,17 @@ export const upload = async (file) => {
         update(local.clientId, {progress});
       },
     });
+    update(local.clientId, {progress: 100});
+    await client.req({
+      op: {
+        type: 'finalizeUpload',
+        fileId: ret.resp.data.fileId,
+        fileName: file.name,
+        contentType: file.type,
+      },
+    });
   } catch (err) {
+    setInfo("dupa");
     update(local.clientId, {
       error: err.message,
       progress: 0,
@@ -38,16 +49,6 @@ export const upload = async (file) => {
     // eslint-disable-next-line no-console
     console.error(err);
   }
-  update(local.clientId, {progress: 100});
-
-  await client.req({
-    op: {
-      type: 'finalizeUpload',
-      fileId: ret.resp.data.fileId,
-      fileName: file.name,
-      contentType: file.type,
-    },
-  });
 }
 
 export const getUrl = async (id) => {

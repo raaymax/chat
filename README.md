@@ -22,6 +22,15 @@ Maybe pub/sub would work but it seems complicated.
 
 ## TODO
 
+### Milestones
+- feat: channels (currently basic)
+- feat: threads in messages
+- feat: emoji reactions 
+- feat: ability to upload images and files (in progress)
+  | drop and paste
+  | missing thumbnails generation
+- feat: custom emojis
+
 ### Critical
 - bug: fix paste of multiline text
 - feat: ability to refresh native app
@@ -31,17 +40,18 @@ Maybe pub/sub would work but it seems complicated.
 - define deploy checklist
 - create script for version update
 
+### Mobile
+- Message about version update is dissapearing after connection
+
 ### General
 - feat: link preview
 - feat: days separated by something
 - feat: searching messages
-- feat: milestone: threads in messages
-- feat: milestone: emoji reactions 
-- feat: milestone: ability to paste images
 - feat: deleting messages
 - feat: custom help messages for home information
 - feat: generate icons for notifications
 - feat: switch to FCM notifications in web version
+- feat: command for displaying version of app and server
 - improvement: move link detection to message builder
 - improvement: separate users from messages 
 - improvement: remove temporary files from gcs after abort

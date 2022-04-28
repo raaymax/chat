@@ -79,7 +79,6 @@ module.exports = {
               link: process.env.SERVER_URL,
             },
             notification: {
-              title: 'asd',
               silent: false,
               vibrate: [200, 100, 200],
               badge: self.user.avatarUrl,
