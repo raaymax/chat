@@ -22,7 +22,7 @@ export const initNotifications = (client) => {
   }
 
   async function subscribeNotifications(client) {
-    if ( Capacitor.isNativePlatform() ) return initNativeNotifications();
+    if ( Capacitor.isNativePlatform() ) return initNativeNotifications(client);
     const cfg = client.getConfig();
     await getToken(messaging, { vapidKey: cfg.applicationServerKey }).then((currentToken) => {
       if (currentToken) {
