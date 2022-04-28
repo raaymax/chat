@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -e
+npm version $1 
+
+VERSION="$(cat package.json | awk '/version/{print $2}' | sed 's/[",]//g')"
+
+sed -i 's/"version": "[0-9\.]*"/"version": "'${VERSION}'"/' ./packages/app/package.json
+sed -i 's/"version": "[0-9\.]*"/"version": "'${VERSION}'"/' ./packages/server/package.json
+
+sed -i "s/versionName '[0-9\.]*'/versionName '${VERSION}'/" ./packages/app/android/app/build.gradle
+sed -i 's/\(.*\)versionCode \([0-9]*\)/echo "\1versionCode $((\2+1))"/e' ./packages/app/android/app/build.gradle
+git add -A
+git commit --amend --edit
