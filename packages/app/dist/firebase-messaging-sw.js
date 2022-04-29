@@ -30,6 +30,16 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
+/***/ "./src/fcm-sw.js":
+/*!***********************!*\
+  !*** ./src/fcm-sw.js ***!
+  \***********************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var firebase_app__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! firebase/app */ \"../../node_modules/firebase/app/dist/index.esm.js\");\n/* harmony import */ var firebase_messaging_sw__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! firebase/messaging/sw */ \"../../node_modules/firebase/messaging/sw/dist/index.esm.js\");\n/* harmony import */ var _firebaseConfig__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./firebaseConfig */ \"./src/firebaseConfig.js\");\n/* eslint-disable no-restricted-globals */\n\n\n\nconst firebaseApp = (0,firebase_app__WEBPACK_IMPORTED_MODULE_0__.initializeApp)(_firebaseConfig__WEBPACK_IMPORTED_MODULE_2__[\"default\"]);\nconst messaging = (0,firebase_messaging_sw__WEBPACK_IMPORTED_MODULE_1__.getMessaging)(firebaseApp);\n(0,firebase_messaging_sw__WEBPACK_IMPORTED_MODULE_1__.onBackgroundMessage)(messaging, async payload => {\n  const client = await getOpenClient();\n\n  if (client) {\n    await client.postMessage(payload);\n  }\n});\nself.addEventListener('notificationclick', event => {\n  // eslint-disable-next-line no-console\n  console.log('click', event);\n  event.notification.close();\n  event.waitUntil(clients.matchAll({\n    includeUncontrolled: true,\n    type: 'window'\n  }).then(clientList => {\n    for (let i = 0; i < clientList.length; i++) {\n      const client = clientList[i];\n      if ('focus' in client) return client.focus();\n    }\n\n    if (clients.openWindow) return clients.openWindow('/');\n  }));\n});\n\nfunction getOpenClient() {\n  return clients.matchAll({\n    includeUncontrolled: true,\n    type: 'window'\n  }).then(clientList => clientList[0]);\n}\n\n//# sourceURL=webpack://@quack/app/./src/fcm-sw.js?");
+
+/***/ }),
+
 /***/ "./src/firebaseConfig.js":
 /*!*******************************!*\
   !*** ./src/firebaseConfig.js ***!
@@ -37,16 +47,6 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({\n  apiKey: \"AIzaSyDt4OVXp0J08ey1iPxkfCyrtxwdMdfOCbc\",\n  authDomain: \"codecat-quack.firebaseapp.com\",\n  projectId: \"codecat-quack\",\n  storageBucket: \"codecat-quack.appspot.com\",\n  messagingSenderId: \"857885813934\",\n  appId: \"1:857885813934:web:28df9a396521b29ac1113f\",\n  measurementId: \"G-5G7PT95N5Z\"\n});\n\n//# sourceURL=webpack://@quack/app/./src/firebaseConfig.js?");
-
-/***/ }),
-
-/***/ "./src/sw.js":
-/*!*******************!*\
-  !*** ./src/sw.js ***!
-  \*******************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var firebase_app__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! firebase/app */ \"../../node_modules/firebase/app/dist/index.esm.js\");\n/* harmony import */ var firebase_messaging_sw__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! firebase/messaging/sw */ \"../../node_modules/firebase/messaging/sw/dist/index.esm.js\");\n/* harmony import */ var _firebaseConfig__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./firebaseConfig */ \"./src/firebaseConfig.js\");\n\n\n\nconst firebaseApp = (0,firebase_app__WEBPACK_IMPORTED_MODULE_0__.initializeApp)(_firebaseConfig__WEBPACK_IMPORTED_MODULE_2__[\"default\"]);\nconst messaging = (0,firebase_messaging_sw__WEBPACK_IMPORTED_MODULE_1__.getMessaging)(firebaseApp);\n(0,firebase_messaging_sw__WEBPACK_IMPORTED_MODULE_1__.onBackgroundMessage)(messaging, (...args) => {\n  // eslint-disable-next-line no-console\n  console.log('FCM notif: ', args);\n});\nconst EXTERNAL_ASSETS = ['https://unpkg.com/quill-emoji@0.2.0/dist/quill-emoji.js', 'https://cdn.quilljs.com/1.3.6/quill.js', 'https://cdn.quilljs.com/1.3.6/quill.snow.css', 'https://unpkg.com/quill-emoji@0.2.0/dist/quill-emoji.css', 'https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap'];\nconst ASSETS = ['/assets/sound.mp3', '/assets/icons/favicon-16x16.png', '/assets/icons/mstile-150x150.png', '/assets/icons/favicon-32x32.png', '/assets/icons/android-chrome-512x512.png', '/assets/icons/apple-touch-icon.png', '/assets/icons/android-chrome-192x192.png', '/assets/emoji_list.json', '/assets/favicon.ico', '/assets/fontawesome/webfonts/fa-v4compatibility.ttf', '/assets/fontawesome/webfonts/fa-brands-400.woff2', '/assets/fontawesome/webfonts/fa-solid-900.ttf', '/assets/fontawesome/webfonts/fa-regular-400.ttf', '/assets/fontawesome/webfonts/fa-solid-900.woff2', '/assets/fontawesome/webfonts/fa-regular-400.woff2', '/assets/fontawesome/webfonts/fa-brands-400.ttf', '/assets/fontawesome/webfonts/fa-v4compatibility.woff2', '/assets/fontawesome/css/all.css', '/assets/fontawesome/css/all.min.css', '/manifest.json', '/sw.js', '/app.css', '/index.html', '/app.js', '/'];\nself.addEventListener('install', event => {\n  async function onInstall() {\n    const cache = await caches.open('static');\n    await cache.addAll(ASSETS);\n    await cache.addAll(EXTERNAL_ASSETS);\n  }\n\n  event.waitUntil(onInstall(event));\n});\nself.addEventListener('fetch', event => {\n  if (event.request.method === 'PUT') {\n    return;\n  }\n\n  if (EXTERNAL_ASSETS.includes(event.request.url)) {\n    event.respondWith(caches.match(event.request).then(response => {\n      if (response) {\n        return response;\n      }\n\n      return fetch(event.request);\n    }));\n  } else if (ASSETS.includes(event.request.url)) {\n    event.respondWith(fetch(event.request).catch(() => caches.match(event.request)));\n  } else {\n    event.respondWith(fetch(event.request));\n  }\n});\nself.addEventListener('activate', event => {\n  event.waitUntil(async () => {\n    await Promise.all(ASSETS.map(asset => cache.delete(asset)));\n  });\n});\n\n//# sourceURL=webpack://@quack/app/./src/sw.js?");
 
 /***/ }),
 
@@ -182,7 +182,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module can't be inlined because the eval devtool is used.
-/******/ 	var __webpack_exports__ = __webpack_require__("./src/sw.js");
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/fcm-sw.js");
 /******/ 	
 /******/ })()
 ;

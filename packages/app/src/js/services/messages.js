@@ -7,7 +7,7 @@ import {
   updateMessage,
 } from '../store/messages.js';
 import { getChannel } from '../store/channel.js';
-import client from '../client';
+import { client } from '../core';
 import { fromDom } from '../MessageBuilder';
 import * as files from '../store/file';
 

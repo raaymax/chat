@@ -1,40 +1,62 @@
 # Quack
+![quack](https://github.com/codecat-io/chat/raw/master/packages/app/resources/icon.png)
 Messaging app
+
+## Objectives
+
+- Create fully private messaging application. 
+- It needs to work reliably.
+- Minimize consts as much as possible.
+- Do not exceed 20USD / month!!
+
+## Decisions
+
+### Database
+Serverless mongodb instance because it's reliable and we pay only for what we used.
+
+### Server
+It would be nice to have a serverless solution but for now cheepest GCE is used.  
+No idea how to propagate messages to other serverless instances.  
+mongo, redis, postgres need to be hosted to be able to watch for messages.  
+Maybe pub/sub would work but it seems complicated.  
 
 ## TODO
 
+### Milestones
+- feat: channels (currently basic)
+- feat: threads in messages
+- feat: emoji reactions 
+- feat: ability to upload images and files (in progress)
+  | drop and paste
+  | missing thumbnails generation
+- feat: custom emojis
+
 ### Critical
-- bug: notifications should work always!
 - bug: fix paste of multiline text
-- feat: displaying images in messages
 - feat: ability to refresh native app
-- deploy: server compatible with mobile app
+- ? bug: different notification sound on mobile
 
 ### DevOps
-- fix production deployment 
-- add signing step for app build in github actions
 - define deploy checklist
+- create script for version update
+
+### Mobile
+- Message about version update is dissapearing after connection
 
 ### General
 - feat: link preview
 - feat: days separated by something
 - feat: searching messages
-- feat: milestone: threads in messages
-- feat: milestone: emoji reactions 
-- feat: milestone: ability to paste images
 - feat: deleting messages
 - feat: custom help messages for home information
 - feat: generate icons for notifications
-- feat: set icon for app
-- feat: set splash screen for app
 - feat: switch to FCM notifications in web version
+- feat: command for displaying version of app and server
 - improvement: move link detection to message builder
-- improvement: remove "session restored" message
 - improvement: separate users from messages 
+- improvement: remove temporary files from gcs after abort
 - bug: line wrapping in wrong place
 - bug: clicking on notification is not taking to correct window
-- bug: file upload wrapps text in input box
-- bug: messages scrolling to sides
 - bug: paste loosing part of text 
 
 ### Message editor
@@ -54,3 +76,22 @@ Messaging app
 - feat: define web share target for sharing
 - feat: mark unread messages
 
+
+
+## Local development setup
+
+Then create local mongo server with docker-compose
+
+```bash
+docker-compose -f docker-compose.dev.yml up -d
+```
+
+next start local development server
+
+```bash
+npm run dev
+```
+
+## License
+
+MIT - Feel free to use this code however you want.

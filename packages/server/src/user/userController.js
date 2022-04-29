@@ -52,7 +52,7 @@ module.exports = {
     if (!user) {
       await self.sys([
         { text: 'Login failed' }, { br: true },
-      ], true);
+      ], { priv: true });
       return msg.error(Errors.AccessDenied());
     }
     self.user = user;
@@ -70,7 +70,7 @@ module.exports = {
     await self.sys([
       { text: 'Login successfull' }, { br: true },
       { text: `Welcome ${user.name}` }, { br: true },
-    ], true, msg.seqId);
+    ], { priv: true, seqId: msg.seqId });
 
     return msg.ok({
       session,

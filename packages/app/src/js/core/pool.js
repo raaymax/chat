@@ -1,5 +1,5 @@
 /* eslint-disable no-await-in-loop */
-import { createEventListener } from './utils';
+import { createEventListener } from '../utils';
 
 export function createPool(address) {
   const cons = [];

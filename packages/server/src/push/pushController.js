@@ -1,6 +1,5 @@
 // eslint-disable-next-line import/no-unresolved
 const { getMessaging } = require('firebase-admin/messaging');
-const push = require('./pushService');
 const { sessionRepo } = require('../database/db');
 const pack = require('../../package.json');
 
@@ -45,6 +44,7 @@ module.exports = {
     return Promise.all(sess.map((ses) => {
       if (ses.fcmToken) {
         const message = {
+          token: ses.fcmToken,
           data: {
             channel: msg.channel,
           },
@@ -58,42 +58,35 @@ module.exports = {
               ...(self.user.avatarUrl ? { imageUrl: self.user.avatarUrl } : {}),
               icon: 'stock_ticker_update',
               color: '#7e55c3',
+              sound: 'https://chat.codecat.io/assets/sound.mp3',
             },
           },
-          token: ses.fcmToken,
+          apns: {
+            payload: {
+              aps: {
+                'mutable-content': 1,
+              },
+            },
+            fcm_options: {
+              image: self.user.avatarUrl,
+            },
+          },
+          webpush: {
+            headers: {
+              image: self.user.avatarUrl,
+            },
+            fcm_options: {
+              link: process.env.SERVER_URL,
+            },
+            notification: {
+              silent: false,
+              vibrate: [200, 100, 200],
+              badge: self.user.avatarUrl,
+              image: self.user.avatarUrl,
+            },
+          },
         };
-        if (self.user.avatarUrl) {
-          Object.assign(message, {
-            apns: {
-              payload: {
-                aps: {
-                  'mutable-content': 1,
-                },
-              },
-              fcm_options: {
-                image: self.user.avatarUrl,
-              },
-            },
-            webpush: {
-              headers: {
-                image: self.user.avatarUrl,
-              },
-            },
-          });
-        }
         return getMessaging().send(message);
-      } if (ses.pushSubscription) {
-        return push.sendNotification(ses.pushSubscription, JSON.stringify({
-          title: `Message from ${msg.user?.name || 'Guest'}`,
-          description: msg.flat,
-          channel: msg.channel,
-        })).catch((err) => {
-          if (err.status === 410) {
-            return sessionRepo.update(ses.id, {
-              pushSubscription: null,
-            });
-          }
-        });
       }
     }));
   },

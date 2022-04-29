@@ -1,5 +1,4 @@
 .envrc
 node_modules
-packages/app/dist
 .DS_Store
 .idea

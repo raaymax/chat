@@ -1,4 +1,5 @@
 const waiting = {};
+
 const register = (seqId, source) => {
   let timeout = null;
   return new Promise((resolve, reject) => {
