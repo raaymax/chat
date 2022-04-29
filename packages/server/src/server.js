@@ -4,6 +4,7 @@ const messageController = require('./message/messageController');
 const userController = require('./user/userController');
 const pushController = require('./push/pushController');
 const fileController = require('./file/fileController');
+const aiController = require('./ai/aiController');
 const Errors = require('./errors');
 
 require('./database/db').init();
@@ -51,12 +52,14 @@ wss({ server })
     { text: '/name <name> - to change your name' }, { br: true },
     { text: '/avatar <url> - to change your avatar' }, { br: true },
     { text: '/login <name> <password> - login to your account' }, { br: true },
+    { text: '/ai <question> - ask openai GPT-3' }, { br: true },
     { text: '/help - display this help' }, { br: true },
   ], { priv: true, seqId: msg.seqId, msgId: 'help' }).then(() => msg.ok()))
   .on('command:name', userController.changeName)
   .on('command:avatar', userController.changeAvatar)
   .on('command:login', userController.login)
   .on('command:channel', messageController.changeChannel)
+  .on('command:ai', aiController.createCompletion)
   .on('command:*', unknownCommand)
   .on('message', messageController.handle)
   .on('broadcast:after', pushController.notifyOther)
