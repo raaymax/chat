@@ -4,6 +4,7 @@ const messageController = require('./message/messageController');
 const userController = require('./user/userController');
 const pushController = require('./push/pushController');
 const fileController = require('./file/fileController');
+const aiController = require('./ai/aiController');
 const Errors = require('./errors');
 
 require('./database/db').init();
@@ -57,6 +58,7 @@ wss({ server })
   .on('command:avatar', userController.changeAvatar)
   .on('command:login', userController.login)
   .on('command:channel', messageController.changeChannel)
+  .on('command:ai', aiController.createCompletion)
   .on('command:*', unknownCommand)
   .on('message', messageController.handle)
   .on('broadcast:after', pushController.notifyOther)

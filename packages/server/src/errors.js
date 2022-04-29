@@ -19,4 +19,5 @@ module.exports = {
   UnknownCommand: (msg) => new AppError('UNKNOWN_COMMAND', msg),
   UnknownOp: (msg) => new AppError('UNKNOWN_OP', msg),
   UnknownError: (err) => new AppError('UNKNOWN_ERROR', err),
+  FeatureNotEnabled: (err) => new AppError('FEATURE_NOT_ENABLED', err),
 };

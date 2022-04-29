@@ -11,7 +11,7 @@ module.exports = {
       [u.id]: { id: u.id, name: u.name, avatarUrl: u.avatarUrl },
     }), {});
     const messages = await messageRepo.getAll(op);
-    messages.forEach((m) => self.send({ ...m, user: userMap[m.userId] }));
+    messages.forEach((m) => self.send({ ...m, ...(m.userId ? { user: userMap[m.userId] } : {}) }));
     msg.ok();
   },
 
