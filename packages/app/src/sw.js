@@ -1,3 +1,15 @@
+import { initializeApp } from "firebase/app";
+import { getMessaging, onBackgroundMessage } from "firebase/messaging/sw";
+import firebaseConfig from './firebaseConfig';
+
+const firebaseApp = initializeApp(firebaseConfig);
+const messaging = getMessaging(firebaseApp);
+
+onBackgroundMessage(messaging, (...args) => {
+  // eslint-disable-next-line no-console
+  console.log('FCM notif: ', args);
+})
+
 const EXTERNAL_ASSETS = [
   'https://unpkg.com/quill-emoji@0.2.0/dist/quill-emoji.js',
   'https://cdn.quilljs.com/1.3.6/quill.js',
@@ -28,9 +40,9 @@ const ASSETS = [
   '/assets/fontawesome/css/all.min.css',
   '/manifest.json',
   '/sw.js',
-  '/index.css',
+  '/app.css',
   '/index.html',
-  '/index.js',
+  '/app.js',
   '/',
 ];
 
@@ -72,55 +84,3 @@ self.addEventListener('activate', (event) => {
     await Promise.all(ASSETS.map((asset) => cache.delete(asset)));
   });
 });
-
-self.addEventListener('push', (e) => {
-  // eslint-disable-next-line no-console
-  console.log('[SW] notification', e);
-  const data = e.data.json();
-  e.waitUntil((async () => {
-    try {
-      await self.registration.showNotification(data.title, {
-        body: data.description,
-        tag: data.channel,
-        vibrate: [100, 50, 100],
-        silent: false,
-        data: {
-          dateOfArrival: Date.now(),
-          primaryKey: '2',
-        },
-        actions: [
-          { action: 'open', title: 'Go to message' },
-        ],
-      });
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error(err);
-    }
-    const client = await getOpenClient();
-    if (client) {
-      await client.postMessage({
-        type: 'sound',
-      });
-    }
-  })());
-});
-
-self.addEventListener('notificationclick', (event) => {
-  event.notification.close();
-
-  event.waitUntil(clients.matchAll({
-    type: 'window',
-  }).then((clientList) => {
-    for (let i = 0; i < clientList.length; i++) {
-      const client = clientList[i];
-      if (client.url === '/' && 'focus' in client) return client.focus();
-    }
-    if (clients.openWindow) return clients.openWindow('/');
-  }));
-});
-
-function getOpenClient() {
-  return clients.matchAll({
-    type: 'window',
-  }).then((clientList) => clientList[0]);
-}

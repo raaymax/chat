@@ -6,6 +6,7 @@ import { notifyTyping } from '../services/typing';
 import { installEmojiSelector } from './EmojiSelector/EmojiSelector';
 import { Attachments } from './Files/Attachments';
 import * as files from '../store/file';
+import {upload} from '../services/file';
 
 const wrap = (tagName) => (e) => {
   const range = window.getSelection().getRangeAt(0);
@@ -15,8 +16,18 @@ const wrap = (tagName) => (e) => {
   e.preventDefault();
 }
 
-const onPaste = (event) => {
-  const paste = (event.clipboardData || window.clipboardData).getData('text');
+const onPaste = async (event) => {
+  const cbData = (event.clipboardData || window.clipboardData);
+  if (cbData.files?.length > 0) {
+    event.preventDefault();
+    const { files } = cbData;
+    for (let i = 0, file; i < files.length; i++) {
+      file = files.item(i);
+      await upload(file);
+    }
+    return;
+  }
+  const paste = cbData.getData('text');
   // eslint-disable-next-line no-useless-escape
   const urlCheck = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/i;
   const m = paste.match(urlCheck);
@@ -67,12 +78,27 @@ const init = (element) => {
   }
 }
 
+const watchFileInput = (fileInput) => {
+  fileInput.addEventListener('change', async (e) => {
+    if (e.target.files?.length > 0) {
+      const { files } = e.target;
+      for (let i = 0, file; i < files.length; i++) {
+        file = files.item(i);
+        await upload(file);
+      }
+      e.target.value = '';
+    }
+  });
+}
+
 export const Input = () => {
   const input = useRef(null);
+  const fileInput = useRef(null);
   const [toolbar, setToolbar] = useState(false);
 
   useEffect(() => installEmojiSelector(input.current), []);
   useEffect(() => init(input.current), []);
+  useEffect(() => watchFileInput(fileInput.current), [fileInput]);
 
   return (
     <div class="input-container" onclick={() => {}} >
@@ -86,6 +112,9 @@ export const Input = () => {
       <Attachments />
       <div class='actionbar' onclick={() => document.getElementById('input').focus()}>
         <Info />
+        <div class='action' onclick={() => fileInput.current.click()}>
+          <i class="fa-solid fa-plus" />
+        </div>
         <div class='action' onclick={() => setToolbar(!toolbar)}>
           <i class="fa-solid fa-paragraph" />
         </div>
@@ -93,6 +122,7 @@ export const Input = () => {
           <i class="fa-solid fa-paper-plane" />
         </div>
       </div>
+      <input ref={fileInput} type="file" style="height: 0; opacity: 0; width: 0; position:absolute; bottom:0; left: 0;" />
     </div>
   );
 };

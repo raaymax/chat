@@ -3,6 +3,7 @@ const Errors = require('../errors');
 
 module.exports = {
   initUpload: async (self, msg) => {
+    if (!self.user) return msg.error(Errors.AccessDenied());
     const { op } = msg;
     try {
       const dest = await fileRepository.createUploadUrl(op.contentType);
@@ -14,6 +15,7 @@ module.exports = {
     }
   },
   finalizeUpload: async (self, msg) => {
+    if (!self.user) return msg.error(Errors.AccessDenied());
     const { op } = msg;
     try {
       const dest = await fileRepository.finalizeUpload(op.fileId, op.fileName, op.contentType);
@@ -23,6 +25,7 @@ module.exports = {
     }
   },
   initDownload: async (self, msg) => {
+    if (!self.user) return msg.error(Errors.AccessDenied());
     const { op } = msg;
     try {
       const dest = await fileRepository.createDownloadUrl(op.fileId);

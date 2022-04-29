@@ -1,14 +1,17 @@
 {
   "name": "@quack/quack",
-  "version": "0.1.1",
+  "version": "0.3.2",
   "description": "",
   "main": "src/index.js",
   "workspaces": [
     "packages/app",
     "packages/server"
   ],
+  "engines": {
+    "node": "17.8.x",
+    "npm": "8.5.x"
+  },
   "scripts": {
-    "postinstall": "npm run build",
     "start": "npm run -w=@quack/server start ",
     "build": "npm run -w=@quack/app build",
     "dev:web": "npm run -w=@quack/app dev",

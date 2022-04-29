@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -e
+npm version --no-git-tag-version --no-commit-hooks $1 
+
+echo 1
+VERSION="$(cat package.json | awk '/version/{print $2}' | sed 's/[",]//g')"
+
+echo 2
+sed -i 's/"version": "[0-9\.]*"/"version": "'${VERSION}'"/' ./packages/app/package.json
+echo 3
+sed -i 's/"version": "[0-9\.]*"/"version": "'${VERSION}'"/' ./packages/server/package.json
+
+echo 4
+sed -i "s/versionName '[0-9\.]*'/versionName '${VERSION}'/" ./packages/app/android/app/build.gradle
+echo 5
+sed -i 's/\(.*\)versionCode \([0-9]*\)/echo "\1versionCode $((\2+1))"/e' ./packages/app/android/app/build.gradle
+echo 6
+
+pushd ./packages/app
+npx cap sync
+popd
+npm run build
+

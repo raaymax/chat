@@ -16,7 +16,10 @@ module.exports = {
   ],
   overrides: [
     {
-      files: ['packages/app/src/sw.js'],
+      files: [
+        'packages/app/src/sw.js',
+        'packages/app/src/fcm-sw.js',
+      ],
       env: {
         serviceworker: true,
         browser: true,
@@ -89,6 +92,7 @@ module.exports = {
     },
   ],
   rules: {
+    'no-await-in-loop': 'off',
     'consistent-return': 'off',
     'no-use-before-define': 'off',
     'no-underscore-dangle': 'off',

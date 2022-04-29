@@ -8,7 +8,6 @@ RUN npm install --production=false
 COPY packages/app/webpack.config.js ./packages/app/webpack.config.js
 COPY packages/app/babel.config.js ./packages/app/babel.config.js
 COPY ./packages/app/src ./packages/app/src
-COPY ./packages/app/public ./packages/app/public
 RUN npm run -w @quack/app build
 
 FROM node:17-alpine
