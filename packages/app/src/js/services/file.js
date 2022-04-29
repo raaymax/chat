@@ -41,7 +41,6 @@ export const upload = async (file) => {
       },
     });
   } catch (err) {
-    setInfo("dupa");
     update(local.clientId, {
       error: err.message,
       progress: 0,

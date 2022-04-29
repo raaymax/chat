@@ -22,6 +22,14 @@ module.exports = async () => {
         },
       ]);
     }
+    if (await (await db).collection('channels').countDocuments() === 0) {
+      await (await db).collection('channels').insertMany([
+        {
+          name: 'main',
+          users: (await (await db).collection('users').find({}).toArray()).map((user) => user._id),
+        },
+      ]);
+    }
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);

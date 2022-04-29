@@ -5,6 +5,7 @@ module.exports = {
   userRepo: require('./userRepo'),
   sessionRepo: require('./sessionRepo'),
   messageRepo: require('./messageRepo'),
+  channelRepo: require('./channelRepo'),
   init: require('./init'),
   close: () => client.close(),
 };

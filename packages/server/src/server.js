@@ -4,6 +4,7 @@ const messageController = require('./message/messageController');
 const userController = require('./user/userController');
 const pushController = require('./push/pushController');
 const fileController = require('./file/fileController');
+const channelsController = require('./channel/channelController');
 const Errors = require('./errors');
 
 require('./database/db').init();
@@ -45,6 +46,9 @@ wss({ server })
   .on('op:typing', messageController.isTyping)
   .on('op:setupPushNotifications', pushController.setupPushNotifications)
   .on('op:setupFcm', pushController.setupFcm)
+  .on('op:channels', channelsController.getAll)
+  .on('op:createChannel', channelsController.create)
+  .on('op:removeChannel', channelsController.remove)
   .on('op:*', unknownOp)
   .on('command:help', (self, msg) => self.sys([
     { text: '/channel <name> - change current channel' }, { br: true },
