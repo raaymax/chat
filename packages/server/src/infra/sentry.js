@@ -1,5 +1,4 @@
 const Sentry = require('@sentry/node');
-const Tracing = require('@sentry/tracing');
 const config = require('../../../../chat.config');
 const pack = require('../../package.json');
 

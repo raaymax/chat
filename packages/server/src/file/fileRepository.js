@@ -1,6 +1,6 @@
 const { Storage } = require('@google-cloud/storage');
-const config = require('../../../../chat.config');
 const { v4: uuid } = require('uuid');
+const config = require('../../../../chat.config');
 
 const storage = new Storage();
 const bucket = storage.bucket(config.gcsBucket);
