@@ -36,7 +36,13 @@ function initAI() {
             avatarUrl: '/assets/openai.png',
           },
           message: [
-            { line: [{ text: msg.user.name }, { text: ' asked: "' }, { text: prompt }, { text: '"' }] },
+            {
+              line: [
+                { bold: { text: msg.user.name } },
+                { text: ' asked: "' },
+                { italic: { text: prompt } },
+                { text: '"' }],
+            },
             ...data.choices[0].text.split('\n').map((line) => ({
               line: { text: line },
             })).filter((l) => !!l.line.text),

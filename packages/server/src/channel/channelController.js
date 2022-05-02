@@ -6,7 +6,7 @@ module.exports = {
     if (!self.user) return msg.error(Errors.AccessDenied());
     const channels = await channelRepo.getAll({ userId: self.user.id });
     channels.forEach((channel) => {
-      self.send({ seqId: msg.seqId, channel: { id: channel.id, name: channel.name } });
+      self.op({ type: 'addChannel', channel }, msg.seqId);
     });
     msg.ok();
   },
@@ -25,13 +25,14 @@ module.exports = {
     if (!self.user) return msg.error(Errors.AccessDenied());
     const id = await channelRepo.insert({ name: msg.op.name, userId: self.user.id });
     const channel = await channelRepo.get({ id });
-    self.send({ seqId: msg.seqId, channel: { id, name: channel.name } });
+    self.op({ type: 'addChannel', channel }, msg.seqId);
     msg.ok({ id });
   },
 
   remove: async (self, msg) => {
     if (!self.user) return msg.error(Errors.AccessDenied());
-    const id = await channelRepo.insert({ name: msg.op.name, userId: self.user.id });
+    const id = await channelRepo.remove({ name: msg.op.name, userId: self.user.id });
+    self.op({ type: 'rmChannel', channel: { id } }, msg.seqId);
     msg.ok({ id });
   },
 

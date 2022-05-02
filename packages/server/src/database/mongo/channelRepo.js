@@ -13,7 +13,7 @@ module.exports = {
 
   insert: async ({ name, userId }) => {
     const channel = await (await db).collection('channels').findOne({ name });
-    if (channel && channel.users.includes(ObjectId(userId))) {
+    if (channel && channel.users.map((u) => u.toHexString()).includes(userId)) {
       return channel._id.toHexString();
     }
     if (channel) {
@@ -28,9 +28,9 @@ module.exports = {
 
   remove: async ({ name, userId }) => {
     const channel = await (await db).collection('channels').findOne({ name });
-    if (channel && channel.users.includes(ObjectId(userId))) {
-      const idx = channel.users.indexOf(ObjectId(userId));
-      await (await db).collection('channels').updateOne({ _id: channel._id }, { $set: { users: channel.users.splice(idx, 1) } });
+    if (channel && channel.users.map((u) => u.toHexString()).includes(userId)) {
+      const users = channel.users.filter((u) => u.toHexString() !== userId);
+      await (await db).collection('channels').updateOne({ _id: channel._id }, { $set: { users } });
       return channel._id.toHexString();
     }
     return null;

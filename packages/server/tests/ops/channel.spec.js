@@ -14,34 +14,46 @@ module.exports = (sys) => {
     it('should respond with list of named channels', async () => {
       await sys.req({ command: { name: 'login', args: ['mateusz', '123'] } });
       match(await sys.req({ op: { type: 'channels' } }), [
-        partial({
-          channel: {
-            name: 'main',
+        {
+          op: {
+            type: 'addChannel',
+            channel: {
+              name: 'main',
+            },
           },
-        }),
-        partial({ resp: { status: 'ok' } }),
+        },
+        { resp: { status: 'ok' } },
       ]);
     });
     it('should create new channel', async () => {
       await sys.req({ command: { name: 'login', args: ['mateusz', '123'] } });
       match(await sys.req({ op: { type: 'createChannel', name: 'test' } }), [
         {
-          channel: {
-            id: anyString,
-            name: 'test',
+          op: {
+            channel: {
+              id: anyString(),
+              name: 'test',
+            },
+            type: 'addChannel',
           },
         },
-        { resp: {status: 'ok', data: {id: anyString()}}},
+        { resp: { status: 'ok', data: { id: anyString() } } },
       ]);
       match(await sys.req({ op: { type: 'channels' } }), [
         {
-          channel: {
-            name: 'main',
+          op: {
+            type: 'addChannel',
+            channel: {
+              name: 'main',
+            },
           },
         },
         {
-          channel: {
-            name: 'test',
+          op: {
+            type: 'addChannel',
+            channel: {
+              name: 'test',
+            },
           },
         },
         { resp: { status: 'ok' } },
@@ -50,15 +62,26 @@ module.exports = (sys) => {
     it('should remove channel', async () => {
       await sys.req({ command: { name: 'login', args: ['mateusz', '123'] } });
       match(await sys.req({ op: { type: 'removeChannel', name: 'test' } }), [
-        { resp: {status: 'ok', data: {id: anyString()}}},
+        {
+          op: {
+            type: 'rmChannel',
+            channel: {
+              id: '626bea4bc8ff0909e6fceaaf',
+            },
+          },
+        },
+        { resp: { status: 'ok', data: { id: anyString() } } },
       ]);
       match(await sys.req({ op: { type: 'channels' } }), [
-        partial({
-          channel: {
-            name: 'main',
+        {
+          op: {
+            type: 'addChannel',
+            channel: {
+              name: 'main',
+            },
           },
-        }),
-        partial({ resp: { status: 'ok' } }),
+        },
+        { resp: { status: 'ok' } },
       ]);
     });
   });

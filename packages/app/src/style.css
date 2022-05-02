@@ -132,7 +132,20 @@ ul {
 .spacy {
   padding: 0 4px;
 }
-.workspace-layout {
+
+.workspace {
+  display: flex;
+  flex-direction: row;
+}
+
+.workspace-side {
+  flex: 0 200px;
+  border-left: 1px solid #565856;
+  border-right: 1px solid #565856;
+}
+
+.workspace-main {
+  flex: 1;
   width: 100vw;
   height: 100vh;
   display: flex;
@@ -468,5 +481,21 @@ ul {
   height: 3px;
 }
 
-
-
+.logo {
+  display: flex;
+  flex-direction: row;
+  height: 50px;
+  border-bottom: 1px solid #565856;
+}
+.logo .logo-img {
+  flex: 0;
+  width: 40px;
+  height: 40px;
+  margin: auto 5px;
+}
+.logo .logo-name {
+  flex: 1;
+  line-height: 50px;
+  font-size: 30px;
+  vertical-align: middle;
+}

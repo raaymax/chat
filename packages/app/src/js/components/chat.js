@@ -24,7 +24,7 @@ function dragOverHandler(ev) {
 }
 
 export const Chat = () => (
-  <div class='chat workspace-layout' ondrop={drop} ondragover={dragOverHandler}>
+  <div class='chat workspace-main' ondrop={drop} ondragover={dragOverHandler}>
     <Header />
     <MessageList />
     <Input />
