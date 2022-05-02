@@ -1,10 +1,11 @@
 /* eslint-disable no-undef */
 import { Capacitor } from '@capacitor/core';
+import Sentry from './sentry'
 
 import { createEventListener } from '../utils';
 import { createPool } from './pool';
 
-const { notify, watch } = createEventListener();
+const { notify, watch, exists } = createEventListener();
 
 let protocol = 'ws:';
 if (document.location.protocol === 'https:') {
@@ -35,7 +36,13 @@ const client = {
     return client;
   },
   // eslint-disable-next-line no-console
-  emit: async (name, ...data) => console.log(name, data) || notify(name, client, ...data),
+  emit: async (name, ...data) => {
+    if (!exists(name)) {
+      Sentry.captureException(new Error(`[client] handler not exists: ${name}`));
+      return;
+    }
+    return notify(name, client, ...data);
+  },
 };
 
 pool.onOpen(() => {

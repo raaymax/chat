@@ -1,15 +1,3 @@
-import { initializeApp } from "firebase/app";
-import { getMessaging, onBackgroundMessage } from "firebase/messaging/sw";
-import firebaseConfig from './firebaseConfig';
-
-const firebaseApp = initializeApp(firebaseConfig);
-const messaging = getMessaging(firebaseApp);
-
-onBackgroundMessage(messaging, (...args) => {
-  // eslint-disable-next-line no-console
-  console.log('FCM notif: ', args);
-})
-
 const EXTERNAL_ASSETS = [
   'https://unpkg.com/quill-emoji@0.2.0/dist/quill-emoji.js',
   'https://cdn.quilljs.com/1.3.6/quill.js',

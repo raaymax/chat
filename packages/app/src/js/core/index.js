@@ -1,4 +1,5 @@
 import './registerSw';
+import './sentry';
 import client from './client';
 import { initNotifications } from './notifications';
 import { initPing } from './ping';

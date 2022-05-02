@@ -1,6 +1,7 @@
 /* eslint-disable global-require */
+const config = require('../../../../chat.config');
 
-if (process.env.DATABASE_URL.startsWith('mongodb')) {
+if (config.databaseUrl.startsWith('mongodb')) {
   module.exports = require('./mongo');
 } else {
   throw new Error('Missing database driver');

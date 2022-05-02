@@ -3,10 +3,10 @@ import { Capacitor } from '@capacitor/core';
 import { PushNotifications } from '@capacitor/push-notifications';
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
-import firebaseConfig from '../../firebaseConfig';
 
 export const initNotifications = (client) => {
-  const app = initializeApp(firebaseConfig);
+  // eslint-disable-next-line no-undef
+  const app = initializeApp(FIREBASE_CONFIG);
   const messaging = getMessaging(app);
 
   client.on('auth:user', subscribeNotifications);

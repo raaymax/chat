@@ -18,10 +18,14 @@ jobs:
       with:
         node-version: 17.x
         cache: 'npm'
+    - name: apply secrets
+      run: echo $CONFIG_FILE >> chat.config.js
+      shell: bash
+      env:
+        CONFIG_FILE: ${{secrets.PRODUCTION_CONFIG}}
     - run: npm i --production=false
     - run: npm run build
       env: 
-        SERVER_URL: ${{ secrets.SERVER_URL }}
         NODE_ENV: production
     - run: npx cap sync
       working-directory: ./packages/app

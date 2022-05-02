@@ -29,8 +29,11 @@ jobs:
       with:
         node-version: 17.x
         cache: 'npm'
+    - name: apply secrets
+      run: echo $CONFIG_FILE >> chat.config.js
+      shell: bash
+      env:
+        CONFIG_FILE: ${{secrets.TEST_CONFIG}}
     - run: npm ci
     - run: npm run lint:ci
     - run: npm run test:ci
-      env:
-        DATABASE_URL: mongodb://chat:chat@localhost:27017/chat?authSource=admin

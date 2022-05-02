@@ -1,4 +1,5 @@
 const admin = require('firebase-admin');
+require('./infra/sentry');
 const server = require('./server');
 
 const PORT = process.env.PORT || 8080;

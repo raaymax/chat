@@ -1,9 +1,9 @@
 /* eslint-disable no-restricted-globals */
 import { initializeApp } from "firebase/app";
 import { getMessaging, onBackgroundMessage } from "firebase/messaging/sw";
-import firebaseConfig from './firebaseConfig';
 
-const firebaseApp = initializeApp(firebaseConfig);
+// eslint-disable-next-line no-undef
+const firebaseApp = initializeApp(FIREBASE_CONFIG);
 const messaging = getMessaging(firebaseApp);
 onBackgroundMessage(messaging, async (payload) => {
   const client = await getOpenClient();

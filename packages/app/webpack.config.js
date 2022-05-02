@@ -2,6 +2,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
 const pack = require('./package.json');
+const config = require('../../chat.config');
 
 module.exports = {
   entry: {
@@ -12,8 +13,12 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       APP_VERSION: JSON.stringify(pack.version),
-      SERVER_URL: JSON.stringify(process.env.SERVER_URL || 'wss://chat.codecat.io/ws'),
+      APP_NAME: JSON.stringify(pack.name),
+      SERVER_WEB_URL: JSON.stringify(config.serverWebUrl),
+      SERVER_URL: JSON.stringify(config.serverUrl),
       ENVIRONMENT: JSON.stringify(process.env.NODE_ENV || 'development'),
+      FIREBASE_CONFIG: JSON.stringify(config.firebase),
+      SENTRY_DNS: JSON.stringify(config.sentryDns),
     }),
     new MiniCssExtractPlugin(),
     new CopyPlugin({
@@ -22,6 +27,9 @@ module.exports = {
         { from: './src/manifest.json', to: '.' },
         { from: './src/index.html', to: '.' },
       ],
+    }),
+    new webpack.SourceMapDevToolPlugin({
+      filename: "[file].map",
     }),
   ],
   module: {
@@ -39,6 +47,11 @@ module.exports = {
             presets: ['@babel/preset-env'],
           },
         },
+      },
+      {
+        test: /\.js$/,
+        enforce: 'pre',
+        use: ['source-map-loader'],
       },
     ],
   },

@@ -69,5 +69,7 @@ export const createEventListener = () => {
   // eslint-disable-next-line no-return-assign
   const watch = (ev, fn) => (handlers[ev] = handlers[ev] || []).push(fn);
 
-  return { watch, notify };
+  const exists = (ev) => Array.isArray(handlers[ev]) && handlers[ev].length > 0;
+
+  return { watch, notify, exists };
 };

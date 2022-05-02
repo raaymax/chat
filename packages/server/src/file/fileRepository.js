@@ -1,8 +1,9 @@
 const { Storage } = require('@google-cloud/storage');
+const config = require('../../../../chat.config');
 const { v4: uuid } = require('uuid');
 
 const storage = new Storage();
-const bucket = storage.bucket(process.env.GCS_BUCKET || 'test.chat.codecat.io');
+const bucket = storage.bucket(config.gcsBucket);
 
 module.exports = {
   createUploadUrl: async (name, contentType) => {
