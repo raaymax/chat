@@ -2,6 +2,7 @@ FROM node:17-alpine AS appbuild
 ENV ENVIRONMENT=production
 WORKDIR /usr/src/app
 COPY package*.json ./
+COPY chat.config.js ./
 COPY packages/server/package*.json ./packages/server/
 COPY packages/app/package*.json ./packages/app/
 RUN npm install --production=false
@@ -13,6 +14,7 @@ RUN npm run -w @quack/app build
 FROM node:17-alpine
 WORKDIR /usr/src/app
 COPY package*.json ./
+COPY chat.config.js ./
 COPY packages/server/package*.json ./packages/server/
 COPY packages/app/package*.json ./packages/app/
 RUN npm install --production
