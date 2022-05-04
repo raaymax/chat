@@ -1,11 +1,12 @@
 const { Configuration, OpenAIApi } = require('openai');
 const { messageRepo } = require('../database/db');
 const Errors = require('../errors');
+const config = require('../../../../chat.config');
 
 function initAI() {
-  if (process.env.OPENAI_API_KEY) {
+  if (config.openaiApiKey) {
     const configuration = new Configuration({
-      apiKey: process.env.OPENAI_API_KEY,
+      apiKey: config.openaiApiKey,
     });
     const openai = new OpenAIApi(configuration);
     return {

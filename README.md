@@ -53,6 +53,7 @@ Maybe pub/sub would work but it seems complicated.
 - feat: generate icons for notifications
 - feat: switch to FCM notifications in web version
 - feat: command for displaying version of app and server
+- feat: changelog messages when app is updated
 - improvement: move link detection to message builder
 - improvement: separate users from messages 
 - improvement: remove temporary files from gcs after abort
