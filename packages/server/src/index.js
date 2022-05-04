@@ -1,10 +1,9 @@
-const admin = require('firebase-admin');
 require('./infra/sentry');
+require('./infra/firebase');
 const server = require('./server');
 
 const PORT = process.env.PORT || 8080;
 
-admin.initializeApp({});
 
 server.listen(PORT, () => {
   // eslint-disable-next-line no-console

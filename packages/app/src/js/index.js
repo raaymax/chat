@@ -20,8 +20,8 @@ client
   .on('con:close', () => setInfo({ msg: 'Disconnected - reconnect attempt in 1s', type: 'error' }))
   .on('message', handleMessage)
   .on('message:remove', handleMessageRemove)
-  .on('notification', () => navigator.vibrate([100, 30, 100]))
-  .on('notification', () => play())
+  .on('notification', () => { try { navigator.vibrate([100, 30, 100]) } catch (err) { /* ignore */ } })
+  .on('notification', () => { try { play(); } catch (err) { /* ignore */ } })
 
 window.addEventListener('hashchange', () => {
   const name = window.location.hash.slice(1);

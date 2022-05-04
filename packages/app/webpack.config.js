@@ -14,9 +14,7 @@ module.exports = {
     new webpack.DefinePlugin({
       APP_VERSION: JSON.stringify(pack.version),
       APP_NAME: JSON.stringify(pack.name),
-      SERVER_WEB_URL: JSON.stringify(config.serverWebUrl),
       SERVER_URL: JSON.stringify(config.serverUrl),
-      ENVIRONMENT: JSON.stringify(process.env.NODE_ENV || 'development'),
       FIREBASE_CONFIG: JSON.stringify(config.firebase),
       SENTRY_DNS: JSON.stringify(config.sentryDns),
     }),

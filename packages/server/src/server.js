@@ -1,5 +1,6 @@
 const Joi = require('joi');
 const http = require('http');
+require('./infra/firebase');
 const messageController = require('./message/messageController');
 const userController = require('./user/userController');
 const pushController = require('./push/pushController');

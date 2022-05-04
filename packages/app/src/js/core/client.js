@@ -24,7 +24,6 @@ const pool = createPool(URI);
 window.pool = pool;
 
 const client = {
-  isOpen: false,
   send: async (msg) => {
     // eslint-disable-next-line no-console
     // console.log('send', JSON.stringify(msg, null, 4));
@@ -45,14 +44,8 @@ const client = {
   },
 };
 
-pool.onOpen(() => {
-  client.isOpen = true;
-  return notify('con:open', client)
-});
-pool.onClose(() => {
-  client.isOpen = false;
-  return notify('con:close', client)
-});
+pool.onOpen(() => notify('con:open', client));
+pool.onClose(() => notify('con:close', client));
 pool.onError(() => notify('con:error', client));
 pool.onPacket((raw) => {
   try {
@@ -67,6 +60,7 @@ pool.onPacket((raw) => {
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
+    Sentry.captureException(err);
     notify('packet:error', client, raw, err);
   }
 });
