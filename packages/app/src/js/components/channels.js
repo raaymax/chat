@@ -7,5 +7,6 @@ const Channel = ({name}) => (
 export const Channels = () => (
   <div class='channels'>
     <Channel name='main' />
+    <Channel name='other' />
   </div>
 )

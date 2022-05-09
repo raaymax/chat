@@ -3,7 +3,9 @@ import { getConfig } from '../store/config';
 
 let cooldown = false;
 let queue = false;
+
 export function notifyTyping() {
+  if (!client.active) return;
   if (!getConfig) return;
   if (cooldown) {
     queue = true;

@@ -1,8 +1,7 @@
 const { ObjectId, MongoClient } = require('mongodb');
+const config = require('../../../../../chat.config');
 
-const URI = 'mongodb://chat:chat@localhost:27017/chat?authSource=admin';
-
-const client = new MongoClient(process.env.DATABASE_URL || URI);
+const client = new MongoClient(config.databaseUrl);
 async function run() {
   await client.connect();
   return client.db();

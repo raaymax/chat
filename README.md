@@ -35,6 +35,7 @@ Maybe pub/sub would work but it seems complicated.
 - bug: fix paste of multiline text
 - feat: ability to refresh native app
 - ? bug: different notification sound on mobile
+- change credentials to firebase
 
 ### DevOps
 - define deploy checklist
@@ -51,6 +52,7 @@ Maybe pub/sub would work but it seems complicated.
 - feat: generate icons for notifications
 - feat: command for displaying version of app and server
 - feat: frontend only commands
+- feat: changelog messages when app is updated
 - improvement: move link detection to message builder
 - improvement: separate users from messages 
 - improvement: remove temporary files from gcs after abort

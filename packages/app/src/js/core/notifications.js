@@ -3,17 +3,10 @@ import { Capacitor } from '@capacitor/core';
 import { PushNotifications } from '@capacitor/push-notifications';
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
-import firebaseConfig from '../../firebaseConfig';
+import Sentry from './sentry';
 
 export const initNotifications = (client) => {
-  const app = initializeApp(firebaseConfig);
-  const messaging = getMessaging(app);
-
   client.on('auth:user', subscribeNotifications);
-
-  onMessage(messaging, (payload) => {
-    client.emit('notification', payload);
-  });
 
   if ( 'serviceWorker' in navigator ) {
     navigator.serviceWorker.addEventListener('message', (payload) => {
@@ -23,6 +16,12 @@ export const initNotifications = (client) => {
 
   async function subscribeNotifications(client) {
     if ( Capacitor.isNativePlatform() ) return initNativeNotifications(client);
+    // eslint-disable-next-line no-undef
+    const app = initializeApp(FIREBASE_CONFIG);
+    const messaging = getMessaging(app);
+    onMessage(messaging, (payload) => {
+      client.emit('notification', payload);
+    });
     const cfg = client.getConfig();
     await getToken(messaging, { vapidKey: cfg.applicationServerKey }).then((currentToken) => {
       if (currentToken) {
@@ -36,6 +35,7 @@ export const initNotifications = (client) => {
       console.log('No registration token available. Request permission to generate one.');
     }).catch((err) => {
       console.log('An error occurred while retrieving token. ', err);
+      Sentry.captureException(err);
     });
     client.emit('notifications:ready');
   }
@@ -58,11 +58,13 @@ export const initNotifications = (client) => {
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err);
+        Sentry.captureException(err);
       }
     });
 
     PushNotifications.addListener('registrationError', (error) => {
       console.log('error', JSON.stringify(error, null, 4));
+      Sentry.captureException(error);
     });
 
     PushNotifications.addListener('pushNotificationReceived', (notification) => {

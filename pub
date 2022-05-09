@@ -17,8 +17,8 @@ echo 5
 sed -i 's/\(.*\)versionCode \([0-9]*\)/echo "\1versionCode $((\2+1))"/e' ./packages/app/android/app/build.gradle
 echo 6
 
+npm run build
 pushd ./packages/app
 npx cap sync
 popd
-npm run build
 

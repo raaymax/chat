@@ -1,6 +1,6 @@
 export const initPing = (client) => {
   setInterval(async () => {
-    if (!client.isOpen) return;
+    if (!client.active) return;
     const start = new Date();
     try {
       await client.req({ op: { type: 'ping' } });
