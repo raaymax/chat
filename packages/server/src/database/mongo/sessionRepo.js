@@ -29,10 +29,3 @@ function deserializeSession(session) {
     userId: session.userId.toHexString(),
   };
 }
-function serializeSession(session) {
-  return {
-    ...session,
-    _id: ObjectId(session.id),
-    userId: ObjectId(session.userId),
-  }
-}

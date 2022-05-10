@@ -37,7 +37,7 @@ const Page = () => {
         <Channels />
       </div>
       <div class='chat workspace-main' ondrop={drop} ondragover={dragOverHandler}>
-        <Header onclick={(e) =>{
+        <Header onclick={(e) => {
           setHide(!hide);
           e.stopPropagation();
           e.preventDefault();
