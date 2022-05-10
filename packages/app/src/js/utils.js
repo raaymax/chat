@@ -39,7 +39,7 @@ export const createNotifier = () => {
     return () => listeners.splice(listeners.indexOf(handler), 1);
   }
 
-  return { notify, watch };
+  return [notify, watch];
 };
 
 export const createCooldown = (fn, time) => {

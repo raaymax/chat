@@ -23,12 +23,11 @@ Maybe pub/sub would work but it seems complicated.
 ## TODO
 
 ### Channels
-- task: notifications should go only to people from channel
-- bug: notifications are dupplicated when many sessions
-- feat: hiding side menu?
 - feat: change channel name? 
 - style: mobile support
-- bug: display channel name in header instead of cid
+- feat: mark current channel
+- feat: notifications should take you to correct channel 
+- feat: notifications should have info about channel
 
 ### Milestones
 - feat: channels (currently basic)

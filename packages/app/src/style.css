@@ -138,11 +138,6 @@ ul {
   flex-direction: row;
 }
 
-.workspace-side {
-  flex: 0 150px;
-  border-left: 1px solid #565856;
-  border-right: 1px solid #565856;
-}
 
 .workspace-main {
   flex: 1;
@@ -165,7 +160,7 @@ ul {
   right: 30px;
 }
 
-#workspace-header .channel-name {
+#workspace-header .channel{
   height: 50px;
   padding-left: 30px;
   line-height: 50px;
@@ -173,16 +168,12 @@ ul {
   font-size: 20px;
   font-weight: bold;
 }
-
-#workspace-header .channel-name:before {
-  content: '#';
-  padding-right: 10px;
-  line-height: 50px;
-  vertical-align: middle;
-  font-size: 30px;
-  font-weight: 600;
+#workspace-header .channel i{
+  font-size: 1.3em;
 }
-
+#workspace-header .channel .name{
+  padding-left: 10px;
+}
 
 .message-list {
   display: flex;
@@ -432,7 +423,7 @@ ul {
 .file.image {
   height: auto;
   width: 100%;
-  max-width: 100%;
+  max-whashtag: 100%;
 }
 
 .file.image img {
@@ -500,6 +491,17 @@ ul {
   vertical-align: middle;
 }
 
+.menu {
+  flex: 0 150px;
+  border-left: 1px solid #565856;
+  border-right: 1px solid #565856;
+}
+
+.menu.hidden {
+  flex: 0 0px;
+  width: 0px;
+}
+
 .channels {
 
 }
@@ -511,12 +513,12 @@ ul {
 }
 
 .channels .channel {
- padding: 5px 20px; 
+ padding: 5px 5px 5px 20px; 
  cursor: pointer;
 }
-.channels .channel:before {
-  content: '# ';
-  
+.channels .channel .name {
+ padding: 0px 10px; 
+ cursor: pointer;
 }
 
 .channels .channel:hover {

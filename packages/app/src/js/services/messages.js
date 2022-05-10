@@ -6,14 +6,14 @@ import {
   insertMessage,
   updateMessage,
 } from '../store/messages.js';
-import { getChannel } from '../store/channel.js';
+import { getCid } from '../store/channel.js';
 import { client } from '../core';
 import { fromDom } from '../MessageBuilder';
 import * as files from '../store/file';
 
-export const loadPrevious = () => client.req({ op: { type: 'load', channel: getChannel(), before: getEarliestDate() } });
-export const loadNext = () => client.req({ op: { type: 'load', channel: getChannel(), after: getLatestDate() } });
-export const load = () => client.req({ op: { type: 'load', channel: getChannel() } });
+export const loadPrevious = () => client.req({ op: { type: 'load', channel: getCid(), before: getEarliestDate() } });
+export const loadNext = () => client.req({ op: { type: 'load', channel: getCid(), after: getLatestDate() } });
+export const load = () => client.req({ op: { type: 'load', channel: getCid() } });
 
 export const sendFromDom = async (dom) => {
   const msg = fromDom(dom);

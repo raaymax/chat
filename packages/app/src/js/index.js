@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { getChannel, setChannel } from './store/channel';
+import { getCid, setCid } from './store/channel';
 import { setInfo } from './store/info.js';
 import { setUser, getUser } from './store/user.js';
 import { insertMessage, clearMessages, removeMessage } from './store/messages';
@@ -39,7 +39,7 @@ window.addEventListener('hashchange', () => {
 }, false);
 
 function handleMessage(_, msg) {
-  if (msg.priv || msg.channel === getChannel()) {
+  if (msg.priv || msg.channel === getCid()) {
     insertMessage(msg);
   }
 }
@@ -49,6 +49,6 @@ function handleMessageRemove(_, id) {
 
 function handleChannel(_, msg) {
   clearMessages();
-  setChannel(msg.op.channel);
+  setCid(msg.op.channel);
   load();
 }

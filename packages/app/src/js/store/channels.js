@@ -1,9 +1,18 @@
 import { createNotifier } from '../utils.js';
+import {watchCid, getCid} from './channel';
 
-const { notify, watch } = createNotifier();
+const [notify, watch] = createNotifier();
+const [notifyCurr, watchCurr] = createNotifier();
 
+let current = null
 let channels = [];
 
+watchCid((cid) => {
+  current = getChannel({cid});
+  notifyCurr(current);
+});
+
+export const getCurrent = () => current;
 export const getChannel = ( q = {}) => channels.find((c) => c.cid === q.cid || c.name === q.name)
 
 export const getChannels = () => channels;
@@ -30,6 +39,10 @@ export const addChannel = (channel) => {
     channel,
     ...channels.slice(pos),
   ];
+  if (getCid() === channel.cid) {
+    current = channel;
+    notifyCurr(current);
+  }
   notify(channels);
 };
 export const rmChannel = (cid) => {
@@ -40,3 +53,4 @@ export const rmChannel = (cid) => {
 };
 
 export const watchChannels = watch;
+export const watchCurrent = watchCurr;

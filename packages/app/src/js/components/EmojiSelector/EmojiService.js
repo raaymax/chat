@@ -1,7 +1,7 @@
 import { emojiFuse} from '../../services/emoji';
 import { createNotifier } from '../../utils.js';
 
-const { notify, watch } = createNotifier();
+const [notify, watch] = createNotifier();
 
 const state = {
   open: false,

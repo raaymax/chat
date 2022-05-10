@@ -1,5 +1,6 @@
 const { getMessaging } = require('../infra/firebase');
 const { sessionRepo } = require('../database/db');
+const { channelRepo } = require('../database/db');
 const pack = require('../../package.json');
 
 module.exports = {
@@ -39,12 +40,17 @@ module.exports = {
   notifyOther: async (self, msg) => {
     if (process.env.NODE_ENV === 'test') return Promise.resolve(); // FIXME: feature disable or separate config for testing?
     if (!msg.message) return Promise.resolve();
-    const sess = await sessionRepo.getOther({ userId: self.user.id });
+    const channel = await channelRepo.get({ cid: msg.channel });
+    const sess = await sessionRepo.getByUsers({
+      userId: channel.users.filter((user) => user.toHexString() !== self.user.id),
+    });
     const tokens = Object.keys(
       sess
         .map((s) => s.fcmToken)
         .reduce((acc, token) => ({ ...acc, [token]: true }), {}),
     ).filter((k) => !!k);
+
+    if (tokens.length === 0) return Promise.resolve();
     // eslint-disable-next-line array-callback-return
     const message = {
       tokens,

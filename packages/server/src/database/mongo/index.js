@@ -1,7 +1,8 @@
 /* eslint-disable global-require */
-const { client } = require('./db');
+const { client, ObjectId } = require('./db');
 
 module.exports = {
+  ObjectId,
   userRepo: require('./userRepo'),
   sessionRepo: require('./sessionRepo'),
   messageRepo: require('./messageRepo'),

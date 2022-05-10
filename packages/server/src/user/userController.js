@@ -22,6 +22,8 @@ module.exports = {
       }, msg.seqId);
       return msg.ok({ session, user });
     } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
       return msg.error(err);
     }
   },
@@ -100,5 +102,4 @@ module.exports = {
     self.author = 'Guest'; // FIXME: Do I really need this?
     msg.ok({});
   },
-
 };

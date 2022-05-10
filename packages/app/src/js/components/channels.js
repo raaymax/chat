@@ -3,8 +3,13 @@ import {useState} from 'preact/hooks';
 import {watchChannels, getChannels } from '../store/channels';
 import {openChannel} from '../services/channels';
 
-const Channel = ({name, cid}) => (
-  <div class='channel' onclick={() => openChannel({cid})}>{name}</div>
+export const Channel = ({
+  name, cid, private: priv, onclick,
+}) => (
+  <div class='channel' data-id={cid} onclick={onclick}>
+    {priv ? <i class='fa-solid fa-lock' /> : <i class='fa-solid fa-hashtag' /> }
+    <span class='name'>{name}</span>
+  </div>
 )
 
 export const Channels = () => {
@@ -13,7 +18,9 @@ export const Channels = () => {
   return (
     <div class='channels'>
       <div class='header'>channels</div>
-      { channels && channels.map((c) => <Channel name={c.name} cid={c.cid} key={c.id} />) }
+      { channels && channels.map((c) => (
+        <Channel {...c} key={c.id} onclick={() => openChannel({cid: c.cid})} />
+      ))}
     </div>
   )
 }
