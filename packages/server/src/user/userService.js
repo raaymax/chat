@@ -24,6 +24,12 @@ async function userLogin(login, password) {
   return { session, user };
 }
 
+async function sessionDestroy({ id }) {
+  const session = await sessionRepo.get({ id });
+  if (!session) throw Errors.SessionNotFound();
+  await sessionRepo.delete({ id });
+}
+
 async function sessionRestore({ id = '', secret }) {
   const session = await sessionRepo.get({ id });
   if (session) {
@@ -41,4 +47,5 @@ async function sessionRestore({ id = '', secret }) {
 module.exports = {
   sessionRestore,
   userLogin,
+  sessionDestroy,
 };

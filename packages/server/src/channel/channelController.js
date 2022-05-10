@@ -12,8 +12,14 @@ module.exports = {
   },
 
   changeChannel: async (self, msg) => {
-    const [channel] = msg.command.args;
-    self.channel = channel;
+    if (!self.user) return msg.error(Errors.AccessDenied());
+    const [cid] = msg.command.args;
+    const channel = await channelRepo.get({ cid });
+    // FIXME remove toHexString()
+    if (channel?.private && !channel.users.map((u) => u.toHexString()).includes(self.user.id)) {
+      return msg.error(Errors.AccessDenied());
+    }
+    self.channel = cid;
     await self.op({
       type: 'setChannel',
       channel: self.channel,
@@ -21,19 +27,27 @@ module.exports = {
     msg.ok();
   },
 
-  create: async (self, msg) => {
+  join: async (self, msg) => {
     if (!self.user) return msg.error(Errors.AccessDenied());
-    const id = await channelRepo.insert({ name: msg.op.name, userId: self.user.id });
+    const cid = self.channel;
+    const id = await channelRepo.insert({
+      cid,
+      name: cid,
+      userId: self.user.id,
+    });
     const channel = await channelRepo.get({ id });
     self.op({ type: 'addChannel', channel }, msg.seqId);
     msg.ok({ id });
   },
 
-  remove: async (self, msg) => {
+  leave: async (self, msg) => {
     if (!self.user) return msg.error(Errors.AccessDenied());
-    const id = await channelRepo.remove({ name: msg.op.name, userId: self.user.id });
-    self.op({ type: 'rmChannel', channel: { id } }, msg.seqId);
-    msg.ok({ id });
+    const cid = self.channel;
+    await channelRepo.remove({ cid, userId: self.user.id });
+    self.op({ type: 'rmChannel', cid }, msg.seqId);
+    await self.sys([
+      { text: 'You left the channel' },
+    ], { priv: true, seqId: msg.seqId });
+    msg.ok({ cid });
   },
-
 };

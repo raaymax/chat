@@ -74,6 +74,7 @@ const exactArray = (expected) => (matched) => {
   if (expected.length !== matched.length) {
     return [{
       expected: expected.length,
+      expectedSchema: expected,
       matched,
       msg: 'length not match',
     }];

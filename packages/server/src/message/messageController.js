@@ -15,16 +15,6 @@ module.exports = {
     msg.ok();
   },
 
-  changeChannel: async (self, msg) => {
-    const [channel] = msg.command.args;
-    self.channel = channel;
-    await self.op({
-      type: 'setChannel',
-      channel: self.channel,
-    }, msg.seqId);
-    msg.ok();
-  },
-
   isTyping: async (self, msg) => {
     if (!self.user) {
       return msg.error(Errors.AccessDenied());

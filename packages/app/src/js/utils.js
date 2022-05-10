@@ -55,21 +55,40 @@ export const createCooldown = (fn, time) => {
 
 export const createEventListener = () => {
   const handlers = {};
-  const notify = (ev, ...args) => Promise.all(
-    (handlers[ev] || [])
-      .map(async (listener) => {
-        try {
-          await listener(...args);
-        } catch (err) {
-          // eslint-disable-next-line no-console
-          console.error(err);
-        }
-      }),
-  );
+  const notify = (ev, ...args) => {
+    if (!handlers[ev] || handlers[ev].length === 0) {
+      // eslint-disable-next-line no-console
+      console.log('Event not handled', ev, args);
+    }
+    return Promise.all(
+      (handlers[ev] || [])
+        .map(async (listener) => {
+          try {
+            await listener(...args);
+          } catch (err) {
+            // eslint-disable-next-line no-console
+            console.error(err);
+          }
+        }),
+    )
+  };
   // eslint-disable-next-line no-return-assign
-  const watch = (ev, fn) => (handlers[ev] = handlers[ev] || []).push(fn);
+  const watch = (ev, fn) => {
+    (handlers[ev] = handlers[ev] || []).push(fn);
+  }
+  const once = (ev, fn) => {
+    handlers[ev] = handlers[ev] || [];
+    const cb = async (...args) => {
+      const idx = handlers[ev].findIndex((c) => c === cb);
+      handlers[ev].splice(idx, 1);
+      return fn(...args)
+    }
+    handlers[ev].push(cb);
+  }
 
   const exists = (ev) => Array.isArray(handlers[ev]) && handlers[ev].length > 0;
 
-  return { watch, notify, exists };
+  return {
+    watch, once, notify, exists,
+  };
 };

@@ -1,5 +1,4 @@
 import { client } from '../core';
-import { setInfo } from '../store/info';
 import { createCounter } from '../utils';
 import { add, update } from '../store/file';
 

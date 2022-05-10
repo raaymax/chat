@@ -5,7 +5,9 @@ import Sentry from './sentry'
 import { createEventListener } from '../utils';
 import { createPool } from './pool';
 
-const { notify, watch, exists } = createEventListener();
+const {
+  notify, watch, once, exists,
+} = createEventListener();
 
 let protocol = 'ws:';
 if (document.location.protocol === 'https:') {
@@ -34,6 +36,10 @@ const client = {
     watch(ev, cb);
     return client;
   },
+  once: (ev, cb) => {
+    once(ev, cb);
+    return client;
+  },
   // eslint-disable-next-line no-console
   emit: async (name, ...data) => {
     if (!exists(name)) {
@@ -50,7 +56,7 @@ pool.onError(() => notify('con:error', client));
 pool.onPacket((raw) => {
   try {
     const msg = JSON.parse(raw.data);
-    notify('packet', msg);
+    // notify('packet', msg);
     if (msg.message) return notify('message', client, msg);
     // eslint-disable-next-line no-console
     // console.log('recv', JSON.stringify(msg, null, 4));

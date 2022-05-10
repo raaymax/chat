@@ -1,6 +1,6 @@
 const Joi = require('joi');
 const http = require('http');
-require('./infra/firebase');
+
 const messageController = require('./message/messageController');
 const userController = require('./user/userController');
 const pushController = require('./push/pushController');
@@ -8,8 +8,6 @@ const fileController = require('./file/fileController');
 const channelsController = require('./channel/channelController');
 const aiController = require('./ai/aiController');
 const Errors = require('./errors');
-
-require('./database/db').init();
 
 const app = require('./app');
 const wss = require('./wss');
@@ -54,17 +52,29 @@ wss({ server })
   .on('op:*', unknownOp)
   .on('command:help', (self, msg) => self.sys([
     { text: '/channel <name> - change current channel' }, { br: true },
+    { text: '/join - join current channel' }, { br: true },
+    { text: '/leave - leave current channel' }, { br: true },
+
+    { text: '/login <name> <password> - login to your account' }, { br: true },
+    { text: '/logout - logout from your account' }, { br: true },
+    { text: '/me - display user info' }, { br: true },
+
     { text: '/name <name> - to change your name' }, { br: true },
     { text: '/avatar <url> - to change your avatar' }, { br: true },
-    { text: '/login <name> <password> - login to your account' }, { br: true },
+
     { text: '/ai <question> - ask openai GPT-3' }, { br: true },
+
     { text: '/help - display this help' }, { br: true },
   ], { priv: true, seqId: msg.seqId, msgId: 'help' }).then(() => msg.ok()))
   .on('command:name', userController.changeName)
   .on('command:avatar', userController.changeAvatar)
   .on('command:login', userController.login)
-  .on('command:channel', messageController.changeChannel)
+  .on('command:channel', channelsController.changeChannel)
   .on('command:ai', aiController.createCompletion)
+  .on('command:join', channelsController.join)
+  .on('command:leave', channelsController.leave)
+  .on('command:logout', userController.logout)
+  .on('command:me', userController.me)
   .on('command:*', unknownCommand)
   .on('message', messageController.handle)
   .on('broadcast:after', pushController.notifyOther)

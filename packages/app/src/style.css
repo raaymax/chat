@@ -139,7 +139,7 @@ ul {
 }
 
 .workspace-side {
-  flex: 0 200px;
+  flex: 0 150px;
   border-left: 1px solid #565856;
   border-right: 1px solid #565856;
 }
@@ -165,7 +165,7 @@ ul {
   right: 30px;
 }
 
-#workspace-header .channel {
+#workspace-header .channel-name {
   height: 50px;
   padding-left: 30px;
   line-height: 50px;
@@ -174,7 +174,7 @@ ul {
   font-weight: bold;
 }
 
-#workspace-header .channel:before {
+#workspace-header .channel-name:before {
   content: '#';
   padding-right: 10px;
   line-height: 50px;
@@ -499,3 +499,27 @@ ul {
   font-size: 30px;
   vertical-align: middle;
 }
+
+.channels {
+
+}
+
+.channels .header {
+ padding: 5px 10px;
+ padding-top: 20px;
+ font-weight: bold;
+}
+
+.channels .channel {
+ padding: 5px 20px; 
+ cursor: pointer;
+}
+.channels .channel:before {
+  content: '# ';
+  
+}
+
+.channels .channel:hover {
+  background-color: var(--primary_active_mask);
+}
+

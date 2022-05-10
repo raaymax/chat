@@ -1,14 +1,18 @@
 /* eslint-disable no-undef */
-import { getChannel, setChannel } from './store/channel.js';
+import { getChannel, setChannel } from './store/channel';
 import { setInfo } from './store/info.js';
 import { setUser, getUser } from './store/user.js';
-import { insertMessage, clearMessages, removeMessage } from './store/messages.js';
-import { load } from './services/messages.js';
+import { insertMessage, clearMessages, removeMessage } from './store/messages';
+import { addChannel, rmChannel, clearChannels } from './store/channels';
+import { load } from './services/messages';
+import { loadChannels } from './services/channels';
 import { play } from './services/sound';
 import { client } from './core';
 
 client
   .on('op:setChannel', handleChannel)
+  .on('op:addChannel', (_, msg) => addChannel(msg.op.channel))
+  .on('op:rmChannel', (_, msg) => rmChannel(msg.op.cid))
   .on('op:typing', (_, msg) => msg.user.id !== getUser().id && setInfo({ msg: `${msg.user.name} is typing`, type: 'info' }, 1000))
   .on('auth:none', () => client.send({ op: { type: 'greet' } }))
   .on('auth:ready', () => setInfo(null))
@@ -16,6 +20,12 @@ client
     setUser(user);
     clearMessages();
     await load();
+    await loadChannels();
+  })
+  .on('auth:logout', async () => {
+    setUser(null);
+    clearMessages();
+    clearChannels();
   })
   .on('con:close', () => setInfo({ msg: 'Disconnected - reconnect attempt in 1s', type: 'error' }))
   .on('message', handleMessage)

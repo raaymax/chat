@@ -22,6 +22,13 @@ Maybe pub/sub would work but it seems complicated.
 
 ## TODO
 
+### Channels
+- task: notifications should go only to people from channel
+- bug: notifications are dupplicated when many sessions
+- feat: hiding side menu?
+- feat: change channel name? 
+- style: mobile support
+
 ### Milestones
 - feat: channels (currently basic)
 - feat: threads in messages
@@ -58,6 +65,7 @@ Maybe pub/sub would work but it seems complicated.
 - improvement: remove temporary files from gcs after abort
 - bug: clicking on notification is not taking to correct window
 - bug: paste loosing part of text 
+- improvement: gcs images cacheing
 
 ### Message editor
 - feat: focus input on any key press

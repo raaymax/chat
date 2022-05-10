@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/no-unresolved
-const { getMessaging } = require('firebase-admin/messaging');
+const { getMessaging } = require('../infra/firebase');
 const { sessionRepo } = require('../database/db');
 const pack = require('../../package.json');
 
@@ -38,6 +37,7 @@ module.exports = {
   }),
 
   notifyOther: async (self, msg) => {
+    if (process.env.NODE_ENV === 'test') return Promise.resolve(); // FIXME: feature disable or separate config for testing?
     if (!msg.message) return Promise.resolve();
     const sess = await sessionRepo.getOther({ userId: self.user.id });
     // eslint-disable-next-line array-callback-return

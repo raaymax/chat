@@ -21,9 +21,12 @@ describe('helpers', () => {
   });
 
   it('exactArray', async () => {
+    const f = () => [];
     assert.deepEqual(exactArray([])([]), []);
     assert.deepEqual(exactArray([() => []])(['anything']), []);
-    assert.deepEqual(exactArray([() => []])([]), [{ expected: 1, matched: [], msg: 'length not match' }]);
+    assert.deepEqual(exactArray([f])([]), [{
+      expected: 1, expectedSchema: [f], matched: [], msg: 'length not match',
+    }]);
     assert.deepEqual(exactArray([() => [{ msg: 'error' }]])(['anything']), [{ msg: 'error' }]);
   });
 
@@ -38,9 +41,20 @@ describe('helpers', () => {
   });
 
   it('partial + plain array', async () => {
-    assert.deepEqual(exactArray([partial({ a: [1, 2, 3] })])([{ a: [1, 2, 3] }]), []);
-    assert.deepEqual(exactArray([partial({ a: [1, 2] })])([{ a: [1, 2, 3] }]), [{ expected: 2, matched: [1, 2, 3], msg: 'length not match' }]);
-    assert.deepEqual(exactArray([partial({ a: [1, 2, 4] })])([{ a: [1, 2, 3] }]), [{ msg: '4 !== 3' }]);
+    assert.deepEqual(
+      exactArray([{ a: [1, 2, 3] }])([{ a: [1, 2, 3] }]),
+      [],
+    );
+    assert.deepEqual(
+      exactArray([{ a: [1, 2] }])([{ a: [1, 2, 3] }]),
+      [{
+        expected: 2, expectedSchema: [1, 2], matched: [1, 2, 3], msg: 'length not match',
+      }],
+    );
+    assert.deepEqual(
+      exactArray([{ a: [1, 2, 4] }])([{ a: [1, 2, 3] }]),
+      [{ msg: '4 !== 3' }],
+    );
   });
 
   it('anyString', async () => {
