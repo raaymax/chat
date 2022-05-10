@@ -28,6 +28,7 @@ Maybe pub/sub would work but it seems complicated.
 - feat: hiding side menu?
 - feat: change channel name? 
 - style: mobile support
+- bug: display channel name in header instead of cid
 
 ### Milestones
 - feat: channels (currently basic)
