@@ -34,7 +34,7 @@ jobs:
       shell: bash
       env:
         CONFIG_FILE: ${{secrets.TEST_CONFIG}}
-    - run: npx migrate-mongo up
     - run: npm ci
     - run: npm run lint:ci
+    - run: npx migrate-mongo up
     - run: npm run test:ci
