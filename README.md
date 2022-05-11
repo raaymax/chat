@@ -28,6 +28,9 @@ Maybe pub/sub would work but it seems complicated.
 - feat: mark current channel
 - feat: notifications should take you to correct channel 
 - feat: notifications should have info about channel
+- bug: "X is typing" is visible in all channels
+- bug: "back to main" not working
+- bug: broadcast on private channel should not send to others
 
 ### Milestones
 - feat: channels (currently basic)
