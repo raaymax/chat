@@ -9,7 +9,7 @@ x-logging:
 
 services:
   chat:
-    image: quack:latest
+    image: gcr.io/codecat-quack/quack:${APP_VERSION}
     logging: *default-logging
     networks:
     - chat

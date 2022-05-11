@@ -1,6 +1,7 @@
 #!/bin/sh
 
-sudo docker build -t quack:latest .
+APP_VERSION="$(cat package.json | awk '/version/{print $2}' | sed 's/[",]//g')"
 sudo cp ../chat.config.js ./
-sudo env COMMIT_HASH=${COMMIT_HASH} docker stack deploy --compose-file=$(pwd)/docker-compose.prod.yml Chat
+gcloud builds submit --tag gcr.io/codecat-quack/quack:${APP_VERSION}
+sudo env APP_VERSION=${APP_VERSION} COMMIT_HASH=${COMMIT_HASH} docker stack deploy --compose-file=$(pwd)/docker-compose.prod.yml Chat
 sudo docker image prune -f
