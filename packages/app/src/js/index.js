@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import { getCid, setCid } from './store/channel';
 import { setInfo } from './store/info.js';
-import { setUser, getUser } from './store/user.js';
+import { setUser } from './store/user.js';
 import { insertMessage, clearMessages, removeMessage } from './store/messages';
 import { addChannel, rmChannel, clearChannels } from './store/channels';
 import { load } from './services/messages';
@@ -33,7 +33,6 @@ client
   .on('message:remove', handleMessageRemove)
   .on('notification', () => { try { navigator.vibrate([100, 30, 100]) } catch (err) { /* ignore */ } })
   .on('notification', () => { try { play(); } catch (err) { /* ignore */ } })
-
 
 function handleMessage(_, msg) {
   if (msg.priv || msg.channel === getCid()) {
