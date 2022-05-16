@@ -84,7 +84,7 @@ export const Message = (props = {}) => {
         {attachments && <Files list={attachments} />}
         {info && <div class={['info', info.type].join(' ')}>{info.msg}</div>}
         {isMe(user.id) && toolbar && <div class='toolbar'>
-          {/*<i class='fa-solid fa-icons' />*/}
+          {/* <i class='fa-solid fa-icons' /> */}
           { isMe(user.id) && <Delete accept={props.onDelete} />}
         </div>}
       </div>

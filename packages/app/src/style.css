@@ -528,6 +528,9 @@ ul {
  padding: 0px 10px; 
  cursor: pointer;
 }
+.channels .channel.active {
+  background-color: var(--primary_active_mask);
+}
 
 .channels .channel:hover {
   background-color: var(--primary_active_mask);

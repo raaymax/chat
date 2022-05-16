@@ -26,10 +26,8 @@ Maybe pub/sub would work but it seems complicated.
 - feat: mark current channel
 - feat: notifications should take you to correct channel 
 - feat: notifications should have info about channel
-- bug: broadcast on private channel should not send to others
 
 ### Milestones
-- feat: channels (currently basic)
 - feat: threads in messages
 - feat: emoji reactions 
 - feat: ability to upload images and files (in progress)
@@ -38,6 +36,7 @@ Maybe pub/sub would work but it seems complicated.
 - feat: custom emojis
 
 ### Critical
+- chore: add tests for message removal
 - bug: fix paste of multiline text
 - feat: ability to refresh native app
 - ? bug: different notification sound on mobile
@@ -53,7 +52,6 @@ Maybe pub/sub would work but it seems complicated.
 - feat: link preview
 - feat: days separated by something
 - feat: searching messages
-- feat: deleting messages
 - feat: custom help messages for home information
 - feat: generate icons for notifications
 - feat: command for displaying version of app and server
