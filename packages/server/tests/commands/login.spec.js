@@ -63,4 +63,33 @@ module.exports = (sys) => {
       ]);
     });
   });
+  describe('/me', () => {
+    it('should return user name and id', async () => {
+      await sys.req({ command: { name: 'login', args: ['mateusz', '123'] } });
+      match(await sys.req({ command: { name: 'me' } }), [
+        {
+          priv: true,
+          user: { name: 'System' },
+          message: [
+            { text: 'ID: ' }, { text: anyString() }, { br: true },
+            { text: 'User: ' }, { text: 'Mateusz' }, { br: true },
+            { text: 'Avatar: ' }, { link: { href: anyString(), children: { text: anyString() } } }, { br: true },
+          ],
+        },
+        { resp: { status: 'ok' } },
+      ]);
+    });
+  });
+  describe('/logout', () => {
+    it('should log user out', async () => {
+      await sys.req({ command: { name: 'login', args: ['mateusz', '123'] } });
+      match(await sys.req({ command: { name: 'logout' } }), [
+        { op: { type: 'rmSession' } },
+        { resp: { status: 'ok' } },
+      ]);
+      match(await sys.req({ command: { name: 'me' } }), [
+        { resp: { status: 'error' } },
+      ]);
+    });
+  });
 };

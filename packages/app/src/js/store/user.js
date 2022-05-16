@@ -1,6 +1,6 @@
 import { createNotifier } from '../utils.js';
 
-const { notify, watch } = createNotifier();
+const [notify, watch] = createNotifier();
 
 let user = null;
 

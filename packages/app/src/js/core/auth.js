@@ -26,7 +26,8 @@ const session = {
 export const initAuth = (client) => {
   client
     .on('config:ready', connectionReady)
-    .on('op:setSession', handleSession);
+    .on('op:setSession', handleSession)
+    .on('op:rmSession', handleLogout);
 }
 
 async function connectionReady(client) {
@@ -51,6 +52,10 @@ async function connectionReady(client) {
 async function handleSession(client, msg) {
   session.set(msg.op.session);
   client.emit('auth:user', msg.op.user);
+}
+async function handleLogout(client) {
+  session.set(null);
+  client.emit('auth:logout');
 }
 
 async function restoreSession(client, i = 1) {

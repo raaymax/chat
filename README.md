@@ -22,6 +22,12 @@ Maybe pub/sub would work but it seems complicated.
 
 ## TODO
 
+### Channels
+- feat: mark current channel
+- feat: notifications should take you to correct channel 
+- feat: notifications should have info about channel
+- bug: broadcast on private channel should not send to others
+
 ### Milestones
 - feat: channels (currently basic)
 - feat: threads in messages
@@ -39,10 +45,9 @@ Maybe pub/sub would work but it seems complicated.
 
 ### DevOps
 - define deploy checklist
-- create script for version update
 
 ### Mobile
-- Message about version update is dissapearing after connection
+- change color of status bar
 
 ### General
 - feat: link preview
@@ -51,15 +56,15 @@ Maybe pub/sub would work but it seems complicated.
 - feat: deleting messages
 - feat: custom help messages for home information
 - feat: generate icons for notifications
-- feat: switch to FCM notifications in web version
 - feat: command for displaying version of app and server
+- feat: frontend only commands
 - feat: changelog messages when app is updated
 - improvement: move link detection to message builder
 - improvement: separate users from messages 
 - improvement: remove temporary files from gcs after abort
-- bug: line wrapping in wrong place
 - bug: clicking on notification is not taking to correct window
 - bug: paste loosing part of text 
+- improvement: gcs images cacheing
 
 ### Message editor
 - feat: focus input on any key press
@@ -71,7 +76,6 @@ Maybe pub/sub would work but it seems complicated.
 - bug: cannot ctrl-v text with emojis from slack
 - bug: formats are working everywhere not just in input box
 - bug: formats can't be toggled off
-- bug: writing links by hand is broken by emoji selector
 - bug: link detection on phone is not working
 
 ### Postponed

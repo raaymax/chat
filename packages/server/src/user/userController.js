@@ -22,6 +22,8 @@ module.exports = {
       }, msg.seqId);
       return msg.ok({ session, user });
     } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
       return msg.error(err);
     }
   },
@@ -44,6 +46,16 @@ module.exports = {
     } catch (err) {
       return msg.error(Errors.UnknownError(err));
     }
+  },
+
+  me: async (self, msg) => {
+    if (!self.user) return msg.error(Errors.AccessDenied());
+    await self.sys([
+      { text: 'ID: ' }, { text: self.user.id }, { br: true },
+      { text: 'User: ' }, { text: self.user.name }, { br: true },
+      { text: 'Avatar: ' }, { link: { href: self.user.avatarUrl, children: { text: self.user.avatarUrl } } }, { br: true },
+    ], { priv: true, seqId: msg.seqId });
+    return msg.ok();
   },
 
   login: async (self, msg) => {
@@ -81,5 +93,13 @@ module.exports = {
       },
     });
   },
-
+  logout: async (self, msg) => {
+    if (!self.user) return msg.error(Errors.AccessDenied());
+    await service.sessionDestroy(self.session);
+    await self.op({ type: 'rmSession' }, msg.seqId);
+    self.user = null;
+    self.session = null;
+    self.author = 'Guest'; // FIXME: Do I really need this?
+    msg.ok({});
+  },
 };

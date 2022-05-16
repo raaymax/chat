@@ -1,4 +1,4 @@
-import { getChannel } from './store/channel';
+import { getCid } from './store/channel';
 import { getUser } from './store/user';
 import { createCounter } from './utils';
 
@@ -41,7 +41,7 @@ export function fromQuill(data) {
 }
 
 export function build(msg) {
-  msg.channel = getChannel();
+  msg.channel = getCid();
   msg.clientId = tempId();
   msg.user = getUser();
   msg.createdAt = new Date();

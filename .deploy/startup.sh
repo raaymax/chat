@@ -1,4 +1,4 @@
 #!/bin/sh
 . .envrc
-npx knex migrate:latest
+npx migrate-mongo up
 npm start

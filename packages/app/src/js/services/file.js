@@ -1,5 +1,4 @@
 import { client } from '../core';
-import { setInfo } from '../store/info';
 import { createCounter } from '../utils';
 import { add, update } from '../store/file';
 
@@ -41,7 +40,6 @@ export const upload = async (file) => {
       },
     });
   } catch (err) {
-    setInfo("dupa");
     update(local.clientId, {
       error: err.message,
       progress: 0,

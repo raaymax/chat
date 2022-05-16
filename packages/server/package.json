@@ -1,14 +1,14 @@
 {
   "name": "@quack/server",
-  "version": "0.5.1",
+  "version": "0.6.2",
   "description": "",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "test:postgres": "DATABASE_URL=postgres://chat:chat@localhost:5432/tests mocha --watch --file tests/index.spec.js --ui bdd",
-    "test": "DATABASE_URL='mongodb://chat:chat@localhost:27017/tests?authSource=admin' mocha --watch --file tests/index.spec.js --ui bdd",
-    "test:ci": "mocha --file tests/index.spec.js --ui bdd"
+    "test": "NODE_ENV='test' DATABASE_URL='mongodb://chat:chat@localhost:27017/tests?authSource=admin' mocha --watch --file tests/index.spec.js --ui bdd",
+    "test:ci": "NODE_ENV='test' mocha --file tests/index.spec.js --ui bdd"
   },
   "author": "",
   "license": "ISC",

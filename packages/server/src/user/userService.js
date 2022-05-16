@@ -2,20 +2,11 @@ const { genToken, genHash } = require('../tools');
 const { sessionRepo, userRepo } = require('../database/db');
 const Errors = require('../errors');
 
-async function createSession(userId) {
-  const secret = genToken();
-  const token = genHash(secret);
-  const session = await sessionRepo.insert({ token, userId });
-  return { id: session.id, secret };
-}
-
-async function refreshSession(session) {
-  const { id } = session;
-  const secret = genToken();
-  const token = genHash(secret);
-  await sessionRepo.update(id, { token });
-  return { id, secret };
-}
+module.exports = {
+  userLogin,
+  sessionRestore,
+  sessionDestroy,
+};
 
 async function userLogin(login, password) {
   const user = await userRepo.get({ login, password: genHash(password) });
@@ -38,7 +29,23 @@ async function sessionRestore({ id = '', secret }) {
   throw Errors.SessionNotFound();
 }
 
-module.exports = {
-  sessionRestore,
-  userLogin,
-};
+async function sessionDestroy({ id }) {
+  const session = await sessionRepo.get({ id });
+  if (!session) throw Errors.SessionNotFound();
+  await sessionRepo.delete({ id });
+}
+
+async function createSession(userId) {
+  const secret = genToken();
+  const token = genHash(secret);
+  const session = await sessionRepo.insert({ token, userId });
+  return { id: session.id, secret };
+}
+
+async function refreshSession(session) {
+  const { id } = session;
+  const secret = genToken();
+  const token = genHash(secret);
+  await sessionRepo.update(id, { token });
+  return { id, secret };
+}

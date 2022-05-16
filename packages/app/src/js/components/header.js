@@ -1,15 +1,21 @@
 import {h} from 'preact';
 import { useState } from '../utils.js';
-import { watchChannel, getChannel } from '../store/channel.js';
+import { getCurrent, watchCurrent } from '../store/channels';
+import { Channel } from './channels';
 
-export const Header = () => {
-  const [channel, setChannel] = useState(getChannel());
-  watchChannel((m) => setChannel(m));
+export const Header = ({onclick}) => {
+  const [channel, setChannel] = useState(getCurrent());
+  watchCurrent((m) => setChannel(m));
 
   return (
     <div id="workspace-header">
-      <div class="channel">{channel}</div>
-      {channel !== 'main' && (<div class="back"><a href='#main'>back to main</a></div>)}
+      <Channel onclick={onclick} {...channel} />
+      {channel?.cid !== 'main' && (
+        <div class="back">
+          <a href='#main'>
+            back to main
+          </a>
+        </div>)}
     </div>
   );
 };

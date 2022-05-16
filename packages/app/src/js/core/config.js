@@ -17,7 +17,7 @@ function handleConfig(client, msg) {
     console.log('version check: ', APP_VERSION, msg.op.config.appVersion);
     if (msg.op.config.appVersion !== APP_VERSION) {
       if (Capacitor.isNativePlatform()) {
-        insertMessage({
+        setTimeout(() => client.emit('message', {
           id: 'version',
           priv: true,
           createdAt: new Date(),
@@ -30,10 +30,10 @@ function handleConfig(client, msg) {
             { line: { text: `Required version ${msg.op.config.appVersion}` } },
             { line: { text: 'Please update' } },
           ],
-        });
+        }), 1000);
       } else {
         setTimeout(() => window.location.reload(true), 5000);
-        insertMessage({
+        client.emit('message', {
           id: 'version',
           priv: true,
           createdAt: new Date(),
