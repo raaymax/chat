@@ -27,7 +27,7 @@ export function notifyTyping() {
 }
 
 export function ackTyping(_, msg) {
-  // if (msg.op.channel !== getCid()) return;
+  if (msg.op.channel !== getCid()) return;
   if (msg.user.id === getUser().id) return;
   setInfo({ msg: `${msg.user.name} is typing`, type: 'info' }, 1000);
 }

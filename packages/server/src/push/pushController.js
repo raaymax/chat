@@ -60,7 +60,7 @@ module.exports = {
         channel: msg.channel,
       },
       notification: {
-        title: `Message from ${msg.user?.name || 'Guest'}`,
+        title: `${msg.user?.name || 'Guest'} on ${msg.channel}`,
         body: msg.flat,
       },
       android: {

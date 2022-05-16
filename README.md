@@ -23,7 +23,6 @@ Maybe pub/sub would work but it seems complicated.
 ## TODO
 
 ### Channels
-- feat: mark current channel
 - feat: notifications should take you to correct channel 
 - feat: notifications should have info about channel
 
