@@ -65,6 +65,8 @@ Maybe pub/sub would work but it seems complicated.
 - bug: clicking on notification is not taking to correct window
 - bug: paste loosing part of text 
 - improvement: gcs images cacheing
+- improvement: emoji alternative names
+- bug: it is not possible to silence the notifications
 
 ### Message editor
 - feat: focus input on any key press

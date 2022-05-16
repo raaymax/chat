@@ -27,6 +27,30 @@ module.exports = {
     return msg.ok();
   },
 
+  remove: async (self, msg) => {
+    const { id } = msg.op;
+    if (!self.user) {
+      return msg.error(Errors.AccessDenied());
+    }
+    const message = await messageRepo.get({ id });
+    if (!message) return msg.error(Errors.NotExist());
+    if (self.user.id !== message.userId) {
+      return msg.error(Errors.AccessDenied());
+    }
+    await messageRepo.remove({ id });
+    await self.broadcast({
+      id,
+      channel: message.channel,
+      message: [],
+      user: {
+        name: 'System',
+      },
+      notifType: 'warning',
+      notif: 'Message removed',
+    });
+    return msg.ok();
+  },
+
   handle: async (self, msg) => {
     if (!self.user) {
       return msg.error(Errors.AccessDenied());
@@ -44,6 +68,7 @@ module.exports = {
     msg.channel = msg.channel || self.channel;
     msg.notify = true;
     const { id } = await messageRepo.insert({
+      clientId: msg.clientId,
       createdAt: msg.createdAt,
       userId: msg.userId,
       channel: msg.channel,

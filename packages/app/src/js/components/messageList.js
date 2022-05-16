@@ -1,11 +1,11 @@
 import {h} from 'preact';
 import {
   useState, useEffect, useRef, createCooldown,
-} from '../utils.js';
-import { watchMessages, deleteBefore } from '../store/messages.js';
-import { Message } from './message.js';
-import { Notification } from './notification.js';
-import { loadPrevious } from '../services/messages.js';
+} from '../utils';
+import { watchMessages, deleteBefore } from '../store/messages';
+import { Message } from './message';
+import { Notification } from './notification';
+import { loadPrevious, removeMessage } from '../services/messages';
 
 const loadPrev = createCooldown(loadPrevious, 100);
 
@@ -61,6 +61,7 @@ export function MessageList() {
             : <Message
               class={msg.priv ? ['private'] : []}
               data-id={msg.id}
+              onDelete={() => removeMessage(msg)}
               key={msg.id || msg.clientId}
               sameUser={sameUser}
               data={msg}

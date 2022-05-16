@@ -20,4 +20,5 @@ module.exports = {
   UnknownOp: (msg) => new AppError('UNKNOWN_OP', msg),
   UnknownError: (err) => new AppError('UNKNOWN_ERROR', err),
   FeatureNotEnabled: (err) => new AppError('FEATURE_NOT_ENABLED', err),
+  NotExist: (err) => new AppError('NOT_EXIST', err),
 };

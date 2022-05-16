@@ -6,7 +6,7 @@ window.EMOJI = Emojis;
 export default Emojis;
 
 export const emojiFuse = new Fuse(Emojis, {
-  isCaseSensitive: false,
+  isCaseSensitive: true,
   includeScore: false,
   shouldSort: true,
   includeMatches: false,

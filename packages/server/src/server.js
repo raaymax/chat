@@ -49,6 +49,7 @@ wss({ server })
   .on('op:channels', channelsController.getAll)
   .on('op:createChannel', channelsController.create)
   .on('op:removeChannel', channelsController.remove)
+  .on('op:removeMessage', messageController.remove)
   .on('op:*', unknownOp)
   .on('command:help', (self, msg) => self.sys([
     { bold: { text: 'auth' } }, { br: true },

@@ -19,7 +19,9 @@ export const insertPendingMessage = (msg) => {
 }
 
 export const insertMessage = (msg) => {
-  msg.createdAt = new Date(msg.createdAt);
+  if (msg.createdAt) {
+    msg.createdAt = new Date(msg.createdAt);
+  }
   const existing = list.find((m) => (m.id && m.id === msg.id)
     || (m.clientId && m.clientId === msg.clientId));
 
