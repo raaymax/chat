@@ -23,6 +23,7 @@ module.exports = (sys) => {
             { text: '/name <name> - to change your name' }, { br: true },
             { text: '/avatar <url> - to change your avatar' }, { br: true },
             { bold: { text: 'other' } }, { br: true },
+            { text: '/prompt <question> - ask openai GPT-3 - without default prompt' }, { br: true },
             { text: '/ai <question> - ask openai GPT-3' }, { br: true },
             { text: '/help - display this help' }, { br: true },
           ],
