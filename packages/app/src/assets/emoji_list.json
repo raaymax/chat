@@ -72,6 +72,14 @@
     "emoji_order": "6"
   },
   {
+    "name": ":D",
+    "unicode": "1f604",
+    "shortname": ":D:",
+    "code_decimal": "&#128516;",
+    "category": "p",
+    "emoji_order": "6"
+  },
+  {
     "name": "sweat_smile",
     "unicode": "1f605",
     "shortname": ":sweat_smile:",
@@ -1460,6 +1468,14 @@
     "name": "thumbsup",
     "unicode": "1f44d",
     "shortname": ":thumbsup:",
+    "code_decimal": "&#128077;",
+    "category": "p",
+    "emoji_order": "1176"
+  },
+  {
+    "name": "+1",
+    "unicode": "1f44d",
+    "shortname": ":+1:",
     "code_decimal": "&#128077;",
     "category": "p",
     "emoji_order": "1176"

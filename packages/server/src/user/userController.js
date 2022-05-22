@@ -9,7 +9,11 @@ module.exports = {
     try {
       const restored = await service.sessionRestore(op.session);
       const { session, user } = restored;
-      self.user = user;
+      self.user = {
+        id: user.id,
+        name: user.name,
+        avatarUrl: user.avatarUrl,
+      };
       self.session = session;
       await self.op({
         type: 'setSession',

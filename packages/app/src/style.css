@@ -3,6 +3,7 @@ html {
   --primary_background: #1a1d21;
   --secondary_background: #222529;
   --primary_active_mask: rgba(249,249,249,0.05);
+  --secondary_active_mask: rgba(249,249,249,0.1);
 
   --primary_foreground: #d1d2d3;
   --secondary_foreground: #38393b;
@@ -126,6 +127,10 @@ ul {
     padding-inline-start: 30px;
 }
 
+.danger {
+  color: red;
+}
+
 .space {
   width: 50px;
 }
@@ -138,6 +143,9 @@ ul {
   flex-direction: row;
 }
 
+.confirm .active{
+  background-color: orange;
+}
 
 .workspace-main {
   flex: 1;
@@ -520,8 +528,36 @@ ul {
  padding: 0px 10px; 
  cursor: pointer;
 }
+.channels .channel.active {
+  background-color: var(--primary_active_mask);
+}
 
 .channels .channel:hover {
   background-color: var(--primary_active_mask);
 }
+.message .toolbar {
+  position: absolute;
+  bottom: -15px;
+  height: 32px;
+  right: 10px;
+  background-color: var(--primary_background);
+  border: 1px solid #565856;
+  border-radius: 0.3em;
+  padding: 1px 5px;
+  font-size: 0.9em;
+}
+.message .toolbar i{
+  padding: 2px 5px;
+  line-height: 24px;
+  width: 24px;
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 0.2em;
+}
+.message .toolbar i:hover{
+  background-color: var(--primary_active_mask);
+}
 
+.message .toolbar i:active{
+  background-color: var(--secondary_active_mask);
+}

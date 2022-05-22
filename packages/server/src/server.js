@@ -49,6 +49,7 @@ wss({ server })
   .on('op:channels', channelsController.getAll)
   .on('op:createChannel', channelsController.create)
   .on('op:removeChannel', channelsController.remove)
+  .on('op:removeMessage', messageController.remove)
   .on('op:*', unknownOp)
   .on('command:help', (self, msg) => self.sys([
     { bold: { text: 'auth' } }, { br: true },
@@ -63,6 +64,7 @@ wss({ server })
     { text: '/name <name> - to change your name' }, { br: true },
     { text: '/avatar <url> - to change your avatar' }, { br: true },
     { bold: { text: 'other' } }, { br: true },
+    { text: '/prompt <question> - ask openai GPT-3 - without default prompt' }, { br: true },
     { text: '/ai <question> - ask openai GPT-3' }, { br: true },
     { text: '/help - display this help' }, { br: true },
   ], { priv: true, seqId: msg.seqId, msgId: 'help' }).then(() => msg.ok()))
@@ -70,7 +72,8 @@ wss({ server })
   .on('command:avatar', userController.changeAvatar)
   .on('command:login', userController.login)
   .on('command:channel', channelsController.changeChannel)
-  .on('command:ai', aiController.createCompletion)
+  .on('command:ai', aiController.ai)
+  .on('command:prompt', aiController.prompt)
   .on('command:join', channelsController.join)
   .on('command:leave', channelsController.leave)
   .on('command:logout', userController.logout)

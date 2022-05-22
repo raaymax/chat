@@ -56,10 +56,10 @@ pool.onError(() => notify('con:error', client));
 pool.onPacket((raw) => {
   try {
     const msg = JSON.parse(raw.data);
-    // notify('packet', msg);
-    if (msg.message) return notify('message', client, msg);
     // eslint-disable-next-line no-console
     // console.log('recv', JSON.stringify(msg, null, 4));
+    // notify('packet', msg);
+    if (msg.message) return notify('message', client, msg);
     if (msg.resp) notify('resp', client, msg);
     else if (msg.op) notify(`op:${msg.op.type}`, client, msg);
     else notify('message', client, msg);

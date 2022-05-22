@@ -2,6 +2,7 @@ const { getMessaging } = require('../infra/firebase');
 const { sessionRepo } = require('../database/db');
 const { channelRepo } = require('../database/db');
 const pack = require('../../package.json');
+const conf = require('../../../../chat.config');
 
 module.exports = {
   setupPushNotifications: async (self, msg) => {
@@ -38,6 +39,7 @@ module.exports = {
   }),
 
   notifyOther: async (self, msg) => {
+    if (!msg.user) return Promise.resolve();
     if (process.env.NODE_ENV === 'test') return Promise.resolve(); // FIXME: feature disable or separate config for testing?
     if (!msg.message) return Promise.resolve();
     const channel = await channelRepo.get({ cid: msg.channel });
@@ -58,7 +60,7 @@ module.exports = {
         channel: msg.channel,
       },
       notification: {
-        title: `Message from ${msg.user?.name || 'Guest'}`,
+        title: `${msg.user?.name || 'Guest'} on ${msg.channel}`,
         body: msg.flat,
       },
       android: {
@@ -85,7 +87,7 @@ module.exports = {
           image: self.user.avatarUrl,
         },
         fcm_options: {
-          link: process.env.SERVER_URL,
+          link: `${conf.serverWebUrl}/#${msg.channel}`,
         },
         notification: {
           silent: false,

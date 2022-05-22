@@ -1,7 +1,10 @@
 import {h} from 'preact';
+import {useState} from 'preact/hooks';
 import { formatTime, formatDate } from '../utils.js';
 import Emojis from '../services/emoji';
 import {Files} from './Files/Files';
+import {Delete} from './confirm';
+import { isMe } from '../store/user';
 
 const EMOJI_MATCHER = () => /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/g;
 
@@ -58,8 +61,15 @@ export const Message = (props = {}) => {
   const {
     info, message, attachments, flat, createdAt, user,
   } = props.data;
+  const [toolbar, setToolbar] = useState(false);
   return (
-    <div {...props} class={['message', ...props.class].join(' ')} onclick={info && info.action ? info.action : () => {}}>
+    <div
+      {...props}
+      class={['message', ...props.class].join(' ')}
+      onclick={info && info.action ? info.action : () => {}}
+      onmouseenter={() => setToolbar(true)}
+      onmouseleave={() => setToolbar(false)}
+    >
       {!props.sameUser
         ? <div class='avatar'>{user.avatarUrl && <img src={user.avatarUrl} />}</div>
         : <div class='spacy side-time'>{formatTime(createdAt)}</div>
@@ -73,6 +83,10 @@ export const Message = (props = {}) => {
         <div class={['content', ...(isOnlyEmoji(message, flat) ? ['emoji'] : [])].join(' ')}>{build(message)}</div>
         {attachments && <Files list={attachments} />}
         {info && <div class={['info', info.type].join(' ')}>{info.msg}</div>}
+        {isMe(user.id) && toolbar && <div class='toolbar'>
+          {/* <i class='fa-solid fa-icons' /> */}
+          { isMe(user.id) && <Delete accept={props.onDelete} />}
+        </div>}
       </div>
     </div>
   );

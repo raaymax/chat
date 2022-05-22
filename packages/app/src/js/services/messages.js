@@ -5,8 +5,8 @@ import {
   insertPendingMessage,
   insertMessage,
   updateMessage,
-} from '../store/messages.js';
-import { getCid } from '../store/channel.js';
+} from '../store/messages';
+import { getCid } from '../store/channel';
 import { client } from '../core';
 import { fromDom } from '../MessageBuilder';
 import * as files from '../store/file';
@@ -53,6 +53,16 @@ export const sendCommand = async (msg) => {
     insertMessage({ ...notif, notifType: 'error', notif: `${msg.command.name} error ${err.resp.data.message}` });
   }
 };
+
+export const removeMessage = async (msg) => {
+  try {
+    await client.req({op: {type: 'removeMessage', id: msg.id}});
+  } catch (err) {
+    insertMessage({
+      id: msg.id, notifType: null, notif: null, info: {type: 'error', msg: 'Could not delete message' },
+    });
+  }
+}
 
 const sendMessage = async (msg) => {
   if (!msg.user) {
