@@ -1,6 +1,7 @@
 const { userRepo } = require('../database/db');
 const service = require('./userService');
 const Errors = require('../errors');
+const msgFactory = require('../message/messageFactory');
 
 module.exports = {
   restore: async (self, msg) => {
@@ -53,11 +54,14 @@ module.exports = {
 
   me: async (self, msg) => {
     if (!self.user) return msg.error(Errors.AccessDenied());
-    await self.sys([
-      { text: 'ID: ' }, { text: self.user.id }, { br: true },
-      { text: 'User: ' }, { text: self.user.name }, { br: true },
-      { text: 'Avatar: ' }, { link: { href: self.user.avatarUrl, children: { text: self.user.avatarUrl } } }, { br: true },
-    ], { priv: true, seqId: msg.seqId });
+    await self.send(msgFactory.createSystemMessage({
+      seqId: msg.seqId,
+      message: [
+        { text: 'ID: ' }, { text: self.user.id }, { br: true },
+        { text: 'User: ' }, { text: self.user.name }, { br: true },
+        { text: 'Avatar: ' }, { link: { href: self.user.avatarUrl, children: { text: self.user.avatarUrl } } }, { br: true },
+      ],
+    }));
     return msg.ok();
   },
 
@@ -65,9 +69,12 @@ module.exports = {
     const { args } = msg;
     const { user, session } = await service.userLogin(args[0], args[1]);
     if (!user) {
-      await self.sys([
-        { text: 'Login failed' }, { br: true },
-      ], { priv: true });
+      await self.send(msgFactory.createSystemMessage({
+        seqId: msg.seqId,
+        message: [
+          { text: 'Login failed' }, { br: true },
+        ],
+      }));
       return msg.error(Errors.AccessDenied());
     }
     self.user = user;
@@ -82,10 +89,13 @@ module.exports = {
         avatarUrl: user.avatarUrl,
       },
     }, msg.seqId);
-    await self.sys([
-      { text: 'Login successfull' }, { br: true },
-      { text: `Welcome ${user.name}` }, { br: true },
-    ], { priv: true, seqId: msg.seqId });
+    await self.send(msgFactory.createSystemMessage({
+      seqId: msg.seqId,
+      message: [
+        { text: 'Login successfull' }, { br: true },
+        { text: `Welcome ${user.name}` }, { br: true },
+      ],
+    }));
 
     return msg.ok({
       session,

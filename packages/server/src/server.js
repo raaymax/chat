@@ -8,6 +8,7 @@ const fileController = require('./file/fileController');
 const channelsController = require('./channel/channelController');
 const Errors = require('./errors');
 const commands = require('./commands');
+const msgFactory = require('./message/messageFactory');
 
 const app = require('./app');
 const wss = require('./wss');
@@ -52,15 +53,19 @@ async function restore(self, msg) {
 }
 
 async function sendGreet(self, msg) {
-  await self.sys([
-    { text: 'Hello!' }, { emoji: 'wave' }, { br: true },
-    { text: 'You can use "/help" to get more info' }, { br: true },
-    { text: 'You won\'t be able to send any messages until you login' }, { br: true },
-  ], { priv: true, seqId: msg.seqId, msgId: 'greet' });
+  await self.send(msgFactory.createSystemMessage({
+    id: 'greet',
+    seqId: msg.seqId,
+    message: [
+      { text: 'Hello!' }, { emoji: 'wave' }, { br: true },
+      { text: 'You can use "/help" to get more info' }, { br: true },
+      { text: 'You won\'t be able to send any messages until you login' }, { br: true },
+    ],
+  }));
   await msg.ok();
 }
 
-function unknownOp(_self, msg) {
-  msg.error(Errors.UnknownOp(msg.type));
+async function unknownOp(_self, msg) {
+  if(msg) msg.error(Errors.UnknownOp(msg.type));
 }
 module.exports = server;

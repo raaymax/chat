@@ -58,9 +58,7 @@ pool.onPacket((raw) => {
     const msg = JSON.parse(raw.data);
     // eslint-disable-next-line no-console
     // console.log('recv', JSON.stringify(msg, null, 4));
-    // notify('packet', msg);
-    if (msg.type === 'response') notify('resp', client, msg);
-    else notify(msg.type, client, msg);
+    notify(msg.type, client, msg);
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);

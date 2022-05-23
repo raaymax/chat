@@ -17,14 +17,13 @@ async function userLogin(login, password) {
 
 async function sessionRestore({ id = '', secret }) {
   const session = await sessionRepo.get({ id });
-  console.log(id, secret, session);
   if (session) {
     if (session.token === genHash(secret)) {
       const user = await userRepo.get({ id: session.userId });
       const newSession = await refreshSession(session);
       return { session: newSession, user };
     }
-    //await sessionRepo.delete({ userId: session.userId });
+    await sessionRepo.delete({ userId: session.userId });
     throw Errors.SessionTerminated('Hack!?!');
   }
   throw Errors.SessionNotFound();

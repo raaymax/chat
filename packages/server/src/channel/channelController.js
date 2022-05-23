@@ -1,5 +1,6 @@
 const { channelRepo } = require('../database/db');
 const Errors = require('../errors');
+const msgFactory = require('../message/messageFactory');
 
 module.exports = {
   getAll: async (self, msg) => {
@@ -45,9 +46,12 @@ module.exports = {
     const cid = self.channel;
     await channelRepo.remove({ cid, userId: self.user.id });
     self.op({ type: 'rmChannel', cid }, msg.seqId);
-    await self.sys([
-      { text: 'You left the channel' },
-    ], { priv: true, seqId: msg.seqId });
+    await self.send(msgFactory.createSystemMessage({
+      seqId: msg.seqId,
+      message: [
+        { text: 'You left the channel' },
+      ],
+    }));
     msg.ok({ cid });
   },
 };

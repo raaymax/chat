@@ -3,9 +3,10 @@ const userController = require('./user/userController');
 const channelsController = require('./channel/channelController');
 const aiController = require('./ai/aiController');
 const Errors = require('./errors');
+const msgFactory = require('./message/messageFactory');
 
 const handlers = {};
-const execute = (name, ...args) => handlers[name].handler(...args);
+const execute = (name, ...args) => (handlers[name] || handlers['*']).handler(...args);
 const cmd = (name, desc) => {
   handlers[name] = { ...desc, name };
 };
@@ -66,12 +67,7 @@ cmd('*', {
   handler: unknownCommand,
 });
 
-module.exports = async (self, msg) => {
-  if (handlers[msg.cmd]) {
-    return execute(msg.cmd, self, msg);
-  }
-  return execute('*', self, msg);
-};
+module.exports = async (self, msg) => execute(msg.cmd, self, msg);
 
 async function sendHelp(self, msg) {
   const help = Object.values(handlers).filter((h) => !h.hidden).map((h) => [
@@ -84,9 +80,15 @@ async function sendHelp(self, msg) {
     { br: true },
   ]).flat();
 
-  return self.sys(help, { priv: true, seqId: msg.seqId, msgId: 'help' }).then(() => msg.ok());
+  await self.send(msgFactory.createSystemMessage({
+    id: 'help',
+    seqId: msg.seqId,
+    message: help,
+  }));
+
+  return msg.ok();
 }
 
 function unknownCommand(_self, msg) {
-  msg.error(Errors.UnknownCommand(msg.cmd));
+  return msg.error(Errors.UnknownCommand(msg.cmd));
 }

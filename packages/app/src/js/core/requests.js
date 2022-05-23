@@ -23,7 +23,7 @@ const register = (seqId, source) => {
 const done = (msg) => waiting[msg.seqId] && waiting[msg.seqId](msg);
 
 export function initRequests(client) {
-  client.on('resp', (srv, msg) => done(msg));
+  client.on('response', (srv, msg) => done(msg));
 
   const ID = (Math.random() + 1).toString(36);
   let nextSeq = 0;
