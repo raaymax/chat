@@ -11,11 +11,11 @@ import { ackTyping} from './services/typing';
 import { client } from './core';
 
 client
-  .on('op:setChannel', handleChannel)
-  .on('op:addChannel', (_, msg) => addChannel(msg.op.channel))
-  .on('op:rmChannel', (_, msg) => rmChannel(msg.op.cid))
-  .on('op:typing', ackTyping)
-  .on('auth:none', () => client.send({ op: { type: 'greet' } }))
+  .on('setChannel', handleChannel)
+  .on('addChannel', (_, msg) => addChannel(msg.channel))
+  .on('rmChannel', (_, msg) => rmChannel(msg.cid))
+  .on('typing', ackTyping)
+  .on('auth:none', () => client.send({ type: 'greet' }))
   .on('auth:ready', () => setInfo(null))
   .on('auth:user', async (_, user) => {
     setUser(user);
@@ -45,6 +45,6 @@ function handleMessageRemove(_, id) {
 
 function handleChannel(_, msg) {
   clearMessages();
-  setCid(msg.op.channel);
+  setCid(msg.channel);
   load();
 }

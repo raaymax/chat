@@ -26,10 +26,8 @@ export const initNotifications = (client) => {
     await getToken(messaging, { vapidKey: cfg.applicationServerKey }).then((currentToken) => {
       if (currentToken) {
         return client.req({
-          op: {
-            type: 'setupFcm',
-            fcmToken: currentToken,
-          },
+          type: 'setupFcm',
+          fcmToken: currentToken,
         })
       }
       console.log('No registration token available. Request permission to generate one.');
@@ -50,10 +48,8 @@ export const initNotifications = (client) => {
     PushNotifications.addListener('registration', async (token) => {
       try {
         await client.req({
-          op: {
-            type: 'setupFcm',
-            fcmToken: token.value,
-          },
+          type: 'setupFcm',
+          fcmToken: token.value,
         });
       } catch (err) {
         // eslint-disable-next-line no-console

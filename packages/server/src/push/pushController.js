@@ -6,35 +6,31 @@ const conf = require('../../../../chat.config');
 
 module.exports = {
   setupPushNotifications: async (self, msg) => {
-    const { op } = msg;
-    if (!op.subscription) return msg.error({ code: 'MISSING_SUBSCRIPTION' });
+    if (!msg.subscription) return msg.error({ code: 'MISSING_SUBSCRIPTION' });
     if (!self.user) return msg.error({ code: 'ACCESS_DENIED' });
-    self.sub = op.subscription;
+    self.sub = msg.subscription;
     await sessionRepo.update(self.session.id, {
-      pushSubscription: op.subscription,
+      pushSubscription: msg.subscription,
     });
 
     return msg.ok();
   },
   setupFcm: async (self, msg) => {
-    const { op } = msg;
-    if (!op.fcmToken) return msg.error({ code: 'MISSING_SUBSCRIPTION' });
+    if (!msg.fcmToken) return msg.error({ code: 'MISSING_SUBSCRIPTION' });
     if (!self.user) return msg.error({ code: 'ACCESS_DENIED' });
-    self.fcmToken = op.fcmToken;
+    self.fcmToken = msg.fcmToken;
     await sessionRepo.update(self.session.id, {
-      fcmToken: op.fcmToken,
+      fcmToken: msg.fcmToken,
     });
 
     return msg.ok();
   },
 
   sendConfig: async (self) => self.send({
-    op: {
-      type: 'setConfig',
-      config: {
-        appVersion: pack.version,
-        applicationServerKey: process.env.VAPID_PUBLIC,
-      },
+    type: 'setConfig',
+    config: {
+      appVersion: pack.version,
+      applicationServerKey: process.env.VAPID_PUBLIC,
     },
   }),
 

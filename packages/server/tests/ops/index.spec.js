@@ -4,4 +4,5 @@ module.exports = (sys) => {
   require('./typing.spec')(sys);
   require('./restore.spec')(sys);
   require('./channel.spec')(sys);
+  require('./message.spec')(sys);
 };

@@ -28,7 +28,4 @@ describe('server', () => {
   describe('commands', () => {
     require('./commands/index.spec')(sys);
   });
-  describe('messages', () => {
-    require('./messages/index.spec')(sys);
-  });
 });

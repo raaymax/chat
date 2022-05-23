@@ -7,22 +7,20 @@ const {
 module.exports = (sys) => {
   describe('typing', () => {
     it('should respond with error if not logged in', async () => {
-      match(await sys.req({ op: { type: 'typing' } }), [
-        partial({ resp: { status: 'error', data: { errorCode: 'ACCESS_DENIED' } } }),
+      match(await sys.req({ type: 'typing' }), [
+        partial({ type: 'response', status: 'error', data: { errorCode: 'ACCESS_DENIED' } }),
       ]);
     });
     it('should respond with ok and op:typing', async () => {
-      await sys.req({ command: { name: 'login', args: ['mateusz', '123'] } });
-      match(await sys.req({ op: { type: 'typing' } }), [
+      await sys.req({ type: 'command', cmd: 'login', args: ['mateusz', '123'] });
+      match(await sys.req({ type: 'typing' }), [
         partial({
-          op: {
-            type: 'typing',
-          },
+          type: 'typing',
           user: { id: anyString(), name: 'Mateusz' },
           senderId: anyString(),
           userId: anyString(),
         }),
-        partial({ resp: { status: 'ok' } }),
+        partial({ type: 'response', status: 'ok' }),
       ]);
     });
   });

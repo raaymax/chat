@@ -4,10 +4,9 @@ const Errors = require('../errors');
 
 module.exports = {
   restore: async (self, msg) => {
-    const { op } = msg;
-    if (!op.session) return msg.error(Errors.SessionNotFound());
+    if (!msg.session) return msg.error(Errors.SessionNotFound());
     try {
-      const restored = await service.sessionRestore(op.session);
+      const restored = await service.sessionRestore(msg.session);
       const { session, user } = restored;
       self.user = {
         id: user.id,
@@ -34,7 +33,7 @@ module.exports = {
 
   changeName: async (self, msg) => {
     if (!self.user) return msg.error(Errors.AccessDenied());
-    const [name] = msg.command.args;
+    const [name] = msg.args;
     self.user.name = name;
     await userRepo.update(self.user.id, { name });
     return msg.ok();
@@ -43,7 +42,7 @@ module.exports = {
   changeAvatar: async (self, msg) => {
     try {
       if (!self.user) return msg.error(Errors.AccessDenied());
-      const [avatarUrl] = msg.command.args;
+      const [avatarUrl] = msg.args;
       self.user.avatarUrl = avatarUrl;
       await userRepo.update(self.user.id, { avatarUrl });
       return msg.ok();
@@ -63,7 +62,7 @@ module.exports = {
   },
 
   login: async (self, msg) => {
-    const { args } = msg.command;
+    const { args } = msg;
     const { user, session } = await service.userLogin(args[0], args[1]);
     if (!user) {
       await self.sys([

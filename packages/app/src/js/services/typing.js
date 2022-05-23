@@ -17,7 +17,7 @@ export function notifyTyping() {
   }
   cooldown = true;
   queue = false;
-  client.send({ op: { type: 'typing', channel: getCid() } });
+  client.send({ type: 'typing', channel: getCid() });
   setTimeout(() => {
     cooldown = false;
     if (queue) {
@@ -27,7 +27,7 @@ export function notifyTyping() {
 }
 
 export function ackTyping(_, msg) {
-  if (msg.op.channel !== getCid()) return;
+  if (msg.channel !== getCid()) return;
   if (msg.user.id === getUser().id) return;
   setInfo({ msg: `${msg.user.name} is typing`, type: 'info' }, 1000);
 }

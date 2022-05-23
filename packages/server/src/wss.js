@@ -44,13 +44,14 @@ const App = (conf = {}) => {
         },
         sys: (data, { priv, seqId, msgId = uuid() }) => send({
           id: msgId,
+          type: 'message',
           seqId,
           createdAt: new Date().toISOString(),
           user: { name: 'System' },
           priv,
           message: data,
         }),
-        op: (msg, seqId) => send({ seqId, op: msg }),
+        op: (msg, seqId) => send({ seqId, ...msg }),
       };
 
       connections[id] = self;
@@ -61,36 +62,36 @@ const App = (conf = {}) => {
           await notify('packet', self, raw.toString());
           const msg = JSON.parse(raw);
           if (msg.seqId) {
-            msg.ok = async (data) => send({ seqId: msg.seqId, resp: { status: 'ok', data } });
+            msg.ok = async (data) => send({
+              type: 'response', seqId: msg.seqId, status: 'ok', data,
+            });
             msg.error = async (data) => send({
+              type: 'response',
               seqId: msg.seqId,
-              resp: {
-                status: 'error',
-                data: {
-                  ...data,
-                  errorCode: data.errorCode || 'UNEXPECTED_ERROR',
-                },
+              status: 'error',
+              data: {
+                ...data,
+                errorCode: data.errorCode || 'UNEXPECTED_ERROR',
               },
             });
           } else {
             msg.ok = async () => {};
             msg.error = async () => {};
           }
-          if (msg.op) {
-            await notify('op', self, msg);
-            if (handlers[`op:${msg.op.type}`]) {
-              await notify(`op:${msg.op.type}`, self, msg);
-            } else {
-              await notify('op:*', self, msg);
-            }
-          } else if (msg.command) {
+          if (msg.type === 'command') {
             await notify('command', self, msg);
-            if (handlers[`command:${msg.command.name}`]) {
-              await notify(`command:${msg.command.name}`, self, msg);
+            if (handlers[`command:${msg.cmd}`]) {
+              await notify(`command:${msg.cmd}`, self, msg);
             } else {
               await notify('command:*', self, msg);
             }
-          } else if (msg.message) await notify('message', self, msg);
+          } else if (msg.type === 'message') {
+            await notify('message', self, msg);
+          } else if (handlers[msg.type]) {
+            await notify(msg.type, self, msg);
+          } else {
+            await notify('*', self, msg);
+          }
         } catch (err) {
           // eslint-disable-next-line no-console
           console.error(err);

@@ -6,11 +6,10 @@ const {
 module.exports = (sys) => {
   describe('/name <new_name>', () => {
     it('should respond with error', async () => {
-      match(await sys.req({ command: { name: 'name', args: ['mateusz'] } }), [
+      match(await sys.req({ type: 'command', cmd: 'name', args: ['mateusz'] }), [
         partial({
-          resp: {
-            status: 'error',
-          },
+          type: 'response',
+          status: 'error',
         }),
       ]);
     });

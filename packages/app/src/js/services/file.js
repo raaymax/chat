@@ -14,16 +14,14 @@ export const upload = async (file) => {
   add(local);
 
   const ret = await client.req({
-    op: {
-      type: 'initUpload',
-      fileName: file.name,
-      contentType: file.type,
-    },
+    type: 'initUpload',
+    fileName: file.name,
+    contentType: file.type,
   });
-  update(local.clientId, {id: ret.resp.data.fileId});
+  update(local.clientId, {id: ret.data.fileId});
 
   try {
-    await uploadFile('PUT', ret.resp.data.url, {
+    await uploadFile('PUT', ret.data.url, {
       file,
       clientId: local.clientId,
       progress: (progress) => {
@@ -32,12 +30,10 @@ export const upload = async (file) => {
     });
     update(local.clientId, {progress: 100});
     await client.req({
-      op: {
-        type: 'finalizeUpload',
-        fileId: ret.resp.data.fileId,
-        fileName: file.name,
-        contentType: file.type,
-      },
+      type: 'finalizeUpload',
+      fileId: ret.data.fileId,
+      fileName: file.name,
+      contentType: file.type,
     });
   } catch (err) {
     update(local.clientId, {
@@ -51,12 +47,10 @@ export const upload = async (file) => {
 
 export const getUrl = async (id) => {
   const file = await client.req({
-    op: {
-      type: 'initDownload',
-      fileId: id,
-    },
+    type: 'initDownload',
+    fileId: id,
   });
-  return file.resp.data.url;
+  return file.data.url;
 }
 
 function uploadFile(method, url, {file, progress, clientId}) {

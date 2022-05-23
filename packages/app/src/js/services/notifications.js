@@ -12,10 +12,8 @@ export const initNotifications = () => {
   PushNotifications.addListener('registration', async (token) => {
     try {
       await client.req({
-        op: {
-          type: 'setupFcm',
-          fcmToken: token.value,
-        },
+        type: 'setupFcm',
+        fcmToken: token.value,
       });
     } catch (err) {
       // eslint-disable-next-line no-console

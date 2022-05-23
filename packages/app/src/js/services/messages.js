@@ -11,9 +11,9 @@ import { client } from '../core';
 import { fromDom } from '../MessageBuilder';
 import * as files from '../store/file';
 
-export const loadPrevious = () => client.req({ op: { type: 'load', channel: getCid(), before: getEarliestDate() } });
-export const loadNext = () => client.req({ op: { type: 'load', channel: getCid(), after: getLatestDate() } });
-export const load = () => client.req({ op: { type: 'load', channel: getCid() } });
+export const loadPrevious = () => client.req({ type: 'load', channel: getCid(), before: getEarliestDate()});
+export const loadNext = () => client.req({ type: 'load', channel: getCid(), after: getLatestDate() });
+export const load = () => client.req({ type: 'load', channel: getCid() });
 
 export const sendFromDom = async (dom) => {
   const msg = fromDom(dom);
@@ -26,7 +26,7 @@ export const sendFromDom = async (dom) => {
 };
 
 export const send = async (msg) => {
-  if (msg.command) return sendCommand(msg);
+  if (msg.type === 'command') return sendCommand(msg);
   sendMessage(msg);
 };
 
@@ -40,23 +40,23 @@ export const sendCommand = async (msg) => {
   const notif = {
     clientId: msg.clientId,
     notifType: 'info',
-    notif: `${msg.command.name} sent`,
+    notif: `${msg.cmd} sent`,
     createdAt: new Date(),
   };
   insertMessage(notif);
   try {
     await client.req(msg);
-    insertMessage({ ...notif, notifType: 'success', notif: `${msg.command.name} executed successfully` });
+    insertMessage({ ...notif, notifType: 'success', notif: `${msg.cmd} executed successfully` });
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
-    insertMessage({ ...notif, notifType: 'error', notif: `${msg.command.name} error ${err.resp.data.message}` });
+    insertMessage({ ...notif, notifType: 'error', notif: `${msg.cmd} error ${err.data.message}` });
   }
 };
 
 export const removeMessage = async (msg) => {
   try {
-    await client.req({op: {type: 'removeMessage', id: msg.id}});
+    await client.req({type: 'removeMessage', id: msg.id});
   } catch (err) {
     insertMessage({
       id: msg.id, notifType: null, notif: null, info: {type: 'error', msg: 'Could not delete message' },

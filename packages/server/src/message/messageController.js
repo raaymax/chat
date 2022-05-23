@@ -4,14 +4,13 @@ const Errors = require('../errors');
 module.exports = {
   load: async (self, msg) => {
     if (!self.user) return msg.error('Not logged in');
-    const { op } = msg;
     const users = await userRepo.getAll();
     const userMap = users.reduce((acc, u) => ({
       ...acc,
       [u.id]: { id: u.id, name: u.name, avatarUrl: u.avatarUrl },
     }), {});
-    const messages = await messageRepo.getAll(op);
-    messages.forEach((m) => self.send({ ...m, ...(m.userId ? { user: userMap[m.userId] } : {}) }));
+    const messages = await messageRepo.getAll(msg);
+    messages.forEach((m) => self.send({ type: 'message', ...m, ...(m.userId ? { user: userMap[m.userId] } : {}) }));
     msg.ok();
   },
 
@@ -28,7 +27,7 @@ module.exports = {
   },
 
   remove: async (self, msg) => {
-    const { id } = msg.op;
+    const { id } = msg;
     if (!self.user) {
       return msg.error(Errors.AccessDenied());
     }
@@ -40,6 +39,7 @@ module.exports = {
     await messageRepo.remove({ id });
     await self.broadcast({
       id,
+      type: 'message',
       channel: message.channel,
       message: [],
       user: {
@@ -77,6 +77,7 @@ module.exports = {
       attachments: msg.attachments,
     });
     msg.id = id;
+    msg.type = 'message';
     await self.broadcast(msg);
     return msg.ok(msg);
   },

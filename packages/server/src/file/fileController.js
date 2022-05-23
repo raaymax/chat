@@ -4,9 +4,8 @@ const Errors = require('../errors');
 module.exports = {
   initUpload: async (self, msg) => {
     if (!self.user) return msg.error(Errors.AccessDenied());
-    const { op } = msg;
     try {
-      const dest = await fileRepository.createUploadUrl(op.contentType);
+      const dest = await fileRepository.createUploadUrl(msg.contentType);
       return msg.ok(dest);
     } catch (err) {
       // eslint-disable-next-line no-console
@@ -16,9 +15,8 @@ module.exports = {
   },
   finalizeUpload: async (self, msg) => {
     if (!self.user) return msg.error(Errors.AccessDenied());
-    const { op } = msg;
     try {
-      const dest = await fileRepository.finalizeUpload(op.fileId, op.fileName, op.contentType);
+      const dest = await fileRepository.finalizeUpload(msg.fileId, msg.fileName, msg.contentType);
       return msg.ok(dest);
     } catch (err) {
       return msg.error(err);
@@ -26,9 +24,8 @@ module.exports = {
   },
   initDownload: async (self, msg) => {
     if (!self.user) return msg.error(Errors.AccessDenied());
-    const { op } = msg;
     try {
-      const dest = await fileRepository.createDownloadUrl(op.fileId);
+      const dest = await fileRepository.createDownloadUrl(msg.fileId);
       return msg.ok(dest);
     } catch (err) {
       // eslint-disable-next-line no-console

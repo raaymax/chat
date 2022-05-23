@@ -6,8 +6,9 @@ const {
 module.exports = (sys) => {
   describe('greet', () => {
     it('should respond with welcome message', async () => {
-      match(await sys.req({ op: { type: 'greet' } }), [
+      match(await sys.req({ type: 'greet' }), [
         partial({
+          type: 'message',
           priv: true,
           user: { name: 'System' },
           message: [
@@ -20,7 +21,7 @@ module.exports = (sys) => {
             { br: true },
           ],
         }),
-        partial({ resp: { status: 'ok' } }),
+        partial({ type: 'response', status: 'ok' }),
       ]);
     });
   });

@@ -5,6 +5,7 @@ const [notify, watch] = createNotifier();
 const pending = [];
 let list = [];
 
+window.mlist = () => list;
 export const getEarliestDate = () => (list.length ? list[0].createdAt : new Date());
 
 export const getLatestDate = () => (list.length ? list[list.length - 1].createdAt : new Date());

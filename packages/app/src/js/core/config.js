@@ -7,15 +7,15 @@ const getConfig = () => config;
 const setConfig = (c) => set(c);
 
 export const initConfig = (client) => {
-  client.on('op:setConfig', handleConfig)
+  client.on('setConfig', handleConfig)
   Object.assign(client, { getConfig });
 };
 
 function handleConfig(client, msg) {
   if (APP_VERSION) {
     // eslint-disable-next-line no-console
-    console.log('version check: ', APP_VERSION, msg.op.config.appVersion);
-    if (msg.op.config.appVersion !== APP_VERSION) {
+    console.log('version check: ', APP_VERSION, msg.config.appVersion);
+    if (msg.config.appVersion !== APP_VERSION) {
       if (Capacitor.isNativePlatform()) {
         setTimeout(() => client.emit('message', {
           id: 'version',
@@ -27,7 +27,7 @@ function handleConfig(client, msg) {
           message: [
             { line: { bold: { text: 'Your Quack app version is outdated!!' } } },
             { line: { text: `Your app version: ${APP_VERSION}` } },
-            { line: { text: `Required version ${msg.op.config.appVersion}` } },
+            { line: { text: `Required version ${msg.config.appVersion}` } },
             { line: { text: 'Please update' } },
           ],
         }), 1000);
@@ -49,6 +49,6 @@ function handleConfig(client, msg) {
       }
     }
   }
-  setConfig(msg.op.config);
-  client.emit('config:ready', msg.op.config);
+  setConfig(msg.config);
+  client.emit('config:ready', msg.config);
 }

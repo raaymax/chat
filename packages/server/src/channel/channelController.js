@@ -13,7 +13,7 @@ module.exports = {
 
   changeChannel: async (self, msg) => {
     if (!self.user) return msg.error(Errors.AccessDenied());
-    const [cid] = msg.command.args;
+    const [cid] = msg.args;
     const channel = await channelRepo.get({ cid });
     // FIXME remove toHexString()
     if (channel?.private && !channel.users.map((u) => u.toHexString()).includes(self.user.id)) {

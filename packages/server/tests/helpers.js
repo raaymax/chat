@@ -16,7 +16,7 @@ const request = (ws) => (msg) => {
       const pmsg = JSON.parse(raw.data);
       if (pmsg.seqId !== id) return;
       list.push(pmsg);
-      if (pmsg.resp) resolve(list);
+      if (pmsg.type === 'response') resolve(list);
     });
     ws.send(JSON.stringify({ seqId: id, ...msg }));
   });
