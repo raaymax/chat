@@ -12,6 +12,7 @@ const msgFactory = require('./message/messageFactory');
 
 const app = require('./app');
 const wss = require('./wss');
+const connections = require('./connections');
 
 const server = http.createServer(app);
 
@@ -22,7 +23,8 @@ const sessionSchema = Joi.object({
 
 wss({ server })
   // eslint-disable-next-line no-console
-  .on('start', (srv) => console.log('[WSS] Server is listening on port:', srv.port))
+  .on('start', () => console.log('[WSS] Server is listening on port:'))
+  .on('auth', auth)
   .on('connection', pushController.sendConfig)
   .on('greet', sendGreet)
   .on('load', messageController.load)
@@ -43,6 +45,11 @@ wss({ server })
   .on('*', unknownOp)
   .on('broadcast:after', pushController.notifyOther)
   .start();
+
+async function auth(self, msg) {
+  const {user, session} = connections.getByConnection(self.ws, msg.token); //rename to activate?
+  msg.ok({user, session});  //filter user data
+};
 
 async function restore(self, msg) {
   const ret = sessionSchema.validate(msg.session);

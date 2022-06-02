@@ -1,5 +1,6 @@
+
 const { Configuration, OpenAIApi } = require('openai');
-const { messageRepo } = require('../database/db');
+const { messageRepo } = require('../infra/database/db');
 const Errors = require('../errors');
 const config = require('../../../../chat.config');
 

@@ -9,6 +9,7 @@ import { MessageList } from '../components/messageList.js';
 import { Header } from '../components/header.js';
 import { Input } from '../components/input.js';
 import { EmojiSelector } from '../components/EmojiSelector/EmojiSelector';
+import { Login } from '../components/auth/login';
 
 import {upload} from '../services/file';
 
@@ -31,6 +32,7 @@ function dragOverHandler(ev) {
 const Page = () => {
   const [hide, setHide] = useState(true);
   return (
+    <Login>
     <div class='workspace'>
       <div class={['menu', ...(hide ? ['hidden'] : [])].join(' ')}>
         <Logo />
@@ -47,6 +49,7 @@ const Page = () => {
         <EmojiSelector />
       </div>
     </div>
+    </Login>
   )
 }
 

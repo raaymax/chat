@@ -1,4 +1,5 @@
-const { channelRepo } = require('../database/db');
+
+const { channelRepo } = require('../infra/database/db');
 const Errors = require('../errors');
 const msgFactory = require('../message/messageFactory');
 

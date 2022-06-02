@@ -28,7 +28,7 @@ window.pool = pool;
 const client = {
   send: async (msg) => {
     // eslint-disable-next-line no-console
-    // console.log('send', JSON.stringify(msg, null, 4));
+    console.log('send', JSON.stringify(msg, null, 4));
     const raw = JSON.stringify(msg);
     await pool.send(raw);
   },
@@ -46,6 +46,7 @@ const client = {
       Sentry.captureException(new Error(`[client] handler not exists: ${name}`));
       return;
     }
+    console.log(name, data);
     return notify(name, client, ...data);
   },
 };
@@ -57,7 +58,7 @@ pool.onPacket((raw) => {
   try {
     const msg = JSON.parse(raw.data);
     // eslint-disable-next-line no-console
-    // console.log('recv', JSON.stringify(msg, null, 4));
+    console.log('recv', JSON.stringify(msg, null, 4));
     notify(msg.type, client, msg);
   } catch (err) {
     // eslint-disable-next-line no-console
