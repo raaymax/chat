@@ -16,20 +16,13 @@ const {
 
 require('./helpers.spec');
 
-describe('server', () => {
-  const sys = {};
-  let db;
-  before((done) => {
-    server.listen(async () =>{
-      db = await run();
-      done();
-    })
-  });
+describe('socket', () => {
+  before((done) => server.listen(done()));
   after(async () => {
     server.close();
   });
 
-  it('should be unauthorized', async () => {
+  it('should return 401 when unauthorized', async () => {
     try{ 
       await connect();
     }catch(err){
@@ -52,13 +45,27 @@ describe('server', () => {
 
   }
 
-  it('should access with correct cookies', async () => {
+  it('should connect with correct cookies', async () => {
     await connectWs();
   })
   
   it('should receive response for ping', async () => {
     const req = await connectWs();
-    const msg = await req({ type: 'ping' })
-    assert(msg[0].status, 'ok');
+    const [msg] = await req({ type: 'ping' })
+    assert(msg.status, 'ok');
+  })
+
+  it('should return error on unknown action type', async () => {
+    const req = await connectWs();
+    const [msg] = await req({ type: 'unknown' })
+    assert(msg.status, 'error');
+    assert(msg.message, 'Unknown command');
+  })
+
+  it('should return error on unknown action type', async () => {
+    const req = await connectWs();
+    const [msg] = await req({ type: 'unknown' })
+    assert(msg.status, 'error');
+    assert(msg.message, 'Unknown command');
   })
 });

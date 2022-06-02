@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 app.use(sessionParser);
 app.use(cors({ origin: config.cors }));
 
-app.get('/ping', (req, res) => console.log('dasduhyasidh') || res.status(204).send());
+app.get('/ping', (req, res) => res.status(204).send());
 app.use('/session', session);
 
 app.use(express.static('../app/dist'));

@@ -3,8 +3,8 @@ const {EventEmitter} = require('events');
 const bus = new EventEmitter();
 
 module.exports = {
-  direct: (userId, msg) => bus.emit(userId, msg),
-  broadcast: (msg) => bus.emit('all', msg),
+  direct: (userId, msg) => bus.emit(userId, {...msg, target: 'direct'}),
+  broadcast: (msg) => bus.emit('all', {...msg, target: 'broadcast'}),
   on: (userId, cb) => {
     bus.on(userId, cb);
     bus.on('all', cb)
