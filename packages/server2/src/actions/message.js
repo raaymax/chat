@@ -1,5 +1,6 @@
 const { messageRepo } = require('../infra/database');
 const { MissingChannel, MissingMessage } = require('../common/errors');
+const push = require('../infra/push');
 
 module.exports = async (req, res) => {
   const msg = req.body;
@@ -17,5 +18,6 @@ module.exports = async (req, res) => {
   const created = await messageRepo.get({id});
 
   res.broadcast({type: 'message', ...created});
+  push.send(created);
   res.ok();
 }
