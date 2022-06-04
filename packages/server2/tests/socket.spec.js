@@ -30,42 +30,37 @@ describe('socket', () => {
     }
   })
 
-  async function connectWs(){
+  async function connectWs(login = 'mateusz'){
     return supertest(server)
         .post('/session')
-        .send({login: 'mateusz', password: '123'})
+        .send({login, password: '123'})
         .expect(200)
         .then(async res => {
-          return connect({
+          return {ws: await connect({
             headers: {
               Cookie: res.headers['set-cookie'][0],
-            }});
+            }}),
+            userId: res.body.user.id,
+          }
         })
-        .then(ws => request(ws))
+        .then((con) => request(con))
 
   }
 
-  it('should connect with correct cookies', async () => {
-    await connectWs();
-  })
-  
   it('should receive response for ping', async () => {
-    const req = await connectWs();
-    const [msg] = await req({ type: 'ping' })
-    assert(msg.status, 'ok');
+    const ws = await connectWs();
+    const [msg] = await ws.send({ type: 'ping' })
+    assert.equal(msg.status, 'ok');
+    ws.close();
   })
 
   it('should return error on unknown action type', async () => {
-    const req = await connectWs();
-    const [msg] = await req({ type: 'unknown' })
-    assert(msg.status, 'error');
-    assert(msg.message, 'Unknown command');
+    const ws = await connectWs();
+    const [msg] = await ws.send({ type: 'unknown' }).catch(err => err);
+    assert.equal(msg.status, 'error');
+    assert.equal(msg.message, 'Unknown action');
+    ws.close();
   })
 
-  it('should return error on unknown action type', async () => {
-    const req = await connectWs();
-    const [msg] = await req({ type: 'unknown' })
-    assert(msg.status, 'error');
-    assert(msg.message, 'Unknown command');
-  })
+  require('./actions')(connectWs);
 });
