@@ -42,5 +42,7 @@ module.exports = (connect) => {
       assert.equal(ret.message, 'MISSING_CHANNEL');
       ws.close();
     })
+
+    it('should not send notification to source user');
   })
 }

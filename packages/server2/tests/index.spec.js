@@ -12,7 +12,8 @@ describe('http', () => {
       .expect(204);
   })
   
-  require('./session.spec')(agent);
+  require('./http/session.spec')(agent);
+  require('./http/files.spec')(agent);
 });
 
 require('./socket.spec');

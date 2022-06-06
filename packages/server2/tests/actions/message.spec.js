@@ -22,6 +22,7 @@ module.exports = (connect) => {
         })
       });
     })
+
     it('should be received by sender', async () => {
       const ws = await connect();
       const [msg, ret] = await ws.send({
@@ -36,6 +37,7 @@ module.exports = (connect) => {
       assert.equal(ret.status, 'ok');
       ws.close();
     })
+
     it('should store message in database', async () => {
       const ws = await connect();
       const clientId = '' + (Math.random()+1);
@@ -51,6 +53,7 @@ module.exports = (connect) => {
       assert.equal(msg.clientId, clientId);
       ws.close();
     })
+
     it('should return error when channel is missing', async () => {
       const ws = await connect();
       const [ret] = await ws.send({
@@ -61,6 +64,7 @@ module.exports = (connect) => {
       assert.equal(ret.message, 'MISSING_CHANNEL');
       ws.close();
     })
+
     it('should return error when message is missing', async () => {
       const ws = await connect();
       const [ret] = await ws.send({
@@ -71,5 +75,23 @@ module.exports = (connect) => {
       assert.equal(ret.message, 'MISSING_MESSAGE');
       ws.close();
     })
+
+    it('should control access to private channels', async () => {
+      const ws = await connect();
+      const channel = await (await db)
+        .collection('channels')
+        .findOne({name: 'Melisa'});
+      const [ret] = await ws.send({
+        type: 'message',
+        channel: channel.cid,
+        message: {text: 'Hello'},
+      }).catch(e => e);
+      assert.equal(ret.type, 'response');
+      assert.equal(ret.status, 'error');
+      assert.equal(ret.message, 'ACCESS_DENIED');
+      ws.close();
+    });
+
+    it('should have flat representation');
   })
 }

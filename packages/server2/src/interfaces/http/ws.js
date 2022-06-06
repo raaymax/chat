@@ -11,7 +11,6 @@ wss.on('connection', (ws, req, client) => {
   } 
   bus.on(client, sendHandler);
 
-
   ws.on('message', async (data) => {
     const msg = JSON.parse(data);
     msg.userId = client;
@@ -49,6 +48,7 @@ wss.on('connection', (ws, req, client) => {
         type: 'response',
         status: 'error',
         message: err.message,
+        ...err
       })
 
     }

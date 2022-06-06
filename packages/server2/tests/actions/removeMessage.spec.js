@@ -19,6 +19,8 @@ module.exports = (connect) => {
       ws.close();
     })
 
+    it('should prevent deletion of not owned messages');
+
     async function createMessage(ws) {
       const [msg, ret] = await ws.send({
         type: 'message',

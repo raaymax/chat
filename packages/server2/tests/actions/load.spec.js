@@ -23,6 +23,7 @@ module.exports = (connect) => {
       assert.equal(msg.clientId, clientId);
       ws.close();
     })
+
     it('should return list of messages', async () => {
       const ws = await connect();
       const messages = await ws.send({
@@ -34,6 +35,7 @@ module.exports = (connect) => {
       assert.equal(messages.length, 6);
       ws.close();
     })
+
     it('should return error when channel is missing', async () => {
       const ws = await connect();
       const [ret] = await ws.send({
@@ -43,5 +45,29 @@ module.exports = (connect) => {
       assert.equal(ret.message, 'MISSING_CHANNEL');
       ws.close();
     })
+
+    it('should load messages from other channels', async () => {
+      const ws = await connect();
+      const messages = await ws.send({
+        type: 'load',
+        channel: 'test'
+      });
+      const ret = messages.pop();
+      assert.equal(ret.status, 'ok');
+      assert.deepEqual(messages, []);
+      ws.close();
+    });
+
+    it('should control access to private channels', async () => {
+      const ws = await connect();
+      const channel = await (await db).collection('channels').findOne({name: 'Melisa'});
+      const [ret] = await ws.send({
+        type: 'load',
+        channel: channel.cid,
+      }).catch(e => e);
+      assert.equal(ret.status, 'error');
+      assert.equal(ret.message, 'ACCESS_DENIED');
+      ws.close();
+    });
   })
 }

@@ -1,4 +1,4 @@
-const { userRepo } = require('../');
+const { userRepo } = require('../infra/database');
 
 module.exports = {
   name: 'avatar',

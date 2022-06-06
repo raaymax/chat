@@ -7,7 +7,11 @@ module.exports = {
   typing: require('./typing'),
   greet: require('./greet'),
   removeMessage: require('./removeMessage'),
+  command: require('./command'),
+  config: require('./config'),
   default: (req, res) => {
-    throw new Error('Unknown action');
+    const err = new Error('Unknown action');
+    err.action = req.type;
+    throw err;
   },
 }
