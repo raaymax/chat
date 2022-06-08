@@ -4,6 +4,6 @@ const {db} = require('../../src/infra/database');
 
 module.exports = connect => {
   describe('/avatar <url>', () => {
-    it('should work')
+    it('should change user avatar')
   })
 }

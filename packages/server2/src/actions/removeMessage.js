@@ -1,7 +1,7 @@
 const { messageRepo } = require('../infra/database');
 //const service = require('../message/messageService');
 //const Errors = require('../errors');
-const {MissingId} = require('../common/errors');
+const {MissingId, NotOwnerOfMessage} = require('../common/errors');
 
 module.exports = async (req, res) => {
     const { id } = req.body;

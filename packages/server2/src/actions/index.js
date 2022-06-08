@@ -9,6 +9,7 @@ module.exports = {
   removeMessage: require('./removeMessage'),
   command: require('./command'),
   config: require('./config'),
+  users: require('./users'),
   default: (req, res) => {
     const err = new Error('Unknown action');
     err.action = req.type;

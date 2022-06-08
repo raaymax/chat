@@ -19,6 +19,7 @@ module.exports = (connect) => {
           type: 'message',
           channel: 'main', 
           message: {line: {text: 'Hello'}},
+          flat: 'Hello',
         })
       });
     })
@@ -29,6 +30,7 @@ module.exports = (connect) => {
         type: 'message',
         channel: 'main', 
         message: {line: {text: 'Hello'}},
+        flat: 'Hello',
       })
       assert.equal(msg.type, 'message');
       assert.ok(Object.keys(msg).includes('createdAt'))
@@ -46,6 +48,7 @@ module.exports = (connect) => {
         channel: 'main', 
         clientId,
         message: {line: {text: 'Hello'}},
+        flat: 'Hello',
       })
       const msg = await (await db).collection('messages').findOne({clientId});
       assert.equal(msg.message?.line?.text, 'Hello');
@@ -59,6 +62,7 @@ module.exports = (connect) => {
       const [ret] = await ws.send({
         type: 'message',
         message: {line: {text: 'Hello'}},
+        flat: 'Hello',
       }).catch(e=>e);
       assert.equal(ret.status, 'error');
       assert.equal(ret.message, 'MISSING_CHANNEL');
@@ -70,6 +74,7 @@ module.exports = (connect) => {
       const [ret] = await ws.send({
         type: 'message',
         channel: 'main',
+        flat: 'Hello',
       }).catch(e=>e);
       assert.equal(ret.status, 'error');
       assert.equal(ret.message, 'MISSING_MESSAGE');
@@ -85,6 +90,7 @@ module.exports = (connect) => {
         type: 'message',
         channel: channel.cid,
         message: {text: 'Hello'},
+        flat: 'Hello',
       }).catch(e => e);
       assert.equal(ret.type, 'response');
       assert.equal(ret.status, 'error');
@@ -92,6 +98,17 @@ module.exports = (connect) => {
       ws.close();
     });
 
-    it('should have flat representation');
+    it('should return error when flat is missing', async () => {
+      const ws = await connect();
+      const [ret] = await ws.send({
+        type: 'message',
+        channel: 'main',
+        message: {text: 'Hello'},
+      }).catch(e => e);
+      assert.equal(ret.type, 'response');
+      assert.equal(ret.status, 'error');
+      assert.equal(ret.message, 'MISSING_FLAT');
+      ws.close();
+    });
   })
 }

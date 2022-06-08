@@ -8,6 +8,8 @@ module.exports = (req, res) => {
     type: 'typing',
     userId: req.userId,
     channel,
+  }, { 
+    onlyOthers: true
   })
   res.ok();
 }

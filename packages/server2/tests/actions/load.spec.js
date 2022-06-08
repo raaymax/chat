@@ -1,8 +1,12 @@
 const assert = require('assert');
 const {db} = require('../../src/infra/database');
+const seeds = require('./seeds');
 
 module.exports = (connect) => {
   describe('load', () => {
+    before(async () =>{
+      await seeds.run()
+    });
     it('should return last added messsage', async () => {
       const ws = await connect();
       const clientId = '' + (Math.random()+1);
@@ -11,6 +15,7 @@ module.exports = (connect) => {
         clientId,
         channel: 'main',
         message: {line: {text: 'Hello'}},
+        flat: 'Hello',
       })
       const [msg, ret] = await ws.send({
         type: 'load',
@@ -35,6 +40,19 @@ module.exports = (connect) => {
       assert.equal(messages.length, 6);
       ws.close();
     })
+
+    it('should return messages before date', async () => {
+      const ws = await connect();
+      const [msg, ret] = await ws.send({
+        type: 'load',
+        channel: 'main', 
+        before: '2022-01-02',
+        limit: 5,
+      })
+      assert.equal(msg.createdAt, new Date('2022-01-01').toISOString());
+      assert.equal(ret.count, 1);
+      ws.close();
+    });
 
     it('should return error when channel is missing', async () => {
       const ws = await connect();

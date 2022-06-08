@@ -43,6 +43,15 @@ module.exports = (connect) => {
       ws.close();
     })
 
-    it('should not send notification to source user');
+    it('should not send notification to source user', async () => {
+      const ws = await connect();
+      const [ret] = await ws.send({
+        type: 'typing',
+        channel: 'main'
+      });
+      assert.equal(ret.type, 'response');
+      assert.equal(ret.status, 'ok');
+      ws.close();
+    });
   })
 }

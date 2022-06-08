@@ -6,7 +6,11 @@ const actions = require('../../actions');
 const wss = new WebSocketServer({ noServer: true });
 
 wss.on('connection', (ws, req, client) => {
-  function sendHandler(msg) {
+  function sendHandler(raw) {
+    const {_opts = {}, ...msg} = raw;
+    if(_opts.onlyOthers && msg.userId === client){
+      return;
+    }
     ws.send(JSON.stringify(msg));
   } 
   bus.on(client, sendHandler);
@@ -25,9 +29,10 @@ wss.on('connection', (ws, req, client) => {
 
     const wsres = {
       bus,
-      broadcast: (m) => bus.broadcast({
+      broadcast: (m, opts) => bus.broadcast({
         ...m,
         seqId: msg.seqId,
+        _opts: opts
       }),
       ok: (m) => bus.direct(client, {
         ...m,

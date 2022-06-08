@@ -1,5 +1,5 @@
 const { messageRepo } = require('../infra/database');
-const { MissingChannel, MissingMessage, AccessDenied } = require('../common/errors');
+const { MissingChannel, MissingMessage, MissingFlat, AccessDenied } = require('../common/errors');
 const push = require('../infra/push');
 const channel = require('../common/channel')
 
@@ -8,6 +8,7 @@ module.exports = async (req, res) => {
 
   if(!msg.message) throw MissingMessage();
   if(!msg.channel) throw MissingChannel();
+  if(!msg.flat) throw MissingFlat();
 
   if(!await channel.haveAccess(req.userId, msg.channel)){
     throw AccessDenied();

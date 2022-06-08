@@ -11,9 +11,9 @@ module.exports = async (req, res) => {
   if(!await channel.haveAccess(req.userId, msg.channel)){
     throw AccessDenied();
   }
-
   const msgs = await messageRepo.getAll({
-    channel: msg.channel
+    channel: msg.channel,
+    before: msg.before,
   }, {limit: msg.limit});
 
   msgs.forEach(m => res.send({type: 'message', ...m}));
