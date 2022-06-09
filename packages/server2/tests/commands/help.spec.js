@@ -1,7 +1,6 @@
-
 const assert = require('assert');
 
-module.exports = connect => {
+module.exports = (connect) => {
   describe('/help', () => {
     it('should return help message', async () => {
       const ws = await connect();
@@ -9,13 +8,13 @@ module.exports = connect => {
         type: 'command',
         name: 'help',
         args: [],
-      })
+      });
       assert.equal(ret.type, 'response');
       assert.equal(ret.status, 'ok');
       assert.equal(help.type, 'message');
       assert.equal(help.id, 'help');
       assert.equal(help.priv, true);
       ws.close();
-    })
-  })
-}
+    });
+  });
+};

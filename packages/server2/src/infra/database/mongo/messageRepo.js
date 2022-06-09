@@ -6,10 +6,10 @@ module.exports = {
     .then((i) => (i ? ({ ...i, id: i._id.toHexString(), _id: undefined }) : null)),
 
   getAll: async ({
-    channel, before, after
+    channel, before, after,
   }, {
     limit = 50,
-    offset = 0
+    offset = 0,
   }) => (await db)
     .collection('messages')
     .find({
@@ -21,10 +21,10 @@ module.exports = {
     .skip(offset)
     .limit(limit)
     .toArray()
-    .then((arr) => arr.map((item) => ({ 
-      ...item, 
-      id: item._id.toHexString(), 
-      _id: undefined
+    .then((arr) => arr.map((item) => ({
+      ...item,
+      id: item._id.toHexString(),
+      _id: undefined,
     }))),
 
   insert: async (msg) => (await db).collection('messages').insertOne(msg)

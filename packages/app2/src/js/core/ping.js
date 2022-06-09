@@ -15,4 +15,4 @@ export const initPing = (client) => {
       }
     }
   }, 10000);
-}
+};

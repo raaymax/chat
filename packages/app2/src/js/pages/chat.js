@@ -33,22 +33,22 @@ const Page = () => {
   const [hide, setHide] = useState(true);
   return (
     <Login>
-    <div class='workspace'>
-      <div class={['menu', ...(hide ? ['hidden'] : [])].join(' ')}>
-        <Logo />
-        <Channels />
+      <div class='workspace'>
+        <div class={['menu', ...(hide ? ['hidden'] : [])].join(' ')}>
+          <Logo />
+          <Channels />
+        </div>
+        <div class='chat workspace-main' ondrop={drop} ondragover={dragOverHandler}>
+          <Header onclick={(e) => {
+            setHide(!hide);
+            e.stopPropagation();
+            e.preventDefault();
+          }} />
+          <MessageList />
+          <Input />
+          <EmojiSelector />
+        </div>
       </div>
-      <div class='chat workspace-main' ondrop={drop} ondragover={dragOverHandler}>
-        <Header onclick={(e) => {
-          setHide(!hide);
-          e.stopPropagation();
-          e.preventDefault();
-        }} />
-        <MessageList />
-        <Input />
-        <EmojiSelector />
-      </div>
-    </div>
     </Login>
   )
 }

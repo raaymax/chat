@@ -1,5 +1,5 @@
 const assert = require('assert');
-const {db} = require('../../src/infra/database');
+const { db } = require('../../src/infra/database');
 
 module.exports = (connect) => {
   describe('users', () => {
@@ -11,8 +11,8 @@ module.exports = (connect) => {
       const ret = users.pop();
       assert(users.length > 0);
       assert.deepEqual(
-        Object.keys(users[0]).sort(), 
-        ['type', 'id', 'name', 'avatarUrl', 'seqId','target'].sort()
+        Object.keys(users[0]).sort(),
+        ['type', 'id', 'name', 'avatarUrl', 'seqId', 'target'].sort(),
       );
       assert.equal(ret.type, 'response');
       assert.equal(ret.status, 'ok');
@@ -24,13 +24,13 @@ module.exports = (connect) => {
       const users = await ws.send({
         type: 'users',
       });
-      const systemUser = users.find(u => u.id === 'system');
+      const systemUser = users.find((u) => u.id === 'system');
       assert.equal(systemUser.name, 'System');
-      const aiUser = users.find(u => u.id === 'openai');
+      const aiUser = users.find((u) => u.id === 'openai');
       assert.equal(aiUser.name, 'OpenAI');
       ws.close();
     });
 
     it('should gen only list of users for specific channel?');
-  })
-}
+  });
+};

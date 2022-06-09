@@ -18,17 +18,17 @@ export const upload = async (file) => {
     fileName: file.name,
     contentType: file.type,
   });
-  update(local.clientId, {id: ret.data.fileId});
+  update(local.clientId, { id: ret.data.fileId });
 
   try {
     await uploadFile('PUT', ret.data.url, {
       file,
       clientId: local.clientId,
       progress: (progress) => {
-        update(local.clientId, {progress});
+        update(local.clientId, { progress });
       },
     });
-    update(local.clientId, {progress: 100});
+    update(local.clientId, { progress: 100 });
     await client.req({
       type: 'finalizeUpload',
       fileId: ret.data.fileId,
@@ -43,7 +43,7 @@ export const upload = async (file) => {
     // eslint-disable-next-line no-console
     console.error(err);
   }
-}
+};
 
 export const getUrl = async (id) => {
   const file = await client.req({
@@ -51,21 +51,21 @@ export const getUrl = async (id) => {
     fileId: id,
   });
   return file.data.url;
-}
+};
 
-function uploadFile(method, url, {file, progress, clientId}) {
+function uploadFile(method, url, { file, progress, clientId }) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
-    xhr.addEventListener('load', () => resolve(), {once: true});
+    xhr.addEventListener('load', () => resolve(), { once: true });
     xhr.upload.addEventListener('progress', (e) => {
       if (e.lengthComputable) {
         progress((e.loaded / e.total) * 100);
       }
     });
-    xhr.addEventListener('error', (e) => reject(e), {once: true});
+    xhr.addEventListener('error', (e) => reject(e), { once: true });
     xhr.open(method, url, true);
     xhr.setRequestHeader('Content-Type', file.type);
-    update(clientId, {abort: () => xhr.abort()});
+    update(clientId, { abort: () => xhr.abort() });
     xhr.send(file);
   });
 }

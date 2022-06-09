@@ -2,7 +2,7 @@ import { createNotifier } from '../utils.js';
 
 const [notify, watch] = createNotifier();
 
-const flags = {}
+const flags = {};
 
 export const getFlags = () => flags;
 export const setFlag = (name, val) => {

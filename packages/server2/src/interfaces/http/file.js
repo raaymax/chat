@@ -1,4 +1,3 @@
-
 const express = require('express');
 const userService = require('../../user');
 
@@ -23,7 +22,7 @@ async function deleteSession(req, res) {
 async function createSession(req, res) {
   try {
     const user = await userService.login(req.body.login, req.body.password);
-    if(user) {
+    if (user) {
       req.session.userId = user.id;
       return res.status(200).send({ status: 'OK', user });
     }

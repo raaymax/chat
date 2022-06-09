@@ -47,7 +47,7 @@ async function createSession(req, res) {
     if (session) {
       const self = connections.getBySession(req.session);
       self.user = user;
-      self.session = session; 
+      self.session = session;
       return res.status(200).send({
         status: 'ok', user, session, token: self.connectionToken,
       });

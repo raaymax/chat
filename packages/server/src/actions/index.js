@@ -1,4 +1,3 @@
-
 module.exports = {
   auth: require('./auth'),
   connection: require('./connection'),
@@ -18,4 +17,4 @@ module.exports = {
   removeMessage: require('./removeMessage'),
   message: require('./message'),
   command: require('../commands'),
-}
+};

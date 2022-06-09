@@ -47,9 +47,9 @@ wss({ server })
   .start();
 
 async function auth(self, msg) {
-  const {user, session} = connections.getByConnection(self.ws, msg.token); //rename to activate?
-  msg.ok({user, session});  //filter user data
-};
+  const { user, session } = connections.getByConnection(self.ws, msg.token); // rename to activate?
+  msg.ok({ user, session }); // filter user data
+}
 
 async function restore(self, msg) {
   const ret = sessionSchema.validate(msg.session);
@@ -73,6 +73,6 @@ async function sendGreet(self, msg) {
 }
 
 async function unknownOp(_self, msg) {
-  if(msg) msg.error(Errors.UnknownOp(msg.type));
+  if (msg) msg.error(Errors.UnknownOp(msg.type));
 }
 module.exports = server;

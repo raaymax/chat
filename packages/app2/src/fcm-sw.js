@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals */
-import { initializeApp } from "firebase/app";
-import { getMessaging, onBackgroundMessage } from "firebase/messaging/sw";
+import { initializeApp } from 'firebase/app';
+import { getMessaging, onBackgroundMessage } from 'firebase/messaging/sw';
 
 // eslint-disable-next-line no-undef
 const firebaseApp = initializeApp(FIREBASE_CONFIG);
@@ -10,7 +10,7 @@ onBackgroundMessage(messaging, async (payload) => {
   if (client) {
     await client.postMessage(payload);
   }
-})
+});
 
 self.addEventListener('notificationclick', (event) => {
   // eslint-disable-next-line no-console

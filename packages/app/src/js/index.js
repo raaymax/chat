@@ -7,7 +7,7 @@ import { addChannel, rmChannel, clearChannels } from './store/channels';
 import { load } from './services/messages';
 import { loadChannels } from './services/channels';
 import { play } from './services/sound';
-import { ackTyping} from './services/typing';
+import { ackTyping } from './services/typing';
 import { client } from './core';
 
 client
@@ -31,8 +31,8 @@ client
   .on('con:close', () => setInfo({ msg: 'Disconnected - reconnect attempt in 1s', type: 'error' }))
   .on('message', handleMessage)
   .on('message:remove', handleMessageRemove)
-  .on('notification', () => { try { navigator.vibrate([100, 30, 100]) } catch (err) { /* ignore */ } })
-  .on('notification', () => { try { play(); } catch (err) { /* ignore */ } })
+  .on('notification', () => { try { navigator.vibrate([100, 30, 100]); } catch (err) { /* ignore */ } })
+  .on('notification', () => { try { play(); } catch (err) { /* ignore */ } });
 
 function handleMessage(_, msg) {
   if (msg.priv || msg.channel === getCid()) {

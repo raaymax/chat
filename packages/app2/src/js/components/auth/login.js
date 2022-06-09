@@ -39,21 +39,23 @@ export const Login = ({children}) => {
       .then(async ({status, user, token}) => {
         if (token) await client.req({type: 'auth', token});
         setStatus(status);
-        if(status === 'ok') {
+        if (status === 'ok') {
           setUser(user);
           client.emit('auth:user', user);
           client.emit('auth:ready');
         }
       })
-      .catch( e => console.error(e));
+      .catch( (e) => console.error(e));
   }, []);
 
   const onSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    const {status, user, session, token} = await submit(e);
+    const {
+      status, user, session, token,
+    } = await submit(e);
     if (token) await client.req({type: 'auth', token});
-    if(status === 'ok') {
+    if (status === 'ok') {
       setUser(user);
       client.emit('auth:user', user);
       client.emit('auth:ready');

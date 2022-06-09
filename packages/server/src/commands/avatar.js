@@ -1,4 +1,4 @@
-const { userRepo } = require('../');
+const { userRepo } = require('..');
 
 module.exports = {
   name: 'avatar',
@@ -8,5 +8,5 @@ module.exports = {
     const [avatarUrl] = req.body.args;
     await userRepo.update(req.userId, { avatarUrl });
     return res.ok();
-  }
-}
+  },
+};

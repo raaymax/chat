@@ -1,21 +1,20 @@
 const assert = require('assert');
 const WebSocket = require('ws');
 const crypto = require('crypto');
+const { EventEmitter } = require('events');
 const server = require('../src/server');
-const {EventEmitter} = require('events');
 
 const connect = (opts) => new Promise((resolve, reject) => {
   const ws = new WebSocket(`ws://localhost:${server.address().port}/ws`, opts);
   ws.addEventListener('open', () => resolve(ws));
-  ws.addEventListener('error', (err) => reject({message: err.message}));
+  ws.addEventListener('error', (err) => reject({ message: err.message }));
 });
-
 
 const request = (con) => {
   const bus = new EventEmitter();
   con.ws.addEventListener('message', (raw) => {
     const msg = JSON.parse(raw.data);
-    bus.emit('type:'+msg.type, msg);
+    bus.emit(`type:${msg.type}`, msg);
     bus.emit('message', msg);
   });
   return ({
@@ -35,19 +34,19 @@ const request = (con) => {
         const handler = (pmsg) => {
           if (pmsg.seqId !== id) return;
           list.push(pmsg);
-          if (pmsg.type === 'response'){
-            bus.off('message', handler)    
-            if(pmsg.status === 'error'){
+          if (pmsg.type === 'response') {
+            bus.off('message', handler);
+            if (pmsg.status === 'error') {
               return reject(list);
             }
             resolve(list);
           }
-        }
+        };
         bus.on('message', handler);
         con.ws.send(JSON.stringify({ seqId: id, ...msg }));
       });
-    }
-  })
+    },
+  });
 };
 const eq = (expected) => (matched) => {
   if (expected !== matched) {

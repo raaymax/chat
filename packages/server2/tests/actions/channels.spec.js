@@ -1,6 +1,6 @@
 const assert = require('assert');
-const {db} = require('../../src/infra/database');
 const crypto = require('crypto');
+const { db } = require('../../src/infra/database');
 
 module.exports = (connect) => {
   describe('channels', () => {
@@ -8,7 +8,7 @@ module.exports = (connect) => {
       const ws = await connect('mateusz');
       const channels = await ws.send({
         type: 'channels',
-      })
+      });
       const ret = channels.pop();
       assert.equal(ret.type, 'response');
       assert.equal(ret.status, 'ok');
@@ -17,6 +17,6 @@ module.exports = (connect) => {
       assert.equal(channels[1].type, 'channel');
       assert.equal(channels[1].channel.name, 'Mateusz');
       ws.close();
-    })
-  })
-}
+    });
+  });
+};

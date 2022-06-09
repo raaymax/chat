@@ -37,7 +37,7 @@ export const createNotifier = () => {
   const watch = (handler) => {
     listeners.push(handler);
     return () => listeners.splice(listeners.indexOf(handler), 1);
-  }
+  };
 
   return [notify, watch];
 };
@@ -70,21 +70,21 @@ export const createEventListener = () => {
             console.error(err);
           }
         }),
-    )
+    );
   };
   // eslint-disable-next-line no-return-assign
   const watch = (ev, fn) => {
     (handlers[ev] = handlers[ev] || []).push(fn);
-  }
+  };
   const once = (ev, fn) => {
     handlers[ev] = handlers[ev] || [];
     const cb = async (...args) => {
       const idx = handlers[ev].findIndex((c) => c === cb);
       handlers[ev].splice(idx, 1);
-      return fn(...args)
-    }
+      return fn(...args);
+    };
     handlers[ev].push(cb);
-  }
+  };
 
   const exists = (ev) => Array.isArray(handlers[ev]) && handlers[ev].length > 0;
 

@@ -13,7 +13,7 @@ export const findIdx = (id) => list.findIndex((f) => (f.id && f.id === id)
 export const add = (file) => {
   list.push(file);
   notify(list);
-}
+};
 
 export const areReady = () => list.every((f) => f.progress === 100);
 
@@ -22,19 +22,19 @@ export const update = (id, file) => {
   if (!found) return;
   Object.assign(found, file);
   notify(list);
-}
+};
 
 export const remove = (id) => {
   const idx = findIdx(id);
   if (idx === -1) return;
   list.splice(idx, 1);
   notify(list);
-}
+};
 
 export const clear = () => {
   list.length = 0;
   notify(list);
-}
+};
 
 export const getAll = () => list;
 

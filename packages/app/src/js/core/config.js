@@ -7,7 +7,7 @@ const getConfig = () => config;
 const setConfig = (c) => set(c);
 
 export const initConfig = (client) => {
-  client.on('setConfig', handleConfig)
+  client.on('setConfig', handleConfig);
   Object.assign(client, { getConfig });
 };
 

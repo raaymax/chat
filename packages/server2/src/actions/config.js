@@ -6,5 +6,4 @@ module.exports = async (req, res) => {
     appVersion: pack.version,
   }),
   await res.ok();
-}
-
+};

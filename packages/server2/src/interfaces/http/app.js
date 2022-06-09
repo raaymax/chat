@@ -1,8 +1,8 @@
 const express = require('express');
-const session = require('./session');
-const files = require('./files');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const session = require('./session');
+const files = require('./files');
 const config = require('../../../../../chat.config');
 const sessionParser = require('./sessionParser');
 

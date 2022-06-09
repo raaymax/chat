@@ -17,7 +17,7 @@ export const getMessages = () => list;
 export const insertPendingMessage = (msg) => {
   pending.push(msg);
   return insertMessage(msg);
-}
+};
 
 export const insertMessage = (msg) => {
   if (msg.createdAt) {

@@ -15,16 +15,16 @@ module.exports = {
           contentDisposition: `attachment; filename="${file.originalname}"`,
           metadata: {
             filename: file.originalname,
-          }
-        }
+          },
+        },
       }))
-      .on('error', function(err) {
-        console.error(err);
-        reject(err);
-      })
-      .on('finish', function() {
-        resolve(fileId)
-      });
+        .on('error', (err) => {
+          console.error(err);
+          reject(err);
+        })
+        .on('finish', () => {
+          resolve(fileId);
+        });
     });
   },
   read: async (fileId) => {
@@ -37,7 +37,7 @@ module.exports = {
       contentDisposition: metadata.body.contentDisposition,
       metadata: metadata.body.metadata,
       stream: file.createReadStream(),
-    }
+    };
   },
 
   createUploadUrl: async (name, contentType) => {

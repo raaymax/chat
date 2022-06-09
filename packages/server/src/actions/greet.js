@@ -1,4 +1,3 @@
-
 module.exports = async (self, msg) => {
   await self.send(msgFactory.createSystemMessage({
     id: 'greet',
@@ -10,5 +9,4 @@ module.exports = async (self, msg) => {
     ],
   }));
   await msg.ok();
-}
-
+};

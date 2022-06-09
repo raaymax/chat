@@ -1,15 +1,16 @@
 const { MissingChannel, MissingMessage } = require('../common/errors');
-module.exports = (req, res) => {
-  const {channel} = req.body;
 
-  if(!channel) throw MissingChannel();
+module.exports = (req, res) => {
+  const { channel } = req.body;
+
+  if (!channel) throw MissingChannel();
 
   res.broadcast({
     type: 'typing',
     userId: req.userId,
     channel,
-  }, { 
-    onlyOthers: true
-  })
+  }, {
+    onlyOthers: true,
+  });
   res.ok();
-}
+};

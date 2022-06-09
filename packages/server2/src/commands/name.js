@@ -7,7 +7,7 @@ module.exports = {
   handler: async (req, res) => {
     const [name] = req.body.args;
     await userRepo.update(req.userId, { name });
-    const user = await userRepo.get({id: req.userId});
+    const user = await userRepo.get({ id: req.userId });
     await res.broadcast({
       type: 'user',
       id: user.id,
@@ -15,5 +15,5 @@ module.exports = {
       avatarUrl: user.avatarUrl,
     });
     return res.ok();
-  }
+  },
 };

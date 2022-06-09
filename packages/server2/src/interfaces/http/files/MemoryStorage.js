@@ -16,14 +16,15 @@ class MemoryStorage {
           filename: file.originalname,
         },
         buffer: data,
-      }
+      };
       cb(null, this.files[fileId]);
     }));
-  }
+  };
+
   _removeFile = (req, file, cb) => {
-    delete this.files[file.fileId] ;
+    delete this.files[file.fileId];
     cb(null);
-  }
+  };
 
   getFile = (fileId) => {
     const file = this.files[fileId];
@@ -31,7 +32,7 @@ class MemoryStorage {
       ...file,
       stream: Readable.from(file.buffer),
     };
-  }
+  };
 }
 
 module.exports = new MemoryStorage();

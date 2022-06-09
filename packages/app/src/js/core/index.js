@@ -12,9 +12,9 @@ window.client = client;
 
 initRequests(client);
 initConfig(client);
-//initAuth(client);
+// initAuth(client);
 initNotifications(client);
 initStatus(client);
 initPing(client);
 
-export {client};
+export { client };

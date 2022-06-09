@@ -1,5 +1,5 @@
-const server = require('../src/server');
 const request = require('supertest');
+const server = require('../src/server');
 
 require('./helpers.spec');
 
@@ -10,8 +10,8 @@ describe('http', () => {
     await agent
       .get('/ping')
       .expect(204);
-  })
-  
+  });
+
   require('./http/session.spec')(agent);
   require('./http/files.spec')(agent);
 });

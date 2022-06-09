@@ -28,7 +28,7 @@ export const initAuth = (client) => {
     .on('config:ready', connectionReady)
     .on('setSession', handleSession)
     .on('rmSession', handleLogout);
-}
+};
 
 async function connectionReady(client) {
   try {
@@ -66,7 +66,7 @@ async function restoreSession(client, i = 1) {
     const sess = session.get();
     if (sess) {
       await client.emit('message:remove', 'session');
-      await client.req({ type: 'restore', session: sess});
+      await client.req({ type: 'restore', session: sess });
     }
   } catch (err) {
     // eslint-disable-next-line no-console

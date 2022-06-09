@@ -19,7 +19,9 @@ const service = {
     return messages.map((m) => ({ ...m, ...(m.userId ? { user: userMap[m.userId] } : {}) }));
   },
 
-  create: async ({ userId, clientId, message, flat, attachments, channel = 'main' }) => {
+  create: async ({
+    userId, clientId, message, flat, attachments, channel = 'main',
+  }) => {
     const { id } = await messageRepo.insert({
       createdAt: new Date(),
       userId,

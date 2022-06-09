@@ -1,4 +1,3 @@
-
 module.exports = (connect) => {
   describe('actions', () => {
     require('./message.spec')(connect);
@@ -11,5 +10,5 @@ module.exports = (connect) => {
     require('./removeMessage.spec')(connect);
     require('./config.spec')(connect);
     require('./command.spec')(connect);
-  })
-}
+  });
+};

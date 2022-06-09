@@ -8,7 +8,7 @@ module.exports = expressSession({
   saveUninitialized: true,
   store: new MongoDBStore({
     uri: config.databaseUrl,
-    collection: 'httpSessions'
+    collection: 'httpSessions',
   }),
   cookie: {
     secure: 'auto',

@@ -5,7 +5,6 @@ const config = require('../../../../../../chat.config');
 const storage = new Storage();
 const bucket = storage.bucket(config.gcsBucket);
 
-
 class GcsStorage {
   async _handleFile(req, file, cb) {
     const fileId = uuid();
@@ -15,17 +14,18 @@ class GcsStorage {
         contentDisposition: `attachment; filename="${file.originalname}"`,
         metadata: {
           filename: file.originalname,
-        }
-      }
+        },
+      },
     }))
-    .on('error', function(err) {
-      console.error(err);
-      cb(err);
-    })
-    .on('finish', function() {
-      cb(null, { fileId, name: file.originalname, mimetype: file.mimetype });
-    });
+      .on('error', (err) => {
+        console.error(err);
+        cb(err);
+      })
+      .on('finish', () => {
+        cb(null, { fileId, name: file.originalname, mimetype: file.mimetype });
+      });
   }
+
   async _removeFile(req, file, cb) {
     try {
       await storage.remove(file);
@@ -44,8 +44,8 @@ class GcsStorage {
       contentDisposition: metadata.contentDisposition,
       metadata: metadata.metadata,
       stream: file.createReadStream(),
-    }
-  }
+    };
+  };
 }
 
 module.exports = new GcsStorage();

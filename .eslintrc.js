@@ -13,6 +13,8 @@ module.exports = {
   ignorePatterns: [
     'packages/app/dist',
     'packages/app/android',
+    'packages/app2/dist',
+    'packages/app2/android',
     'chat.config.js',
   ],
   overrides: [
@@ -20,6 +22,8 @@ module.exports = {
       files: [
         'packages/app/src/sw.js',
         'packages/app/src/fcm-sw.js',
+        'packages/app2/src/sw.js',
+        'packages/app2/src/fcm-sw.js',
       ],
       env: {
         serviceworker: true,
@@ -42,7 +46,7 @@ module.exports = {
     {
       files: [
         'packages/app/tests/**/*.js',
-        'packages/app2/tests/**/*.js'
+        'packages/app2/tests/**/*.js',
       ],
       env: {
         mocha: true,
@@ -64,7 +68,7 @@ module.exports = {
     {
       files: [
         'packages/server/tests/**/*.js',
-        'packages/server2/tests/**/*.js'
+        'packages/server2/tests/**/*.js',
       ],
       env: {
         mocha: true,
@@ -76,7 +80,10 @@ module.exports = {
       },
     },
     {
-      files: ['packages/app2?/**/*.js'],
+      files: [
+        'packages/app/**/*.js',
+        'packages/app2/**/*.js',
+      ],
       extends: 'preact',
       env: {
         browser: true,

@@ -6,4 +6,4 @@ module.exports = (connect) => {
   require('./name.spec')(connect);
   require('./ai.spec')(connect);
   require('./prompt.spec')(connect);
-}
+};

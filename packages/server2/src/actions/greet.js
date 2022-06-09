@@ -1,4 +1,3 @@
-
 module.exports = async (req, res) => {
   await res.send({
     type: 'message',
@@ -14,5 +13,4 @@ module.exports = async (req, res) => {
     ],
   });
   await res.ok();
-}
-
+};

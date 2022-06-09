@@ -8,5 +8,4 @@ module.exports = async (req, res) => {
   await req.session.save();
 
   return res.ok();
-  
-}
+};

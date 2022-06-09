@@ -52,10 +52,9 @@ describe('session service', () => {
     ws.addEventListener('error', (err) => reject(err));
   }));
 
-  it('should reconnect every hour')
-  it('should reconnect on disconnect')
-  it('should heartbeat')
-
+  it('should reconnect every hour');
+  it('should reconnect on disconnect');
+  it('should heartbeat');
 });
 
 mocha.run();

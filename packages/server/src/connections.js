@@ -49,7 +49,7 @@ function removeBySession(session) {
 }
 
 function createSession(data) {
-  //load user id from session
+  // load user id from session
   const id = uuid();
   const self = {
     sid: id,

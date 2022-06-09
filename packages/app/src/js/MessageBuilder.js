@@ -15,10 +15,10 @@ export const fromDom = (dom) => {
       flat: dom.textContent,
     });
   }
-  if (dom.childNodes.length === 0) return build({type: 'message', message: [], flat: ''});
+  if (dom.childNodes.length === 0) return build({ type: 'message', message: [], flat: '' });
 
-  return build({type: 'message', message: mapNodes(dom), flat: dom.textContent});
-}
+  return build({ type: 'message', message: mapNodes(dom), flat: dom.textContent });
+};
 
 export function build(msg) {
   msg.channel = getCid();

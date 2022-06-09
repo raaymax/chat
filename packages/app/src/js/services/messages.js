@@ -11,7 +11,7 @@ import { client } from '../core';
 import { fromDom } from '../MessageBuilder';
 import * as files from '../store/file';
 
-export const loadPrevious = () => client.req({ type: 'load', channel: getCid(), before: getEarliestDate()});
+export const loadPrevious = () => client.req({ type: 'load', channel: getCid(), before: getEarliestDate() });
 export const loadNext = () => client.req({ type: 'load', channel: getCid(), after: getLatestDate() });
 export const load = () => client.req({ type: 'load', channel: getCid() });
 
@@ -56,13 +56,13 @@ export const sendCommand = async (msg) => {
 
 export const removeMessage = async (msg) => {
   try {
-    await client.req({type: 'removeMessage', id: msg.id});
+    await client.req({ type: 'removeMessage', id: msg.id });
   } catch (err) {
     insertMessage({
-      id: msg.id, notifType: null, notif: null, info: {type: 'error', msg: 'Could not delete message' },
+      id: msg.id, notifType: null, notif: null, info: { type: 'error', msg: 'Could not delete message' },
     });
   }
-}
+};
 
 const sendMessage = async (msg) => {
   if (!msg.user) {

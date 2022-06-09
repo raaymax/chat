@@ -47,7 +47,7 @@ const App = (conf = {}) => {
           });
 
           await notify('connection', self);
-          send({type: 'auth:user', user: self.user});
+          send({ type: 'auth:user', user: self.user });
           msg.ok({});
         }
       });

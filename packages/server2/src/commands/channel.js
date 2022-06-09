@@ -1,7 +1,6 @@
 const { channelRepo } = require('../infra/database');
 
-
-//FIXME remove this and validate channel in other actions
+// FIXME remove this and validate channel in other actions
 module.exports = {
   name: 'channel',
   description: 'change current channel',
@@ -10,7 +9,7 @@ module.exports = {
     const [cid] = res.body.args;
     const channel = await channelRepo.get({ cid });
     // FIXME remove toHexString()
-    if (channel?.private 
+    if (channel?.private
       && !channel.users.map((u) => u.toHexString()).includes(self.user.id)) {
       throw new Error('ACCESS_DENIED');
     }
@@ -19,5 +18,5 @@ module.exports = {
       channel: self.channel,
     });
     return res.ok();
-  }
-}
+  },
+};

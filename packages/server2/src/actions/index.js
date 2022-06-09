@@ -15,4 +15,4 @@ module.exports = {
     err.action = req.type;
     throw err;
   },
-}
+};

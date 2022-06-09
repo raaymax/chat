@@ -1,15 +1,14 @@
-const {db} = require('../../src/infra/database');
-
+const { db } = require('../../src/infra/database');
 
 module.exports = {
   run: async () => {
-    const melisa = (await db).collection('users').findOne({login: 'melisa'});
-    const mateusz = (await db).collection('users').findOne({login: 'mateusz'});
+    const melisa = (await db).collection('users').findOne({ login: 'melisa' });
+    const mateusz = (await db).collection('users').findOne({ login: 'mateusz' });
     await (await db).collection('messages').deleteMany({});
     await (await db).collection('messages').insertMany([
       {
         clientId: 1,
-        message: {line: {text: 'Hello'}},
+        message: { line: { text: 'Hello' } },
         channel: 'main',
         flat: 'Hello',
         userId: melisa.id,
@@ -17,7 +16,7 @@ module.exports = {
       },
       {
         clientId: 1,
-        message: {line: {text: 'Hello'}},
+        message: { line: { text: 'Hello' } },
         channel: 'main',
         flat: 'Hello',
         userId: mateusz.id,
@@ -25,7 +24,7 @@ module.exports = {
       },
       {
         clientId: 1,
-        message: {line: {text: 'Hello'}},
+        message: { line: { text: 'Hello' } },
         channel: 'main',
         flat: 'Hello',
         userId: melisa.id,
@@ -33,7 +32,7 @@ module.exports = {
       },
       {
         clientId: 1,
-        message: {line: {text: 'Hello'}},
+        message: { line: { text: 'Hello' } },
         channel: 'main',
         flat: 'Hello',
         userId: mateusz.id,
@@ -41,12 +40,12 @@ module.exports = {
       },
       {
         clientId: 1,
-        message: {line: {text: 'Hello'}},
+        message: { line: { text: 'Hello' } },
         channel: 'main',
         flat: 'Hello',
         userId: melisa.id,
         createdAt: new Date('2022-01-05'),
-      }
-    ])
-  }
-}
+      },
+    ]);
+  },
+};

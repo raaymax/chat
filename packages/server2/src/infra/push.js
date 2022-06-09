@@ -4,7 +4,7 @@ const conf = require('../../../../chat.config');
 
 module.exports = {
   send: async (msg) => {
-     // FIXME: feature disable or separate config for testing?
+    // FIXME: feature disable or separate config for testing?
     if (process.env.NODE_ENV === 'test') return Promise.resolve();
     if (!msg.message) return Promise.resolve();
     const channel = await channelRepo.get({ cid: msg.channel });

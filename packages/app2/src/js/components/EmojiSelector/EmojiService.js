@@ -1,4 +1,4 @@
-import { emojiFuse} from '../../services/emoji';
+import { emojiFuse } from '../../services/emoji';
 import { createNotifier } from '../../utils.js';
 
 const [notify, watch] = createNotifier();
@@ -9,7 +9,7 @@ const state = {
   results: [],
   selected: 0,
   coords: [0, 0],
-}
+};
 
 export const watchState = watch;
 
@@ -18,7 +18,7 @@ export const getState = () => state;
 export const select = (idx, e) => {
   state.selected = idx;
   onSubmit(e);
-}
+};
 
 export const install = (element) => {
   element.addEventListener('input', onInput);
@@ -28,8 +28,8 @@ export const install = (element) => {
     document.removeEventListener('selectionchange', onSelection);
     element.removeEventListener('keydown', onKeyDown);
     element.removeEventListener('input', onInput);
-  }
-}
+  };
+};
 
 const onKeyDown = (e) => {
   if (!state.open && e.key === ':') return onStart(e);
@@ -38,11 +38,11 @@ const onKeyDown = (e) => {
   if (state.open && e.key === 'ArrowUp') return onUp(e);
   if (state.open && e.key === 'ArrowDown') return onDown(e);
   if (state.open && (e.key === 'Space' || e.keyCode === 32)) return onClose(e);
-}
+};
 
 const onStart = (e) => {
   state.open = true;
-  const sel = document.getSelection()
+  const sel = document.getSelection();
   state.container = document.createElement('span');
   state.container.setAttribute('type', 'emoji-selector');
   state.container.innerText = ':';
@@ -52,27 +52,27 @@ const onStart = (e) => {
   notify(state);
   e.preventDefault();
   e.stopPropagation();
-}
+};
 
 const restart = () => {
   state.open = true;
-  const sel = document.getSelection()
+  const sel = document.getSelection();
   state.container = getNotText(sel.anchorNode);
   document.getElementById('input').setAttribute('submitable', false);
   notify(state);
-}
+};
 
 const close = () => {
   state.open = false;
   setTimeout(() => {
     document.getElementById('input').setAttribute('submitable', true);
-  }, 100)
+  }, 100);
   notify(state);
-}
+};
 
 const onClose = (e, char = '\u00a0') => {
   const r = document.createRange();
-  const node = document.createTextNode(char)
+  const node = document.createTextNode(char);
   r.setStartAfter(state.container);
   r.setEndAfter(state.container);
   r.insertNode(node);
@@ -80,16 +80,16 @@ const onClose = (e, char = '\u00a0') => {
   close();
   e.preventDefault();
   e.stopPropagation();
-}
+};
 
 const onEnd = (e) => {
   const query = `=${state.container.textContent}:`;
-  const [found] = emojiFuse.search(query, {limit: 1});
+  const [found] = emojiFuse.search(query, { limit: 1 });
   if (!found) {
     return onClose(e, ':');
   }
   const emoji = String.fromCodePoint(parseInt(found.item.unicode, 16));
-  const node = document.createTextNode(emoji)
+  const node = document.createTextNode(emoji);
   state.container.replaceWith(node);
   setCursor(node, node.textContent.length);
   close();
@@ -99,14 +99,14 @@ const onEnd = (e) => {
     e.preventDefault();
     e.stopPropagation();
   }
-}
+};
 
 const onSubmit = (e) => {
   if (!state.results[state.selected]) {
     return onClose(e);
   }
   const emoji = String.fromCodePoint(parseInt(state.results[state.selected].item.unicode, 16));
-  const node = document.createTextNode(emoji)
+  const node = document.createTextNode(emoji);
   state.container.replaceWith(node);
   setCursor(node, node.textContent.length);
   close();
@@ -116,7 +116,7 @@ const onSubmit = (e) => {
     e.preventDefault();
     e.stopPropagation();
   }
-}
+};
 
 const onInput = () => {
   if (!state.open) return;
@@ -168,23 +168,23 @@ const onDown = (e) => {
 };
 
 const updateResults = (search) => {
-  state.results = emojiFuse.search(search, {limit: 5});
+  state.results = emojiFuse.search(search, { limit: 5 });
   state.selected = Math.min(state.results.length - 1, Math.max(0, state.selected));
   notify(state);
-}
+};
 
 const setCursor = (node, pos) => {
   const sel = document.getSelection();
   const r = document.createRange();
   r.setStart(node, pos);
   r.setEnd(node, pos);
-  sel.removeAllRanges()
+  sel.removeAllRanges();
   sel.addRange(r);
-}
+};
 
 const setPos = (coords) => {
   state.coords = coords;
   notify(state);
-}
+};
 
 const getNotText = (node) => (node.nodeName === '#text' ? node.parentNode : node);

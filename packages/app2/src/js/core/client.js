@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import { Capacitor } from '@capacitor/core';
-import Sentry from './sentry'
+import Sentry from './sentry';
 
 import { createEventListener } from '../utils';
 import { createPool } from './pool';
@@ -20,7 +20,7 @@ const URI = Capacitor.isNativePlatform()
   : `${protocol}//${document.location.host}/ws`;
 
 // eslint-disable-next-line no-console
-console.log("Connectiong to ", URI);
+console.log('Connectiong to ', URI);
 const pool = createPool(URI);
 
 window.pool = pool;

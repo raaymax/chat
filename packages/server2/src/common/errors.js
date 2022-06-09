@@ -9,4 +9,4 @@ module.exports = {
   NotOwnerOfMessage: () => new Error('NOT_OWNER_OF_MESSAGE'),
   AccessDenied: () => new Error('ACCESS_DENIED'),
   NotOwnerOfMessage: () => new Error('NOT_OWNER_OF_MESSAGE'),
-}
+};

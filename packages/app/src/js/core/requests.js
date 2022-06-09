@@ -6,7 +6,9 @@ const register = (seqId, source) => {
     timeout = setTimeout(() => {
       delete waiting[seqId];
       const err = new Error('TIMEOUT');
-      Object.assign(err, { type: 'response', seqId, status: 'timeout', source });
+      Object.assign(err, {
+        type: 'response', seqId, status: 'timeout', source,
+      });
       reject(err);
     }, 2000);
     waiting[seqId] = (msg) => {

@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { PushNotifications } from '@capacitor/push-notifications';
-import {client} from '../core';
+import { client } from '../core';
 
 export const initNotifications = () => {
   PushNotifications.requestPermissions().then((result) => {

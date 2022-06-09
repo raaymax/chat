@@ -1,7 +1,7 @@
 const assert = require('assert');
-const {db, ObjectId} = require('../../src/infra/database');
+const { db, ObjectId } = require('../../src/infra/database');
 
-module.exports = connect => {
+module.exports = (connect) => {
   const CHANNEL = 'leave-channel';
 
   describe('/leave', () => {
@@ -11,24 +11,24 @@ module.exports = connect => {
       await (await db)
         .collection('channels')
         .insertOne({
-          cid: CHANNEL, 
+          cid: CHANNEL,
           name: CHANNEL,
-          users: [ ObjectId(ws.userId) ]
+          users: [ObjectId(ws.userId)],
         });
-    })
+    });
 
     after(async () => {
       ws.close();
-    })
+    });
 
     it('should remove user from a channel', async () => {
       const [removeChannel, info, ret] = await ws.send({
         type: 'command',
-        name: 'leave', 
+        name: 'leave',
         args: [],
         context: {
-          channel: CHANNEL
-        }
+          channel: CHANNEL,
+        },
       });
       assert.equal(ret.type, 'response');
       assert.equal(ret.status, 'ok');
@@ -44,8 +44,8 @@ module.exports = connect => {
 
       const channel = await (await db)
         .collection('channels')
-        .findOne({cid: CHANNEL});
-      assert(!channel.users.map(u=>u.toHexString()).includes(ws.userId));
-    })
-  })
-}
+        .findOne({ cid: CHANNEL });
+      assert(!channel.users.map((u) => u.toHexString()).includes(ws.userId));
+    });
+  });
+};
