@@ -1,0 +1,6 @@
+{
+	"appId": "io.codecat.chat",
+	"appName": "Quack",
+	"webDir": "dist",
+	"bundledWebRuntime": false
+}

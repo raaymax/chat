@@ -40,7 +40,10 @@ module.exports = {
       },
     },
     {
-      files: ['packages/app/tests/**/*.js'],
+      files: [
+        'packages/app/tests/**/*.js',
+        'packages/app2/tests/**/*.js'
+      ],
       env: {
         mocha: true,
         browser: true,
@@ -59,7 +62,10 @@ module.exports = {
       },
     },
     {
-      files: ['packages/server/tests/**/*.js'],
+      files: [
+        'packages/server/tests/**/*.js',
+        'packages/server2/tests/**/*.js'
+      ],
       env: {
         mocha: true,
         commonjs: true,
@@ -70,7 +76,7 @@ module.exports = {
       },
     },
     {
-      files: ['packages/app/**/*.js'],
+      files: ['packages/app2?/**/*.js'],
       extends: 'preact',
       env: {
         browser: true,

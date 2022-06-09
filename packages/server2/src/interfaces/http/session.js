@@ -16,6 +16,7 @@ async function getSession(req, res) {
 }
 
 async function deleteSession(req, res) {
+  await req.session.destroy();
   res.status(204).send();
 }
 

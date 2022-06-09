@@ -17,6 +17,6 @@ app.get('/ping', (req, res) => res.status(204).send());
 app.use('/session', session);
 app.use('/files', files);
 
-app.use(express.static('../app/dist'));
+app.use(express.static('../app2/dist'));
 
 module.exports = app;
