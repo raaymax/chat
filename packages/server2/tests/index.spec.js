@@ -17,4 +17,3 @@ describe('http', () => {
 });
 
 require('./socket.spec');
-require('./client/client.spec');
