@@ -5,8 +5,7 @@
   "main": "src/index.js",
   "workspaces": [
     "packages/app",
-    "packages/server",
-    "packages/server2"
+    "packages/server"
   ],
   "engines": {
     "node": "17.x.x",

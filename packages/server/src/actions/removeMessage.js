@@ -1,28 +1,28 @@
-const service = require('../message/messageService');
-const Errors = require('../errors');
+const { messageRepo } = require('../infra/database');
+// const service = require('../message/messageService');
+// const Errors = require('../errors');
+const { MissingId, NotOwnerOfMessage, MessageNotExist } = require('../common/errors');
 
-module.exports = (self, msg) => {
-    const { id } = msg;
-    if (!self.user) {
-      return msg.error(Errors.AccessDenied());
-    }
-    const message = await messageRepo.get({ id });
-    if (!message) return msg.error(Errors.NotExist());
-    if (self.user.id !== message.userId) {
-      return msg.error(Errors.AccessDenied());
-    }
-    await messageRepo.remove({ id });
-    await self.broadcast({
-      id,
-      type: 'message',
-      channel: message.channel,
-      message: [],
-      user: {
-        name: 'System',
-      },
-      notifType: 'warning',
-      notif: 'Message removed',
-    });
-    return msg.ok();
-  
-}
+module.exports = async (req, res) => {
+  const { id } = req.body;
+  if (!id) throw MissingId();
+
+  const message = await messageRepo.get({ id });
+  if (!message) throw MessageNotExist();
+
+  if (req.userId !== message.userId) throw NotOwnerOfMessage();
+
+  await messageRepo.remove({ id });
+  await res.broadcast({
+    id,
+    type: 'message',
+    channel: message.channel,
+    message: [],
+    user: {
+      name: 'System',
+    },
+    notifType: 'warning',
+    notif: 'Message removed',
+  });
+  return res.ok();
+};

@@ -1,34 +1,30 @@
-const service = require('../message/messageService');
-const Errors = require('../errors');
+const { messageRepo } = require('../infra/database');
+const {
+  MissingChannel, MissingMessage, MissingFlat, AccessDenied,
+} = require('../common/errors');
+const push = require('../infra/push');
+const channel = require('../common/channel');
 
-module.exports = (self, msg) => {
-    if (!self.user) {
-      return msg.error(Errors.AccessDenied());
-    }
-    // await new Promise(resolve => setTimeout(resolve, 10000));
-    msg.createdAt = new Date();
-    if (self.user) {
-      msg.user = {
-        id: self.user.id,
-        name: self.user.name,
-        avatarUrl: self.user.avatarUrl,
-      };
-      msg.userId = self.user.id;
-    }
-    msg.channel = msg.channel || self.channel;
-    msg.notify = true;
-    const { id } = await messageRepo.insert({
-      clientId: msg.clientId,
-      createdAt: msg.createdAt,
-      userId: msg.userId,
-      channel: msg.channel,
-      message: msg.message,
-      flat: msg.flat,
-      attachments: msg.attachments,
-    });
-    msg.id = id;
-    msg.type = 'message';
-    await self.broadcast(msg);
-    return msg.ok(msg);
-  
-}
+module.exports = async (req, res) => {
+  const msg = req.body;
+
+  if (!msg.message) throw MissingMessage();
+  if (!msg.channel) throw MissingChannel();
+  if (!msg.flat) throw MissingFlat();
+
+  if (!await channel.haveAccess(req.userId, msg.channel)) {
+    throw AccessDenied();
+  }
+  const id = await messageRepo.insert({
+    message: msg.message,
+    channel: msg.channel,
+    clientId: msg.clientId,
+    userId: msg.userId,
+    createdAt: new Date(),
+  });
+  const created = await messageRepo.get({ id });
+
+  res.broadcast({ type: 'message', ...created });
+  push.send(created);
+  res.ok();
+};

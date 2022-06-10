@@ -1,17 +1,22 @@
-const { userRepo } = require('../database/db');
-const service = require('./userService');
-const Errors = require('../errors');
-const msgFactory = require('../message/messageFactory');
+const { userRepo } = require('../infra/database');
 
-module.exports = async (self, msg) => {
-  if (!self.user) return msg.error(Errors.AccessDenied());
-  await self.send(msgFactory.createSystemMessage({
-    seqId: msg.seqId,
-    message: [
-      { text: 'ID: ' }, { text: self.user.id }, { br: true },
-      { text: 'User: ' }, { text: self.user.name }, { br: true },
-      { text: 'Avatar: ' }, { link: { href: self.user.avatarUrl, children: { text: self.user.avatarUrl } } }, { br: true },
-    ],
-  }));
-  return msg.ok();
+module.exports = {
+  name: 'me',
+  description: 'info about current user',
+  args: [],
+  handler: async (req, res) => {
+    const user = await userRepo.get({ id: req.userId });
+
+    await res.send({
+      id: 'me',
+      userId: 'system',
+      createdAt: new Date().toISOString(),
+      message: [
+        { text: 'ID: ' }, { text: req.userId }, { br: true },
+        { text: 'User: ' }, { text: user.name }, { br: true },
+        { text: 'Avatar: ' }, { link: { href: user.avatarUrl, children: { text: user.avatarUrl } } }, { br: true },
+      ],
+    });
+    return res.ok();
+  },
 };

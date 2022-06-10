@@ -1,12 +1,9 @@
-const { channelRepo } = require('../database/db');
-const Errors = require('../errors');
-const msgFactory = require('../message/messageFactory');
-  
-module.exports = (self, msg) => {
-    if (!self.user) return msg.error(Errors.AccessDenied());
-    const channels = await channelRepo.getAll({ userId: self.user.id });
-    channels.forEach((channel) => {
-      self.send({ type: 'addChannel', channel }, msg.seqId);
-    });
-    msg.ok();
-}
+const { channelRepo } = require('../infra/database');
+
+module.exports = async (req, res) => {
+  const channels = await channelRepo.getAll({ userId: req.userId });
+  channels.forEach((channel) => {
+    res.send({ type: 'channel', channel });
+  });
+  res.ok();
+};

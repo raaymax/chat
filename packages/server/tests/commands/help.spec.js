@@ -1,19 +1,20 @@
-const {
-  match,
-  partial,
-} = require('../helpers');
+const assert = require('assert');
 
-module.exports = (sys) => {
+module.exports = (connect) => {
   describe('/help', () => {
-    it('should respond with help message', async () => {
-      match(await sys.req({ type: 'command', cmd: 'help', args: [] }), [
-        partial({
-          type: 'message',
-          priv: true,
-          user: { name: 'System' },
-        }),
-        partial({ type: 'response', status: 'ok' }),
-      ]);
+    it('should return help message', async () => {
+      const ws = await connect();
+      const [help, ret] = await ws.send({
+        type: 'command',
+        name: 'help',
+        args: [],
+      });
+      assert.equal(ret.type, 'response');
+      assert.equal(ret.status, 'ok');
+      assert.equal(help.type, 'message');
+      assert.equal(help.id, 'help');
+      assert.equal(help.priv, true);
+      ws.close();
     });
   });
 };

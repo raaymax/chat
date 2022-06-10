@@ -1,5 +1,6 @@
 import {h} from 'preact';
 import {useEffect, useState} from 'preact/hooks';
+import styled from 'styled-components'
 import {client} from '../../core';
 
 const me = async () => {
@@ -30,6 +31,11 @@ const logout = async () => {
     credentials: 'include',
   });
 }
+
+const LoginInput = styled.input`
+  display: 'block';
+  
+`
 
 export const Login = ({children}) => {
   const [status, setStatus] = useState('pending');
@@ -74,7 +80,7 @@ export const Login = ({children}) => {
   return user ? (children) : (
     <div>
       <form method='POST' action='/session' onsubmit={onSubmit}>
-        <input type='text' name='login' placeholder='user@example.com' />
+        <LoginInput type='text' name='login' placeholder='user@example.com' />
         <input type='password' name='password' />
         <input type='submit' />
       </form>

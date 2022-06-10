@@ -7,7 +7,7 @@ const config = require('../../chat.config');
 module.exports = {
   entry: {
     app: './src/index.js',
-    'tests.spec': './src/tests.spec.js',
+    'tests.spec': './src/tests/index.spec.js',
     sw: './src/sw.js',
     'firebase-messaging-sw': './src/fcm-sw.js',
   },

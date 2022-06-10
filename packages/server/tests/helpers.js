@@ -1,24 +1,51 @@
 const assert = require('assert');
 const WebSocket = require('ws');
 const crypto = require('crypto');
+const { EventEmitter } = require('events');
 const server = require('../src/server');
 
-const connect = () => new Promise((resolve) => {
-  const ws = new WebSocket(`ws://localhost:${server.address().port}/ws`);
+const connect = (opts) => new Promise((resolve, reject) => {
+  const ws = new WebSocket(`ws://localhost:${server.address().port}/ws`, opts);
   ws.addEventListener('open', () => resolve(ws));
+  ws.addEventListener('error', (err) => reject(err));
 });
 
-const request = (ws) => (msg) => {
-  const id = crypto.randomBytes(4).toString('hex');
-  return new Promise((resolve) => {
-    const list = [];
-    ws.addEventListener('message', (raw) => {
-      const pmsg = JSON.parse(raw.data);
-      if (pmsg.seqId !== id) return;
-      list.push(pmsg);
-      if (pmsg.type === 'response') resolve(list);
-    });
-    ws.send(JSON.stringify({ seqId: id, ...msg }));
+const request = (con) => {
+  const bus = new EventEmitter();
+  con.ws.addEventListener('message', (raw) => {
+    const msg = JSON.parse(raw.data);
+    bus.emit(`type:${msg.type}`, msg);
+    bus.emit('message', msg);
+  });
+  return ({
+    userId: con.userId,
+    close: () => {
+      bus.removeAllListeners();
+      con.ws.close();
+    },
+    ws: con.ws,
+    on: (ev, handler) => bus.on(ev, handler),
+    off: (ev, handler) => bus.off(ev, handler),
+    send: (msg) => {
+      const id = crypto.randomBytes(4).toString('hex');
+
+      return new Promise((resolve, reject) => {
+        const list = [];
+        const handler = (pmsg) => {
+          if (pmsg.seqId !== id) return;
+          list.push(pmsg);
+          if (pmsg.type === 'response') {
+            bus.off('message', handler);
+            if (pmsg.status === 'error') {
+              return reject(list);
+            }
+            resolve(list);
+          }
+        };
+        bus.on('message', handler);
+        con.ws.send(JSON.stringify({ seqId: id, ...msg }));
+      });
+    },
   });
 };
 const eq = (expected) => (matched) => {

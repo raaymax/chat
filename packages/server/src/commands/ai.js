@@ -1,3 +1,4 @@
+/*
 const { Configuration, OpenAIApi } = require('openai');
 const { messageRepo } = require('../database/db');
 const Errors = require('../errors');
@@ -121,3 +122,4 @@ function initAI() {
   };
 }
 module.exports = initAI();
+*/

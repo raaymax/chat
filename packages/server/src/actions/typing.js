@@ -1,15 +1,16 @@
-const service = require('../message/messageService');
-const Errors = require('../errors');
+const { MissingChannel } = require('../common/errors');
 
-module.exports = (self, msg) => {
-    if (!self.user) {
-      return msg.error(Errors.AccessDenied());
-    }
-    if (self.user) {
-      msg.user = { id: self.user.id, name: self.user.name };
-      msg.userId = self.user.id;
-    }
-    await self.broadcast(msg);
-    return msg.ok();
-  
-}
+module.exports = (req, res) => {
+  const { channel } = req.body;
+
+  if (!channel) throw MissingChannel();
+
+  res.broadcast({
+    type: 'typing',
+    userId: req.userId,
+    channel,
+  }, {
+    onlyOthers: true,
+  });
+  res.ok();
+};

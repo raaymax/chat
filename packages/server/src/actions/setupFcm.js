@@ -1,17 +1,11 @@
-const { getMessaging } = require('../infra/firebase');
-const { sessionRepo } = require('../database/db');
-const { channelRepo } = require('../database/db');
-const pack = require('../../package.json');
-const conf = require('../../../../chat.config');
+const { MissingToken } = require('../common/errors');
 
-module.exports = (self, msg) => {
-    if (!msg.fcmToken) return msg.error({ code: 'MISSING_SUBSCRIPTION' });
-    if (!self.user) return msg.error({ code: 'ACCESS_DENIED' });
-    self.fcmToken = msg.fcmToken;
-    await sessionRepo.update(self.session.id, {
-      fcmToken: msg.fcmToken,
-    });
+module.exports = async (req, res) => {
+  const msg = req.body;
+  if (!msg.token) throw MissingToken();
 
-    return msg.ok();
-  
-}
+  req.session.fcmToken = msg.token;
+  await req.session.save();
+
+  return res.ok();
+};

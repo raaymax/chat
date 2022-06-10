@@ -1,20 +1,20 @@
+/* eslint-disable global-require */
+
 module.exports = {
-  auth: require('./auth'),
-  connection: require('./connection'),
-  greet: require('./greet'),
-  load: require('./load'),
-  initUpload: require('./initUpload'),
-  finalizeUpload: require('./finalizeUpload'),
-  initDownload: require('./initDownload'),
   ping: require('./ping'),
-  restore: require('./restore'),
-  typing: require('./typing'),
-  setupPushNotifications: require('./setupPushNotifications'),
+  message: require('./message'),
+  load: require('./load'),
   setupFcm: require('./setupFcm'),
   channels: require('./channels'),
-  createChannel: require('./createChannel'),
-  removeChannel: require('./removeChannel'),
+  typing: require('./typing'),
+  greet: require('./greet'),
   removeMessage: require('./removeMessage'),
-  message: require('./message'),
-  command: require('../commands'),
+  command: require('./command'),
+  config: require('./config'),
+  users: require('./users'),
+  default: (req) => {
+    const err = new Error('Unknown action');
+    err.action = req.type;
+    throw err;
+  },
 };

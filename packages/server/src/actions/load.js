@@ -1,10 +1,20 @@
-const service = require('../message/messageService');
-const Errors = require('../errors');
+const { messageRepo } = require('../infra/database');
+const { MissingChannel, AccessDenied } = require('../common/errors');
+const channel = require('../common/channel');
 
-module.exports = (self, msg) => {
-    if (!self.user) return msg.error(Errors.AccessDenied());
-    const messages = await service.getAll(msg);
-    messages.forEach((m) => self.send({ type: 'message', ...m }));
-    msg.ok();
-  
-}
+module.exports = async (req, res) => {
+  const msg = req.body;
+
+  if (!msg.channel) throw MissingChannel();
+
+  if (!await channel.haveAccess(req.userId, msg.channel)) {
+    throw AccessDenied();
+  }
+  const msgs = await messageRepo.getAll({
+    channel: msg.channel,
+    before: msg.before,
+  }, { limit: msg.limit });
+
+  msgs.forEach((m) => res.send({ type: 'message', ...m }));
+  res.ok({ count: msgs.length });
+};

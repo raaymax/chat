@@ -1,1 +1,3 @@
-module.exports = (self, msg) => msg.ok();
+module.exports = (req, res) => {
+  res.ok();
+};
