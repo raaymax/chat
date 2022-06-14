@@ -5,14 +5,14 @@ module.exports = (agent) => {
     it('user not logged in', async () => {
       await agent
         .get('/session')
-        .expect(200, { status: 'NO_SESSION' });
+        .expect(200, { status: 'no-session' });
     });
 
     it('login failed', async () => {
       await agent
         .post('/session')
         .send({ login: 'mateusz', password: '321' })
-        .expect(401, { status: 'NOT_AUTHORIZED' });
+        .expect(401, { status: 'nok' });
     });
 
     it('login', async () => {
@@ -21,7 +21,7 @@ module.exports = (agent) => {
         .send({ login: 'mateusz', password: '123' })
         .expect(200)
         .expect((res) => {
-          assert.equal(res.body.status, 'OK');
+          assert.equal(res.body.status, 'ok');
         });
     });
 
@@ -32,7 +32,7 @@ module.exports = (agent) => {
         .get('/session')
         .expect(200)
         .expect((res) => {
-          assert.equal(res.body.status, 'OK');
+          assert.equal(res.body.status, 'ok');
         });
     });
 
@@ -42,7 +42,7 @@ module.exports = (agent) => {
         .expect(204);
       await agent
         .get('/session')
-        .expect(200, { status: 'NO_SESSION' });
+        .expect(200, { status: 'no-session' });
     });
   });
 };

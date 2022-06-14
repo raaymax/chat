@@ -1,7 +1,6 @@
 import {h} from 'preact';
-import {useEffect, useState} from 'preact/hooks';
-import styled from 'styled-components'
-import {client} from '../../core';
+import {useEffect, useState, useCallback} from 'preact/hooks';
+//import {client} from '../../core';
 
 const me = async () => {
   const ret = await fetch('/session', {
@@ -32,57 +31,51 @@ const logout = async () => {
   });
 }
 
-const LoginInput = styled.input`
-  display: 'block';
-  
-`
-
 export const Login = ({children}) => {
   const [status, setStatus] = useState('pending');
   const [user, setUser] = useState(null);
   useEffect(() => {
     me()
       .then(async ({status, user, token}) => {
-        if (token) await client.req({type: 'auth', token});
+        //if (token) await client.req({type: 'auth', token});
         setStatus(status);
         if (status === 'ok') {
           setUser(user);
-          client.emit('auth:user', user);
-          client.emit('auth:ready');
+          //client.emit('auth:user', user);
+          //client.emit('auth:ready');
         }
       })
       .catch( (e) => console.error(e));
   }, []);
 
-  const onSubmit = async (e) => {
+  const onSubmit = useCallback(async (e) => {
     e.preventDefault();
     e.stopPropagation();
     const {
-      status, user, session, token,
+      status, user,
     } = await submit(e);
-    if (token) await client.req({type: 'auth', token});
     if (status === 'ok') {
       setUser(user);
-      client.emit('auth:user', user);
-      client.emit('auth:ready');
+      //client.emit('auth:user', user);
+      //client.emit('auth:ready');
     }
-  };
+  }, [user]);
 
-  const onLogout = async (e) => {
+  const onLogout = useCallback(async (e) => {
     e.preventDefault();
     e.stopPropagation();
     await logout(e);
     setUser(null);
-  };
+  }, [user]);
 
   if (status === 'pending') return 'Loading';
 
   return user ? (children) : (
-    <div>
+    <div class='login'>
       <form method='POST' action='/session' onsubmit={onSubmit}>
-        <LoginInput type='text' name='login' placeholder='user@example.com' />
+        <input type='text' name='login' placeholder='user@example.com' />
         <input type='password' name='password' />
-        <input type='submit' />
+        <input type='submit' value='Login' />
       </form>
     </div>
   );

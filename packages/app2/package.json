@@ -15,13 +15,14 @@
     "@capacitor/android": "3.4.3",
     "@capacitor/core": "3.4.3",
     "@capacitor/push-notifications": "1.0.9",
+    "@reduxjs/toolkit": "1.8.2",
     "@sentry/browser": "6.19.7",
     "@sentry/capacitor": "0.6.0",
     "@sentry/tracing": "6.19.7",
     "firebase": "9.6.11",
     "fuse.js": "6.5.3",
     "preact": "10.7.0",
-    "styled-components": "5.3.5"
+    "react-redux": "8.0.2"
   },
   "devDependencies": {
     "@babel/core": "7.17.8",

@@ -12,8 +12,7 @@ const connect = (opts) => new Promise((resolve, reject) => {
 
 const request = (con) => {
   const bus = new EventEmitter();
-  con.ws.addEventListener('message', (raw) => {
-    const msg = JSON.parse(raw.data);
+  con.ws.addEventListener('message', (msg) => {
     bus.emit(`type:${msg.type}`, msg);
     bus.emit('message', msg);
   });
@@ -43,7 +42,7 @@ const request = (con) => {
           }
         };
         bus.on('message', handler);
-        con.ws.send(JSON.stringify({ seqId: id, ...msg }));
+        con.ws.send({seqId: id, ...msg });
       });
     },
   });

@@ -1,34 +1,57 @@
 import { Capacitor } from '@capacitor/core';
+import { connected, disconnected } from '../js/store/connectionSlice';
+import { createNotifier } from '../js/utils';
+import { useSelector, useDispatch } from 'react-redux';
 
-export function connect(bus) {
+
+function connect1() {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(), 5000);
+
+    const client = new WebSocket(getUri());
+    
+
+  })
+
+  }
+
+
+
+export function connect(dispatch, watch) {
   let pingTimeout;
+  console.log('connecting');
   const client = new WebSocket(getUri());
 
   const handle = (msg) => client.send(JSON.stringify(msg));
-  bus.on('send', handle);
+  const stopWatching = watch(handle);
 
   function heartbeat() {
+    console.log('dye')
     clearTimeout(pingTimeout);
     pingTimeout = setTimeout(() => {
-      bus.off('send', handle);
-      bus.emit('client:closed', handle);
+      stopWatching();
       client.close();
     }, 5000);
   }
 
   client.addEventListener('open', () => {
-    bus.emit('client:open', handle);
+    dispatch(connected());
     return heartbeat();
   });
 
   client.addEventListener('message', (raw) => {
-    if (raw.data === 'PING') {
+    const msg = JSON.parse(raw.data);
+    if (msg.type === 'ping') {
+      client.send(JSON.stringify({type: 'response', seqId: msg.seqId, status: 'ok'}));
       return heartbeat();
     }
-    bus.emit('message', raw.data);
+    dispatch({type: msg.type, payload: msg});
   });
-  client.addEventListener('error', (err) => bus.emit('error', err));
-  client.addEventListener('close', () => clearTimeout(pingTimeout));
+  client.addEventListener('error', (err) => dispatch({type: 'error', payload: err}));
+  client.addEventListener('close', () => {
+    dispatch(disconnected());
+    clearTimeout(pingTimeout);
+  });
 }
 
 function getUri() {
@@ -42,3 +65,6 @@ function getUri() {
     ? SERVER_URL
     : `${protocol}//${document.location.host}/ws`;
 }
+
+
+

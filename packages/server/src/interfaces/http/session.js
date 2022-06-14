@@ -9,9 +9,9 @@ router.get('/', getSession);
 
 async function getSession(req, res) {
   if (req.session.userId) {
-    res.status(200).send({ status: 'OK', user: req.session.userId });
+    res.status(200).send({ status: 'ok', user: req.session.userId });
   } else {
-    res.status(200).send({ status: 'NO_SESSION' });
+    res.status(200).send({ status: 'no-session' });
   }
 }
 
@@ -25,9 +25,9 @@ async function createSession(req, res) {
     const user = await userService.login(req.body.login, req.body.password);
     if (user) {
       req.session.userId = user.id;
-      return res.status(200).send({ status: 'OK', user });
+      return res.status(200).send({ status: 'ok', user });
     }
-    res.status(401).send({ status: 'NOT_AUTHORIZED' });
+    res.status(401).send({ status: 'nok' });
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
