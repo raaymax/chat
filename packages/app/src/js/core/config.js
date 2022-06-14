@@ -7,15 +7,16 @@ const getConfig = () => config;
 const setConfig = (c) => set(c);
 
 export const initConfig = (client) => {
-  client.on('setConfig', handleConfig);
+  client.on('config', handleConfig);
+  client.req({type: 'config'});
   Object.assign(client, { getConfig });
 };
 
 function handleConfig(client, msg) {
   if (APP_VERSION) {
     // eslint-disable-next-line no-console
-    console.log('version check: ', APP_VERSION, msg.config.appVersion);
-    if (msg.config.appVersion !== APP_VERSION) {
+    console.log('version check: ', APP_VERSION, msg.appVersion);
+    if (msg.appVersion !== APP_VERSION) {
       if (Capacitor.isNativePlatform()) {
         setTimeout(() => client.emit('message', {
           id: 'version',
@@ -32,7 +33,7 @@ function handleConfig(client, msg) {
           ],
         }), 1000);
       } else {
-        setTimeout(() => window.location.reload(true), 5000);
+        //setTimeout(() => window.location.reload(true), 5000);
         client.emit('message', {
           id: 'version',
           priv: true,

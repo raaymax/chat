@@ -24,5 +24,11 @@ module.exports = (agent) => {
           assert.equal(res.text, 'some text\n');
         });
     });
+
+    it('should be able to download uploaded file', async () => {
+      return agent
+        .get(`/files/random`)
+        .expect(404)
+    });
   });
 };

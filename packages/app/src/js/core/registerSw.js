@@ -7,10 +7,11 @@ if ('serviceWorker' in navigator) {
   }).catch((err) => {
     console.log('Service Worker registration failed: ', err);
   });
-
   if ('Notification' in window && navigator.serviceWorker) {
-    Notification.requestPermission((status) => {
-      console.log('Notification permission status:', status);
+    document.querySelector('body').addEventListener('click', () => {
+      Notification.requestPermission((status) => {
+        console.log('Notification permission status:', status);
+      });
     });
   }
 }

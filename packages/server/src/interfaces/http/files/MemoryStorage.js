@@ -26,8 +26,10 @@ class MemoryStorage {
     cb(null);
   };
 
-  getFile = (fileId) => {
+  getFile = async (fileId) => {
     const file = this.files[fileId];
+    // eslint-disable-next-line no-throw-literal
+    if (!file) throw { code: 404, message: 'File not found' };
     return {
       ...file,
       stream: Readable.from(file.buffer),

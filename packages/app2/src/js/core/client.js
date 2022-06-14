@@ -20,7 +20,7 @@ const URI = Capacitor.isNativePlatform()
   : `${protocol}//${document.location.host}/ws`;
 
 // eslint-disable-next-line no-console
-console.log('Connectiong to ', URI);
+console.log('Connectiong to oko', URI);
 const pool = createPool(URI);
 
 window.pool = pool;

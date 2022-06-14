@@ -1,36 +1,32 @@
 /* eslint-disable no-undef */
 import { Capacitor } from '@capacitor/core';
+import { Manager } from "socket.io-client";
 import Sentry from './sentry';
 
 import { createEventListener } from '../utils';
-import { createPool } from './pool';
 
 const {
   notify, watch, once, exists,
 } = createEventListener();
 
-let protocol = 'ws:';
-if (document.location.protocol === 'https:') {
-  protocol = 'wss:';
-}
-
 // eslint-disable-next-line no-nested-ternary
 const URI = Capacitor.isNativePlatform()
   ? SERVER_URL
-  : `${protocol}//${document.location.host}/ws`;
+  : `${document.location.protocol}//${document.location.host}`;
 
 // eslint-disable-next-line no-console
-console.log('Connectiong to ', URI);
-const pool = createPool(URI);
+console.log('Connectiong to cycki ', URI);
+const manager = new Manager(URI, {
+  reconnectionDelayMax: 10000,
+});
 
-window.pool = pool;
+const socket = manager.socket('/');
 
 const client = {
   send: async (msg) => {
     // eslint-disable-next-line no-console
-    console.log('send', JSON.stringify(msg, null, 4));
-    const raw = JSON.stringify(msg);
-    await pool.send(raw);
+    //console.log('send', JSON.stringify(msg, null, 4));
+    await socket.send(msg);
   },
   on: (ev, cb) => {
     watch(ev, cb);
@@ -51,21 +47,10 @@ const client = {
   },
 };
 
-pool.onOpen(() => notify('con:open', client));
-pool.onClose(() => notify('con:close', client));
-pool.onError(() => notify('con:error', client));
-pool.onPacket((raw) => {
-  try {
-    const msg = JSON.parse(raw.data);
-    // eslint-disable-next-line no-console
-    console.log('recv', JSON.stringify(msg, null, 4));
-    notify(msg.type, client, msg);
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(err);
-    Sentry.captureException(err);
-    notify('packet:error', client, raw, err);
-  }
-});
+socket.on('message', (msg) => {
+  // eslint-disable-next-line no-console
+  //console.log('recv', JSON.stringify(msg, null, 4));
+  notify(msg.type, client, msg);
+})
 
 export default client;

@@ -27,7 +27,7 @@ export const initNotifications = (client) => {
       if (currentToken) {
         return client.req({
           type: 'setupFcm',
-          fcmToken: currentToken,
+          token: currentToken,
         });
       }
       console.log('No registration token available. Request permission to generate one.');
@@ -49,7 +49,7 @@ export const initNotifications = (client) => {
       try {
         await client.req({
           type: 'setupFcm',
-          fcmToken: token.value,
+          token: token.value,
         });
       } catch (err) {
         // eslint-disable-next-line no-console

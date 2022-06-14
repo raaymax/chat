@@ -31,8 +31,8 @@ async function downloadFile(req, res) {
     file.stream.pipe(res);
   } catch (err) {
     // eslint-disable-next-line no-console
-    console.error(err);
-    res.status(500).send(err);
+    // console.error(err);
+    res.status(err.code || 500).send(err);
   }
 }
 

@@ -2,14 +2,14 @@ import { createNotifier } from '../utils.js';
 
 const [notify, watch] = createNotifier();
 
-let user = null;
+let userId = null;
 
-export const watchUser = watch;
+export const watchUserId = watch;
 
-export const getUser = () => user;
-export const isMe = (id) => user && user.id === id;
+export const getUserId = () => userId;
+export const isMe = (id) => userId === id;
 
-export function setUser(u) {
-  user = u;
-  notify(user);
+export function setUserId(u) {
+  userId = u;
+  notify(userId);
 }

@@ -2,15 +2,15 @@ import { client } from '../core';
 import { getConfig } from '../store/config';
 import { getCid } from '../store/channel';
 
-import { getUser } from '../store/user';
+import { getUserId } from '../store/user';
+import { getUser } from '../store/users';
 import { setInfo } from '../store/info';
 
 let cooldown = false;
 let queue = false;
 
 export function notifyTyping() {
-  if (!client.active) return;
-  if (!getConfig) return;
+  if (!getConfig()) return;
   if (cooldown) {
     queue = true;
     return;
@@ -28,6 +28,6 @@ export function notifyTyping() {
 
 export function ackTyping(_, msg) {
   if (msg.channel !== getCid()) return;
-  if (msg.user.id === getUser().id) return;
-  setInfo({ msg: `${msg.user.name} is typing`, type: 'info' }, 1000);
+  if (msg.userId === getUserId()) return;
+  setInfo({ msg: `${getUser(msg.userId)?.name || 'Someone'} is typing`, type: 'info' }, 1000);
 }

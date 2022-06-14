@@ -13,7 +13,7 @@ import * as files from '../store/file';
 
 export const loadPrevious = () => client.req({ type: 'load', channel: getCid(), before: getEarliestDate() });
 export const loadNext = () => client.req({ type: 'load', channel: getCid(), after: getLatestDate() });
-export const load = () => client.req({ type: 'load', channel: getCid() });
+export const loadMessages = () => client.req({ type: 'load', limit:50, channel: getCid() });
 
 export const sendFromDom = async (dom) => {
   const msg = fromDom(dom);
@@ -65,12 +65,6 @@ export const removeMessage = async (msg) => {
 };
 
 const sendMessage = async (msg) => {
-  if (!msg.user) {
-    insertMessage({
-      id: 'login', notifType: 'warning', notif: 'You must login first!', createdAt: new Date(),
-    });
-    return;
-  }
   insertPendingMessage(msg);
   try {
     await client.req(msg);

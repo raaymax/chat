@@ -42,7 +42,6 @@ export const Login = ({children}) => {
         if (status === 'ok') {
           setUser(user);
           client.emit('auth:user', user);
-          client.emit('auth:ready');
         }
       })
       .catch( (e) => console.error(e));
@@ -58,7 +57,6 @@ export const Login = ({children}) => {
     if (status === 'ok') {
       setUser(user);
       client.emit('auth:user', user);
-      client.emit('auth:ready');
     }
   };
 

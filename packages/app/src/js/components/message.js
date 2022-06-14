@@ -62,6 +62,30 @@ export const Message = (props = {}) => {
     info, message, attachments, flat, createdAt, user,
   } = props.data;
   const [toolbar, setToolbar] = useState(false);
+  if(!user) {
+  return (
+    <div
+      {...props}
+      class={['message', ...props.class].join(' ')}
+      onclick={info && info.action ? info.action : () => {}}
+      onmouseenter={() => setToolbar(true)}
+      onmouseleave={() => setToolbar(false)}
+    >
+      <div class='avatar'></div>
+      <div class='body'>
+        <div class='header'>
+          <span class='author'>Unknown</span>
+          <span class='spacy time'>{formatTime(createdAt)}</span>
+          {!isToday(createdAt) && <span class='spacy time'>{formatDate(createdAt)}</span>}
+        </div>}
+        <div class={['content', ...(isOnlyEmoji(message, flat) ? ['emoji'] : [])].join(' ')}>{build(message)}</div>
+        {attachments && <Files list={attachments} />}
+        {info && <div class={['info', info.type].join(' ')}>{info.msg}</div>}
+      </div>
+    </div>
+  );
+
+  } 
   return (
     <div
       {...props}
