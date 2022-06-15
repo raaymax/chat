@@ -8,6 +8,7 @@ const commands = [
   require('./leave'),
   require('./me'),
   require('./channel'),
+  require('./prompt'),
 ];
 
 module.exports = async (req, res) => {

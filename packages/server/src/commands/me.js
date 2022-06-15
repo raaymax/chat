@@ -8,9 +8,11 @@ module.exports = {
     const user = await userRepo.get({ id: req.userId });
 
     await res.send({
+      type: 'message',
       id: 'me',
       userId: 'system',
       createdAt: new Date().toISOString(),
+      channel: req.body.context.channel,
       message: [
         { text: 'ID: ' }, { text: req.userId }, { br: true },
         { text: 'User: ' }, { text: user.name }, { br: true },

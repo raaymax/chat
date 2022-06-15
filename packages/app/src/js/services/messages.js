@@ -38,6 +38,7 @@ export const resend = async (id) => {
 
 export const sendCommand = async (msg) => {
   const notif = {
+    userId: 'notif',
     clientId: msg.clientId,
     notifType: 'info',
     notif: `${msg.name} sent`,

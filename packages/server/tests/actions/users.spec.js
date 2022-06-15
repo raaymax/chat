@@ -18,6 +18,8 @@ module.exports = (connect) => {
       ws.close();
     });
 
+    it('using strings as userId is not the best idea')
+
     it('should get system user', async () => {
       const ws = await connect();
       const users = await ws.send({
