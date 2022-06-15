@@ -11,9 +11,11 @@ module.exports = (connect) => {
       assert.equal(ret.type, 'response');
       assert.equal(ret.status, 'ok');
       assert.equal(channels[0].type, 'channel');
-      assert.equal(channels[0].channel.name, 'main');
+      assert.equal(channels[0].name, 'main');
+      assert.equal(channels[0].cid, 'main');
       assert.equal(channels[1].type, 'channel');
-      assert.equal(channels[1].channel.name, 'Mateusz');
+      assert.equal(channels[1].name, 'Mateusz');
+      assert.equal(channels[1].cid, ws.userId);
       ws.close();
     });
   });

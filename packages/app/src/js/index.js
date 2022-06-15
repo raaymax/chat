@@ -14,13 +14,13 @@ import { client } from './core';
 
 client
   .on('channel:changed', handleChannel)
-  .on('channel', (_, msg) => addChannel(msg.channel))
-  .on('rmChannel', (_, msg) => rmChannel(msg.cid))
+  .on('setChannel', switchChannel)
+  .on('channel', (_, msg) => addChannel(msg))
+  .on('removeChannel', (_, msg) => rmChannel(msg.cid))
   .on('typing', ackTyping)
   .on('auth:none', () => client.send({ type: 'greet' }))
   .on('auth:ready', () => setInfo(null))
   .on('auth:user', async (_, user) => {
-    console.log(user);
     setUserId(user);
     await loadUsers(client);
     await loadChannels();
@@ -53,7 +53,12 @@ function handleMessageRemove(_, id) {
   removeMessage(id);
 }
 
-function handleChannel() {
+function switchChannel(_, msg) {
+  window.location.hash = msg.channel;
+}
+
+function handleChannel(_, msg) {
+  setCid(msg.channel)
   clearMessages();
   loadMessages();
 }

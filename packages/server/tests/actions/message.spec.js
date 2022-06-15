@@ -61,6 +61,34 @@ module.exports = (connect) => {
       ws.close();
     });
 
+    it('should accept attachments', async () => {
+      const ws = await connect();
+      const [msg, ret] = await ws.send({
+        type: 'message',
+        message: { line: { text: 'Hello' } },
+        channel: 'main',
+        flat: 'Hello',
+        attachments: [
+          {
+            id: 'random',
+            fileName: 'test.txt',
+            contentType: 'text/plain',
+            sonething: 'else',
+          },
+        ],
+      });
+      assert.equal(msg.type, 'message');
+      assert.equal(msg.attachments.length, 1);
+      assert.deepEqual(Object.keys(msg.attachments[0]), ['id', 'fileName', 'contentType']);
+      assert.equal(ret.type, 'response');
+      assert.equal(ret.status, 'ok');
+      ws.close();
+    });
+
+    it('should validate attachments?');
+
+    it('should accept attachments without message');
+
     it('should return error when channel is missing', async () => {
       const ws = await connect();
       const [ret] = await ws.send({

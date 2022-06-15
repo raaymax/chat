@@ -7,6 +7,7 @@ const commands = [
   require('./join'),
   require('./leave'),
   require('./me'),
+  require('./channel'),
 ];
 
 module.exports = async (req, res) => {

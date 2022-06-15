@@ -1,5 +1,6 @@
 import { getCid } from './store/channel';
 import { getUserId } from './store/user';
+import { getUser } from './store/users';
 import { createCounter } from './utils';
 
 const tempId = createCounter(`temp:${(Math.random() + 1).toString(36)}`);
@@ -10,7 +11,7 @@ export const fromDom = (dom) => {
     const m = dom.textContent.trim().replace('\n', '').slice(1).split(/\s+/);
     return build({
       type: 'command',
-      cmd: m[0],
+      name: m[0],
       args: m.splice(1),
       flat: dom.textContent,
     });
@@ -24,6 +25,7 @@ export function build(msg) {
   msg.channel = getCid();
   msg.clientId = tempId();
   msg.userId = getUserId();
+  msg.user = getUser(getUserId());
   msg.createdAt = new Date();
   msg.info = null;
   return msg;

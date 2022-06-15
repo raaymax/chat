@@ -40,17 +40,18 @@ export const sendCommand = async (msg) => {
   const notif = {
     clientId: msg.clientId,
     notifType: 'info',
-    notif: `${msg.cmd} sent`,
+    notif: `${msg.name} sent`,
     createdAt: new Date(),
   };
+  msg.context = {channel: getCid()};
   insertMessage(notif);
   try {
     await client.req(msg);
-    insertMessage({ ...notif, notifType: 'success', notif: `${msg.cmd} executed successfully` });
+    insertMessage({ ...notif, notifType: 'success', notif: `${msg.name} executed successfully` });
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
-    insertMessage({ ...notif, notifType: 'error', notif: `${msg.cmd} error ${err.data.message}` });
+    insertMessage({ ...notif, notifType: 'error', notif: `${msg.name} error ${err.data.message}` });
   }
 };
 

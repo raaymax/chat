@@ -42,7 +42,6 @@ const client = {
       Sentry.captureException(new Error(`[client] handler not exists: ${name}`));
       return;
     }
-    console.log(name, data);
     return notify(name, client, ...data);
   },
 };

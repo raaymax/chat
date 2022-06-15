@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
 
   if (!msg.message) throw MissingMessage();
   if (!msg.channel) throw MissingChannel();
-  if (!msg.flat) throw MissingFlat();
+  if (typeof msg.flat !== 'string') throw MissingFlat();
 
   if (!await channel.haveAccess(req.userId, msg.channel)) {
     throw AccessDenied();
@@ -20,6 +20,11 @@ module.exports = async (req, res) => {
     channel: msg.channel,
     clientId: msg.clientId,
     userId: msg.userId,
+    attachments: msg.attachments?.map((file) => ({
+      id: file.id,
+      fileName: file.fileName,
+      contentType: file.contentType,
+    })),
     createdAt: new Date(),
   });
   const created = await messageRepo.get({ id });

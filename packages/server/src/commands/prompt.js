@@ -25,6 +25,7 @@ function initAI() {
 
         const { data } = await openai.createCompletion('text-davinci-002', args);
         const resp = {
+          userId: 'openai',
           user: {
             id: 'openai',
             name: 'OpenAI',
