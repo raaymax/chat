@@ -26,8 +26,6 @@ client
     await loadChannels();
     await clearMessages();
     await loadMessages();
-    //await load();
-    //await loadChannels();
   })
   .on('auth:logout', async () => {
     setUser(null);
@@ -36,8 +34,6 @@ client
   })
   .on('con:close', () => setInfo({ msg: 'Disconnected - reconnect attempt in 1s', type: 'error' }))
   .on('message', async (client, msg) =>{
-    msg.user = getUser(msg.userId);
-    if(!msg.user) console.log(msg)
     await handleMessage(client, msg)
   })
   .on('message:remove', handleMessageRemove)
