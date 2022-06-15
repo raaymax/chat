@@ -19,7 +19,7 @@ client
   .on('removeChannel', (_, msg) => rmChannel(msg.cid))
   .on('typing', ackTyping)
   .on('auth:none', () => client.send({ type: 'greet' }))
-  .on('auth:ready', () => setInfo(null))
+  .on('con:open', () => setInfo(null))
   .on('auth:user', async (_, user) => {
     setUserId(user);
     await loadUsers(client);

@@ -23,6 +23,7 @@ const manager = new Manager(URI, {
 const socket = manager.socket('/');
 
 const client = {
+  socket,
   send: async (msg) => {
     // eslint-disable-next-line no-console
     //console.log('send', JSON.stringify(msg, null, 4));
