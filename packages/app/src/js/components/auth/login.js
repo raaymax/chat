@@ -53,10 +53,8 @@ export const Login = ({children}) => {
     const {
       status, user, session, token,
     } = await submit(e);
-    if (token) await client.req({type: 'auth', token});
     if (status === 'ok') {
-      setUser(user);
-      client.emit('auth:user', user);
+      window.location.reload(true);
     }
   };
 
