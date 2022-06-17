@@ -21,7 +21,7 @@ export const upload = async (file) => {
   */
   // update(local.clientId, { id: ret.data.fileId });
   try {
-    const {status, fileId } = await uploadFile('POST', '/files', {
+    const {status, fileId } = await uploadFile('POST', SERVER_URL + '/files', {
       file,
       clientId: local.clientId,
       progress: (progress) => {
