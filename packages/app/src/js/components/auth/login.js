@@ -32,6 +32,7 @@ const logout = async () => {
 }
 
 export const Login = ({children}) => {
+  let logs;
   const [status, setStatus] = useState('pending');
   const [user, setUser] = useState(null);
   useEffect(() => {
