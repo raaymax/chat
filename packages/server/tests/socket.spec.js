@@ -1,7 +1,7 @@
 const assert = require('assert');
 const supertest = require('supertest');
-const server = require('../src/server');
 const crypto = require('crypto');
+const server = require('../src/server');
 
 const {
   connect,

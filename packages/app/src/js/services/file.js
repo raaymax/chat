@@ -21,16 +21,16 @@ export const upload = async (file) => {
   */
   // update(local.clientId, { id: ret.data.fileId });
   try {
-    const {status, fileId } = await uploadFile('POST', SERVER_URL + '/files', {
+    const {status, fileId } = await uploadFile('POST', `${SERVER_URL}/files`, {
       file,
       clientId: local.clientId,
       progress: (progress) => {
         update(local.clientId, { progress });
       },
     });
-    if (status === 'ok'){
+    if (status === 'ok') {
       update(local.clientId, { id: fileId, progress: 100 });
-    }else{
+    } else {
       update(local.clientId, {
         error: 'something went wrong',
         progress: 0,
@@ -77,7 +77,7 @@ function uploadFile(method, url, { file, progress, clientId }) {
     xhr.addEventListener('error', (e) => reject(e), { once: true });
     xhr.open(method, url, true);
 
-    var formData = new FormData();
+    const formData = new FormData();
     formData.append('file', file);
     update(clientId, { abort: () => xhr.abort() });
     xhr.send(formData);

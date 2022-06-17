@@ -13,7 +13,7 @@ import * as files from '../store/file';
 
 export const loadPrevious = () => client.req({ type: 'load', channel: getCid(), before: getEarliestDate() });
 export const loadNext = () => client.req({ type: 'load', channel: getCid(), after: getLatestDate() });
-export const loadMessages = () => client.req({ type: 'load', limit:50, channel: getCid() });
+export const loadMessages = () => client.req({ type: 'load', limit: 50, channel: getCid() });
 
 export const sendFromDom = async (dom) => {
   const msg = fromDom(dom);

@@ -3,7 +3,7 @@ import {useEffect, useState} from 'preact/hooks';
 import {client} from '../../core';
 
 const me = async () => {
-  const ret = await fetch(SERVER_URL+'/session', {
+  const ret = await fetch(`${SERVER_URL}/session`, {
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
@@ -14,7 +14,7 @@ const me = async () => {
 const submit = async (e) => {
   const fd = new FormData(e.target);
   const value = Object.fromEntries(fd.entries());
-  const ret = await fetch(SERVER_URL + '/session', {
+  const ret = await fetch(`${SERVER_URL}/session`, {
     method: e.target.getAttribute('method'),
     credentials: 'include',
     headers: {
@@ -25,7 +25,7 @@ const submit = async (e) => {
   return ret.json();
 }
 const logout = async () => {
-  await fetch(SERVER_URL + '/session', {
+  await fetch(`${SERVER_URL}/session`, {
     method: 'DELETE',
     credentials: 'include',
   });
@@ -69,7 +69,7 @@ export const Login = ({children}) => {
 
   return user ? (children) : (
     <div>
-      <form method='POST' action={SERVER_URL+'/session'} onsubmit={onSubmit}>
+      <form method='POST' action={`${SERVER_URL}/session`} onsubmit={onSubmit}>
         <input type='text' name='login' placeholder='user@example.com' />
         <input type='password' name='password' />
         <input type='submit' />

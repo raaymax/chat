@@ -33,7 +33,7 @@ client
     clearChannels();
   })
   .on('con:close', () => setInfo({ msg: 'Disconnected - reconnect attempt in 1s', type: 'error' }))
-  .on('message', async (client, msg) =>{
+  .on('message', async (client, msg) => {
     await handleMessage(client, msg)
   })
   .on('message:remove', handleMessageRemove)

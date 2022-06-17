@@ -25,10 +25,8 @@ module.exports = (agent) => {
         });
     });
 
-    it('should be able to download uploaded file', async () => {
-      return agent
-        .get(`/files/random`)
-        .expect(404)
-    });
+    it('should be able to download uploaded file', async () => agent
+      .get('/files/random')
+      .expect(404));
   });
 };

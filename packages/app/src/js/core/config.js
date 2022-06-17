@@ -33,7 +33,7 @@ function handleConfig(client, msg) {
           ],
         }), 1000);
       } else {
-        //setTimeout(() => window.location.reload(true), 5000);
+        // setTimeout(() => window.location.reload(true), 5000);
         client.emit('message', {
           id: 'version',
           priv: true,
