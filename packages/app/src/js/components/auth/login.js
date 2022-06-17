@@ -35,23 +35,23 @@ export const Login = ({children}) => {
   const [status, setStatus] = useState('pending');
   const [user, setUser] = useState(null);
   useEffect(() => {
+    console.log('server url', `${SERVER_URL}/session`)
     me()
-      .then(async ({status, user, token}) => {
-        if (token) await client.req({type: 'auth', token});
+      .then(async ({status, user}) => {
         setStatus(status);
         if (status === 'ok') {
           setUser(user);
           client.emit('auth:user', user);
         }
       })
-      .catch( (e) => console.error(e));
+      .catch( (e) => {logs = e.toString(); console.error(e)});
   }, []);
 
   const onSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
     const {
-      status, user, session, token,
+      status, user, session,
     } = await submit(e);
     if (status === 'ok') {
       window.location.reload(true);
@@ -74,6 +74,8 @@ export const Login = ({children}) => {
         <input type='password' name='password' />
         <input type='submit' />
       </form>
+
+      {logs && <pre>{logs}</pre>}
     </div>
   );
 }
