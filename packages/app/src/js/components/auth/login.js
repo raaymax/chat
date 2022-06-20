@@ -1,27 +1,21 @@
 import {h} from 'preact';
 import {useEffect, useState} from 'preact/hooks';
 import {client} from '../../core';
-import {me, login, logout} from '../../services/session';
-
-// eslint-disable-next-line no-undef
-const SESSION_URL = `${SERVER_URL}/session`;
+import {me, login} from '../../services/session';
 
 export const Login = ({children}) => {
-  let logs;
   const [status, setStatus] = useState('pending');
   const [user, setUser] = useState(null);
   useEffect(() => {
-    console.log('server url', SESSION_URL)
     me()
       .then(async ({status, user}) => {
-        console.log(status, user);
         setStatus(status);
         if (status === 'ok') {
           setUser(user);
           client.emit('auth:user', user);
         }
       })
-      .catch( (e) => { logs = e.toString(); console.error(e) });
+      .catch( (e) => { console.error(e) });
   }, []);
 
   const onSubmit = async (e) => {
@@ -35,24 +29,15 @@ export const Login = ({children}) => {
     }
   };
 
-  const onLogout = async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    await logout(e);
-    setUser(null);
-  };
-
   if (status === 'pending') return 'Loading';
 
   return user ? (children) : (
-    <div>
-      <form method='POST' action={SESSION_URL} onsubmit={onSubmit}>
+    <div class='login'>
+      <form onsubmit={onSubmit}>
         <input type='text' name='login' placeholder='user@example.com' />
-        <input type='password' name='password' />
-        <input type='submit' />
+        <input type='password' name='password' placeholder='password' />
+        <input type='submit' value='Login' />
       </form>
-
-      {logs && <pre>{logs}</pre>}
     </div>
   );
 }

@@ -41,8 +41,8 @@ client
     clearChannels();
   })
   .on('con:close', () => setInfo({
-    msg: 'Disconnected - reconnect attempt in 1s', 
-    type: 'error'
+    msg: 'Disconnected - reconnect attempt in 1s',
+    type: 'error',
   }))
   .on('message', async (client, msg) => {
     if (msg.priv || msg.channel === getCid()) {
@@ -50,7 +50,9 @@ client
     }
   })
   .on('message:remove', (_, id) => removeMessage(id))
-  .on('notification', () => { try { 
-    navigator.vibrate([100, 30, 100]); 
-  } catch (err) { /* ignore */ } })
+  .on('notification', () => {
+    try {
+      navigator.vibrate([100, 30, 100]);
+    } catch (err) { /* ignore */ }
+  })
   .on('notification', () => { try { play(); } catch (err) { /* ignore */ } });
