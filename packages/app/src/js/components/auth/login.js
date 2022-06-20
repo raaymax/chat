@@ -1,59 +1,35 @@
 import {h} from 'preact';
 import {useEffect, useState} from 'preact/hooks';
 import {client} from '../../core';
+import {me, login, logout} from '../../services/session';
 
-const me = async () => {
-  const ret = await fetch(`${SERVER_URL}/session`, {
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  return ret.json();
-}
-const submit = async (e) => {
-  const fd = new FormData(e.target);
-  const value = Object.fromEntries(fd.entries());
-  const ret = await fetch(`${SERVER_URL}/session`, {
-    method: e.target.getAttribute('method'),
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(value),
-  });
-  return ret.json();
-}
-const logout = async () => {
-  await fetch(`${SERVER_URL}/session`, {
-    method: 'DELETE',
-    credentials: 'include',
-  });
-}
+// eslint-disable-next-line no-undef
+const SESSION_URL = `${SERVER_URL}/session`;
 
 export const Login = ({children}) => {
   let logs;
   const [status, setStatus] = useState('pending');
   const [user, setUser] = useState(null);
   useEffect(() => {
-    console.log('server url', `${SERVER_URL}/session`)
+    console.log('server url', SESSION_URL)
     me()
       .then(async ({status, user}) => {
+        console.log(status, user);
         setStatus(status);
         if (status === 'ok') {
           setUser(user);
           client.emit('auth:user', user);
         }
       })
-      .catch( (e) => {logs = e.toString(); console.error(e)});
+      .catch( (e) => { logs = e.toString(); console.error(e) });
   }, []);
 
   const onSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    const {
-      status, user, session,
-    } = await submit(e);
+    const fd = new FormData(e.target);
+    const value = Object.fromEntries(fd.entries());
+    const { status } = await login(value);
     if (status === 'ok') {
       window.location.reload(true);
     }
@@ -70,7 +46,7 @@ export const Login = ({children}) => {
 
   return user ? (children) : (
     <div>
-      <form method='POST' action={`${SERVER_URL}/session`} onsubmit={onSubmit}>
+      <form method='POST' action={SESSION_URL} onsubmit={onSubmit}>
         <input type='text' name='login' placeholder='user@example.com' />
         <input type='password' name='password' />
         <input type='submit' />

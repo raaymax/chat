@@ -1,8 +1,13 @@
+import { Capacitor } from '@capacitor/core';
 import { client } from '../core';
 import { createCounter } from '../utils';
 import { add, update } from '../store/file';
 
 const tempId = createCounter(`file:${(Math.random() + 1).toString(36)}`);
+
+const FILES_URL = Capacitor.isNativePlatform()
+  ? `${SERVER_URL}/files`
+  : `${document.location.protocol}//${document.location.host}/files`;
 
 export const upload = async (file) => {
   const local = {
@@ -21,7 +26,7 @@ export const upload = async (file) => {
   */
   // update(local.clientId, { id: ret.data.fileId });
   try {
-    const {status, fileId } = await uploadFile('POST', `${SERVER_URL}/files`, {
+    const {status, fileId } = await uploadFile('POST', FILES_URL, {
       file,
       clientId: local.clientId,
       progress: (progress) => {
@@ -54,13 +59,7 @@ export const upload = async (file) => {
   }
 };
 
-export const getUrl = async (id) => {
-  const file = await client.req({
-    type: 'initDownload',
-    fileId: id,
-  });
-  return file.data.url;
-};
+export const getUrl = (id) => `${FILES_URL}/${id}`;
 
 function uploadFile(method, url, { file, progress, clientId }) {
   return new Promise((resolve, reject) => {

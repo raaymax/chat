@@ -1,7 +1,8 @@
 import { h } from 'preact';
+import {getUrl} from '../../services/file';
 
 const download = async (fileId) => {
-  window.open(`/files/${fileId}`);
+  window.open(getUrl(fileId));
 }
 
 export const File = ({data: {fileName, contentType, id}}) => (
@@ -13,7 +14,7 @@ export const File = ({data: {fileName, contentType, id}}) => (
 
 export const Image = ({data: {fileName, id}}) => (
   <div class='file image' data-id={id} onclick={() => download(id)}>
-    <img src={`/files/${id}`} alt={fileName} />
+    <img src={getUrl(id)} alt={fileName} />
   </div>
 )
 

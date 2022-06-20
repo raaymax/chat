@@ -18,6 +18,7 @@ const URI = Capacitor.isNativePlatform()
 console.log('Connectiong to cycki ', URI);
 const manager = new Manager(URI, {
   reconnectionDelayMax: 10000,
+  withCredentials: true,
 });
 
 const socket = manager.socket('/');

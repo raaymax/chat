@@ -2,9 +2,12 @@ const { Server } = require('socket.io');
 const sessionParser = require('./sessionParser');
 const bus = require('../../infra/ws');
 const actions = require('../../actions');
+const corsConfig = require('./cors');
 
 module.exports = (server) => {
-  const io = new Server(server);
+  const io = new Server(server, {
+    cors: corsConfig,
+  });
 
   const wrap = (middleware) => (socket, next) => middleware(socket.request, {}, next);
 
