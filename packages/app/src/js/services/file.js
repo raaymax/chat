@@ -1,5 +1,5 @@
+/* eslint-disable no-undef */
 import { Capacitor } from '@capacitor/core';
-import { client } from '../core';
 import { createCounter } from '../utils';
 import { add, update } from '../store/file';
 

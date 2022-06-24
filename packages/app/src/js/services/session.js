@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { Capacitor } from '@capacitor/core';
 
 const SESSION_URL = Capacitor.isNativePlatform()

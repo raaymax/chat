@@ -15,7 +15,10 @@ export const Login = ({children}) => {
           client.emit('auth:user', user);
         }
       })
-      .catch( (e) => { console.error(e) });
+      .catch( (e) => {
+        // eslint-disable-next-line no-console
+        console.error(e);
+      });
   }, []);
 
   const onSubmit = async (e) => {

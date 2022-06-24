@@ -1,11 +1,9 @@
 const assert = require('assert');
 const supertest = require('supertest');
-const crypto = require('crypto');
 const { io } = require('socket.io-client');
 const server = require('../src/server');
 
 const {
-  connect,
   request,
 } = require('./helpers');
 
@@ -47,7 +45,7 @@ describe('socket.io', () => {
         }),
         userId: res.body.user.id,
       }))
-      .then((con) => request(con));
+      .then((c) => request(c));
   }
 
   it('should receive response for ping', async () => {

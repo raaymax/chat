@@ -65,6 +65,7 @@ export const Message = (props = {}) => {
   const [toolbar, setToolbar] = useState(false);
   const user = getUser(userId);
   if (!user) {
+    // eslint-disable-next-line no-console
     console.log(props.data);
     return null;
   }
