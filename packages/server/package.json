@@ -8,7 +8,7 @@
     "dev": "nodemon src/index.js",
     "test:postgres": "DATABASE_URL=postgres://chat:chat@localhost:5432/tests mocha --watch --file tests/index.spec.js --ui bdd",
     "test": "NODE_ENV='test' DATABASE_URL='mongodb://chat:chat@localhost:27017/tests?authSource=admin' mocha --watch --file tests/index.spec.js --ui bdd",
-    "test:ci": "NODE_ENV='test' mocha --file tests/index.spec.js --ui bdd"
+    "test:ci": "NODE_ENV='test' mocha tests/index.spec.js --exit"
   },
   "author": "",
   "license": "ISC",
