@@ -1,9 +1,5 @@
-require('./infra/sentry');
 const server = require('./server');
+const config = require('../../../chat.config');
 
-const PORT = process.env.PORT || 8080;
-
-server.listen(PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log('Server is listening on port:', PORT);
-});
+// eslint-disable-next-line no-console
+server.listen(config.port, () => console.log('Server listening on port:', config.port));

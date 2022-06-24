@@ -1,9 +1,8 @@
 import { h } from 'preact';
-import { useState, useEffect } from 'preact/hooks';
-import { getUrl } from '../../services/file';
+import {getUrl} from '../../services/file';
 
 const download = async (fileId) => {
-  window.open(await getUrl(fileId));
+  window.open(getUrl(fileId));
 }
 
 export const File = ({data: {fileName, contentType, id}}) => (
@@ -13,20 +12,11 @@ export const File = ({data: {fileName, contentType, id}}) => (
   </div>
 )
 
-export const Image = ({data: {fileName, id}}) => {
-  const [url, setUrl] = useState(null);
-  useEffect(() => {
-    getUrl(id).then((ret) => setUrl(ret));
-  }, [id]);
-  return (
-    <div class='file image' data-id={id} onclick={() => download(id)}>
-      {url
-        ? <img src={url} alt={fileName} />
-        : <div>Loaging image</div>
-      }
-    </div>
-  );
-}
+export const Image = ({data: {fileName, id}}) => (
+  <div class='file image' data-id={id} onclick={() => download(id)}>
+    <img src={getUrl(id)} alt={fileName} />
+  </div>
+)
 
 export const Files = ({list}) => (
   <div>

@@ -1,35 +1,20 @@
-const {
-  match,
-  partial,
-} = require('../helpers');
+const assert = require('assert');
 
-module.exports = (sys) => {
+module.exports = (connect) => {
   describe('/help', () => {
-    it('should respond with help message', async () => {
-      match(await sys.req({ command: { name: 'help', args: [] } }), [
-        partial({
-          priv: true,
-          user: { name: 'System' },
-          message: [
-            { bold: { text: 'auth' } }, { br: true },
-            { text: '/login <name> <password> - login to your account' }, { br: true },
-            { text: '/logout - logout from your account' }, { br: true },
-            { bold: { text: 'channels' } }, { br: true },
-            { text: '/channel <name> - change current channel' }, { br: true },
-            { text: '/join - join current channel' }, { br: true },
-            { text: '/leave - leave current channel' }, { br: true },
-            { bold: { text: 'profile' } }, { br: true },
-            { text: '/me - display user info' }, { br: true },
-            { text: '/name <name> - to change your name' }, { br: true },
-            { text: '/avatar <url> - to change your avatar' }, { br: true },
-            { bold: { text: 'other' } }, { br: true },
-            { text: '/prompt <question> - ask openai GPT-3 - without default prompt' }, { br: true },
-            { text: '/ai <question> - ask openai GPT-3' }, { br: true },
-            { text: '/help - display this help' }, { br: true },
-          ],
-        }),
-        partial({ resp: { status: 'ok' } }),
-      ]);
+    it('should return help message', async () => {
+      const ws = await connect();
+      const [help, ret] = await ws.send({
+        type: 'command',
+        name: 'help',
+        args: [],
+      });
+      assert.equal(ret.type, 'response');
+      assert.equal(ret.status, 'ok');
+      assert.equal(help.type, 'message');
+      assert.equal(help.id, 'help');
+      assert.equal(help.priv, true);
+      ws.close();
     });
   });
 };

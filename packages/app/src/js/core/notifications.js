@@ -1,21 +1,21 @@
 /* eslint-disable no-console */
 import { Capacitor } from '@capacitor/core';
 import { PushNotifications } from '@capacitor/push-notifications';
-import { initializeApp } from "firebase/app";
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { initializeApp } from 'firebase/app';
+import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 import Sentry from './sentry';
 
 export const initNotifications = (client) => {
   client.on('auth:user', subscribeNotifications);
 
-  if ( 'serviceWorker' in navigator ) {
+  if ('serviceWorker' in navigator) {
     navigator.serviceWorker.addEventListener('message', (payload) => {
       client.emit('notification', payload);
     });
   }
 
   async function subscribeNotifications(client) {
-    if ( Capacitor.isNativePlatform() ) return initNativeNotifications(client);
+    if (Capacitor.isNativePlatform()) return initNativeNotifications(client);
     // eslint-disable-next-line no-undef
     const app = initializeApp(FIREBASE_CONFIG);
     const messaging = getMessaging(app);
@@ -26,11 +26,9 @@ export const initNotifications = (client) => {
     await getToken(messaging, { vapidKey: cfg.applicationServerKey }).then((currentToken) => {
       if (currentToken) {
         return client.req({
-          op: {
-            type: 'setupFcm',
-            fcmToken: currentToken,
-          },
-        })
+          type: 'setupFcm',
+          token: currentToken,
+        });
       }
       console.log('No registration token available. Request permission to generate one.');
     }).catch((err) => {
@@ -50,10 +48,8 @@ export const initNotifications = (client) => {
     PushNotifications.addListener('registration', async (token) => {
       try {
         await client.req({
-          op: {
-            type: 'setupFcm',
-            fcmToken: token.value,
-          },
+          type: 'setupFcm',
+          token: token.value,
         });
       } catch (err) {
         // eslint-disable-next-line no-console
@@ -75,4 +71,4 @@ export const initNotifications = (client) => {
       console.log('notifaction', JSON.stringify(notification, null, 4));
     });
   };
-}
+};

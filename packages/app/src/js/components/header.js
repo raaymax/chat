@@ -1,11 +1,12 @@
 import {h} from 'preact';
 import { useState } from '../utils.js';
+import { getCid } from '../store/channel';
 import { getCurrent, watchCurrent } from '../store/channels';
 import { Channel } from './channels';
 
 export const Header = ({onclick}) => {
   const [channel, setChannel] = useState(getCurrent());
-  watchCurrent((m) => setChannel(m));
+  watchCurrent((m) => setChannel(m || {name: getCid(), cid: getCid()} ));
 
   return (
     <div id="workspace-header">

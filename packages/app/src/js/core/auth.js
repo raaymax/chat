@@ -26,9 +26,9 @@ const session = {
 export const initAuth = (client) => {
   client
     .on('config:ready', connectionReady)
-    .on('op:setSession', handleSession)
-    .on('op:rmSession', handleLogout);
-}
+    .on('setSession', handleSession)
+    .on('rmSession', handleLogout);
+};
 
 async function connectionReady(client) {
   try {
@@ -50,8 +50,8 @@ async function connectionReady(client) {
 }
 
 async function handleSession(client, msg) {
-  session.set(msg.op.session);
-  client.emit('auth:user', msg.op.user);
+  session.set(msg.session);
+  client.emit('auth:user', msg.user);
 }
 async function handleLogout(client) {
   session.set(null);
@@ -66,7 +66,7 @@ async function restoreSession(client, i = 1) {
     const sess = session.get();
     if (sess) {
       await client.emit('message:remove', 'session');
-      await client.req({ op: { type: 'restore', session: sess} });
+      await client.req({ type: 'restore', session: sess });
     }
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -78,7 +78,7 @@ async function restoreSession(client, i = 1) {
       notif: 'User session not restored',
       createdAt: new Date(),
     });
-    const errorCode = err?.resp?.data?.errorCode;
+    const errorCode = err?.data?.errorCode;
     if (errorCode !== 'SESSION_TERMINATED' && errorCode !== 'SESSION_NOT_FOUND') {
       return new Promise((resolve, reject) => {
         setTimeout(() => restoreSession(client, i + 1).then(resolve, reject), 2000);

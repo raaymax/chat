@@ -1,5 +1,5 @@
 import {h} from 'preact';
-import { useState } from '../utils.js';
+import { useState } from 'preact/hooks';
 import { watchInfo } from '../store/info.js';
 
 export const Info = () => {

@@ -27,7 +27,7 @@ module.exports = {
       ],
     }),
     new webpack.SourceMapDevToolPlugin({
-      filename: "[file].map",
+      filename: '[file].map',
     }),
   ],
   module: {
@@ -52,6 +52,14 @@ module.exports = {
         use: ['source-map-loader'],
       },
     ],
+  },
+  resolve: {
+    alias: {
+      react: "preact/compat",
+      "react-dom/test-utils": "preact/test-utils",
+      "react-dom": "preact/compat",
+      "react/jsx-runtime": "preact/jsx-runtime",
+    },
   },
   mode: 'development',
 };

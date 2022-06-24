@@ -1,15 +1,15 @@
 /* eslint-disable no-undef */
-import * as Sentry from "@sentry/browser";
-import { BrowserTracing } from "@sentry/tracing";
-import * as SentryCapacitor from "@sentry/capacitor";
+import * as Sentry from '@sentry/browser';
+import { BrowserTracing } from '@sentry/tracing';
+import * as SentryCapacitor from '@sentry/capacitor';
 import { Capacitor } from '@capacitor/core';
 
 export default (() => {
-  if (Capacitor.isNativePlatform() ) {
+  if (Capacitor.isNativePlatform()) {
     SentryCapacitor.init({
       dsn: SENTRY_DNS,
       release: `android@${APP_VERSION}`,
-      dist: "1",
+      dist: '1',
       tracesSampleRate: 1.0,
       integrations: [new BrowserTracing({})],
     });

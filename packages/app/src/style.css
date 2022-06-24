@@ -561,3 +561,16 @@ ul {
 .message .toolbar i:active{
   background-color: var(--secondary_active_mask);
 }
+
+.login {
+  width: 300px;
+  margin: 100px auto;
+}
+
+.login input {
+  display: block;
+  padding: 10px;
+  width: 100%;
+  margin-top: 10px;
+}
+

@@ -1,8 +1,13 @@
-import { client } from '../core';
+/* eslint-disable no-undef */
+import { Capacitor } from '@capacitor/core';
 import { createCounter } from '../utils';
 import { add, update } from '../store/file';
 
 const tempId = createCounter(`file:${(Math.random() + 1).toString(36)}`);
+
+const FILES_URL = Capacitor.isNativePlatform()
+  ? `${SERVER_URL}/files`
+  : `${document.location.protocol}//${document.location.host}/files`;
 
 export const upload = async (file) => {
   const local = {
@@ -12,33 +17,38 @@ export const upload = async (file) => {
     progress: 0,
   };
   add(local);
-
+  /*
   const ret = await client.req({
-    op: {
-      type: 'initUpload',
-      fileName: file.name,
-      contentType: file.type,
-    },
+    type: 'initUpload',
+    fileName: file.name,
+    contentType: file.type,
   });
-  update(local.clientId, {id: ret.resp.data.fileId});
-
+  */
+  // update(local.clientId, { id: ret.data.fileId });
   try {
-    await uploadFile('PUT', ret.resp.data.url, {
+    const {status, fileId } = await uploadFile('POST', FILES_URL, {
       file,
       clientId: local.clientId,
       progress: (progress) => {
-        update(local.clientId, {progress});
+        update(local.clientId, { progress });
       },
     });
-    update(local.clientId, {progress: 100});
+    if (status === 'ok') {
+      update(local.clientId, { id: fileId, progress: 100 });
+    } else {
+      update(local.clientId, {
+        error: 'something went wrong',
+        progress: 0,
+      });
+    }
+    /*
     await client.req({
-      op: {
-        type: 'finalizeUpload',
-        fileId: ret.resp.data.fileId,
-        fileName: file.name,
-        contentType: file.type,
-      },
+      type: 'finalizeUpload',
+      fileId: ret.data.fileId,
+      fileName: file.name,
+      contentType: file.type,
     });
+    */
   } catch (err) {
     update(local.clientId, {
       error: err.message,
@@ -47,31 +57,28 @@ export const upload = async (file) => {
     // eslint-disable-next-line no-console
     console.error(err);
   }
-}
+};
 
-export const getUrl = async (id) => {
-  const file = await client.req({
-    op: {
-      type: 'initDownload',
-      fileId: id,
-    },
-  });
-  return file.resp.data.url;
-}
+export const getUrl = (id) => `${FILES_URL}/${id}`;
 
-function uploadFile(method, url, {file, progress, clientId}) {
+function uploadFile(method, url, { file, progress, clientId }) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
-    xhr.addEventListener('load', () => resolve(), {once: true});
+    xhr.addEventListener('load', () => {
+      const data = JSON.parse(xhr.responseText);
+      resolve(data);
+    }, { once: true });
     xhr.upload.addEventListener('progress', (e) => {
       if (e.lengthComputable) {
         progress((e.loaded / e.total) * 100);
       }
     });
-    xhr.addEventListener('error', (e) => reject(e), {once: true});
+    xhr.addEventListener('error', (e) => reject(e), { once: true });
     xhr.open(method, url, true);
-    xhr.setRequestHeader('Content-Type', file.type);
-    update(clientId, {abort: () => xhr.abort()});
-    xhr.send(file);
+
+    const formData = new FormData();
+    formData.append('file', file);
+    update(clientId, { abort: () => xhr.abort() });
+    xhr.send(formData);
   });
 }

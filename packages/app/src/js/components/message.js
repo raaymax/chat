@@ -5,6 +5,7 @@ import Emojis from '../services/emoji';
 import {Files} from './Files/Files';
 import {Delete} from './confirm';
 import { isMe } from '../store/user';
+import { getUser } from '../store/users';
 
 const EMOJI_MATCHER = () => /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/g;
 
@@ -59,9 +60,15 @@ const isOnlyEmoji = (message, flat) => EMOJI_MATCHER().test(flat) || (
 
 export const Message = (props = {}) => {
   const {
-    info, message, attachments, flat, createdAt, user,
+    info, message, attachments, flat, createdAt, userId,
   } = props.data;
   const [toolbar, setToolbar] = useState(false);
+  const user = getUser(userId);
+  if (!user) {
+    // eslint-disable-next-line no-console
+    console.log(props.data);
+    return null;
+  }
   return (
     <div
       {...props}

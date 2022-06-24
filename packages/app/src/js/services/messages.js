@@ -11,9 +11,9 @@ import { client } from '../core';
 import { fromDom } from '../MessageBuilder';
 import * as files from '../store/file';
 
-export const loadPrevious = () => client.req({ op: { type: 'load', channel: getCid(), before: getEarliestDate() } });
-export const loadNext = () => client.req({ op: { type: 'load', channel: getCid(), after: getLatestDate() } });
-export const load = () => client.req({ op: { type: 'load', channel: getCid() } });
+export const loadPrevious = () => client.req({ type: 'load', channel: getCid(), before: getEarliestDate() });
+export const loadNext = () => client.req({ type: 'load', channel: getCid(), after: getLatestDate() });
+export const loadMessages = () => client.req({ type: 'load', limit: 50, channel: getCid() });
 
 export const sendFromDom = async (dom) => {
   const msg = fromDom(dom);
@@ -26,7 +26,7 @@ export const sendFromDom = async (dom) => {
 };
 
 export const send = async (msg) => {
-  if (msg.command) return sendCommand(msg);
+  if (msg.type === 'command') return sendCommand(msg);
   sendMessage(msg);
 };
 
@@ -38,39 +38,35 @@ export const resend = async (id) => {
 
 export const sendCommand = async (msg) => {
   const notif = {
+    userId: 'notif',
     clientId: msg.clientId,
     notifType: 'info',
-    notif: `${msg.command.name} sent`,
+    notif: `${msg.name} sent`,
     createdAt: new Date(),
   };
+  msg.context = {channel: getCid()};
   insertMessage(notif);
   try {
     await client.req(msg);
-    insertMessage({ ...notif, notifType: 'success', notif: `${msg.command.name} executed successfully` });
+    insertMessage({ ...notif, notifType: 'success', notif: `${msg.name} executed successfully` });
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
-    insertMessage({ ...notif, notifType: 'error', notif: `${msg.command.name} error ${err.resp.data.message}` });
+    insertMessage({ ...notif, notifType: 'error', notif: `${msg.name} error ${err.data.message}` });
   }
 };
 
 export const removeMessage = async (msg) => {
   try {
-    await client.req({op: {type: 'removeMessage', id: msg.id}});
+    await client.req({ type: 'removeMessage', id: msg.id });
   } catch (err) {
     insertMessage({
-      id: msg.id, notifType: null, notif: null, info: {type: 'error', msg: 'Could not delete message' },
+      id: msg.id, notifType: null, notif: null, info: { type: 'error', msg: 'Could not delete message' },
     });
   }
-}
+};
 
 const sendMessage = async (msg) => {
-  if (!msg.user) {
-    insertMessage({
-      id: 'login', notifType: 'warning', notif: 'You must login first!', createdAt: new Date(),
-    });
-    return;
-  }
   insertPendingMessage(msg);
   try {
     await client.req(msg);

@@ -6,13 +6,15 @@ const register = (seqId, source) => {
     timeout = setTimeout(() => {
       delete waiting[seqId];
       const err = new Error('TIMEOUT');
-      Object.assign(err, { seqId: source.id, resp: { status: 'timeout', source } });
+      Object.assign(err, {
+        type: 'response', seqId, status: 'timeout', source,
+      });
       reject(err);
     }, 2000);
     waiting[seqId] = (msg) => {
       msg.source = source;
       clearTimeout(timeout);
-      if (msg.resp.status === 'ok') {
+      if (msg.status === 'ok') {
         resolve(msg);
       } else {
         reject(msg);
@@ -23,7 +25,7 @@ const register = (seqId, source) => {
 const done = (msg) => waiting[msg.seqId] && waiting[msg.seqId](msg);
 
 export function initRequests(client) {
-  client.on('resp', (srv, msg) => done(msg));
+  client.on('response', (srv, msg) => done(msg));
 
   const ID = (Math.random() + 1).toString(36);
   let nextSeq = 0;

@@ -47,7 +47,7 @@ export function MessageList() {
         let sameUser = false;
         if (!msg.priv) {
           sameUser = prev
-            && prev?.user?.id === msg?.user?.id
+            && prev?.userId === msg?.userId
             && (new Date(msg.createdAt) - new Date(prev.createdAt)) < 60000;
         }
         prev = msg;

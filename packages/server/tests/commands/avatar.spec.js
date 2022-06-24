@@ -1,31 +1,41 @@
-const {
-  match,
-  partial,
-} = require('../helpers');
+const assert = require('assert');
+const { db } = require('../../src/infra/database');
 
-module.exports = (sys) => {
+module.exports = (connect) => {
   describe('/avatar <url>', () => {
-    it('should respond with error for not logged user', async () => {
-      match(await sys.req({ command: { name: 'avatar', args: ['http://example.com/image.jpg'] } }), [
-        partial({
-          resp: {
-            status: 'error',
-            data: {
-              errorCode: 'ACCESS_DENIED',
-            },
-          },
-        }),
-      ]);
+    const URL = 'http://example.com/avatar.png';
+
+    let ws;
+    before(async () => {
+      ws = await connect('mateusz');
+      await (await db)
+        .collection('users')
+        .updateOne({ login: 'mateusz' }, { $set: { avatarUrl: null } });
     });
-    it('should respond with ok for logged user', async () => {
-      await sys.req({ command: { name: 'login', args: ['mateusz', '123'] } });
-      match(await sys.req({ command: { name: 'avatar', args: ['http://example.com/image.jpg'] } }), [
-        partial({
-          resp: {
-            status: 'ok',
-          },
-        }),
-      ]);
+
+    after(async () => {
+      ws.close();
     });
+
+    it('should change users avatar and infor about change', async () => {
+      const [user, ret] = await ws.send({
+        type: 'command',
+        name: 'avatar',
+        args: [URL],
+      });
+      assert.equal(ret.type, 'response');
+      assert.equal(ret.status, 'ok');
+
+      const state = await (await db)
+        .collection('users')
+        .findOne({ login: 'mateusz' });
+      assert.equal(state.avatarUrl, URL);
+
+      assert.equal(user.type, 'user');
+      assert.equal(user.avatarUrl, URL);
+      assert.equal(user.id, ws.userId);
+    });
+
+    it('should inform others about change');
   });
 };

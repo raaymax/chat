@@ -9,6 +9,7 @@ import { MessageList } from '../components/messageList.js';
 import { Header } from '../components/header.js';
 import { Input } from '../components/input.js';
 import { EmojiSelector } from '../components/EmojiSelector/EmojiSelector';
+import { Login } from '../components/auth/login';
 
 import {upload} from '../services/file';
 
@@ -31,22 +32,24 @@ function dragOverHandler(ev) {
 const Page = () => {
   const [hide, setHide] = useState(true);
   return (
-    <div class='workspace'>
-      <div class={['menu', ...(hide ? ['hidden'] : [])].join(' ')}>
-        <Logo />
-        <Channels />
+    <Login>
+      <div class='workspace'>
+        <div class={['menu', ...(hide ? ['hidden'] : [])].join(' ')}>
+          <Logo />
+          <Channels />
+        </div>
+        <div class='chat workspace-main' ondrop={drop} ondragover={dragOverHandler}>
+          <Header onclick={(e) => {
+            setHide(!hide);
+            e.stopPropagation();
+            e.preventDefault();
+          }} />
+          <MessageList />
+          <Input />
+          <EmojiSelector />
+        </div>
       </div>
-      <div class='chat workspace-main' ondrop={drop} ondragover={dragOverHandler}>
-        <Header onclick={(e) => {
-          setHide(!hide);
-          e.stopPropagation();
-          e.preventDefault();
-        }} />
-        <MessageList />
-        <Input />
-        <EmojiSelector />
-      </div>
-    </div>
+    </Login>
   )
 }
 

@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { PushNotifications } from '@capacitor/push-notifications';
-import {client} from '../core';
+import { client } from '../core';
 
 export const initNotifications = () => {
   PushNotifications.requestPermissions().then((result) => {
@@ -12,10 +12,8 @@ export const initNotifications = () => {
   PushNotifications.addListener('registration', async (token) => {
     try {
       await client.req({
-        op: {
-          type: 'setupFcm',
-          fcmToken: token.value,
-        },
+        type: 'setupFcm',
+        fcmToken: token.value,
       });
     } catch (err) {
       // eslint-disable-next-line no-console

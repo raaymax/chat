@@ -3,7 +3,7 @@ export const initPing = (client) => {
     if (!client.active) return;
     const start = new Date();
     try {
-      await client.req({ op: { type: 'ping' } });
+      await client.req({ type: 'ping' });
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
@@ -15,4 +15,4 @@ export const initPing = (client) => {
       }
     }
   }, 10000);
-}
+};

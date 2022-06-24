@@ -1,36 +1,36 @@
 /* eslint-disable no-undef */
 import { Capacitor } from '@capacitor/core';
-import Sentry from './sentry'
+import { Manager } from "socket.io-client";
+import Sentry from './sentry';
 
 import { createEventListener } from '../utils';
-import { createPool } from './pool';
 
 const {
   notify, watch, once, exists,
 } = createEventListener();
 
-let protocol = 'ws:';
-if (document.location.protocol === 'https:') {
-  protocol = 'wss:';
-}
-
 // eslint-disable-next-line no-nested-ternary
 const URI = Capacitor.isNativePlatform()
   ? SERVER_URL
-  : `${protocol}//${document.location.host}/ws`;
+  : `${document.location.protocol}//${document.location.host}`;
 
 // eslint-disable-next-line no-console
-console.log("Connectiong to ", URI);
-const pool = createPool(URI);
+console.log('Connectiong to cycki ', URI);
+const manager = new Manager(URI, {
+  reconnectionDelay: 500,
+  reconnectionDelayMax: 2000,
+  timeout: 2000,
+  withCredentials: true,
+});
 
-window.pool = pool;
+const socket = manager.socket('/');
 
 const client = {
+  socket,
   send: async (msg) => {
     // eslint-disable-next-line no-console
     // console.log('send', JSON.stringify(msg, null, 4));
-    const raw = JSON.stringify(msg);
-    await pool.send(raw);
+    await socket.send(msg);
   },
   on: (ev, cb) => {
     watch(ev, cb);
@@ -50,25 +50,10 @@ const client = {
   },
 };
 
-pool.onOpen(() => notify('con:open', client));
-pool.onClose(() => notify('con:close', client));
-pool.onError(() => notify('con:error', client));
-pool.onPacket((raw) => {
-  try {
-    const msg = JSON.parse(raw.data);
-    // eslint-disable-next-line no-console
-    // console.log('recv', JSON.stringify(msg, null, 4));
-    // notify('packet', msg);
-    if (msg.message) return notify('message', client, msg);
-    if (msg.resp) notify('resp', client, msg);
-    else if (msg.op) notify(`op:${msg.op.type}`, client, msg);
-    else notify('message', client, msg);
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(err);
-    Sentry.captureException(err);
-    notify('packet:error', client, raw, err);
-  }
-});
+socket.on('message', (msg) => {
+  // eslint-disable-next-line no-console
+  // console.log('recv', JSON.stringify(msg, null, 4));
+  notify(msg.type, client, msg);
+})
 
 export default client;

@@ -1,19 +1,19 @@
 import { createNotifier } from '../utils.js';
-import {watchCid, getCid} from './channel';
+import { watchCid, getCid } from './channel';
 
 const [notify, watch] = createNotifier();
 const [notifyCurr, watchCurr] = createNotifier();
 
-let current = null
+let current = null;
 let channels = [];
 
 watchCid((cid) => {
-  current = getChannel({cid});
+  current = getChannel({ cid });
   notifyCurr(current);
 });
 
 export const getCurrent = () => current;
-export const getChannel = ( q = {}) => channels.find((c) => c.cid === q.cid || c.name === q.name)
+export const getChannel = (q = {}) => channels.find((c) => c.cid === q.cid || c.name === q.name);
 
 export const getChannels = () => channels;
 

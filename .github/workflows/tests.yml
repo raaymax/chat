@@ -22,6 +22,8 @@ jobs:
           --health-retries 5
         ports:
           - 27017:27017
+    env:
+      DATABASE_URL: 'mongodb://chat:chat@localhost:27017/chat?authSource=admin'
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js 17.x
@@ -34,6 +36,7 @@ jobs:
       shell: bash
       env:
         CONFIG_FILE: ${{secrets.TEST_CONFIG}}
+        DATABASE_URL: 'mongodb://chat:chat@localhost:27017/chat?authSource=admin'
     - run: npm ci
     - run: npm run lint:ci
     - run: npx migrate-mongo up
