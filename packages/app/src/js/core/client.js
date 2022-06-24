@@ -17,7 +17,9 @@ const URI = Capacitor.isNativePlatform()
 // eslint-disable-next-line no-console
 console.log('Connectiong to cycki ', URI);
 const manager = new Manager(URI, {
-  reconnectionDelayMax: 10000,
+  reconnectionDelay: 500,
+  reconnectionDelayMax: 2000,
+  timeout: 2000,
   withCredentials: true,
 });
 
