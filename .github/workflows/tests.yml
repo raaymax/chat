@@ -34,6 +34,7 @@ jobs:
       shell: bash
       env:
         CONFIG_FILE: ${{secrets.TEST_CONFIG}}
+        DATABASE_URL: 'mongodb://chat:chat@localhost:27017/chat?authSource=admin'
     - run: npm ci
     - run: npm run lint:ci
     - run: npx migrate-mongo up
