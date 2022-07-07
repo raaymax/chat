@@ -1,12 +1,16 @@
 import {h} from 'preact';
-import { useState } from 'preact/hooks';
-import { watchInfo } from '../store/info.js';
+import { useSelector } from 'react-redux';
+import {selectors} from '../state';
+import {Typing} from './typing';
 
 export const Info = () => {
-  const [info, setInfo] = useState(null);
-  watchInfo((m) => setInfo(m));
+  const info = useSelector(selectors.getInfo);
 
-  return info && (
-    <div class={['info', info.type].join(' ')}>{info.msg}</div>
+  if (info.type === null) {
+    return <Typing />;
+  }
+
+  return (
+    <div class={['info', info.type].join(' ')}>{info.message}</div>
   );
 };

@@ -15,7 +15,8 @@ module.exports = async (req, res) => {
   if (!await channel.haveAccess(req.userId, msg.channel)) {
     throw AccessDenied();
   }
-  const id = await messageRepo.insert({
+
+  const { id, dup } = await createMessage({
     message: msg.message,
     channel: msg.channel,
     clientId: msg.clientId,
@@ -29,7 +30,23 @@ module.exports = async (req, res) => {
   });
   const created = await messageRepo.get({ id });
 
-  res.broadcast({ type: 'message', ...created });
-  push.send(created);
-  res.ok();
+  if (!dup) {
+    res.broadcast({ type: 'message', ...created });
+    push.send(created);
+  }
+  res.ok(dup ? { duplicate: true } : {});
 };
+
+async function createMessage(msg) {
+  let id; let
+    dup = false;
+  try {
+    id = await messageRepo.insert(msg);
+  } catch (err) {
+    if (err.code !== 11000) {
+      throw err;
+    }
+    dup = true;
+  }
+  return { id, dup };
+}

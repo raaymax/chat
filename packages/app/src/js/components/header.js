@@ -1,12 +1,10 @@
 import {h} from 'preact';
-import { useState } from '../utils.js';
-import { getCid } from '../store/channel';
-import { getCurrent, watchCurrent } from '../store/channels';
+import { useSelector } from 'react-redux';
 import { Channel } from './channels';
+import { selectors } from '../state';
 
 export const Header = ({onclick}) => {
-  const [channel, setChannel] = useState(getCurrent());
-  watchCurrent((m) => setChannel(m || {name: getCid(), cid: getCid()} ));
+  const channel = useSelector(selectors.getCurrentChannel);
 
   return (
     <div id="workspace-header">

@@ -1,7 +1,5 @@
 import {h} from 'preact';
-import {useState} from 'preact/hooks';
-import { watchCid, getCid } from '../store/channel';
-import {watchChannels, getChannels } from '../store/channels';
+import { useDispatch, useSelector } from 'react-redux';
 import {openChannel} from '../services/channels';
 
 export const Channel = ({
@@ -9,15 +7,14 @@ export const Channel = ({
 }) => (
   <div class={`channel ${active ? 'active' : ''}`}data-id={cid} onclick={onclick}>
     {priv ? <i class='fa-solid fa-lock' /> : <i class='fa-solid fa-hashtag' /> }
-    <span class='name'>{name}</span>
+    <span class='name'>{name || cid}</span>
   </div>
 )
 
 export const Channels = () => {
-  const [channels, setChannels] = useState(getChannels());
-  const [cid, setCid] = useState(getCid());
-  watchChannels((c) => setChannels([...c]));
-  watchCid((c) => setCid(c));
+  const dispatch = useDispatch();
+  const channels = useSelector((state) => state.channels.list);
+  const cid = useSelector((state) => state.channels.current);
   return (
     <div class='channels'>
       <div class='header'>channels</div>
@@ -26,7 +23,7 @@ export const Channels = () => {
           {...c}
           active={cid === c.cid}
           key={c.id}
-          onclick={() => openChannel({cid: c.cid})}
+          onclick={() => dispatch(openChannel({cid: c.cid}))}
         />
       ))}
     </div>

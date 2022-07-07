@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
+import {createAsyncThunk} from '@reduxjs/toolkit';
 import { Capacitor } from '@capacitor/core';
 import { createCounter } from '../utils';
-import { add, update } from '../store/file';
+import { actions } from '../state';
 
 const tempId = createCounter(`file:${(Math.random() + 1).toString(36)}`);
 
@@ -9,57 +11,67 @@ const FILES_URL = Capacitor.isNativePlatform()
   ? `${SERVER_URL}/files`
   : `${document.location.protocol}//${document.location.host}/files`;
 
-export const upload = async (file) => {
+export const uploadMany = createAsyncThunk('files/upload/many', async (files, {dispatch}) => {
+  for (let i = 0, file; i < files.length; i++) {
+    file = files.item(i);
+    dispatch(upload(file));
+  }
+})
+
+export const upload = createAsyncThunk('files/upload', async (file, {dispatch}) => {
   const local = {
     clientId: tempId(),
     fileName: file.name,
     contentType: file.type,
     progress: 0,
   };
-  add(local);
-  /*
-  const ret = await client.req({
-    type: 'initUpload',
-    fileName: file.name,
-    contentType: file.type,
-  });
-  */
-  // update(local.clientId, { id: ret.data.fileId });
+
+  dispatch(actions.addFile(local));
+
   try {
     const {status, fileId } = await uploadFile('POST', FILES_URL, {
       file,
       clientId: local.clientId,
+      dispatch,
       progress: (progress) => {
-        update(local.clientId, { progress });
+        dispatch(actions.updateFile({id: local.clientId, file: { progress }}));
       },
     });
     if (status === 'ok') {
-      update(local.clientId, { id: fileId, progress: 100 });
+      dispatch(actions.updateFile({id: local.clientId, file: { id: fileId, progress: 100 }}));
     } else {
-      update(local.clientId, {
-        error: 'something went wrong',
-        progress: 0,
-      });
+      dispatch(actions.updateFile({
+        id: local.clientId,
+        file: {
+          error: 'something went wrong',
+          progress: 0,
+        },
+      }));
     }
-    /*
-    await client.req({
-      type: 'finalizeUpload',
-      fileId: ret.data.fileId,
-      fileName: file.name,
-      contentType: file.type,
-    });
-    */
   } catch (err) {
-    update(local.clientId, {
-      error: err.message,
-      progress: 0,
-    });
+    dispatch(actions.updateFile({
+      id: local.clientId,
+      file: {
+        error: err.message,
+        progress: 0,
+      },
+    }));
     // eslint-disable-next-line no-console
     console.error(err);
   }
-};
+})
 
 export const getUrl = (id) => `${FILES_URL}/${id}`;
+const aborts = {}
+
+export const abort = createAsyncThunk('files/abort', async (clientId, {dispatch}) => {
+  try {
+    aborts[clientId] && aborts[clientId]();
+    dispatch(actions.removeFile(clientId));
+  } catch (err) {
+    console.log(err);
+  }
+})
 
 function uploadFile(method, url, { file, progress, clientId }) {
   return new Promise((resolve, reject) => {
@@ -78,7 +90,7 @@ function uploadFile(method, url, { file, progress, clientId }) {
 
     const formData = new FormData();
     formData.append('file', file);
-    update(clientId, { abort: () => xhr.abort() });
+    aborts[clientId] = () => xhr.abort();
     xhr.send(formData);
   });
 }

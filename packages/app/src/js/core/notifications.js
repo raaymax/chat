@@ -14,8 +14,8 @@ export const initNotifications = (client) => {
     });
   }
 
-  async function subscribeNotifications(client) {
-    if (Capacitor.isNativePlatform()) return initNativeNotifications(client);
+  async function subscribeNotifications() {
+    if (Capacitor.isNativePlatform()) return initNativeNotifications();
     // eslint-disable-next-line no-undef
     const app = initializeApp(FIREBASE_CONFIG);
     const messaging = getMessaging(app);
@@ -38,7 +38,7 @@ export const initNotifications = (client) => {
     client.emit('notifications:ready');
   }
 
-  const initNativeNotifications = (client) => {
+  const initNativeNotifications = () => {
     PushNotifications.requestPermissions().then((result) => {
       if (result.receive === 'granted') {
         PushNotifications.register();

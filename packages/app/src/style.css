@@ -242,9 +242,14 @@ ul {
 }
 
 .info.error{
-  color: #852007
+  color: #852007;
 }
 
+.info.action:hover{
+  --text-decoration: underline;
+  cursor: pointer;
+  font-weight: bold;
+}
 
 .input-container .actionbar .action {
   width: 30px;

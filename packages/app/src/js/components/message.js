@@ -1,11 +1,13 @@
-import {h} from 'preact';
-import {useState} from 'preact/hooks';
+import { h } from 'preact';
+import { useState, useCallback } from 'preact/hooks';
+import { useDispatch, useSelector } from 'react-redux';
 import { formatTime, formatDate } from '../utils.js';
 import Emojis from '../services/emoji';
-import {Files} from './Files/Files';
-import {Delete} from './confirm';
-import { isMe } from '../store/user';
-import { getUser } from '../store/users';
+import {resend} from '../services/messages';
+import { Files } from './Files/Files';
+import { Delete } from './confirm';
+import { removeMessage } from '../services/messages';
+import { selectors, actions } from '../state';
 
 const EMOJI_MATCHER = () => /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/g;
 
@@ -60,20 +62,27 @@ const isOnlyEmoji = (message, flat) => EMOJI_MATCHER().test(flat) || (
 
 export const Message = (props = {}) => {
   const {
-    info, message, attachments, flat, createdAt, userId,
+    clientId, info, message, attachments, flat, createdAt, userId,
   } = props.data;
   const [toolbar, setToolbar] = useState(false);
-  const user = getUser(userId);
-  if (!user) {
-    // eslint-disable-next-line no-console
-    console.log(props.data);
-    return null;
-  }
+  const dispatch = useDispatch();
+  const user = useSelector(selectors.getUser(userId));
+  const meId = useSelector((state) => state.users.meId);
+  const onAction = useCallback(() => {
+    if (info.action === 'resend') {
+      dispatch(resend(clientId));
+    }
+  }, [dispatch, clientId, info]);
+
+  const onDelete = useCallback(() => {
+    dispatch(removeMessage(props.data));
+  }, [dispatch, props.data]);
+
+  const isMe = user.id === meId;
   return (
     <div
       {...props}
       class={['message', ...props.class].join(' ')}
-      onclick={info && info.action ? info.action : () => {}}
       onmouseenter={() => setToolbar(true)}
       onmouseleave={() => setToolbar(false)}
     >
@@ -89,10 +98,10 @@ export const Message = (props = {}) => {
         </div>}
         <div class={['content', ...(isOnlyEmoji(message, flat) ? ['emoji'] : [])].join(' ')}>{build(message)}</div>
         {attachments && <Files list={attachments} />}
-        {info && <div class={['info', info.type].join(' ')}>{info.msg}</div>}
-        {isMe(user.id) && toolbar && <div class='toolbar'>
+        {info && <div onclick={onAction} class={['info', info.type, ...(info.action ? ['action'] : [])].join(' ')}>{info.msg}</div>}
+        {isMe && toolbar && <div class='toolbar'>
           {/* <i class='fa-solid fa-icons' /> */}
-          { isMe(user.id) && <Delete accept={props.onDelete} />}
+          { isMe && <Delete accept={onDelete} />}
         </div>}
       </div>
     </div>

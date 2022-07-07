@@ -1,6 +1,6 @@
 import {h} from 'preact';
-import { useState } from '../../utils.js';
-import * as files from '../../store/file';
+import { useDispatch, useSelector } from 'react-redux';
+import {abort} from '../../services/file';
 
 export const Attachment = ({data: {fileName, contentType, progress}, ondelete}) => (
   <div class='attachment'>
@@ -12,8 +12,8 @@ export const Attachment = ({data: {fileName, contentType, progress}, ondelete}) 
 );
 
 export const Attachments = () => {
-  const [list, setList] = useState([]);
-  files.watchFiles((l) => setList([...l]));
+  const list = useSelector((state) => state.files.list);
+  const dispatch = useDispatch();
 
   return (
     <div>
@@ -22,8 +22,7 @@ export const Attachments = () => {
           key={file.clientId}
           data={{...file}}
           ondelete={() => {
-            file.abort();
-            files.remove(file.clientId);
+            dispatch(abort(file.clientId))
           }}
         />
       ))}

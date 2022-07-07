@@ -18,9 +18,12 @@
     "@sentry/browser": "6.19.7",
     "@sentry/capacitor": "0.6.0",
     "@sentry/tracing": "6.19.7",
+    "@reduxjs/toolkit": "1.8.2",
     "firebase": "9.6.11",
     "fuse.js": "6.5.3",
     "preact": "10.7.0",
+    "react-redux": "8.0.2",
+    "redux": "4.2.0",
     "socket.io-client": "4.5.1"
   },
   "devDependencies": {

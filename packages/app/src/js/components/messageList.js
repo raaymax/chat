@@ -1,20 +1,34 @@
-import {h} from 'preact';
-import {
-  useState, useEffect, useRef, createCooldown,
-} from '../utils';
-import { watchMessages, deleteBefore } from '../store/messages';
+import { h } from 'preact';
+import { useCallback, useEffect, useRef } from 'preact/hooks';
+import { useDispatch, useSelector } from 'react-redux';
+import { createCooldown } from '../utils';
 import { Message } from './message';
 import { Notification } from './notification';
 import { loadPrevious, removeMessage } from '../services/messages';
+import { actions, selectors } from '../state';
 
-const loadPrev = createCooldown(loadPrevious, 100);
+export const useCooldown = (fn, time, deps) => {
+  const cb = useCallback(fn, deps);
+  let cooldown = false;
+  return async () => {
+    if (!cooldown) {
+      cooldown = true;
+      setTimeout(() => { cooldown = false; }, time);
+      return cb();
+    }
+  };
+};
+
 
 export function MessageList() {
-  const [messages, setMessages] = useState([]);
   const list = useRef(null);
   const stop = useRef(null);
 
   const getH = () => parseInt(window.getComputedStyle(list.current).height.split(' ')[0], 10);
+  const messages = useSelector(selectors.getMessages);
+  const dispatch = useDispatch();
+
+  const loadPrev = useCooldown(() => dispatch(loadPrevious()), 100, [dispatch]);
 
   useEffect(() => {
     function onScroll(e) {
@@ -27,17 +41,15 @@ export function MessageList() {
         loadPrev();
       } else if (current) {
         const id = current.getAttribute('data-id');
-        deleteBefore(id);
+        dispatch(actions.removeMessagesBefore(id));
+        // TODO: delete messages before id?
+        //deleteBefore(id);
       }
     }
     const el = list.current;
     el.addEventListener('scroll', onScroll);
     return () => el.removeEventListener('scroll', onScroll);
-  }, [list]);
-
-  watchMessages((m) => {
-    setMessages([...(m || [])]); // fixme: hack for refreshing
-  });
+  }, [list, dispatch, loadPrev]);
 
   let prev;
   return (
@@ -61,7 +73,7 @@ export function MessageList() {
             : <Message
               class={msg.priv ? ['private'] : []}
               data-id={msg.id}
-              onDelete={() => removeMessage(msg)}
+              client-id={msg.clientId}
               key={msg.id || msg.clientId}
               sameUser={sameUser}
               data={msg}

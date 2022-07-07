@@ -1,7 +1,7 @@
 /* eslint-disable no-await-in-loop */
 import {h} from 'preact';
 import {useState} from 'preact/hooks';
-import { render } from '../utils.js';
+import { useDispatch } from 'react-redux'
 
 import { Logo } from '../components/logo';
 import { Channels } from '../components/channels';
@@ -9,19 +9,14 @@ import { MessageList } from '../components/messageList.js';
 import { Header } from '../components/header.js';
 import { Input } from '../components/input.js';
 import { EmojiSelector } from '../components/EmojiSelector/EmojiSelector';
-import { Login } from '../components/auth/login';
 
-import {upload} from '../services/file';
+import { uploadMany } from '../services/file';
 
-const drop = async (e) => {
+const drop = (dispatch) => async (e) => {
   e.preventDefault();
   e.stopPropagation();
   const { files } = e.dataTransfer;
-
-  for (let i = 0, file; i < files.length; i++) {
-    file = files.item(i);
-    await upload(file);
-  }
+  dispatch(uploadMany(files))
 }
 
 function dragOverHandler(ev) {
@@ -29,28 +24,25 @@ function dragOverHandler(ev) {
   ev.stopPropagation();
 }
 
-const Page = () => {
+export const Chat = () => {
   const [hide, setHide] = useState(true);
+  const dispatch = useDispatch();
   return (
-    <Login>
-      <div class='workspace'>
-        <div class={['menu', ...(hide ? ['hidden'] : [])].join(' ')}>
-          <Logo />
-          <Channels />
-        </div>
-        <div class='chat workspace-main' ondrop={drop} ondragover={dragOverHandler}>
-          <Header onclick={(e) => {
-            setHide(!hide);
-            e.stopPropagation();
-            e.preventDefault();
-          }} />
-          <MessageList />
-          <Input />
-          <EmojiSelector />
-        </div>
+    <div class='workspace'>
+      <div class={['menu', ...(hide ? ['hidden'] : [])].join(' ')}>
+        <Logo />
+        <Channels />
       </div>
-    </Login>
+      <div class='chat workspace-main' ondrop={drop(dispatch)} ondragover={dragOverHandler}>
+        <Header onclick={(e) => {
+          setHide(!hide);
+          e.stopPropagation();
+          e.preventDefault();
+        }} />
+        <MessageList />
+        <Input />
+        <EmojiSelector />
+      </div>
+    </div>
   )
 }
-
-render(<Page />, document.getElementById('root'));

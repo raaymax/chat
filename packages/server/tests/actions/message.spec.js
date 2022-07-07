@@ -18,6 +18,7 @@ module.exports = (connect) => {
           });
           mateusz.send({
             type: 'message',
+            clientId: `test:${Math.random()}`,
             channel: 'main',
             message: { line: { text: 'Hello' } },
             flat: 'Hello',
@@ -32,6 +33,7 @@ module.exports = (connect) => {
       const ws = await connect();
       const [msg, ret] = await ws.send({
         type: 'message',
+        clientId: `test:${Math.random()}`,
         channel: 'main',
         message: { line: { text: 'Hello' } },
         flat: 'Hello',
@@ -49,8 +51,8 @@ module.exports = (connect) => {
       const clientId = `${Math.random() + 1}`;
       await ws.send({
         type: 'message',
-        channel: 'main',
         clientId,
+        channel: 'main',
         message: { line: { text: 'Hello' } },
         flat: 'Hello',
       });
@@ -65,6 +67,7 @@ module.exports = (connect) => {
       const ws = await connect();
       const [msg, ret] = await ws.send({
         type: 'message',
+        clientId: `test:${Math.random()}`,
         message: { line: { text: 'Hello' } },
         channel: 'main',
         flat: 'Hello',
@@ -93,6 +96,7 @@ module.exports = (connect) => {
       const ws = await connect();
       const [ret] = await ws.send({
         type: 'message',
+        clientId: `test:${Math.random()}`,
         message: { line: { text: 'Hello' } },
         flat: 'Hello',
       }).catch((e) => e);
@@ -105,6 +109,7 @@ module.exports = (connect) => {
       const ws = await connect();
       const [ret] = await ws.send({
         type: 'message',
+        clientId: `test:${Math.random()}`,
         channel: 'main',
         flat: 'Hello',
       }).catch((e) => e);
@@ -120,6 +125,7 @@ module.exports = (connect) => {
         .findOne({ name: 'Melisa' });
       const [ret] = await ws.send({
         type: 'message',
+        clientId: `test:${Math.random()}`,
         channel: channel.cid,
         message: { text: 'Hello' },
         flat: 'Hello',
@@ -134,6 +140,7 @@ module.exports = (connect) => {
       const ws = await connect();
       const [ret] = await ws.send({
         type: 'message',
+        clientId: `test:${Math.random()}`,
         channel: 'main',
         message: { text: 'Hello' },
       }).catch((e) => e);

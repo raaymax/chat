@@ -41,19 +41,21 @@ const client = {
     return client;
   },
   // eslint-disable-next-line no-console
-  emit: async (name, ...data) => {
+  emit: async (name, data) => {
     if (!exists(name)) {
       Sentry.captureException(new Error(`[client] handler not exists: ${name}`));
       return;
     }
-    return notify(name, client, ...data);
+    return notify(name, data);
   },
 };
 
 socket.on('message', (msg) => {
   // eslint-disable-next-line no-console
   // console.log('recv', JSON.stringify(msg, null, 4));
-  notify(msg.type, client, msg);
-})
+  client.emit(msg.type, msg);
+});
+socket.on('connect', () => { client.emit('con:open'); });
+socket.on('disconnect', () => { client.emit('con:close'); });
 
 export default client;
