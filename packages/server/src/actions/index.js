@@ -1,20 +1,24 @@
 /* eslint-disable global-require */
 
-module.exports = {
-  ping: require('./ping'),
-  message: require('./message'),
-  load: require('./load'),
-  setupFcm: require('./setupFcm'),
-  channels: require('./channels'),
-  typing: require('./typing'),
-  greet: require('./greet'),
-  removeMessage: require('./removeMessage'),
-  command: require('./command'),
-  config: require('./config'),
-  users: require('./users'),
-  default: (req) => {
-    const err = new Error('Unknown action');
-    err.action = req.type;
-    throw err;
+module.exports = [
+  require('./message'),
+  require('./load'),
+  require('./setupFcm'),
+  require('./channels'),
+  require('./typing'),
+  require('./greet'),
+  require('./removeMessage'),
+  require('./command'),
+  require('./config'),
+  require('./users'),
+  {
+    type: 'default',
+    handler: (req) => {
+      const err = new Error('Unknown action');
+      err.action = req.type;
+      throw err;
+    },
   },
-};
+].map((module) => ({
+  [module.type]: module,
+})).reduce((acc, item) => ({ ...acc, ...item }), {});

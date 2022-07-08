@@ -1,6 +1,7 @@
-import {h} from 'preact';
+import { h } from 'preact';
 import { useDispatch, useSelector } from 'react-redux';
-import {abort} from '../../services/file';
+import { abort } from '../../services/file';
+import { selectors } from '../../state';
 
 export const Attachment = ({data: {fileName, contentType, progress}, ondelete}) => (
   <div class='attachment'>
@@ -12,7 +13,7 @@ export const Attachment = ({data: {fileName, contentType, progress}, ondelete}) 
 );
 
 export const Attachments = () => {
-  const list = useSelector((state) => state.files.list);
+  const list = useSelector(selectors.getFiles);
   const dispatch = useDispatch();
 
   return (

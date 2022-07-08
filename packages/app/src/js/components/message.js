@@ -1,13 +1,12 @@
 import { h } from 'preact';
 import { useState, useCallback } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { formatTime, formatDate } from '../utils.js';
+import { formatTime, formatDate } from '../utils';
 import Emojis from '../services/emoji';
-import {resend} from '../services/messages';
+import { resend, removeMessage } from '../services/messages';
 import { Files } from './Files/Files';
 import { Delete } from './confirm';
-import { removeMessage } from '../services/messages';
-import { selectors, actions } from '../state';
+import { selectors } from '../state';
 
 const EMOJI_MATCHER = () => /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/g;
 

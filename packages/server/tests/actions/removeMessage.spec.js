@@ -35,6 +35,7 @@ module.exports = (connect) => {
 
     async function createMessage(ws) {
       const [msg, ret] = await ws.send({
+        clientId: ''+Math.random(),
         type: 'message',
         channel: 'main',
         message: { line: { text: 'Hello' } },

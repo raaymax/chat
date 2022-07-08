@@ -8,7 +8,7 @@ module.exports = (connect) => {
     let ws;
     before(async () => {
       ws = await connect('mateusz');
-      await (await db).collection('channels').deleteOne({cid: CHANNEL})
+      await (await db).collection('channels').deleteOne({ cid: CHANNEL });
       await (await db)
         .collection('channels')
         .insertOne({

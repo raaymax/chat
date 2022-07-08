@@ -1,5 +1,5 @@
-import {h} from 'preact';
-import {useState} from 'preact/hooks';
+import { h } from 'preact';
+import { useState } from 'preact/hooks';
 
 export const Delete = ({accept}) => {
   const [show, setShow] = useState(false);

@@ -1,11 +1,12 @@
 import { client } from '../core';
-import {actions} from '../state';
+import { actions, selectors } from '../state';
 
 let cooldown = false;
 let queue = false;
 
 export const notifyTyping = () => (dispatch, getState) => {
-  const {config, channels} = getState();
+  const config = selectors.getConfig(getState());
+  const cid = selectors.getCid(getState());
   if (!config) return;
   if (cooldown) {
     queue = true;
@@ -13,7 +14,7 @@ export const notifyTyping = () => (dispatch, getState) => {
   }
   cooldown = true;
   queue = false;
-  client.send({ type: 'typing', channel: channels.current });
+  client.send({ type: 'typing', channel: cid });
   setTimeout(() => {
     cooldown = false;
     if (queue) {
@@ -23,7 +24,7 @@ export const notifyTyping = () => (dispatch, getState) => {
 }
 
 export const ackTyping = (msg) => (dispatch, getState) => {
-  const {meId} = getState().users;
+  const meId = selectors.getMeId(getState());
   if (msg.userId === meId) return;
   dispatch(actions.addTyping(msg));
   setTimeout(() => dispatch(actions.clearTyping()), 1100);

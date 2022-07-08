@@ -1,6 +1,6 @@
-import {h} from 'preact';
+import { h } from 'preact';
 import { useSelector } from 'react-redux';
-import {selectors} from '../state';
+import { selectors } from '../state';
 
 export const Typing = () => {
   const typing = useSelector(selectors.getTyping());

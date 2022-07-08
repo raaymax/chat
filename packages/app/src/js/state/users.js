@@ -1,7 +1,6 @@
 import {
-  createReducer, createAction, createAsyncThunk, createSelector,
+  createReducer, createAction,
 } from '@reduxjs/toolkit';
-import {client} from '../core';
 
 const addUser = createAction('users/add');
 
@@ -22,12 +21,9 @@ const usersReducer = createReducer({list: [], meId: null}, {
   logout: () => ({ list: [], meId: null }),
 });
 
-const loadUsers = createAsyncThunk('users/load', async (args, api) => client.req({type: 'users'}))
-
 export const actions = {
   setMe,
   addUser,
-  loadUsers,
 }
 
 export default usersReducer;

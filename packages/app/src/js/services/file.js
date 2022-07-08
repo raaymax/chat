@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
-import {createAsyncThunk} from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Capacitor } from '@capacitor/core';
 import { createCounter } from '../utils';
 import { actions } from '../state';
@@ -69,7 +69,8 @@ export const abort = createAsyncThunk('files/abort', async (clientId, {dispatch}
     aborts[clientId] && aborts[clientId]();
     dispatch(actions.removeFile(clientId));
   } catch (err) {
-    console.log(err);
+    // eslint-disable-next-line no-console
+    console.error(err);
   }
 })
 

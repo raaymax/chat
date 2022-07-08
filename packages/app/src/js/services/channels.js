@@ -1,5 +1,6 @@
-import {createAsyncThunk} from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { client } from '../core';
+import { selectors } from '../state';
 
 window.addEventListener('hashchange', async () => {
   const cid = window.location.hash.slice(1);
@@ -7,7 +8,7 @@ window.addEventListener('hashchange', async () => {
 }, false);
 
 export const openChannel = createAsyncThunk('channels/open', async (q, {getState}) => {
-  const channel = getState().channels.list.find((c) => c.cid === q.cid || c.name === q.name);
+  const channel = selectors.getChannel(q)(getState());
   window.location.hash = channel.cid;
 });
 

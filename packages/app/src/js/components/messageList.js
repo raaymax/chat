@@ -1,14 +1,13 @@
 import { h } from 'preact';
 import { useCallback, useEffect, useRef } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { createCooldown } from '../utils';
 import { Message } from './message';
 import { Notification } from './notification';
-import { loadPrevious, removeMessage } from '../services/messages';
+import { loadPrevious} from '../services/messages';
 import { actions, selectors } from '../state';
 
 export const useCooldown = (fn, time, deps) => {
-  const cb = useCallback(fn, deps);
+  const cb = useCallback(fn, [...deps, fn]);
   let cooldown = false;
   return async () => {
     if (!cooldown) {
@@ -18,7 +17,6 @@ export const useCooldown = (fn, time, deps) => {
     }
   };
 };
-
 
 export function MessageList() {
   const list = useRef(null);
@@ -42,8 +40,6 @@ export function MessageList() {
       } else if (current) {
         const id = current.getAttribute('data-id');
         dispatch(actions.removeMessagesBefore(id));
-        // TODO: delete messages before id?
-        //deleteBefore(id);
       }
     }
     const el = list.current;

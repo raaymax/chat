@@ -1,7 +1,7 @@
-import {h} from 'preact';
-import {useEffect, useState} from 'preact/hooks';
-import {client} from '../../core';
-import {me, login} from '../../services/session';
+import { h } from 'preact';
+import { useEffect, useState } from 'preact/hooks';
+import { client } from '../../core';
+import { me, login } from '../../services/session';
 
 export const Login = ({children}) => {
   const [status, setStatus] = useState('pending');

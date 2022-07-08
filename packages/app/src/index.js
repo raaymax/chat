@@ -1,5 +1,5 @@
-//import './console';
+// import './console';
 import './assets/fontawesome/css/all.css';
 import './style.css';
 import './js/index';
-import './js/pages/login';
+import './js/pages/app';

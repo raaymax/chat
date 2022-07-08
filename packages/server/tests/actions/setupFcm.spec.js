@@ -24,7 +24,7 @@ module.exports = (connect) => {
         type: 'setupFcm',
       }).catch((e) => e);
       assert.equal(ret.status, 'error');
-      assert.equal(ret.message, 'MISSING_TOKEN');
+      assert.equal(ret.message, '"token" is required');
       ws.close();
     });
   });

@@ -1,5 +1,5 @@
 import { emojiFuse } from '../../services/emoji';
-import { createNotifier } from '../../utils.js';
+import { createNotifier } from '../../utils';
 
 const [notify, watch] = createNotifier();
 

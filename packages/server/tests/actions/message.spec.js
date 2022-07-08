@@ -101,7 +101,7 @@ module.exports = (connect) => {
         flat: 'Hello',
       }).catch((e) => e);
       assert.equal(ret.status, 'error');
-      assert.equal(ret.message, 'MISSING_CHANNEL');
+      assert.equal(ret.message, '"channel" is required');
       ws.close();
     });
 
@@ -114,7 +114,7 @@ module.exports = (connect) => {
         flat: 'Hello',
       }).catch((e) => e);
       assert.equal(ret.status, 'error');
-      assert.equal(ret.message, 'MISSING_MESSAGE');
+      assert.equal(ret.message, '"message" is required');
       ws.close();
     });
 
@@ -146,7 +146,7 @@ module.exports = (connect) => {
       }).catch((e) => e);
       assert.equal(ret.type, 'response');
       assert.equal(ret.status, 'error');
-      assert.equal(ret.message, 'MISSING_FLAT');
+      assert.equal(ret.message, '"flat" is required');
       ws.close();
     });
   });

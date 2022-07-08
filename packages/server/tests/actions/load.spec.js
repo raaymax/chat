@@ -60,7 +60,7 @@ module.exports = (connect) => {
         type: 'load',
       }).catch((e) => e);
       assert.equal(ret.status, 'error');
-      assert.equal(ret.message, 'MISSING_CHANNEL');
+      assert.equal(ret.message, '"channel" is required');
       ws.close();
     });
 

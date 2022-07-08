@@ -1,16 +1,22 @@
-const { MissingChannel } = require('../common/errors');
+const Joi = require('joi');
 
-module.exports = (req, res) => {
-  const { channel } = req.body;
+module.exports = {
+  type: 'typing',
+  schema: {
+    body: Joi.object({
+      channel: Joi.string().required(),
+    }),
+  },
+  handler: (req, res) => {
+    const { channel } = req.body;
 
-  if (!channel) throw MissingChannel();
-
-  res.broadcast({
-    type: 'typing',
-    userId: req.userId,
-    channel,
-  }, {
-    onlyOthers: true,
-  });
-  res.ok();
+    res.broadcast({
+      type: 'typing',
+      userId: req.userId,
+      channel,
+    }, {
+      onlyOthers: true,
+    });
+    res.ok();
+  },
 };

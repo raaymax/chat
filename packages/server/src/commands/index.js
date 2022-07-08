@@ -20,7 +20,7 @@ module.exports = async (req, res) => {
 };
 
 async function sendHelp(req, res) {
-  const { channel } = req.body.context;
+  const { channel } = req.body.context || {}; // TODO: this should be validated
   const help = commands.filter((h) => !h.hidden).map((h) => [
     { bold: { text: `/${h.name}` } },
     {

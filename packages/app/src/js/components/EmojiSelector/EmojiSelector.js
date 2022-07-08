@@ -1,9 +1,9 @@
-import {h} from 'preact';
+import { h } from 'preact';
 
 import './EmojiSelector.css';
 import {
   useState, useEffect,
-} from '../../utils.js';
+} from '../../utils';
 
 import {
   install, select, getState, watchState,

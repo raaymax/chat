@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import {getUrl} from '../../services/file';
+import { getUrl } from '../../services/file';
 
 const download = async (fileId) => {
   window.open(getUrl(fileId));

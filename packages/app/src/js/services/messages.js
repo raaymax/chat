@@ -4,22 +4,20 @@ import { actions, selectors } from '../state';
 
 const tempId = createCounter(`temp:${(Math.random() + 1).toString(36)}`);
 
-export const loadPrevious = () => async (dispatch, getState) => client.req({ 
+export const loadPrevious = () => async (_dispatch, getState) => client.req({
   type: 'load',
-  channel: getState().channels.current,
-  before: selectors.getEarliestDate()(getState())
+  channel: selectors.getCid(getState()),
+  before: selectors.getEarliestDate()(getState()),
 });
-export const loadNext = () => null; // TODO  client.req({ type: 'load', channel: getCid(), after: getLatestDate() });
 
-export const loadMessages = () => (dispatch, getState) => {
-  console.log('loadMessages');
-  client.req({ type: 'load', limit: 50, channel: getState().channels.current });
+export const loadMessages = () => (_dispatch, getState) => {
+  client.req({ type: 'load', limit: 50, channel: selectors.getCid(getState()) });
 }
 
 export const sendFromDom = (dom) => async (dispatch, getState) => {
   const msg = fromDom(dom, getState());
   if (msg) {
-    msg.attachments = [...getState().files.list];
+    msg.attachments = [...selectors.getFiles(getState())];
     if (msg.flat.length === 0 && msg.attachments.length === 0) return;
     dispatch(actions.clearFiles());
     dispatch(send(msg));
@@ -29,7 +27,7 @@ export const sendFromDom = (dom) => async (dispatch, getState) => {
 export const send = (msg) => (dispatch) => dispatch(msg.type === 'command' ? sendCommand(msg) : sendMessage(msg));
 
 export const sendCommand = (msg) => async (dispatch, getState) => {
-  const cid = getState().channels.current;
+  const cid = selectors.getCid(getState());
   const notif = {
     userId: 'notif',
     channel: cid,
@@ -39,11 +37,9 @@ export const sendCommand = (msg) => async (dispatch, getState) => {
     createdAt: (new Date()).toISOString(),
   };
   msg.context = {channel: cid};
-  console.log(notif, msg);
   dispatch(actions.addMessage(notif));
   try {
     await client.req(msg);
-    console.log('sent');
     dispatch(actions.addMessage({ ...notif, notifType: 'success', notif: `${msg.name} executed successfully` }));
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -105,7 +101,7 @@ export const fromDom = (dom, state) => {
 };
 
 export function build(msg, state) {
-  msg.channel = state.channels.current;
+  msg.channel = selectors.getCid(state);
   msg.clientId = tempId();
   msg.userId = state.users.meId;
   msg.createdAt = new Date().toISOString();

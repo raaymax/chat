@@ -23,6 +23,13 @@ export const actions = {
 }
 
 export const selectors = {
+  getChannel: (q) => (state) => state.channels.list
+    .find((c) => c.cid === q.cid || c.name === q.name),
+  getChannels: (state) => state.channels.list,
+  getConfig: (state) => state.config,
+  getCid: (state) => state.channels.current,
+  getMeId: (state) => state.users.meId,
+  getFiles: (state) => state.files.list,
   getMessages: createSelector(
     (state) => state.channels.current,
     (state) => state.messages.list,
@@ -31,7 +38,7 @@ export const selectors = {
   ),
   getEarliestDate: () => createSelector(
     (state) => state.messages.list,
-    (messages) => messages[0] ? messages[0].createdAt : new Date().toISOString(),
+    (messages) => (messages[0] ? messages[0].createdAt : new Date().toISOString()),
   ),
   getMessage: (id) => createSelector(
     (state) => state.messages.list,

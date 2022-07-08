@@ -1,6 +1,7 @@
-import {h} from 'preact';
+import { h} from 'preact';
 import { useDispatch, useSelector } from 'react-redux';
-import {openChannel} from '../services/channels';
+import { openChannel } from '../services/channels';
+import { selectors } from '../state';
 
 export const Channel = ({
   name, cid, private: priv, onclick, active,
@@ -13,8 +14,8 @@ export const Channel = ({
 
 export const Channels = () => {
   const dispatch = useDispatch();
-  const channels = useSelector((state) => state.channels.list);
-  const cid = useSelector((state) => state.channels.current);
+  const channels = useSelector(selectors.getChannels);
+  const cid = useSelector(selectors.getCid);
   return (
     <div class='channels'>
       <div class='header'>channels</div>

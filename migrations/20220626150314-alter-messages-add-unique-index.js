@@ -4,12 +4,12 @@ module.exports = {
     const cursor = await db.collection('messages').aggregate([{ $group: { _id: '$clientId', count: { $sum: 1 } } }, { $match: { count: { $gt: 1 } } }]);
     for await (const fixItem of cursor) {
       await db.collection('messages').updateMany(
-        { clientId: {$eq: fixItem._id} },
+        { clientId: { $eq: fixItem._id } },
         [{
           $set: {
             clientId: {
               $function: {
-                body: `function() {return 'temp:' + (Math.random() + 1); }`,
+                body: 'function() {return \'temp:\' + (Math.random() + 1); }',
                 args: [],
                 lang: 'js',
               },

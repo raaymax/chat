@@ -24,6 +24,7 @@ const messagesReducer = createReducer({list: [], loading: false}, {
     list.splice(pos, 0, msg);
   },
   [removeBefore]: (state, action) => {
+    // TODO: remove only from specific channel
     const id = action.payload;
     const idx = state.list.findIndex((m) => m.id === id || m.clientId === id);
     if (idx === -1) return;

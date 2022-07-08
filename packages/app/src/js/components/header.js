@@ -1,4 +1,4 @@
-import {h} from 'preact';
+import { h } from 'preact';
 import { useSelector } from 'react-redux';
 import { Channel } from './channels';
 import { selectors } from '../state';

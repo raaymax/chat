@@ -22,6 +22,9 @@ module.exports = (connect) => {
         type: 'command',
         name: 'name',
         args: [NAME],
+        context: {
+          channel: 'main',
+        },
       });
       assert.equal(ret.type, 'response');
       assert.equal(ret.status, 'ok');

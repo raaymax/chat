@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   useCallback, useEffect, useRef, useState,
 } from 'preact/hooks';
-import { Info } from './info.js';
-import { sendFromDom } from '../services/messages.js';
+import { Info } from './info';
+import { sendFromDom } from '../services/messages';
 import { notifyTyping } from '../services/typing';
 import { installEmojiSelector } from './EmojiSelector/EmojiSelector';
 import { Attachments } from './Files/Attachments';
 import { uploadMany } from '../services/file';
-import { selectors } from '../state/index.js';
+import { selectors } from '../state';
 
 const wrap = (tagName) => (e) => {
   const range = window.getSelection().getRangeAt(0);
@@ -26,7 +26,6 @@ export const Input = () => {
   const dispatch = useDispatch();
 
   const filesAreReady = useSelector(selectors.filesAreReady);
-  const element = input.current;
 
   const submit = useCallback(async () => {
     if (document.getElementById('input').getAttribute('submitable') !== 'true') return;

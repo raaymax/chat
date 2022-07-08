@@ -8,6 +8,9 @@ module.exports = (connect) => {
         type: 'command',
         name: 'help',
         args: [],
+        context: {
+          channel: 'main',
+        },
       });
       assert.equal(ret.type, 'response');
       assert.equal(ret.status, 'ok');
