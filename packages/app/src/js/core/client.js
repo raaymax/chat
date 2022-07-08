@@ -30,7 +30,7 @@ const client = {
   send: async (msg) => {
     // eslint-disable-next-line no-console
     // console.log('send', JSON.stringify(msg, null, 4));
-    await socket.send(msg);
+    socket.send(msg);
   },
   on: (ev, cb) => {
     watch(ev, cb);
