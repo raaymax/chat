@@ -60,6 +60,7 @@ bus.on('openai', async (msg) => {
     bus.broadcast({ type: 'message', ...created });
     push.send(created);
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.log(err);
   }
 });

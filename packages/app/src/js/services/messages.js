@@ -20,7 +20,6 @@ export const sendFromDom = (dom) => async (dispatch, getState) => {
     msg.attachments = [...selectors.getFiles(getState())];
     if (msg.flat.length === 0 && msg.attachments.length === 0) return;
     dispatch(actions.clearFiles());
-    console.log(msg);
     dispatch(send(msg));
   }
 };
@@ -89,12 +88,6 @@ export const fromDom = (dom, state) => {
   const command = dom.textContent.trim().match(/^\/\w+( \S+)*/);
   if (command) {
     const m = dom.textContent.trim().replace('\n', '').slice(1).split(/\s+/);
-    console.log({
-      type: 'command',
-      name: m[0],
-      args: m.splice(1),
-      flat: dom.textContent,
-    });
     return build({
       type: 'command',
       name: m[0],
@@ -104,7 +97,6 @@ export const fromDom = (dom, state) => {
   }
   if (dom.childNodes.length === 0) return build({ type: 'message', message: [], flat: '' }, state);
 
-  console.log({ type: 'message', message: mapNodes(dom), flat: dom.textContent });
   return build({ type: 'message', message: mapNodes(dom), flat: dom.textContent }, state);
 };
 
