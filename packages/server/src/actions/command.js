@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const commands = require('../commands');
 
 module.exports = {
   type: 'command',
@@ -11,5 +12,5 @@ module.exports = {
       }).required(),
     }),
   },
-  handler: require('../commands'),
+  handler: commands,
 };

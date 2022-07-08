@@ -1,6 +1,7 @@
 /* eslint-disable global-require */
 
 module.exports = [
+  require('./ping'),
   require('./message'),
   require('./load'),
   require('./setupFcm'),
