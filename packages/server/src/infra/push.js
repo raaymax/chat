@@ -8,6 +8,7 @@ module.exports = {
     if (process.env.NODE_ENV === 'test') return Promise.resolve();
     if (!msg.message) return Promise.resolve();
     const channel = await channelRepo.get({ cid: msg.channel });
+    if (!channel) return;
     // FIXME should also work with system user
     const user = await userRepo.get({ id: msg.userId });
     if (!user) return;

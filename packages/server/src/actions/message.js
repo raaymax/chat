@@ -28,6 +28,7 @@ module.exports = {
 
     const { id, dup } = await createMessage({
       message: msg.message,
+      flat: msg.flat,
       channel: msg.channel,
       clientId: msg.clientId,
       userId: req.userId,

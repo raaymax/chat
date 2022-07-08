@@ -58,6 +58,7 @@ module.exports = (connect) => {
       });
       const msg = await (await db).collection('messages').findOne({ clientId });
       assert.equal(msg.message?.line?.text, 'Hello');
+      assert.equal(msg.flat, 'Hello');
       assert.ok(Object.keys(msg).includes('createdAt'));
       assert.equal(msg.clientId, clientId);
       ws.close();
@@ -87,6 +88,8 @@ module.exports = (connect) => {
       assert.equal(ret.status, 'ok');
       ws.close();
     });
+
+    it('should not broadcast when sending to private channels');
 
     it('should validate attachments?');
 

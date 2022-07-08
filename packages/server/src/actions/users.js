@@ -26,6 +26,12 @@ module.exports = {
       name: 'OpenAI',
       avatarUrl: '/assets/openai.png',
     });
+    res.send({
+      type: 'user',
+      id: 'bob',
+      name: 'Bob',
+      avatarUrl: '/assets/bob.png',
+    });
     res.ok();
   },
 };
