@@ -3,7 +3,7 @@ const { db, ObjectId } = require('./db');
 module.exports = {
   get: async ({ id, ...msg }) => (await db).collection('messages')
     .findOne(id ? ({ _id: ObjectId(id), ...msg }) : ({ ...msg }))
-    .then((i) => (i ? ({ ...i, id: i._id.toHexString(), _id: undefined }) : null)),
+    .then((i) => (i ? ({ ...i, id: i._id.toHexString() }) : null)),
 
   getAll: async ({
     channel, before, after,
@@ -29,6 +29,8 @@ module.exports = {
 
   insert: async (msg) => (await db).collection('messages').insertOne(msg)
     .then((item) => ({ ...item, id: item.insertedId.toHexString() })),
+
+  update: async (where, msg) => (await db).collection('messages').updateOne(where, { $set: msg }),
 
   remove: async ({ id, ...msg }) => (await db).collection('messages')
     .deleteOne(id ? ({ _id: ObjectId(id), ...msg }) : ({ ...msg })),

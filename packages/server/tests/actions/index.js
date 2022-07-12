@@ -7,6 +7,7 @@ module.exports = (connect) => {
     require('./channels.spec')(connect);
     require('./typing.spec')(connect);
     require('./greet.spec')(connect);
+    require('./updateMessage.spec')(connect);
     require('./removeMessage.spec')(connect);
     require('./config.spec')(connect);
     require('./command.spec')(connect);

@@ -12,9 +12,8 @@ module.exports = {
     // FIXME should also work with system user
     const user = await userRepo.get({ id: msg.userId });
     if (!user) return;
-    const sess = await sessionRepo.getByUsers({
-      userId: channel.users.filter((u) => u.toHexString() !== msg.userId),
-    });
+    const userIds = channel.users.map((u) => u.toHexString()).filter((id) => id !== msg.userId);
+    const sess = await sessionRepo.getByUsers({ userId: userIds });
     const tokens = Object.keys(
       sess
         .map((s) => s.fcmToken)

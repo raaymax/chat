@@ -9,6 +9,7 @@ module.exports = [
   require('./typing'),
   require('./greet'),
   require('./removeMessage'),
+  require('./updateMessage'),
   require('./command'),
   require('./config'),
   require('./users'),
