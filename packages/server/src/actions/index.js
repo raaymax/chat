@@ -10,6 +10,7 @@ module.exports = [
   require('./greet'),
   require('./removeMessage'),
   require('./updateMessage'),
+  require('./reaction'),
   require('./command'),
   require('./config'),
   require('./users'),

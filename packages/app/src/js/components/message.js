@@ -6,6 +6,7 @@ import Emojis from '../services/emoji';
 import { resend, removeMessage } from '../services/messages';
 import { Files } from './Files/Files';
 import { Delete } from './confirm';
+import { Reaction } from './reaction';
 import { selectors } from '../state';
 
 const EMOJI_MATCHER = () => /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/g;
@@ -61,7 +62,7 @@ const isOnlyEmoji = (message, flat) => EMOJI_MATCHER().test(flat) || (
 
 export const Message = (props = {}) => {
   const {
-    clientId, info, message, attachments, flat, createdAt, userId,
+    id, clientId, info, message, reactions, attachments, flat, createdAt, userId,
   } = props.data;
   const [toolbar, setToolbar] = useState(false);
   const dispatch = useDispatch();
@@ -98,7 +99,16 @@ export const Message = (props = {}) => {
         <div class={['content', ...(isOnlyEmoji(message, flat) ? ['emoji'] : [])].join(' ')}>{build(message)}</div>
         {attachments && <Files list={attachments} />}
         {info && <div onclick={onAction} class={['info', info.type, ...(info.action ? ['action'] : [])].join(' ')}>{info.msg}</div>}
-        {isMe && toolbar && <div class='toolbar'>
+        <div>
+          {reactions && reactions.map(r => (<i class='reaction'>{r.reaction}</i>))}
+        </div>
+        
+        {toolbar && <div class='toolbar'>
+            <Reaction messageId={id}>♥️</Reaction>
+            <Reaction messageId={id}>👍</Reaction>
+            <Reaction messageId={id}>👎</Reaction>
+            <Reaction messageId={id}>🎉</Reaction>
+            <Reaction messageId={id}>👀</Reaction>
           {/* <i class='fa-solid fa-icons' /> */}
           { isMe && <Delete accept={onDelete} />}
         </div>}

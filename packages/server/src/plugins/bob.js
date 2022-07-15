@@ -17,7 +17,7 @@ bus.on('openai', async (msg) => {
     flat: m.flat,
   })).map(({ who, flat }) => `${who}: ${flat}`).reverse().join('\n');
 
-  const prompt = 'The following conversation between me and my best friend Bob, we know each other from ages.\n\n'
+  const prompt = 'The following conversation between me and my best friend Bob, we know each other from ages. Bob likes to ask a lot of questions.\n\n'
     + 'Me: Hello, who are you?\n'
     + 'Bob: Fine, and you?\n'
     + `${conversation}\n`

@@ -14,6 +14,19 @@ export const loadMessages = () => (_dispatch, getState) => {
   client.req({ type: 'load', limit: 50, channel: selectors.getCid(getState()) });
 }
 
+export const addReaction = (id, text) => async (dispatch, getState) => {
+  try {
+    await client.req({
+      type: 'reaction',
+      id,
+      reaction: text.trim(),
+    });
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
+  }
+};
+
 export const sendFromDom = (dom) => async (dispatch, getState) => {
   const msg = fromDom(dom, getState());
   if (msg) {

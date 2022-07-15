@@ -13,7 +13,6 @@ module.exports = {
       channel: Joi.string().optional(),
       flat: Joi.string().optional().allow(''),
       clientId: Joi.string().optional(),
-      reactions: Joi.array().items(Joi.string()),
       attachments: Joi.array().items(Joi.object({
         id: Joi.string().required(),
         fileName: Joi.string().required(),
@@ -30,7 +29,7 @@ module.exports = {
 
     if (req.userId !== message.userId) throw NotOwnerOfMessage();
 
-    await messageRepo.update({ id }, body);
+    await messageRepo.update({ id },  body);
     await res.broadcast({
       id,
       type: 'message',

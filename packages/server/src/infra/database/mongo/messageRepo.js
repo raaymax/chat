@@ -30,7 +30,8 @@ module.exports = {
   insert: async (msg) => (await db).collection('messages').insertOne(msg)
     .then((item) => ({ ...item, id: item.insertedId.toHexString() })),
 
-  update: async (where, msg) => (await db).collection('messages').updateOne(where, { $set: msg }),
+  update: async ({id, ...where}, msg) => (await db).collection('messages')
+    .updateOne(id ? ({_id: ObjectId(id), ...where}) : where, { $set: msg }),
 
   remove: async ({ id, ...msg }) => (await db).collection('messages')
     .deleteOne(id ? ({ _id: ObjectId(id), ...msg }) : ({ ...msg })),
