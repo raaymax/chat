@@ -29,7 +29,7 @@ module.exports = {
 
     if (req.userId !== message.userId) throw NotOwnerOfMessage();
 
-    await messageRepo.update({ id },  body);
+    await messageRepo.update({ id }, body);
     await res.broadcast({
       id,
       type: 'message',

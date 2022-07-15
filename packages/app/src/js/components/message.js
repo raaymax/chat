@@ -100,15 +100,17 @@ export const Message = (props = {}) => {
         {attachments && <Files list={attachments} />}
         {info && <div onclick={onAction} class={['info', info.type, ...(info.action ? ['action'] : [])].join(' ')}>{info.msg}</div>}
         <div>
-          {reactions && reactions.map(r => (<i class='reaction'>{r.reaction}</i>))}
+          {reactions && reactions.map((r, idx) => (
+            <i key={idx} class='reaction'>{r.reaction}</i>
+          ))}
         </div>
-        
+
         {toolbar && <div class='toolbar'>
-            <Reaction messageId={id}>♥️</Reaction>
-            <Reaction messageId={id}>👍</Reaction>
-            <Reaction messageId={id}>👎</Reaction>
-            <Reaction messageId={id}>🎉</Reaction>
-            <Reaction messageId={id}>👀</Reaction>
+          <Reaction messageId={id}>♥️</Reaction>
+          <Reaction messageId={id}>👍</Reaction>
+          <Reaction messageId={id}>👎</Reaction>
+          <Reaction messageId={id}>🎉</Reaction>
+          <Reaction messageId={id}>👀</Reaction>
           {/* <i class='fa-solid fa-icons' /> */}
           { isMe && <Delete accept={onDelete} />}
         </div>}

@@ -14,7 +14,7 @@ export const loadMessages = () => (_dispatch, getState) => {
   client.req({ type: 'load', limit: 50, channel: selectors.getCid(getState()) });
 }
 
-export const addReaction = (id, text) => async (dispatch, getState) => {
+export const addReaction = (id, text) => async () => {
   try {
     await client.req({
       type: 'reaction',
