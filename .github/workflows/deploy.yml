@@ -13,7 +13,8 @@ jobs:
       run: |
         version_name="$(cat package.json | awk '/version/{print $2}' | sed 's/[",]//g')"
         echo "Tagging release with tag $version_name"
-        git tag $version_name
+        git push origin :refs/tags/$version_name
+        git tag -f $version_name
         git push origin --tags
 
     - name: Adding Known Hosts
