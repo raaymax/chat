@@ -61,36 +61,3 @@ jobs:
       with:
         name: android-bundle
         path: ${{steps.sign_app.outputs.signedReleaseFile}}
-
-  deploy:
-    - name: Tag Release
-      run: |
-        version_name="$(cat package.json | awk '/version/{print $2}' | sed 's/[",]//g')"
-        echo "Tagging release with tag $version_name"
-        git tag $version_name
-        git push origin --tags
-
-    - name: Adding Known Hosts
-      run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-
-    - name: Install SSH Key
-      uses: shimataro/ssh-key-action@v2
-      with:
-        key: ${{ secrets.SSH_PRIVATE_KEY }} 
-
-    - name: push changes to remote
-      run: |
-        git remote add prod raay@codecat.io:/var/docker/chat/app
-        git push prod master:master -f
-
-    #- name: Create service_account.json
-    #  run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > service_account.json
-
-    #- name: Deploy to Alpha
-    #  uses: r0adkll/upload-google-play@v1
-    #  with:
-    #    serviceAccountJson: service_account.json
-    #    packageName: io.codecat.chat
-    #    releaseFile: ${{steps.sign_app.outputs.signedReleaseFile}}
-    #    track: internal
-
