@@ -420,8 +420,15 @@ ul {
   position: relative;
 }
 
+.file-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
 .file {
   cursor: pointer;
+  flex: 100%;
 }
 
 .attachment, .file {
@@ -436,11 +443,10 @@ ul {
 .file.image {
   height: auto;
   width: 100%;
-  max-whashtag: 100%;
+  flex: 0;
 }
 
 .file.image img {
-  max-width: 100%;
 }
 
 .file:hover {
@@ -569,6 +575,7 @@ ul {
   padding: 2px 5px;
   margin-right: 5px;
   border: 1px solid #565856;
+  font-style: normal;
 }
 
 .message .toolbar i:hover{

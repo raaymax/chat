@@ -62,6 +62,7 @@ export const upload = createAsyncThunk('files/upload', async (file, {dispatch}) 
 })
 
 export const getUrl = (id) => `${FILES_URL}/${id}`;
+export const getThumbnail = (id) => `${IMAGES_URL}/${id}?h=256&w=256&fit=clip`;
 const aborts = {}
 
 export const abort = createAsyncThunk('files/abort', async (clientId, {dispatch}) => {
