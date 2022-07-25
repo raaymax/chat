@@ -55,13 +55,23 @@ jobs:
         keyPassword: ${{ secrets.KEY_PASSWORD }}
       env:
         BUILD_TOOLS_VERSION: "30.0.2"
+          
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: android-bundle
+        path: ${{steps.sign_app.outputs.signedReleaseFile}}
 
+  deploy:
     - name: Tag Release
       run: |
         version_name="$(cat package.json | awk '/version/{print $2}' | sed 's/[",]//g')"
         echo "Tagging release with tag $version_name"
         git tag $version_name
         git push origin --tags
+
+    - name: Adding Known Hosts
+      run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
     - name: Install SSH Key
       uses: shimataro/ssh-key-action@v2
@@ -72,12 +82,6 @@ jobs:
       run: |
         git remote add prod raay@codecat.io:/var/docker/chat/app
         git push prod master:master -f
-
-    - name: Archive production artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: android-bundle
-        path: ${{steps.sign_app.outputs.signedReleaseFile}}
 
     #- name: Create service_account.json
     #  run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > service_account.json
