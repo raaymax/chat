@@ -8,7 +8,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
     - name: Tag Release
       run: |
         version_name="v$(cat package.json | awk '/version/{print $2}' | sed 's/[",]//g')"
