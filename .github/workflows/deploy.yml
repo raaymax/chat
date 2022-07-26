@@ -22,23 +22,7 @@ jobs:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
         ssh-host: ${{ secrets.SSH_HOST }}
 
-    - name: apply secrets
-      run: |
-        echo $PRIVATE_KEY >> ~/.ssh/id_rsa
-        sudo chmod 600 ~/.ssh/id_rsa
-        echo $PUBLIC_KEY >> ~/.ssh/id_rsa.pub
-      shell: bash
-      env:
-        PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
-        PUBLIC_KEY: ${{secrets.SSH_PUBLIC_KEY}}
-
-    - name: test
-      run: |
-        ls ~/.ssh
-
     - name: Push changes to remote
       run: |
         git remote add prod ssh://raay@codecat.io:/var/docker/chat/app
         git push --verbose prod master:master -f
-      env:
-        GIT_SSH_COMMAND: ssh -i ~/.ssh/id_rsa
