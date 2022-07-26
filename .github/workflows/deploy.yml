@@ -22,15 +22,18 @@ jobs:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
         ssh-host: ${{ secrets.SSH_HOST }}
 
+    - name: apply secrets
+      run: |
+        echo $PRIVATE_KEY >> ~/.ssh/id_rsa
+        echo $PUBLIC_KEY >> ~/.ssh/id_rsa.pub
+      shell: bash
+      env:
+        PRIVATE_KEY: ${{secrets.SSH_SECRET_KEY}}
+        PUBLIC_KEY: ${{secrets.SSH_PUBLIC_KEY}}
+
     - name: test
       run: |
         ls ~/.ssh
-
-    - name: apply secrets
-      run: echo $CONFIG_FILE >> ~/.ssh/id_rsa
-      shell: bash
-      env:
-        CONFIG_FILE: ${{secrets.SSH_SECRET_KEY}}
 
     - name: Push changes to remote
       run: |
