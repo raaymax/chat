@@ -38,5 +38,5 @@ jobs:
     - name: Push changes to remote
       run: |
         git remote add prod ssh://raay@codecat.io:/var/docker/chat/app
-        git push prod master:master -f
+        git push prod master:master -f --verbose
 
