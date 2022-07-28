@@ -72,8 +72,6 @@ jobs:
     name: Build mobile app
     needs: tests
     runs-on: ubuntu-latest
-    outputs:
-      abb: ${{ steps.sign_app.outputs.signedReleaseFile }}
     steps:
     - uses: actions/checkout@v2
 
@@ -131,7 +129,7 @@ jobs:
       with:
         serviceAccountJson: service_account.json
         packageName: io.codecat.chat
-        releaseFiles: ${{needs.build.outputs.abb}}
+        releaseFiles: ${{steps.sign_app.outputs.signedReleaseFile}}
         track: internal
 
     # - name: Archive production artifacts
