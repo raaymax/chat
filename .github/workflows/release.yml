@@ -131,7 +131,7 @@ jobs:
         packageName: io.codecat.chat
         releaseFiles: ${{steps.sign_app.outputs.signedReleaseFile}}
         track: internal
-        status: completed
+        status: draft
 
     # - name: Archive production artifacts
     #   uses: actions/upload-artifact@v3

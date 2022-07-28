@@ -2,6 +2,10 @@
 ![quack](https://github.com/codecat-io/chat/raw/master/packages/app/resources/icon.png)
 Messaging app
 
+
+## Requirements
+- Firebase
+
 ## Objectives
 
 - Create fully private messaging application. 
