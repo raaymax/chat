@@ -123,17 +123,6 @@ jobs:
       env:
         BUILD_TOOLS_VERSION: "30.0.2"
           
-    # - name: Archive production artifacts
-    #   uses: actions/upload-artifact@v3
-    #   with:
-    #     name: android-bundle
-    #     path: ${{steps.sign_app.outputs.signedReleaseFile}}
-
-  google-play:
-    name: Deploy to Google Play
-    needs: build 
-    runs-on: ubuntu-latest
-    steps:
     - name: Create service_account.json
       run: echo '${{ secrets.GOOGLE_DEPLOY_KEY }}' > service_account.json
 
@@ -144,3 +133,10 @@ jobs:
         packageName: io.codecat.chat
         releaseFiles: ${{needs.build.outputs.abb}}
         track: internal
+
+    # - name: Archive production artifacts
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: android-bundle
+    #     path: ${{steps.sign_app.outputs.signedReleaseFile}}
+
