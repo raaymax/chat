@@ -7,6 +7,7 @@ on:
 jobs:
   tests:
     runs-on: ubuntu-latest
+    name: Tests
     services:
       mongo:
         image: mongo
@@ -42,7 +43,7 @@ jobs:
 
   deploy:
     needs: tests
-    name: Deploy
+    name: Deploy to server
     runs-on: ubuntu-latest
 
     steps:
@@ -133,11 +134,11 @@ jobs:
 
 
   google-play:
-    name: Build mobile app
+    name: Deploy to Google Play
     needs: build 
     runs-on: ubuntu-latest
     steps:
-    - name: Deploy to Alpha
+    - name: Deploy to Internal
       uses: r0adkll/upload-google-play@v1
       with:
         serviceAccountJson: service_account.json
