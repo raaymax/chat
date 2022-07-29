@@ -23,8 +23,12 @@ jobs:
           - 27017:27017
     env:
       DATABASE_URL: 'mongodb://chat:chat@localhost:27017/chat?authSource=admin'
+    outputs:
+      tagged: ${{steps.tagged.outputs.tagged}}
     steps:
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
     - name: Use Node.js 17.x
       uses: actions/setup-node@v3
       with:
@@ -40,6 +44,18 @@ jobs:
     - run: npm run lint:ci
     - run: npx migrate-mongo up
     - run: npm run test:ci
+
+    - name: Fetch tags
+      run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+
+    - name: Read package.json
+      id: package
+      uses: gregoranders/nodejs-project-info@v0.0.1
+
+    - name: 'Check: package version has corrosponding git tag'
+      id: tagged
+      shell: bash
+      run: git show-ref --tags --verify --quiet -- "refs/tags/v${{ steps.package.outputs.version }}" && echo "::set-output name=tagged::0" || echo "::set-output name=tagged::1"
 
   deploy:
     needs: tests
@@ -74,19 +90,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout master branch
-      uses: actions/checkout@v2
-
-    - name: Fetch tags
-      run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-
-    - name: Read package.json
-      id: package
-      uses: gregoranders/nodejs-project-info@v0.0.1
-
-    - name: 'Check: package version has corrosponding git tag'
-      id: tagged
-      shell: bash
-      run: git show-ref --tags --verify --quiet -- "refs/tags/v${{ steps.package.outputs.version }}" && echo "::set-output name=tagged::0" || echo "::set-output name=tagged::1"
+      uses: actions/checkout@v3
 
     - name: set up JDK 1.8
       if: steps.tagged.outputs.tagged == 1
@@ -102,36 +106,36 @@ jobs:
         cache: 'npm'
 
     - name: apply secrets
-      if: steps.tagged.outputs.tagged == 1
+      if: needs.tests.outputs.tagged == 1
       run: echo $CONFIG_FILE >> chat.config.js
       shell: bash
       env:
         CONFIG_FILE: ${{secrets.PRODUCTION_CONFIG}}
 
     - run: npm i --production=false
-      if: steps.tagged.outputs.tagged == 1
+      if: needs.tests.outputs.tagged == 1
 
     - run: npm run build
-      if: steps.tagged.outputs.tagged == 1
+      if: needs.tests.outputs.tagged == 1
       env: 
         NODE_ENV: production
 
     - run: npx cap sync
-      if: steps.tagged.outputs.tagged == 1
+      if: needs.tests.outputs.tagged == 1
       working-directory: ./packages/app
 
     - name: Build with Gradle
-      if: steps.tagged.outputs.tagged == 1
+      if: needs.tests.outputs.tagged == 1
       working-directory: ./packages/app/android
       run: ./gradlew build --warning-mode=all --stacktrace
 
     - name: Assemble Release Bundle
-      if: steps.tagged.outputs.tagged == 1
+      if: needs.tests.outputs.tagged == 1
       working-directory: ./packages/app/android
       run: ./gradlew bundleRelease
 
     - uses: r0adkll/sign-android-release@v1
-      if: steps.tagged.outputs.tagged == 1
+      if: needs.tests.outputs.tagged == 1
       name: Sign app APK
       id: sign_app
       with:
@@ -144,11 +148,11 @@ jobs:
         BUILD_TOOLS_VERSION: "30.0.2"
           
     - name: Create service_account.json
-      if: steps.tagged.outputs.tagged == 1
+      if: needs.tests.outputs.tagged == 1
       run: echo '${{ secrets.GOOGLE_DEPLOY_KEY }}' > service_account.json
 
     - name: Deploy to Internal
-      if: steps.tagged.outputs.tagged == 1
+      if: needs.tests.outputs.tagged == 1
       uses: r0adkll/upload-google-play@v1
       with:
         serviceAccountJson: service_account.json
