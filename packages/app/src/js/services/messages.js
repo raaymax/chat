@@ -49,7 +49,8 @@ export const sendCommand = (msg) => async (dispatch, getState) => {
     notif: `${msg.name} sent`,
     createdAt: (new Date()).toISOString(),
   };
-  msg.context = {channel: cid};
+  // eslint-disable-next-line no-undef
+  msg.context = {channel: cid, appVersion: APP_VERSION};
   dispatch(actions.addMessage(notif));
   try {
     await client.req(msg);

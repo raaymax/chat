@@ -9,6 +9,7 @@ const commands = [
   require('./me'),
   require('./channel'),
   require('./prompt'),
+  require('./version'),
 ];
 
 module.exports = async (req, res) => {
