@@ -4,7 +4,8 @@ const push = require('../infra/push');
 const openai = require('../infra/openai');
 
 bus.on('openai', async (msg) => {
-  if (msg.type !== 'message' || msg.channel !== 'openai' || msg.userId === 'bob') return;
+  if (msg.type !== 'message' || msg.userId === 'bob') return;
+  if (msg.channel !== 'openai' && !msg.channel.startsWith('bob+')) return;
 
   const messages = await messageRepo.getAll({
     channel: msg.channel,
