@@ -29,7 +29,7 @@ const client = {
   socket,
   send: async (msg) => {
     // eslint-disable-next-line no-console
-    // console.log('send', JSON.stringify(msg, null, 4));
+    console.log('send', JSON.stringify(msg, null, 4));
     socket.send(msg);
   },
   on: (ev, cb) => {
@@ -52,7 +52,7 @@ const client = {
 
 socket.on('message', (msg) => {
   // eslint-disable-next-line no-console
-  // console.log('recv', JSON.stringify(msg, null, 4));
+  console.log('recv', JSON.stringify(msg, null, 4));
   client.emit(msg.type, msg);
 });
 socket.on('connect', () => { client.emit('con:open'); });

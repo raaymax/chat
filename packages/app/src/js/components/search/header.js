@@ -1,8 +1,8 @@
 import { h } from 'preact';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { Channel } from './channels';
-import { selectors, actions } from '../state';
+import { Channel } from '../channels';
+import { selectors, actions } from '../../state';
 
 const StyledHeader = styled.div`
   display: flex;
@@ -17,11 +17,6 @@ const StyledHeader = styled.div`
     height: 50px;
     line-height: 50px;
 
-  }
-
-  & .back {
-    text-align: right;
-    padding-right: 10px;
   }
 
   & .channel{
@@ -57,16 +52,10 @@ export const Header = ({onclick}) => {
 
   return (
     <StyledHeader>
-      <Channel onclick={onclick} {...channel} />
-      {channel?.cid !== 'main' && (
-        <div class="back">
-          <a href='#main'>
-            back to main
-          </a>
-        </div>)}
+      <Channel icon="fa-solid fa-magnifying-glass" onclick={onclick} {...channel} />
       <div class='toolbar'> 
         <div class='tool' onclick={() => dispatch(actions.setView('search'))}>
-          <i class="fa-solid fa-magnifying-glass" />
+          <i class="fa-solid fa-xmark"/>
         </div>
       </div>
     </StyledHeader>

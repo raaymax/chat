@@ -3,12 +3,12 @@ import { Provider } from 'react-redux'
 
 import store from '../state';
 import { Login } from '../components/auth/login';
-import { Chat } from './chat';
+import { Workspace } from '../components/workspace';
 
 export const App = () => (
   <Login>
     <Provider store={store}>
-      <Chat />
+      <Workspace />
     </Provider>
   </Login>
 )

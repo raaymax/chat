@@ -14,6 +14,7 @@ module.exports = [
   require('./command'),
   require('./config'),
   require('./users'),
+  require('./search'),
   {
     type: 'default',
     handler: (req) => {

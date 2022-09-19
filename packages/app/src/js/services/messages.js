@@ -4,6 +4,10 @@ import { actions, selectors } from '../state';
 
 const tempId = createCounter(`temp:${(Math.random() + 1).toString(36)}`);
 
+export const gotoMessage = () => async (dispatch, getState) => {
+  
+}
+
 export const loadPrevious = () => async (_dispatch, getState) => client.req({
   type: 'load',
   channel: selectors.getCid(getState()),

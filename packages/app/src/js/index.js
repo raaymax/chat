@@ -20,6 +20,7 @@ client
   .on('removeChannel', (msg) => store.dispatch(actions.removeChannel(msg.cid)))
   .on('typing', (msg) => store.dispatch(ackTyping(msg)))
   .on('auth:none', () => store.dispatch(greet()))
+  .on('search', (msg) => store.dispatch(actions.addSearchResult(msg)))
   .on('con:open', () => {
     store.dispatch(actions.connected());
     store.dispatch(actions.clearInfo());

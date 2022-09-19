@@ -7,6 +7,8 @@ import users, { actions as userActions } from './users';
 import info, { actions as infoActions } from './info';
 import files, { actions as fileActions, filesAreReady } from './files';
 import typing, { actions as typingActions } from './typing';
+import view, { actions as viewActions } from './view';
+import search, { actions as searchActions } from './search';
 
 const logout = createAction('logout');
 
@@ -20,6 +22,8 @@ export const actions = {
   ...infoActions,
   ...fileActions,
   ...typingActions,
+  ...viewActions,
+  ...searchActions,
 }
 
 export const selectors = {
@@ -30,6 +34,8 @@ export const selectors = {
   getCid: (state) => state.channels.current,
   getMeId: (state) => state.users.meId,
   getFiles: (state) => state.files.list,
+  getView: (state) => state.view.current,
+  getSearchResults: (state) => state.search.results,
   getMessages: createSelector(
     (state) => state.channels.current,
     (state) => state.messages.list,
@@ -82,5 +88,7 @@ export default configureStore({
     info,
     files,
     typing,
+    view,
+    search,
   },
 })

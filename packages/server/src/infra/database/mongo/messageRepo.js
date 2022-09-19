@@ -6,7 +6,7 @@ module.exports = {
     .then((i) => (i ? ({ ...i, id: i._id.toHexString() }) : null)),
 
   getAll: async ({
-    channel, before, after,
+    channel, before, after, ...query
   }, {
     limit = 50,
     offset = 0,
@@ -16,6 +16,7 @@ module.exports = {
       channel,
       ...(!before ? {} : { createdAt: { $lt: new Date(before) } }),
       ...(!after ? {} : { createdAt: { $gt: new Date(after) } }),
+      ...query,
     })
     .sort({ createdAt: -1 })
     .skip(offset)
