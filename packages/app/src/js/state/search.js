@@ -3,23 +3,23 @@ import {
 } from '@reduxjs/toolkit';
 
 const set = createAction('searchInput/set');
-const addResult = createAction('searchInput/addResult');
 const clear = createAction('searchInput/clear');
+const add = createAction('searchInput/add');
 
-const searchReducer = createReducer({text: '', results: []}, {
+const searchReducer = createReducer({results: []}, {
+  [add]: (state, action) => {
+    state.results = [action.payload, ...state.results.slice(0, 5)];
+  },
   [set]: (state, action) => {
     state.text = action.payload;
   },
-  [addResult]: (state, action) => {
-    state.results.push(action.payload);
-  },
-  [clear]: () => ({text: '', results: []}),
+  [clear]: () => ({results: []}),
   logout: () => ({text: '', results: []}),
 });
 
 export const actions = {
   setSearchInput: set,
-  addSearchResult: addResult,
+  addSearchResult: add,
   clearSearchResults: clear,
 }
 

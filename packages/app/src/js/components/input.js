@@ -49,7 +49,7 @@ export const Input = () => {
     }
     const paste = cbData.getData('text');
     // eslint-disable-next-line no-useless-escape
-    const urlCheck = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/i;
+    const urlCheck = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+,.~#?&//=]*)/i;
     const m = paste.match(urlCheck);
 
     const range = document.getSelection().getRangeAt(0);

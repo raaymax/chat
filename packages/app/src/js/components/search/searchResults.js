@@ -1,9 +1,13 @@
 import { h } from 'preact';
-import { useSelector, useDispatch } from 'react-redux';
+import { useCallback } from 'preact/hooks';
+import { useSelector, useDispatch} from 'react-redux';
 import styled from 'styled-components';
-import { Message } from '../message';
-import { selectors } from '../../state';
-import { gotoMessage } from '../../services/messages';
+import { Message } from '../messages/message';
+import { Notification} from '../messages/notification';
+import { actions, selectors } from '../../state';
+import { loadArchive } from '../../services/messages';
+import { openChannel } from '../../services/channels';
+import { formatTime, formatDate } from '../../utils';
 
 const StyledList = styled.div`
   display: flex;
@@ -17,23 +21,42 @@ const StyledList = styled.div`
 `;
 
 export function SearchResults() {
-  const messages = useSelector(selectors.getSearchResults);
+  const results = useSelector(selectors.getSearchResults);
   const dispatch = useDispatch();
-
+  const gotoMessage = useCallback((msg) => {
+    dispatch(actions.setView('search'));
+    dispatch(openChannel({cid: msg.channel}));
+    dispatch(loadArchive({channel: msg.channel, id: msg.id, date: msg.createdAt}));
+  })
+  console.log(results.map(r=>r.text));
   return (
     <StyledList>
       <div key='bottom' id='scroll-stop' />
-      {messages.map((msg) => (
-        <Message
-          onClick={() => dispatch(gotoMessage(msg.id))}
-          class={msg.priv ? ['private'] : []}
-          data-id={msg.id}
-          client-id={msg.clientId}
-          key={msg.id || msg.clientId}
-          sameUser={false}
-          data={msg}
-        />
-      )).reverse()}
+      {results.map((result) => (
+        <div>
+          <Notification
+            key={'searchtime:'+result.text}
+            className='info'>
+            {formatTime(result.searchedAt)} - {formatDate(result.searchedAt)}
+          </Notification>
+          <Notification
+            key={'search:'+result.text}
+            className='info'>
+            Search results for keyword "{result.text}":
+          </Notification>
+        {result.data.map(msg  => (
+          <Message
+            onClick={() => gotoMessage(msg)}
+            class={msg.priv ? ['private'] : []}
+            data-id={msg.id}
+            client-id={msg.clientId}
+            key={msg.id || msg.clientId}
+            sameUser={false}
+            data={msg}
+          />
+        )).reverse()}
+        </div>
+      ))}
     </StyledList>
   )
 }

@@ -1,8 +1,10 @@
 import { h } from 'preact';
+import { useEffect, useCallback, useRef } from 'preact/hooks';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { Channel } from '../channels';
 import { selectors, actions } from '../../state';
+import { search } from '../../services/search';
 
 const StyledHeader = styled.div`
   display: flex;
@@ -33,8 +35,11 @@ const StyledHeader = styled.div`
   }
 
   & .toolbar {
-    flex: 0 50px;
+    flex: 0 100px;
+    display:flex;
+    flex-direction: row;
     & .tool {
+      flex: 1;
       height: 50px;
       line-height: 50px;
       text-align: center;
@@ -44,16 +49,54 @@ const StyledHeader = styled.div`
       }
     }
   }
+  i {
+    flex: 0 50px;
+    line-height: 50px;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  input{ 
+    flex:1;
+    margin: 3px;
+    height: auto;
+  }
 `;
 
 export const Header = ({onclick}) => {
-  const channel = useSelector(selectors.getCurrentChannel);
+  const input = useRef(null);
   const dispatch = useDispatch();
+
+  const submit = useCallback(async () => {
+    const text = input.current.value;
+    dispatch(search(text));
+  }, [dispatch]);
+
+  const onSubmit = useCallback(async (e) => {
+    if (e.key === 'Enter' && e.shiftKey === false) {
+      await submit();
+      e.preventDefault();
+    }
+  }, [submit])
+
+  useEffect(() => {
+    const el = input.current;
+    el.addEventListener('keydown', onSubmit);
+    return () => {
+      el.removeEventListener('keydown', onSubmit);
+    }
+  }, [input, dispatch, onSubmit]);
+
+  const channel = useSelector(selectors.getCurrentChannel);
 
   return (
     <StyledHeader>
-      <Channel icon="fa-solid fa-magnifying-glass" onclick={onclick} {...channel} />
+      <i class='fa-solid fa-magnifying-glass' />
+      <input class='search-input' placeholder='search...' ref={input} onSubmit={submit}/>
       <div class='toolbar'> 
+        <div class='tool' onclick={() => submit()}>
+          <i class="fa-solid fa-paper-plane"/>
+        </div>
         <div class='tool' onclick={() => dispatch(actions.setView('search'))}>
           <i class="fa-solid fa-xmark"/>
         </div>

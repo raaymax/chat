@@ -4,18 +4,97 @@ import { actions, selectors } from '../state';
 
 const tempId = createCounter(`temp:${(Math.random() + 1).toString(36)}`);
 
-export const gotoMessage = () => async (dispatch, getState) => {
-  
+export const loadPrevious = (channel) => async (dispatch, getState) => {
+  dispatch(actions.selectMessage(null));
+  dispatch(actions.messagesLoadingPrev());
+  try {
+    const req = await client.req2({
+      type: 'load',
+      channel: selectors.getCid(getState()),
+      before: selectors.getEarliestDate()(getState()),
+      limit: 50,
+    })
+    dispatch(actions.addMessages(req.data));
+    if (selectors.countMessagesInChannel(channel, getState()) > 100) {
+      dispatch(actions.messagesSetStatus('archive'));
+      setTimeout(() => {
+        dispatch(actions.takeHead({channel, count: 100}));
+      }, 1)
+    }
+  } catch (err) {
+    console.log(err);
+    // TODO: handle error message
+  }
+  dispatch(actions.messagesLoadingPrevDone());
 }
 
-export const loadPrevious = () => async (_dispatch, getState) => client.req({
-  type: 'load',
-  channel: selectors.getCid(getState()),
-  before: selectors.getEarliestDate()(getState()),
-});
+export const loadNext = (channel) => async (dispatch, getState) => {
+  dispatch(actions.selectMessage(null));
+  dispatch(actions.messagesLoadingNext());
+  try {
+    const req = await client.req2({
+      type: 'load',
+      channel: selectors.getCid(getState()),
+      after: selectors.getLatestDate()(getState()),
+      limit: 50,
+    })
+    dispatch(actions.addMessages(req.data));
+    if (selectors.countMessagesInChannel(channel, getState()) > 100) {
+      setTimeout(() => {
+        dispatch(actions.takeTail({channel, count: 100}));
+      }, 1)
+    }
+    if (req.data.length < 50) {
+      setTimeout(() => {
+        dispatch(actions.messagesSetStatus('live'));
+      }, 2)
+    }
+  } catch (err) {
+    // TODO: handle error message
+  }
+  dispatch(actions.messagesLoadingNextDone());
+}
 
-export const loadMessages = () => (_dispatch, getState) => {
-  client.req({ type: 'load', limit: 50, channel: selectors.getCid(getState()) });
+export const loadArchive = ({channel, id, date}) => async (dispatch) => {
+  try {
+    dispatch(actions.messagesSetStatus('archive'));
+    dispatch(actions.selectMessage(id));
+    dispatch(actions.messagesLoadingNext());
+    dispatch(actions.messagesLoadingPrev());
+    dispatch(actions.messagesClear({channel}))
+    const req2 = await client.req2({
+      type: 'load',
+      channel,
+      before: date,
+      limit: 50,
+    })
+    dispatch(actions.messagesLoadingPrevDone());
+    dispatch(actions.addMessages(req2.data));
+    const req = await client.req2({
+      type: 'load',
+      channel,
+      after: date,
+      limit: 50,
+    })
+    dispatch(actions.messagesLoadingNextDone());
+    dispatch(actions.addMessages(req.data));
+    if (req.data.length < 50) {
+      setTimeout(() => {
+        dispatch(actions.messagesSetStatus('live'));
+      }, 2)
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export const loadMessages = () => async (dispatch, getState) => {
+  const req = await client.req2({
+    type: 'load',
+    channel: selectors.getCid(getState()),
+    limit: 50,
+  })
+  dispatch(actions.addMessages(req.data));
 }
 
 export const addReaction = (id, text) => async () => {
@@ -26,8 +105,6 @@ export const addReaction = (id, text) => async () => {
       reaction: text.trim(),
     });
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(err);
   }
 };
 
@@ -60,8 +137,6 @@ export const sendCommand = (msg) => async (dispatch, getState) => {
     await client.req(msg);
     dispatch(actions.addMessage({ ...notif, notifType: 'success', notif: `${msg.name} executed successfully` }));
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(err);
     dispatch(actions.addMessage({ ...notif, notifType: 'error', notif: `${msg.name} error ${err.message}` }));
   }
 };
@@ -71,8 +146,6 @@ const sendMessage = (msg) => async (dispatch) => {
   try {
     await client.req(msg);
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(err);
     dispatch(actions.addMessage({
       clientId: msg.clientId,
       info: {

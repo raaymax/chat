@@ -30,6 +30,5 @@ export const Search = () => (
   <StyledSearch>
     <Header />
     <SearchResults />
-    <SearchInput />
   </StyledSearch>
 )

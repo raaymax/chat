@@ -38,17 +38,30 @@ export const selectors = {
   getSearchResults: (state) => state.search.results,
   getMessages: createSelector(
     (state) => state.channels.current,
-    (state) => state.messages.list,
-    (channel, messages) => messages
-      .filter((msg) => msg.channel === channel),
+    (state) => state.messages.data,
+    (channel, messages) => messages[channel] || [],
+  ),
+  getMessagesStatus: (state) => state.messages.status,
+  getSelectedMessage: (state) => state.messages.selected,
+  countMessagesInChannel: (channel, state) => state.messages.data[channel]?.length || 0,
+  getLatestDate: () => createSelector(
+    (state) => state.channels.current,
+    (state) => state.messages.data,
+    (channel, messages) => (messages[channel][0]
+      ? messages[channel][0].createdAt
+      : new Date().toISOString()),
   ),
   getEarliestDate: () => createSelector(
-    (state) => state.messages.list,
-    (messages) => (messages[0] ? messages[0].createdAt : new Date().toISOString()),
+    (state) => state.channels.current,
+    (state) => state.messages.data,
+    (channel, messages) => (messages[channel][messages[channel].length - 1]
+      ? messages[channel][messages[channel].length - 1].createdAt
+      : new Date().toISOString()),
   ),
   getMessage: (id) => createSelector(
-    (state) => state.messages.list,
-    (messages) => messages
+    (state) => state.channels.current,
+    (state) => state.messages.data,
+    (channel, messages) => messages[channel]
       .find((m) => (m.id && m.id === id)
         || (m.clientId && m.clientId === id)),
   ),
