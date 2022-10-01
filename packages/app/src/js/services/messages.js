@@ -23,6 +23,7 @@ export const loadPrevious = (channel) => async (dispatch, getState) => {
       }, 1)
     }
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.log(err);
     // TODO: handle error message
   }
@@ -52,6 +53,8 @@ export const loadNext = (channel) => async (dispatch, getState) => {
       }, 2)
     }
   } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(err);
     // TODO: handle error message
   }
   dispatch(actions.messagesLoadingNextDone());
@@ -86,6 +89,7 @@ export const loadArchive = ({channel, id, date}) => async (dispatch) => {
       }, 2)
     }
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.log(err);
   }
 }
@@ -102,8 +106,8 @@ export const loadMessages = () => async (dispatch, getState) => {
     })
     dispatch(actions.addMessages(req.data));
   } catch (err) {
-    console.log('fail');
     dispatch(actions.messagesLoadingFailed(true));
+    // eslint-disable-next-line no-console
     console.log(err);
     // TODO: handle error message
   }

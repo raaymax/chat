@@ -1,7 +1,7 @@
 import { h, Component} from 'preact';
 import { useState, useCallback } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { formatTime, formatDate, formatDateDetailed } from '../../utils';
+import { formatTime, formatDateDetailed } from '../../utils';
 import Emojis from '../../services/emoji';
 import { resend, removeMessage } from '../../services/messages';
 import { pinMessage, unpinMessage } from '../../services/pins';
@@ -63,7 +63,8 @@ const isOnlyEmoji = (message, flat) => EMOJI_MATCHER().test(flat) || (
 
 export const Message = (props = {}) => {
   const {
-    id, clientId, info, message, reactions = [], attachments, flat, createdAt, userId, pinned, channel,
+    id, clientId, info, message, reactions = [],
+    attachments, flat, createdAt, userId, pinned, channel,
   } = props.data;
   const [toolbar, setToolbar] = useState(false);
   const dispatch = useDispatch();

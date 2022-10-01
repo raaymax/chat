@@ -56,7 +56,7 @@ export function initRequests2(client) {
 
     finish(msg) {
       this.res = msg;
-      //console.log('fin', this, msg);
+      // console.log('fin', this, msg);
       if (this.closed) return;
       clearTimeout(this.#timeout);
       this.close();
@@ -84,7 +84,7 @@ export function initRequests2(client) {
     send() {
       this.status = Request.STATUS_IN_PROGRESS;
       client.onSeq(this.seqId, this.handle);
-      //console.log('req', { ...this.req, seqId: this.seqId })
+      // console.log('req', { ...this.req, seqId: this.seqId })
       client.send({ ...this.req, seqId: this.seqId });
       return this.wait();
     }

@@ -1,6 +1,5 @@
 /* eslint-disable no-await-in-loop */
 import {h} from 'preact';
-import {useState} from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux'
 
 import styled from 'styled-components';

@@ -27,7 +27,7 @@ export function SearchResults() {
     dispatch(actions.setView('search'));
     dispatch(openChannel({cid: msg.channel}));
     dispatch(loadArchive({channel: msg.channel, id: msg.id, date: msg.createdAt}));
-  })
+  }, [dispatch])
   return (
     <StyledList>
       <div key='bottom' id='scroll-stop' />

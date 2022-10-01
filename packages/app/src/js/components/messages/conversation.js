@@ -1,7 +1,4 @@
 import { h } from 'preact';
-import {
-  useState, useCallback, useEffect, useRef,
-} from 'preact/hooks';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadPrevious, loadNext } from '../../services/messages';

@@ -15,7 +15,7 @@ module.exports = (connect) => {
       assert.equal(ret.type, 'response');
       assert.equal(ret.status, 'ok');
       assert.equal(help.type, 'message');
-      assert.equal(help.id, 'help');
+      assert.equal(help.id.slice(0, 4), 'help');
       assert.equal(help.priv, true);
       ws.close();
     });

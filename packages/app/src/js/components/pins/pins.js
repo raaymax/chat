@@ -1,8 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import {h} from 'preact';
-import {
-  useState, useCallback, useEffect, useRef,
-} from 'preact/hooks';
+import { useCallback } from 'preact/hooks';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 // import {PinsList} from './pinsList';
@@ -10,11 +8,8 @@ import { actions, selectors } from '../../state';
 import {Header} from './header';
 import {messageFormatter } from '../messages/formatter';
 import {MessageList} from '../messages/messageList';
-import {loadPinnedMessages} from '../../services/pins'
 import { openChannel } from '../../services/channels';
 import { loadArchive } from '../../services/messages';
-
-const PinsList = () => [];
 
 const StyledPins = styled.div`
   width: 100vw;
@@ -53,7 +48,7 @@ export const Pins = () => {
         formatter={messageFormatter}
         list={messages}
         status='archive'
-        onMessageClicked={msg => {
+        onMessageClicked={(msg) => {
           gotoMessage(msg);
         }}
         onScrollTo={(dir) => {

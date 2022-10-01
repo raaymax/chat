@@ -1,7 +1,4 @@
-import {createReducer, createAsyncThunk, createAction} from '@reduxjs/toolkit';
-import {client} from '../core';
-
-const SPAN = 50;
+import {createReducer, createAction} from '@reduxjs/toolkit';
 
 const addAll = createAction('pins/addAll');
 const clear = createAction('pins/clear');
@@ -16,6 +13,7 @@ const pinsReducer = createReducer({
   [addAll]: ({data}, action) => {
     action.payload.forEach((msg) => {
       const {channel} = msg;
+      // eslint-disable-next-line no-multi-assign
       const list = data[channel] = data[channel] || [];
       if (msg.createdAt) {
         msg.createdAt = (new Date(msg.createdAt)).toISOString();

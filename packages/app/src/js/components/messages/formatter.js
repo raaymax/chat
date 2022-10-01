@@ -2,7 +2,7 @@ import { h } from 'preact';
 import { Message } from './message';
 import { Notification } from './notification';
 import { DateSeparator} from './dateSeparator';
-import { formatTime, formatDate, formatDateDetailed } from '../../utils';
+import { formatDate, formatDateDetailed } from '../../utils';
 
 export const messageFormatter = (messages, onMessageClicked = () => {}) => {
   let prev;

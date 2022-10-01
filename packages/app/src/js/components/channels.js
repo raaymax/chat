@@ -4,7 +4,7 @@ import { openChannel } from '../services/channels';
 import { selectors } from '../state';
 
 export const Channel = ({
-  name, cid, private: priv, onclick, active, icon
+  name, cid, private: priv, onclick, active, icon,
 }) => (
   <div class={`channel ${active ? 'active' : ''}`}data-id={cid} onclick={onclick}>
     {!icon && ( priv ? <i class='fa-solid fa-lock' /> : <i class='fa-solid fa-hashtag' />) }

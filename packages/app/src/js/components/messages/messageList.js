@@ -1,8 +1,6 @@
+/* eslint-disable no-restricted-syntax */
 import { h, Component } from 'preact';
 import styled from 'styled-components';
-import { useCallback, useEffect, useState } from 'preact/hooks';
-import { Message, MessageWrapper } from './message';
-import { Notification } from './notification';
 
 const ListContainer = styled.div`
   display: flex;
@@ -42,7 +40,11 @@ export class MessageList extends Component {
       scrollPosition = MessageList.SCROLL_AT_BOTTOM;
     } else if (this.base.scrollTop === 0) {
       scrollPosition = MessageList.SCROLL_AT_TOP;
-    } else if (Math.abs(this.base.scrollHeight - Math.floor(this.base.scrollTop + this.base.clientHeight)) <= 2 ) {
+    } else if (
+      Math.abs(
+        this.base.scrollHeight - Math.floor(this.base.scrollTop + this.base.clientHeight),
+      ) <= 2
+    ) {
       scrollPosition = MessageList.SCROLL_AT_BOTTOM;
     } else {
       scrollPosition = MessageList.SCROLL_FREE;
@@ -51,6 +53,7 @@ export class MessageList extends Component {
     if (this.scrollPosition !== scrollPosition) {
       this.scrollPosition = scrollPosition;
       const { onScrollTo } = this.props;
+      // eslint-disable-next-line no-unused-expressions
       onScrollTo && onScrollTo(scrollPosition);
     }
   };
@@ -65,6 +68,7 @@ export class MessageList extends Component {
     if (this.base.scrollHeight <= this.base.clientHeight) {
       const { onScrollTo } = this.props;
       this.scrollPosition = MessageList.SCROLL_AT_BOTTOM;
+      // eslint-disable-next-line no-unused-expressions
       onScrollTo && onScrollTo(MessageList.SCROLL_AT_BOTTOM);
     }
   };
@@ -78,13 +82,13 @@ export class MessageList extends Component {
       this.updateScroll = false;
     }
 
-    for (const key in props) {
+    for (const key in Object.keys(props)) {
       if (props[key] !== nextProps[key]) {
         return true;
       }
     }
 
-    for (const key in nextProps) {
+    for (const key in Object.keys(nextProps)) {
       if (!(key in props)) {
         return true;
       }

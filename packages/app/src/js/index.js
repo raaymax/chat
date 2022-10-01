@@ -1,20 +1,12 @@
 /* eslint-disable no-undef */
 import { loadMessages } from './services/messages';
-import { loadChannels } from './services/channels';
-import { loadUsers } from './services/users';
 import { play } from './services/sound';
 import { ackTyping } from './services/typing';
-import { greet } from './services/greet';
 import { init } from './services/init';
 import { client } from './core';
 import store, {actions} from './state';
 
 client
-  .on('start', () => {
-    console.log('start')
-    store.dispatch(init());
-  })
- // .on('config', (msg) => store.dispatch(actions.setAppVersion(msg.appVersion)))
   .on('user', (msg) => store.dispatch(actions.addUser(msg)))
   .on('channel:changed', (msg) => {
     store.dispatch(actions.setChannel(msg.channel));
@@ -24,16 +16,7 @@ client
   .on('channel', (msg) => store.dispatch(actions.addChannel(msg)))
   .on('removeChannel', (msg) => store.dispatch(actions.removeChannel(msg.cid)))
   .on('typing', (msg) => store.dispatch(ackTyping(msg)))
-  //.on('auth:none', () => store.dispatch(greet()))
-  .on('con:open', () => {
-    console.log('open')
-    store.dispatch(init())
-    //store.dispatch(actions.connected());
-    //store.dispatch(actions.clearInfo());
-    //store.dispatch(loadUsers());
-    //store.dispatch(loadChannels());
-    //store.dispatch(loadMessages());
-  })
+  .on('con:open', () => store.dispatch(init()))
   .on('auth:user', (user) => store.dispatch(actions.setMe(user)))
   .on('auth:logout', () => store.dispatch(actions.setMe(null))) // TODO: check if that works
   .on('con:close', () => {

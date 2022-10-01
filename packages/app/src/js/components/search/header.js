@@ -1,9 +1,8 @@
 import { h } from 'preact';
 import { useEffect, useCallback, useRef } from 'preact/hooks';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { Channel } from '../channels';
-import { selectors, actions } from '../../state';
+import { actions } from '../../state';
 import { search } from '../../services/search';
 
 const StyledHeader = styled.div`
@@ -63,7 +62,7 @@ const StyledHeader = styled.div`
   }
 `;
 
-export const Header = ({onclick}) => {
+export const Header = ({}) => {
   const input = useRef(null);
   const dispatch = useDispatch();
 
@@ -87,18 +86,16 @@ export const Header = ({onclick}) => {
     }
   }, [input, dispatch, onSubmit]);
 
-  const channel = useSelector(selectors.getCurrentChannel);
-
   return (
     <StyledHeader>
       <i class='fa-solid fa-magnifying-glass' />
-      <input class='search-input' placeholder='search...' ref={input} onSubmit={submit}/>
-      <div class='toolbar'> 
+      <input class='search-input' placeholder='search...' ref={input} onSubmit={submit} />
+      <div class='toolbar'>
         <div class='tool' onclick={() => submit()}>
-          <i class="fa-solid fa-paper-plane"/>
+          <i class="fa-solid fa-paper-plane" />
         </div>
         <div class='tool' onclick={() => dispatch(actions.setView('search'))}>
-          <i class="fa-solid fa-xmark"/>
+          <i class="fa-solid fa-xmark" />
         </div>
       </div>
     </StyledHeader>

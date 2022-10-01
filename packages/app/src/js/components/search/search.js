@@ -2,7 +2,6 @@
 import {h} from 'preact';
 import styled from 'styled-components';
 import {SearchResults} from './searchResults';
-import {SearchInput} from './searchInput';
 import {Header} from './header';
 
 const StyledSearch = styled.div`

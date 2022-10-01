@@ -1,7 +1,7 @@
 import { client } from '../core';
-import { actions, selectors } from '../state';
+import { actions } from '../state';
 
-export const loadPinnedMessages = (channel) => async (dispatch, getState) => {
+export const loadPinnedMessages = (channel) => async (dispatch) => {
   try {
     dispatch(actions.clearPinMessages(channel));
     const req = await client.req2({
@@ -9,14 +9,14 @@ export const loadPinnedMessages = (channel) => async (dispatch, getState) => {
       channel,
       limit: 50,
     })
-    console.log(req);
     dispatch(actions.addPinMessages(req.data));
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.log(err);
   }
 }
 
-export const pinMessage = (id, channel) => async (dispatch, getState) => {
+export const pinMessage = (id, channel) => async (dispatch) => {
   dispatch(actions.selectMessage(null));
   const req = await client.req2({
     type: 'pin',
@@ -28,7 +28,7 @@ export const pinMessage = (id, channel) => async (dispatch, getState) => {
   dispatch(loadPinnedMessages(channel));
 }
 
-export const unpinMessage = (id, channel) => async (dispatch, getState) => {
+export const unpinMessage = (id, channel) => async (dispatch) => {
   dispatch(actions.selectMessage(null));
   const req = await client.req2({
     type: 'pin',

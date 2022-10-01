@@ -1,5 +1,4 @@
 import { h } from 'preact';
-import { useEffect, useCallback, useRef } from 'preact/hooks';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { Channel } from '../channels';
@@ -56,16 +55,16 @@ const StyledHeader = styled.div`
   }
 `;
 
-export const Header = ({onclick}) => {
+export const Header = ({}) => {
   const dispatch = useDispatch();
   const channel = useSelector(selectors.getCurrentChannel);
 
   return (
     <StyledHeader>
       <Channel {...channel} icon="fa-solid fa-thumbtack" />
-      <div class='toolbar'> 
+      <div class='toolbar'>
         <div class='tool' onclick={() => dispatch(actions.setView('pins'))}>
-          <i class="fa-solid fa-xmark"/>
+          <i class="fa-solid fa-xmark" />
         </div>
       </div>
     </StyledHeader>

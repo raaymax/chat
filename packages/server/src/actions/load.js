@@ -26,7 +26,7 @@ module.exports = {
       channel: msg.channel,
       before: msg.before,
       after: msg.after,
-      ...(msg.pinned ? {pinned: msg.pinned} : {}),
+      ...(msg.pinned ? { pinned: msg.pinned } : {}),
     }, { limit: msg.limit });
 
     if (msg.after) msgs.reverse();

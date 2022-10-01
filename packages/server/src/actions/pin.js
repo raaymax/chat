@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { messageRepo} = require('../infra/database');
+const { messageRepo } = require('../infra/database');
 // const service = require('../message/messageService');
 // const Errors = require('../errors');
 const { MissingId, MessageNotExist, MissingChannel } = require('../common/errors');

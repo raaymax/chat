@@ -1,14 +1,13 @@
 /* eslint-disable no-undef */
 import { Capacitor } from '@capacitor/core';
 import { client } from '../core';
-import { actions, selectors } from '../state';
+import { actions } from '../state';
 import {initNotifications} from './notifications';
 import {loadMessages} from './messages';
 
-export const init = () => async (dispatch, getState) => {
+export const init = () => async (dispatch) => {
   try {
-
-  dispatch(actions.messagesLoading());
+    dispatch(actions.messagesLoading());
     dispatch(actions.connected());
     dispatch(actions.clearInfo());
     dispatch(actions.initFailed(false));
@@ -27,7 +26,8 @@ export const init = () => async (dispatch, getState) => {
     dispatch(actions.addChannel(channels));
     dispatch(loadMessages());
   } catch (err) {
-    console.log('err', err);
+    // eslint-disable-next-line no-console
+    console.log(err);
     dispatch(actions.initFailed(true));
   }
 }

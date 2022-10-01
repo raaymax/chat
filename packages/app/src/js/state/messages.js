@@ -1,8 +1,6 @@
 import {createReducer, createAsyncThunk, createAction} from '@reduxjs/toolkit';
 import {client} from '../core';
 
-const SPAN = 50;
-
 const add = createAction('message/add');
 const setStatus = createAction('message/set/status');
 const loadingNext = createAction('message/loading');
@@ -61,6 +59,7 @@ const messagesReducer = createReducer({
   [addAll]: ({data}, action) => {
     action.payload.forEach((msg) => {
       const {channel} = msg;
+      // eslint-disable-next-line no-multi-assign
       const list = data[channel] = data[channel] || [];
       if (msg.createdAt) {
         msg.createdAt = (new Date(msg.createdAt)).toISOString();
@@ -81,6 +80,7 @@ const messagesReducer = createReducer({
     if (status === 'archive') return;
     const msg = action.payload;
     const {channel} = msg;
+    // eslint-disable-next-line no-multi-assign
     const list = data[channel] = data[channel] || [];
     if (msg.createdAt) {
       msg.createdAt = (new Date(msg.createdAt)).toISOString();
