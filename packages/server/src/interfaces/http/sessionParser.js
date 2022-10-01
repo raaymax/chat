@@ -12,7 +12,6 @@ module.exports = expressSession({
   }),
   cookie: {
     secure: !config.development,
-    httpOnly: true,
     sameSite: !config.development ? 'None' : 'Lax',
   },
 });
