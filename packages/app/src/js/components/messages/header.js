@@ -1,8 +1,9 @@
 import { h } from 'preact';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { Channel } from './channels';
-import { selectors, actions } from '../state';
+import { Channel } from '../channels';
+import { selectors, actions } from '../../state';
+import { loadPinnedMessages } from '../../services/pins';
 
 const StyledHeader = styled.div`
   display: flex;
@@ -36,10 +37,12 @@ const StyledHeader = styled.div`
   & .channel .name{
     padding-left: 10px;
   }
-
   & .toolbar {
-    flex: 0 50px;
+    flex: 0 100px;
+    display:flex;
+    flex-direction: row;
     & .tool {
+      flex: 1;
       height: 50px;
       line-height: 50px;
       text-align: center;
@@ -53,6 +56,7 @@ const StyledHeader = styled.div`
 
 export const Header = ({onclick}) => {
   const channel = useSelector(selectors.getCurrentChannel);
+  const cid = useSelector(selectors.getCid);
   const dispatch = useDispatch();
 
   return (
@@ -64,7 +68,13 @@ export const Header = ({onclick}) => {
             back to main
           </a>
         </div>)}
-      <div class='toolbar'> 
+      <div class='toolbar'>
+        <div class='tool' onclick={() => {
+          dispatch(loadPinnedMessages(cid));
+          dispatch(actions.setView('pins'));
+        }}>
+          <i class="fa-solid fa-floppy-disk" />
+        </div>
         <div class='tool' onclick={() => dispatch(actions.setView('search'))}>
           <i class="fa-solid fa-magnifying-glass" />
         </div>

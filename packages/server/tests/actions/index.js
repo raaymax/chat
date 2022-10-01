@@ -11,5 +11,6 @@ module.exports = (connect) => {
     require('./removeMessage.spec')(connect);
     require('./config.spec')(connect);
     require('./command.spec')(connect);
+    require('./pins.spec')(connect);
   });
 };

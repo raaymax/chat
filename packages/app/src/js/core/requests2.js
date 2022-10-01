@@ -46,7 +46,7 @@ export function initRequests2(client) {
           });
           this.status = Request.STATUS_TIMEOUT;
           this.#reject(this);
-        }, 2000);
+        }, 4000);
       });
     }
 

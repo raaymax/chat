@@ -9,7 +9,7 @@ module.exports = {
 
     await res.send({
       type: 'message',
-      id: 'me',
+      id: `me:${Math.random().toString(10)}`,
       userId: 'system',
       createdAt: new Date().toISOString(),
       channel: req.body.context.channel,

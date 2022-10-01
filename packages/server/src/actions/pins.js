@@ -4,14 +4,13 @@ const { MissingChannel, AccessDenied } = require('../common/errors');
 const channel = require('../common/channel');
 
 module.exports = {
-  type: 'load',
+  type: 'pins',
   schema: {
     body: Joi.object({
       channel: Joi.string().required(),
-      pinned: Joi.string().optional(),
       before: Joi.string().optional(),
       after: Joi.string().optional(),
-      limit: Joi.number().optional(),
+      limit: Joi.number().optional().default(10),
     }),
   },
   handler: async (req, res) => {
@@ -23,10 +22,10 @@ module.exports = {
       throw AccessDenied();
     }
     const msgs = await messageRepo.getAll({
+      pinned: true,
       channel: msg.channel,
       before: msg.before,
       after: msg.after,
-      ...(msg.pinned ? {pinned: msg.pinned} : {}),
     }, { limit: msg.limit });
 
     if (msg.after) msgs.reverse();

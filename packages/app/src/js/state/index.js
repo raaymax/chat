@@ -9,6 +9,7 @@ import files, { actions as fileActions, filesAreReady } from './files';
 import typing, { actions as typingActions } from './typing';
 import view, { actions as viewActions } from './view';
 import search, { actions as searchActions } from './search';
+import pins, { actions as pinActions } from './pins';
 
 const logout = createAction('logout');
 
@@ -24,6 +25,7 @@ export const actions = {
   ...typingActions,
   ...viewActions,
   ...searchActions,
+  ...pinActions,
 }
 
 export const selectors = {
@@ -36,12 +38,19 @@ export const selectors = {
   getFiles: (state) => state.files.list,
   getView: (state) => state.view.current,
   getSearchResults: (state) => state.search.results,
+  getPinnedMessages: (channel) => (state) => state.pins.data[channel] || [],
   getMessages: createSelector(
     (state) => state.channels.current,
     (state) => state.messages.data,
     (channel, messages) => messages[channel] || [],
   ),
   getMessagesStatus: (state) => state.messages.status,
+  getMessagesLoadingFailed: (state) => state.messages.loadingFailed,
+  getMessagesLoading: (state) => state.messages.loading
+    || state.messages.loadingPrevious
+    || state.messages.loadingNext,
+  getMessagesPrevLoading: (state) => state.messages.loading || state.messages.loadingPrevious,
+  getMessagesNextLoading: (state) => state.messages.loading || state.messages.loadingNext,
   getSelectedMessage: (state) => state.messages.selected,
   countMessagesInChannel: (channel, state) => state.messages.data[channel]?.length || 0,
   getLatestDate: () => createSelector(
@@ -103,5 +112,6 @@ export default configureStore({
     typing,
     view,
     search,
+    pins,
   },
 })

@@ -9,8 +9,9 @@ const register = (seqId, source) => {
       Object.assign(err, {
         type: 'response', seqId, status: 'timeout', source,
       });
+      console.log(source);
       reject(err);
-    }, 2000);
+    }, 4000);
     waiting[seqId] = (msg) => {
       msg.source = source;
       clearTimeout(timeout);

@@ -103,7 +103,7 @@ export class MessageList extends Component {
     if (this.props.selected) {
       const msgs = [...this.base.querySelectorAll('.message')];
       const current = msgs.find((el) => el.getAttribute('data-id') === this.props.selected);
-      current.scrollIntoView();
+      if (current) current.scrollIntoView();
       return;
     }
     if (!this.updateScroll) return;

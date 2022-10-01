@@ -7,37 +7,13 @@ import styled from 'styled-components';
 import { Logo } from './logo';
 import { Channels } from './channels';
 import { Conversation } from './messages/conversation.js';
-import { Header } from './header.js';
-import { Input } from './input.js';
-import { EmojiSelector } from './EmojiSelector/EmojiSelector';
 import { Search } from './search/search';
+import { Pins } from './pins/pins';
 import { selectors, actions} from '../state';
-
-import { uploadMany } from '../services/file';
-
-const drop = (dispatch) => async (e) => {
-  e.preventDefault();
-  e.stopPropagation();
-  const { files } = e.dataTransfer;
-  dispatch(uploadMany(files))
-}
-
-function dragOverHandler(ev) {
-  ev.preventDefault();
-  ev.stopPropagation();
-}
 
 const StyledWorkspace = styled.div`
   display: flex;
   flex-direction: row;
-`;
-
-const StyledMainWorkspace = styled.div`
-  flex: 1;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
 `;
 
 const StyledMenu = styled.div`
@@ -80,19 +56,13 @@ export const Workspace = () => {
   return (
     <StyledWorkspace>
       {view === 'sidebar' && <StyledMenu>
-        <Logo onClick={() => dispatch(actions.setView('sidebar'))}/>
+        <Logo onClick={() => dispatch(actions.setView('sidebar'))} />
         <Channels />
       </StyledMenu>}
 
       {view === 'search' && <Search />}
-      {view !== 'search' && <StyledMainWorkspace ondrop={drop(dispatch)} ondragover={dragOverHandler}>
-        <Header onclick={() => {
-          dispatch(actions.setView('sidebar'));
-        }} />
-        <Conversation />
-        <Input />
-        <EmojiSelector />
-      </StyledMainWorkspace>}
+      {view === 'pins' && <Pins />}
+      {(view === null || view === 'sidebar') && <Conversation />}
     </StyledWorkspace>
   )
 }

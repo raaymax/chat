@@ -1,6 +1,6 @@
 import { h } from 'preact';
 import { useDispatch} from 'react-redux';
-import { addReaction } from '../services/messages';
+import { addReaction } from '../../services/messages';
 
 export const Reaction = ({messageId, children}) => {
   const dispatch = useDispatch();

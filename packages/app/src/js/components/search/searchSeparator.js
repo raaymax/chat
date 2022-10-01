@@ -1,18 +1,18 @@
 import { h } from 'preact';
 import styled from 'styled-components';
 
-const StyledDateSeparator = styled.div`
-  text-align: center;
+const StyledSearchSeparator = styled.div`
   line-height: 30px;
-  height: 50px;
+  height: auto;
   display: block;
   flex: 0;
   position: relative;
   background-color: #38393b;
   margin-top: 10px;
   margin-bottom: 10px;
+  padding-left: 30px;
 `;
 
-export const DateSeparator = ({children}) => (
-  <StyledDateSeparator>{children}</StyledDateSeparator>
+export const SearchSeparator = ({children}) => (
+  <StyledSearchSeparator>{children}</StyledSearchSeparator>
 )

@@ -4,9 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { formatTime, formatDate } from '../../utils';
 import Emojis from '../../services/emoji';
 import { resend, removeMessage } from '../../services/messages';
+import { pinMessage, unpinMessage } from '../../services/pins';
 import { Files } from '../Files/Files';
 import { Delete } from '../confirm';
-import { Reaction } from '../reaction';
+import { Reaction } from './reaction';
 import { selectors } from '../../state';
 
 const EMOJI_MATCHER = () => /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/g;
@@ -62,7 +63,7 @@ const isOnlyEmoji = (message, flat) => EMOJI_MATCHER().test(flat) || (
 
 export const Message = (props = {}) => {
   const {
-    id, clientId, info, message, reactions, attachments, flat, createdAt, userId,
+    id, clientId, info, message, reactions, attachments, flat, createdAt, userId, pinned, channel
   } = props.data;
   const [toolbar, setToolbar] = useState(false);
   const dispatch = useDispatch();
@@ -82,7 +83,7 @@ export const Message = (props = {}) => {
   return (
     <div
       {...props}
-      class={['message', ...props.class].join(' ')}
+      class={['message', (pinned ? 'pinned' : ''), ...props.class].join(' ')}
       onmouseenter={() => setToolbar(true)}
       onmouseleave={() => setToolbar(false)}
     >
@@ -107,10 +108,13 @@ export const Message = (props = {}) => {
 
         {toolbar && <div class='toolbar'>
           <Reaction messageId={id}>♥️</Reaction>
+          <Reaction messageId={id}>🤣</Reaction>
           <Reaction messageId={id}>👍</Reaction>
           <Reaction messageId={id}>👎</Reaction>
           <Reaction messageId={id}>🎉</Reaction>
           <Reaction messageId={id}>👀</Reaction>
+          {!pinned && <i class="fa-solid fa-floppy-disk" onClick={() => dispatch(pinMessage(id, channel))}/>}
+          {pinned && <i class="fa-regular fa-floppy-disk" onClick={() => dispatch(unpinMessage(id, channel))}/>}
           {/* <i class='fa-solid fa-icons' /> */}
           { isMe && <Delete accept={onDelete} />}
         </div>}

@@ -34,7 +34,7 @@ async function sendHelp(req, res) {
 
   await res.send({
     type: 'message',
-    id: 'help',
+    id: `help:${Math.random().toString(10)}`,
     userId: 'system',
     priv: true,
     message: help,

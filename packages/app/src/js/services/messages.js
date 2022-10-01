@@ -5,6 +5,7 @@ import { actions, selectors } from '../state';
 const tempId = createCounter(`temp:${(Math.random() + 1).toString(36)}`);
 
 export const loadPrevious = (channel) => async (dispatch, getState) => {
+  if (selectors.getMessagesPrevLoading(getState())) return;
   dispatch(actions.selectMessage(null));
   dispatch(actions.messagesLoadingPrev());
   try {
@@ -29,6 +30,7 @@ export const loadPrevious = (channel) => async (dispatch, getState) => {
 }
 
 export const loadNext = (channel) => async (dispatch, getState) => {
+  if (selectors.getMessagesNextLoading(getState())) return;
   dispatch(actions.selectMessage(null));
   dispatch(actions.messagesLoadingNext());
   try {
@@ -89,21 +91,33 @@ export const loadArchive = ({channel, id, date}) => async (dispatch) => {
 }
 
 export const loadMessages = () => async (dispatch, getState) => {
-  const req = await client.req2({
-    type: 'load',
-    channel: selectors.getCid(getState()),
-    limit: 50,
-  })
-  dispatch(actions.addMessages(req.data));
+  dispatch(actions.messagesLoadingFailed(false));
+  dispatch(actions.selectMessage(null));
+  dispatch(actions.messagesLoading());
+  try {
+    const req = await client.req2({
+      type: 'load',
+      channel: selectors.getCid(getState()),
+      limit: 50,
+    })
+    dispatch(actions.addMessages(req.data));
+  } catch (err) {
+    console.log('fail');
+    dispatch(actions.messagesLoadingFailed(true));
+    console.log(err);
+    // TODO: handle error message
+  }
+  dispatch(actions.messagesLoadingDone());
 }
 
-export const addReaction = (id, text) => async () => {
+export const addReaction = (id, text) => async (dispatch) => {
   try {
-    await client.req({
+    const req = await client.req2({
       type: 'reaction',
       id,
       reaction: text.trim(),
     });
+    dispatch(actions.addMessages(req.data));
   } catch (err) {
   }
 };

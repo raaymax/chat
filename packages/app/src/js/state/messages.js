@@ -5,10 +5,13 @@ const SPAN = 50;
 
 const add = createAction('message/add');
 const setStatus = createAction('message/set/status');
-const loadingNext = createAction('message/loading/next');
-const loadingNextDone = createAction('message/loading/next/done');
+const loadingNext = createAction('message/loading');
+const loadingNextDone = createAction('message/loading/done');
+const loadingFailed = createAction('message/loading/failed');
 const loadingPrev = createAction('message/loading/prev');
 const loadingPrevDone = createAction('message/loading/prev/done');
+const loading = createAction('message/loading/next');
+const loadingDone = createAction('message/loading/next/done');
 const addAll = createAction('message/addAll');
 const removeBefore = createAction('message/remove/before');
 const takeHead = createAction('message/take/head');
@@ -17,9 +20,10 @@ const clear = createAction('message/clear');
 const select = createAction('message/select');
 
 const messagesReducer = createReducer({
-  data: {}, 
-  loadingPrevios: false, 
+  data: {},
+  loadingPrevios: false,
   loadingNext: false,
+  loading: false,
   status: 'live',
   selected: null,
 }, {
@@ -28,6 +32,15 @@ const messagesReducer = createReducer({
   },
   [setStatus]: (state, action) => {
     state.status = action.payload;
+  },
+  [loadingFailed]: (state, action) => {
+    state.loadingFailed = action.payload;
+  },
+  [loading]: (state) => {
+    state.loading = true;
+  },
+  [loadingDone]: (state) => {
+    state.loading = false;
   },
   [loadingNext]: (state) => {
     state.loadingNext = true;
@@ -105,6 +118,9 @@ const messagesReducer = createReducer({
 
 export const actions = {
   messagesSetStatus: setStatus,
+  messagesLoadingFailed: loadingFailed,
+  messagesLoading: loading,
+  messagesLoadingDone: loadingDone,
   messagesLoadingNext: loadingNext,
   messagesLoadingNextDone: loadingNextDone,
   messagesLoadingPrev: loadingPrev,
