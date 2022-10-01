@@ -8,7 +8,7 @@ module.exports = {
     const { appVersion, channel } = req.body.context;
     await res.send({
       type: 'message',
-      id: 'help',
+      id: `version:${Math.random().toString(10)}`,
       userId: 'system',
       priv: true,
       message: [

@@ -8,7 +8,9 @@ module.exports = {
   schema: {
     body: Joi.object({
       channel: Joi.string().required(),
+      pinned: Joi.string().optional(),
       before: Joi.string().optional(),
+      after: Joi.string().optional(),
       limit: Joi.number().optional(),
     }),
   },
@@ -23,7 +25,11 @@ module.exports = {
     const msgs = await messageRepo.getAll({
       channel: msg.channel,
       before: msg.before,
+      after: msg.after,
+      ...(msg.pinned ? { pinned: msg.pinned } : {}),
     }, { limit: msg.limit });
+
+    if (msg.after) msgs.reverse();
 
     msgs.forEach((m) => res.send({ type: 'message', ...m }));
     res.ok({ count: msgs.length });

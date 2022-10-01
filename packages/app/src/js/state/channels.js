@@ -8,15 +8,16 @@ const set = createAction('channels/set');
 
 const channelReducer = createReducer({list: [], current: CID || 'main'}, {
   [add]: ({list}, action) => {
-    const channel = action.payload;
-    const existing = list.find((c) => c.cid === channel.cid);
-    if (existing) {
-      Object.assign(existing, channel);
-      return;
-    }
-    let pos = list.findIndex((c) => c.createdAt > channel.createdAt);
-    if (pos === -1 && list.some((c) => c.createdAt < channel.createdAt)) pos = list.length;
-    list.splice(pos, 0, channel);
+    [action.payload].flat().forEach((channel) => {
+      const existing = list.find((c) => c.cid === channel.cid);
+      if (existing) {
+        Object.assign(existing, channel);
+        return;
+      }
+      let pos = list.findIndex((c) => c.createdAt > channel.createdAt);
+      if (pos === -1 && list.some((c) => c.createdAt < channel.createdAt)) pos = list.length;
+      list.splice(pos, 0, channel);
+    })
   },
   [remove]: ({list}, action) => {
     const cid = action.payload;

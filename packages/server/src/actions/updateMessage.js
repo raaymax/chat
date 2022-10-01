@@ -13,6 +13,7 @@ module.exports = {
       channel: Joi.string().optional(),
       flat: Joi.string().optional().allow(''),
       clientId: Joi.string().optional(),
+      pinned: Joi.boolean().optional(),
       attachments: Joi.array().items(Joi.object({
         id: Joi.string().required(),
         fileName: Joi.string().required(),

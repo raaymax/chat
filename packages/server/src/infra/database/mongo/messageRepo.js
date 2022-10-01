@@ -6,7 +6,7 @@ module.exports = {
     .then((i) => (i ? ({ ...i, id: i._id.toHexString() }) : null)),
 
   getAll: async ({
-    channel, before, after,
+    channel, before, after, ...query
   }, {
     limit = 50,
     offset = 0,
@@ -14,10 +14,11 @@ module.exports = {
     .collection('messages')
     .find({
       channel,
-      ...(!before ? {} : { createdAt: { $lt: new Date(before) } }),
-      ...(!after ? {} : { createdAt: { $gt: new Date(after) } }),
+      ...(!before ? {} : { createdAt: { $lte: new Date(before) } }),
+      ...(!after ? {} : { createdAt: { $gte: new Date(after) } }),
+      ...query,
     })
-    .sort({ createdAt: -1 })
+    .sort({ createdAt: after ? 1 : -1 })
     .skip(offset)
     .limit(limit)
     .toArray()

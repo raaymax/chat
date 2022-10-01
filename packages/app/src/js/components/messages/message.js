@@ -1,13 +1,14 @@
-import { h } from 'preact';
+import { h, Component} from 'preact';
 import { useState, useCallback } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { formatTime, formatDate } from '../utils';
-import Emojis from '../services/emoji';
-import { resend, removeMessage } from '../services/messages';
-import { Files } from './Files/Files';
-import { Delete } from './confirm';
-import { Reaction } from './reaction';
-import { selectors } from '../state';
+import { formatTime, formatDateDetailed } from '../../utils';
+import Emojis from '../../services/emoji';
+import { resend, removeMessage } from '../../services/messages';
+import { pinMessage, unpinMessage } from '../../services/pins';
+import { Files } from '../Files/Files';
+import { Delete } from '../confirm';
+import { Reaction, Reactions } from './reaction';
+import { selectors } from '../../state';
 
 const EMOJI_MATCHER = () => /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/g;
 
@@ -62,7 +63,8 @@ const isOnlyEmoji = (message, flat) => EMOJI_MATCHER().test(flat) || (
 
 export const Message = (props = {}) => {
   const {
-    id, clientId, info, message, reactions, attachments, flat, createdAt, userId,
+    id, clientId, info, message, reactions = [],
+    attachments, flat, createdAt, userId, pinned, channel,
   } = props.data;
   const [toolbar, setToolbar] = useState(false);
   const dispatch = useDispatch();
@@ -79,10 +81,11 @@ export const Message = (props = {}) => {
   }, [dispatch, props.data]);
 
   const isMe = user.id === meId;
+
   return (
     <div
       {...props}
-      class={['message', ...props.class].join(' ')}
+      class={['message', (pinned ? 'pinned' : ''), ...props.class].join(' ')}
       onmouseenter={() => setToolbar(true)}
       onmouseleave={() => setToolbar(false)}
     >
@@ -94,23 +97,22 @@ export const Message = (props = {}) => {
         {!props.sameUser && <div class='header'>
           <span class='author'>{user.name || 'Guest'}</span>
           <span class='spacy time'>{formatTime(createdAt)}</span>
-          {!isToday(createdAt) && <span class='spacy time'>{formatDate(createdAt)}</span>}
+          {!isToday(createdAt) && <span class='spacy time'>{formatDateDetailed(createdAt)}</span>}
         </div>}
         <div class={['content', ...(isOnlyEmoji(message, flat) ? ['emoji'] : [])].join(' ')}>{build(message)}</div>
         {attachments && <Files list={attachments} />}
         {info && <div onclick={onAction} class={['info', info.type, ...(info.action ? ['action'] : [])].join(' ')}>{info.msg}</div>}
-        <div>
-          {reactions && reactions.map((r, idx) => (
-            <i key={idx} class='reaction'>{r.reaction}</i>
-          ))}
-        </div>
+        <Reactions messageId={id} reactions={reactions} />
 
         {toolbar && <div class='toolbar'>
           <Reaction messageId={id}>♥️</Reaction>
+          <Reaction messageId={id}>🤣</Reaction>
           <Reaction messageId={id}>👍</Reaction>
           <Reaction messageId={id}>👎</Reaction>
           <Reaction messageId={id}>🎉</Reaction>
           <Reaction messageId={id}>👀</Reaction>
+          {!pinned && <i class="fa-solid fa-thumbtack" onClick={() => dispatch(pinMessage(id, channel))} />}
+          {pinned && <i class="fa-solid fa-thumbtack" style="color:Tomato" onClick={() => dispatch(unpinMessage(id, channel))} />}
           {/* <i class='fa-solid fa-icons' /> */}
           { isMe && <Delete accept={onDelete} />}
         </div>}
@@ -118,3 +120,13 @@ export const Message = (props = {}) => {
     </div>
   );
 };
+
+export class MessageWrapper extends Component {
+  shouldComponentUpdate(nextProps) {
+    return nextProps.id !== this.props.id;
+  }
+
+  render() {
+    return <Message {...this.props} />;
+  }
+}

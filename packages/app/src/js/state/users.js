@@ -8,12 +8,13 @@ const setMe = createAction('users/me/set');
 
 const usersReducer = createReducer({list: [], meId: null}, {
   [addUser]: ({list}, action) => {
-    const msg = action.payload;
-    const existing = list.find((m) => m.id === msg.id);
-    if (existing) {
-      Object.assign(existing, msg);
-    }
-    list.push(msg);
+    [action.payload].flat().forEach((msg) => {
+      const existing = list.find((m) => m.id === msg.id);
+      if (existing) {
+        Object.assign(existing, msg);
+      }
+      list.push(msg);
+    });
   },
   [setMe]: (state, action) => {
     state.meId = action.payload;

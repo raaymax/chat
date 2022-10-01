@@ -15,22 +15,28 @@ const URI = Capacitor.isNativePlatform()
   : `${document.location.protocol}//${document.location.host}`;
 
 // eslint-disable-next-line no-console
-console.log('Connectiong to cycki ', URI);
 const manager = new Manager(URI, {
-  reconnectionDelay: 500,
-  reconnectionDelayMax: 2000,
-  timeout: 2000,
   withCredentials: true,
 });
 
 const socket = manager.socket('/');
 
+const seqHandlers = {};
+
 const client = {
   socket,
   send: async (msg) => {
     // eslint-disable-next-line no-console
-    // console.log('send', JSON.stringify(msg, null, 4));
+    console.debug('send', JSON.stringify(msg, null, 4));
     socket.send(msg);
+  },
+  onSeq: (seqId, cb) => {
+    seqHandlers[seqId] = cb;
+    return client;
+  },
+  offSeq: (seqId) => {
+    delete seqHandlers[seqId];
+    return client;
   },
   on: (ev, cb) => {
     watch(ev, cb);
@@ -52,8 +58,12 @@ const client = {
 
 socket.on('message', (msg) => {
   // eslint-disable-next-line no-console
-  // console.log('recv', JSON.stringify(msg, null, 4));
-  client.emit(msg.type, msg);
+  console.debug('recv', JSON.stringify(msg, null, 4));
+  if (seqHandlers[msg.seqId]) {
+    seqHandlers[msg.seqId](msg);
+  } else {
+    client.emit(msg.type, msg);
+  }
 });
 socket.on('connect', () => { client.emit('con:open'); });
 socket.on('disconnect', () => { client.emit('con:close'); });

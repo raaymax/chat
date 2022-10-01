@@ -14,6 +14,9 @@ module.exports = [
   require('./command'),
   require('./config'),
   require('./users'),
+  require('./search'),
+  require('./pins'),
+  require('./pin'),
   {
     type: 'default',
     handler: (req) => {

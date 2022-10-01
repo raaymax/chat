@@ -10,7 +10,7 @@ const register = (seqId, source) => {
         type: 'response', seqId, status: 'timeout', source,
       });
       reject(err);
-    }, 2000);
+    }, 4000);
     waiting[seqId] = (msg) => {
       msg.source = source;
       clearTimeout(timeout);

@@ -4,15 +4,16 @@ import { openChannel } from '../services/channels';
 import { selectors } from '../state';
 
 export const Channel = ({
-  name, cid, private: priv, onclick, active,
+  name, cid, private: priv, onclick, active, icon,
 }) => (
   <div class={`channel ${active ? 'active' : ''}`}data-id={cid} onclick={onclick}>
-    {priv ? <i class='fa-solid fa-lock' /> : <i class='fa-solid fa-hashtag' /> }
+    {!icon && ( priv ? <i class='fa-solid fa-lock' /> : <i class='fa-solid fa-hashtag' />) }
+    {icon && <i class={icon} />}
     <span class='name'>{name || cid}</span>
   </div>
 )
 
-export const Channels = () => {
+export const Channels = ({icon}) => {
   const dispatch = useDispatch();
   const channels = useSelector(selectors.getChannels);
   const cid = useSelector(selectors.getCid);
@@ -24,6 +25,7 @@ export const Channels = () => {
           {...c}
           active={cid === c.cid}
           key={c.id}
+          icon={icon}
           onclick={() => dispatch(openChannel({cid: c.cid}))}
         />
       ))}

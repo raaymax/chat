@@ -7,6 +7,10 @@ import users, { actions as userActions } from './users';
 import info, { actions as infoActions } from './info';
 import files, { actions as fileActions, filesAreReady } from './files';
 import typing, { actions as typingActions } from './typing';
+import view, { actions as viewActions } from './view';
+import search, { actions as searchActions } from './search';
+import pins, { actions as pinActions } from './pins';
+import system, { actions as systemActions } from './system';
 
 const logout = createAction('logout');
 
@@ -20,6 +24,10 @@ export const actions = {
   ...infoActions,
   ...fileActions,
   ...typingActions,
+  ...viewActions,
+  ...searchActions,
+  ...pinActions,
+  ...systemActions,
 }
 
 export const selectors = {
@@ -30,19 +38,42 @@ export const selectors = {
   getCid: (state) => state.channels.current,
   getMeId: (state) => state.users.meId,
   getFiles: (state) => state.files.list,
+  getView: (state) => state.view.current,
+  getSearchResults: (state) => state.search.results,
+  getPinnedMessages: (channel) => (state) => state.pins.data[channel] || [],
   getMessages: createSelector(
     (state) => state.channels.current,
-    (state) => state.messages.list,
-    (channel, messages) => messages
-      .filter((msg) => msg.channel === channel),
+    (state) => state.messages.data,
+    (channel, messages) => messages[channel] || [],
+  ),
+  getMessagesStatus: (state) => state.messages.status,
+  getInitFailed: (state) => state.system.initFailed,
+  getMessagesLoadingFailed: (state) => state.messages.loadingFailed,
+  getMessagesLoading: (state) => state.messages.loading
+    || state.messages.loadingPrevious
+    || state.messages.loadingNext,
+  getMessagesPrevLoading: (state) => state.messages.loading || state.messages.loadingPrevious,
+  getMessagesNextLoading: (state) => state.messages.loading || state.messages.loadingNext,
+  getSelectedMessage: (state) => state.messages.selected,
+  countMessagesInChannel: (channel, state) => state.messages.data[channel]?.length || 0,
+  getLatestDate: () => createSelector(
+    (state) => state.channels.current,
+    (state) => state.messages.data,
+    (channel, messages) => (messages[channel][0]
+      ? messages[channel][0].createdAt
+      : new Date().toISOString()),
   ),
   getEarliestDate: () => createSelector(
-    (state) => state.messages.list,
-    (messages) => (messages[0] ? messages[0].createdAt : new Date().toISOString()),
+    (state) => state.channels.current,
+    (state) => state.messages.data,
+    (channel, messages) => (messages[channel][messages[channel].length - 1]
+      ? messages[channel][messages[channel].length - 1].createdAt
+      : new Date().toISOString()),
   ),
   getMessage: (id) => createSelector(
-    (state) => state.messages.list,
-    (messages) => messages
+    (state) => state.channels.current,
+    (state) => state.messages.data,
+    (channel, messages) => messages[channel]
       .find((m) => (m.id && m.id === id)
         || (m.clientId && m.clientId === id)),
   ),
@@ -82,5 +113,9 @@ export default configureStore({
     info,
     files,
     typing,
+    view,
+    search,
+    pins,
+    system,
   },
 })

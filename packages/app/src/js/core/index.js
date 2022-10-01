@@ -1,14 +1,17 @@
 import './registerSw';
 import './sentry';
 import client from './client';
-import { initNotifications } from './notifications';
 import { initRequests } from './requests';
-import { initConfig } from './config';
+import { initRequests2 } from './requests2';
 
 window.client = client;
 
 initRequests(client);
-initConfig(client);
-initNotifications(client);
+initRequests2(client);
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('message', (payload) => {
+    client.emit('notification', payload);
+  });
+}
 
 export { client };

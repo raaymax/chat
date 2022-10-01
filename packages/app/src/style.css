@@ -1,6 +1,7 @@
 html {
   --primary_border_color: #565856;
   --primary_background: #1a1d21;
+  --pinned_background: #6e5400; 
   --secondary_background: #222529;
   --primary_active_mask: rgba(249,249,249,0.05);
   --secondary_active_mask: rgba(249,249,249,0.1);
@@ -296,6 +297,15 @@ ul {
     background-color: rgba(249,249,249,0)
   }
 }
+@keyframes fade-pinned {
+  from {
+    background-color: rgba(249,249,249,0.1)
+  }
+
+  to {
+    background-color: var(--pinned_background);
+  }
+}
 
 .notification{
   animation-name: fade;
@@ -546,11 +556,34 @@ ul {
 .channels .channel:hover {
   background-color: var(--primary_active_mask);
 }
+.pins .message.pinned {
+  background-color: transparent;
+  animation-name: fade;
+}
+.pins .message.pinned:hover .side-time {
+  color: var(--primary_background);
+}
+.message.pinned {
+  background-color: var(--pinned_background);
+  animation-name: fade-pinned;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+}
+
+
+.message.pinned .side-time{
+  color: var(--pinned_background);
+}
+.message.pinned:hover .side-time {
+  color: rgb(209,210,211);
+}
+
 .message .toolbar {
   position: absolute;
   bottom: -15px;
   height: 32px;
   right: 10px;
+  z-index: 1000;
   background-color: var(--primary_background);
   border: 1px solid #565856;
   border-radius: 0.3em;
