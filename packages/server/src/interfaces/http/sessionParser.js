@@ -11,6 +11,8 @@ module.exports = expressSession({
     collection: 'httpSessions',
   }),
   cookie: {
-    secure: 'auto',
+    secure: !config.development,
+    httpOnly: true,
+    sameSite: !config.development ? 'None' : 'Lax',
   },
 });
