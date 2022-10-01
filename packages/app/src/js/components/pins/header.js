@@ -62,7 +62,7 @@ export const Header = ({onclick}) => {
 
   return (
     <StyledHeader>
-      <Channel {...channel} icon="fa-solid fa-floppy-disk" />
+      <Channel {...channel} icon="fa-solid fa-thumbtack" />
       <div class='toolbar'> 
         <div class='tool' onclick={() => dispatch(actions.setView('pins'))}>
           <i class="fa-solid fa-xmark"/>

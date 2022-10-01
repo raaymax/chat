@@ -2,6 +2,8 @@
 import * as preact from 'preact';
 import * as hooks from 'preact/hooks';
 
+const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
 export const {
   useEffect, useState, useMemo, useRef,
 } = hooks;
@@ -12,6 +14,11 @@ export const { h } = preact;
 export const formatDate = (raw) => {
   const date = new Date(raw);
   return date.toLocaleDateString('pl-PL');
+};
+
+export const formatDateDetailed = (raw) => {
+  const date = new Date(raw);
+  return `${DAYS[date.getDay()]}, ${date.toLocaleDateString('pl-PL')}`;
 };
 
 export const formatTime = (raw) => {

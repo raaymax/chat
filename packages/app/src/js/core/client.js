@@ -16,9 +16,6 @@ const URI = Capacitor.isNativePlatform()
 
 // eslint-disable-next-line no-console
 const manager = new Manager(URI, {
-  reconnectionDelay: 500,
-  reconnectionDelayMax: 1000,
-  timeout: 1000,
   withCredentials: true,
 });
 

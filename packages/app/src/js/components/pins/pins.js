@@ -11,6 +11,8 @@ import {Header} from './header';
 import {messageFormatter } from '../messages/formatter';
 import {MessageList} from '../messages/messageList';
 import {loadPinnedMessages} from '../../services/pins'
+import { openChannel } from '../../services/channels';
+import { loadArchive } from '../../services/messages';
 
 const PinsList = () => [];
 
@@ -36,15 +38,24 @@ const StyledPins = styled.div`
 `;
 
 export const Pins = () => {
+  const dispatch = useDispatch();
   const channel = useSelector(selectors.getCid);
   const messages = useSelector(selectors.getPinnedMessages(channel));
+  const gotoMessage = useCallback((msg) => {
+    dispatch(actions.setView('search'));
+    dispatch(openChannel({cid: msg.channel}));
+    dispatch(loadArchive({channel: msg.channel, id: msg.id, date: msg.createdAt}));
+  }, [dispatch])
   return (
-    <StyledPins>
+    <StyledPins className='pins'>
       <Header />
       <MessageList
         formatter={messageFormatter}
         list={messages}
         status='archive'
+        onMessageClicked={msg => {
+          gotoMessage(msg);
+        }}
         onScrollTo={(dir) => {
           if (dir === 'top') {
             // dispatch(loadPrevious(channel))

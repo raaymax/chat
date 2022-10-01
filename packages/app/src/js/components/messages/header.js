@@ -73,7 +73,7 @@ export const Header = ({onclick}) => {
           dispatch(loadPinnedMessages(cid));
           dispatch(actions.setView('pins'));
         }}>
-          <i class="fa-solid fa-floppy-disk" />
+          <i class="fa-solid fa-thumbtack" />
         </div>
         <div class='tool' onclick={() => dispatch(actions.setView('search'))}>
           <i class="fa-solid fa-magnifying-glass" />

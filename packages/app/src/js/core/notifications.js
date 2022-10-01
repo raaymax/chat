@@ -24,6 +24,7 @@ export const initNotifications = (client) => {
     });
     const cfg = client.getConfig();
     await getToken(messaging, { vapidKey: cfg.applicationServerKey }).then((currentToken) => {
+      console.log(currentToken)
       if (currentToken) {
         return client.req({
           type: 'setupFcm',

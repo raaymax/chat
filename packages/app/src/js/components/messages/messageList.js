@@ -142,7 +142,7 @@ export class MessageList extends Component {
     const {props} = this;
     return (
       <ListContainer onScroll={this.handleScroll}>
-        {props.formatter ? props.formatter(props.list) : props.list}
+        {props.formatter ? props.formatter(props.list, props.onMessageClicked) : props.list}
       </ListContainer>
     );
   }

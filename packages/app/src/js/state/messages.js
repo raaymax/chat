@@ -23,7 +23,7 @@ const messagesReducer = createReducer({
   data: {},
   loadingPrevios: false,
   loadingNext: false,
-  loading: false,
+  loading: true,
   status: 'live',
   selected: null,
 }, {

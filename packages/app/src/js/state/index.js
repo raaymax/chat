@@ -10,6 +10,7 @@ import typing, { actions as typingActions } from './typing';
 import view, { actions as viewActions } from './view';
 import search, { actions as searchActions } from './search';
 import pins, { actions as pinActions } from './pins';
+import system, { actions as systemActions } from './system';
 
 const logout = createAction('logout');
 
@@ -26,6 +27,7 @@ export const actions = {
   ...viewActions,
   ...searchActions,
   ...pinActions,
+  ...systemActions,
 }
 
 export const selectors = {
@@ -45,6 +47,7 @@ export const selectors = {
     (channel, messages) => messages[channel] || [],
   ),
   getMessagesStatus: (state) => state.messages.status,
+  getInitFailed: (state) => state.system.initFailed,
   getMessagesLoadingFailed: (state) => state.messages.loadingFailed,
   getMessagesLoading: (state) => state.messages.loading
     || state.messages.loadingPrevious
@@ -113,5 +116,6 @@ export default configureStore({
     view,
     search,
     pins,
+    system,
   },
 })

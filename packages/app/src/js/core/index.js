@@ -8,9 +8,18 @@ import { initConfig } from './config';
 
 window.client = client;
 
+console.log('a');
 initRequests(client);
+console.log('b');
 initRequests2(client);
-initConfig(client);
-initNotifications(client);
+console.log('c');
+client.emit('start');
+//initConfig(client);
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('message', (payload) => {
+    client.emit('notification', payload);
+  });
+}
+//initNotifications(client);
 
 export { client };

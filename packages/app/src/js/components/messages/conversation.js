@@ -34,9 +34,22 @@ const StyledConversation = styled.div`
   flex-direction: column;
 `;
 
+const StyledLoader = styled.div`
+  position: relative;
+  height: 0;
+  width: 100%;
+
+  & div {
+    position: absolute;
+    top: -50px;
+    width: 100%;
+  }
+`;
+
 export function Conversation() {
   const dispatch = useDispatch();
   const messages = useSelector(selectors.getMessages);
+  const initFailed = useSelector(selectors.getInitFailed);
   const loading = useSelector(selectors.getMessagesLoading);
   const failed = useSelector(selectors.getMessagesLoadingFailed);
   const channel = useSelector(selectors.getCid);
@@ -62,13 +75,13 @@ export function Conversation() {
           }
         }}
       />
-      {loading && <div>
+      {loading && <StyledLoader><div>
         <Loader />
+      </div></StyledLoader>}
+
+      {(initFailed || failed) && <div>
+        Loading failed. If this happend inform me please ;)  Mateusz
       </div>}
-    {failed && <div> 
-      <i class="fa-solid fa-rotate"></i>
-        Loading failed. Click for retry
-    </div>}
 
       <Input />
       <EmojiSelector />

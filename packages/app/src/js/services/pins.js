@@ -17,6 +17,7 @@ export const loadPinnedMessages = (channel) => async (dispatch, getState) => {
 }
 
 export const pinMessage = (id, channel) => async (dispatch, getState) => {
+  dispatch(actions.selectMessage(null));
   const req = await client.req2({
     type: 'pin',
     channel,
@@ -28,6 +29,7 @@ export const pinMessage = (id, channel) => async (dispatch, getState) => {
 }
 
 export const unpinMessage = (id, channel) => async (dispatch, getState) => {
+  dispatch(actions.selectMessage(null));
   const req = await client.req2({
     type: 'pin',
     channel,
