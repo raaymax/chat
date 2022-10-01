@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       mongo:
-        image: mongo:6.0
+        image: mongo:6.0.1
         env:
           MONGO_INITDB_ROOT_USERNAME: chat
           MONGO_INITDB_ROOT_PASSWORD: chat
