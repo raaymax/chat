@@ -11,7 +11,7 @@ module.exports = expressSession({
     collection: 'httpSessions',
   }),
   cookie: {
-    secure: !config.development,
-    sameSite: !config.development ? 'None' : 'Lax',
+    secure: config.production,
+    sameSite: config.production ? 'None' : 'Lax',
   },
 });
