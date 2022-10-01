@@ -10,7 +10,7 @@ jobs:
     name: Tests
     services:
       mongo:
-        image: mongo
+        image: mongo:5
         env:
           MONGO_INITDB_ROOT_USERNAME: chat
           MONGO_INITDB_ROOT_PASSWORD: chat
