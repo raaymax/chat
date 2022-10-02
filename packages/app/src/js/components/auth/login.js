@@ -8,6 +8,7 @@ export const Login = ({children}) => {
   const [user, setUser] = useState(null);
   const reload = useCallback(() => me()
     .then(async ({status, user}) => {
+      console.log(status);
       setStatus(status);
       if (status === 'ok') {
         setUser(user);
@@ -28,7 +29,8 @@ export const Login = ({children}) => {
     e.stopPropagation();
     const fd = new FormData(e.target);
     const value = Object.fromEntries(fd.entries());
-    const { status } = await login(value);
+    const { status, token } = await login(value);
+    localStorage.setItem('token', token);
     if (status === 'ok') {
       window.location.reload(true);
     }

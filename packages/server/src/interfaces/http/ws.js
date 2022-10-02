@@ -1,5 +1,6 @@
 const { Server } = require('socket.io');
 const sessionParser = require('./sessionParser');
+const { sessionRepo } = require('../../infra/database');
 const bus = require('../../infra/ws');
 const actions = require('../../actions');
 const corsConfig = require('./cors');
@@ -14,11 +15,19 @@ module.exports = (server) => {
   io.use(wrap(sessionParser));
 
   // only allow authenticated users
-  io.use((socket, next) => {
+  io.use(async (socket, next) => {
     const { session } = socket.request;
-    if (session && session.userId) {
+    if (session?.userId) {
       next();
     } else {
+      const token = socket.handshake?.auth?.token;
+      if (token) {
+        const record = await sessionRepo.getByToken(token);
+        if (record?.session?.userId) {
+          socket.request.session = record.session;
+          return next();
+        }
+      }
       next(new Error('unauthorized'));
     }
   });

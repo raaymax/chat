@@ -15,11 +15,13 @@ const URI = Capacitor.isNativePlatform()
   : `${document.location.protocol}//${document.location.host}`;
 
 // eslint-disable-next-line no-console
-const manager = new Manager(URI, {
-  withCredentials: true,
-});
+const manager = new Manager(URI);
 
-const socket = manager.socket('/');
+const socket = manager.socket('/', {
+  auth: (cb) => {
+    cb({ token: localStorage.token })
+  }
+});
 
 const seqHandlers = {};
 

@@ -9,6 +9,7 @@ export const me = async () => {
   const ret = await fetch(SESSION_URL, {
     credentials: 'include',
     headers: {
+      'Authorization': 'Bearer ' + localStorage.token,
       'Content-Type': 'application/json',
     },
   });
