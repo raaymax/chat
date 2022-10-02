@@ -1,5 +1,5 @@
 import { h, Component} from 'preact';
-import { useState, useCallback } from 'preact/hooks';
+import { useCallback } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { formatTime, formatDateDetailed } from '../../utils';
 import Emojis from '../../services/emoji';
@@ -79,10 +79,10 @@ export const Message = (props = {}) => {
   }, [dispatch, id]);
 
   const onLeave = useCallback(() => {
-    if(hovered === id) {
+    if (hovered === id) {
       dispatch(actions.hoverMessage(null));
     }
-  }, [dispatch, id]);
+  }, [dispatch, hovered, id]);
 
   return (
     <div
@@ -106,7 +106,7 @@ export const Message = (props = {}) => {
         {info && <div onclick={onAction} class={['info', info.type, ...(info.action ? ['action'] : [])].join(' ')}>{info.msg}</div>}
         <Reactions messageId={id} reactions={reactions} />
 
-        {hovered === id && <Toolbar message={props.data} user={user}/>}
+        {hovered === id && <Toolbar message={props.data} user={user} />}
       </div>
     </div>
   );
