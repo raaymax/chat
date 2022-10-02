@@ -5,7 +5,7 @@ module.exports = {
     .findOne(sess)
     .then((i) => (i ? deserializeSession(i) : null)),
   getByToken: async (token) => (await db).collection('httpSessions')
-    .findOne({"session.token": token})
+    .findOne({ 'session.token': token })
     .then((i) => (i ? deserializeSession(i) : null)),
   getAll: async (session) => (await db).collection('httpSessions')
     .find(session).toArray()

@@ -20,7 +20,7 @@ const manager = new Manager(URI);
 const socket = manager.socket('/', {
   auth: (cb) => {
     cb({ token: localStorage.token })
-  }
+  },
 });
 
 const seqHandlers = {};

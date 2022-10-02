@@ -8,7 +8,6 @@ export const Login = ({children}) => {
   const [user, setUser] = useState(null);
   const reload = useCallback(() => me()
     .then(async ({status, user}) => {
-      console.log(status);
       setStatus(status);
       if (status === 'ok') {
         setUser(user);
