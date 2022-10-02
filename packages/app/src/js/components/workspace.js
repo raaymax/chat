@@ -17,7 +17,7 @@ const StyledWorkspace = styled.div`
 
 const StyledMenu = styled.div`
   flex: 0 150px;
-  @media (max-width : 480px) {
+  @media (max-width : 510px) {
     flex: none;
     width: 100%;
     position: absolute;

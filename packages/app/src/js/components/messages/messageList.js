@@ -11,6 +11,10 @@ const ListContainer = styled.div`
   overflow-x: hidden;
   flex: 1;
   overscroll-behavior: contain;
+
+  .space {
+    height: 50px;
+  }
 `;
 
 export class MessageList extends Component {
@@ -147,6 +151,7 @@ export class MessageList extends Component {
     return (
       <ListContainer onScroll={this.handleScroll}>
         {props.formatter ? props.formatter(props.list, props.onMessageClicked) : props.list}
+        <div class='space'>&nbsp;</div>
       </ListContainer>
     );
   }

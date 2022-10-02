@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
 export const Loader = styled.span`
-  width: 12px;
-  height: 12px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   display: block;
-  margin:15px auto;
+  margin:7px auto;
   position: relative;
   color: #FFF;
   box-sizing: border-box;
@@ -13,16 +13,16 @@ export const Loader = styled.span`
 
   @keyframes animloader {
     0% {
-      box-shadow: -38px -12px ,  -14px 0,  14px 0, 38px 0;
+      box-shadow: -19px -6px ,  -7px 0,  7px 0, 19px 0;
     }
     33% {
-      box-shadow: -38px 0px, -14px -12px,  14px 0, 38px 0;
+      box-shadow: -19px 0px, -7px -6px,  7px 0, 19px 0;
     }
     66% {
-      box-shadow: -38px 0px , -14px 0, 14px -12px, 38px 0;
+      box-shadow: -19px 0px , -7px 0, 7px -6px, 19px 0;
     }
     100% {
-      box-shadow: -38px 0 , -14px 0, 14px 0 , 38px -12px;
+      box-shadow: -19px 0 , -7px 0, 7px 0 , 19px -6px;
     }
   }
 `;

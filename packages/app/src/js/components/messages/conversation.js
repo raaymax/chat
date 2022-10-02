@@ -38,7 +38,7 @@ const StyledLoader = styled.div`
 
   & div {
     position: absolute;
-    top: -50px;
+    top: -20px;
     width: 100%;
   }
 `;
