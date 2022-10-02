@@ -3,12 +3,11 @@ import { useState, useCallback } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { formatTime, formatDateDetailed } from '../../utils';
 import Emojis from '../../services/emoji';
-import { resend, removeMessage } from '../../services/messages';
-import { pinMessage, unpinMessage } from '../../services/pins';
+import { resend } from '../../services/messages';
 import { Files } from '../Files/Files';
-import { Delete } from '../confirm';
-import { Reaction, Reactions } from './reaction';
-import { selectors } from '../../state';
+import { Reactions } from './reaction';
+import { actions, selectors } from '../../state';
+import { Toolbar } from '../messageToolbar';
 
 const EMOJI_MATCHER = () => /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/g;
 
@@ -64,30 +63,33 @@ const isOnlyEmoji = (message, flat) => EMOJI_MATCHER().test(flat) || (
 export const Message = (props = {}) => {
   const {
     id, clientId, info, message, reactions = [],
-    attachments, flat, createdAt, userId, pinned, channel,
+    attachments, flat, createdAt, userId, pinned,
   } = props.data;
-  const [toolbar, setToolbar] = useState(false);
   const dispatch = useDispatch();
+  const hovered = useSelector(selectors.getHoveredMessage);
   const user = useSelector(selectors.getUser(userId));
-  const meId = useSelector((state) => state.users.meId);
   const onAction = useCallback(() => {
     if (info.action === 'resend') {
       dispatch(resend(clientId));
     }
   }, [dispatch, clientId, info]);
 
-  const onDelete = useCallback(() => {
-    dispatch(removeMessage(props.data));
-  }, [dispatch, props.data]);
+  const onEnter = useCallback(() => {
+    dispatch(actions.hoverMessage(id));
+  }, [dispatch, id]);
 
-  const isMe = user.id === meId;
+  const onLeave = useCallback(() => {
+    if(hovered === id) {
+      dispatch(actions.hoverMessage(null));
+    }
+  }, [dispatch, id]);
 
   return (
     <div
       {...props}
       class={['message', (pinned ? 'pinned' : ''), ...props.class].join(' ')}
-      onmouseenter={() => setToolbar(true)}
-      onmouseleave={() => setToolbar(false)}
+      onmouseenter={onEnter}
+      onmouseleave={onLeave}
     >
       {!props.sameUser
         ? <div class='avatar'>{user.avatarUrl && <img src={user.avatarUrl} />}</div>
@@ -104,18 +106,7 @@ export const Message = (props = {}) => {
         {info && <div onclick={onAction} class={['info', info.type, ...(info.action ? ['action'] : [])].join(' ')}>{info.msg}</div>}
         <Reactions messageId={id} reactions={reactions} />
 
-        {toolbar && <div class='toolbar'>
-          <Reaction messageId={id}>♥️</Reaction>
-          <Reaction messageId={id}>🤣</Reaction>
-          <Reaction messageId={id}>👍</Reaction>
-          <Reaction messageId={id}>👎</Reaction>
-          <Reaction messageId={id}>🎉</Reaction>
-          <Reaction messageId={id}>👀</Reaction>
-          {!pinned && <i class="fa-solid fa-thumbtack" onClick={() => dispatch(pinMessage(id, channel))} />}
-          {pinned && <i class="fa-solid fa-thumbtack" style="color:Tomato" onClick={() => dispatch(unpinMessage(id, channel))} />}
-          {/* <i class='fa-solid fa-icons' /> */}
-          { isMe && <Delete accept={onDelete} />}
-        </div>}
+        {hovered === id && <Toolbar message={props.data} user={user}/>}
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import {createReducer, createAsyncThunk, createAction} from '@reduxjs/toolkit';
 import {client} from '../core';
 
 const add = createAction('message/add');
+const hover = createAction('message/hover');
 const setStatus = createAction('message/set/status');
 const loadingNext = createAction('message/loading');
 const loadingNextDone = createAction('message/loading/done');
@@ -24,7 +25,11 @@ const messagesReducer = createReducer({
   loading: true,
   status: 'live',
   selected: null,
+  hovered: null,
 }, {
+  [hover]: (state, action) => {
+    state.hovered = action.payload;
+  },
   [select]: (state, action) => {
     state.selected = action.payload;
   },
@@ -127,6 +132,7 @@ export const actions = {
   messagesLoadingPrevDone: loadingPrevDone,
   messagesClear: clear,
   selectMessage: select,
+  hoverMessage: hover,
   addMessages: addAll,
   addMessage: add,
   removeMessagesBefore: removeBefore,

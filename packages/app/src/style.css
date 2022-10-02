@@ -578,30 +578,6 @@ ul {
   color: rgb(209,210,211);
 }
 
-.message .toolbar {
-  position: absolute;
-  bottom: -15px;
-  height: 32px;
-  right: 10px;
-  z-index: 1000;
-  background-color: var(--primary_background);
-  border: 1px solid #565856;
-  border-radius: 0.3em;
-  padding: 1px 5px;
-  font-size: 0.9em;
-}
-.message .toolbar i{
-  padding: 2px 5px;
-  line-height: 24px;
-  width: 24px;
-  text-align: center;
-  vertical-align: middle;
-  display: inline;
-  font-style: normal;
-  cursor: pointer;
-  border-radius: 0.2em;
-}
-
 .message i.reaction {
   background-color: var(--secondary_active_mask);
   border-radius: 10px;
@@ -609,14 +585,6 @@ ul {
   margin-right: 5px;
   border: 1px solid #565856;
   font-style: normal;
-}
-
-.message .toolbar i:hover{
-  background-color: var(--primary_active_mask);
-}
-
-.message .toolbar i:active{
-  background-color: var(--secondary_active_mask);
 }
 
 .login {

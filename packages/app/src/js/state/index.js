@@ -47,6 +47,7 @@ export const selectors = {
     (channel, messages) => messages[channel] || [],
   ),
   getMessagesStatus: (state) => state.messages.status,
+  getHoveredMessage: (state) => state.messages.hovered,
   getInitFailed: (state) => state.system.initFailed,
   getMessagesLoadingFailed: (state) => state.messages.loadingFailed,
   getMessagesLoading: (state) => state.messages.loading

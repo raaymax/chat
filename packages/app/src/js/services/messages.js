@@ -95,7 +95,6 @@ export const loadArchive = ({channel, id, date}) => async (dispatch) => {
 }
 
 export const loadMessages = () => async (dispatch, getState) => {
-  dispatch(actions.messagesLoadingFailed(false));
   dispatch(actions.selectMessage(null));
   dispatch(actions.messagesLoading());
   try {
@@ -106,7 +105,6 @@ export const loadMessages = () => async (dispatch, getState) => {
     })
     dispatch(actions.addMessages(req.data));
   } catch (err) {
-    dispatch(actions.messagesLoadingFailed(true));
     // eslint-disable-next-line no-console
     console.log(err);
     // TODO: handle error message

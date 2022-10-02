@@ -9,7 +9,7 @@ module.exports = {
     body: Joi.object({
       channel: Joi.string().required(),
       text: Joi.string().required(),
-      limit: Joi.number().optional().default(10),
+      limit: Joi.number().optional().default(100),
     }),
   },
   handler: async (req, res) => {
