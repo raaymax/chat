@@ -24,6 +24,10 @@ module.exports = (server) => {
       if (token) {
         const record = await sessionRepo.getByToken(token);
         if (record?.session?.userId) {
+          record.session.save = async () => {
+            const { save, ...data } = record.session;
+            return sessionRepo.update(record.id, { session: data });
+          };
           socket.request.session = record.session;
           return next();
         }

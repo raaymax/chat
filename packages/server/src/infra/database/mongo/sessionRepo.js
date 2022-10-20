@@ -14,7 +14,7 @@ module.exports = {
     .insertOne(data)
     .then((i) => ({ ...i, id: i.insertedId.toHexString() })),
   update: async (id, session) => (await db).collection('httpSessions')
-    .updateOne({ _id: ObjectId(id) }, { $set: session }),
+    .updateOne({ _id: id }, { $set: session }),
   delete: async ({ _id, ...session }) => (await db).collection('httpSessions')
     .deleteOne(_id ? ({ _id: ObjectId(_id), ...session }) : ({ ...session })),
   getOther: async ({ userId }) => (await db).collection('httpSessions')

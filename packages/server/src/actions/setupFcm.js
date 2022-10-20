@@ -13,6 +13,7 @@ module.exports = {
     if (!msg.token) throw MissingToken();
 
     req.session.fcmToken = msg.token;
+
     await req.session.save();
 
     return res.ok();
