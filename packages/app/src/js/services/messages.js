@@ -164,6 +164,7 @@ const sendMessage = (msg) => async (dispatch) => {
   } catch (err) {
     dispatch(actions.addMessage({
       clientId: msg.clientId,
+      channel: msg.channel,
       info: {
         msg: 'Sending message failed',
         type: 'error',

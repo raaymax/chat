@@ -6,6 +6,7 @@ module.exports = {
   schema: {
     body: Joi.object({
       token: Joi.string().required(),
+      mobile: Joi.boolean().optional(),
     }),
   },
   handler: async (req, res) => {
@@ -13,6 +14,7 @@ module.exports = {
     if (!msg.token) throw MissingToken();
 
     req.session.fcmToken = msg.token;
+    req.session.mobile = msg.mobile;
 
     await req.session.save();
 

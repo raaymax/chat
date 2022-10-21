@@ -47,6 +47,7 @@ const initNativeNotifications = () => {
       await client.req2({
         type: 'setupFcm',
         token: token.value,
+        mobile: true,
       });
     } catch (err) {
       // eslint-disable-next-line no-console
