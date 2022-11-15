@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   useCallback, useEffect, useRef, useState,
 } from 'preact/hooks';
-import { Info } from './info';
-import { sendFromDom } from '../services/messages';
-import { notifyTyping } from '../services/typing';
+import { Info } from '../info';
+import { sendFromDom } from '../../services/messages';
+import { notifyTyping } from '../../services/typing';
 import { installEmojiSelector } from './EmojiSelector/EmojiSelector';
-import { Attachments } from './Files/Attachments';
-import { uploadMany } from '../services/file';
-import { selectors } from '../state';
+import { Attachments } from '../Files/Attachments';
+import { uploadMany } from '../../services/file';
+import { selectors } from '../../state';
 
 const wrap = (tagName) => (e) => {
   const range = window.getSelection().getRangeAt(0);

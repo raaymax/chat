@@ -3,7 +3,7 @@ import { h } from 'preact';
 import './EmojiSelector.css';
 import {
   useState, useEffect,
-} from '../../utils';
+} from '../../../utils';
 
 import {
   install, select, getState, watchState,

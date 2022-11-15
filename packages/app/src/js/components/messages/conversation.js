@@ -7,8 +7,8 @@ import {messageFormatter } from './formatter';
 import {MessageList } from './messageList';
 import {Header} from './header';
 import { uploadMany } from '../../services/file';
-import { Input } from '../input.js';
-import { EmojiSelector } from '../EmojiSelector/EmojiSelector';
+import { Input } from '../Input/Input';
+import { EmojiSelector } from '../Input/EmojiSelector/EmojiSelector';
 import {Loader} from '../loader';
 
 const drop = (dispatch) => async (e) => {
