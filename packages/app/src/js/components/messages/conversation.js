@@ -8,7 +8,6 @@ import {MessageList } from './messageList';
 import {Header} from './header';
 import { uploadMany } from '../../services/file';
 import { Input } from '../Input/Input';
-import { EmojiSelector } from '../Input/EmojiSelector/EmojiSelector';
 import {Loader} from '../loader';
 
 const drop = (dispatch) => async (e) => {
@@ -81,7 +80,6 @@ export function Conversation() {
       </div>}
 
       <Input />
-      <EmojiSelector />
     </StyledConversation>
   )
 }

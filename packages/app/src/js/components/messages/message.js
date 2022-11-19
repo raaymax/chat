@@ -8,6 +8,7 @@ import { Files } from '../Files/Files';
 import { Reactions } from './reaction';
 import { actions, selectors } from '../../state';
 import { Toolbar } from '../messageToolbar';
+import {Emoji} from './Emoji';
 
 const EMOJI_MATCHER = () => /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/g;
 
@@ -36,12 +37,10 @@ const TYPES = {
   italic: (props) => <em>{build(props.data)}</em>,
   underline: (props) => <u>{build(props.data)}</u>,
   strike: (props) => <s>{build(props.data)}</s>,
-  link: (props) => <a target="_blank" rel="noreferrer" href={props.data.href}>{build(props.data.children)}</a>,
-  emoji: (props) => {
-    const emoji = Emojis.find((e) => e.name === props.data);
-    if (!emoji) return `:${props.data}:`;
-    return String.fromCodePoint(parseInt(emoji.unicode, 16));
-  },
+  link: (props) => (props.data.href.startsWith('#')
+    ? <a href={props.data.href}>{build(props.data.children)}</a>
+    : <a target="_blank" rel="noreferrer" href={props.data.href}>{build(props.data.children)}</a>),
+  emoji: (props) => <Emoji shortname={props.data} />,
 };
 
 const isToday = (date) => {
@@ -101,7 +100,7 @@ export const Message = (props = {}) => {
           <span class='spacy time'>{formatTime(createdAt)}</span>
           {!isToday(createdAt) && <span class='spacy time'>{formatDateDetailed(createdAt)}</span>}
         </div>}
-        <div class={['content', ...(isOnlyEmoji(message, flat) ? ['emoji'] : [])].join(' ')}>{build(message)}</div>
+        <div class={['content', ...(isOnlyEmoji(message, flat) ? ['big-emoji'] : [])].join(' ')}>{build(message)}</div>
         {attachments && <Files list={attachments} />}
         {info && <div onclick={onAction} class={['info', info.type, ...(info.action ? ['action'] : [])].join(' ')}>{info.msg}</div>}
         <Reactions messageId={id} reactions={reactions} />

@@ -1,5 +1,7 @@
 import Fuse from 'fuse.js';
+import { client } from '../core';
 import Emojis from '../../assets/emoji_list.json';
+import {actions} from '../state';
 
 window.EMOJI = Emojis;
 
@@ -26,3 +28,16 @@ export const emojiFuse = new Fuse(Emojis, {
 });
 
 window.ef = emojiFuse;
+
+export const findEmoji = (shortname) => async (dispatch) => {
+  console.log('findEmoji', shortname);
+  try {
+    const {data:[emoji]} = await client.req2({ type: 'findEmoji', shortname });
+    if(emoji){
+      dispatch(actions.addEmoji(emoji));
+    }
+    console.log(data);
+  } catch (err) {
+    dispatch(actions.addEmoji({empty: true, shortname}));
+  }
+}
