@@ -11,6 +11,7 @@ import { uploadMany } from '../../services/file';
 import { Info } from '../info';
 import { Attachments } from '../Files/Attachments';
 import { selectors } from '../../state';
+import { notifyTyping } from '../../services/typing';
 
 const InputContainer = styled.div`
   border-top: 1px solid #565856;
@@ -140,12 +141,13 @@ function submit({store, input, event}) {
 }
 
 const runAction = (args ) => [
-  { match: ({scope, event}) => scope !== 'emoji-selector' && event.key === ':', run: emojis.start },
+  { match: ({source}) => source === 'keyDown', run: ({store}) => store.dispatch(notifyTyping()) },
+  { match: ({scope, event}) => !scope && event.key === ':', run: emojis.start },
   { match: ({scope}) => scope === 'emoji-selector', run: emojis.handle },
-  { match: ({event}) => event.key === '#', run: channels.start },
+  { match: ({scope, event}) => !scope && event.key === '#', run: channels.start },
   { match: ({scope}) => scope === 'channel', run: channels.handle },
   {
-    match: ({event}) => event.key === '*',
+    match: ({scope, event}) => !scope && event.key === '*',
     run: ({textBefore, parent, event}) => {
       const idx = textBefore.lastIndexOf('*');
       if (idx !== -1) {
@@ -173,11 +175,10 @@ const runAction = (args ) => [
       }
     },
   },
-  {match: ({event}) => event.key === 'Enter' && event.shiftKey === false, run: submit },
+  {match: ({scope, event}) => !scope && event.key === 'Enter' && event.shiftKey === false, run: submit },
   {match: ({action}) => action === 'submit', run: submit },
   {match: ({action}) => action === 'focus', run: ({input}) => input.focus() },
-  {match: () => true, run: () => {}},
-].find(({match}) => match(args)).run(args);
+].filter(({match}) => match(args)).map(({run}) => run(args));
 
 const process = (store, input, event, source) => runAction({
   store,

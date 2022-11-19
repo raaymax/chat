@@ -92,6 +92,12 @@ const onClose2 = (e, char) => {
   }
   state.container.className = 'emoji';
   state.container.setAttribute('emoji', state.container.textContent);
+  moveOut();
+  e.preventDefault();
+  e.stopPropagation();
+};
+
+const moveOut = () => {
   const r = document.createRange();
   const node = document.createTextNode('\u00a0');
   r.setStartAfter(state.container);
@@ -99,9 +105,7 @@ const onClose2 = (e, char) => {
   r.insertNode(node);
   setCursor(node, 1);
   close();
-  e.preventDefault();
-  e.stopPropagation();
-};
+}
 
 const onEnd = (e) => {
   console.log('end');
@@ -125,11 +129,13 @@ const applyResult = (result, event) => {
   const node = document.createElement('span');
   node.className = 'emoji';
   node.setAttribute('emoji', result.shortname);
+  node.setAttribute('contenteditable', false);
   node.innerText = emoji;
   state.container.replaceWith(node);
+  state.container = node;
   setCursor(node, node.textContent.length - 1);
-  close();
   node.parentNode.normalize();
+  moveOut();
   setState({})
   if (event) {
     event.preventDefault();
