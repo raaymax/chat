@@ -35,6 +35,7 @@ export const actions = {
 export const selectors = {
   getEmoji: (shortname) => (state) => state.customEmojis
     .find((emoji) => emoji.shortname === shortname),
+  getAllEmojis: () => (state) => state.customEmojis,
   getChannel: (q) => (state) => state.channels.list
     .find((c) => c.cid === q.cid || c.name === q.name),
   getChannels: (state) => state.channels.list,

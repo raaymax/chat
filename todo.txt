@@ -1,0 +1,3 @@
+links detection before sending
+text formatting - bold
+only emoji should be big

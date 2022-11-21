@@ -37,6 +37,13 @@ const Menu = styled.div`
     display: flex;
     flex-direction: row;
     cursor: pointer;
+
+    img {
+      width: 1.5em;
+      height: 1.5em;
+      display: inline-block;
+      vertical-align: bottom;
+    }
   }
   & ul li:hover {
     background-color: var(--primary_active_mask);
@@ -102,6 +109,7 @@ export const TextMenu = ({className, watch, select}) => {
           <li key={idx} onclick={(e) => console.log('click') || select(idx, e)} class={idx === state.selected ? 'selected' : ''}>
             {e.icon && <span><i class={e.icon} /></span>}
             {e.label && <span>{e.label}</span>}
+            {e.url && <span><img src={e.url} alt="img" /></span>}
             <span>{e.name}</span>
           </li>
         ))}

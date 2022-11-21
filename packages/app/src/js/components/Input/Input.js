@@ -93,6 +93,13 @@ const InputContainer = styled.div`
     flex: 1;
     border: 0;
     padding: 5px 30px;
+
+    .emoji img {
+      width: 1.5em;
+      height: 1.5em;
+      display: inline-block;
+      vertical-align: middle;
+    }
   }
   #input:focus-visible {
     outline: none;

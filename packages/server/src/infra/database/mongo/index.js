@@ -8,5 +8,6 @@ module.exports = {
   sessionRepo: require('./sessionRepo'),
   messageRepo: require('./messageRepo'),
   channelRepo: require('./channelRepo'),
+  emojiRepo: require('./emojiRepo'),
   close: () => client.close(),
 };
