@@ -12,6 +12,7 @@ module.exports = {
       channel: Joi.string().required(),
       flat: Joi.string().required().allow(''),
       clientId: Joi.string().required(),
+      emojiOnly: Joi.boolean().optional().default(false),
       debug: Joi.string().optional().allow(''),
       attachments: Joi.array().items(Joi.object({
         id: Joi.string().required(),
@@ -36,6 +37,7 @@ module.exports = {
       flat: msg.flat,
       channel: msg.channel,
       clientId: msg.clientId,
+      emojiOnly: msg.emojiOnly,
       userId: req.userId,
       attachments: msg.attachments?.map((file) => ({
         id: file.id,

@@ -7,11 +7,13 @@ import {getUrl} from '../../services/file';
 
 const StyledEmoji = styled.span`
   img{
-    height: ${props=>props.big ? 3 : 1.5}em;
-    width: ${props=>props.big ? 3 : 1.5}em;
+    height: 1.5em;
+    width: 1.5em;
     vertical-align: bottom;
     display: inline-block;
   }
+  font-size: ${props=>props.big ? 2 : 1}em;
+  line-height: ${props=>props.big ? 40 : 24}px;
 `;
 
 export const Emoji = ({shortname, big}) => {
@@ -21,7 +23,7 @@ export const Emoji = ({shortname, big}) => {
 
   if (emoji && !emoji.empty) {
     return (
-      <StyledEmoji class='emoji' emoji={shortname}>
+      <StyledEmoji big={big} emoji={shortname}>
         {emoji.unicode
           ? String.fromCodePoint(parseInt(emoji.unicode, 16))
           : <img src={getUrl(custom.fileId)} alt={shortname} />}
@@ -33,5 +35,5 @@ export const Emoji = ({shortname, big}) => {
   }
   if (!custom || custom.empty) return <span class='emoji' emoji={shortname}>{shortname}</span>;
 
-  return <StyledEmoji big={big} className='emoji' emoji={shortname}><img src={getUrl(custom.fileId)} alt={shortname} /></StyledEmoji>;
+  return <StyledEmoji big={big} emoji={shortname}><img src={getUrl(custom.fileId)} alt={shortname} /></StyledEmoji>;
 }

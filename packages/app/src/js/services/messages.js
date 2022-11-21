@@ -126,6 +126,7 @@ export const addReaction = (id, text) => async (dispatch) => {
 
 export const sendFromDom = (dom) => async (dispatch, getState) => {
   const msg = fromDom(dom, getState());
+  console.log(msg);
   if (msg) {
     msg.attachments = [...selectors.getFiles(getState())];
     if (msg.flat.length === 0 && msg.attachments.length === 0) return;
@@ -217,9 +218,29 @@ export const fromDom = (dom, state) => {
       flat: '',
     }, state);
   }
+  const tree = mapNodes(dom);
 
-  return build({ type: 'message', message: mapNodes(dom), flat: dom.textContent }, state);
+  return build({
+    type: 'message',
+    message: tree,
+    emojiOnly: isEmojiOnly(tree),
+    flat: dom.textContent,
+  }, state);
 };
+
+const trim = (arr) => {
+  const copy = [...arr];
+  const idx = copy.reverse().findIndex(
+    (e) => !(e.text === '' || e.text === '\u200B' || e.text === '\u00A0' || e.br === true),
+  );
+  return copy.slice(idx).reverse();
+}
+
+const isEmojiOnly = (tree) => {
+  const arr = trim(tree);
+  if (arr.length === 1 && arr[0].emoji) return true;
+  return false;
+}
 
 export function build(msg, state) {
   msg.channel = selectors.getCid(state);
@@ -230,8 +251,10 @@ export function build(msg, state) {
   return msg;
 }
 
+const matchUrl = (text) => text.match(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)/g);
+
 const mapNodes = (dom) => (!dom.childNodes ? [] : [...dom.childNodes].map((n) => {
-  if (n.nodeName === '#text') return { text: n.nodeValue };
+  if (n.nodeName === '#text') return processUrls(n.nodeValue);
   if (n.nodeName === 'U') return { underline: mapNodes(n) };
   if (n.nodeName === 'A') return { link: { href: n.attributes.href.nodeValue, children: mapNodes(n) } };
   if (n.nodeName === 'B') return { bold: mapNodes(n) };
@@ -239,8 +262,21 @@ const mapNodes = (dom) => (!dom.childNodes ? [] : [...dom.childNodes].map((n) =>
   if (n.nodeName === 'S') return { strike: mapNodes(n) };
   if (n.nodeName === 'DIV') return { line: mapNodes(n) };
   if (n.nodeName === 'SPAN' && n.className === 'emoji') return { emoji: n.attributes.emoji.value };
-  if (n.nodeName === 'SPAN' && n.className === 'channel') return { link: { href: '#' + n.attributes.cid.value, children: mapNodes(n) } };
+  if (n.nodeName === 'SPAN' && n.className === 'channel') return { link: { href: `#${n.attributes.cid.value}`, children: mapNodes(n) } };
   if (n.nodeName === 'SPAN') return mapNodes(n);
   if (n.nodeName === 'BR') return { br: true };
   return { text: '' };
 }).flat());
+
+function processUrls(text) {
+  const m = matchUrl(text);
+  if (m) {
+    const parts = text.split(m[0]);
+    return [
+      { text: parts[0] },
+      { link: { href: m[0], children: [{ text: m[0] }] } },
+      ...processUrls(parts[1]),
+    ];
+  }
+  return [{text}];
+}

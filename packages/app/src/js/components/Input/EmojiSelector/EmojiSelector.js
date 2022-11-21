@@ -111,7 +111,7 @@ const onClose2 = (e, char) => {
 
 const moveOut = () => {
   const r = document.createRange();
-  const node = document.createTextNode('\u00a0');
+  const node = document.createTextNode('\u200B');
   r.setStartAfter(state.container);
   r.setEndAfter(state.container);
   r.insertNode(node);

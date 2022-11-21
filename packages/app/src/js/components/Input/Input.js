@@ -98,7 +98,7 @@ const InputContainer = styled.div`
       width: 1.5em;
       height: 1.5em;
       display: inline-block;
-      vertical-align: middle;
+      vertical-align: bottom;
     }
   }
   #input:focus-visible {
