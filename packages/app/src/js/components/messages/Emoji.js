@@ -2,7 +2,7 @@ import { h } from 'preact';
 import {useSelector, useDispatch} from 'react-redux';
 import styled from 'styled-components';
 import {selectors} from '../../state';
-import {default as Emojis, findEmoji} from '../../services/emoji';
+import Emojis, {findEmoji} from '../../services/emoji';
 import {getUrl} from '../../services/file';
 
 const StyledEmoji = styled.span`
@@ -12,8 +12,8 @@ const StyledEmoji = styled.span`
     vertical-align: bottom;
     display: inline-block;
   }
-  font-size: ${props=>props.big ? 2 : 1}em;
-  line-height: ${props=>props.big ? 40 : 24}px;
+  font-size: ${(props) => (props.big ? 2 : 1)}em;
+  line-height: ${(props) => (props.big ? 40 : 24)}px;
 `;
 
 export const Emoji = ({shortname, big}) => {
@@ -35,5 +35,7 @@ export const Emoji = ({shortname, big}) => {
   }
   if (!custom || custom.empty) return <span class='emoji' emoji={shortname}>{shortname}</span>;
 
-  return <StyledEmoji big={big} emoji={shortname}><img src={getUrl(custom.fileId)} alt={shortname} /></StyledEmoji>;
+  return <StyledEmoji big={big} emoji={shortname}>
+    <img src={getUrl(custom.fileId)} alt={shortname} />
+  </StyledEmoji>;
 }

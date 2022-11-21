@@ -1,6 +1,5 @@
 import { h } from 'preact';
 import {getEmojiFuse} from '../../../services/emoji';
-import Fuse from 'fuse.js';
 import { createNotifier } from '../../../utils';
 import {TextMenu} from '../TextMenu/TextMenu';
 import {getUrl} from '../../../services/file';

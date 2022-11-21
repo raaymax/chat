@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import { useDispatch, useStore, useSelector } from 'react-redux';
+import { useStore, useSelector } from 'react-redux';
 import {
   useCallback, useEffect, useRef,
 } from 'preact/hooks';

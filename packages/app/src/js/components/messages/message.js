@@ -2,7 +2,6 @@ import { h, Component} from 'preact';
 import { useCallback } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { formatTime, formatDateDetailed } from '../../utils';
-import Emojis from '../../services/emoji';
 import { resend } from '../../services/messages';
 import { Files } from '../Files/Files';
 import { Reactions } from './reaction';
@@ -37,6 +36,7 @@ const TYPES = {
   italic: (props) => <em>{build(props.data)}</em>,
   underline: (props) => <u>{build(props.data)}</u>,
   strike: (props) => <s>{build(props.data)}</s>,
+  img: (props) => <img src={props.data.src} alt={props.data.alt} />,
   link: (props) => (props.data.href.startsWith('#')
     ? <a href={props.data.href}>{build(props.data.children)}</a>
     : <a target="_blank" rel="noreferrer" href={props.data.href}>{build(props.data.children)}</a>),

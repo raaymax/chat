@@ -22,7 +22,6 @@ export const watchState = watch;
 export const getState = () => state;
 
 export const select = (idx, event) => {
-  console.log('select');
   setState({selected: idx});
   submit({event})
 };
@@ -109,10 +108,9 @@ const selectDown = ({event}) => {
 const submit = ({event}) => {
   event.preventDefault();
   event.stopPropagation();
-  console.log(state.options[state.selected].name);
   const {container} = state;
   const sel = document.getSelection();
-  container.textContent = "#" + state.options[state.selected].name;
+  container.textContent = `#${state.options[state.selected].name}`;
   container.setAttribute('cid', state.options[state.selected].cid);
   const fresh = document.createTextNode('\u00A0');
   const r = document.createRange();

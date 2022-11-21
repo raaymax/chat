@@ -126,7 +126,6 @@ export const addReaction = (id, text) => async (dispatch) => {
 
 export const sendFromDom = (dom) => async (dispatch, getState) => {
   const msg = fromDom(dom, getState());
-  console.log(msg);
   if (msg) {
     msg.attachments = [...selectors.getFiles(getState())];
     if (msg.flat.length === 0 && msg.attachments.length === 0) return;
@@ -218,12 +217,14 @@ export const fromDom = (dom, state) => {
       flat: '',
     }, state);
   }
-  const tree = mapNodes(dom);
+  const info = {};
+  const tree = mapNodes(dom, info);
 
   return build({
     type: 'message',
     message: tree,
     emojiOnly: isEmojiOnly(tree),
+    parsingErrors: info.errors,
     flat: dom.textContent,
   }, state);
 };
@@ -251,20 +252,28 @@ export function build(msg, state) {
   return msg;
 }
 
+// eslint-disable-next-line no-useless-escape
 const matchUrl = (text) => text.match(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)/g);
 
-const mapNodes = (dom) => (!dom.childNodes ? [] : [...dom.childNodes].map((n) => {
+const mapNodes = (dom, info) => (!dom.childNodes ? [] : [...dom.childNodes].map((n) => {
   if (n.nodeName === '#text') return processUrls(n.nodeValue);
-  if (n.nodeName === 'U') return { underline: mapNodes(n) };
-  if (n.nodeName === 'A') return { link: { href: n.attributes.href.nodeValue, children: mapNodes(n) } };
-  if (n.nodeName === 'B') return { bold: mapNodes(n) };
-  if (n.nodeName === 'I') return { italic: mapNodes(n) };
-  if (n.nodeName === 'S') return { strike: mapNodes(n) };
-  if (n.nodeName === 'DIV') return { line: mapNodes(n) };
+  if (n.nodeName === 'U') return { underline: mapNodes(n, info) };
+  if (n.nodeName === 'A') return { link: { href: n.attributes.href.nodeValue, children: mapNodes(n, info) } };
+  if (n.nodeName === 'B') return { bold: mapNodes(n, info) };
+  if (n.nodeName === 'I') return { italic: mapNodes(n, info) };
+  if (n.nodeName === 'S') return { strike: mapNodes(n, info) };
+  if (n.nodeName === 'DIV') return { line: mapNodes(n, info) };
+  if (n.nodeName === 'UL') return { bullet: mapNodes(n, info) };
+  if (n.nodeName === 'LI') return { item: mapNodes(n, info) };
+  if (n.nodeName === 'IMG') return { img: {src: n.attributes.src.nodeValue, alt: n.attributes.alt.nodeValue }};
   if (n.nodeName === 'SPAN' && n.className === 'emoji') return { emoji: n.attributes.emoji.value };
-  if (n.nodeName === 'SPAN' && n.className === 'channel') return { link: { href: `#${n.attributes.cid.value}`, children: mapNodes(n) } };
-  if (n.nodeName === 'SPAN') return mapNodes(n);
+  if (n.nodeName === 'SPAN' && n.className === 'channel') return { link: { href: `#${n.attributes.cid.value}`, children: mapNodes(n, info) } };
+  if (n.nodeName === 'SPAN') return mapNodes(n, info);
   if (n.nodeName === 'BR') return { br: true };
+  // eslint-disable-next-line no-console
+  console.log('unknown node', n, n.nodeName);
+  info.errors = info.errors || [];
+  info.errors.push('unknown node');
   return { text: '' };
 }).flat());
 

@@ -1,3 +1,2 @@
 https://xkcd.com/2294/ add rss feeds to chat
 text formatting - bold
-only emoji should be big

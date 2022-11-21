@@ -3,13 +3,11 @@ import { useState, useEffect, useCallback } from 'preact/hooks';
 
 import styled from 'styled-components';
 
-import { useDispatch, useSelector } from 'react-redux';
-
 const Menu = styled.div`
   position: absolute;
-  margin-top: ${props=> -props.height * 30 - 40}px;
+  margin-top: ${(props) => -props.height * 30 - 40}px;
   width: 300px;
-  height: ${props=> props.height * 30 + 20}px;
+  height: ${(props) => props.height * 30 + 20}px;
   background-color: var(--primary_background);
   bottom: 70px;
   left: 20px;
@@ -17,8 +15,8 @@ const Menu = styled.div`
   padding: 10px 0;
   border-radius: 10px;
   border: 1px solid var(--primary_border_color);
-  top: ${props => props.top}px;
-  left: ${props => props.left}px;
+  top: ${(props) => props.top}px;
+  left: ${(props) => props.left}px;
   
   &.hidden {
     display: none;
@@ -106,7 +104,7 @@ export const TextMenu = ({className, watch, select}) => {
     <Menu className={className} top={getYPos()} left={getXPos()} height={state.options.length} >
       <ul>
         {state.options.map((e, idx) => (
-          <li key={idx} onclick={(e) => console.log('click') || select(idx, e)} class={idx === state.selected ? 'selected' : ''}>
+          <li key={idx} onclick={(e) => select(idx, e)} class={idx === state.selected ? 'selected' : ''}>
             {e.icon && <span><i class={e.icon} /></span>}
             {e.label && <span>{e.label}</span>}
             {e.url && <span><img src={e.url} alt="img" /></span>}

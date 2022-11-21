@@ -69,6 +69,7 @@ export const loadEmojis = () => async (dispatch) => {
       });
     }
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.log(err);
   }
 }
@@ -80,6 +81,7 @@ export const findEmoji = (shortname) => async (dispatch) => {
       dispatch(actions.addEmoji(emoji));
     }
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.log(err);
     dispatch(actions.addEmoji({empty: true, shortname}));
   }
