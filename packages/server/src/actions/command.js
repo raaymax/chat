@@ -11,7 +11,8 @@ module.exports = {
       attachments: Joi.array().items(Joi.object({
         id: Joi.string().required(),
         fileName: Joi.string().required(),
-        contentType: Joi.string().optional().allow('').empty(['']).default('application/octet-stream'),
+        contentType: Joi.string().optional().allow('').empty([''])
+          .default('application/octet-stream'),
       })).optional(),
       context: Joi.object({
         channel: Joi.string().required(),

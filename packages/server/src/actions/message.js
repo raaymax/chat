@@ -17,16 +17,13 @@ module.exports = {
       attachments: Joi.array().items(Joi.object({
         id: Joi.string().required(),
         fileName: Joi.string().required(),
-        contentType: Joi.string().optional().allow('').empty(['']).default('application/octet-stream'),
+        contentType: Joi.string().optional().allow('').empty([''])
+          .default('application/octet-stream'),
       })).optional(),
     }),
   },
   handler: async (req, res) => {
     const msg = req.body;
-
-    if (msg.debug) {
-      console.log(JSON.stringify(msg, null, 2));
-    }
 
     if (!await channel.haveAccess(req.userId, msg.channel)) {
       throw AccessDenied();

@@ -11,7 +11,7 @@ module.exports = {
     if (!shortname.match(/^:[a-zA-Z0-9_-]+:$/)) {
       throw new Error('Invalid emoji name');
     }
-    const [{id}] = req.body.attachments;
+    const [{ id }] = req.body.attachments;
     await emojiRepo.insert({ shortname, fileId: id });
     res.broadcast({ type: 'emoji', shortname, fileId: id });
     return res.ok();
