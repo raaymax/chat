@@ -195,52 +195,6 @@ ul {
   overscroll-behavior: contain;
 }
 
-.input-container {
-  border-top: 1px solid #565856;
-  background-color: var(--secondary_background);
-  display: flex;
-  flex-direction: column;
-}
-.input-container .toolbar {
-  display: flex;
-  flex-direction: row;
-}
-
-.input-container .toolbar button:first-child {
-  margin-left: 30px;
-}
-
-.input-container .toolbar button {
-  color: var(--secondary_foreground);
-  margin: 2px 0 2px 2px;
-  width: 25px;
-  height: 25px;
-  border: 0;
-  padding: 1px 3px;
-  background: none;
-}
-
-.input-container .toolbar button:hover {
-  color: var(--primary_foreground);
-  background-color: var(--primary_active_mask);
-}
-
-.input-container .actionbar {
-  padding: 5px;
-  display: flex;
-  justify-content: flex-end;
-  flex-direction: row;
-  height: 40px;
-}
-
-.input-container .info {
-  flex: 1;
-  line-height: 30px;
-  padding: 0px 10px;
-  font-weight: 300;
-  vertical-align: middle;
-  font-size: .8em;
-}
 
 .info.error{
   color: #852007;
@@ -251,43 +205,6 @@ ul {
   cursor: pointer;
   font-weight: bold;
 }
-
-.input-container .actionbar .action {
-  width: 30px;
-  height: 30px;
-  padding: 0 6px;
-  border-radius: 100%;
-  line-height: 30px;
-  vertical-align: middle;
-}
-.input-container .actionbar .action.green {
-  background-color: #1c780c;
-}
-
-.input-container .actionbar .action:hover {
-  background-color: rgba(249,249,249,0.05);
-}
-.input-container .actionbar .action:active {
-  background-color: rgba(249,249,249,0.1);
-}
-
-#input {
-  flex: 1;
-  border: 0;
-  padding: 5px 30px;
-}
-#input:focus-visible {
-  outline: none;
-}
-
-.input-container .ql-toolbar.ql-snow{
-  border: 0;
-}
-
-.input-container .ql-container.ql-snow {
-  border: 0;
-}
-
 @keyframes fade {
   from {
     background-color: rgba(249,249,249,0.1)
@@ -401,9 +318,13 @@ ul {
 .message .content {
   font-weight: 300;
 }
-.message .content.emoji {
+.message .content.big-emoji .emoji {
   font-size: 30px;
   line-height: 35px;
+}
+ .message .content.big-emoji .emoji  img !important {
+  height: 3em;
+  width: 3em;
 }
 .message .body {
   flex: 1;

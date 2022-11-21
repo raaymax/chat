@@ -27,7 +27,10 @@ async function downloadFile(req, res) {
   try {
     const { fileId } = req.params;
     const file = await storage.getFile(fileId);
-    res.set({ 'Content-Type': file.contentType });
+    res.set({
+      'Content-Type': file.contentType,
+      'Content-disposition': file.contentDisposition,
+    });
     file.stream.pipe(res);
   } catch (err) {
     // eslint-disable-next-line no-console

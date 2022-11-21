@@ -10,6 +10,7 @@ const commands = [
   require('./channel'),
   require('./prompt'),
   require('./version'),
+  require('./emoji'),
 ];
 
 module.exports = async (req, res) => {

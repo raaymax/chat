@@ -8,6 +8,7 @@ import store, {actions} from './state';
 
 client
   .on('user', (msg) => store.dispatch(actions.addUser(msg)))
+  .on('emoji', (msg) => store.dispatch(actions.addEmoji(msg)))
   .on('channel:changed', (msg) => {
     store.dispatch(actions.setChannel(msg.channel));
     store.dispatch(loadMessages());

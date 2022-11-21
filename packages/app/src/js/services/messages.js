@@ -129,6 +129,7 @@ export const sendFromDom = (dom) => async (dispatch, getState) => {
   if (msg) {
     msg.attachments = [...selectors.getFiles(getState())];
     if (msg.flat.length === 0 && msg.attachments.length === 0) return;
+    msg.debug = dom.innerHTML;
     dispatch(actions.clearFiles());
     dispatch(send(msg));
   }
@@ -187,7 +188,13 @@ export const removeMessage = (msg) => async (dispatch) => {
     await client.req({ type: 'removeMessage', id: msg.id });
   } catch (err) {
     dispatch(actions.addMessage({
-      id: msg.id, notifType: null, notif: null, info: { type: 'error', msg: 'Could not delete message' },
+      id: msg.id,
+      notifType: null,
+      notif: null,
+      info: {
+        type: 'error',
+        msg: 'Could not delete message',
+      },
     }));
   }
 };
@@ -203,10 +210,38 @@ export const fromDom = (dom, state) => {
       flat: dom.textContent,
     }, state);
   }
-  if (dom.childNodes.length === 0) return build({ type: 'message', message: [], flat: '' }, state);
+  if (dom.childNodes.length === 0) {
+    return build({
+      type: 'message',
+      message: [],
+      flat: '',
+    }, state);
+  }
+  const info = {};
+  const tree = mapNodes(dom, info);
 
-  return build({ type: 'message', message: mapNodes(dom), flat: dom.textContent }, state);
+  return build({
+    type: 'message',
+    message: tree,
+    emojiOnly: isEmojiOnly(tree),
+    parsingErrors: info.errors,
+    flat: dom.textContent,
+  }, state);
 };
+
+const trim = (arr) => {
+  const copy = [...arr];
+  const idx = copy.reverse().findIndex(
+    (e) => !(e.text === '' || e.text === '\u200B' || e.text === '\u00A0' || e.br === true),
+  );
+  return copy.slice(idx).reverse();
+}
+
+const isEmojiOnly = (tree) => {
+  const arr = trim(tree);
+  if (arr.length === 1 && arr[0].emoji) return true;
+  return false;
+}
 
 export function build(msg, state) {
   msg.channel = selectors.getCid(state);
@@ -217,51 +252,40 @@ export function build(msg, state) {
   return msg;
 }
 
-const KEYS = [
-  'bullet',
-  'ordered',
-  'item',
-  'codeblock',
-  'blockquote',
-  'code',
-  'line',
-  'text',
-  'br',
-  'bold',
-  'italic',
-  'underline',
-  'strike',
-  'link',
-  'emoji',
-];
+// eslint-disable-next-line no-useless-escape
+const matchUrl = (text) => text.match(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)/g);
 
-const flat = (datas) => [datas].flat().map((data) => {
-  if (typeof data === 'string') return data;
-
-  const key = Object.keys(data).find((f) => KEYS.includes(f));
-  if (!key) return '';
-  return type(key, data[key]);
-}).join('');
-
-function type(t, data) {
-  switch (t) {
-  case 'br':
-    return '';
-  case 'link':
-    return flat(data.children);
-  default:
-    return flat(data);
-  }
-}
-
-const mapNodes = (dom) => (!dom.childNodes ? [] : [...dom.childNodes].map((n) => {
-  if (n.nodeName === '#text') return { text: n.nodeValue };
-  if (n.nodeName === 'U') return { underline: mapNodes(n) };
-  if (n.nodeName === 'A') return { link: { href: n.attributes.href.nodeValue, children: mapNodes(n) } };
-  if (n.nodeName === 'B') return { bold: mapNodes(n) };
-  if (n.nodeName === 'I') return { italic: mapNodes(n) };
-  if (n.nodeName === 'S') return { strike: mapNodes(n) };
-  if (n.nodeName === 'SPAN') return mapNodes(n);
+const mapNodes = (dom, info) => (!dom.childNodes ? [] : [...dom.childNodes].map((n) => {
+  if (n.nodeName === '#text') return processUrls(n.nodeValue);
+  if (n.nodeName === 'U') return { underline: mapNodes(n, info) };
+  if (n.nodeName === 'A') return { link: { href: n.attributes.href.nodeValue, children: mapNodes(n, info) } };
+  if (n.nodeName === 'B') return { bold: mapNodes(n, info) };
+  if (n.nodeName === 'I') return { italic: mapNodes(n, info) };
+  if (n.nodeName === 'S') return { strike: mapNodes(n, info) };
+  if (n.nodeName === 'DIV') return { line: mapNodes(n, info) };
+  if (n.nodeName === 'UL') return { bullet: mapNodes(n, info) };
+  if (n.nodeName === 'LI') return { item: mapNodes(n, info) };
+  if (n.nodeName === 'IMG') return { img: {src: n.attributes.src.nodeValue, alt: n.attributes.alt.nodeValue }};
+  if (n.nodeName === 'SPAN' && n.className === 'emoji') return { emoji: n.attributes.emoji.value };
+  if (n.nodeName === 'SPAN' && n.className === 'channel') return { link: { href: `#${n.attributes.cid.value}`, children: mapNodes(n, info) } };
+  if (n.nodeName === 'SPAN') return mapNodes(n, info);
   if (n.nodeName === 'BR') return { br: true };
+  // eslint-disable-next-line no-console
+  console.log('unknown node', n, n.nodeName);
+  info.errors = info.errors || [];
+  info.errors.push('unknown node');
   return { text: '' };
 }).flat());
+
+function processUrls(text) {
+  const m = matchUrl(text);
+  if (m) {
+    const parts = text.split(m[0]);
+    return [
+      { text: parts[0] },
+      { link: { href: m[0], children: [{ text: m[0] }] } },
+      ...processUrls(parts[1]),
+    ];
+  }
+  return [{text}];
+}

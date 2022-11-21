@@ -2,8 +2,9 @@
 import { Capacitor } from '@capacitor/core';
 import { client } from '../core';
 import { actions } from '../state';
-import {initNotifications} from './notifications';
-import {loadMessages} from './messages';
+import { initNotifications } from './notifications';
+import { loadMessages } from './messages';
+import { loadEmojis } from './emoji';
 
 export const init = () => async (dispatch) => {
   try {
@@ -25,6 +26,7 @@ export const init = () => async (dispatch) => {
     const { data: channels } = await client.req2({type: 'channels'});
     dispatch(actions.addChannel(channels));
     dispatch(loadMessages());
+    dispatch(loadEmojis());
   } catch (err) {
     // eslint-disable-next-line no-console
     console.log(err);

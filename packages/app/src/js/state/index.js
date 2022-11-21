@@ -11,6 +11,7 @@ import view, { actions as viewActions } from './view';
 import search, { actions as searchActions } from './search';
 import pins, { actions as pinActions } from './pins';
 import system, { actions as systemActions } from './system';
+import customEmojis, { actions as cusotmEmojisActions } from './customEmojis';
 
 const logout = createAction('logout');
 
@@ -28,9 +29,13 @@ export const actions = {
   ...searchActions,
   ...pinActions,
   ...systemActions,
+  ...cusotmEmojisActions,
 }
 
 export const selectors = {
+  getEmoji: (shortname) => (state) => state.customEmojis
+    .find((emoji) => emoji.shortname === shortname),
+  getAllEmojis: () => (state) => state.customEmojis,
   getChannel: (q) => (state) => state.channels.list
     .find((c) => c.cid === q.cid || c.name === q.name),
   getChannels: (state) => state.channels.list,
@@ -118,5 +123,6 @@ export default configureStore({
     search,
     pins,
     system,
+    customEmojis,
   },
 })

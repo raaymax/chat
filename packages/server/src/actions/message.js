@@ -12,15 +12,21 @@ module.exports = {
       channel: Joi.string().required(),
       flat: Joi.string().required().allow(''),
       clientId: Joi.string().required(),
+      emojiOnly: Joi.boolean().optional().default(false),
+      debug: Joi.string().optional().allow(''),
       attachments: Joi.array().items(Joi.object({
         id: Joi.string().required(),
         fileName: Joi.string().required(),
-        contentType: Joi.string().required(),
+        contentType: Joi.string().optional().allow('').empty(['']).default('application/octet-stream'),
       })).optional(),
     }),
   },
   handler: async (req, res) => {
     const msg = req.body;
+
+    if (msg.debug) {
+      console.log(JSON.stringify(msg, null, 2));
+    }
 
     if (!await channel.haveAccess(req.userId, msg.channel)) {
       throw AccessDenied();
@@ -31,6 +37,7 @@ module.exports = {
       flat: msg.flat,
       channel: msg.channel,
       clientId: msg.clientId,
+      emojiOnly: msg.emojiOnly,
       userId: req.userId,
       attachments: msg.attachments?.map((file) => ({
         id: file.id,

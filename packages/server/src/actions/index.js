@@ -17,6 +17,8 @@ module.exports = [
   require('./search'),
   require('./pins'),
   require('./pin'),
+  require('./findEmoji'),
+  require('./loadEmojis'),
   {
     type: 'default',
     handler: (req) => {
