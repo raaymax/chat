@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 COPY packages/server/package*.json ./packages/server/
 COPY packages/app/package*.json ./packages/app/
-RUN npm install -g npm
+#RUN npm install -g npm
 RUN npm install --production=false
 COPY chat.config.js ./
 COPY packages/app/webpack.config.js ./packages/app/webpack.config.js
@@ -17,7 +17,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 COPY packages/server/package*.json ./packages/server/
 COPY packages/app/package*.json ./packages/app/
-RUN npm install -g npm
+#RUN npm install -g npm
 RUN npm install --production
 COPY --from=appbuild /usr/src/app/packages/app/dist ./packages/app/dist
 COPY ./packages/server/src ./packages/server/src
