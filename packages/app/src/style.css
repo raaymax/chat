@@ -380,6 +380,11 @@ ul {
 .file.image img {
 }
 
+.file.image img.raw-image {
+  max-width: 400px;
+  max-height: 400px;
+}
+
 .file:hover {
   background-color: var(--primary_active_mask);
 }

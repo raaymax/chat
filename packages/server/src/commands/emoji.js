@@ -2,7 +2,7 @@ const { emojiRepo } = require('../infra/database');
 
 module.exports = {
   name: 'emoji',
-  description: 'defines emoji, name should be in :your_name: form',
+  description: '[attachment] - defines emoji, name should be in your_name form without ":"',
   args: ['name'],
   attachments: ['image'],
   handler: async (req, res) => {

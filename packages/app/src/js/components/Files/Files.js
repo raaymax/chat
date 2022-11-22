@@ -19,7 +19,7 @@ export const Image = ({raw, data: {fileName, id}}) => (
   <div class='file image' data-id={id} onclick={() => download(id)}>
     {
       raw
-        ? <img src={getUrl(id)} alt={fileName} />
+        ? <img class='raw-image' src={getUrl(id)} alt={fileName} />
         : <img src={getThumbnail(id)} alt={fileName} />
     }
   </div>
