@@ -35,6 +35,7 @@ module.exports = {
         collapse_key: msg.userId,
         notification: {
           ...(user.avatarUrl ? { imageUrl: user.avatarUrl } : {}),
+          channel_id: 'default',
           icon: 'stock_ticker_update',
           color: '#7e55c3',
           sound: 'https://chat.codecat.io/assets/sound.mp3',
@@ -65,6 +66,11 @@ module.exports = {
         },
       },
     };
+    try{
     return getMessaging().sendMulticast(message);
+    }catch(e){
+      console.log(e);
+      throw e;
+    }
   },
 };

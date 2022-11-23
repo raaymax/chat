@@ -47,7 +47,9 @@ module.exports = {
 
     if (!dup) {
       res.broadcast({ type: 'message', ...created });
-      push.send(created);
+
+      const a = await push.send(created);
+      console.log(JSON.stringify(a, null, 2));
     }
     res.ok(dup ? { duplicate: true } : {});
   },

@@ -36,6 +36,15 @@ const initWebNotifications = async (config) => {
 }
 
 const initNativeNotifications = () => {
+  PushNotifications.createChannel({
+    id: 'default',
+    name: 'Messages',
+    description: 'Default channel for messages',
+    importance: 5,
+    visibility: 1,
+    vibration: true,
+    sound: 'sound.mp3',
+  })
   PushNotifications.requestPermissions().then((result) => {
     if (result.receive === 'granted') {
       PushNotifications.register();
