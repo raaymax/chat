@@ -49,6 +49,8 @@ module.exports = {
       res.broadcast({ type: 'message', ...created });
 
       const a = await push.send(created);
+      // FIXME: handle errors
+      // eslint-disable-next-line no-console
       console.log(JSON.stringify(a, null, 2));
     }
     res.ok(dup ? { duplicate: true } : {});

@@ -66,9 +66,10 @@ module.exports = {
         },
       },
     };
-    try{
-    return getMessaging().sendMulticast(message);
-    }catch(e){
+    try {
+      return getMessaging().sendMulticast(message);
+    } catch (e) {
+      // eslint-disable-next-line no-console
       console.log(e);
       throw e;
     }
