@@ -1,7 +1,7 @@
 const Joi = require('joi');
-const { messageRepo } = require('../infra/database');
+const { messageRepo, channelProgressRepo, channelRepo } = require('../infra/database');
 const { MissingChannel, AccessDenied } = require('../common/errors');
-const channel = require('../common/channel');
+const ChannelHelper = require('../common/channel');
 
 module.exports = {
   type: 'load',
@@ -19,7 +19,7 @@ module.exports = {
 
     if (!msg.channel) throw MissingChannel();
 
-    if (!await channel.haveAccess(req.userId, msg.channel)) {
+    if (!await ChannelHelper.haveAccess(req.userId, msg.channel)) {
       throw AccessDenied();
     }
     const msgs = await messageRepo.getAll({

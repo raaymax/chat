@@ -19,6 +19,8 @@ module.exports = [
   require('./pin'),
   require('./findEmoji'),
   require('./loadEmojis'),
+  require('./updateProgress'),
+  require('./loadProgress'),
   {
     type: 'default',
     handler: (req) => {

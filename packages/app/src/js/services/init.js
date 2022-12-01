@@ -1,12 +1,13 @@
 /* eslint-disable no-undef */
 import { Capacitor } from '@capacitor/core';
 import { client } from '../core';
-import { actions } from '../state';
+import { actions, selectors } from '../state';
 import { initNotifications } from './notifications';
 import { loadMessages } from './messages';
 import { loadEmojis } from './emoji';
+import { loadProgress } from './progress';
 
-export const init = () => async (dispatch) => {
+export const init = () => async (dispatch, getState) => {
   try {
     dispatch(actions.messagesLoading());
     dispatch(actions.connected());
@@ -27,6 +28,9 @@ export const init = () => async (dispatch) => {
     dispatch(actions.addChannel(channels));
     dispatch(loadMessages());
     dispatch(loadEmojis());
+    const channelId = selectors.getChannel({cid: selectors.getCid(getState())})(getState()).id;
+
+    dispatch(loadProgress(channelId));
   } catch (err) {
     // eslint-disable-next-line no-console
     console.log(err);

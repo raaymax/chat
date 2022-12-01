@@ -4,13 +4,16 @@ import { play } from './services/sound';
 import { ackTyping } from './services/typing';
 import { init } from './services/init';
 import { client } from './core';
-import store, {actions} from './state';
+import store, {actions, selectors} from './state';
 
 client
   .on('user', (msg) => store.dispatch(actions.addUser(msg)))
   .on('emoji', (msg) => store.dispatch(actions.addEmoji(msg)))
+  .on('progress', (msg) => store.dispatch(actions.addProgress(msg)))
   .on('channel:changed', (msg) => {
     store.dispatch(actions.setChannel(msg.channel));
+    const channelId = selectors.getChannel(store.getState()).id;
+    store.dispatch(loadProgress(channelId));
     store.dispatch(loadMessages());
   })
   .on('setChannel', (msg) => { window.location.hash = msg.channel; })

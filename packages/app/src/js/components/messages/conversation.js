@@ -1,14 +1,16 @@
 import { h } from 'preact';
+import { useEffect } from 'preact/hooks';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadPrevious, loadNext } from '../../services/messages';
+import { updateProgress } from '../../services/progress';
 import { actions, selectors } from '../../state';
-import {messageFormatter } from './formatter';
-import {MessageList } from './messageList';
-import {Header} from './header';
+import { messageFormatter } from './formatter';
+import { MessageList } from './messageList';
+import { Header } from './header';
 import { uploadMany } from '../../services/file';
 import { Input } from '../Input/Input';
-import {Loader} from '../loader';
+import { Loader } from '../loader';
 
 const drop = (dispatch) => async (e) => {
   e.preventDefault();
@@ -51,6 +53,14 @@ export function Conversation() {
   const channel = useSelector(selectors.getCid);
   const status = useSelector(selectors.getMessagesStatus);
   const selected = useSelector(selectors.getSelectedMessage);
+  const progress = useSelector(selectors.getProgress(channel));
+  const list = messages.map((m) => ({...m, progress: progress[m.id]}));
+
+  useEffect(() => {
+    const cb = () => dispatch(updateProgress(list[0].id))
+    window.addEventListener('focus', cb);
+    return () => window.removeEventListener('focus', cb);
+  }, [list, dispatch]);
 
   return (
     <StyledConversation onDrop={drop(dispatch)} onDragOver={dragOverHandler}>
@@ -59,7 +69,7 @@ export function Conversation() {
       }} />
       <MessageList
         formatter={messageFormatter}
-        list={messages}
+        list={list}
         status={status}
         selected={selected}
         onScrollTo={(dir) => {

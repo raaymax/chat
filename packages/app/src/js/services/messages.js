@@ -1,6 +1,7 @@
 import { client } from '../core';
 import { createCounter } from '../utils';
 import { actions, selectors } from '../state';
+import { loadProgress, updateProgress } from './progress';
 
 const tempId = createCounter(`temp:${(Math.random() + 1).toString(36)}`);
 
@@ -41,6 +42,7 @@ export const loadNext = (channel) => async (dispatch, getState) => {
       after: selectors.getLatestDate()(getState()),
       limit: 50,
     })
+    dispatch(updateProgress(req.data[0].id))
     dispatch(actions.addMessages(req.data));
     if (selectors.countMessagesInChannel(channel, getState()) > 100) {
       setTimeout(() => {
@@ -81,6 +83,7 @@ export const loadArchive = ({channel, id, date}) => async (dispatch) => {
       after: date,
       limit: 50,
     })
+    dispatch(updateProgress(req.data[0].id))
     dispatch(actions.messagesLoadingNextDone());
     dispatch(actions.addMessages(req.data));
     if (req.data.length < 50) {
@@ -104,6 +107,7 @@ export const loadMessages = () => async (dispatch, getState) => {
       limit: 50,
     })
     dispatch(actions.addMessages(req.data));
+    dispatch(updateProgress(req.data[0].id))
   } catch (err) {
     // eslint-disable-next-line no-console
     console.log(err);
@@ -111,6 +115,7 @@ export const loadMessages = () => async (dispatch, getState) => {
   }
   dispatch(actions.messagesLoadingDone());
 }
+
 
 export const addReaction = (id, text) => async (dispatch) => {
   try {
