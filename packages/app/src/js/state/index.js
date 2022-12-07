@@ -39,7 +39,7 @@ export const selectors = {
     (state) => state.channels.list.find((c) => c.cid === channel),
     (state) => state.progress,
     (state) => state.users.list,
-    (channel, progress, users) => progress
+    (channel, progress, users) => (channel ? progress
       .filter((p) => p.channelId === channel.id)
       .map((p) => ({
         ...p,
@@ -48,7 +48,7 @@ export const selectors = {
       .reduce((acc, p) => ({
         ...acc,
         [p.lastMessageId]: [...(acc[p.lastMessageId] || []), p],
-      }), {}),
+      }), {}) : {}),
   ),
   getBadges: (userId) => createSelector(
     (state) => state.progress,
@@ -67,6 +67,11 @@ export const selectors = {
   getChannels: (state) => state.channels.list,
   getConfig: (state) => state.config,
   getCid: (state) => state.channels.current,
+  getChannelId: createSelector(
+    (state) => state.channels.current,
+    (state) => state.channels.list,
+    (cid, channels) => channels.find((c) => c.cid === cid)?.id,
+  ),
   getMeId: (state) => state.users.meId,
   getMyId: (state) => state.users.meId,
   getFiles: (state) => state.files.list,

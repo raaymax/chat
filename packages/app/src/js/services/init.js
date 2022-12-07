@@ -27,8 +27,8 @@ const initApp = async (dispatch, getState) => {
   dispatch(actions.addChannel(channels));
   dispatch(loadMessages());
   dispatch(loadEmojis());
-  const channelId = selectors.getChannel({cid: selectors.getCid(getState())})(getState()).id;
-  dispatch(loadProgress(channelId));
+  const channelId = selectors.getChannelId(getState());
+  if (channelId) dispatch(loadProgress(channelId));
   dispatch(loadBadges());
 };
 

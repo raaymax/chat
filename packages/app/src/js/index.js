@@ -13,7 +13,7 @@ client
   .on('badge', (msg) => store.dispatch(actions.addProgress(msg)))
   .on('channel:changed', (msg) => {
     store.dispatch(actions.setChannel(msg.channel));
-    const channelId = selectors.getChannel(store.getState()).id;
+    const channelId = selectors.getChannelId(getState());
     store.dispatch(loadProgress(channelId));
     store.dispatch(loadMessages());
   })

@@ -5,9 +5,12 @@ import { selectors } from '../state';
 import styled from 'styled-components';
 
 const Badge = styled.span`
-
+  border-radius: 10px;
+  background-color: #af0000;
+  color: #ffffff;
+  font-size: 0.8em;
+  padding: 3px 5px;
 `;
-
 
 export const Channel = ({
   name, cid, private: priv, onclick, active, icon, badge
@@ -16,7 +19,6 @@ export const Channel = ({
     {!icon && ( priv ? <i class='fa-solid fa-lock' /> : <i class='fa-solid fa-hashtag' />) }
     {icon && <i class={icon} />}
     <span class='name'>{name || cid}</span>
-
     {badge > 0 && <Badge>{badge}</Badge>}
   </div>
 )
