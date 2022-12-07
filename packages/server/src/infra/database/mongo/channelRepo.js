@@ -1,36 +1,39 @@
 const { db, ObjectId } = require('./db');
+const { serialize, serializeInsert, deserialize } = require('./serializer');
+
+const TABLE_NAME = 'channels';
 
 module.exports = {
-  get: async ({ id, ...channel }) => (await db).collection('channels')
-    .findOne(id ? ({ _id: ObjectId(id), ...channel }) : ({ ...channel }))
-    .then((i) => (i ? ({ ...i, id: i._id.toHexString() }) : null)),
+  get: async (query) => (await db).collection(TABLE_NAME)
+    .findOne(deserialize(query))
+    .then(serialize),
 
-  getAll: async ({ userId }) => (await db).collection('channels').find({
+  getAll: async ({ userId }) => (await db).collection(TABLE_NAME).find({
     users: { $elemMatch: { $eq: ObjectId(userId) } },
   })
     .toArray()
-    .then((arr) => arr.map((item) => ({ ...item, id: item._id.toHexString() }))),
+    .then(serialize),
 
   insert: async ({ cid, name, userId }) => {
-    const channel = await (await db).collection('channels').findOne({ cid });
+    const channel = await (await db).collection(TABLE_NAME).findOne({ cid });
     if (channel && channel.users.map((u) => u.toHexString()).includes(userId)) {
       return channel._id.toHexString();
     }
     if (channel) {
       channel.users.push(ObjectId(userId));
-      await (await db).collection('channels').updateOne({ _id: channel._id }, { $set: { users: channel.users } });
+      await (await db).collection(TABLE_NAME).updateOne({ _id: channel._id }, { $set: { users: channel.users } });
       return channel._id.toHexString();
     }
 
-    return (await db).collection('channels').insertOne({ cid, name, users: [ObjectId(userId)] })
-      .then((item) => ({ ...item, id: item.insertedId.toHexString() }));
+    return (await db).collection(TABLE_NAME).insertOne({ cid, name, users: [ObjectId(userId)] })
+      .then(serializeInsert);
   },
 
   remove: async ({ cid, userId }) => {
-    const channel = await (await db).collection('channels').findOne({ cid });
+    const channel = await (await db).collection(TABLE_NAME).findOne({ cid });
     if (channel && channel.users.map((u) => u.toHexString()).includes(userId)) {
       const users = channel.users.filter((u) => u.toHexString() !== userId);
-      await (await db).collection('channels').updateOne({ _id: channel._id }, { $set: { users } });
+      await (await db).collection(TABLE_NAME).updateOne({ _id: channel._id }, { $set: { users } });
       return channel._id.toHexString();
     }
     return null;

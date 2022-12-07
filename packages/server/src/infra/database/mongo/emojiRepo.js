@@ -1,12 +1,16 @@
-const { db, ObjectId } = require('./db');
+const { db } = require('./db');
+const { serialize, serializeInsert, deserialize } = require('./serializer');
+
+const TABLE_NAME = 'emojis';
 
 module.exports = {
-  getAll: async () => (await db).collection('emojis').find({})
+  getAll: async (query) => (await db).collection(TABLE_NAME)
+    .find(deserialize(query))
     .toArray()
-    .then((arr) => arr.map((item) => ({ ...item, id: item._id.toHexString() }))),
-  get: async ({ id, ...emoji }) => (await db).collection('emojis')
-    .findOne(id ? ({ _id: ObjectId(id), ...emoji }) : ({ ...emoji }))
-    .then((i) => (i ? ({ ...i, id: i._id.toHexString() }) : null)),
-  insert: async (msg) => (await db).collection('emojis').insertOne(msg)
-    .then((item) => ({ ...item, id: item.insertedId.toHexString() })),
+    .then(serialize),
+  get: async (query) => (await db).collection(TABLE_NAME)
+    .findOne(deserialize(query))
+    .then(serialize),
+  insert: async (msg) => (await db).collection(TABLE_NAME).insertOne(deserialize(msg))
+    .then(serializeInsert),
 };

@@ -24,7 +24,7 @@ module.exports = {
   },
   handler: async (req, res) => {
     const msg = req.body;
-    const channel = await db.channel.get({cid: msg.channel});
+    const channel = await db.channel.get({ cid: msg.channel });
     if (!await channelHelper.haveAccess(req.userId, msg.channel)) {
       throw AccessDenied();
     }
@@ -45,6 +45,7 @@ module.exports = {
     });
     const created = await db.message.get({ id });
     await db.badge.increment({ channelId: channel.id });
+    await db.badge.reset({ channelId: channel.id, userId: req.userId });
 
     if (!dup) {
       res.broadcast({ type: 'message', ...created });
@@ -58,7 +59,7 @@ async function createMessage(msg) {
   let id; let
     dup = false;
   try {
-    id = await db.message.insert(msg);
+    ({ id } = await db.message.insert(msg));
   } catch (err) {
     if (err.code !== 11000) {
       throw err;

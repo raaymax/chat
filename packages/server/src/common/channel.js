@@ -5,7 +5,7 @@ module.exports = {
     const channel = await db.channel.get({ cid });
 
     if (channel?.private
-        && !channel.users.map((u) => u.toHexString()).includes(userId)) {
+        && !channel.users.includes(userId)) {
       return false;
     }
     return true;

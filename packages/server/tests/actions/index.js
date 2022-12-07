@@ -12,5 +12,6 @@ module.exports = (connect) => {
     require('./config.spec')(connect);
     require('./command.spec')(connect);
     require('./pins.spec')(connect);
+    require('./badges.spec')(connect);
   });
 };

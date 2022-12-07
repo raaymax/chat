@@ -13,7 +13,7 @@ module.exports = {
   handler: async (req, res) => {
     const msg = req.body;
 
-    if (!msg.messageId) throw MissingChannel(); //FIXME
+    if (!msg.messageId) throw MissingChannel(); // FIXME
 
     const message = await db.message.get({ id: msg.messageId });
     const channel = await db.channel.get({ cid: message.channel });
@@ -26,6 +26,7 @@ module.exports = {
       channelId: channel.id,
       lastMessageId: msg.messageId,
       lastRead: message.createdAt,
+      count: await db.message.count({ after: message.createdAt, channel: channel.cid }),
     });
 
     const myProgress = await db.badge.get({ channelId: channel.id, userId: req.userId });
