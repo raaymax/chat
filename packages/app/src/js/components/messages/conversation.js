@@ -11,6 +11,7 @@ import { Header } from './header';
 import { uploadMany } from '../../services/file';
 import { Input } from '../Input/Input';
 import { Loader } from '../loader';
+import { reinit } from '../../services/init';
 
 const drop = (dispatch) => async (e) => {
   e.preventDefault();
@@ -41,6 +42,20 @@ const StyledLoader = styled.div`
     position: absolute;
     top: -20px;
     width: 100%;
+  }
+`;
+
+const ReInit = styled.div`
+  cursor: pointer;
+  border: 0;
+  text-align: center;
+  color: var(--color_danger);
+  vertical-align: middle;
+  height: 50px;
+  line-height: 25px;
+  border-top: 1px solid var(--border_color);
+  &:hover {
+    background-color: var(--secondary_background);
   }
 `;
 
@@ -85,11 +100,8 @@ export function Conversation() {
         <Loader />
       </div></StyledLoader>}
 
-      {(initFailed || failed) && <div>
-        Loading failed. If this happend inform me please ;)  Mateusz
-      </div>}
-
       <Input />
+      {initFailed && <ReInit onClick={() => dispatch(reinit())}>Failed to initialize<br/> Retry</ReInit>}
     </StyledConversation>
   )
 }

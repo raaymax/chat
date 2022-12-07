@@ -2,7 +2,7 @@ import { client } from '../core';
 import { createCounter } from '../utils';
 import { actions, selectors } from '../state';
 
-export const loadBadges = (channelId) => async(dispatch, getState) => {
+export const loadBadges = () => async(dispatch, getState) => {
   const {data} = await client.req2({
     type: 'loadBadges',
   })

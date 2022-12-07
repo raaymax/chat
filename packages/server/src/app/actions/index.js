@@ -21,6 +21,7 @@ module.exports = [
   require('./loadEmojis'),
   require('./updateProgress'),
   require('./loadProgress'),
+  require('./loadBadges'),
   {
     type: 'default',
     handler: (req) => {

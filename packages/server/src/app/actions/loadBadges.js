@@ -7,7 +7,7 @@ module.exports = {
     body: Joi.any(),
   },
   handler: async (req, res) => {
-    const badges = await db.badge.getAll({ userId: req.user.id });
+    const badges = await db.badge.getAll({ userId: req.userId });
     badges.forEach((badge) => res.send({ type: 'badge', ...badge }));
     res.ok({ count: badges.length });
   },

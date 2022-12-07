@@ -93,6 +93,7 @@ module.exports = (server) => {
           type: 'response',
           status: 'error',
           message: err.message,
+          stack: err.stack,
           ...err,
         });
       }

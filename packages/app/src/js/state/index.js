@@ -50,6 +50,15 @@ export const selectors = {
         [p.lastMessageId]: [...(acc[p.lastMessageId] || []), p],
       }), {}),
   ),
+  getBadges: (userId) => createSelector(
+    (state) => state.progress,
+    (progress) => progress
+      .filter((p) => p.userId === userId)
+      .reduce((acc, p) => ({
+        ...acc,
+        [p.channelId]: p.count,
+      }), {}),
+  ),
   getEmoji: (shortname) => (state) => state.customEmojis
     .find((emoji) => emoji.shortname === shortname),
   getAllEmojis: () => (state) => state.customEmojis,
@@ -59,6 +68,7 @@ export const selectors = {
   getConfig: (state) => state.config,
   getCid: (state) => state.channels.current,
   getMeId: (state) => state.users.meId,
+  getMyId: (state) => state.users.meId,
   getFiles: (state) => state.files.list,
   getView: (state) => state.view.current,
   getSearchResults: (state) => state.search.results,
