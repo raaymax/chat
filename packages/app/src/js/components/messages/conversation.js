@@ -71,7 +71,7 @@ export function Conversation() {
   const list = messages.map((m) => ({...m, progress: progress[m.id]}));
 
   useEffect(() => {
-    const cb = () => dispatch(updateProgress(list[0].id))
+    const cb = () => list.length > 0 && dispatch(updateProgress(list[0].id))
     window.addEventListener('focus', cb);
     return () => window.removeEventListener('focus', cb);
   }, [list, dispatch]);
