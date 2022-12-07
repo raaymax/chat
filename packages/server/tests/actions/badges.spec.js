@@ -15,10 +15,10 @@ module.exports = (connect) => {
       const melisa = await connect('melisa');
       const user = await (await db).collection('users').findOne({ name: 'Mateusz' });
       const channel = await (await db).collection('channels').findOne({ name: 'main' });
-      await (await db).collection('badges').deleteMany({ userId: user._id, channelId: channel._id});
+      await (await db).collection('badges').deleteMany({ userId: user._id, channelId: channel._id });
       await (await db).collection('badges').insertOne({ userId: user._id, channelId: channel._id, count: 0 });
       await sendHello(melisa);
-      const badge = await (await db).collection('badges').findOne({userId: user._id, channelId: channel._id });
+      const badge = await (await db).collection('badges').findOne({ userId: user._id, channelId: channel._id });
       assert.equal(badge.count, 1);
       melisa.close();
     });
@@ -28,7 +28,7 @@ module.exports = (connect) => {
       const melisa = await connect('melisa');
       const user = await (await db).collection('users').findOne({ name: 'Mateusz' });
       const channel = await (await db).collection('channels').findOne({ name: 'main' });
-      await (await db).collection('badges').deleteMany({ userId: user._id, channelId: channel._id});
+      await (await db).collection('badges').deleteMany({ userId: user._id, channelId: channel._id });
       await (await db).collection('badges').insertOne({ userId: user._id, channelId: channel._id, count: 0 });
       const [msg] = await sendHello(melisa);
       await sendHello(melisa);
@@ -36,7 +36,7 @@ module.exports = (connect) => {
         type: 'updateProgress',
         messageId: msg.id,
       });
-      const badge = await (await db).collection('badges').findOne({userId: user._id, channelId: channel._id });
+      const badge = await (await db).collection('badges').findOne({ userId: user._id, channelId: channel._id });
       assert.equal(badge.count, 1);
       ws.close();
       melisa.close();
@@ -47,12 +47,12 @@ module.exports = (connect) => {
       const melisa = await connect('melisa');
       const user = await (await db).collection('users').findOne({ name: 'Mateusz' });
       const channel = await (await db).collection('channels').findOne({ name: 'main' });
-      await (await db).collection('badges').deleteMany({ userId: user._id, channelId: channel._id});
+      await (await db).collection('badges').deleteMany({ userId: user._id, channelId: channel._id });
       await (await db).collection('badges').insertOne({ userId: user._id, channelId: channel._id, count: 0 });
-      const [msg] = await sendHello(melisa);
       await sendHello(melisa);
-      await sendHello(mateusz)
-      const badge = await (await db).collection('badges').findOne({userId: user._id, channelId: channel._id });
+      await sendHello(melisa);
+      await sendHello(mateusz);
+      const badge = await (await db).collection('badges').findOne({ userId: user._id, channelId: channel._id });
       assert.equal(badge.count, 0);
       mateusz.close();
       melisa.close();

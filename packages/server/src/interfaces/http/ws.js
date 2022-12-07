@@ -2,7 +2,7 @@ const { Server } = require('socket.io');
 const sessionParser = require('./sessionParser');
 const db = require('../../infra/database');
 const bus = require('../../infra/ws');
-const actions = require('../../actions');
+const actions = require('../../app/actions');
 const corsConfig = require('./cors');
 
 module.exports = (server) => {
