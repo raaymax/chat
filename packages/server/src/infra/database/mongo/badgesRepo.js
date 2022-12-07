@@ -1,4 +1,4 @@
-const { db, ObjectId } = require('./db');
+const { db } = require('./db');
 
 const TABLE_NAME = 'badges';
 const { serialize, deserialize } = require('./serializer');

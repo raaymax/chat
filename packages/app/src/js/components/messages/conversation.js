@@ -64,7 +64,6 @@ export function Conversation() {
   const messages = useSelector(selectors.getMessages);
   const initFailed = useSelector(selectors.getInitFailed);
   const loading = useSelector(selectors.getMessagesLoading);
-  const failed = useSelector(selectors.getMessagesLoadingFailed);
   const channel = useSelector(selectors.getCid);
   const status = useSelector(selectors.getMessagesStatus);
   const selected = useSelector(selectors.getSelectedMessage);
@@ -99,9 +98,11 @@ export function Conversation() {
       {loading && <StyledLoader><div>
         <Loader />
       </div></StyledLoader>}
-
       <Input />
-      {initFailed && <ReInit onClick={() => dispatch(reinit())}>Failed to initialize<br/> Retry</ReInit>}
+      {initFailed && <ReInit onClick={() => dispatch(reinit())}>
+        Failed to initialize<br />
+        Retry
+      </ReInit>}
     </StyledConversation>
   )
 }

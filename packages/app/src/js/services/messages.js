@@ -1,7 +1,7 @@
 import { client } from '../core';
 import { createCounter } from '../utils';
 import { actions, selectors } from '../state';
-import { loadProgress, updateProgress } from './progress';
+import { updateProgress } from './progress';
 
 const tempId = createCounter(`temp:${(Math.random() + 1).toString(36)}`);
 
@@ -115,7 +115,6 @@ export const loadMessages = () => async (dispatch, getState) => {
   }
   dispatch(actions.messagesLoadingDone());
 }
-
 
 export const addReaction = (id, text) => async (dispatch) => {
   try {

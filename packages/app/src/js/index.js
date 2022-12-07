@@ -5,7 +5,7 @@ import { play } from './services/sound';
 import { ackTyping } from './services/typing';
 import { init } from './services/init';
 import { client } from './core';
-import store, {actions, selectors} from './state';
+import store, {actions} from './state';
 
 client
   .on('user', (msg) => store.dispatch(actions.addUser(msg)))
@@ -13,8 +13,7 @@ client
   .on('badge', (msg) => store.dispatch(actions.addProgress(msg)))
   .on('channel:changed', (msg) => {
     store.dispatch(actions.setChannel(msg.channel));
-    const channelId = selectors.getChannelId(getState());
-    store.dispatch(loadProgress(channelId));
+    store.dispatch(loadProgress());
     store.dispatch(loadMessages());
   })
   .on('setChannel', (msg) => { window.location.hash = msg.channel; })

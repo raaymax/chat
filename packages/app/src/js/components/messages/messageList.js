@@ -85,7 +85,6 @@ export class MessageList extends Component {
     } else {
       this.updateScroll = false;
     }
-    return true;
 
     for (const key in Object.keys(props)) {
       if (props[key] !== nextProps[key]) {

@@ -1,8 +1,8 @@
 import { h} from 'preact';
 import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import { openChannel } from '../services/channels';
 import { selectors } from '../state';
-import styled from 'styled-components';
 
 const Badge = styled.span`
   border-radius: 10px;
@@ -13,7 +13,7 @@ const Badge = styled.span`
 `;
 
 export const Channel = ({
-  name, cid, private: priv, onclick, active, icon, badge
+  name, cid, private: priv, onclick, active, icon, badge,
 }) => (
   <div class={`channel ${active ? 'active' : ''}`}data-id={cid} onclick={onclick}>
     {!icon && ( priv ? <i class='fa-solid fa-lock' /> : <i class='fa-solid fa-hashtag' />) }

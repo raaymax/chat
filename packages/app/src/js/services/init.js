@@ -1,13 +1,13 @@
 /* eslint-disable no-undef */
 import { Capacitor } from '@capacitor/core';
 import { client } from '../core';
-import { actions, selectors } from '../state';
+import { actions } from '../state';
 import { initNotifications } from './notifications';
 import { loadMessages } from './messages';
 import { loadEmojis } from './emoji';
 import { loadProgress, loadBadges } from './progress';
 
-const initApp = async (dispatch, getState) => {
+const initApp = async (dispatch) => {
   dispatch(actions.messagesLoading());
   dispatch(actions.connected());
   dispatch(actions.clearInfo());
@@ -27,8 +27,7 @@ const initApp = async (dispatch, getState) => {
   dispatch(actions.addChannel(channels));
   dispatch(loadMessages());
   dispatch(loadEmojis());
-  const channelId = selectors.getChannelId(getState());
-  if (channelId) dispatch(loadProgress(channelId));
+  dispatch(loadProgress());
   dispatch(loadBadges());
 };
 

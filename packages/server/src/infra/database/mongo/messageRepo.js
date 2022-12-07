@@ -1,4 +1,4 @@
-const { db, ObjectId } = require('./db');
+const { db } = require('./db');
 const { serialize, serializeInsert, deserialize } = require('./serializer');
 
 const TABLE_NAME = 'messages';

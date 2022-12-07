@@ -21,7 +21,8 @@ module.exports = {
     }
     if (channel) {
       channel.users.push(ObjectId(userId));
-      await (await db).collection(TABLE_NAME).updateOne({ _id: channel._id }, { $set: { users: channel.users } });
+      await (await db).collection(TABLE_NAME)
+        .updateOne({ _id: channel._id }, { $set: { users: channel.users } });
       return channel._id.toHexString();
     }
 
