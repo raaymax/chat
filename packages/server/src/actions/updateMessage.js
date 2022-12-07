@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { messageRepo } = require('../infra/database');
+const db = require('../infra/database');
 // const service = require('../message/messageService');
 // const Errors = require('../errors');
 const { MissingId, NotOwnerOfMessage, MessageNotExist } = require('../common/errors');
@@ -25,12 +25,12 @@ module.exports = {
     const { id, ...body } = req.body;
     if (!id) throw MissingId();
 
-    const message = await messageRepo.get({ id });
+    const message = await db.message.get({ id });
     if (!message) throw MessageNotExist();
 
     if (req.userId !== message.userId) throw NotOwnerOfMessage();
 
-    await messageRepo.update({ id }, body);
+    await db.message.update({ id }, body);
     await res.broadcast({
       id,
       type: 'message',

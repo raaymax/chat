@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { messageRepo, channelProgressRepo, channelRepo } = require('../infra/database');
+const db = require('../infra/database');
 const { MissingChannel, AccessDenied } = require('../common/errors');
 const ChannelHelper = require('../common/channel');
 
@@ -15,20 +15,20 @@ module.exports = {
 
     if (!msg.messageId) throw MissingChannel(); //FIXME
 
-    const message = await messageRepo.get({ id: msg.messageId });
-    const channel = await channelRepo.get({ cid: message.channel });
+    const message = await db.message.get({ id: msg.messageId });
+    const channel = await db.channel.get({ cid: message.channel });
 
     if (!await ChannelHelper.haveAccess(req.userId, channel.cid)) {
       throw AccessDenied();
     }
-    await channelProgressRepo.upsert({
+    await db.badge.upsert({
       userId: req.userId,
       channelId: channel.id,
       lastMessageId: msg.messageId,
       lastRead: message.createdAt,
     });
 
-    const myProgress = await channelProgressRepo.get({ channelId: channel.id, userId: req.userId });
+    const myProgress = await db.badge.get({ channelId: channel.id, userId: req.userId });
     res.broadcast({ type: 'progress', ...myProgress });
     res.ok({ });
   },

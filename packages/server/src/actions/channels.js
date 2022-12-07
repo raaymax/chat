@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { channelRepo } = require('../infra/database');
+const db = require('../infra/database');
 
 module.exports = {
   type: 'channels',
@@ -7,7 +7,7 @@ module.exports = {
     body: Joi.any(),
   },
   handler: async (req, res) => {
-    const channels = await channelRepo.getAll({ userId: req.userId });
+    const channels = await db.channel.getAll({ userId: req.userId });
     channels.forEach((channel) => {
       res.send({ type: 'channel', ...channel });
     });

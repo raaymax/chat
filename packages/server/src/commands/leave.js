@@ -1,4 +1,4 @@
-const { channelRepo } = require('../infra/database');
+const db = require('../infra/database');
 
 module.exports = {
   name: 'leave',
@@ -6,7 +6,7 @@ module.exports = {
   args: [],
   handler: async (req, res) => {
     const { channel: cid } = req.body.context;
-    await channelRepo.remove({ cid, userId: req.userId });
+    await db.channel.remove({ cid, userId: req.userId });
     await res.send({ type: 'removeChannel', cid });
     await res.send({
       type: 'message',

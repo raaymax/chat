@@ -1,4 +1,4 @@
-const { channelRepo } = require('../infra/database');
+const db = require('../infra/database');
 const { AccessDenied } = require('../common/errors');
 const channelHelper = require('../common/channel');
 
@@ -13,12 +13,12 @@ module.exports = {
       throw AccessDenied();
     }
 
-    const id = await channelRepo.insert({
+    const id = await db.channel.insert({
       cid: channel,
       name: channel,
       userId: req.userId,
     });
-    const createdChannel = await channelRepo.get({ id });
+    const createdChannel = await db.channel.get({ id });
     res.send({
       type: 'channel',
       cid: createdChannel.cid,

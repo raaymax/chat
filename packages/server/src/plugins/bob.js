@@ -1,5 +1,5 @@
 const bus = require('../infra/ws');
-const { messageRepo } = require('../infra/database');
+const db = require('../infra/database');
 const push = require('../infra/push');
 const openai = require('../infra/openai');
 
@@ -7,7 +7,7 @@ bus.on('openai', async (msg) => {
   if (msg.type !== 'message' || msg.userId === 'bob') return;
   if (msg.channel !== 'openai' && !msg.channel.startsWith('bob+')) return;
 
-  const messages = await messageRepo.getAll({
+  const messages = await db.message.getAll({
     channel: msg.channel,
     after: new Date(Date.now() - 1000 * 60 * 10),
   }, {
@@ -56,8 +56,8 @@ bus.on('openai', async (msg) => {
       clientId: `ai:${Math.random()}`,
     };
 
-    const { id } = await messageRepo.insert(resp);
-    const created = await messageRepo.get({ id });
+    const { id } = await db.message.insert(resp);
+    const created = await db.message.get({ id });
     bus.broadcast({ type: 'message', ...created });
     push.send(created);
   } catch (err) {

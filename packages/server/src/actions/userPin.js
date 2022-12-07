@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { messageRepo, channelRepo } = require('../infra/database');
+const db = require('../infra/database');
 // const service = require('../message/messageService');
 // const Errors = require('../errors');
 const { MissingId, MessageNotExist, MissingChannel } = require('../common/errors');
@@ -18,9 +18,9 @@ module.exports = {
     if (!id) throw MissingId();
     if (!channel) throw MissingChannel();
 
-    const message = await messageRepo.get({ id });
+    const message = await db.message.get({ id });
     if (!message) throw MessageNotExist();
-    const chan = await channelRepo.get({ cid: channel });
+    const chan = await db.channel.get({ cid: channel });
 
     let pins = [...(chan.pins || [])];
     const idx = pins.findIndex(id);
@@ -31,7 +31,7 @@ module.exports = {
       pins = [...pins.slice(0, idx), ...pins.slice(idx + 1)];
     }
 
-    await channelRepo.update({ cid: channel }, { pins });
+    await db.channel.update({ cid: channel }, { pins });
     await res.broadcast({
       type: 'channel',
       ...chan,

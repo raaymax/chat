@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { userRepo } = require('../infra/database');
+const db = require('../infra/database');
 
 module.exports = {
   type: 'users',
@@ -7,7 +7,7 @@ module.exports = {
     body: Joi.any(),
   },
   handler: async (req, res) => {
-    const users = await userRepo.getAll();
+    const users = await db.user.getAll();
     users.forEach((user) => res.send({
       type: 'user',
       id: user.id,

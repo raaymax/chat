@@ -1,7 +1,7 @@
 const { db, ObjectId } = require('./db');
 
-const TABLE_NAME = 'channelProgress';
-const {serialize} = require('./serializer');
+const TABLE_NAME = 'badges';
+const { serialize } = require('./serializer');
 
 const deserialize = (query) => Object.fromEntries(Object.entries({
   ...query,
@@ -17,7 +17,7 @@ module.exports = {
     .findOne(deserialize(query))
     .then(serialize),
 
-  getAll: async (query) => console.log(deserialize(query)) || (await db).collection(TABLE_NAME).find(deserialize(query))
+  getAll: async (query) => (await db).collection(TABLE_NAME).find(deserialize(query))
     .toArray()
     .then((arr) => arr.map(serialize)),
 
@@ -54,7 +54,9 @@ module.exports = {
 
     if (!progress) {
       await database.collection(TABLE_NAME)
-        .insertOne(deserialize({ channelId, userId, lastRead, ...data }))
+        .insertOne(deserialize({
+          channelId, userId, lastRead, ...data,
+        }))
         .then(serialize);
     } else {
       await database.collection(TABLE_NAME)
@@ -71,4 +73,7 @@ module.exports = {
     }
     return null;
   },
+
+  increment: async (where) => (await db).collection(TABLE_NAME)
+    .updateMany(deserialize(where), { $inc: { count: 1 } }),
 };

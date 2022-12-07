@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { messageRepo } = require('../infra/database');
+const db = require('../infra/database');
 // const service = require('../message/messageService');
 // const Errors = require('../errors');
 const { MissingId, MessageNotExist, MissingChannel } = require('../common/errors');
@@ -18,10 +18,10 @@ module.exports = {
     if (!id) throw MissingId();
     if (!channel) throw MissingChannel();
 
-    const message = await messageRepo.get({ id });
+    const message = await db.message.get({ id });
     if (!message) throw MessageNotExist();
 
-    await messageRepo.update({ id }, { pinned });
+    await db.message.update({ id }, { pinned });
     await res.broadcast({
       id,
       type: 'message',

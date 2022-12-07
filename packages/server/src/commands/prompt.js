@@ -1,5 +1,4 @@
-const { userRepo } = require('../infra/database');
-const { messageRepo } = require('../infra/database');
+const db = require('../infra/database');
 const push = require('../infra/push');
 const channel = require('../common/channel');
 const openai = require('../infra/openai');
@@ -14,7 +13,7 @@ module.exports = {
       throw AccessDenied();
     }
     res.ok();
-    const user = await userRepo.get({ id: req.userId });
+    const user = await db.user.get({ id: req.userId });
     const prompt = req.body.args.join(' ');
 
     const args = {
@@ -52,8 +51,8 @@ module.exports = {
       createdAt: new Date(),
       channel: req.body.context.channel,
     };
-    const { id } = await messageRepo.insert(resp);
-    const created = await messageRepo.get({ id });
+    const { id } = await db.message.insert(resp);
+    const created = await db.message.get({ id });
     res.broadcast({ type: 'message', ...created });
     push.send(created);
   },

@@ -1,8 +1,8 @@
 const Joi = require('joi');
-const { messageRepo } = require('../infra/database');
+const db = require('../infra/database');
 const { AccessDenied } = require('../common/errors');
 const push = require('../infra/push');
-const channel = require('../common/channel');
+const channelHelper = require('../common/channel');
 
 module.exports = {
   type: 'message',
@@ -24,8 +24,8 @@ module.exports = {
   },
   handler: async (req, res) => {
     const msg = req.body;
-
-    if (!await channel.haveAccess(req.userId, msg.channel)) {
+    const channel = await db.channel.get({cid: msg.channel});
+    if (!await channelHelper.haveAccess(req.userId, msg.channel)) {
       throw AccessDenied();
     }
 
@@ -43,15 +43,12 @@ module.exports = {
       })),
       createdAt: new Date(),
     });
-    const created = await messageRepo.get({ id });
+    const created = await db.message.get({ id });
+    await db.badge.increment({ channelId: channel.id });
 
     if (!dup) {
       res.broadcast({ type: 'message', ...created });
-
-      const a = await push.send(created);
-      // FIXME: handle errors
-      // eslint-disable-next-line no-console
-      console.log(JSON.stringify(a, null, 2));
+      await push.send(created);
     }
     res.ok(dup ? { duplicate: true } : {});
   },
@@ -61,7 +58,7 @@ async function createMessage(msg) {
   let id; let
     dup = false;
   try {
-    id = await messageRepo.insert(msg);
+    id = await db.message.insert(msg);
   } catch (err) {
     if (err.code !== 11000) {
       throw err;

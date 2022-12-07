@@ -1,19 +1,20 @@
 const { getMessaging } = require('./firebase');
-const { sessionRepo, channelRepo, userRepo } = require('./database');
+const db = require('./database');
 const conf = require('../../../../chat.config');
 
 module.exports = {
   send: async (msg) => {
+    if (process.env.OFFLINE) return;
     // FIXME: feature disable or separate config for testing?
     if (process.env.NODE_ENV === 'test') return Promise.resolve();
     if (!msg.message) return Promise.resolve();
-    const channel = await channelRepo.get({ cid: msg.channel });
+    const channel = await db.channel.get({ cid: msg.channel });
     if (!channel) return;
     // FIXME should also work with system user
-    const user = await userRepo.get({ id: msg.userId });
+    const user = await db.user.get({ id: msg.userId });
     if (!user) return;
     const userIds = channel.users.map((u) => u.toHexString()).filter((id) => id !== msg.userId);
-    const sess = await sessionRepo.getByUsers({ userId: userIds });
+    const sess = await db.session.getByUsers({ userId: userIds });
     const tokens = Object.keys(
       sess
         .map((s) => s.fcmToken)

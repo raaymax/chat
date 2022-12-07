@@ -1,4 +1,4 @@
-const { emojiRepo } = require('../infra/database');
+const db = require('../infra/database');
 
 module.exports = {
   name: 'emoji',
@@ -12,7 +12,7 @@ module.exports = {
       throw new Error('Invalid emoji name');
     }
     const [{ id }] = req.body.attachments;
-    await emojiRepo.insert({ shortname, fileId: id });
+    await db.emoji.insert({ shortname, fileId: id });
     res.broadcast({ type: 'emoji', shortname, fileId: id });
     return res.ok();
   },

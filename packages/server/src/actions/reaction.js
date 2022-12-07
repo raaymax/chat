@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { messageRepo } = require('../infra/database');
+const db = require('../infra/database');
 const { MissingId, MessageNotExist } = require('../common/errors');
 
 // FIXME: add tests for this action
@@ -15,7 +15,7 @@ module.exports = {
     const { id } = req.body;
     if (!id) throw MissingId();
 
-    const message = await messageRepo.get({ id });
+    const message = await db.message.get({ id });
     if (!message) throw MessageNotExist();
 
     message.reactions = message.reactions || [];
@@ -30,7 +30,7 @@ module.exports = {
       message.reactions = [...message.reactions.slice(0, idx), ...message.reactions.slice(idx + 1)];
     }
 
-    await messageRepo.update({ id }, { reactions: message.reactions });
+    await db.message.update({ id }, { reactions: message.reactions });
     await res.broadcast({
       id,
       type: 'message',
