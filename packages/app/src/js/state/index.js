@@ -12,6 +12,7 @@ import search, { actions as searchActions } from './search';
 import pins, { actions as pinActions } from './pins';
 import system, { actions as systemActions } from './system';
 import customEmojis, { actions as cusotmEmojisActions } from './customEmojis';
+import progress, { actions as progressActions } from './progress';
 
 const logout = createAction('logout');
 
@@ -30,9 +31,34 @@ export const actions = {
   ...pinActions,
   ...systemActions,
   ...cusotmEmojisActions,
+  ...progressActions,
 }
 
 export const selectors = {
+  getProgress: (channel) => createSelector(
+    (state) => state.channels.list.find((c) => c.cid === channel),
+    (state) => state.progress,
+    (state) => state.users.list,
+    (channel, progress, users) => (channel ? progress
+      .filter((p) => p.channelId === channel.id)
+      .map((p) => ({
+        ...p,
+        user: users.find((u) => u.id === p.userId),
+      }))
+      .reduce((acc, p) => ({
+        ...acc,
+        [p.lastMessageId]: [...(acc[p.lastMessageId] || []), p],
+      }), {}) : {}),
+  ),
+  getBadges: (userId) => createSelector(
+    (state) => state.progress,
+    (progress) => progress
+      .filter((p) => p.userId === userId)
+      .reduce((acc, p) => ({
+        ...acc,
+        [p.channelId]: p.count,
+      }), {}),
+  ),
   getEmoji: (shortname) => (state) => state.customEmojis
     .find((emoji) => emoji.shortname === shortname),
   getAllEmojis: () => (state) => state.customEmojis,
@@ -41,7 +67,13 @@ export const selectors = {
   getChannels: (state) => state.channels.list,
   getConfig: (state) => state.config,
   getCid: (state) => state.channels.current,
+  getChannelId: createSelector(
+    (state) => state.channels.current,
+    (state) => state.channels.list,
+    (cid, channels) => channels.find((c) => c.cid === cid)?.id,
+  ),
   getMeId: (state) => state.users.meId,
+  getMyId: (state) => state.users.meId,
   getFiles: (state) => state.files.list,
   getView: (state) => state.view.current,
   getSearchResults: (state) => state.search.results,
@@ -124,5 +156,6 @@ export default configureStore({
     pins,
     system,
     customEmojis,
+    progress,
   },
 })

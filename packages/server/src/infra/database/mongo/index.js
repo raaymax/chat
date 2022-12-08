@@ -4,10 +4,11 @@ const { db, client, ObjectId } = require('./db');
 module.exports = {
   db,
   ObjectId,
-  userRepo: require('./userRepo'),
-  sessionRepo: require('./sessionRepo'),
-  messageRepo: require('./messageRepo'),
-  channelRepo: require('./channelRepo'),
-  emojiRepo: require('./emojiRepo'),
+  user: require('./userRepo'),
+  session: require('./sessionRepo'),
+  message: require('./messageRepo'),
+  channel: require('./channelRepo'),
+  badge: require('./badgesRepo'),
+  emoji: require('./emojiRepo'),
   close: () => client.close(),
 };

@@ -46,7 +46,7 @@ module.exports = (connect) => {
       const [msg, msg2, ret] = await ws.send({
         type: 'load',
         channel: 'main',
-        before: '2022-01-02',
+        before: '2022-01-03',
         limit: 5,
       });
       assert.equal(msg.createdAt, new Date('2022-01-02').toISOString());
@@ -63,8 +63,8 @@ module.exports = (connect) => {
         after: '2022-01-02',
         limit: 2,
       });
-      assert.equal(msg.createdAt, new Date('2022-01-03T00:00:00.000Z').toISOString());
-      assert.equal(msg2.createdAt, new Date('2022-01-02T00:00:00.000Z').toISOString());
+      assert.equal(msg.createdAt, new Date('2022-01-04T00:00:00.000Z').toISOString());
+      assert.equal(msg2.createdAt, new Date('2022-01-03T00:00:00.000Z').toISOString());
       assert.equal(ret.count, 2);
       ws.close();
     });

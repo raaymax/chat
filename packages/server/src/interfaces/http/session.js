@@ -1,7 +1,7 @@
 const express = require('express');
 const crypto = require('crypto');
 const userService = require('../../user');
-const { sessionRepo } = require('../../infra/database');
+const db = require('../../infra/database');
 
 const router = new express.Router();
 
@@ -15,7 +15,7 @@ async function getSession(req, res) {
   } else {
     const token = req.headers?.authorization?.split(' ')[1];
     if (token) {
-      const record = await sessionRepo.getByToken(token);
+      const record = await db.session.getByToken(token);
       if (record?.session?.userId) {
         return res.status(200).send({ status: 'ok', user: record.session.userId });
       }

@@ -63,6 +63,7 @@ export const handle = (args) => [
       {match: ({event, textBefore}) => (state.open && textBefore === ':' && event.key === ')'), run: ({event, store}) => endAs(event, store, 'slight_smile')},
       {match: ({event, textBefore}) => (state.open && textBefore === ':' && event.key === 'D'), run: ({event, store}) => endAs(event, store, 'smiley')},
       {match: ({event, textBefore}) => (state.open && textBefore === ':' && event.key === '('), run: ({event, store}) => endAs(event, store, 'disappointed')},
+      {match: ({event, textBefore}) => (state.open && textBefore === ':\'' && event.key === '('), run: ({event, store}) => endAs(event, store, 'cry')},
       {match: ({event, textBefore}) => (state.open && textBefore === ':' && event.key === 'O'), run: ({event, store}) => endAs(event, store, 'open_mouth')},
       {match: ({event, textBefore}) => (state.open && textBefore === ':' && event.key === 'P'), run: ({event, store}) => endAs(event, store, 'stuck_out_tongue')},
       {match: ({event, textBefore}) => (state.open && textBefore === ':' && event.key === 'S'), run: ({event, store}) => endAs(event, store, 'confounded')},

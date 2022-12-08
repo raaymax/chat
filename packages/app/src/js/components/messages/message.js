@@ -8,6 +8,7 @@ import { Reactions } from './reaction';
 import { actions, selectors } from '../../state';
 import { Toolbar } from '../messageToolbar';
 import {Emoji} from './Emoji';
+import { Progress } from './progress';
 
 const EMOJI_MATCHER = () => /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/g;
 
@@ -62,7 +63,7 @@ const isOnlyEmoji = (message, flat) => EMOJI_MATCHER().test(flat) || (
 export const Message = (props = {}) => {
   const {
     id, clientId, info, message, reactions = [], emojiOnly,
-    attachments, flat, createdAt, userId, pinned,
+    attachments, flat, createdAt, userId, pinned, progress,
   } = props.data;
   const dispatch = useDispatch();
   const hovered = useSelector(selectors.getHoveredMessage);
@@ -104,6 +105,7 @@ export const Message = (props = {}) => {
         {attachments && <Files list={attachments} />}
         {info && <div onclick={onAction} class={['info', info.type, ...(info.action ? ['action'] : [])].join(' ')}>{info.msg}</div>}
         <Reactions messageId={id} reactions={reactions} />
+        {progress && <Progress progress={progress} />}
 
         {hovered === id && <Toolbar message={props.data} user={user} />}
       </div>

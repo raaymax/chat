@@ -1,8 +1,8 @@
 const { Server } = require('socket.io');
 const sessionParser = require('./sessionParser');
-const { sessionRepo } = require('../../infra/database');
+const db = require('../../infra/database');
 const bus = require('../../infra/ws');
-const actions = require('../../actions');
+const actions = require('../../app/actions');
 const corsConfig = require('./cors');
 
 module.exports = (server) => {
@@ -22,11 +22,11 @@ module.exports = (server) => {
     } else {
       const token = socket.handshake?.auth?.token;
       if (token) {
-        const record = await sessionRepo.getByToken(token);
+        const record = await db.session.getByToken(token);
         if (record?.session?.userId) {
           record.session.save = async () => {
             const { save, ...data } = record.session;
-            return sessionRepo.update(record.id, { session: data });
+            return db.session.update(record.id, { session: data });
           };
           socket.request.session = record.session;
           return next();
@@ -93,6 +93,7 @@ module.exports = (server) => {
           type: 'response',
           status: 'error',
           message: err.message,
+          stack: err.stack,
           ...err,
         });
       }

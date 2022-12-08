@@ -1,14 +1,16 @@
-const { db, ObjectId } = require('./db');
+const { db } = require('./db');
+const { serialize, deserialize } = require('./serializer');
+
+const TABLE_NAME = 'users';
 
 module.exports = {
-  getAll: async () => {
-    const cursor = (await db).collection('users').find();
-    return cursor.toArray()
-      .then((arr) => arr.map((i) => ({ ...i, id: i._id.toHexString() })));
-  },
-  get: async ({ id, ...user }) => (await db).collection('users')
-    .findOne(id ? ({ _id: ObjectId.isValid(id) ? ObjectId(id) : id, ...user }) : ({ ...user }))
-    .then((i) => (i ? ({ ...i, id: i._id.toHexString() }) : null)),
-  update: async (id, user) => (await db).collection('users')
-    .updateOne({ _id: ObjectId(id) }, { $set: user }),
+  getAll: async (query) => (await db).collection(TABLE_NAME)
+    .find(deserialize(query))
+    .toArray()
+    .then(serialize),
+  get: async (query) => (await db).collection(TABLE_NAME)
+    .findOne(deserialize(query))
+    .then(serialize),
+  update: async (id, user) => (await db).collection(TABLE_NAME)
+    .updateOne(deserialize({ id }), { $set: deserialize(user) }),
 };
