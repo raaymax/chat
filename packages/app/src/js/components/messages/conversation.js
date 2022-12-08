@@ -71,7 +71,10 @@ export function Conversation() {
   const list = messages.map((m) => ({...m, progress: progress[m.id]}));
 
   useEffect(() => {
-    const cb = () => list.length > 0 && dispatch(updateProgress(list[0].id))
+    const cb = () => {
+      const latest = list.find(({priv}) => !priv);
+      if (latest?.id) dispatch(updateProgress(latest.id));
+    };
     window.addEventListener('focus', cb);
     return () => window.removeEventListener('focus', cb);
   }, [list, dispatch]);
