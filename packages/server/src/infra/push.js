@@ -13,7 +13,7 @@ module.exports = {
     // FIXME should also work with system user
     const user = await db.user.get({ id: msg.userId });
     if (!user) return;
-    const userIds = channel.users.map((u) => u.toHexString()).filter((id) => id !== msg.userId);
+    const userIds = channel.users.filter((id) => id !== msg.userId);
     const sess = await db.session.getByUsers({ userId: userIds });
     const tokens = Object.keys(
       sess
