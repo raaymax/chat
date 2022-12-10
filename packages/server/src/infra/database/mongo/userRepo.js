@@ -13,4 +13,6 @@ module.exports = {
     .then(serialize),
   update: async (id, user) => (await db).collection(TABLE_NAME)
     .updateOne(deserialize({ id }), { $set: deserialize(user) }),
+  removeProp: async (id, user, type = 'set') => (await db).collection(TABLE_NAME)
+    .updateOne(deserialize({ id }), { [`$${type}`]: deserialize(user) }),
 };

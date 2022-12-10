@@ -1,5 +1,5 @@
 const db = require('../../infra/database');
-const bus = require('../../infra/ws');
+const bus = require('../../infra/bus');
 
 module.exports = {
   messageSent: async (channelId, messageId, userId) => {

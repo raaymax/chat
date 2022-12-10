@@ -1,4 +1,4 @@
-const bus = require('../infra/ws');
+const bus = require('../infra/bus');
 const db = require('../infra/database');
 const push = require('../infra/push');
 const openai = require('../infra/openai');

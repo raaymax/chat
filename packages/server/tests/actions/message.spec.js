@@ -1,5 +1,7 @@
 const assert = require('assert');
+const crypto = require('crypto');
 const { db } = require('../../src/infra/database');
+const PushService = require('../../src/infra/push');
 
 module.exports = (connect) => {
   describe('message', () => {
@@ -44,6 +46,29 @@ module.exports = (connect) => {
       assert.equal(ret.type, 'response');
       assert.equal(ret.status, 'ok');
       ws.close();
+    });
+
+    it('should send push notifications', async () => {
+      const ws = await connect();
+      const melisa = await connect('melisa');
+      let push;
+      PushService.push = async (m) => { push = m; };
+      const token = 'melisaToken';
+      await melisa.send({
+        type: 'setupFcm',
+        token,
+      });
+      await ws.send({
+        type: 'message',
+        clientId: `test:${Math.random()}`,
+        channel: 'main',
+        message: { line: { text: 'Hello' } },
+        flat: 'Hello',
+      });
+      assert.ok(push.tokens.includes(token));
+      assert.equal(push.notification.title, 'Mateusz on main');
+      ws.close();
+      melisa.close();
     });
 
     it('should store message in database', async () => {
