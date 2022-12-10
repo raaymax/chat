@@ -5,6 +5,7 @@ module.exports = {
   messageSent: async (channelId, messageId, userId) => {
     const message = await db.message.get({ id: messageId });
     if (!message) {
+      // eslint-disable-next-line no-console
       console.debug('messageSent: message not found', messageId);
       return;
     }

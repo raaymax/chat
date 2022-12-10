@@ -15,11 +15,11 @@ module.exports = {
     if (!user) return;
     const userIds = channel.users.filter((id) => id !== msg.userId);
     const sess = await db.session.getByUsers({ userId: userIds });
-    const tokens = Object.keys(
+    const tokens = [...new Set(
       sess
-        .map((s) => s.fcmToken)
-        .reduce((acc, token) => ({ ...acc, [token]: true }), {}),
-    ).filter((k) => !!k);
+        .map((s) => s.session.fcmToken)
+        .filter((k) => !!k),
+    )];
 
     if (tokens.length === 0) return Promise.resolve();
     // eslint-disable-next-line array-callback-return

@@ -15,7 +15,6 @@ module.exports = {
 
     req.session.fcmToken = msg.token;
     req.session.mobile = msg.mobile;
-
     await req.session.save();
 
     return res.ok();

@@ -20,10 +20,11 @@ module.exports = {
     .updateOne({ id }, { $set: session }),
   delete: async (session) => (await db).collection(TABLE_NAME)
     .deleteOne(deserialize(session)),
-  getOther: async ({ userId }) => (await db).collection(TABLE_NAME)
-    .find({ 'session.userId': { $ne: userId } }).toArray()
-    .then(serialize),
   getByUsers: async ({ userId }) => (await db).collection(TABLE_NAME)
-    .find({ 'session.userId': { $in: [userId].flat() } }).toArray()
+    .find({
+      'session.userId': {
+        $in: [userId].flat(),
+      },
+    }).toArray()
     .then(serialize),
 };
