@@ -15,24 +15,24 @@ const PushService = {
   send: async (msg) => {
     if (process.env.OFFLINE) return;
     if (!msg.message) return Promise.resolve();
-    const channel = await db.channel.get({ cid: msg.channel });
+    const channel = await db.channel.get({ id: msg.channelId });
     if (!channel) return;
     const user = await db.user.get({ id: msg.userId });
     if (!user) return;
-    const users = await db.user.getAll({ 
+    const users = await db.user.getAll({
       id: channel.users.filter((id) => id !== msg.userId),
     });
 
-    const tokens = [...new Set(users.map((u) => Object.keys(u.notifications || {})).flat())]
-    if (tokens.length === 0) return Promise.resolve();
+    const tokens = [...new Set(users.map((u) => Object.keys(u.notifications || {})).flat())];
+    if (tokens.length === 0) return;
     const message = {
       tokens,
       topic: 'messages',
       data: {
-        channel: msg.channel,
+        channel: channel.name,
       },
       notification: {
-        title: `${user?.name || 'Guest'} on ${msg.channel}`,
+        title: `${user?.name || 'Guest'} on ${channel.name}`,
         body: msg.flat,
       },
       android: {
@@ -52,7 +52,7 @@ const PushService = {
           Urgency: 'high',
         },
         fcm_options: {
-          link: `${conf.serverWebUrl}/#${msg.channel}`,
+          link: `${conf.serverWebUrl}/#${channel.name}`,
         },
         notification: {
           silent: false,

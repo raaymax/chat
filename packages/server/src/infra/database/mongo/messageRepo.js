@@ -5,10 +5,10 @@ const TABLE_NAME = 'messages';
 
 const deserializeQuery = (data) => {
   const {
-    channel, before, after, ...query
+    channelId, before, after, ...query
   } = deserialize(data);
   return {
-    channel,
+    channelId,
     ...(!before ? {} : { createdAt: { $lt: new Date(before) } }),
     ...(!after ? {} : { createdAt: { $gt: new Date(after) } }),
     ...query,

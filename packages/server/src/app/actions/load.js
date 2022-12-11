@@ -19,11 +19,12 @@ module.exports = {
 
     if (!msg.channel) throw MissingChannel();
 
+    const channel = await db.channel.get({ cid: msg.channel });
     if (!await ChannelHelper.haveAccess(req.userId, msg.channel)) {
       throw AccessDenied();
     }
     const msgs = await db.message.getAll({
-      channel: msg.channel,
+      channelId: channel.id,
       before: msg.before,
       after: msg.after,
       ...(msg.pinned ? { pinned: msg.pinned } : {}),

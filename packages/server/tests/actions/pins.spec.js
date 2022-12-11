@@ -2,7 +2,7 @@ const assert = require('assert');
 const seeds = require('./seeds');
 
 module.exports = (connect) => {
-  describe('load', () => {
+  describe('pins', () => {
     before(async () => {
       await seeds.run();
     });

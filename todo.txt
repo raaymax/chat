@@ -1,6 +1,11 @@
 https://xkcd.com/2294/ add rss feeds to chat
 text formatting - bold
 
-fix notifications
-fix raw image size
-fix help for /emoji
+
+
+
+---------------------------------------
+create migration for messages channelId 
+---------------------------------------
+
+

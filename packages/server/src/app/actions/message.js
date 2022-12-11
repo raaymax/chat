@@ -25,14 +25,15 @@ module.exports = {
   },
   handler: async (req, res) => {
     const msg = req.body;
-    const channel = await db.channel.get({ cid: msg.channel });
-    if (!await channelHelper.haveAccess(req.userId, msg.channel)) {
+    const channel = await db.channel.get({ cid: msg.channel});
+    if (!await channelHelper.haveAccess(req.userId, channel.cid)) {
       throw AccessDenied();
     }
 
     const { id, dup } = await createMessage({
       message: msg.message,
       flat: msg.flat,
+      channelId: channel.id,
       channel: msg.channel,
       clientId: msg.clientId,
       emojiOnly: msg.emojiOnly,
