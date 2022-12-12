@@ -22,6 +22,7 @@ module.exports = [
   require('./updateProgress'),
   require('./loadProgress'),
   require('./loadBadges'),
+  require('./createChannel'),
   {
     type: 'default',
     handler: (req) => {

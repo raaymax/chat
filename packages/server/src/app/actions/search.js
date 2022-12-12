@@ -1,7 +1,7 @@
 const Joi = require('joi');
 const db = require('../../infra/database');
 const { MissingChannel, AccessDenied } = require('../common/errors');
-const channel = require('../common/channel');
+const channelHelper = require('../common/channel');
 
 module.exports = {
   type: 'search',
@@ -17,12 +17,13 @@ module.exports = {
 
     if (!msg.channel) throw MissingChannel();
 
-    if (!await channel.haveAccess(req.userId, msg.channel)) {
+    const channel = await db.channel.get({ cid: msg.channel });
+    if (!await channelHelper.haveAccess(req.userId, msg.channel)) {
       throw AccessDenied();
     }
     const msgs = await db.message.getAll({
       $text: { $search: msg.text },
-      channel: msg.channel,
+      channelId: channel.id,
       before: msg.before,
     }, { limit: msg.limit });
 

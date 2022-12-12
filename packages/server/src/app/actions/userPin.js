@@ -31,7 +31,7 @@ module.exports = {
       pins = [...pins.slice(0, idx), ...pins.slice(idx + 1)];
     }
 
-    await db.channel.update({ cid: channel }, { pins });
+    await db.channel.update({ id: chan.id }, { pins });
     await res.broadcast({
       type: 'channel',
       ...chan,

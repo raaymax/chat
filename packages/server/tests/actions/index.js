@@ -13,5 +13,7 @@ module.exports = (connect) => {
     require('./command.spec')(connect);
     require('./pins.spec')(connect);
     require('./badges.spec')(connect);
+    require('./search.spec')(connect);
+    require('./createChannel.spec')(connect);
   });
 };
