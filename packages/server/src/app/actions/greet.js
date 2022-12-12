@@ -6,6 +6,7 @@ module.exports = {
     body: Joi.any(),
   },
   handler: async (req, res) => {
+    // FIXME: make this message show?
     await res.send({
       type: 'message',
       id: 'greet',

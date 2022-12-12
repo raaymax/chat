@@ -10,7 +10,7 @@ module.exports = {
   schema: {
     body: Joi.object({
       message: Joi.any().required(), // TODO: define message schema
-      channel: Joi.string().required(),
+      channelId: Joi.string().required(),
       flat: Joi.string().required().allow(''),
       clientId: Joi.string().required(),
       emojiOnly: Joi.boolean().optional().default(false),
@@ -25,8 +25,8 @@ module.exports = {
   },
   handler: async (req, res) => {
     const msg = req.body;
-    const channel = await db.channel.get({ cid: msg.channel});
-    if (!await channelHelper.haveAccess(req.userId, channel.cid)) {
+    const channel = await db.channel.get({ id: msg.channelId });
+    if (!await channelHelper.haveAccess(req.userId, channel.id)) {
       throw AccessDenied();
     }
 

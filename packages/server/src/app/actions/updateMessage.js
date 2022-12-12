@@ -10,7 +10,7 @@ module.exports = {
     body: Joi.object({
       id: Joi.string().required(),
       message: Joi.any().optional(), // TODO: define message schema
-      channel: Joi.string().optional(),
+      channelId: Joi.string().optional(),
       flat: Joi.string().optional().allow(''),
       clientId: Joi.string().optional(),
       pinned: Joi.boolean().optional(),

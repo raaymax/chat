@@ -4,7 +4,7 @@ const { db } = require('../../src/infra/database');
 module.exports = (connect) => {
   const CHANNEL = 'join-channel';
 
-  describe('/join', () => {
+  describe.skip('/join', () => {
     before(async () => {
       await (await db)
         .collection('channels')

@@ -4,16 +4,16 @@ module.exports = {
   type: 'typing',
   schema: {
     body: Joi.object({
-      channel: Joi.string().required(),
+      channelId: Joi.string().required(),
     }),
   },
   handler: (req, res) => {
-    const { channel } = req.body;
+    const { channelId } = req.body;
 
     res.broadcast({
       type: 'typing',
       userId: req.userId,
-      channel,
+      channelId,
     }, {
       onlyOthers: true,
     });

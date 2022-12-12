@@ -5,7 +5,7 @@ module.exports = {
     const melisa = (await db).collection('users').findOne({ login: 'melisa' });
     const mateusz = (await db).collection('users').findOne({ login: 'mateusz' });
     await (await db).collection('messages').deleteMany({});
-    const channel = await (await db).collection('channels').findOne({name: 'main'});
+    const channel = await (await db).collection('channels').findOne({ name: 'main' });
     await (await db).collection('messages').insertMany([
       {
         clientId: 1,

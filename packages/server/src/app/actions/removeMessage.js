@@ -24,7 +24,7 @@ module.exports = {
     await res.broadcast({
       id,
       type: 'message',
-      channel: message.channel,
+      channelId: message.channelId,
       message: [],
       user: {
         name: 'System',

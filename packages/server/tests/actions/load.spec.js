@@ -4,8 +4,10 @@ const seeds = require('./seeds');
 
 module.exports = (connect) => {
   describe('load', () => {
+    let channel;
     before(async () => {
       await seeds.run();
+      channel = await (await db).collection('channels').findOne({ name: 'main' });
     });
     it('should return last added messsage', async () => {
       const ws = await connect();
@@ -13,13 +15,13 @@ module.exports = (connect) => {
       await ws.send({
         type: 'message',
         clientId,
-        channel: 'main',
+        channelId: channel._id.toHexString(),
         message: { line: { text: 'Hello' } },
         flat: 'Hello',
       });
       const [msg, ret] = await ws.send({
         type: 'load',
-        channel: 'main',
+        channelId: channel._id.toHexString(),
         limit: 1,
       });
       assert.equal(ret.type, 'response');
@@ -33,7 +35,7 @@ module.exports = (connect) => {
       const ws = await connect();
       const messages = await ws.send({
         type: 'load',
-        channel: 'main',
+        channelId: channel._id.toHexString(),
         limit: 5,
       });
       assert.equal(messages[0].type, 'message');
@@ -45,7 +47,7 @@ module.exports = (connect) => {
       const ws = await connect();
       const [msg, msg2, ret] = await ws.send({
         type: 'load',
-        channel: 'main',
+        channelId: channel._id.toHexString(),
         before: '2022-01-03',
         limit: 5,
       });
@@ -59,7 +61,7 @@ module.exports = (connect) => {
       const ws = await connect();
       const [msg, msg2, ret] = await ws.send({
         type: 'load',
-        channel: 'main',
+        channelId: channel._id.toHexString(),
         after: '2022-01-02',
         limit: 2,
       });
@@ -75,15 +77,16 @@ module.exports = (connect) => {
         type: 'load',
       }).catch((e) => e);
       assert.equal(ret.status, 'error');
-      assert.equal(ret.message, '"channel" is required');
+      assert.equal(ret.message, '"channelId" is required');
       ws.close();
     });
 
     it('should load messages from other channels', async () => {
+      const testChannel = await (await db).collection('channels').findOne({ name: 'test' });
       const ws = await connect();
       const messages = await ws.send({
         type: 'load',
-        channel: 'test',
+        channelId: testChannel._id.toHexString(),
       });
       const ret = messages.pop();
       assert.equal(ret.status, 'ok');
@@ -93,10 +96,10 @@ module.exports = (connect) => {
 
     it('should control access to private channels', async () => {
       const ws = await connect();
-      const channel = await (await db).collection('channels').findOne({ name: 'Melisa' });
+      const melisaChannel = await (await db).collection('channels').findOne({ name: 'Melisa' });
       const [ret] = await ws.send({
         type: 'load',
-        channel: channel.cid,
+        channelId: melisaChannel._id.toHexString(),
       }).catch((e) => e);
       assert.equal(ret.status, 'error');
       assert.equal(ret.message, 'ACCESS_DENIED');

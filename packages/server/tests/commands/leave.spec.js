@@ -6,16 +6,17 @@ module.exports = (connect) => {
 
   describe('/leave', () => {
     let ws;
+    let channelId;
     before(async () => {
       ws = await connect('mateusz');
       await (await db).collection('channels').deleteOne({ cid: CHANNEL });
-      await (await db)
+      ({ insertedId: channelId } = await (await db)
         .collection('channels')
         .insertOne({
           cid: CHANNEL,
           name: CHANNEL,
           users: [ObjectId(ws.userId)],
-        });
+        }));
     });
 
     after(async () => {
@@ -28,7 +29,7 @@ module.exports = (connect) => {
         name: 'leave',
         args: [],
         context: {
-          channel: CHANNEL,
+          channelId: channelId.toHexString(),
         },
       });
       assert.equal(ret.type, 'response');

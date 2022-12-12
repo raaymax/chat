@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
 };
 
 async function sendHelp(req, res) {
-  const { channel } = req.body.context || {}; // TODO: this should be validated
+  const { channelId } = req.body.context || {}; // TODO: this should be validated
   const help = commands.filter((h) => !h.hidden).map((h) => [
     { bold: { text: `/${h.name}` } },
     {
@@ -39,7 +39,7 @@ async function sendHelp(req, res) {
     userId: 'system',
     priv: true,
     message: help,
-    channel,
+    channelId,
     createdAt: new Date().toISOString(),
   });
 

@@ -9,4 +9,5 @@ module.exports = {
   NotOwnerOfMessage: () => new Error('NOT_OWNER_OF_MESSAGE'),
   AccessDenied: () => new Error('ACCESS_DENIED'),
   ChannelAlreadyExist: () => new Error('CHANNEL_ALREADY_EXIST'),
+  ChannelNotExist: () => new Error('CHANNEL_NOT_EXIST'),
 };

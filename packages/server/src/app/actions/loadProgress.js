@@ -16,7 +16,7 @@ module.exports = {
     if (!msg.channelId) throw MissingChannel();
     const channel = await db.channel.get({ id: msg.channelId });
 
-    if (!await ChannelHelper.haveAccess(req.userId, channel.cid)) {
+    if (!await ChannelHelper.haveAccess(req.userId, channel.id)) {
       throw AccessDenied();
     }
     const badges = await db.badge.getAll({ channelId: channel.id });

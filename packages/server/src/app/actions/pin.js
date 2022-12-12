@@ -19,7 +19,7 @@ module.exports = {
     const message = await db.message.get({ id });
     if (!message) throw MessageNotExist();
     // TODO: test if permissions work in tests
-    if (!await ChannelHelper.haveAccess(req.userId, message.channel)) {
+    if (!await ChannelHelper.haveAccess(req.userId, message.channelId)) {
       throw AccessDenied();
     }
 

@@ -15,7 +15,7 @@ module.exports = {
           .default('application/octet-stream'),
       })).optional(),
       context: Joi.object({
-        channel: Joi.string().required(),
+        channelId: Joi.string().required(),
         appVersion: Joi.string().optional().default(pack.version),
       }).required(),
     }),

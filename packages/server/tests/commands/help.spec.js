@@ -1,15 +1,17 @@
 const assert = require('assert');
+const { db } = require('../../src/infra/database');
 
 module.exports = (connect) => {
   describe('/help', () => {
     it('should return help message', async () => {
       const ws = await connect();
+      const channel = await (await db).collection('channels').findOne({ name: 'main' });
       const [help, ret] = await ws.send({
         type: 'command',
         name: 'help',
         args: [],
         context: {
-          channel: 'main',
+          channelId: channel._id.toHexString(),
         },
       });
       assert.equal(ret.type, 'response');

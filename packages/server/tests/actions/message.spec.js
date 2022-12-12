@@ -1,10 +1,13 @@
 const assert = require('assert');
-const crypto = require('crypto');
 const { db } = require('../../src/infra/database');
 const PushService = require('../../src/infra/push');
 
 module.exports = (connect) => {
   describe('message', () => {
+    let channel;
+    before(async () => {
+      channel = await (await db).collection('channels').findOne({ name: 'main' });
+    });
     it('should be received by other users', async () => {
       const melisa = await connect('melisa');
       const mateusz = await connect('mateusz');
@@ -21,7 +24,7 @@ module.exports = (connect) => {
           mateusz.send({
             type: 'message',
             clientId: `test:${Math.random()}`,
-            channel: 'main',
+            channelId: channel._id.toHexString(),
             message: { line: { text: 'Hello' } },
             flat: 'Hello',
           });
@@ -36,7 +39,7 @@ module.exports = (connect) => {
       const [msg, ret] = await ws.send({
         type: 'message',
         clientId: `test:${Math.random()}`,
-        channel: 'main',
+        channelId: channel._id.toHexString(),
         message: { line: { text: 'Hello' } },
         flat: 'Hello',
       });
@@ -49,7 +52,7 @@ module.exports = (connect) => {
     });
 
     it('should send push notifications', async () => {
-      const ws = await connect();
+      const mateusz = await connect('mateusz');
       const melisa = await connect('melisa');
       let push;
       PushService.push = async (m) => { push = m; };
@@ -58,16 +61,16 @@ module.exports = (connect) => {
         type: 'setupFcm',
         token,
       });
-      await ws.send({
+      await mateusz.send({
         type: 'message',
         clientId: `test:${Math.random()}`,
-        channel: 'main',
+        channelId: channel._id.toHexString(),
         message: { line: { text: 'Hello' } },
         flat: 'Hello',
       });
       assert.ok(push.tokens.includes(token));
       assert.equal(push.notification.title, 'Mateusz on main');
-      ws.close();
+      mateusz.close();
       melisa.close();
     });
 
@@ -77,7 +80,7 @@ module.exports = (connect) => {
       await ws.send({
         type: 'message',
         clientId,
-        channel: 'main',
+        channelId: channel._id.toHexString(),
         message: { line: { text: 'Hello' } },
         flat: 'Hello',
       });
@@ -95,7 +98,7 @@ module.exports = (connect) => {
         type: 'message',
         clientId: `test:${Math.random()}`,
         message: { line: { text: 'Hello' } },
-        channel: 'main',
+        channelId: channel._id.toHexString(),
         flat: 'Hello',
         attachments: [
           {
@@ -120,7 +123,7 @@ module.exports = (connect) => {
 
     it('should accept attachments without message');
 
-    it('should return error when channel is missing', async () => {
+    it('should return error when channelId is missing', async () => {
       const ws = await connect();
       const [ret] = await ws.send({
         type: 'message',
@@ -129,7 +132,7 @@ module.exports = (connect) => {
         flat: 'Hello',
       }).catch((e) => e);
       assert.equal(ret.status, 'error');
-      assert.equal(ret.message, '"channel" is required');
+      assert.equal(ret.message, '"channelId" is required');
       ws.close();
     });
 
@@ -138,7 +141,7 @@ module.exports = (connect) => {
       const [ret] = await ws.send({
         type: 'message',
         clientId: `test:${Math.random()}`,
-        channel: 'main',
+        channelId: channel._id.toHexString(),
         flat: 'Hello',
       }).catch((e) => e);
       assert.equal(ret.status, 'error');
@@ -148,13 +151,13 @@ module.exports = (connect) => {
 
     it('should control access to private channels', async () => {
       const ws = await connect();
-      const channel = await (await db)
+      const otherChannel = await (await db)
         .collection('channels')
         .findOne({ name: 'Melisa' });
       const [ret] = await ws.send({
         type: 'message',
         clientId: `test:${Math.random()}`,
-        channel: channel.cid,
+        channelId: otherChannel._id.toHexString(),
         message: { text: 'Hello' },
         flat: 'Hello',
       }).catch((e) => e);
@@ -169,7 +172,7 @@ module.exports = (connect) => {
       const [ret] = await ws.send({
         type: 'message',
         clientId: `test:${Math.random()}`,
-        channel: 'main',
+        channelId: channel._id.toHexString(),
         message: { text: 'Hello' },
       }).catch((e) => e);
       assert.equal(ret.type, 'response');

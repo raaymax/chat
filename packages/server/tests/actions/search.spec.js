@@ -1,13 +1,18 @@
 const assert = require('assert');
+const { db } = require('../../src/infra/database');
 
 module.exports = (connect) => {
   describe('search', () => {
+    let channel;
+    before(async () => {
+      channel = await (await db).collection('channels').findOne({ name: 'main' });
+    });
     it('should search for messages', async () => {
       const ws = await connect();
       const newMsg = await createMessage(ws);
       const [msg, ret] = await ws.send({
         type: 'search',
-        channel: 'main',
+        channelId: channel._id.toHexString(),
         text: 'Search',
         limit: 1,
       });
@@ -23,7 +28,7 @@ module.exports = (connect) => {
       const [msg, ret] = await ws.send({
         clientId: `${Math.random()}`,
         type: 'message',
-        channel: 'main',
+        channelId: channel._id.toHexString(),
         message: { line: { text: 'Search' } },
         flat: 'nice Search test',
       });

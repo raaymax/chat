@@ -13,7 +13,6 @@ const PushService = {
     }
   },
   send: async (msg) => {
-    if (process.env.OFFLINE) return;
     if (!msg.message) return Promise.resolve();
     const channel = await db.channel.get({ id: msg.channelId });
     if (!channel) return;

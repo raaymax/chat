@@ -7,7 +7,7 @@ module.exports = {
   type: 'load',
   schema: {
     body: Joi.object({
-      channel: Joi.string().required(),
+      channelId: Joi.string().required(),
       pinned: Joi.string().optional(),
       before: Joi.string().optional(),
       after: Joi.string().optional(),
@@ -16,15 +16,15 @@ module.exports = {
   },
   handler: async (req, res) => {
     const msg = req.body;
+    const { channelId } = msg;
 
-    if (!msg.channel) throw MissingChannel();
+    if (!channelId) throw MissingChannel();
 
-    const channel = await db.channel.get({ cid: msg.channel });
-    if (!await ChannelHelper.haveAccess(req.userId, msg.channel)) {
+    if (!await ChannelHelper.haveAccess(req.userId, channelId)) {
       throw AccessDenied();
     }
     const msgs = await db.message.getAll({
-      channelId: channel.id,
+      channelId,
       before: msg.before,
       after: msg.after,
       ...(msg.pinned ? { pinned: msg.pinned } : {}),

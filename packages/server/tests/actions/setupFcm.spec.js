@@ -1,5 +1,4 @@
 const assert = require('assert');
-const crypto = require('crypto');
 const { db, ObjectId } = require('../../src/infra/database');
 
 module.exports = (connect) => {

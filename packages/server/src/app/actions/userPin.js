@@ -2,27 +2,24 @@ const Joi = require('joi');
 const db = require('../../infra/database');
 // const service = require('../message/messageService');
 // const Errors = require('../errors');
-const { MissingId, MessageNotExist, MissingChannel } = require('../common/errors');
+const { MessageNotExist } = require('../common/errors');
 
 module.exports = {
   type: 'user-pin',
   schema: {
     body: Joi.object({
-      channel: Joi.string().required(),
+      channelId: Joi.string().required(),
       id: Joi.string().required(),
       pinned: Joi.boolean().required(),
     }),
   },
   handler: async (req, res) => {
-    const { id, channel, pinned } = req.body;
-    if (!id) throw MissingId();
-    if (!channel) throw MissingChannel();
-
+    const { id, channelId, pinned } = req.body;
     const message = await db.message.get({ id });
     if (!message) throw MessageNotExist();
-    const chan = await db.channel.get({ cid: channel });
+    const channel = await db.channel.get({ id: channelId });
 
-    let pins = [...(chan.pins || [])];
+    let pins = [...(channel.pins || [])];
     const idx = pins.findIndex(id);
     if (pinned && idx === -1) {
       pins = [...pins, id];
@@ -31,10 +28,10 @@ module.exports = {
       pins = [...pins.slice(0, idx), ...pins.slice(idx + 1)];
     }
 
-    await db.channel.update({ id: chan.id }, { pins });
+    await db.channel.update({ id: channel.id }, { pins });
     await res.broadcast({
       type: 'channel',
-      ...chan,
+      ...channel,
       pins,
     });
     return res.ok();
