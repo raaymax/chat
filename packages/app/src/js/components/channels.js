@@ -12,6 +12,22 @@ const Badge = styled.span`
   padding: 3px 5px;
 `;
 
+const InlineChannelLink = styled.a`
+span {
+  padding-left: 1px;
+}
+`;
+
+export const InlineChannel = ({channelId: id, cid}) => {
+  const channel = useSelector(selectors.getChannel({id, cid}));
+  return (
+    <InlineChannelLink className='channel' data-id={id} href={`#${channel?.id || id}`} >
+      { channel?.private ? <i class='fa-solid fa-lock' /> : <i class='fa-solid fa-hashtag' /> }
+      <span class='name'>{channel?.name || channel?.id || id}</span>
+    </InlineChannelLink>
+  );
+}
+
 export const Channel = ({
   name, id, private: priv, onclick, active, icon, badge,
 }) => (

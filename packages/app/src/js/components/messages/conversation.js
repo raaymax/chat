@@ -64,10 +64,10 @@ export function Conversation() {
   const messages = useSelector(selectors.getMessages);
   const initFailed = useSelector(selectors.getInitFailed);
   const loading = useSelector(selectors.getMessagesLoading);
-  const channel = useSelector(selectors.getCid);
+  const channelId = useSelector(selectors.getChannelId);
   const status = useSelector(selectors.getMessagesStatus);
   const selected = useSelector(selectors.getSelectedMessage);
-  const progress = useSelector(selectors.getProgress(channel));
+  const progress = useSelector(selectors.getProgress(channelId));
   const list = messages.map((m) => ({...m, progress: progress[m.id]}));
 
   useEffect(() => {
@@ -91,10 +91,10 @@ export function Conversation() {
         selected={selected}
         onScrollTo={(dir) => {
           if (dir === 'top') {
-            dispatch(loadPrevious(channel))
+            dispatch(loadPrevious(channelId))
           }
           if (dir === 'bottom') {
-            dispatch(loadNext(channel))
+            dispatch(loadNext(channelId))
           }
         }}
       />

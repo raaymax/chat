@@ -22,6 +22,8 @@ conversation:
   updating progress
   uploading/downloading file
   "back to main" button
+  links to other channels
+  unloading messages when scrolling
 
 
 side panel:

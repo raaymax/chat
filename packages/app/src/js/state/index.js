@@ -35,8 +35,8 @@ export const actions = {
 }
 
 export const selectors = {
-  getProgress: (channel) => createSelector(
-    (state) => state.channels.list.find((c) => c.id === channel),
+  getProgress: (channelId) => createSelector(
+    (state) => state.channels.list.find((c) => c.id === channelId),
     (state) => state.progress,
     (state) => state.users.list,
     (channel, progress, users) => (channel ? progress
@@ -63,7 +63,7 @@ export const selectors = {
     .find((emoji) => emoji.shortname === shortname),
   getAllEmojis: () => (state) => state.customEmojis,
   getChannel: (q) => (state) => state.channels.list
-    .find((c) => c.id === q.id || c.name === q.name),
+    .find((c) => c.id === q.id || c.name === q.name || c.cid === q.cid),
   getChannels: (state) => state.channels.list,
   getConfig: (state) => state.config,
   getCid: (state) => state.channels.current,

@@ -5,7 +5,7 @@ import { updateProgress } from './progress';
 
 const tempId = createCounter(`temp:${(Math.random() + 1).toString(36)}`);
 
-export const loadPrevious = (channel) => async (dispatch, getState) => {
+export const loadPrevious = (channelId) => async (dispatch, getState) => {
   if (selectors.getMessagesPrevLoading(getState())) return;
   dispatch(actions.selectMessage(null));
   dispatch(actions.messagesLoadingPrev());
@@ -17,10 +17,10 @@ export const loadPrevious = (channel) => async (dispatch, getState) => {
       limit: 50,
     })
     dispatch(actions.addMessages(req.data));
-    if (selectors.countMessagesInChannel(channel, getState()) > 100) {
+    if (selectors.countMessagesInChannel(channelId, getState()) > 100) {
       dispatch(actions.messagesSetStatus('archive'));
       setTimeout(() => {
-        dispatch(actions.takeHead({channel, count: 100}));
+        dispatch(actions.takeHead({channelId, count: 100}));
       }, 1)
     }
   } catch (err) {
@@ -31,7 +31,7 @@ export const loadPrevious = (channel) => async (dispatch, getState) => {
   dispatch(actions.messagesLoadingPrevDone());
 }
 
-export const loadNext = (channel) => async (dispatch, getState) => {
+export const loadNext = (channelId) => async (dispatch, getState) => {
   if (selectors.getMessagesNextLoading(getState())) return;
   dispatch(actions.selectMessage(null));
   dispatch(actions.messagesLoadingNext());
@@ -44,9 +44,9 @@ export const loadNext = (channel) => async (dispatch, getState) => {
     })
     if (req.data?.length > 0) dispatch(updateProgress(req.data[0].id))
     dispatch(actions.addMessages(req.data));
-    if (selectors.countMessagesInChannel(channel, getState()) > 100) {
+    if (selectors.countMessagesInChannel(channelId, getState()) > 100) {
       setTimeout(() => {
-        dispatch(actions.takeTail({channel, count: 100}));
+        dispatch(actions.takeTail({channelId, count: 100}));
       }, 1)
     }
     if (req.data.length < 50) {
@@ -271,7 +271,7 @@ const mapNodes = (dom, info) => (!dom.childNodes ? [] : [...dom.childNodes].map(
   if (n.nodeName === 'LI') return { item: mapNodes(n, info) };
   if (n.nodeName === 'IMG') return { img: {src: n.attributes.src.nodeValue, alt: n.attributes.alt.nodeValue }};
   if (n.nodeName === 'SPAN' && n.className === 'emoji') return { emoji: n.attributes.emoji.value };
-  if (n.nodeName === 'SPAN' && n.className === 'channel') return { link: { href: `#${n.attributes.cid.value}`, children: mapNodes(n, info) } };
+  if (n.nodeName === 'SPAN' && n.className === 'channel') return { channel: n.attributes.channelId.value };
   if (n.nodeName === 'SPAN') return mapNodes(n, info);
   if (n.nodeName === 'BR') return { br: true };
   // eslint-disable-next-line no-console

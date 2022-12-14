@@ -48,7 +48,7 @@ export const start = ({event, store}) => {
     container: span,
     options: store.getState().channels.list.slice(0, 5).map((channel) => ({
       name: channel.name,
-      cid: channel.cid,
+      id: channel.id,
       icon: channel.private ? 'fa-solid fa-lock' : 'fa-solid fa-hashtag',
     })),
   });
@@ -74,12 +74,12 @@ const updateOptions = ({store}) => {
   const m = text.match(/#([a-zA-Z0-9_-]*)$/);
   if (m && m.length > 1) {
     const list = store.getState().channels.list.map((channel) => ({
-      cid: channel.cid,
+      id: channel.id,
       name: channel.name,
       icon: channel.private ? 'fa-solid fa-lock' : 'fa-solid fa-hashtag',
     }))
     if (m[1] && !list.find((channel) => channel.name === m[1])) {
-      list.unshift({name: m[1], icon: 'fa-solid fa-hashtag', cid: m[1]});
+      list.unshift({name: m[1], icon: 'fa-solid fa-hashtag', id: m[1]});
     }
     if (m[1].length > 0) {
       const channels = new Fuse(list, {
@@ -111,7 +111,7 @@ const submit = ({event}) => {
   const {container} = state;
   const sel = document.getSelection();
   container.textContent = `#${state.options[state.selected].name}`;
-  container.setAttribute('cid', state.options[state.selected].cid);
+  container.setAttribute('channelId', state.options[state.selected].id);
   const fresh = document.createTextNode('\u00A0');
   const r = document.createRange();
   r.setEndAfter(container);

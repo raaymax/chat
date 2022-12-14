@@ -9,6 +9,7 @@ import { actions, selectors } from '../../state';
 import { Toolbar } from '../messageToolbar';
 import {Emoji} from './Emoji';
 import { Progress } from './progress';
+import { InlineChannel } from '../channels';
 
 const EMOJI_MATCHER = () => /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/g;
 
@@ -39,9 +40,10 @@ const TYPES = {
   strike: (props) => <s>{build(props.data)}</s>,
   img: (props) => <img src={props.data.src} alt={props.data.alt} />,
   link: (props) => (props.data.href.startsWith('#')
-    ? <a href={props.data.href}>{build(props.data.children)}</a>
+    ? <InlineChannel cid={props.data.href.slice(1)} />
     : <a target="_blank" rel="noreferrer" href={props.data.href}>{build(props.data.children)}</a>),
   emoji: (props) => <Emoji big={props.opts.emojiOnly} shortname={props.data} />,
+  channel: (props) => <InlineChannel channelId={props.data} />,
 };
 
 const isToday = (date) => {
