@@ -36,7 +36,7 @@ export const actions = {
 
 export const selectors = {
   getProgress: (channel) => createSelector(
-    (state) => state.channels.list.find((c) => c.cid === channel),
+    (state) => state.channels.list.find((c) => c.id === channel),
     (state) => state.progress,
     (state) => state.users.list,
     (channel, progress, users) => (channel ? progress
@@ -63,14 +63,14 @@ export const selectors = {
     .find((emoji) => emoji.shortname === shortname),
   getAllEmojis: () => (state) => state.customEmojis,
   getChannel: (q) => (state) => state.channels.list
-    .find((c) => c.cid === q.cid || c.name === q.name),
+    .find((c) => c.id === q.id || c.name === q.name),
   getChannels: (state) => state.channels.list,
   getConfig: (state) => state.config,
   getCid: (state) => state.channels.current,
   getChannelId: createSelector(
     (state) => state.channels.current,
     (state) => state.channels.list,
-    (cid, channels) => channels.find((c) => c.cid === cid)?.id,
+    (channelId, channels) => channels.find((c) => c.id === channelId)?.id,
   ),
   getMeId: (state) => state.users.meId,
   getMyId: (state) => state.users.meId,
@@ -118,7 +118,7 @@ export const selectors = {
   getCurrentChannel: createSelector(
     (state) => state.channels.list,
     (state) => state.channels.current,
-    (list, cid) => list.find((c) => c.cid === cid) || {cid},
+    (list, channelId) => list.find((c) => c.id === channelId) || {id: channelId},
   ),
   getInfo: (state) => state.info,
   getUser: (userId) => createSelector(
@@ -135,7 +135,7 @@ export const selectors = {
     (state) => state.channels.current,
     (state) => state.typing,
     (state) => state.users.list,
-    (cid, typing, users) => Object.keys(typing[cid] || {})
+    (channelId, typing, users) => Object.keys(typing[channelId] || {})
       .map((id) => users.find((u) => u.id === id)),
   ),
 }

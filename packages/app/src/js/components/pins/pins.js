@@ -34,12 +34,12 @@ const StyledPins = styled.div`
 
 export const Pins = () => {
   const dispatch = useDispatch();
-  const channel = useSelector(selectors.getCid);
-  const messages = useSelector(selectors.getPinnedMessages(channel));
+  const channelId = useSelector(selectors.getChannelId);
+  const messages = useSelector(selectors.getPinnedMessages(channelId));
   const gotoMessage = useCallback((msg) => {
     dispatch(actions.setView('search'));
-    dispatch(openChannel({cid: msg.channel}));
-    dispatch(loadArchive({channel: msg.channel, id: msg.id, date: msg.createdAt}));
+    dispatch(openChannel({id: msg.channelId}));
+    dispatch(loadArchive({channelId: msg.channelId, id: msg.id, date: msg.createdAt}));
   }, [dispatch])
   return (
     <StyledPins className='pins'>

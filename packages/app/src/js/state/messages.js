@@ -58,14 +58,14 @@ const messagesReducer = createReducer({
     state.loadingNext = false;
   },
   [clear]: (state, action) => {
-    const {channel} = action.payload;
-    state.data[channel] = [];
+    const {channelId} = action.payload;
+    state.data[channelId] = [];
   },
   [addAll]: ({data}, action) => {
     action.payload.forEach((msg) => {
-      const {channel} = msg;
+      const {channelId} = msg;
       // eslint-disable-next-line no-multi-assign
-      const list = data[channel] = data[channel] || [];
+      const list = data[channelId] = data[channelId] || [];
       if (msg.createdAt) {
         msg.createdAt = (new Date(msg.createdAt)).toISOString();
       }
@@ -84,9 +84,9 @@ const messagesReducer = createReducer({
   [add]: ({data, status}, action) => {
     if (status === 'archive') return;
     const msg = action.payload;
-    const {channel} = msg;
+    const { channelId } = msg;
     // eslint-disable-next-line no-multi-assign
-    const list = data[channel] = data[channel] || [];
+    const list = data[channelId] = data[channelId] || [];
     if (msg.createdAt) {
       msg.createdAt = (new Date(msg.createdAt)).toISOString();
     }
@@ -103,19 +103,19 @@ const messagesReducer = createReducer({
   },
 
   [takeHead]: (state, action) => {
-    const {channel, count} = action.payload;
-    const ids = state.data[channel]
-      .slice(0, Math.max(state.data[channel].length - count, 0))
+    const {channelId, count} = action.payload;
+    const ids = state.data[channelId]
+      .slice(0, Math.max(state.data[channelId].length - count, 0))
       .map((m) => m.id)
-    state.data[channel] = state.data[channel].filter((m) => !ids.includes(m.id));
+    state.data[channelId] = state.data[channelId].filter((m) => !ids.includes(m.id));
   },
 
   [takeTail]: (state, action) => {
-    const {channel, count} = action.payload;
-    const ids = state.data[channel]
-      .slice(0, Math.min(count, state.data[channel].length))
+    const {channelId, count} = action.payload;
+    const ids = state.data[channelId]
+      .slice(0, Math.min(count, state.data[channelId].length))
       .map((m) => m.id)
-    state.data[channel] = state.data[channel].filter((m) => ids.includes(m.id));
+    state.data[channelId] = state.data[channelId].filter((m) => ids.includes(m.id));
   },
 
   logout: () => ({ list: [], loading: false }),

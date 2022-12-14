@@ -34,7 +34,7 @@ module.exports = {
       message: msg.message,
       flat: msg.flat,
       channelId: channel.id,
-      channel: msg.channel,
+      channel: channel.cid,
       clientId: msg.clientId,
       emojiOnly: msg.emojiOnly,
       userId: req.userId,

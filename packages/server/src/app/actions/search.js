@@ -23,7 +23,7 @@ module.exports = {
       $text: { $search: msg.text },
       channelId,
       before: msg.before,
-    }, { limit: msg.limit });
+    }, { limit: msg.limit, order: -1 });
 
     msgs.forEach((m) => res.send({ type: 'search', ...m }));
     res.ok({ count: msgs.length });

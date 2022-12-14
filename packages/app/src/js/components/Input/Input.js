@@ -145,6 +145,7 @@ function submit({store, input, event}) {
   store.dispatch(sendFromDom(input));
   input.innerHTML = '';
   event.preventDefault();
+  window.input.focus();
 }
 
 const runAction = (args ) => [

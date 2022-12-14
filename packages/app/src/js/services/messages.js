@@ -12,7 +12,7 @@ export const loadPrevious = (channel) => async (dispatch, getState) => {
   try {
     const req = await client.req2({
       type: 'load',
-      channel: selectors.getCid(getState()),
+      channelId: selectors.getChannelId(getState()),
       before: selectors.getEarliestDate()(getState()),
       limit: 50,
     })
@@ -38,7 +38,7 @@ export const loadNext = (channel) => async (dispatch, getState) => {
   try {
     const req = await client.req2({
       type: 'load',
-      channel: selectors.getCid(getState()),
+      channelId: selectors.getChannelId(getState()),
       after: selectors.getLatestDate()(getState()),
       limit: 50,
     })
@@ -62,16 +62,16 @@ export const loadNext = (channel) => async (dispatch, getState) => {
   dispatch(actions.messagesLoadingNextDone());
 }
 
-export const loadArchive = ({channel, id, date}) => async (dispatch) => {
+export const loadArchive = ({channelId, id, date}) => async (dispatch) => {
   try {
     dispatch(actions.messagesSetStatus('archive'));
     dispatch(actions.selectMessage(id));
     dispatch(actions.messagesLoadingNext());
     dispatch(actions.messagesLoadingPrev());
-    dispatch(actions.messagesClear({channel}))
+    dispatch(actions.messagesClear({channelId}))
     const req2 = await client.req2({
       type: 'load',
-      channel,
+      channelId,
       before: date,
       limit: 50,
     })
@@ -79,7 +79,7 @@ export const loadArchive = ({channel, id, date}) => async (dispatch) => {
     dispatch(actions.addMessages(req2.data));
     const req = await client.req2({
       type: 'load',
-      channel,
+      channelId,
       after: date,
       limit: 50,
     })
@@ -103,7 +103,7 @@ export const loadMessages = () => async (dispatch, getState) => {
   try {
     const req = await client.req2({
       type: 'load',
-      channel: selectors.getCid(getState()),
+      channelId: selectors.getChannelId(getState()),
       limit: 50,
     })
     dispatch(actions.addMessages(req.data));
@@ -142,17 +142,17 @@ export const sendFromDom = (dom) => async (dispatch, getState) => {
 export const send = (msg) => (dispatch) => dispatch(msg.type === 'command' ? sendCommand(msg) : sendMessage(msg));
 
 export const sendCommand = (msg) => async (dispatch, getState) => {
-  const cid = selectors.getCid(getState());
+  const channelId = selectors.getChannelId(getState());
   const notif = {
     userId: 'notif',
-    channel: cid,
+    channelId,
     clientId: msg.clientId,
     notifType: 'info',
     notif: `${msg.name} sent`,
     createdAt: (new Date()).toISOString(),
   };
   // eslint-disable-next-line no-undef
-  msg.context = {channel: cid, appVersion: APP_VERSION};
+  msg.context = {channelId, appVersion: APP_VERSION};
   dispatch(actions.addMessage(notif));
   try {
     await client.req(msg);
@@ -169,7 +169,7 @@ const sendMessage = (msg) => async (dispatch) => {
   } catch (err) {
     dispatch(actions.addMessage({
       clientId: msg.clientId,
-      channel: msg.channel,
+      channelId: msg.channelId,
       info: {
         msg: 'Sending message failed',
         type: 'error',
@@ -248,7 +248,7 @@ const isEmojiOnly = (tree) => {
 }
 
 export function build(msg, state) {
-  msg.channel = selectors.getCid(state);
+  msg.channelId = selectors.getChannelId(state);
   msg.clientId = tempId();
   msg.userId = state.users.meId;
   msg.createdAt = new Date().toISOString();

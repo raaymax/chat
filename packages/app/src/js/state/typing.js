@@ -5,13 +5,14 @@ const clear = createAction('typing/clear');
 
 const reducer = createReducer({}, {
   [add]: (state, action) => {
-    state[action.payload.channel] = state[action.payload.channel] || {};
-    state[action.payload.channel][action.payload.userId] = new Date().toISOString();
+    const { userId, channelId } = action.payload;
+    state[channelId] = state[channelId] || {};
+    state[channelId][userId] = new Date().toISOString();
   },
   [clear]: (state) => Object.fromEntries(
     Object.entries(state)
-      .map(([channel, users]) => [
-        channel,
+      .map(([channelId, users]) => [
+        channelId,
         Object.fromEntries(
           Object.entries(users)
             .filter(([, date]) => new Date(date) > new Date(Date.now() - 1000)),

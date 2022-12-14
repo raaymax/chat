@@ -1,12 +1,12 @@
 import { client } from '../core';
 import { actions } from '../state';
 
-export const loadPinnedMessages = (channel) => async (dispatch) => {
+export const loadPinnedMessages = (channelId) => async (dispatch) => {
   try {
-    dispatch(actions.clearPinMessages(channel));
+    dispatch(actions.clearPinMessages(channelId));
     const req = await client.req2({
       type: 'pins',
-      channel,
+      channelId,
       limit: 50,
     })
     dispatch(actions.addPinMessages(req.data));
@@ -16,26 +16,26 @@ export const loadPinnedMessages = (channel) => async (dispatch) => {
   }
 }
 
-export const pinMessage = (id, channel) => async (dispatch) => {
+export const pinMessage = (id, channelId) => async (dispatch) => {
   dispatch(actions.selectMessage(null));
   const req = await client.req2({
     type: 'pin',
-    channel,
+    channelId,
     id,
     pinned: true,
   });
   dispatch(actions.addMessages(req.data));
-  dispatch(loadPinnedMessages(channel));
+  dispatch(loadPinnedMessages(channelId));
 }
 
-export const unpinMessage = (id, channel) => async (dispatch) => {
+export const unpinMessage = (id, channelId) => async (dispatch) => {
   dispatch(actions.selectMessage(null));
   const req = await client.req2({
     type: 'pin',
-    channel,
+    channelId,
     id,
     pinned: false,
   });
   dispatch(actions.addMessages(req.data));
-  dispatch(loadPinnedMessages(channel));
+  dispatch(loadPinnedMessages(channelId));
 }

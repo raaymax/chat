@@ -42,7 +42,7 @@ module.exports = (connect) => {
       assert.ok(info.message);
 
       assert.equal(removeChannel.type, 'removeChannel');
-      assert.equal(removeChannel.cid, CHANNEL);
+      assert.equal(removeChannel.channelId, channelId.toHexString());
 
       const channel = await (await db)
         .collection('channels')

@@ -40,7 +40,7 @@ const ToolbarContainer = styled.div`
 `;
 
 export const Toolbar = ({message, user}) => {
-  const {id, pinned, channel} = message;
+  const {id, pinned, channelId} = message;
   const [view, setView] = useState(null);
   const dispatch = useDispatch();
   const onDelete = useCallback(() => {
@@ -75,8 +75,8 @@ export const Toolbar = ({message, user}) => {
     <ToolbarContainer>
       <i class="fa-solid fa-icons" onClick={() => setView('reactions')} />
       {!pinned
-        ? <i class="fa-solid fa-thumbtack" onClick={() => dispatch(pinMessage(id, channel))} />
-        : <i class="fa-solid fa-thumbtack" style="color:Tomato" onClick={() => dispatch(unpinMessage(id, channel))} />}
+        ? <i class="fa-solid fa-thumbtack" onClick={() => dispatch(pinMessage(id, channelId))} />
+        : <i class="fa-solid fa-thumbtack" style="color:Tomato" onClick={() => dispatch(unpinMessage(id, channelId))} />}
       { isMe && <i class='fa-solid fa-trash-can' onclick={() => setView('delete')} /> }
     </ToolbarContainer>
   );

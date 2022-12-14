@@ -9,8 +9,8 @@ const deserializeQuery = (data) => {
   } = deserialize(data);
   return {
     channelId,
-    ...(!before ? {} : { createdAt: { $lt: new Date(before) } }),
-    ...(!after ? {} : { createdAt: { $gt: new Date(after) } }),
+    ...(!before ? {} : { createdAt: { $lte: new Date(before) } }),
+    ...(!after ? {} : { createdAt: { $gte: new Date(after) } }),
     ...query,
   };
 };

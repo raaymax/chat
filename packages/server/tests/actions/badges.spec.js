@@ -18,9 +18,11 @@ module.exports = (connect) => {
     it('should increment count when sending the message', async () => {
       const melisa = await connect('melisa');
       const user = await (await db).collection('users').findOne({ name: 'Mateusz' });
-      await (await db).collection('badges').deleteMany({ userId: user._id, channelId: channel._id });
+      await (await db).collection('messages').deleteMany({});
+      await (await db).collection('badges').deleteMany({});
       await (await db).collection('badges').insertOne({ userId: user._id, channelId: channel._id, count: 0 });
       await sendHello(melisa);
+      console.log(await (await db).collection('messages').find({ channelId: channel._id }).toArray());
       const badge = await (await db).collection('badges').findOne({ userId: user._id, channelId: channel._id });
       assert.equal(badge.count, 1);
       melisa.close();
@@ -30,10 +32,12 @@ module.exports = (connect) => {
       const mateusz = await connect('mateusz');
       const melisa = await connect('melisa');
       const user = await (await db).collection('users').findOne({ name: 'Mateusz' });
-      await (await db).collection('badges').deleteMany({ userId: user._id, channelId: channel._id });
+      await (await db).collection('badges').deleteMany({});
       await (await db).collection('badges').insertOne({ userId: user._id, channelId: channel._id, count: 0 });
       const [msg] = await sendHello(melisa);
-      await sendHello(melisa);
+      await new Promise((resolve) => setTimeout(resolve, 2))
+        .then(() => sendHello(melisa));
+
       await mateusz.send({
         type: 'updateProgress',
         messageId: msg.id,
@@ -48,7 +52,7 @@ module.exports = (connect) => {
       const mateusz = await connect('mateusz');
       const melisa = await connect('melisa');
       const user = await (await db).collection('users').findOne({ name: 'Mateusz' });
-      await (await db).collection('badges').deleteMany({ userId: user._id, channelId: channel._id });
+      await (await db).collection('badges').deleteMany({});
       await (await db).collection('badges').insertOne({ userId: user._id, channelId: channel._id, count: 0 });
       await sendHello(melisa);
       await sendHello(melisa);

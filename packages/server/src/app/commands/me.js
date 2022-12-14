@@ -12,7 +12,7 @@ module.exports = {
       id: `me:${Math.random().toString(10)}`,
       userId: 'system',
       createdAt: new Date().toISOString(),
-      channel: req.body.context.channel,
+      channelId: req.body.context.channelId,
       message: [
         { text: 'ID: ' }, { text: req.userId }, { br: true },
         { text: 'User: ' }, { text: user.name }, { br: true },

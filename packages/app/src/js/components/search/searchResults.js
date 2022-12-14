@@ -26,7 +26,7 @@ export function SearchResults() {
   const gotoMessage = useCallback((msg) => {
     dispatch(actions.setView('search'));
     dispatch(openChannel({cid: msg.channel}));
-    dispatch(loadArchive({channel: msg.channel, id: msg.id, date: msg.createdAt}));
+    dispatch(loadArchive({channelId: msg.channelId, id: msg.id, date: msg.createdAt}));
   }, [dispatch])
   return (
     <StyledList>

@@ -45,15 +45,16 @@ module.exports = (connect) => {
 
     it('should return messages before date', async () => {
       const ws = await connect();
-      const [msg, msg2, ret] = await ws.send({
+      const [msg, msg2, msg3, ret] = await ws.send({
         type: 'load',
         channelId: channel._id.toHexString(),
         before: '2022-01-03',
         limit: 5,
       });
-      assert.equal(msg.createdAt, new Date('2022-01-02').toISOString());
-      assert.equal(msg2.createdAt, new Date('2022-01-01').toISOString());
-      assert.equal(ret.count, 2);
+      assert.equal(msg.createdAt, new Date('2022-01-03').toISOString());
+      assert.equal(msg2.createdAt, new Date('2022-01-02').toISOString());
+      assert.equal(msg3.createdAt, new Date('2022-01-01').toISOString());
+      assert.equal(ret.count, 3);
       ws.close();
     });
 
@@ -65,8 +66,8 @@ module.exports = (connect) => {
         after: '2022-01-02',
         limit: 2,
       });
-      assert.equal(msg.createdAt, new Date('2022-01-04T00:00:00.000Z').toISOString());
-      assert.equal(msg2.createdAt, new Date('2022-01-03T00:00:00.000Z').toISOString());
+      assert.equal(msg.createdAt, new Date('2022-01-03T00:00:00.000Z').toISOString());
+      assert.equal(msg2.createdAt, new Date('2022-01-02T00:00:00.000Z').toISOString());
       assert.equal(ret.count, 2);
       ws.close();
     });

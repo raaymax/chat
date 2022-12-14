@@ -6,7 +6,7 @@ let queue = false;
 
 export const notifyTyping = () => (dispatch, getState) => {
   const config = selectors.getConfig(getState());
-  const cid = selectors.getCid(getState());
+  const channelId = selectors.getChannelId(getState());
   if (!config) return;
   if (cooldown) {
     queue = true;
@@ -14,7 +14,7 @@ export const notifyTyping = () => (dispatch, getState) => {
   }
   cooldown = true;
   queue = false;
-  client.send({ type: 'typing', channel: cid });
+  client.send({ type: 'typing', channelId });
   setTimeout(() => {
     cooldown = false;
     if (queue) {

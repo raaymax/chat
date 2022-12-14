@@ -1,0 +1,48 @@
+general:
+  receiving push notifications
+  playing sound 
+
+search: 
+  clicking on message should take to correct message
+  searching
+
+pins:
+  showing pinned messages
+  clicking on message should take to correct message
+
+conversation:
+  focus back to input after sending message
+  scrolling history
+  selecting emoji
+  selecting custom emoji
+  reactions create/remove
+  sending message
+  typing information
+  pinning / unpinning
+  updating progress
+  uploading/downloading file
+  "back to main" button
+
+
+side panel:
+  listing channels
+  changing channels
+  updating badges
+
+
+commands:
+  display version
+  change avatar
+  change name
+  info about current user
+  uploading custom emojis
+
+channels:
+  creating new channel
+  joining channel
+  leaving channel
+
+openai:
+  prompting openai
+  conversation with bob
+

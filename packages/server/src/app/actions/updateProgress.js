@@ -26,7 +26,10 @@ module.exports = {
       channelId,
       lastMessageId: msg.messageId,
       lastRead: message.createdAt,
-      count: await db.message.count({ after: message.createdAt, channelId }),
+      count: await db.message.count({
+        after: new Date(new Date(message.createdAt).getTime() + 1),
+        channelId,
+      }),
     });
 
     const myProgress = await db.badge.get({ channelId, userId: req.userId });

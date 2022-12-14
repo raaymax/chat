@@ -56,7 +56,7 @@ const StyledHeader = styled.div`
 
 export const Header = ({onclick}) => {
   const channel = useSelector(selectors.getCurrentChannel);
-  const cid = useSelector(selectors.getCid);
+  const id = useSelector(selectors.getChannelId);
   const dispatch = useDispatch();
 
   return (
@@ -64,13 +64,13 @@ export const Header = ({onclick}) => {
       <Channel onclick={onclick} {...channel} />
       {channel?.cid !== 'main' && (
         <div class="back">
-          <a href='#main'>
+          <a href='/#'>
             back to main
           </a>
         </div>)}
       <div class='toolbar'>
         <div class='tool' onclick={() => {
-          dispatch(loadPinnedMessages(cid));
+          dispatch(loadPinnedMessages(id));
           dispatch(actions.setView('pins'));
         }}>
           <i class="fa-solid fa-thumbtack" />

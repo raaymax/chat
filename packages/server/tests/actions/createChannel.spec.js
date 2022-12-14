@@ -2,7 +2,7 @@ const assert = require('assert');
 const { db } = require('../../src/infra/database');
 
 module.exports = (connect) => {
-  describe('search', () => {
+  describe('createChannel', () => {
     it('should prevent creation of channels with the same name', async () => {
       const ws = await connect();
       const [ret] = await ws.send({

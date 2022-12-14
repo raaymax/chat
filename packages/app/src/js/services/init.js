@@ -14,6 +14,7 @@ const initApp = async (dispatch) => {
   dispatch(actions.initFailed(false));
   const {data: [config]} = await client.req2({type: 'config'});
   dispatch(actions.setAppVersion(config.appVersion));
+  dispatch(actions.setMainChannel(config.mainChannelId));
   await initNotifications(config);
   const { data: users } = await client.req2({type: 'users'});
   dispatch(actions.addUser(users));
@@ -53,12 +54,12 @@ export const reinit = () => async (dispatch) => {
   dispatch(init());
 }
 
+// FIXME: messages have no channel and are not showing
 const showUpdateMessage = () => (dispatch) => {
   if (Capacitor.isNativePlatform()) {
     dispatch(actions.addMessage({
       clientId: 'update-version',
       priv: true,
-      channel: 'main',
       createdAt: new Date(),
       user: {
         name: 'System',
@@ -75,7 +76,6 @@ const showUpdateMessage = () => (dispatch) => {
     dispatch(actions.addMessage({
       clientId: 'update-version',
       priv: true,
-      channel: 'main',
       createdAt: new Date(),
       user: {
         name: 'System',
