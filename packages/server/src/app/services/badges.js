@@ -14,7 +14,6 @@ module.exports = {
     other.filter((badge) => badge.userId !== userId).forEach((badge) => {
       bus.direct(badge.userId, { type: 'badge', ...badge });
     });
-    await db.badge.reset({ channelId, userId });
     await db.badge.upsert({
       userId,
       channelId,
