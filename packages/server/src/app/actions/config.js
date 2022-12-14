@@ -11,7 +11,7 @@ module.exports = {
     await res.send({
       type: 'config',
       appVersion: pack.version,
-      mainChannelId: (await db.channel.get({name: 'main'})).id,
+      mainChannelId: (await db.channel.get({ name: 'main' })).id,
     });
     await res.ok();
   },

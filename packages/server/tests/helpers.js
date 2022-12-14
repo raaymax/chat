@@ -43,9 +43,7 @@ const request = (con) => {
         };
         bus.on('message', handler);
         con.ws.send({ seqId: id, ...msg });
-      }).catch((e) => e);
-
-
+      });
     },
   });
 };

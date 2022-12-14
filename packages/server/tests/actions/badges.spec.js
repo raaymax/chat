@@ -22,7 +22,6 @@ module.exports = (connect) => {
       await (await db).collection('badges').deleteMany({});
       await (await db).collection('badges').insertOne({ userId: user._id, channelId: channel._id, count: 0 });
       await sendHello(melisa);
-      console.log(await (await db).collection('messages').find({ channelId: channel._id }).toArray());
       const badge = await (await db).collection('badges').findOne({ userId: user._id, channelId: channel._id });
       assert.equal(badge.count, 1);
       melisa.close();
@@ -35,8 +34,9 @@ module.exports = (connect) => {
       await (await db).collection('badges').deleteMany({});
       await (await db).collection('badges').insertOne({ userId: user._id, channelId: channel._id, count: 0 });
       const [msg] = await sendHello(melisa);
-      await new Promise((resolve) => setTimeout(resolve, 2))
-        .then(() => sendHello(melisa));
+      await (new Promise((resolve) => {
+        setTimeout(() => resolve(), 2);
+      })).then(() => sendHello(melisa));
 
       await mateusz.send({
         type: 'updateProgress',

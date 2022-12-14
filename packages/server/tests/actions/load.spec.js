@@ -9,6 +9,7 @@ module.exports = (connect) => {
       await seeds.run();
       channel = await (await db).collection('channels').findOne({ name: 'main' });
     });
+
     it('should return last added messsage', async () => {
       const ws = await connect();
       const clientId = `${Math.random() + 1}`;
@@ -17,7 +18,7 @@ module.exports = (connect) => {
         clientId,
         channelId: channel._id.toHexString(),
         message: { line: { text: 'Hello' } },
-        flat: 'Hello',
+        flat: 'Dupa',
       });
       const [msg, ret] = await ws.send({
         type: 'load',

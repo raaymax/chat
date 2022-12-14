@@ -24,7 +24,7 @@ module.exports = {
     limit = 50,
     offset = 0,
     order = 1,
-  }) => (await db)
+  } = {}) => (await db)
     .collection(TABLE_NAME)
     .find(deserializeQuery(query))
     .sort({ createdAt: order })
