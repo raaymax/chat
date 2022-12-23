@@ -11,6 +11,7 @@ module.exports = {
     body: Joi.object({
       message: Joi.any().required(), // TODO: define message schema
       channelId: Joi.string().required(),
+      parentId: Joi.string().optional(),
       flat: Joi.string().required().allow(''),
       clientId: Joi.string().required(),
       emojiOnly: Joi.boolean().optional().default(false),
@@ -34,6 +35,7 @@ module.exports = {
       message: msg.message,
       flat: msg.flat,
       channelId: channel.id,
+      parentId: msg.parentId,
       channel: channel.cid,
       clientId: msg.clientId,
       emojiOnly: msg.emojiOnly,
@@ -45,6 +47,18 @@ module.exports = {
       })),
       createdAt: new Date(),
     });
+
+    if (msg.parentId) {
+      await db.message.updateThread({
+        id,
+        parentId: msg.parentId,
+        userId: req.userId,
+      });
+      const parent = await db.message.get({ id: msg.parentId });
+      console.log('parent', parent)
+      res.broadcast({ type: 'message', ...parent });
+    }
+
     const created = await db.message.get({ id });
     if (!dup) {
       res.broadcast({ type: 'message', ...created });
@@ -56,10 +70,11 @@ module.exports = {
 };
 
 async function createMessage(msg) {
+  const data = Object.fromEntries(Object.entries(msg).filter(([, v]) => v !== undefined));
   let id; let
     dup = false;
   try {
-    ({ id } = await db.message.insert(msg));
+    ({ id } = await db.message.insert(data));
   } catch (err) {
     if (err.code !== 11000) {
       throw err;

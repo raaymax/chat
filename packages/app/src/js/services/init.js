@@ -20,7 +20,8 @@ const initApp = async (dispatch) => {
   dispatch(actions.addUser(users));
   const { data: channels } = await client.req2({type: 'channels'});
   dispatch(actions.addChannel(channels));
-  dispatch(loadMessages());
+  // FIXME: load messages from current channel or none
+  dispatch(loadMessages({channelId: config.mainChannelId}));
   dispatch(loadEmojis());
   dispatch(loadProgress());
   dispatch(loadBadges());

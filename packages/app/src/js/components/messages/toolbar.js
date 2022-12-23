@@ -2,9 +2,10 @@ import { h } from 'preact';
 import styled from 'styled-components';
 import { useState, useCallback } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeMessage } from '../services/messages';
-import { pinMessage, unpinMessage } from '../services/pins';
-import { Reaction } from './messages/reaction';
+import { removeMessage } from '../../services/messages';
+import { pinMessage, unpinMessage } from '../../services/pins';
+import { Reaction } from './reaction';
+import { openThread } from '../../services/threads';
 
 const ToolbarContainer = styled.div`
   position: absolute;
@@ -78,6 +79,8 @@ export const Toolbar = ({message, user}) => {
         ? <i class="fa-solid fa-thumbtack" onClick={() => dispatch(pinMessage(id, channelId))} />
         : <i class="fa-solid fa-thumbtack" style="color:Tomato" onClick={() => dispatch(unpinMessage(id, channelId))} />}
       { isMe && <i class='fa-solid fa-trash-can' onclick={() => setView('delete')} /> }
+      <i class="fa-solid fa-icons" onClick={() => setView('reactions')} />
+      <i class="fa-solid fa-reply" onClick={() => dispatch(openThread({channelId, parentId: id}))}/>
     </ToolbarContainer>
   );
 }

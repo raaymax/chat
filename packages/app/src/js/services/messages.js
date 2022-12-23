@@ -5,22 +5,22 @@ import { updateProgress } from './progress';
 
 const tempId = createCounter(`temp:${(Math.random() + 1).toString(36)}`);
 
-export const loadPrevious = (channelId) => async (dispatch, getState) => {
+export const loadPrevious = (stream) => async (dispatch, getState) => {
   if (selectors.getMessagesPrevLoading(getState())) return;
   dispatch(actions.selectMessage(null));
   dispatch(actions.messagesLoadingPrev());
   try {
     const req = await client.req2({
+      ...stream,
       type: 'load',
-      channelId: selectors.getChannelId(getState()),
       before: selectors.getEarliestDate()(getState()),
       limit: 50,
     })
     dispatch(actions.addMessages(req.data));
-    if (selectors.countMessagesInChannel(channelId, getState()) > 100) {
+    if (selectors.countMessagesInStream(stream, getState()) > 100) {
       dispatch(actions.messagesSetStatus('archive'));
       setTimeout(() => {
-        dispatch(actions.takeHead({channelId, count: 100}));
+        dispatch(actions.takeHead({stream, count: 100}));
       }, 1)
     }
   } catch (err) {
@@ -31,22 +31,22 @@ export const loadPrevious = (channelId) => async (dispatch, getState) => {
   dispatch(actions.messagesLoadingPrevDone());
 }
 
-export const loadNext = (channelId) => async (dispatch, getState) => {
+export const loadNext = (stream) => async (dispatch, getState) => {
   if (selectors.getMessagesNextLoading(getState())) return;
   dispatch(actions.selectMessage(null));
   dispatch(actions.messagesLoadingNext());
   try {
     const req = await client.req2({
+      ...stream,
       type: 'load',
-      channelId: selectors.getChannelId(getState()),
       after: selectors.getLatestDate()(getState()),
       limit: 50,
     })
     if (req.data?.length > 0) dispatch(updateProgress(req.data[0].id))
     dispatch(actions.addMessages(req.data));
-    if (selectors.countMessagesInChannel(channelId, getState()) > 100) {
+    if (selectors.countMessagesInChannel(stream, getState()) > 100) {
       setTimeout(() => {
-        dispatch(actions.takeTail({channelId, count: 100}));
+        dispatch(actions.takeTail({stream, count: 100}));
       }, 1)
     }
     if (req.data.length < 50) {
@@ -62,24 +62,24 @@ export const loadNext = (channelId) => async (dispatch, getState) => {
   dispatch(actions.messagesLoadingNextDone());
 }
 
-export const loadArchive = ({channelId, id, date}) => async (dispatch) => {
+export const loadArchive = ({stream, id, date}) => async (dispatch) => {
   try {
     dispatch(actions.messagesSetStatus('archive'));
     dispatch(actions.selectMessage(id));
     dispatch(actions.messagesLoadingNext());
     dispatch(actions.messagesLoadingPrev());
-    dispatch(actions.messagesClear({channelId}))
+    dispatch(actions.messagesClear({stream}))
     const req2 = await client.req2({
+      ...stream,
       type: 'load',
-      channelId,
       before: date,
       limit: 50,
     })
     dispatch(actions.messagesLoadingPrevDone());
     dispatch(actions.addMessages(req2.data));
     const req = await client.req2({
+      ...stream,
       type: 'load',
-      channelId,
       after: date,
       limit: 50,
     })
@@ -97,13 +97,16 @@ export const loadArchive = ({channelId, id, date}) => async (dispatch) => {
   }
 }
 
-export const loadMessages = () => async (dispatch, getState) => {
+export const loadMessages = (stream) => async (dispatch) => {
+  if (!stream.channelId) {
+    return;
+  }
   dispatch(actions.selectMessage(null));
   dispatch(actions.messagesLoading());
   try {
     const req = await client.req2({
+      ...stream,
       type: 'load',
-      channelId: selectors.getChannelId(getState()),
       limit: 50,
     })
     dispatch(actions.addMessages(req.data));
@@ -128,31 +131,31 @@ export const addReaction = (id, text) => async (dispatch) => {
   }
 };
 
-export const sendFromDom = (dom) => async (dispatch, getState) => {
+export const sendFromDom = (stream, dom) => async (dispatch, getState) => {
   const msg = fromDom(dom, getState());
   if (msg) {
     msg.attachments = [...selectors.getFiles(getState())];
     if (msg.flat.length === 0 && msg.attachments.length === 0) return;
     msg.debug = dom.innerHTML;
+    Object.assign(msg, stream);
     dispatch(actions.clearFiles());
-    dispatch(send(msg));
+    dispatch(send(stream, msg));
   }
 };
 
-export const send = (msg) => (dispatch) => dispatch(msg.type === 'command' ? sendCommand(msg) : sendMessage(msg));
+export const send = (stream, msg) => (dispatch) => dispatch(msg.type === 'command' ? sendCommand(stream, msg) : sendMessage(stream, msg));
 
-export const sendCommand = (msg) => async (dispatch, getState) => {
-  const channelId = selectors.getChannelId(getState());
+export const sendCommand = (stream, msg) => async (dispatch) => {
   const notif = {
+    ...stream,
     userId: 'notif',
-    channelId,
     clientId: msg.clientId,
     notifType: 'info',
     notif: `${msg.name} sent`,
     createdAt: (new Date()).toISOString(),
   };
   // eslint-disable-next-line no-undef
-  msg.context = {channelId, appVersion: APP_VERSION};
+  msg.context = {...stream, appVersion: APP_VERSION};
   dispatch(actions.addMessage(notif));
   try {
     await client.req(msg);
@@ -162,14 +165,14 @@ export const sendCommand = (msg) => async (dispatch, getState) => {
   }
 };
 
-const sendMessage = (msg) => async (dispatch) => {
+const sendMessage = (stream, msg) => async (dispatch) => {
   dispatch(actions.addMessage({...msg, pending: true}));
   try {
     await client.req(msg);
   } catch (err) {
     dispatch(actions.addMessage({
+      ...stream,
       clientId: msg.clientId,
-      channelId: msg.channelId,
       info: {
         msg: 'Sending message failed',
         type: 'error',
@@ -229,7 +232,7 @@ export const fromDom = (dom, state) => {
     message: tree,
     emojiOnly: isEmojiOnly(tree),
     parsingErrors: info.errors,
-    flat: dom.textContent,
+    flat: flatten(tree),
   }, state);
 };
 
@@ -248,7 +251,6 @@ const isEmojiOnly = (tree) => {
 }
 
 export function build(msg, state) {
-  msg.channelId = selectors.getChannelId(state);
   msg.clientId = tempId();
   msg.userId = state.users.meId;
   msg.createdAt = new Date().toISOString();
@@ -292,4 +294,24 @@ function processUrls(text) {
     ];
   }
   return [{text}];
+}
+
+function flatten(tree) {
+  return tree.map((n) => {
+    if (n.text) return n.text;
+    if (n.emoji) return n.emoji;
+    if (n.img) return n.img.alt;
+    if (n.link) return flatten(n.link.children);
+    if (n.underline) return flatten(n.underline);
+    if (n.bold) return flatten(n.bold);
+    if (n.italic) return flatten(n.italic);
+    if (n.strike) return flatten(n.strike);
+    if (n.line) return [flatten(n.line), '\n'];
+    if (n.bullet) return flatten(n.bullet);
+    if (n.item) return flatten(n.item);
+    if (n.br) return '\n';
+    // eslint-disable-next-line no-console
+    console.log('unknown node', n);
+    return '';
+  }).flat().join('');
 }

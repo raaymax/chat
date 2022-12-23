@@ -5,6 +5,7 @@ const openai = require('../infra/openai');
 
 bus.on('openai', async (msg) => {
   const author = await db.user.get({ id: msg.userId });
+  if (!author) return;
   if (msg.type !== 'message' || author.login === 'bob') return;
   const channel = await db.channel.get({ id: msg.channelId });
   if (channel.cid !== 'openai' && !channel.cid.startsWith('bob+')) return;

@@ -16,6 +16,7 @@ module.exports = {
       })).optional(),
       context: Joi.object({
         channelId: Joi.string().required(),
+        parentId: Joi.string().optional(),
         appVersion: Joi.string().optional().default(pack.version),
       }).required(),
     }),

@@ -1,15 +1,17 @@
 import { h, Component} from 'preact';
 import { useCallback } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import { formatTime, formatDateDetailed } from '../../utils';
 import { resend } from '../../services/messages';
 import { Files } from '../Files/Files';
 import { Reactions } from './reaction';
 import { actions, selectors } from '../../state';
-import { Toolbar } from '../messageToolbar';
+import { Toolbar } from './toolbar';
 import {Emoji} from './Emoji';
 import { Progress } from './progress';
 import { InlineChannel } from '../channels';
+import { ThreadInfo, ThreadLink } from './threadInfo';
 
 const EMOJI_MATCHER = () => /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/g;
 
@@ -44,6 +46,7 @@ const TYPES = {
     : <a target="_blank" rel="noreferrer" href={props.data.href}>{build(props.data.children)}</a>),
   emoji: (props) => <Emoji big={props.opts.emojiOnly} shortname={props.data} />,
   channel: (props) => <InlineChannel channelId={props.data} />,
+  thread: (props) => <ThreadLink channelId={props.data.channelId} parentId={props.data.parentId} text={props.data.text} />,
 };
 
 const isToday = (date) => {
@@ -65,8 +68,9 @@ const isOnlyEmoji = (message, flat) => EMOJI_MATCHER().test(flat) || (
 export const Message = (props = {}) => {
   const {
     id, clientId, info, message, reactions = [], emojiOnly,
-    attachments, flat, createdAt, userId, pinned, progress,
+    attachments, flat, createdAt, userId, pinned, progress, thread,
   } = props.data;
+  const msg = props.data;
   const dispatch = useDispatch();
   const hovered = useSelector(selectors.getHoveredMessage);
   const user = useSelector(selectors.getUser(userId));
@@ -107,6 +111,7 @@ export const Message = (props = {}) => {
         {attachments && <Files list={attachments} />}
         {info && <div onclick={onAction} class={['info', info.type, ...(info.action ? ['action'] : [])].join(' ')}>{info.msg}</div>}
         <Reactions messageId={id} reactions={reactions} />
+        {thread && <ThreadInfo message={props.data} />}
         {progress && <Progress progress={progress} />}
 
         {hovered === id && <Toolbar message={props.data} user={user} />}

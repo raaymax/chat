@@ -5,17 +5,27 @@ import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components';
 import { Logo } from './logo';
 import { Channels } from './channels';
-import { Conversation } from './messages/conversation.js';
+import { MainConversation } from './mainConversation/mainConversaion';
+import { SideConversation } from './sideConversation/sideConversation';
 import { Search } from './search/search';
 import { Pins } from './pins/pins';
 import { selectors, actions} from '../state';
 
-const StyledWorkspace = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: row;
+  @media (max-width : 510px) {
+    & .side {
+      width: 100vh;
+    }
+    & .main {
+      width: 0vh;
+      display: none;
+    }
+  }
 `;
 
-const StyledMenu = styled.div`
+const SideMenu = styled.div`
   flex: 0 150px;
   @media (max-width : 510px) {
     flex: none;
@@ -41,8 +51,8 @@ const StyledMenu = styled.div`
       }
     }
   }
-  border-left: 1px solid #565856;
-  border-right: 1px solid #565856;
+  border-left: 1px solid ${(props) => props.theme.borderColor};
+  border-right: 1px solid ${(props) => props.theme.borderColor};
   &.hidden {
     flex: 0 0px;
     width: 0px;
@@ -51,17 +61,20 @@ const StyledMenu = styled.div`
 
 export const Workspace = () => {
   const view = useSelector(selectors.getView);
+  const thread = useSelector(selectors.getThread());
+  const channelId = useSelector(selectors.getChannelId);
   const dispatch = useDispatch();
   return (
-    <StyledWorkspace>
-      {view === 'sidebar' && <StyledMenu>
+    <Container>
+      {view === 'sidebar' && <SideMenu>
         <Logo onClick={() => dispatch(actions.setView('sidebar'))} />
         <Channels />
-      </StyledMenu>}
+      </SideMenu>}
 
       {view === 'search' && <Search />}
       {view === 'pins' && <Pins />}
-      {(view === null || view === 'sidebar') && <Conversation />}
-    </StyledWorkspace>
+      {(view === null || view === 'sidebar') && <MainConversation className={view === null ? '' : 'main'} stream={{channelId}} />}
+      {thread && <SideConversation className='side' stream={thread} />}
+    </Container>
   )
 }

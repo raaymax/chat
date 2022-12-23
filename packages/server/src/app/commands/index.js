@@ -11,6 +11,7 @@ const commands = [
   require('./prompt'),
   require('./version'),
   require('./emoji'),
+  require('./ping'),
 ];
 
 module.exports = async (req, res) => {

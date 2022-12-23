@@ -2,12 +2,11 @@ import { h } from 'preact';
 import { useEffect } from 'preact/hooks';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadPrevious, loadNext } from '../../services/messages';
+import { loadMessages, loadPrevious, loadNext } from '../../services/messages';
 import { updateProgress } from '../../services/progress';
 import { actions, selectors } from '../../state';
 import { messageFormatter } from './formatter';
 import { MessageList } from './messageList';
-import { Header } from './header';
 import { uploadMany } from '../../services/file';
 import { Input } from '../Input/Input';
 import { Loader } from '../loader';
@@ -27,10 +26,11 @@ function dragOverHandler(ev) {
 
 const StyledConversation = styled.div`
   flex: 1;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: calc(100vh - 50px);
   display: flex;
   flex-direction: column;
+  border-right: 1px solid var(--primary_border_color);
 `;
 
 const StyledLoader = styled.div`
@@ -59,15 +59,17 @@ const ReInit = styled.div`
   }
 `;
 
-export function Conversation() {
+export function Conversation({ stream }) {
   const dispatch = useDispatch();
-  const messages = useSelector(selectors.getMessages);
+  useEffect(() => {
+    dispatch(loadMessages(stream));
+  }, [stream, dispatch]);
+  const messages = useSelector(selectors.getStreamMessages(stream));
   const initFailed = useSelector(selectors.getInitFailed);
   const loading = useSelector(selectors.getMessagesLoading);
-  const channelId = useSelector(selectors.getChannelId);
   const status = useSelector(selectors.getMessagesStatus);
   const selected = useSelector(selectors.getSelectedMessage);
-  const progress = useSelector(selectors.getProgress(channelId));
+  const progress = useSelector(selectors.getProgress(stream));
   const list = messages.map((m) => ({...m, progress: progress[m.id]}));
 
   useEffect(() => {
@@ -81,9 +83,6 @@ export function Conversation() {
 
   return (
     <StyledConversation onDrop={drop(dispatch)} onDragOver={dragOverHandler}>
-      <Header onclick={() => {
-        dispatch(actions.setView('sidebar'));
-      }} />
       <MessageList
         formatter={messageFormatter}
         list={list}
@@ -91,17 +90,17 @@ export function Conversation() {
         selected={selected}
         onScrollTo={(dir) => {
           if (dir === 'top') {
-            dispatch(loadPrevious(channelId))
+            dispatch(loadPrevious(stream))
           }
           if (dir === 'bottom') {
-            dispatch(loadNext(channelId))
+            dispatch(loadNext(stream))
           }
         }}
       />
       {loading && <StyledLoader><div>
         <Loader />
       </div></StyledLoader>}
-      <Input />
+      <Input stream={stream} />
       {initFailed && <ReInit onClick={() => dispatch(reinit())}>
         Failed to initialize<br />
         Retry

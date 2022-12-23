@@ -18,6 +18,30 @@ const takeTail = createAction('message/take/tail');
 const clear = createAction('message/clear');
 const select = createAction('message/select');
 
+export const getStream = (state, {channelId, parentId}) => {
+  if (parentId) {
+    const key = `${channelId}:${parentId}`;
+    return state[key] || [];
+  }
+  return state[channelId] || [];
+}
+
+const useStream = (state, {channelId, parentId}) => {
+  if (parentId) {
+    const key = `${channelId}:${parentId}`;
+    return state[key] = state[key] || [];
+  }
+  return state[channelId] = state[channelId] || [];
+}
+
+const setStream = (state, {channelId, parentId}, list) => {
+  if (parentId) {
+    const key = `${channelId}:${parentId}`;
+    state[key] = list;
+  }
+  state[channelId] = list;
+}
+
 const messagesReducer = createReducer({
   data: {},
   loadingPrevios: false,
@@ -58,14 +82,13 @@ const messagesReducer = createReducer({
     state.loadingNext = false;
   },
   [clear]: (state, action) => {
-    const {channelId} = action.payload;
-    state.data[channelId] = [];
+    const {stream} = action.payload;
+    setStream(state.data, stream, []);
   },
   [addAll]: ({data}, action) => {
     action.payload.forEach((msg) => {
-      const {channelId} = msg;
-      // eslint-disable-next-line no-multi-assign
-      const list = data[channelId] = data[channelId] || [];
+      const {channelId, parentId} = msg;
+      const list = useStream(data, {channelId, parentId});
       if (msg.createdAt) {
         msg.createdAt = (new Date(msg.createdAt)).toISOString();
       }
@@ -84,9 +107,8 @@ const messagesReducer = createReducer({
   [add]: ({data, status}, action) => {
     if (status === 'archive') return;
     const msg = action.payload;
-    const { channelId } = msg;
-    // eslint-disable-next-line no-multi-assign
-    const list = data[channelId] = data[channelId] || [];
+    const { channelId, parentId } = msg;
+    const list = useStream(data, {channelId, parentId});
     if (msg.createdAt) {
       msg.createdAt = (new Date(msg.createdAt)).toISOString();
     }
@@ -103,19 +125,22 @@ const messagesReducer = createReducer({
   },
 
   [takeHead]: (state, action) => {
-    const {channelId, count} = action.payload;
-    const ids = state.data[channelId]
-      .slice(0, Math.max(state.data[channelId].length - count, 0))
+    const {stream, count} = action.payload;
+    const list = useStream(state.data, stream);
+    const ids = list
+      .slice(0, Math.max(list.length - count, 0))
       .map((m) => m.id)
-    state.data[channelId] = state.data[channelId].filter((m) => !ids.includes(m.id));
+    setStream(state.data, stream, list.filter((m) => !ids.includes(m.id)));
   },
 
   [takeTail]: (state, action) => {
-    const {channelId, count} = action.payload;
-    const ids = state.data[channelId]
-      .slice(0, Math.min(count, state.data[channelId].length))
+    const {stream, count} = action.payload;
+    const list = useStream(state.data, stream);
+    const ids = list
+      .slice(0, Math.min(count, list.length))
       .map((m) => m.id)
-    state.data[channelId] = state.data[channelId].filter((m) => ids.includes(m.id));
+
+    setStream(state.data, stream, list.filter((m) => ids.includes(m.id)));
   },
 
   logout: () => ({ list: [], loading: false }),

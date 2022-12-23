@@ -1,5 +1,5 @@
 import { configureStore, createSelector, createAction } from '@reduxjs/toolkit'
-import messages, { actions as messageActions } from './messages';
+import messages, { actions as messageActions, getStream } from './messages';
 import connected, { actions as connectionActions } from './connection';
 import config, { actions as configActions } from './config';
 import channels, { actions as channelActions } from './channels';
@@ -13,6 +13,7 @@ import pins, { actions as pinActions } from './pins';
 import system, { actions as systemActions } from './system';
 import customEmojis, { actions as cusotmEmojisActions } from './customEmojis';
 import progress, { actions as progressActions } from './progress';
+import thread, { actions as threadActions } from './thread';
 
 const logout = createAction('logout');
 
@@ -32,6 +33,7 @@ export const actions = {
   ...systemActions,
   ...cusotmEmojisActions,
   ...progressActions,
+  ...threadActions,
 }
 
 export const selectors = {
@@ -78,6 +80,14 @@ export const selectors = {
   getView: (state) => state.view.current,
   getSearchResults: (state) => state.search.results,
   getPinnedMessages: (channel) => (state) => state.pins.data[channel] || [],
+  getChannelMessages: (channelId) => createSelector(
+    (state) => state.messages.data,
+    (messages) => messages[channelId] || [],
+  ),
+  getStreamMessages: (stream) => createSelector(
+    (state) => state.messages.data,
+    (messages) => getStream(messages, stream),
+  ),
   getMessages: createSelector(
     (state) => state.channels.current,
     (state) => state.messages.data,
@@ -131,6 +141,8 @@ export const selectors = {
     filesAreReady,
   ),
 
+  getThread: () => (state) => state.thread.stream,
+
   getTyping: () => createSelector(
     (state) => state.channels.current,
     (state) => state.typing,
@@ -157,5 +169,6 @@ export default configureStore({
     system,
     customEmojis,
     progress,
+    thread,
   },
 })

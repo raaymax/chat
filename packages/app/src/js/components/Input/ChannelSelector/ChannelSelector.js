@@ -26,7 +26,7 @@ export const select = (idx, event) => {
   submit({event})
 };
 
-export const ChannelSelector = () => <TextMenu className="channel-menu" watch={watch} select={select} />
+export const ChannelSelector = (props) => <TextMenu className="channel-menu" watch={watch} select={select} {...props} />
 
 export const start = ({event, store}) => {
   event.preventDefault();

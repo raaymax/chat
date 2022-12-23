@@ -15,7 +15,7 @@ const deserializeQuery = (data) => {
   };
 };
 
-module.exports = {
+const message = {
   get: async (query) => (await db).collection(TABLE_NAME)
     .findOne(deserialize(query))
     .then(serialize),
@@ -39,9 +39,26 @@ module.exports = {
   update: async (where, msg) => (await db).collection(TABLE_NAME)
     .updateOne(deserialize(where), { $set: deserialize(msg) }),
 
+  updateThread: async ({ parentId, userId, id }) => (await db).collection(TABLE_NAME)
+    .updateOne(deserialize({
+      id: parentId,
+    }), {
+      $push: {
+        thread: deserialize({
+          userId,
+          childId: id,
+        }),
+      },
+      $set: {
+        updatedAt: new Date(),
+      },
+    }),
+
   remove: async (where) => (await db).collection(TABLE_NAME)
     .deleteOne(deserialize(where)),
 
   count: async (query) => (await db).collection(TABLE_NAME)
     .count(deserializeQuery(query)),
 };
+
+module.exports = message;

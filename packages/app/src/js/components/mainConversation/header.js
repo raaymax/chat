@@ -54,8 +54,8 @@ const StyledHeader = styled.div`
   }
 `;
 
-export const Header = ({onclick}) => {
-  const channel = useSelector(selectors.getCurrentChannel);
+export const Header = ({channelId, onclick}) => {
+  const channel = useSelector(selectors.getChannel({id: channelId}));
   const id = useSelector(selectors.getChannelId);
   const dispatch = useDispatch();
 

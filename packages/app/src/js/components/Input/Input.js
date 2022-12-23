@@ -141,11 +141,11 @@ const ActionButton = styled.div`
   }
 `;
 
-function submit({store, input, event}) {
-  store.dispatch(sendFromDom(input));
+function submit({ store, input, stream, event }) {
+  store.dispatch(sendFromDom(stream, input));
   input.innerHTML = '';
   event.preventDefault();
-  window.input.focus();
+  input.focus();
 }
 
 const runAction = (args ) => [
@@ -188,8 +188,9 @@ const runAction = (args ) => [
   {match: ({action}) => action === 'focus', run: ({input}) => input.focus() },
 ].filter(({match}) => match(args)).map(({run}) => run(args));
 
-const process = (store, input, event, source) => runAction({
+const process = (store, stream, input, event, source) => runAction({
   store,
+  stream,
   event,
   input,
   source,
@@ -200,10 +201,19 @@ const process = (store, input, event, source) => runAction({
     .slice(0, document.getSelection().anchorOffset),
 })
 
-export const Input = () => {
+export const Input = ({ stream }) => {
   const store = useStore();
+  const input = useRef();
   const fileInput = useRef(null);
-  const dispatchEvent = useCallback((source, e) => process(store, document.getElementById('input'), e, source), [store]);
+  const dispatchEvent = useCallback((source, e) => (
+    process(
+      store,
+      stream,
+      input.current,
+      e,
+      source,
+    )
+  ), [store, input, stream]);
   const filesAreReady = useSelector(selectors.filesAreReady);
 
   useEffect(() => {
@@ -231,6 +241,7 @@ export const Input = () => {
     <InputContainer>
       <div
         id="input"
+        ref={input}
         contenteditable='true'
         onPaste={onPaste}
         onInput={(e) => dispatchEvent('input', e)}
@@ -247,8 +258,8 @@ export const Input = () => {
         </ActionButton>
       </div>
       <input onChange={onChange} ref={fileInput} type="file" multiple style="height: 0; opacity: 0; width: 0; position:absolute; bottom:0; left: 0;" />
-      <emojis.EmojiSelector />
-      <channels.ChannelSelector />
+      <emojis.EmojiSelector input={input.current} />
+      <channels.ChannelSelector input={input.current} />
     </InputContainer>
   );
 };
