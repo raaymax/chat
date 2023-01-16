@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { selectors } from '../../state';
+import { selectors } from '../../../state';
 
 const Image = styled.img`
   display: inline-block;

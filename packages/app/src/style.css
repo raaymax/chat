@@ -320,6 +320,10 @@ ul {
 .message .content {
   font-weight: 300;
 }
+.message .content.big-emoji {
+  font-size: 30px;
+  line-height: 35px;
+}
 .message .content.big-emoji .emoji {
   font-size: 30px;
   line-height: 35px;

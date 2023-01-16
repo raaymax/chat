@@ -55,7 +55,6 @@ module.exports = {
         userId: req.userId,
       });
       const parent = await db.message.get({ id: msg.parentId });
-      console.log('parent', parent)
       res.broadcast({ type: 'message', ...parent });
     }
 
@@ -64,7 +63,8 @@ module.exports = {
       res.broadcast({ type: 'message', ...created });
       await push.send(created);
     }
-    await services.badges.messageSent(channel.id, id, req.userId);
+    console.log()
+    await services.badges.messageSent(channel.id, msg.parentId, id, req.userId);
     res.ok(dup ? { duplicate: true } : {});
   },
 };

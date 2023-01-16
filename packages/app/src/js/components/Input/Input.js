@@ -12,6 +12,7 @@ import { Info } from '../info';
 import { Attachments } from '../Files/Attachments';
 import { selectors } from '../../state';
 import { notifyTyping } from '../../services/typing';
+import { useStream } from '../streamContext';
 
 const InputContainer = styled.div`
   border-top: 1px solid #565856;
@@ -201,7 +202,8 @@ const process = (store, stream, input, event, source) => runAction({
     .slice(0, document.getSelection().anchorOffset),
 })
 
-export const Input = ({ stream }) => {
+export const Input = () => {
+  const [stream] = useStream();
   const store = useStore();
   const input = useRef();
   const fileInput = useRef(null);

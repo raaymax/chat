@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import styled from 'styled-components';
 import { Header } from './header';
-import { Conversation } from '../messages/conversation';
+import { Conversation } from '../conversation';
 
 const Container = styled.div`
   flex: 1;
@@ -11,9 +11,9 @@ const Container = styled.div`
   flex-direction: column;
   border-right: 1px solid var(--primary_border_color);
 `;
-export const MainConversation = ({stream, className}) => (
+export const SideConversation = ({className}) => (
   <Container className={className}>
-    <Header channelId={stream.channelId} /> {/* FIXME: use stream */}
-    <Conversation stream={stream} />
+    <Header />
+    <Conversation />
   </Container>
 )

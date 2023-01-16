@@ -1,16 +1,13 @@
 https://xkcd.com/2294/ add rss feeds to chat
 text formatting - bold
 
-
-
-
----------------------------------------
-create migration for messages channelId 
----------------------------------------
-
 TODO: Notifications merging based on badges
 
 Idea: Log errors as messages in the channel
 
 better formatting of openai responses
 
+
+
+
+badges for threads

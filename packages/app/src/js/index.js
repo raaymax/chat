@@ -13,8 +13,8 @@ client
   .on('badge', (msg) => store.dispatch(actions.addProgress(msg)))
   .on('channel:changed', (msg) => {
     store.dispatch(actions.setChannel(msg.channelId));
-    store.dispatch(loadProgress());
-    store.dispatch(loadMessages());
+    store.dispatch(loadProgress({channelId: msg.channelId}));
+    //store.dispatch(loadMessages({channelId: msg.channelId}));
   })
   .on('setChannel', (msg) => { window.location.hash = msg.channelId; })
   .on('channel', (msg) => store.dispatch(actions.addChannel(msg)))

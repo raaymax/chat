@@ -3,13 +3,16 @@ import {h} from 'preact';
 import { useDispatch, useSelector } from 'react-redux'
 
 import styled from 'styled-components';
+import { useState, useEffect, useCallback } from 'preact/hooks';
 import { Logo } from './logo';
 import { Channels } from './channels';
-import { MainConversation } from './mainConversation/mainConversaion';
-import { SideConversation } from './sideConversation/sideConversation';
+import { MainConversation } from './messages/main/mainConversaion';
+import { SideConversation } from './messages/side/sideConversation';
 import { Search } from './search/search';
 import { Pins } from './pins/pins';
-import { selectors, actions} from '../state';
+import { selectors, actions, useStream} from '../state';
+import {StreamContext} from './streamContext';
+import { setStream } from '../services/stream';
 
 const Container = styled.div`
   display: flex;
@@ -61,20 +64,36 @@ const SideMenu = styled.div`
 
 export const Workspace = () => {
   const view = useSelector(selectors.getView);
-  const thread = useSelector(selectors.getThread());
   const channelId = useSelector(selectors.getChannelId);
   const dispatch = useDispatch();
+
+
+  const stream = useStream('main');
+  console.log('main', stream);
+  const sideStream = useStream('side');
+
+  useEffect(() => {
+    dispatch(setStream('main', {type: 'live', channelId}));
+  }, [channelId]);
+
   return (
     <Container>
       {view === 'sidebar' && <SideMenu>
         <Logo onClick={() => dispatch(actions.setView('sidebar'))} />
         <Channels />
       </SideMenu>}
-
-      {view === 'search' && <Search />}
-      {view === 'pins' && <Pins />}
-      {(view === null || view === 'sidebar') && <MainConversation className={view === null ? '' : 'main'} stream={{channelId}} />}
-      {thread && <SideConversation className='side' stream={thread} />}
+      <StreamContext value={[stream, (val) => dispatch(setStream('main', val))]}>
+        {view === 'search' && <Search />}
+        {view === 'pins' && <Pins />}
+        {(view === null || view === 'sidebar' || view === 'thread')
+          && <MainConversation
+            className={view === null ? '' : 'main'}
+            onclick={() => dispatch(actions.setView('sidebar'))} />
+        }
+      </StreamContext>
+      {sideStream && <StreamContext value={[sideStream, (val) => dispatch(setStream('side', val))]}>
+        <SideConversation className='side' />
+      </StreamContext>}
     </Container>
   )
 }

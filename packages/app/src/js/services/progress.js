@@ -8,12 +8,12 @@ export const loadBadges = () => async(dispatch) => {
   data.forEach((p) => dispatch(actions.addProgress(p)));
 }
 
-export const loadProgress = () => async(dispatch, getState) => {
-  const channelId = selectors.getChannelId(getState());
-  if (!channelId) return;
+export const loadProgress = (stream) => async(dispatch, getState) => {
+  if (!stream.channelId) return;
   const {data} = await client.req2({
     type: 'loadProgress',
-    channelId,
+    channelId: stream.channelId,
+    parentId: stream.parentId,
   })
   data.forEach((p) => dispatch(actions.addProgress(p)));
 }

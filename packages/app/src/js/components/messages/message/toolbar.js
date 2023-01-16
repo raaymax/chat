@@ -2,10 +2,12 @@ import { h } from 'preact';
 import styled from 'styled-components';
 import { useState, useCallback } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeMessage } from '../../services/messages';
-import { pinMessage, unpinMessage } from '../../services/pins';
+import { removeMessage } from '../../../services/messages';
+import { pinMessage, unpinMessage } from '../../../services/pins';
 import { Reaction } from './reaction';
-import { openThread } from '../../services/threads';
+import { setStream } from '../../../services/stream';
+import { useStream, useHovered  } from '../conversationContext';
+import { useMessageData, useMessageUser } from './messageContext';
 
 const ToolbarContainer = styled.div`
   position: absolute;
@@ -40,15 +42,21 @@ const ToolbarContainer = styled.div`
   }
 `;
 
-export const Toolbar = ({message, user}) => {
+export const Toolbar = () => {
+  const message = useMessageData();
+  const user = useMessageUser();
   const {id, pinned, channelId} = message;
   const [view, setView] = useState(null);
   const dispatch = useDispatch();
+  const stream = useStream();
   const onDelete = useCallback(() => {
     dispatch(removeMessage({id}));
   }, [dispatch, id]);
   const meId = useSelector((state) => state.users.meId);
   const isMe = user.id === meId;
+  const [hovered] = useHovered();
+
+  if (hovered !== id) return null;
 
   if (view === 'reactions') {
     return (
@@ -80,7 +88,9 @@ export const Toolbar = ({message, user}) => {
         : <i class="fa-solid fa-thumbtack" style="color:Tomato" onClick={() => dispatch(unpinMessage(id, channelId))} />}
       { isMe && <i class='fa-solid fa-trash-can' onclick={() => setView('delete')} /> }
       <i class="fa-solid fa-icons" onClick={() => setView('reactions')} />
-      <i class="fa-solid fa-reply" onClick={() => dispatch(openThread({channelId, parentId: id}))}/>
+      {
+        !stream.parentId && <i class="fa-solid fa-reply" onClick={() => dispatch(setStream('side', {type: 'live', channelId, parentId: id}))} />
+      }
     </ToolbarContainer>
   );
 }

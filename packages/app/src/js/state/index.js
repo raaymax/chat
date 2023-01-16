@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import { configureStore, createSelector, createAction } from '@reduxjs/toolkit'
 import messages, { actions as messageActions, getStream } from './messages';
 import connected, { actions as connectionActions } from './connection';
@@ -13,7 +14,8 @@ import pins, { actions as pinActions } from './pins';
 import system, { actions as systemActions } from './system';
 import customEmojis, { actions as cusotmEmojisActions } from './customEmojis';
 import progress, { actions as progressActions } from './progress';
-import thread, { actions as threadActions } from './thread';
+import stream, { actions as streamActions } from './stream';
+import {useSelector} from 'react-redux';
 
 const logout = createAction('logout');
 
@@ -33,16 +35,17 @@ export const actions = {
   ...systemActions,
   ...cusotmEmojisActions,
   ...progressActions,
-  ...threadActions,
+  ...streamActions,
 }
 
 export const selectors = {
-  getProgress: (channelId) => createSelector(
+  getProgress: ({channelId, parentId}) => createSelector(
     (state) => state.channels.list.find((c) => c.id === channelId),
     (state) => state.progress,
     (state) => state.users.list,
     (channel, progress, users) => (channel ? progress
       .filter((p) => p.channelId === channel.id)
+      .filter((p) => (!p.parentId && !parentId) || p.parentId === parentId)
       .map((p) => ({
         ...p,
         user: users.find((u) => u.id === p.userId),
@@ -104,6 +107,7 @@ export const selectors = {
   getMessagesNextLoading: (state) => state.messages.loading || state.messages.loadingNext,
   getSelectedMessage: (state) => state.messages.selected,
   countMessagesInChannel: (channel, state) => state.messages.data[channel]?.length || 0,
+  countMessagesInStream: (stream, state) => state.messages.data[stream.parentId ? (stream.channelId+":"+stream.parentId) : stream.channelId]?.length || 0,
   getLatestDate: () => createSelector(
     (state) => state.channels.current,
     (state) => state.messages.data,
@@ -119,11 +123,14 @@ export const selectors = {
       : new Date().toISOString()),
   ),
   getMessage: (id) => createSelector(
-    (state) => state.channels.current,
     (state) => state.messages.data,
-    (channel, messages) => messages[channel]
-      .find((m) => (m.id && m.id === id)
-        || (m.clientId && m.clientId === id)),
+    (messages) => {
+      for (const channel of Object.values(messages)) {
+        const message = channel.find((m) => m.id === id);
+        if (message) return message;
+      }
+      return null;
+    },
   ),
   getCurrentChannel: createSelector(
     (state) => state.channels.list,
@@ -141,8 +148,6 @@ export const selectors = {
     filesAreReady,
   ),
 
-  getThread: () => (state) => state.thread.stream,
-
   getTyping: () => createSelector(
     (state) => state.channels.current,
     (state) => state.typing,
@@ -150,7 +155,12 @@ export const selectors = {
     (channelId, typing, users) => Object.keys(typing[channelId] || {})
       .map((id) => users.find((u) => u.id === id)),
   ),
-}
+
+  getStream: (id) => (state) => state.stream[id],
+};
+
+export const useUser = (userId) => useSelector(selectors.getUser(userId));
+export const useStream = (id) => useSelector(selectors.getStream(id));
 
 export default configureStore({
   devTools: true,
@@ -169,6 +179,6 @@ export default configureStore({
     system,
     customEmojis,
     progress,
-    thread,
+    stream,
   },
-})
+});

@@ -29,8 +29,8 @@ exports.deserialize = function deserialize(data) {
     return Object.fromEntries(Object.entries(data).map(([key, value]) => {
       if (key === 'id') {
         return ['_id', Array.isArray(value)
-          ? { $in: value.map((v) => ObjectId(v)) }
-          : ObjectId(value)];
+          ? { $in: value.map((v) => (ObjectId.isValid(v) ? ObjectId(v) : v)) }
+          : (ObjectId.isValid(value) ? ObjectId(value) : value)];
       }
       if (key.match(/Id$/)) {
         if (Array.isArray(value)) {

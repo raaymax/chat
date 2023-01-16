@@ -2,8 +2,10 @@ import { h } from 'preact';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { UserCircle } from './userCircle';
-import { formatTime, formatDateDetailed } from '../../utils';
-import { openThread } from '../../services/threads';
+import { formatTime, formatDateDetailed } from '../../../utils';
+import { useMessageData } from './messageContext';
+import { useStream } from '../../streamContext';
+import { setStream } from '../../../services/stream';
 
 const Container = styled.div`
   width: auto;
@@ -38,22 +40,20 @@ const Link = styled.span`
 `;
 
 export const ThreadLink = ({channelId, parentId, text}) => {
-  const dispatch = useDispatch();
   return (
-    <Link onClick={() => dispatch(openThread({ channelId, parentId }))}>
+    <Link onClick={() => dispatch(setStream('side', {type: 'live', channelId, parentId }))}>
       {text || 'Thread'}
     </Link>
   );
 }
 
-export const ThreadInfo = ({
-  message: {
-    updatedAt, thread, channelId, id,
-  },
-}) => {
+export const ThreadInfo = () => {
+  const { updatedAt, thread, channelId, id } = useMessageData();
   const dispatch = useDispatch();
+  const [stream] = useStream();
+  if (!thread || stream.parentId) return null;
   return (
-    <Container onClick={() => dispatch(openThread({channelId, parentId: id}))}>
+    <Container onClick={() => dispatch(setStream('side', {type: 'live', channelId, parentId: id}))}>
       {[...new Set(thread.map((t) => t.userId))]
         .map((userId) => (
           <UserCircle key={userId} userId={userId} />
