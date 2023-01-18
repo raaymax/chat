@@ -1,12 +1,13 @@
 import { h } from 'preact';
 import styled from 'styled-components';
-import { useState, useCallback } from 'preact/hooks';
+import { useState, useCallback, useEffect } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeMessage } from '../../../services/messages';
 import { pinMessage, unpinMessage } from '../../../services/pins';
 import { Reaction } from './reaction';
 import { setStream } from '../../../services/stream';
-import { useStream, useHovered  } from '../conversationContext';
+import { useHovered } from '../conversationContext';
+import { useStream } from '../../streamContext';
 import { useMessageData, useMessageUser } from './messageContext';
 
 const ToolbarContainer = styled.div`
@@ -21,6 +22,7 @@ const ToolbarContainer = styled.div`
   padding: 1px 5px;
   font-size: 0.9em;
 
+
   i {
     padding: 2px 5px;
     line-height: 24px;
@@ -31,6 +33,29 @@ const ToolbarContainer = styled.div`
     font-style: normal;
     cursor: pointer;
     border-radius: 0.2em;
+  }
+
+  body.mobile & {
+    width: 100%;
+    top: -50px;
+    right: 0;
+    border-radius: 0;
+    border-top: 1px solid #565856;
+    border-bottom: 1px solid #565856;
+    border-left: 0;
+    border-right: 0;
+    margin: 0;
+    padding: 0;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    i {
+      flex: 0 50px;
+      line-height: 50px;
+      font-size: 25px;
+
+    }
   }
 
   i:hover {
@@ -48,13 +73,15 @@ export const Toolbar = () => {
   const {id, pinned, channelId} = message;
   const [view, setView] = useState(null);
   const dispatch = useDispatch();
-  const stream = useStream();
+  const [stream] = useStream();
   const onDelete = useCallback(() => {
     dispatch(removeMessage({id}));
   }, [dispatch, id]);
   const meId = useSelector((state) => state.users.meId);
   const isMe = user.id === meId;
   const [hovered] = useHovered();
+
+  useEffect(() => setView(null), [hovered]);
 
   if (hovered !== id) return null;
 
@@ -87,7 +114,6 @@ export const Toolbar = () => {
         ? <i class="fa-solid fa-thumbtack" onClick={() => dispatch(pinMessage(id, channelId))} />
         : <i class="fa-solid fa-thumbtack" style="color:Tomato" onClick={() => dispatch(unpinMessage(id, channelId))} />}
       { isMe && <i class='fa-solid fa-trash-can' onclick={() => setView('delete')} /> }
-      <i class="fa-solid fa-icons" onClick={() => setView('reactions')} />
       {
         !stream.parentId && <i class="fa-solid fa-reply" onClick={() => dispatch(setStream('side', {type: 'live', channelId, parentId: id}))} />
       }

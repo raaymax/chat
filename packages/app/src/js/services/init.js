@@ -3,12 +3,13 @@ import { Capacitor } from '@capacitor/core';
 import { client } from '../core';
 import { actions } from '../state';
 import { initNotifications } from './notifications';
-import { loadMessages } from './messages';
 import { loadEmojis } from './emoji';
 import { loadProgress, loadBadges } from './progress';
 
 const initApp = async (dispatch) => {
-  dispatch(actions.messagesLoading());
+  if (Capacitor.isNativePlatform()) {
+    document.body.setAttribute('class', 'mobile');
+  }
   dispatch(actions.connected());
   dispatch(actions.clearInfo());
   dispatch(actions.initFailed(false));

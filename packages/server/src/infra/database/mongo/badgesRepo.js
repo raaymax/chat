@@ -17,7 +17,6 @@ module.exports = {
   }) => {
     const database = await db;
 
-    console.log(deserialize({ channelId, parentId, userId }));
     const progress = await database.collection(TABLE_NAME)
       .findOne(deserialize({ channelId, parentId, userId }));
 

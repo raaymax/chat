@@ -5,7 +5,6 @@ import {loadProgress } from './progress';
 
 export const setStream = (id, value) => async (dispatch, getState) => {
   if (selectors.getStream(id)(getState()) === value) return;
-  console.log('setStream', value);
   dispatch(actions.setStream({id, value}));
   if (value ) {
     dispatch(loadMessages(value));

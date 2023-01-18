@@ -65,7 +65,7 @@ const StyledHeader = styled.div`
 `;
 
 export const Header = ({ onclick }) => {
-  const [{ channelId, parentId}] = useStream();
+  const [{ channelId, parentId}, setSideStream] = useStream();
   const channel = useSelector(selectors.getChannel({id: channelId}));
   const message = useSelector(selectors.getMessage(parentId));
   const dispatch = useDispatch();
@@ -75,11 +75,12 @@ export const Header = ({ onclick }) => {
       <h1>Thread</h1>
       <Channel onclick={onclick} {...channel} />
       <div class='toolbar'>
-        <div class='tool' onclick={() => (
-          dispatch(actions.setThread(message?.parentId
-            ? { parentId: message.parentId, channelId }
-            : null))
-        )}>
+        <div class='tool' onclick={() => {
+          setSideStream(null);
+          dispatch(setStream('main', {
+            channelId, type: 'archive', selected: message.id, date: message.createdAt,
+          }));
+        }}>
           <i class="fa-solid fa-arrow-left" />
         </div>
         <div class='tool' onclick={() => dispatch(setStream('side', null))}>

@@ -54,7 +54,6 @@ export class MessageList extends Component {
       scrollPosition = MessageList.SCROLL_FREE;
     }
 
-    console.log(scrollPosition);
     if (this.scrollPosition !== scrollPosition) {
       this.scrollPosition = scrollPosition;
       const { onScrollTo } = this.props;
@@ -104,34 +103,27 @@ export class MessageList extends Component {
 
   // FIXME: deprecated
   componentWillUpdate() {
-    document.elementFromPoint(10,100);
+    document.elementFromPoint(10, 100);
     this.previousScrollHeight = this.base.scrollHeight;
     this.previousScrollTop = this.base.scrollTop;
-
   }
 
   componentDidUpdate() {
     if (this.props.selected) {
-      console.log('selected');
       const msgs = [...this.base.querySelectorAll('.message')];
       const current = msgs.find((el) => el.getAttribute('data-id') === this.props.selected);
       if (current) current.scrollIntoView();
       return;
     }
-    console.log('updateScroll', this.updateScroll);
     if (!this.updateScroll) return;
     const {status} = this.props;
     if (this.scrollPosition === MessageList.SCROLL_AT_BOTTOM) {
       if (status === MessageList.STATUS_LIVE) {
         this.base.scrollTop = this.base.scrollHeight;
-      } else {
-        console.log('else');
-        if (this.previousScrollHeight >= this.base.scrollHeight) {
-          const heightDelta = this.previousScrollHeight - this.base.scrollHeight;
-          const scrollDelta = Math.max(this.previousScrollTop - this.base.scrollTop, 0);
-          console.log(heightDelta, scrollDelta, this.base.scrollTop - heightDelta + scrollDelta);
-          this.base.scrollTop = this.base.scrollTop - heightDelta + scrollDelta;
-        }
+      } else if (this.previousScrollHeight >= this.base.scrollHeight) {
+        const heightDelta = this.previousScrollHeight - this.base.scrollHeight;
+        const scrollDelta = Math.max(this.previousScrollTop - this.base.scrollTop, 0);
+        this.base.scrollTop = this.base.scrollTop - heightDelta + scrollDelta;
       }
       this.previousScrollHeight = this.base.scrollHeight;
       return;

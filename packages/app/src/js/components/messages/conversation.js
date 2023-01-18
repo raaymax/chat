@@ -68,7 +68,6 @@ export function Conversation() {
   const initFailed = useSelector(selectors.getInitFailed);
   const loading = useSelector(selectors.getMessagesLoading);
   const status = stream.type;
-  const selected = useSelector(selectors.getSelectedMessage);
   const progress = useSelector(selectors.getProgress(stream));
   const list = messages.map((m) => ({...m, progress: progress[m.id]}));
 
@@ -85,7 +84,7 @@ export function Conversation() {
 
   return (
     <StyledConversation onDrop={drop(dispatch)} onDragOver={dragOverHandler}>
-      <ConversationContext value={{ stream, setStream, messages, selected }}>
+      <ConversationContext>
         <MessageList
           formatter={messageFormatter}
           list={list}

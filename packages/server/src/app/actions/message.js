@@ -63,7 +63,6 @@ module.exports = {
       res.broadcast({ type: 'message', ...created });
       await push.send(created);
     }
-    console.log()
     await services.badges.messageSent(channel.id, msg.parentId, id, req.userId);
     res.ok(dup ? { duplicate: true } : {});
   },

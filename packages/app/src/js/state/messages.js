@@ -4,11 +4,7 @@ import {client} from '../core';
 const add = createAction('message/add');
 const hover = createAction('message/hover');
 const setStatus = createAction('message/set/status');
-const loadingNext = createAction('message/loading');
-const loadingNextDone = createAction('message/loading/done');
 const loadingFailed = createAction('message/loading/failed');
-const loadingPrev = createAction('message/loading/prev');
-const loadingPrevDone = createAction('message/loading/prev/done');
 const loading = createAction('message/loading/next');
 const loadingDone = createAction('message/loading/next/done');
 const addAll = createAction('message/addAll');
@@ -44,9 +40,7 @@ const setStream = (state, {channelId, parentId}, list) => {
 
 const messagesReducer = createReducer({
   data: {},
-  loadingPrevios: false,
-  loadingNext: false,
-  loading: true,
+  loading: false,
   status: 'live',
   selected: null,
   hovered: null,
@@ -68,18 +62,6 @@ const messagesReducer = createReducer({
   },
   [loadingDone]: (state) => {
     state.loading = false;
-  },
-  [loadingNext]: (state) => {
-    state.loadingNext = true;
-  },
-  [loadingNextDone]: (state) => {
-    state.loadingNext = false;
-  },
-  [loadingPrev]: (state) => {
-    state.loadingNext = true;
-  },
-  [loadingPrevDone]: (state) => {
-    state.loadingNext = false;
   },
   [clear]: (state, action) => {
     const {stream} = action.payload;
@@ -151,10 +133,6 @@ export const actions = {
   messagesLoadingFailed: loadingFailed,
   messagesLoading: loading,
   messagesLoadingDone: loadingDone,
-  messagesLoadingNext: loadingNext,
-  messagesLoadingNextDone: loadingNextDone,
-  messagesLoadingPrev: loadingPrev,
-  messagesLoadingPrevDone: loadingPrevDone,
   messagesClear: clear,
   selectMessage: select,
   hoverMessage: hover,

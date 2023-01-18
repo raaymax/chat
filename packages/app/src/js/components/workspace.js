@@ -66,10 +66,7 @@ export const Workspace = () => {
   const view = useSelector(selectors.getView);
   const channelId = useSelector(selectors.getChannelId);
   const dispatch = useDispatch();
-
-
   const stream = useStream('main');
-  console.log('main', stream);
   const sideStream = useStream('side');
 
   useEffect(() => {

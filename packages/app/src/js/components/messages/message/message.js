@@ -9,6 +9,7 @@ import { Info } from './info';
 import { ThreadInfo } from './threadInfo';
 import { MessageContext, useMessageData, useMessageUser } from './messageContext';
 import { useHovered } from '../conversationContext';
+import { useStream } from '../../streamContext';
 import { buildMessageBody } from './messageBuilder';
 import { isToday, isOnlyEmoji } from './utils';
 
@@ -19,6 +20,7 @@ const MessageBase = (props = {}) => {
     flat, createdAt, pinned,
   } = msg;
   const [hovered, setHovered] = useHovered()
+  const [{selected}] = useStream();
   const user = useMessageUser();
 
   const onEnter = useCallback(() => {
@@ -34,7 +36,7 @@ const MessageBase = (props = {}) => {
   return (
     <div
       {...props}
-      class={['message', (pinned ? 'pinned' : ''), ...props.class].join(' ')}
+      class={['message', (pinned ? 'pinned' : ''), (selected === id ? 'selected' : ''), ...props.class].join(' ')}
       onmouseenter={onEnter}
       onmouseleave={onLeave}
     >

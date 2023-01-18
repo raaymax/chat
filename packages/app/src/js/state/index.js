@@ -71,7 +71,7 @@ export const selectors = {
     .find((c) => c.id === q.id || c.name === q.name || c.cid === q.cid),
   getChannels: (state) => state.channels.list,
   getConfig: (state) => state.config,
-  getCid: (state) => state.channels.current,
+  //getCid: (state) => state.channels.current,
   getChannelId: createSelector(
     (state) => state.channels.current,
     (state) => state.channels.list,
@@ -100,13 +100,11 @@ export const selectors = {
   getHoveredMessage: (state) => state.messages.hovered,
   getInitFailed: (state) => state.system.initFailed,
   getMessagesLoadingFailed: (state) => state.messages.loadingFailed,
-  getMessagesLoading: (state) => state.messages.loading
-    || state.messages.loadingPrevious
-    || state.messages.loadingNext,
+  getMessagesLoading: (state) => state.messages.loading,
   getMessagesPrevLoading: (state) => state.messages.loading || state.messages.loadingPrevious,
   getMessagesNextLoading: (state) => state.messages.loading || state.messages.loadingNext,
-  getSelectedMessage: (state) => state.messages.selected,
-  countMessagesInChannel: (channel, state) => state.messages.data[channel]?.length || 0,
+  //getSelectedMessage: (state) => state.messages.selected,
+  //countMessagesInChannel: (channel, state) => state.messages.data[channel]?.length || 0,
   countMessagesInStream: (stream, state) => state.messages.data[stream.parentId ? (stream.channelId+":"+stream.parentId) : stream.channelId]?.length || 0,
   getLatestDate: () => createSelector(
     (state) => state.channels.current,
