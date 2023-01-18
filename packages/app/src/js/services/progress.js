@@ -1,5 +1,5 @@
 import { client } from '../core';
-import { actions, selectors } from '../state';
+import { actions } from '../state';
 
 export const loadBadges = () => async(dispatch) => {
   const {data} = await client.req2({
@@ -8,12 +8,12 @@ export const loadBadges = () => async(dispatch) => {
   data.forEach((p) => dispatch(actions.addProgress(p)));
 }
 
-export const loadProgress = () => async(dispatch, getState) => {
-  const channelId = selectors.getChannelId(getState());
-  if (!channelId) return;
+export const loadProgress = (stream) => async(dispatch) => {
+  if (!stream.channelId) return;
   const {data} = await client.req2({
     type: 'loadProgress',
-    channelId,
+    channelId: stream.channelId,
+    parentId: stream.parentId,
   })
   data.forEach((p) => dispatch(actions.addProgress(p)));
 }

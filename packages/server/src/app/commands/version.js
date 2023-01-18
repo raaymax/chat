@@ -5,7 +5,7 @@ module.exports = {
   description: 'displays app verions',
   args: [],
   handler: async (req, res) => {
-    const { appVersion, channel } = req.body.context;
+    const { appVersion, channelId } = req.body.context;
     await res.send({
       type: 'message',
       id: `version:${Math.random().toString(10)}`,
@@ -15,7 +15,7 @@ module.exports = {
         { line: { text: `Server version: ${pack.version}` } },
         { line: { text: `App version: ${appVersion}` } },
       ],
-      channel,
+      channelId,
       createdAt: new Date().toISOString(),
     });
     return res.ok();

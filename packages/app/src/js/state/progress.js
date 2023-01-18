@@ -6,7 +6,7 @@ const progressReducer = createReducer([], {
   [add]: (state, action) => {
     const {payload} = action;
     const found = state.find((item) => item.channelId === payload.channelId
-      && item.userId === payload.userId);
+      && item.userId === payload.userId && item.parentId === payload.parentId);
     if (found) {
       Object.assign(found, payload);
     } else {

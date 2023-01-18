@@ -1,16 +1,19 @@
 const assert = require('assert');
 const seeds = require('./seeds');
+const { db } = require('../../src/infra/database');
 
 module.exports = (connect) => {
-  describe('load', () => {
+  describe('pins', () => {
+    let channel;
     before(async () => {
       await seeds.run();
+      channel = await (await db).collection('channels').findOne({ name: 'main' });
     });
     it('should return last added messsage', async () => {
       const ws = await connect();
       const [msg, ret] = await ws.send({
         type: 'pins',
-        channel: 'main',
+        channelId: channel._id.toHexString(),
         limit: 1,
       });
       assert.equal(ret.type, 'response');

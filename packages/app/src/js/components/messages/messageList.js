@@ -103,6 +103,7 @@ export class MessageList extends Component {
 
   // FIXME: deprecated
   componentWillUpdate() {
+    document.elementFromPoint(10, 100);
     this.previousScrollHeight = this.base.scrollHeight;
     this.previousScrollTop = this.base.scrollTop;
   }
@@ -119,7 +120,7 @@ export class MessageList extends Component {
     if (this.scrollPosition === MessageList.SCROLL_AT_BOTTOM) {
       if (status === MessageList.STATUS_LIVE) {
         this.base.scrollTop = this.base.scrollHeight;
-      } else if (this.previousScrollHeight > this.base.scrollHeight) {
+      } else if (this.previousScrollHeight >= this.base.scrollHeight) {
         const heightDelta = this.previousScrollHeight - this.base.scrollHeight;
         const scrollDelta = Math.max(this.previousScrollTop - this.base.scrollTop, 0);
         this.base.scrollTop = this.base.scrollTop - heightDelta + scrollDelta;
@@ -150,7 +151,7 @@ export class MessageList extends Component {
     const {props} = this;
     return (
       <ListContainer onScroll={this.handleScroll}>
-        {props.formatter ? props.formatter(props.list, props.onMessageClicked) : props.list}
+        {props.formatter ? props.formatter(props) : props.list}
         <div class='space'>&nbsp;</div>
       </ListContainer>
     );

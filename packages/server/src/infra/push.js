@@ -2,37 +2,40 @@ const { getMessaging } = require('./firebase');
 const db = require('./database');
 const conf = require('../../../../chat.config');
 
-module.exports = {
+const PushService = {
+  push: async (message) => {
+    try {
+      return getMessaging().sendMulticast(message);
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.log(e);
+      throw e;
+    }
+  },
   send: async (msg) => {
-    if (process.env.OFFLINE) return;
-    // FIXME: feature disable or separate config for testing?
-    if (process.env.NODE_ENV === 'test') return Promise.resolve();
     if (!msg.message) return Promise.resolve();
-    const channel = await db.channel.get({ cid: msg.channel });
+    const channel = await db.channel.get({ id: msg.channelId });
     if (!channel) return;
-    // FIXME should also work with system user
     const user = await db.user.get({ id: msg.userId });
     if (!user) return;
-    const userIds = channel.users.filter((id) => id !== msg.userId);
-    const sess = await db.session.getByUsers({ userId: userIds });
-    const tokens = [...new Set(
-      sess
-        .map((s) => s.session.fcmToken)
-        .filter((k) => !!k),
-    )];
+    const users = await db.user.getAll({
+      id: channel.users.filter((id) => id !== msg.userId),
+    });
 
-    if (tokens.length === 0) return Promise.resolve();
-    // eslint-disable-next-line array-callback-return
+    const tokens = [...new Set(users.map((u) => Object.keys(u.notifications || {})).flat())];
+    if (tokens.length === 0) return;
     const message = {
       tokens,
+      topic: 'messages',
       data: {
-        channel: msg.channel,
+        channel: channel.name,
       },
       notification: {
-        title: `${user?.name || 'Guest'} on ${msg.channel}`,
+        title: `${user?.name || 'Guest'} on ${channel.name}`,
         body: msg.flat,
       },
       android: {
+        priority: 'high',
         collapse_key: msg.userId,
         notification: {
           ...(user.avatarUrl ? { imageUrl: user.avatarUrl } : {}),
@@ -42,22 +45,13 @@ module.exports = {
           sound: 'https://chat.codecat.io/assets/sound.mp3',
         },
       },
-      apns: {
-        payload: {
-          aps: {
-            'mutable-content': 1,
-          },
-        },
-        fcm_options: {
-          image: user.avatarUrl,
-        },
-      },
       webpush: {
         headers: {
           image: user.avatarUrl,
+          Urgency: 'high',
         },
         fcm_options: {
-          link: `${conf.serverWebUrl}/#${msg.channel}`,
+          link: `${conf.serverWebUrl}/#${channel.name}`,
         },
         notification: {
           silent: false,
@@ -67,12 +61,8 @@ module.exports = {
         },
       },
     };
-    try {
-      return getMessaging().sendMulticast(message);
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.log(e);
-      throw e;
-    }
+    return PushService.push(message);
   },
 };
+
+module.exports = PushService;

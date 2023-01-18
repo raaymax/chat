@@ -9,7 +9,7 @@ module.exports = {
   description: 'prompt OpenAI',
   args: 'text',
   handler: async (req, res) => {
-    if (!await channel.haveAccess(req.userId, req.body.context.channel)) {
+    if (!await channel.haveAccess(req.userId, req.body.context.channelId)) {
       throw AccessDenied();
     }
     res.ok();
@@ -22,10 +22,11 @@ module.exports = {
       max_tokens: 256,
     };
 
-    const { data } = await openai.createCompletion('text-davinci-002', args);
+    const { data } = await openai.createCompletion('text-davinci-003', args);
 
+    const openaiUser = await db.user.get({ login: 'openai' });
     const resp = {
-      userId: 'openai',
+      userId: openaiUser.id,
       message: [
         {
           line: [
@@ -49,7 +50,8 @@ module.exports = {
       },
       flat: `${prompt}: ${data.choices[0].text}`,
       createdAt: new Date(),
-      channel: req.body.context.channel,
+      channelId: req.body.context.channelId,
+      clientId: `ai:${Math.random()}`,
     };
     const { id } = await db.message.insert(resp);
     const created = await db.message.get({ id });

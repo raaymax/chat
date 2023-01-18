@@ -12,6 +12,7 @@ import { Info } from '../info';
 import { Attachments } from '../Files/Attachments';
 import { selectors } from '../../state';
 import { notifyTyping } from '../../services/typing';
+import { useStream } from '../streamContext';
 
 const InputContainer = styled.div`
   border-top: 1px solid #565856;
@@ -89,7 +90,7 @@ const InputContainer = styled.div`
     background-color: rgba(249,249,249,0.1);
   }
 
-  #input {
+  .input {
     flex: 1;
     border: 0;
     padding: 5px 30px;
@@ -101,7 +102,7 @@ const InputContainer = styled.div`
       vertical-align: bottom;
     }
   }
-  #input:focus-visible {
+  .input:focus-visible {
     outline: none;
   }
 
@@ -141,10 +142,13 @@ const ActionButton = styled.div`
   }
 `;
 
-function submit({store, input, event}) {
-  store.dispatch(sendFromDom(input));
+function submit({
+  store, input, stream, event,
+}) {
+  store.dispatch(sendFromDom(stream, input));
   input.innerHTML = '';
   event.preventDefault();
+  input.focus();
 }
 
 const runAction = (args ) => [
@@ -187,8 +191,9 @@ const runAction = (args ) => [
   {match: ({action}) => action === 'focus', run: ({input}) => input.focus() },
 ].filter(({match}) => match(args)).map(({run}) => run(args));
 
-const process = (store, input, event, source) => runAction({
+const process = (store, stream, input, event, source) => runAction({
   store,
+  stream,
   event,
   input,
   source,
@@ -200,9 +205,19 @@ const process = (store, input, event, source) => runAction({
 })
 
 export const Input = () => {
+  const [stream] = useStream();
   const store = useStore();
+  const input = useRef();
   const fileInput = useRef(null);
-  const dispatchEvent = useCallback((source, e) => process(store, document.getElementById('input'), e, source), [store]);
+  const dispatchEvent = useCallback((source, e) => (
+    process(
+      store,
+      stream,
+      input.current,
+      e,
+      source,
+    )
+  ), [store, input, stream]);
   const filesAreReady = useSelector(selectors.filesAreReady);
 
   useEffect(() => {
@@ -216,6 +231,10 @@ export const Input = () => {
       event.preventDefault();
       store.dispatch(uploadMany(cbData.files));
     }
+    input.current.innerHTML = cbData.getData('text/plain').split('\n').join('<br>');
+
+    event.preventDefault();
+    event.stopPropagation();
   }, [store])
 
   const onChange = useCallback(async (e) => {
@@ -229,7 +248,8 @@ export const Input = () => {
   return (
     <InputContainer>
       <div
-        id="input"
+        class='input'
+        ref={input}
         contenteditable='true'
         onPaste={onPaste}
         onInput={(e) => dispatchEvent('input', e)}
@@ -246,8 +266,8 @@ export const Input = () => {
         </ActionButton>
       </div>
       <input onChange={onChange} ref={fileInput} type="file" multiple style="height: 0; opacity: 0; width: 0; position:absolute; bottom:0; left: 0;" />
-      <emojis.EmojiSelector />
-      <channels.ChannelSelector />
+      <emojis.EmojiSelector input={input.current} />
+      <channels.ChannelSelector input={input.current} />
     </InputContainer>
   );
 };

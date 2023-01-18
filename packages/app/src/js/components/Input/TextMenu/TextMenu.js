@@ -62,7 +62,9 @@ const Menu = styled.div`
   }
 `;
 
-export const TextMenu = ({className, watch, select}) => {
+export const TextMenu = ({
+  className, watch, select, input,
+}) => {
   const [coords, setCoords] = useState( [0, 0]);
   const [state, setState] = useState({
     open: false,
@@ -83,10 +85,10 @@ export const TextMenu = ({className, watch, select}) => {
 
   const onSelectionChange = useCallback(() => {
     const sel = document.getSelection();
-    if (!window.input.contains(sel.anchorNode)) return;
+    if (!input.contains(sel.anchorNode)) return;
     const box = sel.getRangeAt(0).getBoundingClientRect();
     setCoords([box.bottom, box.left]);
-  }, [setCoords])
+  }, [setCoords, input])
 
   useEffect(() => {
     document.addEventListener('selectionchange', onSelectionChange);

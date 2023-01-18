@@ -13,12 +13,12 @@ module.exports = {
     .then((arr) => arr.map(serialize)),
 
   upsert: async ({
-    channelId, userId, lastRead, ...data
+    channelId, parentId, userId, lastRead, ...data
   }) => {
     const database = await db;
 
     const progress = await database.collection(TABLE_NAME)
-      .findOne(deserialize({ channelId, userId }));
+      .findOne(deserialize({ channelId, parentId, userId }));
 
     if (progress && progress.lastRead > lastRead) return;
 
@@ -27,6 +27,7 @@ module.exports = {
         .insertOne(deserialize({
           count: 0,
           channelId,
+          parentId,
           userId,
           lastRead,
           ...data,

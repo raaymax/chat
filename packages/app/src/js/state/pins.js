@@ -7,14 +7,14 @@ const pinsReducer = createReducer({
   data: {},
 }, {
   [clear]: (state, action) => {
-    const channel = action.payload;
-    state.data[channel] = [];
+    const channelId = action.payload;
+    state.data[channelId] = [];
   },
   [addAll]: ({data}, action) => {
     action.payload.forEach((msg) => {
-      const {channel} = msg;
+      const {channelId} = msg;
       // eslint-disable-next-line no-multi-assign
-      const list = data[channel] = data[channel] || [];
+      const list = data[channelId] = data[channelId] || [];
       if (msg.createdAt) {
         msg.createdAt = (new Date(msg.createdAt)).toISOString();
       }

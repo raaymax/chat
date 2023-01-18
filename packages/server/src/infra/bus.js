@@ -3,6 +3,7 @@ const { EventEmitter } = require('events');
 const bus = new EventEmitter();
 bus.setMaxListeners(100);
 
+// FIXME!: onlu users from specific channel should be informed about message
 module.exports = {
   direct: (userId, msg) => bus.emit(userId, { ...msg, target: 'direct' }),
   broadcast: (msg) => bus.emit('all', { ...msg, target: 'broadcast' }),

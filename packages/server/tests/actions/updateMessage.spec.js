@@ -8,7 +8,9 @@ module.exports = (connect) => {
       const user = await (await db).collection('users')
         .findOne({ login: 'mateusz' });
       ({ insertedId: messageId } = await (await db).collection('messages')
-        .insertOne({ message: { text: 'asd' }, flat: 'asd', userId: user._id.toHexString() }));
+        .insertOne({
+          message: { text: 'asd' }, flat: 'asd', userId: user._id.toHexString(), clientId: `x${Math.random()}`,
+        }));
     });
 
     it('should update message', async () => {

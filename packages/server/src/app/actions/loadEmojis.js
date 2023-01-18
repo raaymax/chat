@@ -8,7 +8,7 @@ module.exports = {
   },
   handler: async (req, res) => {
     const emojis = await db.emoji.getAll();
-    await Promise.all(emojis.map((emoji) => res.send({ type: 'emoji', ...emoji })));
+    await Promise.all(emojis.map((emoji) => res.send({ type: 'emoji', empty: !emoji.fileId, ...emoji })));
     res.ok();
   },
 };

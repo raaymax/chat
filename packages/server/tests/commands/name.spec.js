@@ -14,16 +14,18 @@ module.exports = (connect) => {
     });
 
     after(async () => {
+      await (await db).collection('users').updateOne({ login: 'mateusz' }, { $set: { name: 'Mateusz' } });
       ws.close();
     });
 
     it('should change users name and infor about change', async () => {
+      const channel = await (await db).collection('channels').findOne({ name: 'main' });
       const [user, ret] = await ws.send({
         type: 'command',
         name: 'name',
         args: [NAME],
         context: {
-          channel: 'main',
+          channelId: channel._id.toHexString(),
         },
       });
       assert.equal(ret.type, 'response');

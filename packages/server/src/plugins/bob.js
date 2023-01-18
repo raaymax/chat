@@ -1,14 +1,17 @@
-const bus = require('../infra/ws');
+const bus = require('../infra/bus');
 const db = require('../infra/database');
 const push = require('../infra/push');
 const openai = require('../infra/openai');
 
 bus.on('openai', async (msg) => {
-  if (msg.type !== 'message' || msg.userId === 'bob') return;
-  if (msg.channel !== 'openai' && !msg.channel.startsWith('bob+')) return;
+  const author = await db.user.get({ id: msg.userId });
+  if (!author) return;
+  if (msg.type !== 'message' || author.login === 'bob') return;
+  const channel = await db.channel.get({ id: msg.channelId });
+  if (channel.cid !== 'openai' && !channel.cid.startsWith('bob+')) return;
 
   const messages = await db.message.getAll({
-    channel: msg.channel,
+    channelId: msg.channelId,
     after: new Date(Date.now() - 1000 * 60 * 10),
   }, {
     limit: 10,
@@ -33,9 +36,10 @@ bus.on('openai', async (msg) => {
 
   try {
     const { data } = await openai.createCompletion('text-davinci-002', args);
+    const user = await db.user.get({ login: 'bob' });
 
     const resp = {
-      userId: 'bob',
+      userId: user.id,
       message: [
         ...data.choices[0].text.trim().split('\n').map((line) => ({
           line: { text: line },
@@ -52,7 +56,7 @@ bus.on('openai', async (msg) => {
       },
       flat: data.choices[0].text.trim(),
       createdAt: new Date(),
-      channel: msg.channel,
+      channelId: msg.channelId,
       clientId: `ai:${Math.random()}`,
     };
 

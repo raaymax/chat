@@ -1,7 +1,13 @@
 const assert = require('assert');
+const { db } = require('../../src/infra/database');
 
 module.exports = (connect) => {
   describe('typing', () => {
+    let channel;
+    before(async () => {
+      channel = await (await db).collection('channels').findOne({ name: 'main' });
+    });
+
     it('should be received by other users', async () => {
       const melisa = await connect('melisa');
       const mateusz = await connect('mateusz');
@@ -9,13 +15,13 @@ module.exports = (connect) => {
         try {
           melisa.on('type:typing', (msg) => {
             assert.equal(msg.type, 'typing');
-            assert.equal(msg.channel, 'main');
+            assert.equal(msg.channelId, channel._id.toHexString());
             assert.equal(msg.userId, mateusz.userId);
             resolve();
           });
           mateusz.send({
             type: 'typing',
-            channel: 'main',
+            channelId: channel._id.toHexString(),
           });
         } catch (err) {
           reject(err);
@@ -36,7 +42,7 @@ module.exports = (connect) => {
         type: 'typing',
       }).catch((e) => e);
       assert.equal(ret.status, 'error');
-      assert.equal(ret.message, '"channel" is required');
+      assert.equal(ret.message, '"channelId" is required');
       ws.close();
     });
 
@@ -44,7 +50,7 @@ module.exports = (connect) => {
       const ws = await connect();
       const [ret] = await ws.send({
         type: 'typing',
-        channel: 'main',
+        channelId: channel._id.toHexString(),
       });
       assert.equal(ret.type, 'response');
       assert.equal(ret.status, 'ok');

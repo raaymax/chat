@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 const { ObjectId } = require('./db');
 
 exports.serialize = function serialize(query) {
@@ -28,7 +29,9 @@ exports.deserialize = function deserialize(data) {
   if (typeof data === 'object') {
     return Object.fromEntries(Object.entries(data).map(([key, value]) => {
       if (key === 'id') {
-        return ['_id', ObjectId(value)];
+        return ['_id', Array.isArray(value)
+          ? { $in: value.map((v) => (ObjectId.isValid(v) ? ObjectId(v) : v)) }
+          : (ObjectId.isValid(value) ? ObjectId(value) : value)];
       }
       if (key.match(/Id$/)) {
         if (Array.isArray(value)) {

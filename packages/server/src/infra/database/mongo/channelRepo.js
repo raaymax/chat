@@ -14,6 +14,13 @@ module.exports = {
     .toArray()
     .then(serialize),
 
+  create: async (channel) => (await db).collection(TABLE_NAME)
+    .insertOne(deserialize(channel))
+    .then(serializeInsert),
+
+  update: async (id, channel) => (await db).collection(TABLE_NAME)
+    .updateOne(deserialize({ id }), { $set: deserialize(channel) }),
+
   insert: async ({ cid, name, userId }) => {
     const channel = await (await db).collection(TABLE_NAME).findOne({ cid });
     if (channel && channel.users.map((u) => u.toHexString()).includes(userId)) {
@@ -30,8 +37,8 @@ module.exports = {
       .then(serializeInsert);
   },
 
-  remove: async ({ cid, userId }) => {
-    const channel = await (await db).collection(TABLE_NAME).findOne({ cid });
+  remove: async ({ id, userId }) => {
+    const channel = await (await db).collection(TABLE_NAME).findOne({ _id: ObjectId(id) });
     if (channel && channel.users.map((u) => u.toHexString()).includes(userId)) {
       const users = channel.users.filter((u) => u.toHexString() !== userId);
       await (await db).collection(TABLE_NAME).updateOne({ _id: channel._id }, { $set: { users } });

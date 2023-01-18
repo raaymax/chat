@@ -2,12 +2,11 @@ import { h } from 'preact';
 import { useCallback } from 'preact/hooks';
 import { useSelector, useDispatch} from 'react-redux';
 import styled from 'styled-components';
-import { Message } from '../messages/message';
+import { Message } from '../messages/message/message';
 import { actions, selectors } from '../../state';
-import { loadArchive } from '../../services/messages';
-import { openChannel } from '../../services/channels';
 import { formatTime, formatDate } from '../../utils';
 import { SearchSeparator } from './searchSeparator';
+import { useStream } from '../streamContext';
 
 const StyledList = styled.div`
   display: flex;
@@ -21,13 +20,19 @@ const StyledList = styled.div`
 `;
 
 export function SearchResults() {
+  const [, setStream] = useStream()
   const results = useSelector(selectors.getSearchResults);
   const dispatch = useDispatch();
   const gotoMessage = useCallback((msg) => {
     dispatch(actions.setView('search'));
-    dispatch(openChannel({cid: msg.channel}));
-    dispatch(loadArchive({channel: msg.channel, id: msg.id, date: msg.createdAt}));
-  }, [dispatch])
+    setStream({
+      type: 'archive',
+      channelId: msg.channelId,
+      parentId: msg.parentId,
+      selected: msg.id,
+      date: msg.createdAt,
+    });
+  }, [dispatch, setStream])
   return (
     <StyledList>
       <div key='bottom' id='scroll-stop' />

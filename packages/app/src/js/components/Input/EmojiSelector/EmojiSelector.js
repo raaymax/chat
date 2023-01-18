@@ -28,7 +28,7 @@ export const select = (idx, e) => {
   onSubmit(e);
 };
 
-export const EmojiSelector = () => <TextMenu className="emoji-menu" watch={watch} select={select} />
+export const EmojiSelector = (props) => <TextMenu className="emoji-menu" watch={watch} select={select} {...props} />
 
 export const onStart = (e) => {
   const sel = document.getSelection();

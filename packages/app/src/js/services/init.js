@@ -3,25 +3,28 @@ import { Capacitor } from '@capacitor/core';
 import { client } from '../core';
 import { actions } from '../state';
 import { initNotifications } from './notifications';
-import { loadMessages } from './messages';
 import { loadEmojis } from './emoji';
 import { loadProgress, loadBadges } from './progress';
 
 const initApp = async (dispatch) => {
-  dispatch(actions.messagesLoading());
+  if (Capacitor.isNativePlatform()) {
+    document.body.setAttribute('class', 'mobile');
+  }
   dispatch(actions.connected());
   dispatch(actions.clearInfo());
   dispatch(actions.initFailed(false));
   const {data: [config]} = await client.req2({type: 'config'});
   dispatch(actions.setAppVersion(config.appVersion));
+  dispatch(actions.setMainChannel(config.mainChannelId));
   await initNotifications(config);
   const { data: users } = await client.req2({type: 'users'});
   dispatch(actions.addUser(users));
   const { data: channels } = await client.req2({type: 'channels'});
   dispatch(actions.addChannel(channels));
-  dispatch(loadMessages());
+  // FIXME: load messages from current channel or none
+  // dispatch(loadMessages({channelId: config.mainChannelId}));
   dispatch(loadEmojis());
-  dispatch(loadProgress());
+  dispatch(loadProgress({channelId: config.mainChannelId}));
   dispatch(loadBadges());
   // eslint-disable-next-line no-console
   console.log('version check: ', APP_VERSION, config.appVersion);
@@ -53,12 +56,12 @@ export const reinit = () => async (dispatch) => {
   dispatch(init());
 }
 
+// FIXME: messages have no channel and are not showing
 const showUpdateMessage = () => (dispatch) => {
   if (Capacitor.isNativePlatform()) {
     dispatch(actions.addMessage({
       clientId: 'update-version',
       priv: true,
-      channel: 'main',
       createdAt: new Date(),
       user: {
         name: 'System',
@@ -75,7 +78,6 @@ const showUpdateMessage = () => (dispatch) => {
     dispatch(actions.addMessage({
       clientId: 'update-version',
       priv: true,
-      channel: 'main',
       createdAt: new Date(),
       user: {
         name: 'System',

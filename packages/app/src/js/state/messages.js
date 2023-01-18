@@ -4,11 +4,7 @@ import {client} from '../core';
 const add = createAction('message/add');
 const hover = createAction('message/hover');
 const setStatus = createAction('message/set/status');
-const loadingNext = createAction('message/loading');
-const loadingNextDone = createAction('message/loading/done');
 const loadingFailed = createAction('message/loading/failed');
-const loadingPrev = createAction('message/loading/prev');
-const loadingPrevDone = createAction('message/loading/prev/done');
 const loading = createAction('message/loading/next');
 const loadingDone = createAction('message/loading/next/done');
 const addAll = createAction('message/addAll');
@@ -18,11 +14,35 @@ const takeTail = createAction('message/take/tail');
 const clear = createAction('message/clear');
 const select = createAction('message/select');
 
+export const getStream = (state, {channelId, parentId}) => {
+  if (parentId) {
+    const key = `${channelId}:${parentId}`;
+    return state[key] || [];
+  }
+  return state[channelId] || [];
+}
+
+const useStream = (state, {channelId, parentId}) => {
+  if (parentId) {
+    const key = `${channelId}:${parentId}`;
+    state[key] = state[key] || []
+    return state[key];
+  }
+  state[channelId] = state[channelId] || [];
+  return state[channelId];
+}
+
+const setStream = (state, {channelId, parentId}, list) => {
+  if (parentId) {
+    const key = `${channelId}:${parentId}`;
+    state[key] = list;
+  }
+  state[channelId] = list;
+}
+
 const messagesReducer = createReducer({
   data: {},
-  loadingPrevios: false,
-  loadingNext: false,
-  loading: true,
+  loading: false,
   status: 'live',
   selected: null,
   hovered: null,
@@ -45,27 +65,14 @@ const messagesReducer = createReducer({
   [loadingDone]: (state) => {
     state.loading = false;
   },
-  [loadingNext]: (state) => {
-    state.loadingNext = true;
-  },
-  [loadingNextDone]: (state) => {
-    state.loadingNext = false;
-  },
-  [loadingPrev]: (state) => {
-    state.loadingNext = true;
-  },
-  [loadingPrevDone]: (state) => {
-    state.loadingNext = false;
-  },
   [clear]: (state, action) => {
-    const {channel} = action.payload;
-    state.data[channel] = [];
+    const {stream} = action.payload;
+    setStream(state.data, stream, []);
   },
   [addAll]: ({data}, action) => {
     action.payload.forEach((msg) => {
-      const {channel} = msg;
-      // eslint-disable-next-line no-multi-assign
-      const list = data[channel] = data[channel] || [];
+      const {channelId, parentId} = msg;
+      const list = useStream(data, {channelId, parentId});
       if (msg.createdAt) {
         msg.createdAt = (new Date(msg.createdAt)).toISOString();
       }
@@ -84,9 +91,8 @@ const messagesReducer = createReducer({
   [add]: ({data, status}, action) => {
     if (status === 'archive') return;
     const msg = action.payload;
-    const {channel} = msg;
-    // eslint-disable-next-line no-multi-assign
-    const list = data[channel] = data[channel] || [];
+    const { channelId, parentId } = msg;
+    const list = useStream(data, {channelId, parentId});
     if (msg.createdAt) {
       msg.createdAt = (new Date(msg.createdAt)).toISOString();
     }
@@ -103,19 +109,22 @@ const messagesReducer = createReducer({
   },
 
   [takeHead]: (state, action) => {
-    const {channel, count} = action.payload;
-    const ids = state.data[channel]
-      .slice(0, Math.max(state.data[channel].length - count, 0))
+    const {stream, count} = action.payload;
+    const list = useStream(state.data, stream);
+    const ids = list
+      .slice(0, Math.max(list.length - count, 0))
       .map((m) => m.id)
-    state.data[channel] = state.data[channel].filter((m) => !ids.includes(m.id));
+    setStream(state.data, stream, list.filter((m) => !ids.includes(m.id)));
   },
 
   [takeTail]: (state, action) => {
-    const {channel, count} = action.payload;
-    const ids = state.data[channel]
-      .slice(0, Math.min(count, state.data[channel].length))
+    const {stream, count} = action.payload;
+    const list = useStream(state.data, stream);
+    const ids = list
+      .slice(0, Math.min(count, list.length))
       .map((m) => m.id)
-    state.data[channel] = state.data[channel].filter((m) => ids.includes(m.id));
+
+    setStream(state.data, stream, list.filter((m) => ids.includes(m.id)));
   },
 
   logout: () => ({ list: [], loading: false }),
@@ -126,10 +135,6 @@ export const actions = {
   messagesLoadingFailed: loadingFailed,
   messagesLoading: loading,
   messagesLoadingDone: loadingDone,
-  messagesLoadingNext: loadingNext,
-  messagesLoadingNextDone: loadingNextDone,
-  messagesLoadingPrev: loadingPrev,
-  messagesLoadingPrevDone: loadingPrevDone,
   messagesClear: clear,
   selectMessage: select,
   hoverMessage: hover,

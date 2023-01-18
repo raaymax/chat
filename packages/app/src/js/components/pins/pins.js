@@ -8,8 +8,7 @@ import { actions, selectors } from '../../state';
 import {Header} from './header';
 import {messageFormatter } from '../messages/formatter';
 import {MessageList} from '../messages/messageList';
-import { openChannel } from '../../services/channels';
-import { loadArchive } from '../../services/messages';
+import { useStream } from '../streamContext';
 
 const StyledPins = styled.div`
   width: 100vw;
@@ -33,14 +32,20 @@ const StyledPins = styled.div`
 `;
 
 export const Pins = () => {
+  const [, setStream] = useStream()
   const dispatch = useDispatch();
-  const channel = useSelector(selectors.getCid);
-  const messages = useSelector(selectors.getPinnedMessages(channel));
+  const channelId = useSelector(selectors.getChannelId);
+  const messages = useSelector(selectors.getPinnedMessages(channelId));
   const gotoMessage = useCallback((msg) => {
-    dispatch(actions.setView('search'));
-    dispatch(openChannel({cid: msg.channel}));
-    dispatch(loadArchive({channel: msg.channel, id: msg.id, date: msg.createdAt}));
-  }, [dispatch])
+    dispatch(actions.setView('pins'));
+    setStream({
+      type: 'archive',
+      channelId: msg.channelId,
+      parentId: msg.parentId,
+      selected: msg.id,
+      date: msg.createdAt,
+    });
+  }, [dispatch, setStream])
   return (
     <StyledPins className='pins'>
       <Header />

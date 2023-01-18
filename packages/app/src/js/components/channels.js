@@ -12,13 +12,29 @@ const Badge = styled.span`
   padding: 3px 5px;
 `;
 
+const InlineChannelLink = styled.a`
+span {
+  padding-left: 1px;
+}
+`;
+
+export const InlineChannel = ({channelId: id, cid}) => {
+  const channel = useSelector(selectors.getChannel({id, cid}));
+  return (
+    <InlineChannelLink className='channel' data-id={id} href={`#${channel?.id || id}`} >
+      { channel?.private ? <i class='fa-solid fa-lock' /> : <i class='fa-solid fa-hashtag' /> }
+      <span class='name'>{channel?.name || channel?.id || id}</span>
+    </InlineChannelLink>
+  );
+}
+
 export const Channel = ({
-  name, cid, private: priv, onclick, active, icon, badge,
+  name, id, private: priv, onclick, active, icon, badge,
 }) => (
-  <div class={`channel ${active ? 'active' : ''}`}data-id={cid} onclick={onclick}>
+  <div class={`channel ${active ? 'active' : ''}`}data-id={id} onclick={onclick}>
     {!icon && ( priv ? <i class='fa-solid fa-lock' /> : <i class='fa-solid fa-hashtag' />) }
     {icon && <i class={icon} />}
-    <span class='name'>{name || cid}</span>
+    <span class='name'>{name || id}</span>
     {badge > 0 && <Badge>{badge}</Badge>}
   </div>
 )
@@ -28,18 +44,18 @@ export const Channels = ({icon}) => {
   const channels = useSelector(selectors.getChannels);
   const userId = useSelector(selectors.getMyId);
   const badges = useSelector(selectors.getBadges(userId));
-  const cid = useSelector(selectors.getCid);
+  const id = useSelector(selectors.getChannelId);
   return (
     <div class='channels'>
       <div class='header'>channels</div>
       { channels && channels.map((c) => (
         <Channel
           {...c}
-          active={cid === c.cid}
+          active={id === c.id}
           key={c.id}
           icon={icon}
           badge={badges[c.id]}
-          onclick={() => dispatch(openChannel({cid: c.cid}))}
+          onclick={() => dispatch(openChannel({id: c.id}))}
         />
       ))}
     </div>

@@ -18,12 +18,13 @@ module.exports = (connect) => {
     });
 
     it('should change users avatar and infor about change', async () => {
+      const channel = await (await db).collection('channels').findOne({ name: 'main' });
       const [user, ret] = await ws.send({
         type: 'command',
         name: 'avatar',
         args: [URL],
         context: {
-          channel: 'main',
+          channelId: channel._id.toHexString(),
         },
       });
       assert.equal(ret.type, 'response');

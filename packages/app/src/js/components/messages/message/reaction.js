@@ -1,7 +1,8 @@
 import { h } from 'preact';
 import styled from 'styled-components';
 import { useDispatch} from 'react-redux';
-import { addReaction } from '../../services/messages';
+import { addReaction } from '../../../services/messages';
+import { useMessageData } from './messageContext';
 
 const StyledReactions = styled.div`
   i {
@@ -14,7 +15,8 @@ const StyledReactions = styled.div`
   }
 `
 
-export const Reactions = ({messageId, reactions}) => {
+export const Reactions = () => {
+  const {id, reactions = []} = useMessageData();
   const dispatch = useDispatch();
 
   const reactionMap = reactions
@@ -22,7 +24,7 @@ export const Reactions = ({messageId, reactions}) => {
   return (
     <StyledReactions>
       {Object.entries(reactionMap).map(([key, count], idx) => (
-        <i key={idx} onClick={() => dispatch(addReaction(messageId, key))}>{count > 1 ? `${count} ` : ''}{key}</i>
+        <i key={idx} onClick={() => dispatch(addReaction(id, key))}>{count > 1 ? `${count} ` : ''}{key}</i>
       ))}
     </StyledReactions>
   );

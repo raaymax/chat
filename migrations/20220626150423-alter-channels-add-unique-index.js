@@ -9,6 +9,6 @@ module.exports = {
   },
 
   async down(db) {
-    return db.collection('channels').createIndex({ cid: 1 }, { unique: true });
+    return db.collection('channels').createIndex({ cid: 1 }, { unique: false });
   },
 };

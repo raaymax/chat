@@ -5,116 +5,146 @@ import { updateProgress } from './progress';
 
 const tempId = createCounter(`temp:${(Math.random() + 1).toString(36)}`);
 
-export const loadPrevious = (channel) => async (dispatch, getState) => {
-  if (selectors.getMessagesPrevLoading(getState())) return;
-  dispatch(actions.selectMessage(null));
-  dispatch(actions.messagesLoadingPrev());
+const loading = (dispatch, getState) => {
+  if (selectors.getMessagesLoading(getState())) throw new Error('busy');
+  dispatch(actions.messagesLoading());
+  const timer = setTimeout(() => dispatch(actions.messagesLoadingDone()), 1000);
+  return () => {
+    dispatch(actions.messagesLoadingDone());
+    clearTimeout(timer);
+  }
+}
+
+export const loadPrevious = (stream) => async (dispatch, getState) => {
   try {
+    const loadingDone = loading(dispatch, getState);
+    dispatch(actions.setStream({
+      id: stream.id,
+      value: {
+        ...stream,
+        selected: undefined,
+        date: undefined,
+      },
+    }));
+    dispatch(actions.selectMessage(null));
     const req = await client.req2({
+      ...stream,
       type: 'load',
-      channel: selectors.getCid(getState()),
       before: selectors.getEarliestDate()(getState()),
       limit: 50,
     })
     dispatch(actions.addMessages(req.data));
-    if (selectors.countMessagesInChannel(channel, getState()) > 100) {
-      dispatch(actions.messagesSetStatus('archive'));
+    if (selectors.countMessagesInStream(stream, getState()) > 100) {
+      dispatch(actions.setStream({id: stream.id, value: {...stream, type: 'archive'}}));
       setTimeout(() => {
-        dispatch(actions.takeHead({channel, count: 100}));
+        dispatch(actions.takeHead({stream, count: 100}));
       }, 1)
     }
+    loadingDone();
   } catch (err) {
     // eslint-disable-next-line no-console
-    console.log(err);
+    console.error(err);
     // TODO: handle error message
   }
-  dispatch(actions.messagesLoadingPrevDone());
 }
 
-export const loadNext = (channel) => async (dispatch, getState) => {
-  if (selectors.getMessagesNextLoading(getState())) return;
-  dispatch(actions.selectMessage(null));
-  dispatch(actions.messagesLoadingNext());
+export const loadNext = (stream) => async (dispatch, getState) => {
   try {
+    const loadingDone = loading(dispatch, getState);
+    dispatch(actions.setStream({
+      id: stream.id,
+      value: {
+        ...stream,
+        selected: undefined,
+        date: undefined,
+      },
+    }));
+    dispatch(actions.selectMessage(null));
     const req = await client.req2({
+      ...stream,
       type: 'load',
-      channel: selectors.getCid(getState()),
       after: selectors.getLatestDate()(getState()),
       limit: 50,
     })
     if (req.data?.length > 0) dispatch(updateProgress(req.data[0].id))
     dispatch(actions.addMessages(req.data));
-    if (selectors.countMessagesInChannel(channel, getState()) > 100) {
+    if (selectors.countMessagesInStream(stream, getState()) > 100) {
       setTimeout(() => {
-        dispatch(actions.takeTail({channel, count: 100}));
+        dispatch(actions.takeTail({stream, count: 100}));
       }, 1)
     }
     if (req.data.length < 50) {
       setTimeout(() => {
-        dispatch(actions.messagesSetStatus('live'));
+        dispatch(actions.setStream({id: stream.id, value: {...stream, type: 'live'}}));
       }, 2)
     }
+    loadingDone();
   } catch (err) {
     // eslint-disable-next-line no-console
-    console.log(err);
+    console.error(err);
     // TODO: handle error message
   }
-  dispatch(actions.messagesLoadingNextDone());
 }
 
-export const loadArchive = ({channel, id, date}) => async (dispatch) => {
+export const loadMessagesArchive = (stream) => async (dispatch, getState) => {
+  if (!stream.channelId) return;
+  const {date} = stream;
   try {
-    dispatch(actions.messagesSetStatus('archive'));
-    dispatch(actions.selectMessage(id));
-    dispatch(actions.messagesLoadingNext());
-    dispatch(actions.messagesLoadingPrev());
-    dispatch(actions.messagesClear({channel}))
+    const loadingDone = loading(dispatch, getState);
+    dispatch(actions.messagesClear({stream}))
     const req2 = await client.req2({
+      ...stream,
       type: 'load',
-      channel,
       before: date,
       limit: 50,
     })
-    dispatch(actions.messagesLoadingPrevDone());
     dispatch(actions.addMessages(req2.data));
     const req = await client.req2({
+      ...stream,
       type: 'load',
-      channel,
       after: date,
       limit: 50,
     })
     if (req.data?.length > 0) dispatch(updateProgress(req.data[0].id))
-    dispatch(actions.messagesLoadingNextDone());
     dispatch(actions.addMessages(req.data));
     if (req.data.length < 50) {
       setTimeout(() => {
-        dispatch(actions.messagesSetStatus('live'));
+        // setStream({...stream, type: 'live'});
       }, 2)
     }
+    loadingDone();
   } catch (err) {
     // eslint-disable-next-line no-console
-    console.log(err);
+    console.error(err);
   }
 }
 
-export const loadMessages = () => async (dispatch, getState) => {
-  dispatch(actions.selectMessage(null));
-  dispatch(actions.messagesLoading());
+export const loadMessagesLive = (stream) => async (dispatch, getState) => {
+  if (!stream.channelId) return;
   try {
+    const loadingDone = loading(dispatch, getState);
     const req = await client.req2({
+      ...stream,
       type: 'load',
-      channel: selectors.getCid(getState()),
       limit: 50,
     })
     dispatch(actions.addMessages(req.data));
     if (req.data?.length > 0) dispatch(updateProgress(req.data[0].id))
+    loadingDone();
   } catch (err) {
     // eslint-disable-next-line no-console
-    console.log(err);
+    console.error(err);
     // TODO: handle error message
   }
-  dispatch(actions.messagesLoadingDone());
 }
+
+export const loadMessages = (stream) => async (dispatch) => {
+  if (stream.type === 'archive') {
+    dispatch(loadMessagesArchive(stream));
+  } else {
+    dispatch(loadMessagesLive(stream));
+  }
+};
 
 export const addReaction = (id, text) => async (dispatch) => {
   try {
@@ -125,34 +155,36 @@ export const addReaction = (id, text) => async (dispatch) => {
     });
     dispatch(actions.addMessages(req.data));
   } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
   }
 };
 
-export const sendFromDom = (dom) => async (dispatch, getState) => {
+export const sendFromDom = (stream, dom) => async (dispatch, getState) => {
   const msg = fromDom(dom, getState());
   if (msg) {
     msg.attachments = [...selectors.getFiles(getState())];
     if (msg.flat.length === 0 && msg.attachments.length === 0) return;
     msg.debug = dom.innerHTML;
+    msg.channelId = stream.channelId;
+    msg.parentId = stream.parentId;
     dispatch(actions.clearFiles());
-    dispatch(send(msg));
+    dispatch(send(stream, msg));
   }
 };
 
-export const send = (msg) => (dispatch) => dispatch(msg.type === 'command' ? sendCommand(msg) : sendMessage(msg));
+export const send = (stream, msg) => (dispatch) => dispatch(msg.type === 'command' ? sendCommand(stream, msg) : sendMessage(msg));
 
-export const sendCommand = (msg) => async (dispatch, getState) => {
-  const cid = selectors.getCid(getState());
+export const sendCommand = (stream, msg) => async (dispatch) => {
   const notif = {
     userId: 'notif',
-    channel: cid,
     clientId: msg.clientId,
     notifType: 'info',
     notif: `${msg.name} sent`,
     createdAt: (new Date()).toISOString(),
   };
   // eslint-disable-next-line no-undef
-  msg.context = {channel: cid, appVersion: APP_VERSION};
+  msg.context = {...stream, appVersion: APP_VERSION};
   dispatch(actions.addMessage(notif));
   try {
     await client.req(msg);
@@ -169,7 +201,6 @@ const sendMessage = (msg) => async (dispatch) => {
   } catch (err) {
     dispatch(actions.addMessage({
       clientId: msg.clientId,
-      channel: msg.channel,
       info: {
         msg: 'Sending message failed',
         type: 'error',
@@ -229,7 +260,7 @@ export const fromDom = (dom, state) => {
     message: tree,
     emojiOnly: isEmojiOnly(tree),
     parsingErrors: info.errors,
-    flat: dom.textContent,
+    flat: flatten(tree),
   }, state);
 };
 
@@ -248,7 +279,6 @@ const isEmojiOnly = (tree) => {
 }
 
 export function build(msg, state) {
-  msg.channel = selectors.getCid(state);
   msg.clientId = tempId();
   msg.userId = state.users.meId;
   msg.createdAt = new Date().toISOString();
@@ -271,7 +301,7 @@ const mapNodes = (dom, info) => (!dom.childNodes ? [] : [...dom.childNodes].map(
   if (n.nodeName === 'LI') return { item: mapNodes(n, info) };
   if (n.nodeName === 'IMG') return { img: {src: n.attributes.src.nodeValue, alt: n.attributes.alt.nodeValue }};
   if (n.nodeName === 'SPAN' && n.className === 'emoji') return { emoji: n.attributes.emoji.value };
-  if (n.nodeName === 'SPAN' && n.className === 'channel') return { link: { href: `#${n.attributes.cid.value}`, children: mapNodes(n, info) } };
+  if (n.nodeName === 'SPAN' && n.className === 'channel') return { channel: n.attributes.channelId.value };
   if (n.nodeName === 'SPAN') return mapNodes(n, info);
   if (n.nodeName === 'BR') return { br: true };
   // eslint-disable-next-line no-console
@@ -292,4 +322,24 @@ function processUrls(text) {
     ];
   }
   return [{text}];
+}
+
+function flatten(tree) {
+  return tree.map((n) => {
+    if (n.text) return n.text;
+    if (n.emoji) return n.emoji;
+    if (n.img) return n.img.alt;
+    if (n.link) return flatten(n.link.children);
+    if (n.underline) return flatten(n.underline);
+    if (n.bold) return flatten(n.bold);
+    if (n.italic) return flatten(n.italic);
+    if (n.strike) return flatten(n.strike);
+    if (n.line) return [flatten(n.line), '\n'];
+    if (n.bullet) return flatten(n.bullet);
+    if (n.item) return flatten(n.item);
+    if (n.br) return '\n';
+    // eslint-disable-next-line no-console
+    console.log('unknown node', n);
+    return '';
+  }).flat().join('');
 }

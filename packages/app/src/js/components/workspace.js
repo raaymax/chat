@@ -3,21 +3,48 @@ import {h} from 'preact';
 import { useDispatch, useSelector } from 'react-redux'
 
 import styled from 'styled-components';
+import { useEffect } from 'preact/hooks';
 import { Logo } from './logo';
 import { Channels } from './channels';
-import { Conversation } from './messages/conversation.js';
+import { MainConversation } from './messages/main/mainConversaion';
+import { SideConversation } from './messages/side/sideConversation';
 import { Search } from './search/search';
 import { Pins } from './pins/pins';
-import { selectors, actions} from '../state';
+import { selectors, actions, useStream} from '../state';
+import {StreamContext} from './streamContext';
+import { setStream } from '../services/stream';
 
-const StyledWorkspace = styled.div`
-  display: flex;
-  flex-direction: row;
+const SideView = styled.div`
+  flex: 0;
+  .side-stream & {
+    flex: 1 50%;
+    @media (max-width : 710px) {
+      flex: 1 100%;
+    }
+  }
 `;
 
-const StyledMenu = styled.div`
+const MainView = styled.div`
+  flex: 1 100%;
+  .side-stream & {
+    flex: 1 50%;
+    @media (max-width : 710px) {
+      flex: 0;
+      width: 0vw;
+      display: none;
+    }
+  }
+`
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  height: 100vh;
+`;
+
+const SideMenu = styled.div`
   flex: 0 150px;
-  @media (max-width : 510px) {
+  @media (max-width : 710px) {
     flex: none;
     width: 100%;
     position: absolute;
@@ -41,8 +68,8 @@ const StyledMenu = styled.div`
       }
     }
   }
-  border-left: 1px solid #565856;
-  border-right: 1px solid #565856;
+  border-left: 1px solid ${(props) => props.theme.borderColor};
+  border-right: 1px solid ${(props) => props.theme.borderColor};
   &.hidden {
     flex: 0 0px;
     width: 0px;
@@ -51,17 +78,37 @@ const StyledMenu = styled.div`
 
 export const Workspace = () => {
   const view = useSelector(selectors.getView);
+  const channelId = useSelector(selectors.getChannelId);
   const dispatch = useDispatch();
+  const stream = useStream('main');
+  const sideStream = useStream('side');
+
+  useEffect(() => {
+    dispatch(setStream('main', {type: 'live', channelId}));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [channelId]);
+
   return (
-    <StyledWorkspace>
-      {view === 'sidebar' && <StyledMenu>
+    <Container className={sideStream ? ['side-stream'] : ['main-stream']}>
+      {view === 'sidebar' && <SideMenu>
         <Logo onClick={() => dispatch(actions.setView('sidebar'))} />
         <Channels />
-      </StyledMenu>}
-
-      {view === 'search' && <Search />}
-      {view === 'pins' && <Pins />}
-      {(view === null || view === 'sidebar') && <Conversation />}
-    </StyledWorkspace>
+      </SideMenu>}
+      <MainView>
+        <StreamContext value={[stream, (val) => dispatch(setStream('main', val))]}>
+          {view === 'search' && <Search />}
+          {view === 'pins' && <Pins />}
+          {(view === null || view === 'sidebar' || view === 'thread')
+            && <MainConversation
+              onclick={() => dispatch(actions.setView('sidebar'))} />
+          }
+        </StreamContext>
+      </MainView>
+      {sideStream && <SideView>
+        <StreamContext value={[sideStream, (val) => dispatch(setStream('side', val))]}>
+          <SideConversation />
+        </StreamContext>
+      </SideView>}
+    </Container>
   )
 }

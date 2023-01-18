@@ -5,18 +5,20 @@ module.exports = {
   description: 'leave current channel',
   args: [],
   handler: async (req, res) => {
-    const { channel: cid } = req.body.context;
-    await db.channel.remove({ cid, userId: req.userId });
-    await res.send({ type: 'removeChannel', cid });
+    const { channelId } = req.body.context;
+    const channel = await db.channel.get({ id: channelId });
+    await db.channel.remove({ id: channel.id, userId: req.userId }); // FIXME
+    await res.send({ type: 'removeChannel', channelId: channel.id });
     await res.send({
       type: 'message',
       userId: 'system',
       priv: true,
       createdAt: new Date().toISOString(),
+      channelId: channel.id,
       message: [
         { text: 'You left the channel' },
       ],
     });
-    res.ok({ cid });
+    res.ok({ channelId: channel.id });
   },
 };

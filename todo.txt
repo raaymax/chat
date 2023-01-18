@@ -1,6 +1,20 @@
 https://xkcd.com/2294/ add rss feeds to chat
 text formatting - bold
 
-fix notifications
-fix raw image size
-fix help for /emoji
+TODO: Notifications merging based on badges
+
+Idea: Log errors as messages in the channel
+
+better formatting of openai responses
+
+
+
+
+badges for threads
+
+
+
+
+
+
+

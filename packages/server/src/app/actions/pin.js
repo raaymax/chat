@@ -1,25 +1,27 @@
 const Joi = require('joi');
 const db = require('../../infra/database');
-// const service = require('../message/messageService');
-// const Errors = require('../errors');
-const { MissingId, MessageNotExist, MissingChannel } = require('../common/errors');
+const { MissingId, MessageNotExist, AccessDenied } = require('../common/errors');
+const ChannelHelper = require('../common/channel');
 
+// TODO api changed fix frontend
 module.exports = {
   type: 'pin',
   schema: {
     body: Joi.object({
-      channel: Joi.string().required(),
       id: Joi.string().required(),
       pinned: Joi.boolean().required(),
     }),
   },
   handler: async (req, res) => {
-    const { id, channel, pinned } = req.body;
+    const { id, pinned } = req.body;
     if (!id) throw MissingId();
-    if (!channel) throw MissingChannel();
 
     const message = await db.message.get({ id });
     if (!message) throw MessageNotExist();
+    // TODO: test if permissions work in tests
+    if (!await ChannelHelper.haveAccess(req.userId, message.channelId)) {
+      throw AccessDenied();
+    }
 
     await db.message.update({ id }, { pinned });
     await res.broadcast({

@@ -1,10 +1,12 @@
 import { h } from 'preact';
-import { Message } from './message';
+import { Message } from './message/message';
 import { Notification } from './notification';
 import { DateSeparator} from './dateSeparator';
 import { formatDate, formatDateDetailed } from '../../utils';
 
-export const messageFormatter = (messages, onMessageClicked = () => {}) => {
+export const messageFormatter = ({
+  list: messages, stream, context, onMessageClicked = () => {},
+}) => {
   let prev;
   return [...messages].reverse().map((msg) => {
     let sameUser = false;
@@ -28,6 +30,8 @@ export const messageFormatter = (messages, onMessageClicked = () => {}) => {
           {msg.notif}
         </Notification>
         : <Message
+          stream={stream}
+          context={context}
           onClick={() => onMessageClicked(msg)}
           class={msg.priv ? ['private'] : []}
           data-id={msg.id}

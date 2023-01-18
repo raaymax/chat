@@ -1,5 +1,8 @@
 const request = require('supertest');
 const server = require('../src/server');
+const PushService = require('../src/infra/push');
+
+PushService.push = async () => {};
 
 require('./helpers.spec');
 

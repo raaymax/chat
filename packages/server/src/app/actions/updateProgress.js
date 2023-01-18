@@ -16,20 +16,25 @@ module.exports = {
     if (!msg.messageId) throw MissingChannel(); // FIXME
 
     const message = await db.message.get({ id: msg.messageId });
-    const channel = await db.channel.get({ cid: message.channel });
+    const { channelId, parentId = null } = message;
 
-    if (!await ChannelHelper.haveAccess(req.userId, channel.cid)) {
+    if (!await ChannelHelper.haveAccess(req.userId, channelId)) {
       throw AccessDenied();
     }
     await db.badge.upsert({
       userId: req.userId,
-      channelId: channel.id,
+      channelId,
+      parentId,
       lastMessageId: msg.messageId,
       lastRead: message.createdAt,
-      count: await db.message.count({ after: message.createdAt, channel: channel.cid }),
+      count: await db.message.count({
+        after: new Date(new Date(message.createdAt).getTime() + 1),
+        channelId,
+        parentId,
+      }),
     });
 
-    const myProgress = await db.badge.get({ channelId: channel.id, userId: req.userId });
+    const myProgress = await db.badge.get({ channelId, parentId, userId: req.userId });
     res.broadcast({ type: 'badge', ...myProgress });
     res.ok({ });
   },
