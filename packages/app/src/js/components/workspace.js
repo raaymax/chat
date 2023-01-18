@@ -3,7 +3,7 @@ import {h} from 'preact';
 import { useDispatch, useSelector } from 'react-redux'
 
 import styled from 'styled-components';
-import { useState, useEffect, useCallback } from 'preact/hooks';
+import { useEffect } from 'preact/hooks';
 import { Logo } from './logo';
 import { Channels } from './channels';
 import { MainConversation } from './messages/main/mainConversaion';
@@ -14,23 +14,37 @@ import { selectors, actions, useStream} from '../state';
 import {StreamContext} from './streamContext';
 import { setStream } from '../services/stream';
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  @media (max-width : 510px) {
-    & .side {
-      width: 100vh;
-    }
-    & .main {
-      width: 0vh;
-      display: none;
+const SideView = styled.div`
+  flex: 0;
+  .side-stream & {
+    flex: 1 50%;
+    @media (max-width : 710px) {
+      flex: 1 100%;
     }
   }
 `;
 
+const MainView = styled.div`
+  flex: 1 100%;
+  .side-stream & {
+    flex: 1 50%;
+    @media (max-width : 710px) {
+      flex: 0;
+      width: 0vw;
+      display: none;
+    }
+  }
+`
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  height: 100vh;
+`;
+
 const SideMenu = styled.div`
   flex: 0 150px;
-  @media (max-width : 510px) {
+  @media (max-width : 710px) {
     flex: none;
     width: 100%;
     position: absolute;
@@ -74,23 +88,26 @@ export const Workspace = () => {
   }, [channelId]);
 
   return (
-    <Container>
+    <Container className={sideStream ? ['side-stream'] : ['main-stream']}>
       {view === 'sidebar' && <SideMenu>
         <Logo onClick={() => dispatch(actions.setView('sidebar'))} />
         <Channels />
       </SideMenu>}
-      <StreamContext value={[stream, (val) => dispatch(setStream('main', val))]}>
-        {view === 'search' && <Search />}
-        {view === 'pins' && <Pins />}
-        {(view === null || view === 'sidebar' || view === 'thread')
-          && <MainConversation
-            className={view === null ? '' : 'main'}
-            onclick={() => dispatch(actions.setView('sidebar'))} />
-        }
-      </StreamContext>
-      {sideStream && <StreamContext value={[sideStream, (val) => dispatch(setStream('side', val))]}>
-        <SideConversation className='side' />
-      </StreamContext>}
+      <MainView>
+        <StreamContext value={[stream, (val) => dispatch(setStream('main', val))]}>
+          {view === 'search' && <Search />}
+          {view === 'pins' && <Pins />}
+          {(view === null || view === 'sidebar' || view === 'thread')
+            && <MainConversation
+              onclick={() => dispatch(actions.setView('sidebar'))} />
+          }
+        </StreamContext>
+      </MainView>
+      {sideStream && <SideView>
+        <StreamContext value={[sideStream, (val) => dispatch(setStream('side', val))]}>
+          <SideConversation />
+        </StreamContext>
+      </SideView>}
     </Container>
   )
 }

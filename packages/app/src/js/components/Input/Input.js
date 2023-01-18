@@ -90,7 +90,7 @@ const InputContainer = styled.div`
     background-color: rgba(249,249,249,0.1);
   }
 
-  #input {
+  .input {
     flex: 1;
     border: 0;
     padding: 5px 30px;
@@ -102,7 +102,7 @@ const InputContainer = styled.div`
       vertical-align: bottom;
     }
   }
-  #input:focus-visible {
+  .input:focus-visible {
     outline: none;
   }
 
@@ -229,6 +229,10 @@ export const Input = () => {
       event.preventDefault();
       store.dispatch(uploadMany(cbData.files));
     }
+    input.current.innerHTML = cbData.getData('text/plain').split('\n').join('<br>');
+
+    event.preventDefault();
+    event.stopPropagation();
   }, [store])
 
   const onChange = useCallback(async (e) => {
@@ -242,7 +246,7 @@ export const Input = () => {
   return (
     <InputContainer>
       <div
-        id="input"
+        class='input'
         ref={input}
         contenteditable='true'
         onPaste={onPaste}

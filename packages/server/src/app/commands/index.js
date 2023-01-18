@@ -4,10 +4,7 @@
 const commands = [
   require('./avatar'),
   require('./name'),
-  require('./join'),
-  require('./leave'),
   require('./me'),
-  require('./channel'),
   require('./prompt'),
   require('./version'),
   require('./emoji'),

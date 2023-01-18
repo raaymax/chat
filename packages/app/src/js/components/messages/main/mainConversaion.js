@@ -5,8 +5,8 @@ import { Conversation } from '../conversation';
 
 const Container = styled.div`
   flex: 1;
-  width: 50vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   border-right: 1px solid var(--primary_border_color);
