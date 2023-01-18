@@ -1,4 +1,3 @@
-import { client } from '../core';
 import { actions, selectors } from '../state';
 import {loadMessages} from './messages';
 import {loadProgress } from './progress';
@@ -11,4 +10,3 @@ export const setStream = (id, value) => async (dispatch, getState) => {
     dispatch(loadProgress(value));
   }
 }
-

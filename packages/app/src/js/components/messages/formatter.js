@@ -4,7 +4,9 @@ import { Notification } from './notification';
 import { DateSeparator} from './dateSeparator';
 import { formatDate, formatDateDetailed } from '../../utils';
 
-export const messageFormatter = ({list: messages, stream, context, onMessageClicked = () => {}}) => {
+export const messageFormatter = ({
+  list: messages, stream, context, onMessageClicked = () => {},
+}) => {
   let prev;
   return [...messages].reverse().map((msg) => {
     let sameUser = false;

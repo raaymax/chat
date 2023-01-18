@@ -6,13 +6,11 @@ const Context = createContext({
   data: {},
 });
 
-export const MessageContext = ({children, value}) => {
-  return (
-    <Context.Provider value={value}>
-      {children}
-    </Context.Provider>
-  );
-};
+export const MessageContext = ({children, value}) => (
+  <Context.Provider value={value}>
+    {children}
+  </Context.Provider>
+);
 
 export const useMessageData = () => {
   const context = useContext(Context);

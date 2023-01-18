@@ -25,9 +25,11 @@ export const getStream = (state, {channelId, parentId}) => {
 const useStream = (state, {channelId, parentId}) => {
   if (parentId) {
     const key = `${channelId}:${parentId}`;
-    return state[key] = state[key] || [];
+    state[key] = state[key] || []
+    return state[key];
   }
-  return state[channelId] = state[channelId] || [];
+  state[channelId] = state[channelId] || [];
+  return state[channelId];
 }
 
 const setStream = (state, {channelId, parentId}, list) => {

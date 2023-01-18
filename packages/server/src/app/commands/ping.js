@@ -1,5 +1,5 @@
-const db = require('../../infra/database');
 const crypto = require('crypto');
+const db = require('../../infra/database');
 
 module.exports = {
   name: 'ping',
@@ -18,10 +18,10 @@ module.exports = {
     // FIXME: check permissions
 
     const lines = parent.flat.split('\n');
-    const { id, dup } = await createMessage({
+    const { id } = await createMessage({
       clientId: crypto.randomBytes(16).toString('hex'),
       message: [{
-        line: [{ text: '[PING] from ' }, { thread: { channelId, parentId, text: lines[0] + (lines.length >= 2 ? '...' : '') }}],
+        line: [{ text: '[PING] from ' }, { thread: { channelId, parentId, text: lines[0] + (lines.length >= 2 ? '...' : '') } }],
       }],
       flat: '[PING] from thread',
       channelId,

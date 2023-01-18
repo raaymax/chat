@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-import { loadMessages } from './services/messages';
 import { loadProgress } from './services/progress';
 import { play } from './services/sound';
 import { ackTyping } from './services/typing';
@@ -14,7 +13,7 @@ client
   .on('channel:changed', (msg) => {
     store.dispatch(actions.setChannel(msg.channelId));
     store.dispatch(loadProgress({channelId: msg.channelId}));
-    //store.dispatch(loadMessages({channelId: msg.channelId}));
+    // store.dispatch(loadMessages({channelId: msg.channelId}));
   })
   .on('setChannel', (msg) => { window.location.hash = msg.channelId; })
   .on('channel', (msg) => store.dispatch(actions.addChannel(msg)))

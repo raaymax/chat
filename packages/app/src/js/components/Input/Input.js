@@ -142,7 +142,9 @@ const ActionButton = styled.div`
   }
 `;
 
-function submit({ store, input, stream, event }) {
+function submit({
+  store, input, stream, event,
+}) {
   store.dispatch(sendFromDom(stream, input));
   input.innerHTML = '';
   event.preventDefault();

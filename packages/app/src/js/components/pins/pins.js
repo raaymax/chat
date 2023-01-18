@@ -8,7 +8,6 @@ import { actions, selectors } from '../../state';
 import {Header} from './header';
 import {messageFormatter } from '../messages/formatter';
 import {MessageList} from '../messages/messageList';
-import { openChannel } from '../../services/channels';
 import { useStream } from '../streamContext';
 
 const StyledPins = styled.div`

@@ -85,6 +85,7 @@ export const Workspace = () => {
 
   useEffect(() => {
     dispatch(setStream('main', {type: 'live', channelId}));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [channelId]);
 
   return (

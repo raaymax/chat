@@ -62,7 +62,9 @@ const Menu = styled.div`
   }
 `;
 
-export const TextMenu = ({className, watch, select, input}) => {
+export const TextMenu = ({
+  className, watch, select, input,
+}) => {
   const [coords, setCoords] = useState( [0, 0]);
   const [state, setState] = useState({
     open: false,

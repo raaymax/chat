@@ -16,7 +16,7 @@ const Container = styled.div`
   }
 
   .replies {
-    color: ${props => props.theme.linkColor};
+    color: ${(props) => props.theme.linkColor};
   }
   .date {
     font-size: 0.7em;
@@ -40,6 +40,7 @@ const Link = styled.span`
 `;
 
 export const ThreadLink = ({channelId, parentId, text}) => {
+  const dispatch = useDispatch();
   return (
     <Link onClick={() => dispatch(setStream('side', {type: 'live', channelId, parentId }))}>
       {text || 'Thread'}
@@ -48,7 +49,9 @@ export const ThreadLink = ({channelId, parentId, text}) => {
 }
 
 export const ThreadInfo = () => {
-  const { updatedAt, thread, channelId, id } = useMessageData();
+  const {
+    updatedAt, thread, channelId, id,
+  } = useMessageData();
   const dispatch = useDispatch();
   const [stream] = useStream();
   if (!thread || stream.parentId) return null;

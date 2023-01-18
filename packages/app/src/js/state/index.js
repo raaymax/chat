@@ -1,5 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import { configureStore, createSelector, createAction } from '@reduxjs/toolkit'
+import {useSelector} from 'react-redux';
 import messages, { actions as messageActions, getStream } from './messages';
 import connected, { actions as connectionActions } from './connection';
 import config, { actions as configActions } from './config';
@@ -15,7 +16,6 @@ import system, { actions as systemActions } from './system';
 import customEmojis, { actions as cusotmEmojisActions } from './customEmojis';
 import progress, { actions as progressActions } from './progress';
 import stream, { actions as streamActions } from './stream';
-import {useSelector} from 'react-redux';
 
 const logout = createAction('logout');
 
@@ -71,7 +71,7 @@ export const selectors = {
     .find((c) => c.id === q.id || c.name === q.name || c.cid === q.cid),
   getChannels: (state) => state.channels.list,
   getConfig: (state) => state.config,
-  //getCid: (state) => state.channels.current,
+  // getCid: (state) => state.channels.current,
   getChannelId: createSelector(
     (state) => state.channels.current,
     (state) => state.channels.list,
@@ -103,9 +103,9 @@ export const selectors = {
   getMessagesLoading: (state) => state.messages.loading,
   getMessagesPrevLoading: (state) => state.messages.loading || state.messages.loadingPrevious,
   getMessagesNextLoading: (state) => state.messages.loading || state.messages.loadingNext,
-  //getSelectedMessage: (state) => state.messages.selected,
-  //countMessagesInChannel: (channel, state) => state.messages.data[channel]?.length || 0,
-  countMessagesInStream: (stream, state) => state.messages.data[stream.parentId ? (stream.channelId+":"+stream.parentId) : stream.channelId]?.length || 0,
+  // getSelectedMessage: (state) => state.messages.selected,
+  // countMessagesInChannel: (channel, state) => state.messages.data[channel]?.length || 0,
+  countMessagesInStream: (stream, state) => state.messages.data[stream.parentId ? (`${stream.channelId}:${stream.parentId}`) : stream.channelId]?.length || 0,
   getLatestDate: () => createSelector(
     (state) => state.channels.current,
     (state) => state.messages.data,

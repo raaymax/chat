@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 const { ObjectId } = require('./db');
 
 exports.serialize = function serialize(query) {

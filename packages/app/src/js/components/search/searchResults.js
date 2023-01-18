@@ -4,7 +4,6 @@ import { useSelector, useDispatch} from 'react-redux';
 import styled from 'styled-components';
 import { Message } from '../messages/message/message';
 import { actions, selectors } from '../../state';
-import { openChannel } from '../../services/channels';
 import { formatTime, formatDate } from '../../utils';
 import { SearchSeparator } from './searchSeparator';
 import { useStream } from '../streamContext';

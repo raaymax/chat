@@ -173,7 +173,7 @@ export const sendFromDom = (stream, dom) => async (dispatch, getState) => {
   }
 };
 
-export const send = (stream, msg) => (dispatch) => console.log(msg) || dispatch(msg.type === 'command' ? sendCommand(stream, msg) : sendMessage(msg));
+export const send = (stream, msg) => (dispatch) => dispatch(msg.type === 'command' ? sendCommand(stream, msg) : sendMessage(msg));
 
 export const sendCommand = (stream, msg) => async (dispatch) => {
   const notif = {

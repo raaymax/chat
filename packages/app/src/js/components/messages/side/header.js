@@ -2,7 +2,7 @@ import { h } from 'preact';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { Channel } from '../../channels';
-import { selectors, actions } from '../../../state';
+import { selectors } from '../../../state';
 import { useStream } from '../../streamContext';
 import { setStream } from '../../../services/stream';
 
