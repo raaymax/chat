@@ -18,12 +18,11 @@ const loading = (dispatch, getState) => {
 export const loadPrevious = (stream) => async (dispatch, getState) => {
   try {
     const loadingDone = loading(dispatch, getState);
-    dispatch(actions.setStream({
+    dispatch(actions.patchStream({
       id: stream.id,
-      value: {
-        ...stream,
-        selected: undefined,
-        date: undefined,
+      patch: {
+        selected: null,
+        date: null,
       },
     }));
     dispatch(actions.selectMessage(null));
@@ -35,7 +34,7 @@ export const loadPrevious = (stream) => async (dispatch, getState) => {
     })
     dispatch(actions.addMessages(req.data));
     if (selectors.countMessagesInStream(stream, getState()) > 100) {
-      dispatch(actions.setStream({id: stream.id, value: {...stream, type: 'archive'}}));
+      dispatch(actions.patchStream({id: stream.id, patch: {type: 'archive'}}));
       setTimeout(() => {
         dispatch(actions.takeHead({stream, count: 100}));
       }, 1)
@@ -51,12 +50,11 @@ export const loadPrevious = (stream) => async (dispatch, getState) => {
 export const loadNext = (stream) => async (dispatch, getState) => {
   try {
     const loadingDone = loading(dispatch, getState);
-    dispatch(actions.setStream({
+    dispatch(actions.patchStream({
       id: stream.id,
-      value: {
-        ...stream,
-        selected: undefined,
-        date: undefined,
+      patch: {
+        selected: null,
+        date: null,
       },
     }));
     dispatch(actions.selectMessage(null));
@@ -75,7 +73,7 @@ export const loadNext = (stream) => async (dispatch, getState) => {
     }
     if (req.data.length < 50) {
       setTimeout(() => {
-        dispatch(actions.setStream({id: stream.id, value: {...stream, type: 'live'}}));
+        dispatch(actions.patchStream({id: stream.id, patch: { type: 'live'}}));
       }, 2)
     }
     loadingDone();
@@ -287,7 +285,7 @@ export function build(msg, state) {
 }
 
 // eslint-disable-next-line no-useless-escape
-const matchUrl = (text) => text.match(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)/g);
+const matchUrl = (text) => text.match(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!,@:%_\+.~#?&\/\/=]*)/g);
 
 const mapNodes = (dom, info) => (!dom.childNodes ? [] : [...dom.childNodes].map((n) => {
   if (n.nodeName === '#text') return processUrls(n.nodeValue);
@@ -326,7 +324,7 @@ function processUrls(text) {
 
 function flatten(tree) {
   return tree.map((n) => {
-    if (n.text) return n.text;
+    if (n.text || n.text === '') return n.text;
     if (n.emoji) return n.emoji;
     if (n.img) return n.img.alt;
     if (n.link) return flatten(n.link.children);

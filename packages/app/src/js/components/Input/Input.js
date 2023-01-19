@@ -231,8 +231,15 @@ export const Input = () => {
       event.preventDefault();
       store.dispatch(uploadMany(cbData.files));
     }
-    input.current.innerHTML = cbData.getData('text/plain').split('\n').join('<br>');
 
+    const range = document.getSelection().getRangeAt(0);
+    range.deleteContents();
+
+    cbData.getData('text').split('\n').reverse().forEach((line, idx) => {
+      if (idx) range.insertNode(document.createElement('br'));
+      range.insertNode(document.createTextNode(line));
+    });
+    document.getSelection().collapseToEnd();
     event.preventDefault();
     event.stopPropagation();
   }, [store])
