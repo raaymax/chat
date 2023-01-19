@@ -1,5 +1,6 @@
 import { h } from 'preact';
 import {Emoji} from './Emoji';
+import {Link} from './Link';
 import { InlineChannel } from '../../channels';
 import { ThreadLink } from './threadInfo';
 
@@ -20,7 +21,7 @@ const TYPES = {
   img: (props) => <img src={props.data.src} alt={props.data.alt} />,
   link: (props) => (props.data.href.startsWith('#')
     ? <InlineChannel cid={props.data.href.slice(1)} />
-    : <a target="_blank" rel="noreferrer" href={props.data.href}>{build(props.data.children)}</a>),
+    : <Link href={props.data.href}>{build(props.data.children)}</Link>),
   emoji: (props) => <Emoji big={props.opts.emojiOnly} shortname={props.data} />,
   channel: (props) => <InlineChannel channelId={props.data} />,
   thread: (props) => <ThreadLink

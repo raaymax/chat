@@ -2,13 +2,14 @@ x highlight selected message
 x go back from thread should select parent message
 x side and main windows are not merging then screen size is small
 x side window "left arrow" not working
+x after going back to main channel from thread scroll is behaving wiredly
 
 - attachment is displaying in all inputs
 - no way to create channel
-- badges not working correctly - Melisa only main channel
+- badges not working correctly
 - html parsing failed on production
 - save message parsing errros in database
-- after going back to main channel from thread scroll is behaving wiredly
 - pins should scroll to latest when opened
+- on mobile going back breaks layout of the app
 
 - change state management to recoil?
