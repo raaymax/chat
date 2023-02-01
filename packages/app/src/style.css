@@ -47,6 +47,7 @@ body, html {
 	--sk_highlight: 29,155,209;
 	--sk_highlight_hover: 64,179,228;
 	color-scheme: dark;
+  overflow: hidden;
 }
 *, :after, :before {
   box-sizing: inherit;
