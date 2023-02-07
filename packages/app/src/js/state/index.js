@@ -59,6 +59,7 @@ export const selectors = {
     (state) => state.progress,
     (progress) => progress
       .filter((p) => p.userId === userId)
+      .filter((p) => !p.parentId)
       .reduce((acc, p) => ({
         ...acc,
         [p.channelId]: p.count,
