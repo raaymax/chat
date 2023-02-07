@@ -12,8 +12,10 @@ const StyledEmoji = styled.span`
     vertical-align: bottom;
     display: inline-block;
   }
-  font-size: ${(props) => (props.big ? 2 : 1)}em;
-  line-height: ${(props) => (props.big ? 40 : 24)}px;
+  span {
+    font-size: ${(props) => (props.big ? 2 : 1)}em;
+    line-height: ${(props) => (props.big ? 40 : 24)}px;
+  }
 `;
 
 export const Emoji = ({shortname, big}) => {
@@ -25,7 +27,7 @@ export const Emoji = ({shortname, big}) => {
     return (
       <StyledEmoji big={big} emoji={shortname}>
         {emoji.unicode
-          ? String.fromCodePoint(parseInt(emoji.unicode, 16))
+          ? <span>{String.fromCodePoint(parseInt(emoji.unicode, 16))}</span>
           : <img src={getUrl(custom.fileId)} alt={shortname} />}
       </StyledEmoji>
     );

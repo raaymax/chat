@@ -10,7 +10,7 @@ const IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image
 const RAW_IMAGE_TYPES = ['image/gif', 'image/webp'];
 
 const Container = styled.div`
-  max-width: calc(100vw - 92px);
+  max-width: calc(100%)
   .file-list {
     display: flex;
     flex-direction: row;

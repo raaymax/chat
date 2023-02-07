@@ -25,6 +25,10 @@ const SideView = styled.div`
 `;
 
 const MainView = styled.div`
+  max-width: 100vw;
+  &.sidebar { 
+    max-width: calc(100vw - 200px);
+  }
   flex: 1 100%;
   .side-stream & {
     flex: 1 50%;
@@ -35,15 +39,9 @@ const MainView = styled.div`
     }
   }
 `
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100vw;
-  height: 100vh;
-`;
 
 const SideMenu = styled.div`
-  flex: 0 150px;
+  flex: 0 0 200px;
   @media (max-width : 710px) {
     flex: none;
     width: 100%;
@@ -76,6 +74,14 @@ const SideMenu = styled.div`
   }
 `;
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  height: 100vh;
+
+`;
+
 export const Workspace = () => {
   const view = useSelector(selectors.getView);
   const channelId = useSelector(selectors.getChannelId);
@@ -94,7 +100,7 @@ export const Workspace = () => {
         <Logo onClick={() => dispatch(actions.setView('sidebar'))} />
         <Channels />
       </SideMenu>}
-      <MainView>
+      <MainView className={view === 'sidebar' ? ['sidebar'] : []}>
         <StreamContext value={[stream, (val) => dispatch(setStream('main', val))]}>
           {view === 'search' && <Search />}
           {view === 'pins' && <Pins />}

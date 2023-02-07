@@ -331,6 +331,10 @@ ul {
 .message .content {
   font-weight: 300;
 }
+.message .content p{
+  white-space: break-spaces;
+  word-break: break-word;
+}
 .message .content.big-emoji {
   font-size: 30px;
   line-height: 35px;
@@ -348,6 +352,7 @@ ul {
   padding: 0px 10px;
   line-break: auto;
   hyphens: auto;
+  width: calc(100% - 75px);
 }
 .message.private .avatar {
   margin-left: 20px;

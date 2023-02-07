@@ -33,9 +33,12 @@ async function downloadFile(req, res) {
     });
     file.stream.pipe(res);
   } catch (err) {
+    if (err.code === 'ENOTFOUND') {
+      return res.status(404).send(err);
+    }
     // eslint-disable-next-line no-console
     // console.error(err);
-    res.status(err.code || 500).send(err);
+    res.status(500).send(err);
   }
 }
 

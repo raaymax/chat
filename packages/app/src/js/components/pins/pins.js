@@ -52,7 +52,7 @@ export const Pins = () => {
       <MessageList
         formatter={messageFormatter}
         list={messages}
-        status='archive'
+        status='live'
         onMessageClicked={(msg) => {
           gotoMessage(msg);
         }}
