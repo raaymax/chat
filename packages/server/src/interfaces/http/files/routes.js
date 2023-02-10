@@ -37,7 +37,7 @@ async function downloadFile(req, res) {
       return res.status(404).send(err);
     }
     if (typeof err.code === 'number') {
-      res.status(err.code).send(err);
+      return res.status(err.code).send(err);
     }
     // eslint-disable-next-line no-console
     // console.error(err);
