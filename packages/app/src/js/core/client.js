@@ -51,7 +51,7 @@ const client = {
   // eslint-disable-next-line no-console
   emit: async (name, data) => {
     if (!exists(name)) {
-      Sentry.captureException(new Error(`[client] handler not exists: ${name}`));
+      Sentry.captureException(new Error(`[client] handler not exists: ${name}`, {extra: {name, data}}));
       return;
     }
     return notify(name, data);

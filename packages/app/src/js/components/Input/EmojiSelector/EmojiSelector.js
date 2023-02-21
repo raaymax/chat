@@ -191,7 +191,7 @@ export const onSelection = (e) => {
   const sel = document.getSelection();
   if (state.open && getNotText(sel.anchorNode)?.attributes?.type?.nodeValue !== 'emoji-selector') {
     const p = document.querySelector('.emoji-menu');
-    if (!p.contains(sel.anchorNode)) {
+    if (!p || !p.contains(sel.anchorNode)) {
       close();
     } else {
       e.preventDefault();

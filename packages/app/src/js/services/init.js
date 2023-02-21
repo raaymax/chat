@@ -5,38 +5,42 @@ import { actions } from '../state';
 import { initNotifications } from './notifications';
 import { loadEmojis } from './emoji';
 import { loadProgress, loadBadges } from './progress';
+import { reloadStream } from './stream';
 
-const initApp = async (dispatch) => {
+const initApp = (withStream = false) => async (dispatch) => {
   if (Capacitor.isNativePlatform()) {
     document.body.setAttribute('class', 'mobile');
   }
-  dispatch(actions.connected());
-  dispatch(actions.clearInfo());
-  dispatch(actions.initFailed(false));
+  await dispatch(actions.connected());
+  await dispatch(actions.clearInfo());
+  await dispatch(actions.initFailed(false));
   const {data: [config]} = await client.req2({type: 'config'});
-  dispatch(actions.setAppVersion(config.appVersion));
-  dispatch(actions.setMainChannel(config.mainChannelId));
+  await dispatch(actions.setAppVersion(config.appVersion));
+  await dispatch(actions.setMainChannel(config.mainChannelId));
   await initNotifications(config);
   const { data: users } = await client.req2({type: 'users'});
-  dispatch(actions.addUser(users));
+  await dispatch(actions.addUser(users));
   const { data: channels } = await client.req2({type: 'channels'});
-  dispatch(actions.addChannel(channels));
+  await dispatch(actions.addChannel(channels));
   // FIXME: load messages from current channel or none
   // dispatch(loadMessages({channelId: config.mainChannelId}));
-  dispatch(loadEmojis());
-  dispatch(loadProgress({channelId: config.mainChannelId}));
-  dispatch(loadBadges());
+  await dispatch(loadEmojis());
+  await dispatch(loadProgress({channelId: config.mainChannelId}));
+  await dispatch(loadBadges());
   // eslint-disable-next-line no-console
   console.log('version check: ', APP_VERSION, config.appVersion);
   if (config.appVersion !== APP_VERSION) {
-    dispatch(showUpdateMessage());
+    await dispatch(showUpdateMessage());
+  }
+  if (withStream) {
+    await dispatch(reloadStream('main'));
   }
 };
 
 let tryCount = 1
-export const init = () => async (dispatch) => {
+export const init = (withStream) => async (dispatch) => {
   try {
-    dispatch(initApp)
+    await dispatch(initApp(withStream))
     tryCount = 1;
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -52,8 +56,8 @@ export const init = () => async (dispatch) => {
 
 export const reinit = () => async (dispatch) => {
   tryCount = 1;
-  dispatch(actions.initFailed(false));
-  dispatch(init());
+  await dispatch(actions.initFailed(false));
+  await dispatch(init());
 }
 
 // FIXME: messages have no channel and are not showing

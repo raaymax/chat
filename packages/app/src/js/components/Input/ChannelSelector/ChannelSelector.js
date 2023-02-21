@@ -151,7 +151,7 @@ document.addEventListener('selectionchange', (e) => {
   const sel = document.getSelection();
   if (state.open && getContainer() !== 'channel') {
     const p = document.querySelector('.channel-menu');
-    if (!p.contains(sel.anchorNode)) {
+    if (!p || !p.contains(sel.anchorNode)) {
       close();
     } else {
       e.preventDefault();

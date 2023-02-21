@@ -10,3 +10,11 @@ export const setStream = (id, value) => async (dispatch, getState) => {
     dispatch(loadProgress(value));
   }
 }
+
+export const reloadStream = (id) => async (dispatch, getState) => {
+  const value = selectors.getStream(id)(getState());
+  if (value ) {
+    dispatch(loadMessages(value));
+    dispatch(loadProgress(value));
+  }
+}

@@ -85,7 +85,7 @@ export const TextMenu = ({
 
   const onSelectionChange = useCallback(() => {
     const sel = document.getSelection();
-    if (!input.contains(sel.anchorNode)) return;
+    if (!input || !input.contains(sel.anchorNode)) return;
     const box = sel.getRangeAt(0).getBoundingClientRect();
     setCoords([box.bottom, box.left]);
   }, [setCoords, input])

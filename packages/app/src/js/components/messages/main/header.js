@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Channel } from '../../channels';
 import { selectors, actions } from '../../../state';
 import { loadPinnedMessages } from '../../../services/pins';
+import { init } from '../../../services/init';
 import { useStream } from '../../streamContext';
 
 const StyledHeader = styled.div`
@@ -108,6 +109,11 @@ export const Header = ({onclick}) => {
         </div>)}
 
       <div class='toolbar'>
+        <div class='tool' onclick={() => {
+          dispatch(init(true));
+        }}>
+          <i class="fa-solid fa-arrows-rotate" />
+        </div>
         <div class='tool' onclick={() => dispatch(actions.setView('search'))}>
           <i class="fa-solid fa-magnifying-glass" />
         </div>
