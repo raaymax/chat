@@ -1,12 +1,14 @@
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
+const CompressionPlugin = require("compression-webpack-plugin");
 const pack = require('./package.json');
 const config = require('../../chat.config');
 
 module.exports = {
   entry: {
     app: './src/index.js',
+    secured: './src/js/pages/secured.js',
     sw: './src/sw.js',
     'firebase-messaging-sw': './src/fcm-sw.js',
   },

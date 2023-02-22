@@ -6,4 +6,4 @@ include ':capacitor-push-notifications'
 project(':capacitor-push-notifications').projectDir = new File('../node_modules/@capacitor/push-notifications/android')
 
 include ':sentry-capacitor'
-project(':sentry-capacitor').projectDir = new File('../../../node_modules/@sentry/capacitor/android')
+project(':sentry-capacitor').projectDir = new File('../node_modules/@sentry/capacitor/android')

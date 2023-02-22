@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import { useCallback, useEffect, useState } from 'preact/hooks';
-import { client } from '../../core';
 import { me, login } from '../../services/session';
+import { UserContext } from './UserContext';
 
 export const Login = ({children}) => {
   const [status, setStatus] = useState('pending');
@@ -11,7 +11,6 @@ export const Login = ({children}) => {
       setStatus(status);
       if (status === 'ok') {
         setUser(user);
-        client.emit('auth:user', user);
       }
     }), []);
   useEffect(() => {
@@ -37,7 +36,11 @@ export const Login = ({children}) => {
 
   if (status === 'pending') return 'Loading';
 
-  return user ? (children) : (
+  return user ? (
+    <UserContext value={user}>
+      {children}
+    </UserContext>
+  ) : (
     <div class='login'>
       <form onsubmit={onSubmit}>
         <input type='text' name='login' placeholder='user@example.com' />
