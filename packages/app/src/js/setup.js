@@ -20,7 +20,7 @@ client
   .on('removeChannel', (msg) => store.dispatch(actions.removeChannel(msg.channelId)))
   .on('typing', (msg) => store.dispatch(ackTyping(msg)))
   .on('con:open', () => store.dispatch(init()))
-  .on('auth:user', (user) => console.log('auth', user) || store.dispatch(actions.setMe(user)))
+  .on('auth:user', (user) => store.dispatch(actions.setMe(user)))
   .on('auth:logout', () => store.dispatch(actions.setMe(null))) // TODO: check if that works
   .on('con:close', () => {
     store.dispatch(actions.disconnected());
@@ -32,4 +32,3 @@ client
   .on('message', (msg) => store.dispatch(actions.addMessage({...msg, pending: false })))
   .on('notification', () => { try { navigator.vibrate([100, 30, 100]); } catch (err) { /* ignore */ } })
   .on('notification', () => { try { play(); } catch (err) { /* ignore */ } });
-console.log('done');

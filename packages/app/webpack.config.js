@@ -1,7 +1,6 @@
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
-const CompressionPlugin = require("compression-webpack-plugin");
 const pack = require('./package.json');
 const config = require('../../chat.config');
 
