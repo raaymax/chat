@@ -6,22 +6,13 @@ const EXTERNAL_ASSETS = [
   'https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap',
 ];
 
+// TODO: fix assets list generation
 const ASSETS = [
-  '/vendors-node_modules_reduxjs_toolkit_dist_redux-toolkit_esm_js-node_modules_firebase_app_dist-9bcf40.js',
   '/index.html',
   '/secured.js',
-  '/15d98c18221c8bcb2334.ttf',
-  '/52eba2c567c521b8d58a.ttf',
   '/firebase-messaging-sw.js',
   '/app.css',
-  '/79da213423ac0def2058.ttf',
-  '/src_js_pages_secured_js.js',
-  '/4896d4b04430cc3dfb06.woff2',
-  '/3d503f89ccaf1b224aa5.woff2',
-  '/0a1b701f5563c2288281.ttf',
   '/manifest.json',
-  '/f77bcc98bb7468c8b15a.woff2',
-  '/d79c2ec96ab9ff1161a2.woff2',
   '/assets/icon.png',
   '/assets/bob.png',
   '/assets/favicon.ico',
