@@ -19,9 +19,14 @@ export const loadProgress = (stream) => async(dispatch) => {
 }
 
 export const updateProgress = (messageId) => async(dispatch) => {
-  const {data} = await client.req2({
-    type: 'updateProgress',
-    messageId,
-  })
-  data.forEach((p) => dispatch(actions.addProgress(p)));
+  try {
+    const {data} = await client.req2({
+      type: 'updateProgress',
+      messageId,
+    })
+    await Promise.all(data.map((p) => dispatch(actions.addProgress(p))));
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
+  }
 }

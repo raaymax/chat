@@ -28,9 +28,6 @@ module.exports = {
         { from: './src/index.html', to: '.' },
       ],
     }),
-    new webpack.SourceMapDevToolPlugin({
-      filename: '[file].map',
-    }),
   ],
   module: {
     rules: [
@@ -64,5 +61,5 @@ module.exports = {
     },
   },
   mode: 'development',
-  devtool: 'eval',
+  devtool: 'eval-source-map',
 };

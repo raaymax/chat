@@ -41,7 +41,7 @@ const MessageBase = (props = {}) => {
       onmouseleave={onLeave}
     >
       {!props.sameUser
-        ? <div class='avatar'>{user.avatarUrl && <img src={user.avatarUrl} />}</div>
+        ? <div class='avatar'>{user.avatarUrl && <img src={user.avatarUrl} alt='avatar' />}</div>
         : <div class='spacy side-time'>{formatTime(createdAt)}</div>
       }
       <div class='body'>
