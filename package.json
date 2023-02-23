@@ -1,6 +1,6 @@
 {
   "name": "@quack/quack",
-  "version": "1.6.10",
+  "version": "1.6.11",
   "description": "",
   "main": "src/index.js",
   "workspaces": [
@@ -12,14 +12,14 @@
     "npm": "8.x.x"
   },
   "scripts": {
-    "start": "migrate-mongo up && npm run -w=@quack/server start ",
-    "build": "npm run -w=@quack/app build",
-    "dev:web": "npm run -w=@quack/app dev",
-    "dev:srv": "npm run -w=@quack/server dev",
+    "start": "migrate-mongo up && pnpm run --filter @quack/server start ",
+    "build": "pnpm run --filter @quack/app build",
+    "dev:web": "pnpm run --filter @quack/app dev",
+    "dev:srv": "pnpm run --filter @quack/server dev",
     "dev": "run-p dev:srv dev:web",
-    "test": "npm run -ws test",
+    "test": "pnpm run --filter @quack/server test",
     "lint:ci": "eslint .",
-    "test:ci": "npm run -ws test:ci"
+    "test:ci": "pnpm run --filter @quack/server test:ci"
   },
   "author": "",
   "license": "ISC",
@@ -37,10 +37,5 @@
     "eslint-plugin-import": "2.25.4",
     "nodemon": "2.0.15",
     "npm-run-all": "4.1.5"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
   }
 }

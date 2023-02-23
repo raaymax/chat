@@ -24,18 +24,21 @@ jobs:
       DATABASE_URL: 'mongodb://chat:chat@localhost:27017/chat?authSource=admin'
     steps:
     - uses: actions/checkout@v3
+    - uses: pnpm/action-setup@v2
+      with:
+        version: 7
     - name: Use Node.js 17.x
       uses: actions/setup-node@v3
       with:
         node-version: 17.x
-        cache: 'npm'
+        cache: 'pnpm'
     - name: apply secrets
       run: echo $CONFIG_FILE >> chat.config.js
       shell: bash
       env:
         CONFIG_FILE: ${{secrets.TEST_CONFIG}}
         DATABASE_URL: 'mongodb://chat:chat@localhost:27017/chat?authSource=admin'
-    - run: npm ci
-    - run: npm run lint:ci
-    - run: npx migrate-mongo up
-    - run: npm run test:ci
+    - run: pnpm i
+    - run: pnpm run lint:ci
+    - run: pnpm exec migrate-mongo up
+    - run: pnpm run test:ci

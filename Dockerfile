@@ -1,24 +1,31 @@
 FROM node:17-alpine AS appbuild
+RUN npm i -g pnpm
+RUN apk -U upgrade
 ENV ENVIRONMENT=production
 WORKDIR /usr/src/app
 COPY package*.json ./
+COPY pnpm-*.yaml ./
 COPY packages/server/package*.json ./packages/server/
 COPY packages/app/package*.json ./packages/app/
 #RUN npm install -g npm
-RUN npm install --production=false
+RUN pnpm i
 COPY chat.config.js ./
 COPY packages/app/webpack.config.js ./packages/app/webpack.config.js
 COPY packages/app/babel.config.js ./packages/app/babel.config.js
 COPY ./packages/app/src ./packages/app/src
-RUN npm run -w @quack/app build
+RUN pnpm run build
 
 FROM node:17-alpine
+RUN npm i -g pnpm
+RUN apk -U upgrade
+ENV NODE_ENV=production
 WORKDIR /usr/src/app
 COPY package*.json ./
+COPY pnpm-*.yaml ./
 COPY packages/server/package*.json ./packages/server/
 COPY packages/app/package*.json ./packages/app/
 #RUN npm install -g npm
-RUN npm install --production
+RUN pnpm i --prod
 COPY --from=appbuild /usr/src/app/packages/app/dist ./packages/app/dist
 COPY ./packages/server/src ./packages/server/src
 COPY ./.deploy ./.deploy

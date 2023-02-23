@@ -15,11 +15,15 @@ jobs:
       with:
         java-version: 1.8
 
+    - uses: pnpm/action-setup@v2
+      with:
+        version: 7
+
     - name: Use Node.js 17.x
       uses: actions/setup-node@v3
       with:
         node-version: 17.x
-        cache: 'npm'
+        cache: "pnpm"
 
     - name: apply secrets
       run: echo $CONFIG_FILE >> chat.config.js
@@ -27,13 +31,13 @@ jobs:
       env:
         CONFIG_FILE: ${{secrets.PRODUCTION_CONFIG}}
 
-    - run: npm i --production=false
+    - run: pnpm i
 
-    - run: npm run build
+    - run: pnpm run build
       env: 
         NODE_ENV: production
 
-    - run: npx cap sync
+    - run: pnpm exec cap sync
       working-directory: ./packages/app
 
     - name: Build with Gradle
