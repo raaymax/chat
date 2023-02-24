@@ -21,6 +21,7 @@ services:
     - ../env:/usr/src/app/.envrc
     - ../chat.config.js:/usr/src/app/chat.config.js
     - ../codecat-quack.json:/usr/src/app/secret.json
+    - ../assetlinks.json:/usr/src/app/packages/app/dist/.well-known/assetlinks.json
     deploy:
       labels:
         traefik.enable: "true"
