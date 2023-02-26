@@ -22,7 +22,7 @@ jobs:
         ports:
           - 27017:27017
     env:
-      DATABASE_URL: 'mongodb://chat:chat@localhost:27017/chat?authSource=admin'
+      DATABASE_URL: 'mongodb://chat:chat@localhost:27017/tests?authSource=admin'
     outputs:
       tagged: ${{steps.tagged.outputs.tagged}}
     steps:
@@ -42,7 +42,7 @@ jobs:
       shell: bash
       env:
         CONFIG_FILE: ${{secrets.TEST_CONFIG}}
-        DATABASE_URL: 'mongodb://chat:chat@localhost:27017/chat?authSource=admin'
+        DATABASE_URL: 'mongodb://chat:chat@localhost:27017/tests?authSource=admin'
     - run: pnpm i
     - run: pnpm run lint:ci
     - run: pnpm exec migrate-mongo up

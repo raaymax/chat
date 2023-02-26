@@ -25,7 +25,8 @@
     "react-redux": "8.0.2",
     "redux": "4.2.0",
     "socket.io-client": "4.5.1",
-    "styled-components": "5.3.5"
+    "styled-components": "5.3.5",
+    "workbox-precaching": "6.5.4"
   },
   "devDependencies": {
     "@babel/core": "7.17.8",
@@ -46,6 +47,7 @@
     "source-map-loader": "3.0.1",
     "webpack": "5.75.0",
     "webpack-bundle-analyzer": "4.8.0",
+    "workbox-webpack-plugin": "6.5.4",
     "webpack-cli": "5.0.1"
   },
   "browserslist": {

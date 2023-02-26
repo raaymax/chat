@@ -1,5 +1,6 @@
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const {InjectManifest} = require('workbox-webpack-plugin');
 const webpack = require('webpack');
 const pack = require('./package.json');
 const config = require('../../chat.config');
@@ -7,8 +8,6 @@ const config = require('../../chat.config');
 module.exports = {
   entry: {
     app: './src/index.js',
-    secured: './src/js/pages/secured.js',
-    sw: './src/sw.js',
     'firebase-messaging-sw': './src/fcm-sw.js',
   },
   plugins: [
@@ -27,6 +26,11 @@ module.exports = {
         { from: './src/manifest.json', to: '.' },
         { from: './src/index.html', to: '.' },
       ],
+    }),
+    new InjectManifest({
+      exclude: [],
+      maximumFileSizeToCacheInBytes: 1024 * 1024 * 10,
+      swSrc: './src/sw.js'
     }),
   ],
   module: {
