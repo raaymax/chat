@@ -2,7 +2,7 @@ const db = require('../../infra/database');
 
 module.exports = {
   name: 'channel',
-  description: 'to change channel',
+  description: 'to create and join new channel',
   args: ['name'],
   handler: async (req, res) => {
     const [cid] = req.body.args;

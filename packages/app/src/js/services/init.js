@@ -14,7 +14,7 @@ const initApp = (withStream = false) => async (dispatch) => {
   await dispatch(actions.connected());
   await dispatch(actions.clearInfo());
   await dispatch(actions.initFailed(false));
-  const {data: [config]} = await client.req2({type: 'config'});
+  const { data: [config] } = await client.req2({type: 'config'});
   await dispatch(actions.setAppVersion(config.appVersion));
   await dispatch(actions.setMainChannel(config.mainChannelId));
   await initNotifications(config);

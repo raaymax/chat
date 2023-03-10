@@ -1,4 +1,4 @@
-import { WebSocketTransport, Request} from '@quack/rpc';
+import { WebSocketTransport, Request, Notification} from '@quack/rpc';
 import './registerSw';
 import './sentry';
 import { initRequests } from './requests';
@@ -10,6 +10,7 @@ const client = new WebSocketTransport(URI);
 window.client = client;
 
 client.req2 = (msg) => Request.send(msg, client);
+client.notif = (msg) => Notification.send(msg, client);
 
 initRequests(client);
 

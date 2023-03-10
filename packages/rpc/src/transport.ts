@@ -1,6 +1,7 @@
 import { Socket, Manager } from "socket.io-client";
 import { createEventListener } from './utils';
 import { Message, SequenceMessage, isMessage, isSequenceMessage } from './types';
+import { Event } from './event';
 
 export interface Transport {
   send: (data: Message) => void;
@@ -26,12 +27,16 @@ export class WebSocketTransport implements Transport {
     });
 
     this.socket.on('message', (msg: unknown) => {
+      const ev = new Event();
       // eslint-disable-next-line no-console
       console.debug('recv', JSON.stringify(msg, null, 4));
       if (isMessage(msg)) {
         if(isSequenceMessage(msg)) {
           if (this.seqHandlers.exists(msg.seqId)) {
-            this.seqHandlers.notify(msg.seqId, msg);
+            this.seqHandlers.notify(msg.seqId, msg, ev);
+            if(!ev.isHandled()) {
+              this.emit(msg.type, msg);
+            }
           } else {
             this.emit(msg.type, msg);
           }
@@ -51,7 +56,7 @@ export class WebSocketTransport implements Transport {
     return this;
   }
 
-  onSeq(seqId: string, callback: (data?: SequenceMessage) => void): WebSocketTransport {
+  onSeq(seqId: string, callback: (data: SequenceMessage, ev: Event) => void): WebSocketTransport {
     this.seqHandlers.watch(seqId, callback);
     return this;
   }
@@ -61,17 +66,17 @@ export class WebSocketTransport implements Transport {
     return this;
   }
 
-  on(event: string, callback: (data?: Message) => void): WebSocketTransport {
+  on(event: string, callback: (data: Message) => void): WebSocketTransport {
     this.bus.watch(event, callback);
     return this;
   }
 
-  once(event: string, callback: (data?: Message) => void): WebSocketTransport {
+  once(event: string, callback: (data: Message) => void): WebSocketTransport {
     this.bus.once(event, callback);
     return this;
   }
 
-  off(event: string, callback: (data?: Message) => void): WebSocketTransport {
+  off(event: string, callback: (data: Message) => void): WebSocketTransport {
     this.bus.off(event, callback);
     return this;
   }

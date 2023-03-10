@@ -21,19 +21,28 @@ module.exports = {
   update: async (id, channel) => (await db).collection(TABLE_NAME)
     .updateOne(deserialize({ id }), { $set: deserialize(channel) }),
 
-  insert: async ({ cid, name, userId }) => {
-    const channel = await (await db).collection(TABLE_NAME).findOne({ cid });
-    if (channel && channel.users.map((u) => u.toHexString()).includes(userId)) {
-      return channel._id.toHexString();
-    }
+  join: async (id, userId) => {
+    const channel = await (await db).collection(TABLE_NAME).findOne({ _id: ObjectId(id) });
     if (channel) {
       channel.users.push(ObjectId(userId));
       await (await db).collection(TABLE_NAME)
         .updateOne({ _id: channel._id }, { $set: { users: channel.users } });
       return channel._id.toHexString();
     }
+    return null;
+  },
 
-    return (await db).collection(TABLE_NAME).insertOne({ cid, name, users: [ObjectId(userId)] })
+  insert: async (name, userId) => {
+    const channel = await (await db).collection(TABLE_NAME).findOne({
+      name: ObjectId(name),
+      users: { $elemMatch: { $eq: ObjectId(userId) } },
+    });
+    if (channel) {
+      return channel._id.toHexString();
+    }
+    return (await db).collection(TABLE_NAME).insertOne({
+      cid: name, name, users: [ObjectId(userId)],
+    })
       .then(serializeInsert);
   },
 
