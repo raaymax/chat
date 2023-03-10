@@ -26,7 +26,7 @@ export const loadPrevious = (stream) => async (dispatch, getState) => {
       },
     }));
     dispatch(actions.selectMessage(null));
-    const req = await client.req2({
+    const req = await client.req({
       ...stream,
       type: 'load',
       before: selectors.getEarliestDate(stream)(getState()),
@@ -58,7 +58,7 @@ export const loadNext = (stream) => async (dispatch, getState) => {
       },
     }));
     dispatch(actions.selectMessage(null));
-    const req = await client.req2({
+    const req = await client.req({
       ...stream,
       type: 'load',
       after: selectors.getLatestDate(stream)(getState()),
@@ -90,14 +90,14 @@ export const loadMessagesArchive = (stream) => async (dispatch, getState) => {
   try {
     const loadingDone = loading(dispatch, getState);
     dispatch(actions.messagesClear({stream}))
-    const req2 = await client.req2({
+    const req2 = await client.req({
       ...stream,
       type: 'load',
       before: date,
       limit: 50,
     })
     dispatch(actions.addMessages(req2.data));
-    const req = await client.req2({
+    const req = await client.req({
       ...stream,
       type: 'load',
       after: date,
@@ -121,7 +121,7 @@ export const loadMessagesLive = (stream) => async (dispatch, getState) => {
   if (!stream.channelId) return;
   try {
     const loadingDone = loading(dispatch, getState);
-    const req = await client.req2({
+    const req = await client.req({
       ...stream,
       type: 'load',
       limit: 50,
@@ -146,7 +146,7 @@ export const loadMessages = (stream) => async (dispatch) => {
 
 export const addReaction = (id, text) => async (dispatch) => {
   try {
-    const req = await client.req2({
+    const req = await client.req({
       type: 'reaction',
       id,
       reaction: text.trim(),
@@ -175,8 +175,11 @@ export const send = (stream, msg) => (dispatch) => dispatch(msg.type === 'comman
 
 export const sendCommand = (stream, msg) => async (dispatch) => {
   const notif = {
+    type: 'notif',
     userId: 'notif',
     clientId: msg.clientId,
+    channelId: stream.channelId,
+    parentId: stream.parentId,
     notifType: 'info',
     notif: `${msg.name} sent`,
     createdAt: (new Date()).toISOString(),
@@ -188,7 +191,8 @@ export const sendCommand = (stream, msg) => async (dispatch) => {
     await client.notif(msg);
     dispatch(actions.addMessage({ ...notif, notifType: 'success', notif: `${msg.name} executed successfully` }));
   } catch (err) {
-    dispatch(actions.addMessage({ ...notif, notifType: 'error', notif: `${msg.name} error ${err.message}` }));
+    console.log(err);
+    dispatch(actions.addMessage({ ...notif, notifType: 'error', notif: `${msg.name} error ${err.res.message || err.message}` }));
   }
 };
 
@@ -226,7 +230,7 @@ export const resend = (id) => (dispatch, getState) => {
 
 export const removeMessage = (msg) => async (dispatch) => {
   try {
-    await client.req({ type: 'removeMessage', id: msg.id });
+    await client.notif({ type: 'removeMessage', id: msg.id });
   } catch (err) {
     dispatch(actions.addMessage({
       id: msg.id,

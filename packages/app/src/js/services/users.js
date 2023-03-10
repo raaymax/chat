@@ -2,7 +2,7 @@ import { client } from '../core';
 
 export const loadUsers = () => async () => {
   try {
-    const res = await client.req2({type: 'users'});
+    const res = await client.req({type: 'users'});
     res.data.forEach((usr) => {
       dispatch(actions.addUser(usr))
     })

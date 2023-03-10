@@ -62,7 +62,7 @@ export const getEmojiFuse = (store) => {
 
 export const loadEmojis = () => async (dispatch) => {
   try {
-    const {data: emojis} = await client.req2({ type: 'loadEmojis' });
+    const {data: emojis} = await client.req({ type: 'loadEmojis' });
     if (emojis) {
       emojis.forEach((emoji) => {
         dispatch(actions.addEmoji(emoji));
@@ -76,7 +76,7 @@ export const loadEmojis = () => async (dispatch) => {
 
 export const findEmoji = (shortname) => async (dispatch) => {
   try {
-    const {data: [emoji]} = await client.req2({ type: 'findEmoji', shortname });
+    const {data: [emoji]} = await client.req({ type: 'findEmoji', shortname });
     if (emoji) {
       dispatch(actions.addEmoji(emoji));
     }

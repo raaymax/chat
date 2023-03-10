@@ -15,7 +15,7 @@ export const openChannel = createAsyncThunk('channels/open', async (q, {dispatch
 
 export const loadChannels = () => async () => {
   try {
-    const res = await client.req2({type: 'channels'});
+    const res = await client.req({type: 'channels'});
     res.data.forEach((usr) => {
       dispatch(actions.addChannel(usr))
     })
