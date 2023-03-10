@@ -20,6 +20,8 @@ const theme = {
   linkColor: '#4a90e2',
 }
 
+console.log(store.getState());
+
 const Secured = () => {
   const user = useUser();
   useEffect(() => {

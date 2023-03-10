@@ -1,5 +1,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable global-require */
+const db = require('../../infra/database');
 
 const commands = [
   require('./avatar'),
@@ -12,6 +13,18 @@ const commands = [
 ];
 
 module.exports = async (req, res) => {
+  res.systemMessage = async (msg) => {
+    const { channelId } = req.body.context || {};
+    await res.send({
+      type: 'message',
+      id: `sys:${Math.random().toString(10)}`,
+      userId: (await db.user.get({ name: 'System' })).id,
+      priv: true,
+      message: msg,
+      channelId,
+      createdAt: new Date().toISOString(),
+    });
+  };
   const { name } = req.body;
   if (name === 'help') return sendHelp(req, res);
   const command = commands.find((cmd) => cmd.name === name);
@@ -20,7 +33,6 @@ module.exports = async (req, res) => {
 };
 
 async function sendHelp(req, res) {
-  const { channelId } = req.body.context || {}; // TODO: this should be validated
   const help = commands.filter((h) => !h.hidden).map((h) => [
     { bold: { text: `/${h.name}` } },
     {
@@ -31,15 +43,7 @@ async function sendHelp(req, res) {
     { br: true },
   ]).flat();
 
-  await res.send({
-    type: 'message',
-    id: `help:${Math.random().toString(10)}`,
-    userId: 'system',
-    priv: true,
-    message: help,
-    channelId,
-    createdAt: new Date().toISOString(),
-  });
+  await res.systemMessage(help);
 
   return res.ok();
 }

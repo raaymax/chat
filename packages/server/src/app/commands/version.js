@@ -5,19 +5,11 @@ module.exports = {
   description: 'displays app verions',
   args: [],
   handler: async (req, res) => {
-    const { appVersion, channelId } = req.body.context;
-    await res.send({
-      type: 'message',
-      id: `version:${Math.random().toString(10)}`,
-      userId: 'system',
-      priv: true,
-      message: [
-        { line: { text: `Server version: ${pack.version}` } },
-        { line: { text: `App version: ${appVersion}` } },
-      ],
-      channelId,
-      createdAt: new Date().toISOString(),
-    });
+    const { appVersion } = req.body.context;
+    await res.systemMessage([
+      { line: { text: `Server version: ${pack.version}` } },
+      { line: { text: `App version: ${appVersion}` } },
+    ]);
     return res.ok();
   },
 };

@@ -96,29 +96,19 @@ export const selectors = {
   getMessagesNextLoading: (state) => state.messages.loading || state.messages.loadingNext,
   // getSelectedMessage: (state) => state.messages.selected,
   // countMessagesInChannel: (channel, state) => state.messages.data[channel]?.length || 0,
-  countMessagesInStream: (stream, state) => getStreamMessages(stream, state.messages.data).length,
-  getStreamMessages: (stream) => createSelector(
-    (state) => getStreamMessages(stream, state.messages.data),
-  ),
-  getLatestDate: (stream) => createSelector(
-    (state) => {
-      const data = getStreamMessages(stream, state.messages.data);
-      return data.length ? data[0].createdAt : new Date().toISOString();
-    },
-  ),
-  getEarliestDate: (stream) => createSelector(
-    (state) => {
-      const data = getStreamMessages(stream, state.messages.data);
-      return data.length ? data[data.length - 1].createdAt : new Date().toISOString();
-    },
-  ),
-  /*getMessage: (id) => createSelector(
-    (state) => console.log(state, id) || state.messages.data
+  countMessagesInStream: (stream) => (state) => getStreamMessages(stream, state.messages.data).length,
+  getStreamMessages: (stream) => (state) => getStreamMessages(stream, state.messages.data),
+  getLatestDate: (stream) => (state) => {
+    const data = getStreamMessages(stream, state.messages.data);
+    return data.length ? data[0].createdAt : new Date().toISOString();
+  },
+  getEarliestDate: (stream) => (state) => {
+    const data = getStreamMessages(stream, state.messages.data);
+    return data.length ? data[data.length - 1].createdAt : new Date().toISOString();
+  },
+  getMessage: (id) => (state) => state.messages.data
       .find((m) => m.id === id || m.clientId === id) || null,
-  ),*/
-  getStreamMessages: (stream) => createSelector(
-    (state) => getStreamMessages(stream, state.messages.data),
-  ),
+  getStreamMessages: (stream) => (state) => getStreamMessages(stream, state.messages.data),
   getCurrentChannel: createSelector(
     (state) => state.channels.list,
     (state) => state.channels.current,

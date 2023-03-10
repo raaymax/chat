@@ -14,34 +14,8 @@ const takeTail = createAction('message/take/tail');
 const clear = createAction('message/clear');
 const select = createAction('message/select');
 
-export const getStream = (state, {channelId, parentId}) => {
-  if (parentId) {
-    const key = `${channelId}:${parentId}`;
-    return state[key] || [];
-  }
-  return state[channelId] || [];
-}
-
-const useStream = (state, {channelId, parentId}) => {
-  if (parentId) {
-    const key = `${channelId}:${parentId}`;
-    state[key] = state[key] || []
-    return state[key];
-  }
-  state[channelId] = state[channelId] || [];
-  return state[channelId];
-}
-
-const setStream = (state, {channelId, parentId}, list) => {
-  if (parentId) {
-    const key = `${channelId}:${parentId}`;
-    state[key] = list;
-  }
-  state[channelId] = list;
-}
-
 const messagesReducer = createReducer({
-  data: {},
+  data: [],
   loading: false,
   status: 'live',
   selected: null,
@@ -65,69 +39,69 @@ const messagesReducer = createReducer({
   [loadingDone]: (state) => {
     state.loading = false;
   },
-  [clear]: (state, action) => {
-    const {stream} = action.payload;
-    setStream(state.data, stream, []);
+  [clear]: ({data}, action) => {
+    const {stream: {parentId, channelId}} = action.payload;
+    const ids = data
+      .filter((m => m.channelId === channelId && (!parentId || m.parentId === parentId)))
+      .map((m) => m.id)
+
+    data = data.filter((m) => !ids.includes(m.id))
   },
   [addAll]: ({data}, action) => {
     action.payload.forEach((msg) => {
-      const {channelId, parentId} = msg;
-      const list = useStream(data, {channelId, parentId});
       if (msg.createdAt) {
         msg.createdAt = (new Date(msg.createdAt)).toISOString();
       }
-      const existing = list.find((m) => (m.id && m.id === msg.id)
+      const existing = data.find((m) => (m.id && m.id === msg.id)
         || (m.clientId && m.clientId === msg.clientId));
 
       if (existing) {
         Object.assign(existing, msg);
         return;
       }
-      let pos = list.findIndex((m) => m.createdAt < msg.createdAt);
-      if (pos === -1 && list.some((m) => m.createdAt > msg.createdAt)) pos = list.length;
-      list.splice(pos, 0, msg);
+      let pos = data.findIndex((m) => m.createdAt < msg.createdAt);
+      if (pos === -1 && data.some((m) => m.createdAt > msg.createdAt)) pos = data.length;
+      data.splice(pos, 0, msg);
     })
   },
   [add]: ({data, status}, action) => {
     if (status === 'archive') return;
     const msg = action.payload;
-    const { channelId, parentId } = msg;
-    const list = useStream(data, {channelId, parentId});
     if (msg.createdAt) {
       msg.createdAt = (new Date(msg.createdAt)).toISOString();
     }
-    const existing = list.find((m) => (m.id && m.id === msg.id)
+    const existing = data.find((m) => (m.id && m.id === msg.id)
       || (m.clientId && m.clientId === msg.clientId));
 
     if (existing) {
       Object.assign(existing, msg);
       return;
     }
-    let pos = list.findIndex((m) => m.createdAt < msg.createdAt);
-    if (pos === -1 && list.some((m) => m.createdAt > msg.createdAt)) pos = list.length;
-    list.splice(pos, 0, msg);
+    let pos = data.findIndex((m) => m.createdAt < msg.createdAt);
+    if (pos === -1 && data.some((m) => m.createdAt > msg.createdAt)) pos = data.length;
+    data.splice(pos, 0, msg);
   },
 
-  [takeHead]: (state, action) => {
-    const {stream, count} = action.payload;
-    const list = useStream(state.data, stream);
-    const ids = list
-      .slice(0, Math.max(list.length - count, 0))
+  [takeHead]: ({ data }, action) => {
+    const {stream: {channelId, parentId}, count} = action.payload;
+    const ids = data
+      .filter((m) => m.channelId === channelId && (!parentId || m.parentId === parentId))
+      .slice(0, Math.max(data.length - count, 0))
+      .map((m) => m.id);
+    data = data.filter((m) => !ids.includes(m.id));
+  },
+
+  [takeTail]: ({data}, action) => {
+    const {stream: {channelId, parentId}, count} = action.payload;
+    const ids = data
+      .filter((m) => m.channelId === channelId && (!parentId || m.parentId === parentId))
+      .slice(0, Math.min(count, data.length))
       .map((m) => m.id)
-    setStream(state.data, stream, list.filter((m) => !ids.includes(m.id)));
+
+    data = data.filter((m) => !ids.includes(m.id))
   },
 
-  [takeTail]: (state, action) => {
-    const {stream, count} = action.payload;
-    const list = useStream(state.data, stream);
-    const ids = list
-      .slice(0, Math.min(count, list.length))
-      .map((m) => m.id)
-
-    setStream(state.data, stream, list.filter((m) => ids.includes(m.id)));
-  },
-
-  logout: () => ({ list: [], loading: false }),
+  logout: () => ({ data: [], loading: false }),
 })
 
 export const actions = {
@@ -143,7 +117,7 @@ export const actions = {
   removeMessagesBefore: removeBefore,
   loadMessages: createAsyncThunk('messages/load', async ({limit = 50}, {getState}) => {
     const {channel} = getState();
-    return client.req({ type: 'load', limit, channel });
+    return client.notif({ type: 'load', limit, channel });
   }),
   takeTail,
   takeHead,

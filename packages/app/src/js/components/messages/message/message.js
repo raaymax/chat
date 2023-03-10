@@ -33,6 +33,7 @@ const MessageBase = (props = {}) => {
     }
   }, [setHovered, hovered, id]);
 
+  console.log(user);
   return (
     <div
       {...props}

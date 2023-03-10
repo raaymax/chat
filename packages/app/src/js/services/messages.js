@@ -29,11 +29,11 @@ export const loadPrevious = (stream) => async (dispatch, getState) => {
     const req = await client.req2({
       ...stream,
       type: 'load',
-      before: selectors.getEarliestDate()(getState()),
+      before: selectors.getEarliestDate(stream)(getState()),
       limit: 50,
     })
     dispatch(actions.addMessages(req.data));
-    if (selectors.countMessagesInStream(stream, getState()) > 100) {
+    if (selectors.countMessagesInStream(stream)(getState()) > 100) {
       dispatch(actions.patchStream({id: stream.id, patch: {type: 'archive'}}));
       setTimeout(() => {
         dispatch(actions.takeHead({stream, count: 100}));
@@ -61,12 +61,12 @@ export const loadNext = (stream) => async (dispatch, getState) => {
     const req = await client.req2({
       ...stream,
       type: 'load',
-      after: selectors.getLatestDate()(getState()),
+      after: selectors.getLatestDate(stream)(getState()),
       limit: 50,
     })
     if (req.data?.length > 0) dispatch(updateProgress(req.data[0].id))
     dispatch(actions.addMessages(req.data));
-    if (selectors.countMessagesInStream(stream, getState()) > 100) {
+    if (selectors.countMessagesInStream(stream)(getState()) > 100) {
       setTimeout(() => {
         dispatch(actions.takeTail({stream, count: 100}));
       }, 1)
@@ -185,7 +185,7 @@ export const sendCommand = (stream, msg) => async (dispatch) => {
   msg.context = {...stream, appVersion: APP_VERSION};
   dispatch(actions.addMessage(notif));
   try {
-    await client.req(msg);
+    await client.notif(msg);
     dispatch(actions.addMessage({ ...notif, notifType: 'success', notif: `${msg.name} executed successfully` }));
   } catch (err) {
     dispatch(actions.addMessage({ ...notif, notifType: 'error', notif: `${msg.name} error ${err.message}` }));
@@ -195,10 +195,13 @@ export const sendCommand = (stream, msg) => async (dispatch) => {
 const sendMessage = (msg) => async (dispatch) => {
   dispatch(actions.addMessage({...msg, pending: true}));
   try {
-    await client.req(msg);
+    await client.notif(msg);
   } catch (err) {
+    console.log(err);
     dispatch(actions.addMessage({
       clientId: msg.clientId,
+      channelId: msg.channelId,
+      parentId: msg.parentId,
       info: {
         msg: 'Sending message failed',
         type: 'error',
@@ -211,8 +214,13 @@ const sendMessage = (msg) => async (dispatch) => {
 export const resend = (id) => (dispatch, getState) => {
   const msg = selectors.getMessage(id)(getState());
   dispatch(sendMessage({
-    ...msg,
-    info: null,
+    clientId: msg.clientId,
+    channelId: msg.channelId,
+    parentId: msg.parentId,
+    info: {
+      msg: 'Resending',
+      type: 'warning',
+    },
   }));
 };
 
