@@ -12,13 +12,11 @@ client.req = (msg) => Request.send(msg, client);
 client.notif = (msg) => Notification.send(msg, client);
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.addEventListener('message', (payload) => {
-    client.emit('notification', payload);
+  navigator.serviceWorker.addEventListener('message', ({data}) => {
+    if(data.type){
+      client.emit(data.type, data);
+    }
   });
 }
-
-navigator.serviceWorker.addEventListener("message", (event) => {
-  console.log(event.data.msg, event.data.url);
-});
 
 export { client };

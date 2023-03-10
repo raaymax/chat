@@ -8,7 +8,7 @@ const messaging = getMessaging(firebaseApp);
 onBackgroundMessage(messaging, async (payload) => {
   const client = await getOpenClient();
   if (client) {
-    await client.postMessage(payload);
+    await client.postMessage({type: 'notification', ...payload});
   }
 });
 

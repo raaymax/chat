@@ -173,6 +173,57 @@ export const sendFromDom = (stream, dom) => async (dispatch, getState) => {
 
 export const send = (stream, msg) => (dispatch) => dispatch(msg.type === 'command' ? sendCommand(stream, msg) : sendMessage(msg));
 
+export const sendShareMessage = (data) => async (dispatch, getState) => {
+  const {channelId, parentId} = selectors.getStream('main')(getState());
+  const msg = build({
+    type: 'message',
+    channelId: channelId,
+    parentId: parentId,
+    flat: data.title + ' ' + data.text + ' ' + data.url,
+    message: [
+      buildShareLink(data),
+    ]
+  }, getState());
+  dispatch(actions.addMessage({...msg, pending: true}));
+  try {
+    await client.notif(msg);
+  } catch (err) {
+    console.log(err);
+    dispatch(actions.addMessage({
+      clientId: msg.clientId,
+      channelId: msg.channelId,
+      parentId: msg.parentId,
+      info: {
+        msg: 'Sending message failed',
+        type: 'error',
+        action: 'resend',
+      },
+    }));
+  }
+}
+
+const buildShareLink = (data) => {
+  if(data.url) {
+    return { link: { href: data.url, children: buildShareMessage(data) }};
+  }
+  return buildShareMessage(data);
+}
+
+const buildShareMessage = (data) => {
+  const lines = [];
+  if(data.title) {
+    lines.push({line: {bold: data.title}});
+  }
+  if(data.text) {
+    lines.push({line: {text: data.text}});
+  }
+  if(data.url) {
+    lines.push({line: {text: data.url}});
+  }
+  return lines;
+}
+
+
 export const sendCommand = (stream, msg) => async (dispatch) => {
   const notif = {
     type: 'notif',
