@@ -13,7 +13,7 @@
     },
     "packages/rpc": {
       "component": "rpc"
-    },
+    }
   },
   "plugins": [
     {"type": "node-workspace"},
