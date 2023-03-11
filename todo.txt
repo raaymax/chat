@@ -1,12 +1,12 @@
 v1.7.0
 x refactor: remove old req
-- feat: channel creation ability
 x refactor: migrate to rpc client
 x feat: share target add to service worker and redirect to app
 x feat: changelog on github
-- feat: save message parsing errros in database and display them in message
 
 v1.8.0
+- feat: channel creation ability
+- feat: save message parsing errros in database and display them in message
 - feat: ability to share files
 - feat: rss feeds (https://xkcd.com/2294/)
 - feat: emoji selector

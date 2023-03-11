@@ -70,18 +70,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-      if: ${{ steps.release.outputs.release_created }}
+      if: ${{ needs.release-please.outputs.release_created }}
       with:
         fetch-depth: 0
 
     - uses: kielabokkie/ssh-key-and-known-hosts-action@v1
-      if: ${{ steps.release.outputs.release_created }}
+      if: ${{ needs.release-please.outputs.release_created }}
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
         ssh-host: ${{ secrets.SSH_HOST }}
 
     - name: Push changes to remote
-      if: ${{ steps.release.outputs.release_created }}
+      if: ${{ needs.release-please.outputs.release_created }}
       run: |
         git remote add prod ssh://raay@codecat.io:/var/docker/chat/app
         git push --verbose prod master:master -f
