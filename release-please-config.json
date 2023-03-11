@@ -7,22 +7,22 @@
     ".": {
       "component": "@quack/quack"
       "pullRequestTitlePattern": "chore: release ${component} ${version}",
-      "group-pull-request-title-pattern": "chore: release ${component} ${version}",
+      "group-pull-request-title-pattern": "chore: release ${component} ${version}"
     },
     "packages/app": {
       "component": "@quack/app"
       "pullRequestTitlePattern": "chore: release ${component} ${version}",
-      "group-pull-request-title-pattern": "chore: release ${component} ${version}",
+      "group-pull-request-title-pattern": "chore: release ${component} ${version}"
     },
     "packages/server": {
       "component": "@quack/server"
       "pullRequestTitlePattern": "chore: release ${component} ${version}",
-      "group-pull-request-title-pattern": "chore: release ${component} ${version}",
+      "group-pull-request-title-pattern": "chore: release ${component} ${version}"
     },
     "packages/rpc": {
       "component": "@quack/rpc"
       "pullRequestTitlePattern": "chore: release ${component} ${version}",
-      "group-pull-request-title-pattern": "chore: release ${component} ${version}",
+      "group-pull-request-title-pattern": "chore: release ${component} ${version}"
     }
   },
   "plugins": [
