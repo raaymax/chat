@@ -61,7 +61,9 @@ jobs:
     - run: pnpm run test:ci
 
   deploy:
-    needs: tests
+    needs: 
+    - tests
+    - release-please
     name: Deploy to server
     runs-on: ubuntu-latest
 
