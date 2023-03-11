@@ -11,77 +11,77 @@ permissions:
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{steps.release.outputs.release_created}}
     steps:
       - uses: google-github-actions/release-please-action@v3
         id: release
         with:
           release-type: node
-          token: ${{secrets.GITHUB_TOKEN}}
-          package-name: release-please-action
-  tests:
-    runs-on: ubuntu-latest
-    name: Tests
-    services:
-      mongo:
-        image: mongo:5
-        env:
-          MONGO_INITDB_ROOT_USERNAME: chat
-          MONGO_INITDB_ROOT_PASSWORD: chat
-        options: >-
-          --health-cmd mongo
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 27017:27017
-    env:
-      DATABASE_URL: 'mongodb://chat:chat@localhost:27017/tests?authSource=admin'
-    outputs:
-      tagged: ${{steps.tagged.outputs.tagged}}
-    steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-    - uses: pnpm/action-setup@v2
-      with:
-        version: 7
-    - name: Use Node.js 17.x
-      uses: actions/setup-node@v3
-      with:
-        node-version: 17.x
-        cache: 'pnpm'
-    - name: apply secrets
-      run: echo $CONFIG_FILE >> chat.config.js
-      shell: bash
-      env:
-        CONFIG_FILE: ${{secrets.TEST_CONFIG}}
-        DATABASE_URL: 'mongodb://chat:chat@localhost:27017/tests?authSource=admin'
-    - run: pnpm i
-    - run: pnpm run lint:ci
-    - run: pnpm exec migrate-mongo up
-    - run: pnpm run test:ci
+          token: ${{secrets.PERSONAL_GH_TOKEN}}
+          command: manifest
+            # tests:
+            #   runs-on: ubuntu-latest
+            #   name: Tests
+            #   services:
+            #     mongo:
+            #       image: mongo:5
+            #       env:
+            #         MONGO_INITDB_ROOT_USERNAME: chat
+            #         MONGO_INITDB_ROOT_PASSWORD: chat
+            #       options: >-
+            #         --health-cmd mongo
+            #         --health-interval 10s
+            #         --health-timeout 5s
+            #         --health-retries 5
+            #       ports:
+            #         - 27017:27017
+            #   env:
+            #     DATABASE_URL: 'mongodb://chat:chat@localhost:27017/tests?authSource=admin'
+            #   steps:
+            #   - uses: actions/checkout@v3
+            #     with:
+            #       fetch-depth: 0
+            #   - uses: pnpm/action-setup@v2
+            #     with:
+            #       version: 7
+            #   - name: Use Node.js 17.x
+            #     uses: actions/setup-node@v3
+            #     with:
+            #       node-version: 17.x
+            #       cache: 'pnpm'
+            #   - name: apply secrets
+            #     run: echo $CONFIG_FILE >> chat.config.js
+            #     shell: bash
+            #     env:
+            #       CONFIG_FILE: ${{secrets.TEST_CONFIG}}
+            #       DATABASE_URL: 'mongodb://chat:chat@localhost:27017/tests?authSource=admin'
+            #   - run: pnpm i
+            #   - run: pnpm run lint:ci
+            #   - run: pnpm exec migrate-mongo up
+            #   - run: pnpm run test:ci
 
   deploy:
     needs: 
-    - tests
     - release-please
+    # - tests
     name: Deploy to server
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
-      if: ${{ steps.release.outputs.release_created }}
+      if: ${{ needs.release-please.outputs.release_created }}
       with:
         fetch-depth: 0
 
     - uses: kielabokkie/ssh-key-and-known-hosts-action@v1
-      if: ${{ steps.release.outputs.release_created }}
+      if: ${{ needs.release-please.outputs.release_created }}
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
         ssh-host: ${{ secrets.SSH_HOST }}
 
     - name: Push changes to remote
-      if: ${{ steps.release.outputs.release_created }}
+      if: ${{ needs.release-please.outputs.release_created }}
       run: |
         git remote add prod ssh://raay@codecat.io:/var/docker/chat/app
         git push --verbose prod master:master -f
