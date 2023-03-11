@@ -1,28 +1,28 @@
 {
   "bootstrap-sha": "d4f4923d576d7777ff08bdc43c628aecc4a0d33f",
   "release-type": "node",
-  "pullRequestTitlePattern": "chore(${scope}): release ${component} ${version}",
-  "group-pull-request-title-pattern": "chore(${scope}): release ${component} ${version}",
+  "pullRequestTitlePattern": "chore${scope}: release ${component} ${version}",
+  "group-pull-request-title-pattern": "chore${scope}: release ${component} ${version}",
   "packages": {
     ".": {
       "component": "@quack/quack",
-      "pullRequestTitlePattern": "chore: release ${component} ${version}",
-      "group-pull-request-title-pattern": "chore(${scope}): release ${component} ${version}"
+      "pullRequestTitlePattern": "chore${scope}: release ${component} ${version}",
+      "group-pull-request-title-pattern": "chore${scope}: release ${component} ${version}"
     },
     "packages/app": {
       "component": "@quack/app",
-      "pullRequestTitlePattern": "chore(${scope}): release ${component} ${version}",
-      "group-pull-request-title-pattern": "chore(${scope}): release ${component} ${version}"
+      "pullRequestTitlePattern": "chore${scope}: release ${component} ${version}",
+      "group-pull-request-title-pattern": "chore${scope}: release ${component} ${version}"
     },
     "packages/server": {
       "component": "@quack/server",
-      "pullRequestTitlePattern": "chore(${scope}): release ${component} ${version}",
-      "group-pull-request-title-pattern": "chore(${scope}): release ${component} ${version}"
+      "pullRequestTitlePattern": "chore${scope}: release ${component} ${version}",
+      "group-pull-request-title-pattern": "chore${scope}: release ${component} ${version}"
     },
     "packages/rpc": {
       "component": "@quack/rpc",
-      "pullRequestTitlePattern": "chore(${scope}): release ${component} ${version}",
-      "group-pull-request-title-pattern": "chore(${scope}): release ${component} ${version}"
+      "pullRequestTitlePattern": "chore${scope}: release ${component} ${version}",
+      "group-pull-request-title-pattern": "chore${scope}: release ${component} ${version}"
     }
   },
   "plugins": [
