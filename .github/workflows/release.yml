@@ -19,7 +19,7 @@ jobs:
         with:
           release-type: node
           token: ${{secrets.PERSONAL_GH_TOKEN}}
-          command: manifest-pr
+          command: manifest
   tests:
     runs-on: ubuntu-latest
     name: Tests
