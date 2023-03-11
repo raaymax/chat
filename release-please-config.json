@@ -1,11 +1,9 @@
 {
   "bootstrap-sha": "0cb9b72583f881a3e0ba0cbe7e1a14132e4251cb",
   "release-type": "node",
-  "pull-request-title-pattern": "chore: release${component} ${version}",
   "skip-github-release": false,
   "packages": {
     ".": {
-      "component": "quack",
       "changelog-path": "CHANGELOG.md",
       "release-type": "node",
       "bump-minor-pre-major": false,
@@ -14,15 +12,12 @@
       "prerelease": false
     },
     "packages/app": {
-      "component": "app",
       "release-type": "node"
     },
     "packages/server": {
-      "component": "server",
       "release-type": "node"
     },
     "packages/rpc": {
-      "component": "rpc",
       "release-type": "node"
     }
   },
