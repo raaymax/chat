@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.7.3](https://github.com/codecat-io/chat/compare/@quack/quack-v1.7.1...@quack/quack-v1.7.3) (2023-03-11)
+
+
+### Bug Fixes
+
+* **gh-actions:** release process ([84e82db](https://github.com/codecat-io/chat/commit/84e82db521311bb0245a6392929bc0e38f9fbb4a))
+* **GH:** release process in actions ([9cbde2e](https://github.com/codecat-io/chat/commit/9cbde2e010a7213b8175783323b4c65b568f28f4))
+* **release-please:** config ([a38a9c9](https://github.com/codecat-io/chat/commit/a38a9c957ffdc1b949ad25dec22676b5a953a89b))
+* **release-please:** config ([6cebe2a](https://github.com/codecat-io/chat/commit/6cebe2abd9bb147edbe891751ff92dabfd9cd4a0))
+* **release-please:** config ([5ffb250](https://github.com/codecat-io/chat/commit/5ffb2506804d77c73fbaa6ef3e3427e13399262f))
+* **release-please:** config ([07821ee](https://github.com/codecat-io/chat/commit/07821ee52c0ed28fb59b62e6ee4f3f8e8884a78a))
+* **release-please:** releasing all packages ([acff4a7](https://github.com/codecat-io/chat/commit/acff4a7ab308b2e5f6a1b97d3988a88d86925584))
+
+
+### Miscellaneous Chores
+
+* release quack 1.7.2 ([ef041a7](https://github.com/codecat-io/chat/commit/ef041a76e5429c43ba1518d35a1b1842ac6fe532))
+* release quack 1.7.3 ([c06ebfc](https://github.com/codecat-io/chat/commit/c06ebfceecd749baf6e5dcfa3087eb4eb8ae09fa))
+
 ## [1.7.1](https://github.com/codecat-io/chat/compare/v1.7.0...v1.7.1) (2023-03-11)
 
 
