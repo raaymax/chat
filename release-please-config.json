@@ -2,6 +2,7 @@
   "bootstrap-sha": "0cb9b72583f881a3e0ba0cbe7e1a14132e4251cb",
   "release-type": "node",
   "pull-request-title-pattern": "chore: release${component} ${version}",
+  "skip-github-release": false,
   "packages": {
     ".": {
       "component": "quack",
@@ -26,13 +27,7 @@
     }
   },
   "plugins": [
-    {"type": "node-workspace"},
-    {
-      "type": "linked-versions",
-      "group-name": "all",
-      "components": [
-        "root", "app", "server", "rpc"
-      ]
-    }
+    {"type": "node-workspace",
+    "merge": true }
   ]
 }
