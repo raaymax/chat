@@ -2,11 +2,13 @@
 import { loadProgress } from './services/progress';
 import { play } from './services/sound';
 import { ackTyping } from './services/typing';
+import { sendShareMessage } from './services/messages';
 import { init } from './services/init';
 import { client } from './core';
 import store, {actions} from './state';
 
 client
+  .on('share', ({data}) => store.dispatch(sendShareMessage(data)))
   .on('user', (msg) => store.dispatch(actions.addUser(msg)))
   .on('emoji', (msg) => store.dispatch(actions.addEmoji(msg)))
   .on('badge', (msg) => store.dispatch(actions.addProgress(msg)))
@@ -32,3 +34,19 @@ client
   .on('message', (msg) => store.dispatch(actions.addMessage({...msg, pending: false })))
   .on('notification', () => { try { navigator.vibrate([100, 30, 100]); } catch (err) { /* ignore */ } })
   .on('notification', () => { try { play(); } catch (err) { /* ignore */ } });
+
+/*
+setTimeout(() => {
+  const data = {title: 'oko', text: 'dupa', url: 'https://google.com/'};
+  const formData  = new FormData();
+
+  for(const name in data) {
+    formData.append(name, data[name]);
+  }
+
+  fetch('http://localhost:8080/share/', {
+    method: 'POST',
+    body: formData,
+  });
+}, 2000);
+*/

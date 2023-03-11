@@ -242,7 +242,7 @@ ul {
   animation-duration: 1s;
   animation-iteration-count: 1;
   margin: 0;
-  padding: 5px 20px;
+  padding: 5px 10px;
   font-weight: 400;
   font-size: .7em;
 }
@@ -251,7 +251,11 @@ ul {
   color: #277370
 }
 .notification.warning{
-  border-left: 10px solid #852007; 
+  border-left: 74px solid #f2c94c;
+  color: #852007
+}
+.notification.error{
+  border-left: 74px solid #852007; 
   color: #852007
 }
 .notification:hover {

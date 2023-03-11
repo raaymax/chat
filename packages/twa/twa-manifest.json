@@ -1,0 +1,42 @@
+{
+  "packageId": "io.codecat.chat.twa",
+  "host": "chat.codecat.io",
+  "name": "Quack",
+  "launcherName": "quack",
+  "display": "standalone",
+  "themeColor": "#673AB8",
+  "navigationColor": "#000000",
+  "navigationColorDark": "#000000",
+  "navigationDividerColor": "#000000",
+  "navigationDividerColorDark": "#000000",
+  "backgroundColor": "#1A1D21",
+  "enableNotifications": true,
+  "startUrl": "/",
+  "iconUrl": "https://chat.codecat.io/assets/icons/android-chrome-512x512.png",
+  "maskableIconUrl": "https://chat.codecat.io/assets/icons/android-chrome-512x512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "/Users/raay/Workspace/CodeCat/Chat/experimental/android/android.keystore",
+    "alias": "android-twa"
+  },
+  "appVersionName": "6",
+  "appVersionCode": 6,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://chat.codecat.io/manifest.json",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://chat.codecat.io/",
+  "minSdkVersion": 19,
+  "orientation": "portrait",
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": [],
+  "appVersion": "6"
+}

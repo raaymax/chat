@@ -2,7 +2,7 @@ import { client } from '../core';
 import { actions } from '../state';
 
 export const loadBadges = () => async(dispatch) => {
-  const {data} = await client.req2({
+  const {data} = await client.req({
     type: 'loadBadges',
   })
   data.forEach((p) => dispatch(actions.addProgress(p)));
@@ -10,7 +10,7 @@ export const loadBadges = () => async(dispatch) => {
 
 export const loadProgress = (stream) => async(dispatch) => {
   if (!stream.channelId) return;
-  const {data} = await client.req2({
+  const {data} = await client.req({
     type: 'loadProgress',
     channelId: stream.channelId,
     parentId: stream.parentId,
@@ -20,7 +20,7 @@ export const loadProgress = (stream) => async(dispatch) => {
 
 export const updateProgress = (messageId) => async(dispatch) => {
   try {
-    const {data} = await client.req2({
+    const {data} = await client.req({
       type: 'updateProgress',
       messageId,
     })

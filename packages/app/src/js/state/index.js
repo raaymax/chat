@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import { configureStore, createSelector, createAction } from '@reduxjs/toolkit'
 import {useSelector} from 'react-redux';
-import messages, { actions as messageActions, getStream } from './messages';
+import messages, { actions as messageActions} from './messages';
 import connected, { actions as connectionActions } from './connection';
 import config, { actions as configActions } from './config';
 import channels, { actions as channelActions } from './channels';
@@ -37,6 +37,10 @@ export const actions = {
   ...progressActions,
   ...streamActions,
 }
+
+const getStreamMessages = (stream, messages) => messages
+  .filter((m) => m.channelId === stream.channelId
+    && (!stream.parentId || m.parentId === stream.parentId));
 
 export const selectors = {
   getProgress: ({channelId, parentId}) => createSelector(
@@ -84,19 +88,6 @@ export const selectors = {
   getView: (state) => state.view.current,
   getSearchResults: (state) => state.search.results,
   getPinnedMessages: (channel) => (state) => state.pins.data[channel] || [],
-  getChannelMessages: (channelId) => createSelector(
-    (state) => state.messages.data,
-    (messages) => messages[channelId] || [],
-  ),
-  getStreamMessages: (stream) => createSelector(
-    (state) => state.messages.data,
-    (messages) => getStream(messages, stream),
-  ),
-  getMessages: createSelector(
-    (state) => state.channels.current,
-    (state) => state.messages.data,
-    (channel, messages) => messages[channel] || [],
-  ),
   getMessagesStatus: (state) => state.messages.status,
   getHoveredMessage: (state) => state.messages.hovered,
   getInitFailed: (state) => state.system.initFailed,
@@ -106,31 +97,19 @@ export const selectors = {
   getMessagesNextLoading: (state) => state.messages.loading || state.messages.loadingNext,
   // getSelectedMessage: (state) => state.messages.selected,
   // countMessagesInChannel: (channel, state) => state.messages.data[channel]?.length || 0,
-  countMessagesInStream: (stream, state) => state.messages.data[stream.parentId ? (`${stream.channelId}:${stream.parentId}`) : stream.channelId]?.length || 0,
-  getLatestDate: () => createSelector(
-    (state) => state.channels.current,
-    (state) => state.messages.data,
-    (channel, messages) => (messages[channel][0]
-      ? messages[channel][0].createdAt
-      : new Date().toISOString()),
-  ),
-  getEarliestDate: () => createSelector(
-    (state) => state.channels.current,
-    (state) => state.messages.data,
-    (channel, messages) => (messages[channel][messages[channel].length - 1]
-      ? messages[channel][messages[channel].length - 1].createdAt
-      : new Date().toISOString()),
-  ),
-  getMessage: (id) => createSelector(
-    (state) => state.messages.data,
-    (messages) => {
-      for (const channel of Object.values(messages)) {
-        const message = channel.find((m) => m.id === id);
-        if (message) return message;
-      }
-      return null;
-    },
-  ),
+  countMessagesInStream: (stream) => (state) => getStreamMessages(stream, state.messages.data)
+    .length,
+  getStreamMessages: (stream) => (state) => getStreamMessages(stream, state.messages.data),
+  getLatestDate: (stream) => (state) => {
+    const data = getStreamMessages(stream, state.messages.data);
+    return data.length ? data[0].createdAt : new Date().toISOString();
+  },
+  getEarliestDate: (stream) => (state) => {
+    const data = getStreamMessages(stream, state.messages.data);
+    return data.length ? data[data.length - 1].createdAt : new Date().toISOString();
+  },
+  getMessage: (id) => (state) => state.messages.data
+    .find((m) => m.id === id || m.clientId === id) || null,
   getCurrentChannel: createSelector(
     (state) => state.channels.list,
     (state) => state.channels.current,

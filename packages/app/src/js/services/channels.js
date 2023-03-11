@@ -13,4 +13,14 @@ export const openChannel = createAsyncThunk('channels/open', async (q, {dispatch
   window.location.hash = channel.id;
 });
 
-export const loadChannels = () => async () => client.req({ type: 'channels' });
+export const loadChannels = () => async (dispatch) => {
+  try {
+    const res = await client.req({type: 'channels'});
+    res.data.forEach((usr) => {
+      dispatch(actions.addChannel(usr))
+    })
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(err);
+  }
+}

@@ -17,7 +17,6 @@ No idea how to propagate messages to other serverless instances.
 mongo, redis, postgres need to be hosted to be able to watch for messages.  
 Maybe pub/sub would work but it seems complicated.  
 
-
 ## Local development setup
 
 Then create local mongo server with docker-compose

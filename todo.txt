@@ -1,20 +1,20 @@
-https://xkcd.com/2294/ add rss feeds to chat
-text formatting - bold
+v1.7.0
+x refactor: remove old req
+- feat: channel creation ability
+x refactor: migrate to rpc client
+x feat: share target add to service worker and redirect to app
+x feat: changelog on github
+- feat: save message parsing errros in database and display them in message
 
-TODO: Notifications merging based on badges
+v1.8.0
+- feat: ability to share files
+- feat: rss feeds (https://xkcd.com/2294/)
+- feat: emoji selector
+- feat: link preview
 
-Idea: Log errors as messages in the channel
-
-better formatting of openai responses
-
-
-
-
-badges for threads
-
-
-
-
-
-
-
+backlog:
+- fix: attachment is displaying in all inputs
+- fix: html parsing failed on production
+- fix: bob is not working - migrate to chatgpt?
+- fix: notifications are not taking user to correct message
+- improvement: emoji alternative names

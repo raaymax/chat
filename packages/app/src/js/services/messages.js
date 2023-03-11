@@ -26,14 +26,14 @@ export const loadPrevious = (stream) => async (dispatch, getState) => {
       },
     }));
     dispatch(actions.selectMessage(null));
-    const req = await client.req2({
+    const req = await client.req({
       ...stream,
       type: 'load',
-      before: selectors.getEarliestDate()(getState()),
+      before: selectors.getEarliestDate(stream)(getState()),
       limit: 50,
     })
     dispatch(actions.addMessages(req.data));
-    if (selectors.countMessagesInStream(stream, getState()) > 100) {
+    if (selectors.countMessagesInStream(stream)(getState()) > 100) {
       dispatch(actions.patchStream({id: stream.id, patch: {type: 'archive'}}));
       setTimeout(() => {
         dispatch(actions.takeHead({stream, count: 100}));
@@ -58,15 +58,15 @@ export const loadNext = (stream) => async (dispatch, getState) => {
       },
     }));
     dispatch(actions.selectMessage(null));
-    const req = await client.req2({
+    const req = await client.req({
       ...stream,
       type: 'load',
-      after: selectors.getLatestDate()(getState()),
+      after: selectors.getLatestDate(stream)(getState()),
       limit: 50,
     })
     if (req.data?.length > 0) dispatch(updateProgress(req.data[0].id))
     dispatch(actions.addMessages(req.data));
-    if (selectors.countMessagesInStream(stream, getState()) > 100) {
+    if (selectors.countMessagesInStream(stream)(getState()) > 100) {
       setTimeout(() => {
         dispatch(actions.takeTail({stream, count: 100}));
       }, 1)
@@ -90,14 +90,14 @@ export const loadMessagesArchive = (stream) => async (dispatch, getState) => {
   try {
     const loadingDone = loading(dispatch, getState);
     dispatch(actions.messagesClear({stream}))
-    const req2 = await client.req2({
+    const req2 = await client.req({
       ...stream,
       type: 'load',
       before: date,
       limit: 50,
     })
     dispatch(actions.addMessages(req2.data));
-    const req = await client.req2({
+    const req = await client.req({
       ...stream,
       type: 'load',
       after: date,
@@ -121,7 +121,7 @@ export const loadMessagesLive = (stream) => async (dispatch, getState) => {
   if (!stream.channelId) return;
   try {
     const loadingDone = loading(dispatch, getState);
-    const req = await client.req2({
+    const req = await client.req({
       ...stream,
       type: 'load',
       limit: 50,
@@ -146,7 +146,7 @@ export const loadMessages = (stream) => async (dispatch) => {
 
 export const addReaction = (id, text) => async (dispatch) => {
   try {
-    const req = await client.req2({
+    const req = await client.req({
       type: 'reaction',
       id,
       reaction: text.trim(),
@@ -173,10 +173,62 @@ export const sendFromDom = (stream, dom) => async (dispatch, getState) => {
 
 export const send = (stream, msg) => (dispatch) => dispatch(msg.type === 'command' ? sendCommand(stream, msg) : sendMessage(msg));
 
+export const sendShareMessage = (data) => async (dispatch, getState) => {
+  const {channelId, parentId} = selectors.getStream('main')(getState());
+  const msg = build({
+    type: 'message',
+    channelId,
+    parentId,
+    flat: `${data.title} ${data.text} ${data.url}`,
+    message: [
+      buildShareLink(data),
+    ],
+  }, getState());
+  dispatch(actions.addMessage({...msg, pending: true}));
+  try {
+    await client.notif(msg);
+  } catch (err) {
+    dispatch(actions.addMessage({
+      clientId: msg.clientId,
+      channelId: msg.channelId,
+      parentId: msg.parentId,
+      info: {
+        msg: 'Sending message failed',
+        type: 'error',
+        action: 'resend',
+      },
+    }));
+  }
+}
+
+const buildShareLink = (data) => {
+  if (data.url) {
+    return { link: { href: data.url, children: buildShareMessage(data) }};
+  }
+  return buildShareMessage(data);
+}
+
+const buildShareMessage = (data) => {
+  const lines = [];
+  if (data.title) {
+    lines.push({line: {bold: data.title}});
+  }
+  if (data.text) {
+    lines.push({line: {text: data.text}});
+  }
+  if (data.url) {
+    lines.push({line: {text: data.url}});
+  }
+  return lines;
+}
+
 export const sendCommand = (stream, msg) => async (dispatch) => {
   const notif = {
+    type: 'notif',
     userId: 'notif',
     clientId: msg.clientId,
+    channelId: stream.channelId,
+    parentId: stream.parentId,
     notifType: 'info',
     notif: `${msg.name} sent`,
     createdAt: (new Date()).toISOString(),
@@ -185,20 +237,22 @@ export const sendCommand = (stream, msg) => async (dispatch) => {
   msg.context = {...stream, appVersion: APP_VERSION};
   dispatch(actions.addMessage(notif));
   try {
-    await client.req(msg);
+    await client.notif(msg);
     dispatch(actions.addMessage({ ...notif, notifType: 'success', notif: `${msg.name} executed successfully` }));
   } catch (err) {
-    dispatch(actions.addMessage({ ...notif, notifType: 'error', notif: `${msg.name} error ${err.message}` }));
+    dispatch(actions.addMessage({ ...notif, notifType: 'error', notif: `${msg.name} error ${err.res.message || err.message}` }));
   }
 };
 
 const sendMessage = (msg) => async (dispatch) => {
   dispatch(actions.addMessage({...msg, pending: true}));
   try {
-    await client.req(msg);
+    await client.notif(msg);
   } catch (err) {
     dispatch(actions.addMessage({
       clientId: msg.clientId,
+      channelId: msg.channelId,
+      parentId: msg.parentId,
       info: {
         msg: 'Sending message failed',
         type: 'error',
@@ -211,14 +265,19 @@ const sendMessage = (msg) => async (dispatch) => {
 export const resend = (id) => (dispatch, getState) => {
   const msg = selectors.getMessage(id)(getState());
   dispatch(sendMessage({
-    ...msg,
-    info: null,
+    clientId: msg.clientId,
+    channelId: msg.channelId,
+    parentId: msg.parentId,
+    info: {
+      msg: 'Resending',
+      type: 'warning',
+    },
   }));
 };
 
 export const removeMessage = (msg) => async (dispatch) => {
   try {
-    await client.req({ type: 'removeMessage', id: msg.id });
+    await client.notif({ type: 'removeMessage', id: msg.id });
   } catch (err) {
     dispatch(actions.addMessage({
       id: msg.id,
