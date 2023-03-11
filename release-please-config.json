@@ -1,7 +1,41 @@
 {
   "bootstrap-sha": "0cb9b72583f881a3e0ba0cbe7e1a14132e4251cb",
   "release-type": "node",
+  "pull-request-title-pattern": "chore${scope}: release${component} ${version}",
+  "group-pull-request-title-pattern": "chore${scope}: release${component} ${version}",
   "packages": {
-    ".": {}
-  }
+    ".": {
+      "component": "@quack/quack",
+      "pull-request-title-pattern": "chore${scope}: release${component} ${version}",
+      "group-pull-request-title-pattern": "chore${scope}: release${component} ${version}"
+    },
+    "packages/app": {
+      "component": "@quack/app",
+      "pull-request-title-pattern": "chore${scope}: release${component} ${version}",
+      "group-pull-request-title-pattern": "chore${scope}: release${component} ${version}"
+    },
+    "packages/server": {
+      "component": "@quack/server",
+      "pull-request-title-pattern": "chore${scope}: release${component} ${version}",
+      "group-pull-request-title-pattern": "chore${scope}: release${component} ${version}"
+    },
+    "packages/rpc": {
+      "component": "@quack/rpc",
+      "pull-request-title-pattern": "chore${scope}: release${component} ${version}",
+      "group-pull-request-title-pattern": "chore${scope}: release${component} ${version}"
+    }
+  },
+  "plugins": [
+    {
+      "type": "linked-versions",
+      "groupName": "@quack/quack",
+      "merge": true,
+      "components": [
+        "@quack/quack",
+        "@quack/app",
+        "@quack/server",
+        "@quack/rpc"
+      ]
+    }
+  ]
 }
