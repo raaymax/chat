@@ -3,16 +3,25 @@
   "release-type": "node",
   "packages": {
     ".": {
-      "component": "root"
+      "component": "quack",
+      "changelog-path": "CHANGELOG.md",
+      "release-type": "node",
+      "bump-minor-pre-major": false,
+      "bump-patch-for-minor-pre-major": false,
+      "draft": false,
+      "prerelease": false
     },
     "packages/app": {
-      "component": "app"
+      "component": "app",
+      "release-type": "node"
     },
     "packages/server": {
-      "component": "server"
+      "component": "server",
+      "release-type": "node"
     },
     "packages/rpc": {
-      "component": "rpc"
+      "component": "rpc",
+      "release-type": "node"
     }
   },
   "plugins": [
