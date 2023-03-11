@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/codecat-io/chat/compare/v1.7.0...v1.7.1) (2023-03-11)
+
+
+### Bug Fixes
+
+* deploy after release not working ([7c95fab](https://github.com/codecat-io/chat/commit/7c95faba86b6dd07852096936fb12fbbe99c7379))
+
 ## [1.7.0](https://github.com/codecat-io/chat/compare/v1.6.13...v1.7.0) (2023-03-11)
 
 
