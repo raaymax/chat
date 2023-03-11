@@ -1,6 +1,6 @@
 {
   "name": "@quack/rpc",
-  "version": "1.7.2",
+  "version": "1.7.0",
   "description": "",
   "main": "build/index.js",
   "scripts": {
