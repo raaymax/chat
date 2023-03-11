@@ -3,7 +3,12 @@
   "release-type": "node",
   "packages": {
     ".": {
-      "component": "root"
+      "changelog-path": "CHANGELOG.md",
+      "release-type": "node",
+      "bump-minor-pre-major": false,
+      "bump-patch-for-minor-pre-major": false,
+      "draft": false,
+      "prerelease": false
     },
     "packages/app": {
       "component": "app"
@@ -16,13 +21,19 @@
     }
   },
   "plugins": [
-    {"type": "node-workspace"},
+    {
+      "type": "node-workspace"
+    },
     {
       "type": "linked-versions",
       "group-name": "all",
       "components": [
-        "root", "app", "server", "rpc"
+        "root",
+        "app",
+        "server",
+        "rpc"
       ]
     }
-  ]
+  ],
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json"
 }
