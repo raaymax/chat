@@ -2,16 +2,9 @@
 ![quack](https://github.com/codecat-io/chat/raw/master/packages/app/resources/icon.png)
 Messaging app
 
-
 ## Requirements
-- Firebase
-
-## Objectives
-
-- Create fully private messaging application. 
-- It needs to work reliably.
-- Minimize consts as much as possible.
-- Do not exceed 20USD / month!!
+- MongoDB
+- Firebase (for notifications)
 
 ## Decisions
 
