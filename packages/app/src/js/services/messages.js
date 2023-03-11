@@ -177,18 +177,17 @@ export const sendShareMessage = (data) => async (dispatch, getState) => {
   const {channelId, parentId} = selectors.getStream('main')(getState());
   const msg = build({
     type: 'message',
-    channelId: channelId,
-    parentId: parentId,
-    flat: data.title + ' ' + data.text + ' ' + data.url,
+    channelId,
+    parentId,
+    flat: `${data.title} ${data.text} ${data.url}`,
     message: [
       buildShareLink(data),
-    ]
+    ],
   }, getState());
   dispatch(actions.addMessage({...msg, pending: true}));
   try {
     await client.notif(msg);
   } catch (err) {
-    console.log(err);
     dispatch(actions.addMessage({
       clientId: msg.clientId,
       channelId: msg.channelId,
@@ -203,7 +202,7 @@ export const sendShareMessage = (data) => async (dispatch, getState) => {
 }
 
 const buildShareLink = (data) => {
-  if(data.url) {
+  if (data.url) {
     return { link: { href: data.url, children: buildShareMessage(data) }};
   }
   return buildShareMessage(data);
@@ -211,18 +210,17 @@ const buildShareLink = (data) => {
 
 const buildShareMessage = (data) => {
   const lines = [];
-  if(data.title) {
+  if (data.title) {
     lines.push({line: {bold: data.title}});
   }
-  if(data.text) {
+  if (data.text) {
     lines.push({line: {text: data.text}});
   }
-  if(data.url) {
+  if (data.url) {
     lines.push({line: {text: data.url}});
   }
   return lines;
 }
-
 
 export const sendCommand = (stream, msg) => async (dispatch) => {
   const notif = {
@@ -242,7 +240,6 @@ export const sendCommand = (stream, msg) => async (dispatch) => {
     await client.notif(msg);
     dispatch(actions.addMessage({ ...notif, notifType: 'success', notif: `${msg.name} executed successfully` }));
   } catch (err) {
-    console.log(err);
     dispatch(actions.addMessage({ ...notif, notifType: 'error', notif: `${msg.name} error ${err.res.message || err.message}` }));
   }
 };
@@ -252,7 +249,6 @@ const sendMessage = (msg) => async (dispatch) => {
   try {
     await client.notif(msg);
   } catch (err) {
-    console.log(err);
     dispatch(actions.addMessage({
       clientId: msg.clientId,
       channelId: msg.channelId,

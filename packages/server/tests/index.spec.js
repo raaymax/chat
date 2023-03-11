@@ -1,4 +1,4 @@
-// NOTE: after another db wipe, this line MUST be here! 
+// NOTE: after another db wipe, this line MUST be here!
 process.env.DATABASE_URL = 'mongodb://chat:chat@localhost:27017/tests?authSource=admin';
 
 const request = require('supertest');

@@ -39,7 +39,8 @@ export const actions = {
 }
 
 const getStreamMessages = (stream, messages) => messages
-  .filter((m) => m.channelId === stream.channelId && (!stream.parentId || m.parentId === stream.parentId));
+  .filter((m) => m.channelId === stream.channelId
+    && (!stream.parentId || m.parentId === stream.parentId));
 
 export const selectors = {
   getProgress: ({channelId, parentId}) => createSelector(
@@ -96,7 +97,8 @@ export const selectors = {
   getMessagesNextLoading: (state) => state.messages.loading || state.messages.loadingNext,
   // getSelectedMessage: (state) => state.messages.selected,
   // countMessagesInChannel: (channel, state) => state.messages.data[channel]?.length || 0,
-  countMessagesInStream: (stream) => (state) => getStreamMessages(stream, state.messages.data).length,
+  countMessagesInStream: (stream) => (state) => getStreamMessages(stream, state.messages.data)
+    .length,
   getStreamMessages: (stream) => (state) => getStreamMessages(stream, state.messages.data),
   getLatestDate: (stream) => (state) => {
     const data = getStreamMessages(stream, state.messages.data);
@@ -107,8 +109,7 @@ export const selectors = {
     return data.length ? data[data.length - 1].createdAt : new Date().toISOString();
   },
   getMessage: (id) => (state) => state.messages.data
-      .find((m) => m.id === id || m.clientId === id) || null,
-  getStreamMessages: (stream) => (state) => getStreamMessages(stream, state.messages.data),
+    .find((m) => m.id === id || m.clientId === id) || null,
   getCurrentChannel: createSelector(
     (state) => state.channels.list,
     (state) => state.channels.current,

@@ -45,7 +45,7 @@ setTimeout(() => {
   }
 
   fetch('http://localhost:8080/share/', {
-    method: 'POST', 
+    method: 'POST',
     body: formData,
   });
 }, 2000);

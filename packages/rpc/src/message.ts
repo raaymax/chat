@@ -71,6 +71,7 @@ export class Message {
     this.transport.offSeq(this.seqId);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   processSequnce(_msg: SequenceMessage, _ev: Event): void {
     return;
   }

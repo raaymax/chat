@@ -30,7 +30,7 @@ module.exports = {
     new InjectManifest({
       exclude: [],
       maximumFileSizeToCacheInBytes: 1024 * 1024 * 10,
-      swSrc: './src/sw.js'
+      swSrc: './src/sw.js',
     }),
   ],
   module: {

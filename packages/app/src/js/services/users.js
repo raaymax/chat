@@ -1,6 +1,7 @@
 import { client } from '../core';
+import { actions } from '../state';
 
-export const loadUsers = () => async () => {
+export const loadUsers = () => async (dispatch) => {
   try {
     const res = await client.req({type: 'users'});
     res.data.forEach((usr) => {

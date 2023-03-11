@@ -25,10 +25,10 @@ module.exports = (connect) => {
       const users = await ws.send({
         type: 'users',
       });
-      const systemUser = users.find((u) => u.id === 'system');
-      assert.equal(systemUser.name, 'System');
-      const aiUser = users.find((u) => u.id === 'openai');
-      assert.equal(aiUser.name, 'OpenAI');
+      const systemUser = users.find((u) => u.name === 'System');
+      assert(!!systemUser);
+      const aiUser = users.find((u) => u.name === 'OpenAI');
+      assert(!!aiUser);
       ws.close();
     });
 

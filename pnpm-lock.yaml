@@ -32,6 +32,7 @@ importers:
   packages/app:
     specifiers:
       '@babel/core': 7.17.8
+      '@babel/plugin-syntax-class-properties': 7.12.13
       '@babel/plugin-transform-react-jsx': 7.17.3
       '@babel/preset-env': 7.16.11
       '@capacitor/android': ^4.0.0
@@ -86,6 +87,7 @@ importers:
       workbox-precaching: 6.5.4
     devDependencies:
       '@babel/core': 7.17.8
+      '@babel/plugin-syntax-class-properties': 7.12.13_@babel+core@7.17.8
       '@babel/plugin-transform-react-jsx': 7.17.3_@babel+core@7.17.8
       '@babel/preset-env': 7.16.11_@babel+core@7.17.8
       '@capacitor/cli': 4.7.0

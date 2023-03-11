@@ -13,7 +13,7 @@ client.notif = (msg) => Notification.send(msg, client);
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.addEventListener('message', ({data}) => {
-    if(data.type){
+    if (data.type) {
       client.emit(data.type, data);
     }
   });

@@ -42,7 +42,7 @@ const messagesReducer = createReducer({
   [clear]: ({data}, action) => {
     const {stream: {parentId, channelId}} = action.payload;
     const ids = data
-      .filter((m => m.channelId === channelId && (!parentId || m.parentId === parentId)))
+      .filter(((m) => m.channelId === channelId && (!parentId || m.parentId === parentId)))
       .map((m) => m.id)
 
     data = data.filter((m) => !ids.includes(m.id))

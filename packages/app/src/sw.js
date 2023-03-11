@@ -9,7 +9,6 @@ const EXTERNAL_ASSETS = [
 ];
 
 self.addEventListener('install', (event) => {
-  console.log('install');
   async function onInstall() {
     const cache = await caches.open('static');
     await cache.addAll(EXTERNAL_ASSETS);
@@ -17,15 +16,15 @@ self.addEventListener('install', (event) => {
   event.waitUntil(onInstall(event));
 });
 
-console.log('start');
 self.addEventListener('fetch', (event) => {
   if (event.request.method === 'POST' && event.request.url.includes('/share/')) {
     getOpenClient().then((client) => {
       if (client) {
         event.request.formData().then((formData) => {
           const data = {}
-          for (const pair of formData.entries()) {
-              data[pair[0]] = pair[1];
+          // eslint-disable-next-line no-restricted-syntax
+          for (const [key, val] of formData.entries()) {
+            data[key] = val;
           }
           client.postMessage({type: 'share', data});
         });
@@ -44,12 +43,11 @@ self.addEventListener('fetch', (event) => {
           return fetch(event.request);
         }),
     );
-  } 
+  }
 });
 
-self.addEventListener('activate', (event) => {
-  console.log('activate');
-  //return self.clients.claim();
+self.addEventListener('activate', () => {
+  // return self.clients.claim();
 });
 
 function getOpenClient() {
