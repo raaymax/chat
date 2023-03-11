@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.7.2](https://github.com/codecat-io/chat/compare/v1.7.1...v1.7.2) (2023-03-11)
+
+
+### Bug Fixes
+
+* release-please manifest syntax error ([b7f2d88](https://github.com/codecat-io/chat/commit/b7f2d88e7fae2ae6f5ebe4cae096e69a4793f132))
+* release-please packages versions problem ([d4f4923](https://github.com/codecat-io/chat/commit/d4f4923d576d7777ff08bdc43c628aecc4a0d33f))
+* release-please version bump ([2bb3d81](https://github.com/codecat-io/chat/commit/2bb3d81f9c1d93ef705eb0d2845b44f7d2dd14ad))
+* **release-please:** config ([751009f](https://github.com/codecat-io/chat/commit/751009fa0de71c32ec64bd97516cf7799c40bc92))
+* **release-please:** config2 ([9f8c1e7](https://github.com/codecat-io/chat/commit/9f8c1e7d19625120e7df47f5b0c7758d5e502b25))
+* **release-please:** GH action ([612fa13](https://github.com/codecat-io/chat/commit/612fa131f1f684e73ddadcbde6cb3fff816c7a3f))
+
 ## [1.7.1](https://github.com/codecat-io/chat/compare/v1.7.0...v1.7.1) (2023-03-11)
 
 
