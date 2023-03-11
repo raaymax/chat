@@ -1,6 +1,6 @@
 {
-  ".":"1.7.1"
-  "packages/app":"1.7.1"
-  "packages/server":"1.7.1"
+  ".":"1.7.1",
+  "packages/app":"1.7.1",
+  "packages/server":"1.7.1",
   "packages/rpc":"1.7.1"
 }
