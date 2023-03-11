@@ -17,8 +17,6 @@ jobs:
         with:
           release-type: node
           token: ${{secrets.GITHUB_TOKEN}}
-          command: manifest
-          package-name: release-please-action
   tests:
     runs-on: ubuntu-latest
     name: Tests
