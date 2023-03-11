@@ -2,16 +2,9 @@
 ![quack](https://github.com/codecat-io/chat/raw/master/packages/app/resources/icon.png)
 Messaging app
 
-
 ## Requirements
-- Firebase
-
-## Objectives
-
-- Create fully private messaging application. 
-- It needs to work reliably.
-- Minimize consts as much as possible.
-- Do not exceed 20USD / month!!
+- MongoDB
+- Firebase (for notifications)
 
 ## Decisions
 
@@ -23,70 +16,6 @@ It would be nice to have a serverless solution but for now cheepest GCE is used.
 No idea how to propagate messages to other serverless instances.  
 mongo, redis, postgres need to be hosted to be able to watch for messages.  
 Maybe pub/sub would work but it seems complicated.  
-
-## TODO
-
-
-
-### Channels
-- feat: notifications should take you to correct channel 
-- feat: notifications should have info about channel
-
-### Milestones
-- feat: threads in messages
-- feat: emoji reactions 
-- feat: ability to upload images and files (in progress)
-  | drop and paste
-  | missing thumbnails generation
-- feat: custom emojis
-
-### Critical
-- chore: add tests for message removal
-- bug: fix paste of multiline text
-- feat: ability to refresh native app
-- ? bug: different notification sound on mobile
-- change credentials to firebase
-
-### DevOps
-- define deploy checklist
-
-### Mobile
-- change color of status bar
-
-### General
-- feat: link preview
-- feat: days separated by something
-- feat: searching messages
-- feat: custom help messages for home information
-- feat: generate icons for notifications
-- feat: command for displaying version of app and server
-- feat: frontend only commands
-- feat: changelog messages when app is updated
-- improvement: move link detection to message builder
-- improvement: separate users from messages 
-- improvement: remove temporary files from gcs after abort
-- bug: clicking on notification is not taking to correct window
-- bug: paste loosing part of text 
-- improvement: gcs images cacheing
-- improvement: emoji alternative names
-- bug: it is not possible to silence the notifications
-
-### Message editor
-- feat: focus input on any key press
-- feat: link creation when typing
-- feat: paste of :name: should translate to emoji
-- feat: formatting: code formatting when between tildas
-- feat: formatting: codeblock formatting when between 3tildas
-- feat: formatting: make ':)' and others translate to emoji
-- bug: cannot ctrl-v text with emojis from slack
-- bug: formats are working everywhere not just in input box
-- bug: formats can't be toggled off
-- bug: link detection on phone is not working
-
-### Postponed
-- feat: define web share target for sharing
-- feat: mark unread messages
-
 
 
 ## Local development setup
