@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/codecat-io/chat/compare/rpc-v1.7.0...rpc-v1.7.1) (2023-03-12)
+
+
+### Bug Fixes
+
+* **build:** failing docker build ([6448216](https://github.com/codecat-io/chat/commit/6448216d159326c5f2f307946b99074ae770d944))
+
 ## [1.7.0](https://github.com/codecat-io/chat/compare/rpc-v1.6.12...rpc-v1.7.0) (2023-03-12)
 
 
