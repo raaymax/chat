@@ -5,22 +5,22 @@
   "group-pull-request-title-pattern": "chore${scope}: release${component} ${version}",
   "packages": {
     ".": {
-      "component": "@quack/quack",
+      "component": "quack",
       "pull-request-title-pattern": "chore${scope}: release${component} ${version}",
       "group-pull-request-title-pattern": "chore${scope}: release${component} ${version}"
     },
     "packages/app": {
-      "component": "@quack/app",
+      "component": "app",
       "pull-request-title-pattern": "chore${scope}: release${component} ${version}",
       "group-pull-request-title-pattern": "chore${scope}: release${component} ${version}"
     },
     "packages/server": {
-      "component": "@quack/server",
+      "component": "server",
       "pull-request-title-pattern": "chore${scope}: release${component} ${version}",
       "group-pull-request-title-pattern": "chore${scope}: release${component} ${version}"
     },
     "packages/rpc": {
-      "component": "@quack/rpc",
+      "component": "rpc",
       "pull-request-title-pattern": "chore${scope}: release${component} ${version}",
       "group-pull-request-title-pattern": "chore${scope}: release${component} ${version}"
     }
@@ -28,13 +28,13 @@
   "plugins": [
     {
       "type": "linked-versions",
-      "groupName": "@quack/quack",
+      "groupName": "quack",
       "merge": true,
       "components": [
-        "@quack/quack",
-        "@quack/app",
-        "@quack/server",
-        "@quack/rpc"
+        "quack",
+        "app",
+        "server",
+        "rpc"
       ]
     }
   ]
