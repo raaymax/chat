@@ -1,2 +1,4 @@
 packages:
-  - 'packages/*'
+  - 'packages/rpc'
+  - 'packages/app'
+  - 'packages/server'

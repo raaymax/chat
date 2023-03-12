@@ -15,7 +15,7 @@
     "@capacitor/android": "^4.0.0",
     "@capacitor/core": "^4.0.0",
     "@capacitor/push-notifications": "^4.0.0",
-    "@quack/rpc": "*",
+    "@quack/rpc": "workspace:*",
     "@reduxjs/toolkit": "1.8.2",
     "@sentry/browser": "6.19.7",
     "@sentry/capacitor": "0.6.0",
