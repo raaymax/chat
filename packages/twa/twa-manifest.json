@@ -19,8 +19,8 @@
     "path": "/Users/raay/Workspace/CodeCat/Chat/packages/twa/android.keystore",
     "alias": "android-twa"
   },
-  "appVersionName": "6",
-  "appVersionCode": 6,
+  "appVersionName": "12",
+  "appVersionCode": 12,
   "shortcuts": [],
   "generatorApp": "bubblewrap-cli",
   "webManifestUrl": "https://chat.codecat.io/manifest.json",
@@ -34,9 +34,19 @@
   "isMetaQuest": false,
   "fullScopeUrl": "https://chat.codecat.io/",
   "minSdkVersion": 19,
+  "shareTarget": {
+    "action": "https://chat.codecat.io/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
   "orientation": "portrait",
   "fingerprints": [],
   "additionalTrustedOrigins": [],
   "retainedBundles": [],
-  "appVersion": "6"
+  "appVersion": "12"
 }

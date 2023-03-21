@@ -1,4 +1,5 @@
 packages:
   - 'packages/rpc'
+  - 'packages/rpc-server'
   - 'packages/app'
   - 'packages/server'

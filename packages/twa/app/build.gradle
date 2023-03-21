@@ -55,8 +55,8 @@ android {
         applicationId "io.codecat.chat.twa"
         minSdkVersion 19
         targetSdkVersion 31
-        versionCode 6
-        versionName "6"
+        versionCode 12
+        versionName "12"
 
         // The name for the application
         resValue "string", "appName", twaManifest.name
@@ -80,6 +80,9 @@ android {
             resValue "string", "fullScopeUrl", 'https://chat.codecat.io/'
         
 
+        
+            // The data for the app to support web share target.
+            resValue "string", "shareTarget", '{\\"action\\":\\"https://chat.codecat.io/share\\",\\"method\\":\\"POST\\",\\"enctype\\":\\"multipart/form-data\\",\\"params\\":{\\"title\\":\\"title\\",\\"text\\":\\"text\\",\\"url\\":\\"url\\"}}'
         
 
         // The hostname is used when building the intent-filter, so the TWA is able to
