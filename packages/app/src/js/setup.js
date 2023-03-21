@@ -21,7 +21,7 @@ client
   .on('channel', (msg) => store.dispatch(actions.addChannel(msg)))
   .on('removeChannel', (msg) => store.dispatch(actions.removeChannel(msg.channelId)))
   .on('typing', (msg) => store.dispatch(ackTyping(msg)))
-  .on('con:open', () => store.dispatch(init()))
+  .on('con:open', () => store.dispatch(init(true)))
   .on('auth:user', (user) => store.dispatch(actions.setMe(user)))
   .on('auth:logout', () => store.dispatch(actions.setMe(null))) // TODO: check if that works
   .on('con:close', () => {
