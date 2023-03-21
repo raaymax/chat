@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.7.2](https://github.com/codecat-io/chat/compare/quack-v1.7.1...quack-v1.7.2) (2023-03-21)
+
+
+### Bug Fixes
+
+* manifest and reload after reconnect ([11a03d7](https://github.com/codecat-io/chat/commit/11a03d765db71e9993db34ceeeaa9a42223fef13))
+* twa window resize ([efc1eb4](https://github.com/codecat-io/chat/commit/efc1eb40091c852ff5c75b99cbf68bfafa102b60))
+
 ## [1.7.1](https://github.com/codecat-io/chat/compare/quack-v1.7.0...quack-v1.7.1) (2023-03-12)
 
 

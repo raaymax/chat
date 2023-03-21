@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.2](https://github.com/codecat-io/chat/compare/server-v1.7.1...server-v1.7.2) (2023-03-21)
+
+
+### Miscellaneous Chores
+
+* **server:** Synchronize quack versions
+
 ## [1.7.1](https://github.com/codecat-io/chat/compare/server-v1.7.0...server-v1.7.1) (2023-03-12)
 
 
