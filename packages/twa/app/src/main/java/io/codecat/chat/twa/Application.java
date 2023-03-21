@@ -24,6 +24,6 @@ public class Application extends android.app.Application {
   @Override
   public void onCreate() {
       super.onCreate();
-      
+      getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);     
   }
 }

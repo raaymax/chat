@@ -16,7 +16,7 @@
   "maskableIconUrl": "https://chat.codecat.io/assets/icons/android-chrome-512x512.png",
   "splashScreenFadeOutDuration": 300,
   "signingKey": {
-    "path": "/Users/raay/Workspace/CodeCat/Chat/experimental/android/android.keystore",
+    "path": "/Users/raay/Workspace/CodeCat/Chat/packages/twa/android.keystore",
     "alias": "android-twa"
   },
   "appVersionName": "6",
