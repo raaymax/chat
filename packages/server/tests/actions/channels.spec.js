@@ -5,7 +5,7 @@ module.exports = (connect) => {
     it('should return list of channels', async () => {
       const ws = await connect('mateusz');
       const channels = await ws.send({
-        type: 'channels',
+        type: 'loadChannels',
       });
       const ret = channels.pop();
       assert.equal(ret.type, 'response');

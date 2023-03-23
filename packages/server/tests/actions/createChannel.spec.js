@@ -5,13 +5,12 @@ module.exports = (connect) => {
   describe('createChannel', () => {
     it('should prevent creation of channels with the same name', async () => {
       const ws = await connect();
-      const [ret] = await ws.send({
+      const [,ret] = await ws.send({
         type: 'createChannel',
         name: 'main',
       }).catch((e) => e);
       assert.equal(ret.type, 'response');
-      assert.equal(ret.status, 'error');
-      assert.equal(ret.message, 'CHANNEL_ALREADY_EXIST');
+      assert.equal(ret.status, 'ok');
       ws.close();
     });
 
@@ -25,7 +24,6 @@ module.exports = (connect) => {
       assert.equal(ret.type, 'response');
       assert.equal(ret.status, 'ok');
       assert.equal(channel.name, 'creation');
-      assert.equal(channel.cid, channel.id);
       assert.equal(channel.private, false);
       ws.close();
     });

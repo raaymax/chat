@@ -3,9 +3,8 @@
 module.exports = [
   require('./ping'),
   require('./message'),
-  require('./load'),
   require('./setupFcm'),
-  require('./channels'),
+  require('./loadChannels'),
   require('./findChannel'),
   require('./typing'),
   require('./greet'),
@@ -19,10 +18,11 @@ module.exports = [
   require('./pins'),
   require('./pin'),
   require('./findEmoji'),
+  require('./loadMessages'),
   require('./loadEmojis'),
-  require('./updateProgress'),
   require('./loadProgress'),
   require('./loadBadges'),
+  require('./updateProgress'),
   require('./createChannel'),
   {
     type: 'default',

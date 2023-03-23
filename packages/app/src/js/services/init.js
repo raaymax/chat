@@ -20,7 +20,7 @@ const initApp = (withStream = false) => async (dispatch) => {
   await initNotifications(config);
   const { data: users } = await client.req({type: 'users'});
   await dispatch(actions.addUser(users));
-  const { data: channels } = await client.req({type: 'channels'});
+  const { data: channels } = await client.req({type: 'loadChannels'});
   await dispatch(actions.addChannel(channels));
   // FIXME: load messages from current channel or none
   // dispatch(loadMessages({channelId: config.mainChannelId}));

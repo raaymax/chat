@@ -28,7 +28,7 @@ export const loadPrevious = (stream) => async (dispatch, getState) => {
     dispatch(actions.selectMessage(null));
     const req = await client.req({
       ...stream,
-      type: 'load',
+      type: 'loadMessages',
       before: selectors.getEarliestDate(stream)(getState()),
       limit: 50,
     })
@@ -60,7 +60,7 @@ export const loadNext = (stream) => async (dispatch, getState) => {
     dispatch(actions.selectMessage(null));
     const req = await client.req({
       ...stream,
-      type: 'load',
+      type: 'loadMessages',
       after: selectors.getLatestDate(stream)(getState()),
       limit: 50,
     })
@@ -92,14 +92,14 @@ export const loadMessagesArchive = (stream) => async (dispatch, getState) => {
     dispatch(actions.messagesClear({stream}))
     const req2 = await client.req({
       ...stream,
-      type: 'load',
+      type: 'loadMessages',
       before: date,
       limit: 50,
     })
     dispatch(actions.addMessages(req2.data));
     const req = await client.req({
       ...stream,
-      type: 'load',
+      type: 'loadMessages',
       after: date,
       limit: 50,
     })
@@ -123,7 +123,7 @@ export const loadMessagesLive = (stream) => async (dispatch, getState) => {
     const loadingDone = loading(dispatch, getState);
     const req = await client.req({
       ...stream,
-      type: 'load',
+      type: 'loadMessages',
       limit: 50,
     })
     dispatch(actions.addMessages(req.data));
