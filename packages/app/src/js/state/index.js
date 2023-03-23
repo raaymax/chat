@@ -40,7 +40,7 @@ export const actions = {
 
 const getStreamMessages = (stream, messages) => messages
   .filter((m) => m.channelId === stream.channelId
-    && (!stream.parentId || m.parentId === stream.parentId));
+    && ((!stream.parentId && !m.parentId ) || m.parentId === stream.parentId));
 
 export const selectors = {
   getProgress: ({channelId, parentId}) => createSelector(
