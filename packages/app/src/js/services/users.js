@@ -3,7 +3,7 @@ import { actions } from '../state';
 
 export const loadUsers = () => async (dispatch) => {
   try {
-    const res = await client.req({type: 'users'});
+    const res = await client.req({type: 'users:load'});
     res.data.forEach((usr) => {
       dispatch(actions.addUser(usr))
     })

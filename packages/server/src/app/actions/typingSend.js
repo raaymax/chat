@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 module.exports = {
-  type: 'typing',
+  type: 'typing:send',
   schema: {
     body: Joi.object({
       channelId: Joi.string().required(),

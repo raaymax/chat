@@ -4,7 +4,7 @@ const { MissingId, MessageNotExist } = require('../common/errors');
 
 // FIXME: add tests for this action
 module.exports = {
-  type: 'reaction',
+  type: 'reaction:send',
   schema: {
     body: Joi.object({
       id: Joi.string().required(),

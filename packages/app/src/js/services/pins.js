@@ -5,7 +5,7 @@ export const loadPinnedMessages = (channelId) => async (dispatch) => {
   try {
     dispatch(actions.clearPinMessages(channelId));
     const req = await client.req({
-      type: 'pins',
+      type: 'messages:pins',
       channelId,
       limit: 50,
     })
@@ -19,7 +19,7 @@ export const loadPinnedMessages = (channelId) => async (dispatch) => {
 export const pinMessage = (id, channelId) => async (dispatch) => {
   dispatch(actions.selectMessage(null));
   const req = await client.req({
-    type: 'pin',
+    type: 'message:pin',
     channelId,
     id,
     pinned: true,
@@ -31,7 +31,7 @@ export const pinMessage = (id, channelId) => async (dispatch) => {
 export const unpinMessage = (id, channelId) => async (dispatch) => {
   dispatch(actions.selectMessage(null));
   const req = await client.req({
-    type: 'pin',
+    type: 'message:pin',
     channelId,
     id,
     pinned: false,

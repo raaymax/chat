@@ -3,7 +3,7 @@ import { actions } from '../state';
 
 export const loadBadges = () => async(dispatch) => {
   const {data} = await client.req({
-    type: 'loadBadges',
+    type: 'badges:load',
   })
   data.forEach((p) => dispatch(actions.addProgress(p)));
 }
@@ -11,7 +11,7 @@ export const loadBadges = () => async(dispatch) => {
 export const loadProgress = (stream) => async(dispatch) => {
   if (!stream.channelId) return;
   const {data} = await client.req({
-    type: 'loadProgress',
+    type: 'progress:load',
     channelId: stream.channelId,
     parentId: stream.parentId,
   })
@@ -21,7 +21,7 @@ export const loadProgress = (stream) => async(dispatch) => {
 export const updateProgress = (messageId) => async(dispatch) => {
   try {
     const {data} = await client.req({
-      type: 'updateProgress',
+      type: 'progress:update',
       messageId,
     })
     await Promise.all(data.map((p) => dispatch(actions.addProgress(p))));

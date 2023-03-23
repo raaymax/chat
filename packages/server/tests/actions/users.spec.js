@@ -1,11 +1,11 @@
 const assert = require('assert');
 
 module.exports = (connect) => {
-  describe('users', () => {
+  describe('users:load', () => {
     it('should return list of users', async () => {
       const ws = await connect();
       const users = await ws.send({
-        type: 'users',
+        type: 'users:load',
       });
       const ret = users.pop();
       assert(users.length > 0);
@@ -23,7 +23,7 @@ module.exports = (connect) => {
     it('should get system user', async () => {
       const ws = await connect();
       const users = await ws.send({
-        type: 'users',
+        type: 'users:load',
       });
       const systemUser = users.find((u) => u.name === 'System');
       assert(!!systemUser);

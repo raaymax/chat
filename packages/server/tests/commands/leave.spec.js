@@ -25,7 +25,7 @@ module.exports = (connect) => {
 
     it('should remove user from a channel', async () => {
       const [removeChannel, info, ret] = await ws.send({
-        type: 'command',
+        type: 'command:execute',
         name: 'leave',
         args: [],
         context: {

@@ -4,7 +4,7 @@ const { MissingChannel, AccessDenied } = require('../common/errors');
 const ChannelHelper = require('../common/channel');
 
 module.exports = {
-  type: 'updateProgress',
+  type: 'progress:update',
   schema: {
     body: Joi.object({
       messageId: Joi.string().required(),

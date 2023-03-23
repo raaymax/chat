@@ -3,7 +3,7 @@ const { db } = require('../../src/infra/database');
 const seeds = require('./seeds');
 
 module.exports = (connect) => {
-  describe('loadMessages', () => {
+  describe('messages:load', () => {
     let channel;
     before(async () => {
       await seeds.run();
@@ -14,14 +14,14 @@ module.exports = (connect) => {
       const ws = await connect();
       const clientId = `${Math.random() + 1}`;
       await ws.send({
-        type: 'message',
+        type: 'message:send',
         clientId,
         channelId: channel._id.toHexString(),
         message: { line: { text: 'Hello' } },
         flat: 'Dupa',
       });
       const [msg, ret] = await ws.send({
-        type: 'loadMessages',
+        type: 'messages:load',
         channelId: channel._id.toHexString(),
         limit: 1,
       });
@@ -35,7 +35,7 @@ module.exports = (connect) => {
     it('should return list of messages', async () => {
       const ws = await connect();
       const messages = await ws.send({
-        type: 'loadMessages',
+        type: 'messages:load',
         channelId: channel._id.toHexString(),
         limit: 5,
       });
@@ -47,7 +47,7 @@ module.exports = (connect) => {
     it('should return messages before date', async () => {
       const ws = await connect();
       const [msg, msg2, msg3, ret] = await ws.send({
-        type: 'loadMessages',
+        type: 'messages:load',
         channelId: channel._id.toHexString(),
         before: '2022-01-03',
         limit: 5,
@@ -62,7 +62,7 @@ module.exports = (connect) => {
     it('should return messages after date', async () => {
       const ws = await connect();
       const [msg, msg2, ret] = await ws.send({
-        type: 'loadMessages',
+        type: 'messages:load',
         channelId: channel._id.toHexString(),
         after: '2022-01-02',
         limit: 2,
@@ -76,7 +76,7 @@ module.exports = (connect) => {
     it('should return error when channel is missing', async () => {
       const ws = await connect();
       const [ret] = await ws.send({
-        type: 'loadMessages',
+        type: 'messages:load',
       }).catch((e) => e);
       assert.equal(ret.status, 'error');
       assert.equal(ret.message, '"channelId" is required');
@@ -87,7 +87,7 @@ module.exports = (connect) => {
       const testChannel = await (await db).collection('channels').findOne({ name: 'test' });
       const ws = await connect();
       const messages = await ws.send({
-        type: 'loadMessages',
+        type: 'messages:load',
         channelId: testChannel._id.toHexString(),
       });
       const ret = messages.pop();
@@ -100,7 +100,7 @@ module.exports = (connect) => {
       const ws = await connect();
       const melisaChannel = await (await db).collection('channels').findOne({ name: 'Melisa' });
       const [ret] = await ws.send({
-        type: 'loadMessages',
+        type: 'messages:load',
         channelId: melisaChannel._id.toHexString(),
       }).catch((e) => e);
       assert.equal(ret.status, 'error');

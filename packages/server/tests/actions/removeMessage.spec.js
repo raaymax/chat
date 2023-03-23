@@ -2,7 +2,7 @@ const assert = require('assert');
 const { db } = require('../../src/infra/database');
 
 module.exports = (connect) => {
-  describe('removeMessage', () => {
+  describe('message:remove', () => {
     let channel;
     before(async () => {
       channel = await (await db).collection('channels').findOne({ name: 'main' });
@@ -11,7 +11,7 @@ module.exports = (connect) => {
       const ws = await connect();
       const toBeRemoved = await createMessage(ws);
       const [msg, ret] = await ws.send({
-        type: 'removeMessage',
+        type: 'message:remove',
         id: toBeRemoved.id,
       });
       assert.equal(ret.type, 'response');
@@ -28,7 +28,7 @@ module.exports = (connect) => {
       const melisa = await connect('melisa');
       const toBeRemoved = await createMessage(melisa);
       const [ret] = await ws.send({
-        type: 'removeMessage',
+        type: 'message:remove',
         id: toBeRemoved.id,
       }).catch((e) => e);
       assert.equal(ret.type, 'response');
@@ -41,7 +41,7 @@ module.exports = (connect) => {
     async function createMessage(ws) {
       const [msg, ret] = await ws.send({
         clientId: `${Math.random()}`,
-        type: 'message',
+        type: 'message:send',
         channelId: channel._id.toHexString(),
         message: { line: { text: 'Hello' } },
         flat: 'Hello',

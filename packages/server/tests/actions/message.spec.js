@@ -3,7 +3,7 @@ const { db } = require('../../src/infra/database');
 const PushService = require('../../src/infra/push');
 
 module.exports = (connect) => {
-  describe('message', () => {
+  describe('message:send', () => {
     let channel;
     before(async () => {
       channel = await (await db).collection('channels').findOne({ name: 'main' });
@@ -22,7 +22,7 @@ module.exports = (connect) => {
             resolve();
           });
           mateusz.send({
-            type: 'message',
+            type: 'message:send',
             clientId: `test:${Math.random()}`,
             channelId: channel._id.toHexString(),
             message: { line: { text: 'Hello' } },
@@ -37,7 +37,7 @@ module.exports = (connect) => {
     it('should be received by sender', async () => {
       const ws = await connect();
       const [msg, ret] = await ws.send({
-        type: 'message',
+        type: 'message:send',
         clientId: `test:${Math.random()}`,
         channelId: channel._id.toHexString(),
         message: { line: { text: 'Hello' } },
@@ -58,11 +58,11 @@ module.exports = (connect) => {
       PushService.push = async (m) => { push = m; };
       const token = 'melisaToken';
       await melisa.send({
-        type: 'setupFcm',
+        type: 'fcm:setup',
         token,
       });
       await mateusz.send({
-        type: 'message',
+        type: 'message:send',
         clientId: `test:${Math.random()}`,
         channelId: channel._id.toHexString(),
         message: { line: { text: 'Hello' } },
@@ -78,7 +78,7 @@ module.exports = (connect) => {
       const ws = await connect();
       const clientId = `${Math.random() + 1}`;
       await ws.send({
-        type: 'message',
+        type: 'message:send',
         clientId,
         channelId: channel._id.toHexString(),
         message: { line: { text: 'Hello' } },
@@ -95,7 +95,7 @@ module.exports = (connect) => {
     it('should accept attachments', async () => {
       const ws = await connect();
       const [msg, ret] = await ws.send({
-        type: 'message',
+        type: 'message:send',
         clientId: `test:${Math.random()}`,
         message: { line: { text: 'Hello' } },
         channelId: channel._id.toHexString(),
@@ -126,7 +126,7 @@ module.exports = (connect) => {
     it('should return error when channelId is missing', async () => {
       const ws = await connect();
       const [ret] = await ws.send({
-        type: 'message',
+        type: 'message:send',
         clientId: `test:${Math.random()}`,
         message: { line: { text: 'Hello' } },
         flat: 'Hello',
@@ -139,7 +139,7 @@ module.exports = (connect) => {
     it('should return error when message is missing', async () => {
       const ws = await connect();
       const [ret] = await ws.send({
-        type: 'message',
+        type: 'message:send',
         clientId: `test:${Math.random()}`,
         channelId: channel._id.toHexString(),
         flat: 'Hello',
@@ -155,7 +155,7 @@ module.exports = (connect) => {
         .collection('channels')
         .findOne({ name: 'Melisa' });
       const [ret] = await ws.send({
-        type: 'message',
+        type: 'message:send',
         clientId: `test:${Math.random()}`,
         channelId: otherChannel._id.toHexString(),
         message: { text: 'Hello' },
@@ -170,7 +170,7 @@ module.exports = (connect) => {
     it('should return error when flat is missing', async () => {
       const ws = await connect();
       const [ret] = await ws.send({
-        type: 'message',
+        type: 'message:send',
         clientId: `test:${Math.random()}`,
         channelId: channel._id.toHexString(),
         message: { text: 'Hello' },

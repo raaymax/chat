@@ -1,5 +1,4 @@
 const db = require('../../infra/database');
-const push = require('../../infra/push');
 const openai = require('../../infra/openai');
 const channel = require('../common/channel');
 const { AccessDenied } = require('../common/errors');
@@ -56,7 +55,7 @@ module.exports = {
     const { id } = await db.message.insert(resp);
     const created = await db.message.get({ id });
     res.broadcast({ type: 'message', ...created });
-    push.send(created);
+    res.push.send(created);
   },
 };
 /*

@@ -5,7 +5,7 @@ const ChannelHelper = require('../common/channel');
 
 // TODO api changed fix frontend
 module.exports = {
-  type: 'pin',
+  type: 'message:pin',
   schema: {
     body: Joi.object({
       id: Joi.string().required(),

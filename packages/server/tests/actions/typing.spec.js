@@ -2,7 +2,7 @@ const assert = require('assert');
 const { db } = require('../../src/infra/database');
 
 module.exports = (connect) => {
-  describe('typing', () => {
+  describe('typing:send', () => {
     let channel;
     before(async () => {
       channel = await (await db).collection('channels').findOne({ name: 'main' });
@@ -20,7 +20,7 @@ module.exports = (connect) => {
             resolve();
           });
           mateusz.send({
-            type: 'typing',
+            type: 'typing:send',
             channelId: channel._id.toHexString(),
           });
         } catch (err) {
@@ -39,7 +39,7 @@ module.exports = (connect) => {
     it('should throw error when channel is not present', async () => {
       const ws = await connect();
       const [ret] = await ws.send({
-        type: 'typing',
+        type: 'typing:send',
       }).catch((e) => e);
       assert.equal(ret.status, 'error');
       assert.equal(ret.message, '"channelId" is required');
@@ -49,7 +49,7 @@ module.exports = (connect) => {
     it('should not send notification to source user', async () => {
       const ws = await connect();
       const [ret] = await ws.send({
-        type: 'typing',
+        type: 'typing:send',
         channelId: channel._id.toHexString(),
       });
       assert.equal(ret.type, 'response');

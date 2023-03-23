@@ -5,24 +5,14 @@ const db = require('../../infra/database');
 const { MissingId, NotOwnerOfMessage, MessageNotExist } = require('../common/errors');
 
 module.exports = {
-  type: 'updateMessage',
+  type: 'message:remove',
   schema: {
     body: Joi.object({
       id: Joi.string().required(),
-      message: Joi.any().optional(), // TODO: define message schema
-      channelId: Joi.string().optional(),
-      flat: Joi.string().optional().allow(''),
-      clientId: Joi.string().optional(),
-      pinned: Joi.boolean().optional(),
-      attachments: Joi.array().items(Joi.object({
-        id: Joi.string().required(),
-        fileName: Joi.string().required(),
-        contentType: Joi.string().required(),
-      })).optional(),
     }),
   },
   handler: async (req, res) => {
-    const { id, ...body } = req.body;
+    const { id } = req.body;
     if (!id) throw MissingId();
 
     const message = await db.message.get({ id });
@@ -30,12 +20,17 @@ module.exports = {
 
     if (req.userId !== message.userId) throw NotOwnerOfMessage();
 
-    await db.message.update({ id }, body);
+    await db.message.remove({ id });
     await res.broadcast({
       id,
       type: 'message',
-      ...message,
-      ...body,
+      channelId: message.channelId,
+      message: [],
+      user: {
+        name: 'System',
+      },
+      notifType: 'warning',
+      notif: 'Message removed',
     });
     return res.ok();
   },

@@ -4,13 +4,12 @@ const { AccessDenied } = require('../common/errors');
 const channelHelper = require('../common/channel');
 
 module.exports = {
-  type: 'pins',
+  type: 'messages:search',
   schema: {
     body: Joi.object({
       channelId: Joi.string().required(),
-      before: Joi.string().optional(),
-      after: Joi.string().optional(),
-      limit: Joi.number().optional().default(10),
+      text: Joi.string().required(),
+      limit: Joi.number().optional().default(100),
     }),
   },
   handler: async (req, res) => {
@@ -21,15 +20,12 @@ module.exports = {
       throw AccessDenied();
     }
     const msgs = await db.message.getAll({
-      pinned: true,
+      $text: { $search: msg.text },
       channelId,
       before: msg.before,
-      after: msg.after,
-    }, { limit: msg.limit });
+    }, { limit: msg.limit, order: -1 });
 
-    if (msg.after) msgs.reverse();
-
-    msgs.forEach((m) => res.send({ type: 'message', ...m }));
+    msgs.forEach((m) => res.send({ type: 'search', ...m }));
     res.ok({ count: msgs.length });
   },
 };

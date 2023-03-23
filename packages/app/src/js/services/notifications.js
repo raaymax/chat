@@ -25,7 +25,7 @@ const initWebNotifications = async (config) => {
     const currentToken = await getToken(messaging, { vapidKey: config.applicationServerKey });
     if (currentToken) {
       await client.req({
-        type: 'setupFcm',
+        type: 'fcm:setup',
         token: currentToken,
       });
     }
@@ -54,7 +54,7 @@ const initNativeNotifications = () => {
   PushNotifications.addListener('registration', async (token) => {
     try {
       await client.req({
-        type: 'setupFcm',
+        type: 'fcm:setup',
         token: token.value,
         mobile: true,
       });

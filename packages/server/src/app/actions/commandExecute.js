@@ -3,7 +3,7 @@ const commands = require('../commands');
 const pack = require('../../../package.json');
 
 module.exports = {
-  type: 'command',
+  type: 'command:execute',
   schema: {
     body: Joi.object({
       name: Joi.string().required(),

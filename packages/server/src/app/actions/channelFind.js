@@ -2,7 +2,7 @@ const Joi = require('joi');
 const db = require('../../infra/database');
 
 module.exports = {
-  type: 'findChannel',
+  type: 'channel:find',
   schema: {
     id: Joi.string().required(),
   },

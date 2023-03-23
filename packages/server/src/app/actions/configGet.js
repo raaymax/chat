@@ -3,7 +3,7 @@ const pack = require('../../../package.json');
 const db = require('../../infra/database');
 
 module.exports = {
-  type: 'config',
+  type: 'config:get',
   schema: {
     body: Joi.any(),
   },

@@ -2,12 +2,12 @@ const assert = require('assert');
 const { db, ObjectId } = require('../../src/infra/database');
 
 module.exports = (connect) => {
-  describe('setupFcm', () => {
+  describe('fcm:setup', () => {
     it('should update fcm token for current session', async () => {
       const ws = await connect();
       const token = 'testToken';
       const [ret] = await ws.send({
-        type: 'setupFcm',
+        type: 'fcm:setup',
         token,
       });
       assert.equal(ret.type, 'response');
@@ -20,7 +20,7 @@ module.exports = (connect) => {
     it('should throw error when token is not present', async () => {
       const ws = await connect();
       const [ret] = await ws.send({
-        type: 'setupFcm',
+        type: 'fcm:setup',
       }).catch((e) => e);
       assert.equal(ret.status, 'error');
       assert.equal(ret.message, '"token" is required');

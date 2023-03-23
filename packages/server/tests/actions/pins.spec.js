@@ -3,7 +3,7 @@ const seeds = require('./seeds');
 const { db } = require('../../src/infra/database');
 
 module.exports = (connect) => {
-  describe('pins', () => {
+  describe('messages:pins', () => {
     let channel;
     before(async () => {
       await seeds.run();
@@ -12,7 +12,7 @@ module.exports = (connect) => {
     it('should return last added messsage', async () => {
       const ws = await connect();
       const [msg, ret] = await ws.send({
-        type: 'pins',
+        type: 'messages:pins',
         channelId: channel._id.toHexString(),
         limit: 1,
       });

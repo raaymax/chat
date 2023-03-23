@@ -4,6 +4,7 @@ const db = require('../../infra/database');
 const bus = require('../../infra/bus');
 const actions = require('../../app/actions');
 const corsConfig = require('./cors');
+const push = require('../../infra/push');
 
 module.exports = (server) => {
   const io = new Server(server, {
@@ -47,58 +48,7 @@ module.exports = (server) => {
     }
     bus.on(userId, sendHandler);
 
-    ws.on('message', async ({ type, seqId, ...body }) => {
-      let handler = actions[type];
-      if (!handler) handler = actions.default;
-      const wsreq = {
-        type,
-        body,
-        userId,
-        session: ws.request.session,
-      };
-
-      const wsres = {
-        bus,
-        broadcast: (m, opts) => bus.broadcast({
-          ...m,
-          seqId,
-          _opts: opts,
-        }),
-        ok: (m) => bus.direct(userId, {
-          ...m,
-          seqId,
-          type: 'response',
-          status: 'ok',
-        }),
-        send: (m) => bus.direct(userId, {
-          ...m,
-          seqId,
-        }),
-      };
-      try {
-        if (typeof handler === 'function') {
-          await handler(wsreq, wsres);
-        } else {
-          if (handler.schema?.body) {
-            const { value, error } = await handler.schema.body
-              .validate(wsreq.body, { stripUnknown: true });
-            if (error) throw error;
-            wsreq.body = value;
-          }
-          await handler.handler(wsreq, wsres);
-        }
-      } catch (err) {
-        console.error(err);
-        bus.direct(userId, {
-          seqId,
-          type: 'response',
-          status: 'error',
-          message: err.message,
-          stack: err.stack,
-          ...err,
-        });
-      }
-    });
+    ws.on('message', async (msg) => actions.dispatch(msg, { userId, bus, push }));
 
     ws.on('close', () => {
       bus.off(userId, sendHandler);

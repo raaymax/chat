@@ -2,7 +2,7 @@ const assert = require('assert');
 const { db } = require('../../src/infra/database');
 
 module.exports = (connect) => {
-  describe('updateMessage', () => {
+  describe('message:update', () => {
     let messageId;
     before(async () => {
       const user = await (await db).collection('users')
@@ -16,7 +16,7 @@ module.exports = (connect) => {
     it('should update message', async () => {
       const ws = await connect('mateusz');
       const [msg, ret] = await ws.send({
-        type: 'updateMessage',
+        type: 'message:update',
         id: messageId,
         flat: 'test',
       });

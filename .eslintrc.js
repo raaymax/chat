@@ -46,8 +46,7 @@ module.exports = {
     {
       files: [
         'packages/app/tests/**/*.js',
-        'packages/app2/tests/**/*.js',
-        'packages/app2/**/*.spec.js',
+        'packages/app/**/*.spec.js',
       ],
       env: {
         mocha: true,
@@ -69,6 +68,7 @@ module.exports = {
     {
       files: [
         'packages/server/tests/**/*.js',
+        'packages/server/**/*.spec.js',
       ],
       env: {
         mocha: true,

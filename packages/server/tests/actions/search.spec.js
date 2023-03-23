@@ -11,7 +11,7 @@ module.exports = (connect) => {
       const ws = await connect();
       const newMsg = await createMessage(ws);
       const [msg, ret] = await ws.send({
-        type: 'search',
+        type: 'messages:search',
         channelId: channel._id.toHexString(),
         text: 'Search',
         limit: 1,
@@ -27,7 +27,7 @@ module.exports = (connect) => {
     async function createMessage(ws) {
       const [msg, ret] = await ws.send({
         clientId: `${Math.random()}`,
-        type: 'message',
+        type: 'message:send',
         channelId: channel._id.toHexString(),
         message: { line: { text: 'Search' } },
         flat: 'nice Search test',

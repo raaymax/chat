@@ -1,5 +1,5 @@
 module.exports = (connect) => {
-  describe('command', () => {
+  describe('command:execute', () => {
     require('../commands')(connect);
   });
 };

@@ -2,7 +2,7 @@ const Joi = require('joi');
 const db = require('../../infra/database');
 
 module.exports = {
-  type: 'loadEmojis',
+  type: 'emojis:load',
   schema: {
     body: Joi.any(),
   },

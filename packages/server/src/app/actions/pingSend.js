@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 module.exports = {
-  type: 'ping',
+  type: 'ping:send',
   schema: {
     body: Joi.any(),
   },

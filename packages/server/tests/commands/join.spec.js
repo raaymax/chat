@@ -19,7 +19,7 @@ module.exports = (connect) => {
     it('should add user to a channel', async () => {
       const ws = await connect('mateusz');
       const [chan, ret] = await ws.send({
-        type: 'command',
+        type: 'command:execute',
         name: 'join',
         args: [],
         context: {
@@ -44,7 +44,7 @@ module.exports = (connect) => {
     it('should add user to a existing channel', async () => {
       const ws = await connect('mateusz');
       const [, ret] = await ws.send({
-        type: 'command',
+        type: 'command:execute',
         name: 'join',
         args: [],
         context: {
@@ -67,7 +67,7 @@ module.exports = (connect) => {
 
       const ws = await connect('mateusz');
       const [ret] = await ws.send({
-        type: 'command',
+        type: 'command:execute',
         name: 'join',
         args: [],
         context: {

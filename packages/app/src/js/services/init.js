@@ -14,13 +14,13 @@ const initApp = (withStream = false) => async (dispatch) => {
   await dispatch(actions.connected());
   await dispatch(actions.clearInfo());
   await dispatch(actions.initFailed(false));
-  const { data: [config] } = await client.req({type: 'config'});
+  const { data: [config] } = await client.req({type: 'config:get'});
   await dispatch(actions.setAppVersion(config.appVersion));
   await dispatch(actions.setMainChannel(config.mainChannelId));
   await initNotifications(config);
-  const { data: users } = await client.req({type: 'users'});
+  const { data: users } = await client.req({type: 'users:load'});
   await dispatch(actions.addUser(users));
-  const { data: channels } = await client.req({type: 'loadChannels'});
+  const { data: channels } = await client.req({type: 'channels:load'});
   await dispatch(actions.addChannel(channels));
   // FIXME: load messages from current channel or none
   // dispatch(loadMessages({channelId: config.mainChannelId}));

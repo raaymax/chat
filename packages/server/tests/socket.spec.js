@@ -41,7 +41,7 @@ describe('socket', () => {
 
   it('should receive response for ping', async () => {
     const ws = await connectWs();
-    const [msg] = await ws.send({ type: 'ping' });
+    const [msg] = await ws.send({ type: 'ping:send' });
     assert.equal(msg.status, 'ok');
     ws.close();
   });

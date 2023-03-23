@@ -7,7 +7,7 @@ module.exports = (connect) => {
       const ws = await connect();
       const channel = await (await db).collection('channels').findOne({ name: 'main' });
       const [help, ret] = await ws.send({
-        type: 'command',
+        type: 'command:execute',
         name: 'help',
         args: [],
         context: {

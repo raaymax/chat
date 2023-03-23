@@ -4,7 +4,7 @@ const { MissingChannel, AccessDenied } = require('../common/errors');
 const ChannelHelper = require('../common/channel');
 
 module.exports = {
-  type: 'loadMessages',
+  type: 'messages:load',
   schema: {
     body: Joi.object({
       channelId: Joi.string().required(),

@@ -1,12 +1,11 @@
 const Joi = require('joi');
 const db = require('../../infra/database');
 const { AccessDenied } = require('../common/errors');
-const push = require('../../infra/push');
 const channelHelper = require('../common/channel');
 const services = require('../services');
 
 module.exports = {
-  type: 'message',
+  type: 'message:send',
   schema: {
     body: Joi.object({
       message: Joi.any().required(), // TODO: define message schema
@@ -61,7 +60,7 @@ module.exports = {
     const created = await db.message.get({ id });
     if (!dup) {
       res.broadcast({ type: 'message', ...created });
-      await push.send(created);
+      await res.push.send(created);
     }
     await services.badges.messageSent(channel.id, msg.parentId, id, req.userId);
     res.ok(dup ? { duplicate: true } : {});

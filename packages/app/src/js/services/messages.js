@@ -28,7 +28,7 @@ export const loadPrevious = (stream) => async (dispatch, getState) => {
     dispatch(actions.selectMessage(null));
     const req = await client.req({
       ...stream,
-      type: 'loadMessages',
+      type: 'messages:load',
       before: selectors.getEarliestDate(stream)(getState()),
       limit: 50,
     })
@@ -60,7 +60,7 @@ export const loadNext = (stream) => async (dispatch, getState) => {
     dispatch(actions.selectMessage(null));
     const req = await client.req({
       ...stream,
-      type: 'loadMessages',
+      type: 'messages:load',
       after: selectors.getLatestDate(stream)(getState()),
       limit: 50,
     })
@@ -92,14 +92,14 @@ export const loadMessagesArchive = (stream) => async (dispatch, getState) => {
     dispatch(actions.messagesClear({stream}))
     const req2 = await client.req({
       ...stream,
-      type: 'loadMessages',
+      type: 'messages:load',
       before: date,
       limit: 50,
     })
     dispatch(actions.addMessages(req2.data));
     const req = await client.req({
       ...stream,
-      type: 'loadMessages',
+      type: 'messages:load',
       after: date,
       limit: 50,
     })
@@ -123,7 +123,7 @@ export const loadMessagesLive = (stream) => async (dispatch, getState) => {
     const loadingDone = loading(dispatch, getState);
     const req = await client.req({
       ...stream,
-      type: 'loadMessages',
+      type: 'messages:load',
       limit: 50,
     })
     dispatch(actions.addMessages(req.data));
@@ -147,7 +147,7 @@ export const loadMessages = (stream) => async (dispatch) => {
 export const addReaction = (id, text) => async (dispatch) => {
   try {
     const req = await client.req({
-      type: 'reaction',
+      type: 'reaction:send',
       id,
       reaction: text.trim(),
     });
@@ -171,12 +171,12 @@ export const sendFromDom = (stream, dom) => async (dispatch, getState) => {
   }
 };
 
-export const send = (stream, msg) => (dispatch) => dispatch(msg.type === 'command' ? sendCommand(stream, msg) : sendMessage(msg));
+export const send = (stream, msg) => (dispatch) => dispatch(msg.type === 'command:execute' ? sendCommand(stream, msg) : sendMessage(msg));
 
 export const sendShareMessage = (data) => async (dispatch, getState) => {
   const {channelId, parentId} = selectors.getStream('main')(getState());
   const msg = build({
-    type: 'message',
+    type: 'message:send',
     channelId,
     parentId,
     flat: `${data.title} ${data.text} ${data.url}`,
@@ -277,7 +277,7 @@ export const resend = (id) => (dispatch, getState) => {
 
 export const removeMessage = (msg) => async (dispatch) => {
   try {
-    await client.notif({ type: 'removeMessage', id: msg.id });
+    await client.notif({ type: 'message:remove', id: msg.id });
   } catch (err) {
     dispatch(actions.addMessage({
       id: msg.id,
@@ -296,7 +296,7 @@ export const fromDom = (dom, state) => {
   if (command) {
     const m = dom.textContent.trim().replace('\n', '').slice(1).split(/\s+/);
     return build({
-      type: 'command',
+      type: 'command:execute',
       name: m[0],
       args: m.splice(1),
       flat: dom.textContent,
@@ -304,7 +304,7 @@ export const fromDom = (dom, state) => {
   }
   if (dom.childNodes.length === 0) {
     return build({
-      type: 'message',
+      type: 'message:send',
       message: [],
       flat: '',
     }, state);
@@ -313,7 +313,7 @@ export const fromDom = (dom, state) => {
   const tree = mapNodes(dom, info);
 
   return build({
-    type: 'message',
+    type: 'message:send',
     message: tree,
     emojiOnly: isEmojiOnly(tree),
     parsingErrors: info.errors,

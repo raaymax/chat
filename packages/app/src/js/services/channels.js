@@ -15,7 +15,7 @@ export const openChannel = createAsyncThunk('channels/open', async (q, {dispatch
 
 export const loadChannels = () => async (dispatch) => {
   try {
-    const res = await client.req({type: 'loadChannels'});
+    const res = await client.req({type: 'channels:load'});
     res.data.forEach((chan) => {
       dispatch(actions.addChannel(chan))
     })
@@ -27,7 +27,7 @@ export const loadChannels = () => async (dispatch) => {
 
 export const createChannel = (name, priv = false) => async (dispatch) => {
   try {
-    const res = await client.req({type: 'createChannel', name, private: priv});
+    const res = await client.req({type: 'channel:create', name, private: priv});
     res.data.forEach((chan) => {
       dispatch(actions.addChannel(chan))
     })
@@ -38,7 +38,7 @@ export const createChannel = (name, priv = false) => async (dispatch) => {
 }
 export const findChannel = (id) => async (dispatch) => {
   try {
-    const res = await client.req({ type: 'findChannel', id });
+    const res = await client.req({ type: 'channel:find', id });
     res.data.forEach((chan) => {
       dispatch(actions.addChannel(chan))
     })

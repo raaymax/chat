@@ -3,9 +3,8 @@ const db = require('../../infra/database');
 const { ChannelAlreadyExist } = require('../common/errors');
 const services = require('../services');
 
-
 module.exports = {
-  type: 'createChannel',
+  type: 'channel:create',
   schema: {
     body: Joi.object({
       name: Joi.string().required(),

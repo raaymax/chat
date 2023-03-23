@@ -20,7 +20,7 @@ module.exports = (connect) => {
     it('should change users avatar and infor about change', async () => {
       const channel = await (await db).collection('channels').findOne({ name: 'main' });
       const [user, ret] = await ws.send({
-        type: 'command',
+        type: 'command:execute',
         name: 'avatar',
         args: [URL],
         context: {

@@ -3,7 +3,7 @@ const { MissingToken } = require('../common/errors');
 const db = require('../../infra/database');
 
 module.exports = {
-  type: 'setupFcm',
+  type: 'fcm:setup',
   schema: {
     body: Joi.object({
       token: Joi.string().required(),

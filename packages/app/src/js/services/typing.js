@@ -14,7 +14,7 @@ export const notifyTyping = () => (dispatch, getState) => {
   }
   cooldown = true;
   queue = false;
-  client.send({ type: 'typing', channelId });
+  client.send({ type: 'typing:send', channelId });
   setTimeout(() => {
     cooldown = false;
     if (queue) {

@@ -2,7 +2,7 @@ const Joi = require('joi');
 const db = require('../../infra/database');
 
 module.exports = {
-  type: 'loadBadges',
+  type: 'badgesLoad',
   schema: {
     body: Joi.any(),
   },

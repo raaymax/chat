@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 module.exports = {
-  type: 'greet',
+  type: 'greet:send',
   schema: {
     body: Joi.any(),
   },

@@ -117,7 +117,7 @@ export const actions = {
   removeMessagesBefore: removeBefore,
   loadMessages: createAsyncThunk('messages/load', async ({limit = 50}, {getState}) => {
     const {channel} = getState();
-    return client.notif({ type: 'loadMessages', limit, channel });
+    return client.notif({ type: 'messages:load', limit, channel });
   }),
   takeTail,
   takeHead,

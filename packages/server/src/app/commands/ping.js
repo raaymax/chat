@@ -2,7 +2,7 @@ const crypto = require('crypto');
 const db = require('../../infra/database');
 
 module.exports = {
-  name: 'ping',
+  name: 'ping:send',
   description: 'sends ping on channel from thread',
   args: [],
   handler: async (req, res) => {

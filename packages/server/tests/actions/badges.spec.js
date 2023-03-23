@@ -8,7 +8,7 @@ module.exports = (connect) => {
       channel = await (await db).collection('channels').findOne({ name: 'main' });
     });
     const sendHello = (ws) => ws.send({
-      type: 'message',
+      type: 'message:send',
       clientId: `test:${Math.random()}`,
       channelId: channel._id.toHexString(),
       message: { line: { text: 'Hello' } },
@@ -39,7 +39,7 @@ module.exports = (connect) => {
       })).then(() => sendHello(melisa));
 
       await mateusz.send({
-        type: 'updateProgress',
+        type: 'progress:update',
         messageId: msg.id,
       });
       const badge = await (await db).collection('badges').findOne({ userId: user._id, channelId: channel._id });

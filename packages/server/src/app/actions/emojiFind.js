@@ -2,7 +2,7 @@ const Joi = require('joi');
 const db = require('../../infra/database');
 
 module.exports = {
-  type: 'findEmoji',
+  type: 'emoji:find',
   schema: {
     shortname: Joi.string().required(),
   },
