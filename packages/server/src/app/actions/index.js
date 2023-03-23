@@ -6,6 +6,7 @@ module.exports = [
   require('./load'),
   require('./setupFcm'),
   require('./channels'),
+  require('./findChannel'),
   require('./typing'),
   require('./greet'),
   require('./removeMessage'),

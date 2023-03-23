@@ -4,6 +4,7 @@ const push = require('../infra/push');
 const openai = require('../infra/openai');
 
 bus.on('openai', async (msg) => {
+  return;
   const author = await db.user.get({ id: msg.userId });
   if (!author) return;
   if (msg.type !== 'message' || author.login === 'bob') return;

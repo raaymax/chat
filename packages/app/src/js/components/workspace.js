@@ -88,11 +88,12 @@ export const Workspace = () => {
   const dispatch = useDispatch();
   const stream = useStream('main');
   const sideStream = useStream('side');
+  const mainChannelId = useSelector(selectors.getMainChannelId);
 
   useEffect(() => {
-    dispatch(setStream('main', {type: 'live', channelId}));
+    dispatch(setStream('main', {type: 'live', channelId: channelId || mainChannelId}));
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [channelId]);
+  }, [channelId, mainChannelId]);
 
   return (
     <Container className={sideStream ? ['side-stream'] : ['main-stream']}>
@@ -103,7 +104,7 @@ export const Workspace = () => {
       <MainView className={view === 'sidebar' ? ['sidebar'] : []}>
         <StreamContext value={[stream, (val) => dispatch(setStream('main', val))]}>
           {view === 'search' && <Search />}
-          {view === 'pins' && <Pins />}
+          {view === 'pins' && <Pins channelId={stream.channelId} />}
           {(view === null || view === 'sidebar' || view === 'thread')
             && <MainConversation
               onclick={() => dispatch(actions.setView('sidebar'))} />

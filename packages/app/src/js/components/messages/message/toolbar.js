@@ -78,7 +78,7 @@ export const Toolbar = () => {
     dispatch(removeMessage({id}));
   }, [dispatch, id]);
   const meId = useSelector((state) => state.users.meId);
-  const isMe = user.id === meId;
+  const isMe = user?.id === meId;
   const [hovered] = useHovered();
 
   useEffect(() => setView(null), [hovered]);

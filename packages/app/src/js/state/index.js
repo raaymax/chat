@@ -59,6 +59,7 @@ export const selectors = {
         [p.lastMessageId]: [...(acc[p.lastMessageId] || []), p],
       }), {}) : {}),
   ),
+  getMainChannelId: (state) => state.channels.main,
   getBadges: (userId) => createSelector(
     (state) => state.progress,
     (progress) => progress
@@ -73,8 +74,13 @@ export const selectors = {
     .find((emoji) => emoji.shortname === shortname),
   getAllEmojis: () => (state) => state.customEmojis,
   getChannel: (q) => (state) => state.channels.list
-    .find((c) => c.id === q.id || c.name === q.name || c.cid === q.cid),
-  getChannels: (state) => state.channels.list,
+    .find((c) => (q.id && c.id === q.id) || (q.name && c.name === q.name) || (q.cid && c.cid && c.cid === q.cid)),
+  getChannels: createSelector(
+    (state) => state.users.meId,
+    (state) => state.channels.list,
+    (meId, channels) => channels 
+      .filter((c) => c.users.includes(meId)),
+  ),
   getConfig: (state) => state.config,
   // getCid: (state) => state.channels.current,
   getChannelId: createSelector(

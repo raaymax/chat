@@ -1,6 +1,8 @@
 const Joi = require('joi');
 const db = require('../../infra/database');
 const { ChannelAlreadyExist } = require('../common/errors');
+const services = require('../services');
+
 
 module.exports = {
   type: 'createChannel',
@@ -13,18 +15,13 @@ module.exports = {
   handler: async (req, res) => {
     const msg = req.body;
 
-    const existing = await db.channel.get({ name: msg.name });
-    if (existing) throw ChannelAlreadyExist();
+    const channelId = await services.channel.create(
+      msg.name,
+      req.userId,
+    );
 
-    const channel = await db.channel.create({
-      name: msg.name,
-      private: msg.private,
-      ownerId: req.userId,
-      users: [req.userId],
-    });
-
-    await db.channel.update({ id: channel.id }, { cid: channel.id });
-    const ret = await db.channel.get({ id: channel.id });
+    await db.channel.update({ id: channelId }, { private: msg.private });
+    const ret = await db.channel.get({ id: channelId });
 
     res.broadcast({ type: 'channel', ...ret });
     res.ok({});

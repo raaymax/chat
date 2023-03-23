@@ -55,13 +55,13 @@ const StyledHeader = styled.div`
   }
 `;
 
-export const Header = ({}) => {
+export const Header = () => {
   const dispatch = useDispatch();
-  const channel = useSelector(selectors.getCurrentChannel);
+  const channelId = useSelector(selectors.getChannelId);
 
   return (
     <StyledHeader>
-      <Channel {...channel} icon="fa-solid fa-thumbtack" />
+      <Channel channelId={channelId} icon="fa-solid fa-thumbtack" />
       <div class='toolbar'>
         <div class='tool' onclick={() => dispatch(actions.setView('pins'))}>
           <i class="fa-solid fa-xmark" />

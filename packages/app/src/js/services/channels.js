@@ -16,8 +16,31 @@ export const openChannel = createAsyncThunk('channels/open', async (q, {dispatch
 export const loadChannels = () => async (dispatch) => {
   try {
     const res = await client.req({type: 'channels'});
-    res.data.forEach((usr) => {
-      dispatch(actions.addChannel(usr))
+    res.data.forEach((chan) => {
+      dispatch(actions.addChannel(chan))
+    })
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(err);
+  }
+}
+
+export const createChannel = (name, priv = false) => async (dispatch) => {
+  try {
+    const res = await client.req({type: 'createChannel', name, private: priv});
+    res.data.forEach((chan) => {
+      dispatch(actions.addChannel(chan))
+    })
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(err);
+  }
+}
+export const findChannel = (id) => async (dispatch) => {
+  try {
+    const res = await client.req({ type: 'findChannel', id });
+    res.data.forEach((chan) => {
+      dispatch(actions.addChannel(chan))
     })
   } catch (err) {
     // eslint-disable-next-line no-console

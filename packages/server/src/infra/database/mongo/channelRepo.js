@@ -3,56 +3,62 @@ const { serialize, serializeInsert, deserialize } = require('./serializer');
 
 const TABLE_NAME = 'channels';
 
+const deserializeQuery = (data) => {
+  const {
+    userId, ...query
+  } = deserialize(data);
+  return {
+    ...(!userId ? {} : { users: { $elemMatch: { $eq: ObjectId(userId) } } }),
+    ...query,
+  };
+};
+const deserializeChannel = (data) => {
+  const {
+    users, ...query
+  } = deserialize(data);
+  return {
+    ...(!users ? {} : { users: users.map((userId) => ObjectId(userId)) }),
+    ...query,
+  };
+};
+
+const serializeChannel = (data) => {
+  if (Array.isArray(data)) {
+    return data.map(serializeChannel);
+  }
+  const ret = serialize(data);
+  if (!ret) return ret;
+  const {
+    users = null, ...query
+  } = ret;
+  return {
+    ...query,
+    users: users
+      ? users.map((user) => (
+        user instanceof ObjectId
+          ? user.toHexString()
+          : user))
+      : undefined,
+  };
+};
+
 module.exports = {
   get: async (query) => (await db).collection(TABLE_NAME)
-    .findOne(deserialize(query))
-    .then(serialize),
+    .findOne(deserializeQuery(query))
+    .then(serializeChannel),
 
-  getAll: async ({ userId }) => (await db).collection(TABLE_NAME).find({
-    users: { $elemMatch: { $eq: ObjectId(userId) } },
-  })
+  getAll: async (query) => (await db).collection(TABLE_NAME)
+    .find(deserializeQuery(query))
     .toArray()
-    .then(serialize),
+    .then(serializeChannel),
 
   create: async (channel) => (await db).collection(TABLE_NAME)
-    .insertOne(deserialize(channel))
+    .insertOne(deserializeChannel(channel))
     .then(serializeInsert),
 
   update: async (id, channel) => (await db).collection(TABLE_NAME)
-    .updateOne(deserialize({ id }), { $set: deserialize(channel) }),
+    .updateOne(deserialize({ id }), { $set: deserializeChannel(channel) }),
 
-  join: async (id, userId) => {
-    const channel = await (await db).collection(TABLE_NAME).findOne({ _id: ObjectId(id) });
-    if (channel) {
-      channel.users.push(ObjectId(userId));
-      await (await db).collection(TABLE_NAME)
-        .updateOne({ _id: channel._id }, { $set: { users: channel.users } });
-      return channel._id.toHexString();
-    }
-    return null;
-  },
-
-  insert: async (name, userId) => {
-    const channel = await (await db).collection(TABLE_NAME).findOne({
-      name: ObjectId(name),
-      users: { $elemMatch: { $eq: ObjectId(userId) } },
-    });
-    if (channel) {
-      return channel._id.toHexString();
-    }
-    return (await db).collection(TABLE_NAME).insertOne({
-      cid: name, name, users: [ObjectId(userId)],
-    })
-      .then(serializeInsert);
-  },
-
-  remove: async ({ id, userId }) => {
-    const channel = await (await db).collection(TABLE_NAME).findOne({ _id: ObjectId(id) });
-    if (channel && channel.users.map((u) => u.toHexString()).includes(userId)) {
-      const users = channel.users.filter((u) => u.toHexString() !== userId);
-      await (await db).collection(TABLE_NAME).updateOne({ _id: channel._id }, { $set: { users } });
-      return channel._id.toHexString();
-    }
-    return null;
-  },
+  remove: async (channel) => (await db).collection(TABLE_NAME)
+    .deleteOne(deserialize(channel)),
 };

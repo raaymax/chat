@@ -1,4 +1,5 @@
 const db = require('../../infra/database');
+const services = require('../services');
 
 module.exports = {
   name: 'leave',
@@ -6,19 +7,12 @@ module.exports = {
   args: [],
   handler: async (req, res) => {
     const { channelId } = req.body.context;
+    await services.channel.leave(channelId, req.userId);
     const channel = await db.channel.get({ id: channelId });
-    await db.channel.remove({ id: channel.id, userId: req.userId }); // FIXME
-    await res.send({ type: 'removeChannel', channelId: channel.id });
-    await res.send({
-      type: 'message',
-      userId: 'system',
-      priv: true,
-      createdAt: new Date().toISOString(),
-      channelId: channel.id,
-      message: [
-        { text: 'You left the channel' },
-      ],
-    });
+    await res.send({ type: 'channel', ...channel });
+    await res.systemMessage([
+      { text: 'You left the channel' },
+    ]);
     res.ok({ channelId: channel.id });
   },
 };

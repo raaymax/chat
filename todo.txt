@@ -1,5 +1,12 @@
 v1.8.0
 - feat: channel creation ability
+  x user can create new channel 
+  * invite/add person to channel
+  x share channel with other users
+  * leave channel
+  * join channel
+  * search for channels?
+
 - feat: emoji selector
 - feat: rss feeds (https://xkcd.com/2294/)
 - feat: reminders

@@ -66,14 +66,13 @@ const StyledHeader = styled.div`
 
 export const Header = ({ onclick }) => {
   const [{ channelId, parentId}, setSideStream] = useStream();
-  const channel = useSelector(selectors.getChannel({id: channelId}));
   const message = useSelector(selectors.getMessage(parentId));
   const dispatch = useDispatch();
 
   return (
     <StyledHeader>
       <h1>Thread</h1>
-      <Channel onclick={onclick} {...channel} />
+      <Channel onclick={onclick} channelId={channelId} />
       <div class='toolbar'>
         <div class='tool' onclick={() => {
           setSideStream(null);

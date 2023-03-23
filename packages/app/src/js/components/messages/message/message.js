@@ -41,12 +41,12 @@ const MessageBase = (props = {}) => {
       onmouseleave={onLeave}
     >
       {!props.sameUser
-        ? <div class='avatar'>{user.avatarUrl && <img src={user.avatarUrl} alt='avatar' />}</div>
+        ? <div class='avatar'>{user?.avatarUrl && <img src={user?.avatarUrl} alt='avatar' />}</div>
         : <div class='spacy side-time'>{formatTime(createdAt)}</div>
       }
       <div class='body'>
         {!props.sameUser && <div class='header'>
-          <span class='author'>{user.name || 'Guest'}</span>
+          <span class='author'>{user?.name || 'Guest'}</span>
           <span class='spacy time'>{formatTime(createdAt)}</span>
           {!isToday(createdAt) && <span class='spacy time'>{formatDateDetailed(createdAt)}</span>}
         </div>}

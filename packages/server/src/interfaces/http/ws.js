@@ -88,6 +88,7 @@ module.exports = (server) => {
           await handler.handler(wsreq, wsres);
         }
       } catch (err) {
+        console.error(err);
         bus.direct(userId, {
           seqId,
           type: 'response',

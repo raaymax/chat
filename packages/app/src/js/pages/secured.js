@@ -17,6 +17,13 @@ const theme = {
   fontColor: '#d9d9d9',
   frontHoverColor: 'var(--primary_active_mask)',
 
+  actionButtonBackgroundColor: '#2E1A4E',
+  actionButtonHoverBackgroundColor: '#3D2760',
+  actionButtonActiveBackgroundColor: '#3D2760',
+  actionButtonFontColor: '#d9d9d9',
+
+  borderColor: '#2a2d31',
+
   linkColor: '#4a90e2',
 }
 

@@ -69,8 +69,6 @@ const StyledHeader = styled.div`
 export const Header = ({onclick}) => {
   const [stream, setStream] = useStream();
   const {channelId, parentId} = stream;
-  const channel = useSelector(selectors.getChannel({id: channelId}));
-  const id = useSelector(selectors.getChannelId);
   const dispatch = useDispatch();
   const message = useSelector(selectors.getMessage(parentId));
 
@@ -78,7 +76,7 @@ export const Header = ({onclick}) => {
     return (
       <StyledHeader>
         {parentId && <h1>Thread</h1>}
-        <Channel onclick={onclick} {...channel} />
+        <Channel onclick={onclick} channelId={channelId} />
 
         <div class='toolbar'>
 
@@ -99,9 +97,9 @@ export const Header = ({onclick}) => {
 
   return (
     <StyledHeader>
-      <Channel onclick={onclick} {...channel} />
+      <Channel onclick={onclick} channelId={channelId}/>
 
-      {channel?.cid !== 'main' && (
+      {window.location.hash.slice(1) !== '' && (
         <div class="back">
           <a href='/#'>
             back to main
@@ -118,7 +116,7 @@ export const Header = ({onclick}) => {
           <i class="fa-solid fa-magnifying-glass" />
         </div>
         <div class='tool' onclick={() => {
-          dispatch(loadPinnedMessages(id));
+          dispatch(loadPinnedMessages(channelId));
           dispatch(actions.setView('pins'));
         }}>
           <i class="fa-solid fa-thumbtack" />

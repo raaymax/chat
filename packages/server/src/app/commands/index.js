@@ -10,6 +10,8 @@ const commands = [
   require('./version'),
   require('./emoji'),
   require('./ping'),
+  require('./leave'),
+  require('./join'),
 ];
 
 module.exports = async (req, res) => {
