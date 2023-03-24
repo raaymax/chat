@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable global-require */
-const db = require('../../infra/database');
+const repo = require('../repository');
 
 const commands = [
   require('./avatar'),
@@ -20,7 +20,7 @@ module.exports = async (req, res) => {
     await res.send({
       type: 'message',
       id: `sys:${Math.random().toString(10)}`,
-      userId: (await db.user.get({ name: 'System' })).id,
+      userId: (await repo.user.get({ name: 'System' })).id,
       priv: true,
       message: msg,
       channelId,

@@ -1,8 +1,8 @@
-const db = require('../../infra/database');
+const repo = require('../repository');
 
 module.exports = {
   haveAccess: async (userId, id) => {
-    const channel = await db.channel.get({ id });
+    const channel = await repo.channel.get({ id });
 
     if (channel?.private
         && !channel.users.includes(userId)) {

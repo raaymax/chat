@@ -1,0 +1,18 @@
+const assert = require('assert');
+const api = require('./api');
+
+describe('badges:load', () => {
+  let user;
+
+  before(async () => {
+    user = await api.repo.user.get({ login: 'mateusz' });
+  });
+
+  it('should return list of badges', async () => {
+    const { res, data: badges } = await api.sendMessage({
+      type: 'badges:load',
+    }, { userId: user.id });
+    const invalid = badges.filter((b) => b.userId !== user.id);
+    assert.equal(invalid.length, 0);
+  });
+});

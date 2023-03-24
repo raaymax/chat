@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const db = require('../../infra/database');
+const repo = require('../repository');
 const { MissingChannel, AccessDenied } = require('../common/errors');
 const ChannelHelper = require('../common/channel');
 
@@ -25,14 +25,14 @@ module.exports = {
       throw AccessDenied();
     }
     if (parentId) {
-      const parent = await db.message.get({
+      const parent = await repo.message.get({
         id: parentId,
         channelId,
       });
       res.send({ type: 'message', ...parent, parentId });
     }
 
-    const msgs = await db.message.getAll({
+    const msgs = await repo.message.getAll({
       channelId,
       parentId,
       before: msg.before,

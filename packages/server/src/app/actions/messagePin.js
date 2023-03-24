@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const db = require('../../infra/database');
+const repo = require('../repository');
 const { MissingId, MessageNotExist, AccessDenied } = require('../common/errors');
 const ChannelHelper = require('../common/channel');
 
@@ -16,14 +16,14 @@ module.exports = {
     const { id, pinned } = req.body;
     if (!id) throw MissingId();
 
-    const message = await db.message.get({ id });
+    const message = await repo.message.get({ id });
     if (!message) throw MessageNotExist();
     // TODO: test if permissions work in tests
     if (!await ChannelHelper.haveAccess(req.userId, message.channelId)) {
       throw AccessDenied();
     }
 
-    await db.message.update({ id }, { pinned });
+    await repo.message.update({ id }, { pinned });
     await res.broadcast({
       id,
       type: 'message',

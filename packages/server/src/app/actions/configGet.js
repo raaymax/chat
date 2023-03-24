@@ -1,6 +1,6 @@
 const Joi = require('joi');
 const pack = require('../../../package.json');
-const db = require('../../infra/database');
+const repo = require('../repository');
 
 module.exports = {
   type: 'config:get',
@@ -8,10 +8,11 @@ module.exports = {
     body: Joi.any(),
   },
   handler: async (req, res) => {
+    const user = await repo.user.get({ id: req.userId });
     await res.send({
       type: 'config',
       appVersion: pack.version,
-      mainChannelId: (await db.channel.get({ name: 'main' })).id,
+      mainChannelId: user.mainChannelId ?? (await repo.channel.get({ cid: user.id })).id,
     });
     await res.ok();
   },

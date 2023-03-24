@@ -86,7 +86,7 @@ const dispatch = async ({ type, seqId, ...body }, { userId, bus, push }) => {
       await handler.handler(wsreq, wsres);
     }
   } catch (err) {
-    //console.error(err); // maybe attach logger
+    // console.error(err); // maybe attach logger
     bus.direct(userId, {
       seqId,
       type: 'response',

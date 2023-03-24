@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const db = require('../../infra/database');
+const repo = require('../repository');
 const { AccessDenied } = require('../common/errors');
 const channelHelper = require('../common/channel');
 
@@ -20,7 +20,7 @@ module.exports = {
     if (!await channelHelper.haveAccess(req.userId, channelId)) {
       throw AccessDenied();
     }
-    const msgs = await db.message.getAll({
+    const msgs = await repo.message.getAll({
       pinned: true,
       channelId,
       before: msg.before,

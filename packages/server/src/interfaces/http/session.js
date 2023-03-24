@@ -1,6 +1,6 @@
 const express = require('express');
 const crypto = require('crypto');
-const userService = require('../../user');
+const userService = require('../../app/user');
 const db = require('../../infra/database');
 
 const router = new express.Router();

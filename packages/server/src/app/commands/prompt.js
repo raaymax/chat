@@ -1,4 +1,4 @@
-const db = require('../../infra/database');
+const repo = require('../repository');
 const openai = require('../../infra/openai');
 const channel = require('../common/channel');
 const { AccessDenied } = require('../common/errors');
@@ -12,7 +12,7 @@ module.exports = {
       throw AccessDenied();
     }
     res.ok();
-    const user = await db.user.get({ id: req.userId });
+    const user = await repo.user.get({ id: req.userId });
     const prompt = req.body.args.join(' ');
 
     const args = {
@@ -23,7 +23,7 @@ module.exports = {
 
     const { data } = await openai.createCompletion('text-davinci-003', args);
 
-    const openaiUser = await db.user.get({ login: 'openai' });
+    const openaiUser = await repo.user.get({ login: 'openai' });
     const resp = {
       userId: openaiUser.id,
       message: [
@@ -52,8 +52,8 @@ module.exports = {
       channelId: req.body.context.channelId,
       clientId: `ai:${Math.random()}`,
     };
-    const { id } = await db.message.insert(resp);
-    const created = await db.message.get({ id });
+    const id = await repo.message.insert(resp);
+    const created = await repo.message.get({ id });
     res.broadcast({ type: 'message', ...created });
     res.push.send(created);
   },

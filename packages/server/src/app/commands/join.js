@@ -1,4 +1,4 @@
-const db = require('../../infra/database');
+const repo = require('../repository');
 const { AccessDenied, ChannelNotExist } = require('../common/errors');
 const channelHelper = require('../common/channel');
 const services = require('../services');
@@ -10,14 +10,14 @@ module.exports = {
   handler: async (req, res) => {
     const { channelId } = req.body.context;
 
-    const channel = await db.channel.get({ id: channelId });
+    const channel = await repo.channel.get({ id: channelId });
     if (!await channelHelper.haveAccess(req.userId, channel.id)) {
       throw AccessDenied();
     }
     if (!channel) throw ChannelNotExist();
     const id = await services.channel.join(channel.id, req.userId);
 
-    const joinedChannel = await db.channel.get({ id });
+    const joinedChannel = await repo.channel.get({ id });
     res.send({
       type: 'channel',
       ...joinedChannel,

@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const db = require('../../infra/database');
+const repo = require('../repository');
 
 module.exports = {
   name: 'ping:send',
@@ -10,11 +10,11 @@ module.exports = {
     if (!parentId) {
       throw new Error('No parent message');
     }
-    const parent = await db.message.get({ id: parentId });
+    const parent = await repo.message.get({ id: parentId });
     if (!parent) {
       throw new Error('Parent message not found');
     }
-    const channel = await db.channel.get({ id: channelId });
+    const channel = await repo.channel.get({ id: channelId });
     // FIXME: check permissions
 
     const lines = parent.flat.split('\n');
@@ -30,7 +30,7 @@ module.exports = {
       updatedAt: new Date(),
       createdAt: new Date(),
     });
-    const msg = await db.message.get({ id });
+    const msg = await repo.message.get({ id });
     await res.broadcast({ type: 'message', ...msg });
     return res.ok();
   },
@@ -41,7 +41,7 @@ async function createMessage(msg) {
   let id; let
     dup = false;
   try {
-    ({ id } = await db.message.insert(data));
+    (id = await repo.message.insert(data));
   } catch (err) {
     if (err.code !== 11000) {
       throw err;

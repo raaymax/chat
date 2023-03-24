@@ -1,4 +1,4 @@
-const db = require('../../infra/database');
+const repo = require('../repository');
 
 module.exports = {
   name: 'channel',
@@ -6,7 +6,7 @@ module.exports = {
   args: ['name'],
   handler: async (req, res) => {
     const [cid] = req.body.args;
-    const channel = await db.channel.get({ cid });
+    const channel = await repo.channel.get({ cid });
     res.send({
       type: 'setChannel',
       channelId: channel.id,

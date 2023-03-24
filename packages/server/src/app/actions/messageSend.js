@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const db = require('../../infra/database');
+const repo = require('../repository');
 const { AccessDenied } = require('../common/errors');
 const channelHelper = require('../common/channel');
 const services = require('../services');
@@ -25,7 +25,7 @@ module.exports = {
   },
   handler: async (req, res) => {
     const msg = req.body;
-    const channel = await db.channel.get({ id: msg.channelId });
+    const channel = await repo.channel.get({ id: msg.channelId });
     if (!await channelHelper.haveAccess(req.userId, channel.id)) {
       throw AccessDenied();
     }
@@ -48,16 +48,16 @@ module.exports = {
     });
 
     if (msg.parentId) {
-      await db.message.updateThread({
+      await repo.message.updateThread({
         id,
         parentId: msg.parentId,
         userId: req.userId,
       });
-      const parent = await db.message.get({ id: msg.parentId });
+      const parent = await repo.message.get({ id: msg.parentId });
       res.broadcast({ type: 'message', ...parent });
     }
 
-    const created = await db.message.get({ id });
+    const created = await repo.message.get({ id });
     if (!dup) {
       res.broadcast({ type: 'message', ...created });
       await res.push.send(created);
@@ -72,7 +72,7 @@ async function createMessage(msg) {
   let id; let
     dup = false;
   try {
-    ({ id } = await db.message.insert(data));
+    (id = await repo.message.create(data));
   } catch (err) {
     if (err.code !== 11000) {
       throw err;

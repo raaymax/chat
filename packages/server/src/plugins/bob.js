@@ -1,10 +1,12 @@
-const bus = require('../infra/bus');
-const db = require('../infra/database');
-const push = require('../infra/push');
-const openai = require('../infra/openai');
+/* eslint-disable */
+// const bus = require('../infra/bus');
+// const db = require('../infra/database');
+// const push = require('../infra/push');
+// const openai = require('../infra/openai');
 
-bus.on('openai', async (msg) => {
-  return;
+// bus.on('openai', async (msg) => {
+
+/*
   const author = await db.user.get({ id: msg.userId });
   if (!author) return;
   if (msg.type !== 'message' || author.login === 'bob') return;
@@ -69,4 +71,5 @@ bus.on('openai', async (msg) => {
     // eslint-disable-next-line no-console
     console.log(err);
   }
-});
+  */
+// });

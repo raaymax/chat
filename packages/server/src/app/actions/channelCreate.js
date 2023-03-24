@@ -1,6 +1,5 @@
 const Joi = require('joi');
-const db = require('../../infra/database');
-const { ChannelAlreadyExist } = require('../common/errors');
+const repo = require('../repository');
 const services = require('../services');
 
 module.exports = {
@@ -19,8 +18,8 @@ module.exports = {
       req.userId,
     );
 
-    await db.channel.update({ id: channelId }, { private: msg.private });
-    const ret = await db.channel.get({ id: channelId });
+    await repo.channel.update({ id: channelId }, { private: msg.private });
+    const ret = await repo.channel.get({ id: channelId });
 
     res.broadcast({ type: 'channel', ...ret });
     res.ok({});

@@ -1,4 +1,4 @@
-const db = require('../../infra/database');
+const repo = require('../repository');
 const services = require('../services');
 
 module.exports = {
@@ -8,7 +8,7 @@ module.exports = {
   handler: async (req, res) => {
     const { channelId } = req.body.context;
     await services.channel.leave(channelId, req.userId);
-    const channel = await db.channel.get({ id: channelId });
+    const channel = await repo.channel.get({ id: channelId });
     await res.send({ type: 'channel', ...channel });
     await res.systemMessage([
       { text: 'You left the channel' },

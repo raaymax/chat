@@ -1,11 +1,11 @@
-const db = require('../../infra/database');
+const repo = require('../repository');
 
 module.exports = {
   name: 'me',
   description: 'info about current user',
   args: [],
   handler: async (req, res) => {
-    const user = await db.user.get({ id: req.userId });
+    const user = await repo.user.get({ id: req.userId });
 
     await res.systemMessage([
       { text: 'ID: ' }, { text: req.userId }, { br: true },

@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const db = require('../../infra/database');
+const repo = require('../repository');
 
 module.exports = {
   type: 'channel:find',
@@ -8,7 +8,7 @@ module.exports = {
   },
   handler: async (req, res) => {
     const { id } = req.body;
-    const channel = await db.channel.get({ id, private: false });
+    const channel = await repo.channel.get({ id, private: false });
     if (channel) {
       res.send({
         type: 'channel',

@@ -1,4 +1,4 @@
-const db = require('../../infra/database');
+const repo = require('../repository');
 
 module.exports = {
   name: 'name',
@@ -6,8 +6,8 @@ module.exports = {
   args: ['name'],
   handler: async (req, res) => {
     const [name] = req.body.args;
-    await db.user.update(req.userId, { name });
-    const user = await db.user.get({ id: req.userId });
+    await repo.user.update({ id: req.userId }, { name });
+    const user = await repo.user.get({ id: req.userId });
     await res.broadcast({
       type: 'user',
       id: user.id,

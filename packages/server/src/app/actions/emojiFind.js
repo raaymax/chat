@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const db = require('../../infra/database');
+const repo = require('../repository');
 
 module.exports = {
   type: 'emoji:find',
@@ -8,7 +8,7 @@ module.exports = {
   },
   handler: async (req, res) => {
     const { shortname } = req.body;
-    const emoji = await db.emoji.get({ shortname });
+    const emoji = await repo.emoji.get({ shortname });
     if (emoji) {
       res.send({ type: 'emoji', ...emoji });
     } else {
