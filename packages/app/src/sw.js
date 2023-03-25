@@ -1,5 +1,9 @@
 import {precacheAndRoute} from 'workbox-precaching';
-import { registerRoute } from 'workbox-routing';
+import {registerRoute} from 'workbox-routing';
+import * as navigationPreload from 'workbox-navigation-preload';
+precacheAndRoute(self.__WB_MANIFEST);
+
+navigationPreload.enable();
 
 registerRoute(
   '/share',
@@ -32,4 +36,3 @@ function getOpenClient() {
   }).then((clientList) => clientList[0]);
 }
 
-precacheAndRoute(self.__WB_MANIFEST);

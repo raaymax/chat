@@ -32,7 +32,7 @@ export const Progress = () => {
         {
           progress
             .map((p) => (
-              <img key={p.userId} src={p.user.avatarUrl} alt={p.user.name} />
+              <img key={p.userId} src={p.user?.avatarUrl} alt={p.user?.name} />
             ))
         }
       </div>

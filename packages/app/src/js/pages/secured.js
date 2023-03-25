@@ -24,6 +24,9 @@ const theme = {
 
   borderColor: '#2a2d31',
 
+  searchBoxBackgroundColor: '#2a2d31',
+  labelColor: 'gray',
+
   linkColor: '#4a90e2',
 }
 

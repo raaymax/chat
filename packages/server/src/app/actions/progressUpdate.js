@@ -1,5 +1,6 @@
 const Joi = require('joi');
 const repo = require('../repository');
+const services = require('../services');
 const { MissingChannel, AccessDenied } = require('../common/errors');
 const ChannelHelper = require('../common/channel');
 
@@ -21,7 +22,7 @@ module.exports = {
     if (!await ChannelHelper.haveAccess(req.userId, channelId)) {
       throw AccessDenied();
     }
-    await repo.badge.upsert({
+    await services.badge.upsert({
       userId: req.userId,
       channelId,
       parentId,

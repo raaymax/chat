@@ -1,5 +1,11 @@
 v1.8.0
-x feat: channel creation ability
+refactor(server): new repositories
+refactor: normalization of rpc message types
+refactor: renamed actions to loadChannels and loadMessages
+fix: message from thread showing outside of thread
+feat: channels management
+fix(share): share target redirect
+feat: emoji selector
  
 v2.0.0 // first public release
 - feat: registration of users
@@ -12,8 +18,7 @@ backlog:
 - feat: save message parsing errros in database and display them in message
 - feat: add tags to messages
 - feat: searching using tags
-- feat: ability to share files
-- feat: emoji selector
+- feat(share): ability to share files
 - feat: rss feeds (https://xkcd.com/2294/)
 - feat: reminders
 - feat: ability to search channels

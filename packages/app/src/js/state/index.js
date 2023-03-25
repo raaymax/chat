@@ -72,13 +72,20 @@ export const selectors = {
   ),
   getEmoji: (shortname) => (state) => state.customEmojis
     .find((emoji) => emoji.shortname === shortname),
+  getCategorizedEmojis: (state) => state.customEmojis
+    .reduce((acc, emoji) => {
+      acc[emoji.category] = acc[emoji.category] || [];
+      acc[emoji.category].push(emoji);
+      return acc;
+    }, {}),
+  getEmojis: (state) => state.customEmojis,
   getAllEmojis: () => (state) => state.customEmojis,
   getChannel: (q) => (state) => state.channels.list
     .find((c) => (q.id && c.id === q.id) || (q.name && c.name === q.name) || (q.cid && c.cid && c.cid === q.cid)),
   getChannels: createSelector(
     (state) => state.users.meId,
     (state) => state.channels.list,
-    (meId, channels) => channels 
+    (meId, channels) => channels
       .filter((c) => c.users.includes(meId)),
   ),
   getConfig: (state) => state.config,

@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import { useStore, useSelector } from 'react-redux';
 import {
-  useCallback, useEffect, useRef,
+  useCallback, useEffect, useRef, useState,
 } from 'preact/hooks';
 import styled from 'styled-components';
 import { sendFromDom } from '../../services/messages';
@@ -13,134 +13,10 @@ import { Attachments } from '../Files/Attachments';
 import { selectors } from '../../state';
 import { notifyTyping } from '../../services/typing';
 import { useStream } from '../streamContext';
-
-const InputContainer = styled.div`
-  border-top: 1px solid #565856;
-  background-color: var(--secondary_background);
-  display: flex;
-  flex-direction: column;
-
-  & .toolbar {
-    display: flex;
-    flex-direction: row;
-  }
-
-  & .toolbar button:first-child {
-    margin-left: 30px;
-  }
-
-  & .toolbar button {
-    color: var(--secondary_foreground);
-    margin: 2px 0 2px 2px;
-    width: 25px;
-    height: 25px;
-    border: 0;
-    padding: 1px 3px;
-    background: none;
-  }
-
-  & .toolbar button:hover {
-    color: var(--primary_foreground);
-    background-color: var(--primary_active_mask);
-  }
-
-  & .actionbar {
-    padding: 5px;
-    display: flex;
-    justify-content: flex-end;
-    flex-direction: row;
-    height: 40px;
-  }
-
-  & .info {
-    flex: 1;
-    line-height: 30px;
-    padding: 0px 10px;
-    font-weight: 300;
-    vertical-align: middle;
-    font-size: .8em;
-  }
-
-  .info.error{
-    color: #852007;
-  }
-
-  .info.action:hover{
-    --text-decoration: underline;
-    cursor: pointer;
-    font-weight: bold;
-  }
-
-  & .actionbar .action {
-    width: 30px;
-    height: 30px;
-    padding: 0 6px;
-    border-radius: 100%;
-    line-height: 30px;
-    vertical-align: middle;
-  }
-  & .actionbar .action.green {
-    background-color: #1c780c;
-  }
-
-  & .actionbar .action:hover {
-    background-color: rgba(249,249,249,0.05);
-  }
-  & .actionbar .action:active {
-    background-color: rgba(249,249,249,0.1);
-  }
-
-  .input {
-    flex: 1;
-    border: 0;
-    padding: 5px 30px;
-
-    .emoji img {
-      width: 1.5em;
-      height: 1.5em;
-      display: inline-block;
-      vertical-align: bottom;
-    }
-  }
-  .input:focus-visible {
-    outline: none;
-  }
-
-  & .ql-toolbar.ql-snow{
-    border: 0;
-  }
-
-  & .ql-container.ql-snow {
-    border: 0;
-  }
-
-  & .channel {
-    color: #3080a0;
-  }
-`;
-
-const ActionButton = styled.div`
-  width: 30px;
-  height: 30px;
-  padding: 0 6px;
-  border-radius: 100%;
-  line-height: 30px;
-  vertical-align: middle;
-
-  &.green {
-    background-color: #1c780c;
-  }
-
-  &:hover {
-    background-color: rgba(249,249,249,0.05);
-  }
-  &:active {
-    background-color: rgba(249,249,249,0.1);
-  }
-  & i {
-    pointer-events: none;
-  }
-`;
+import { EmojiSearch } from '../EmojiSearch/search';
+import { getUrl } from '../../services/file';
+import {InputContainer} from './elements/container';
+import {ActionButton} from './elements/actionButton';
 
 function submit({
   store, input, stream, event,
@@ -209,6 +85,8 @@ export const Input = () => {
   const store = useStore();
   const input = useRef();
   const fileInput = useRef(null);
+  const [range, setRange] = useState(null);
+  const [showEmojis, setShowEmojis] = useState(false);
   const dispatchEvent = useCallback((source, e) => (
     process(
       store,
@@ -221,9 +99,24 @@ export const Input = () => {
   const filesAreReady = useSelector(selectors.filesAreReady);
 
   useEffect(() => {
-    document.addEventListener('selectionchange', (e) => dispatchEvent('selectionChange', e));
-    return () => document.removeEventListener('selectionchange', (e) => dispatchEvent('selectionChange', e));
-  });
+    const inputEl = input.current;
+    const range = document.createRange();
+    range.setStart(inputEl, 0);
+    range.setEnd(inputEl, 0);
+    setRange(range);
+  }, [input]);
+
+  useEffect(() => {
+    const handler = (e) => {
+      const range = document.getSelection().getRangeAt(0);
+      if(input.current.contains(range.commonAncestorContainer)) {
+        setRange(document.getSelection().getRangeAt(0));
+      }
+      dispatchEvent('selectionChange', e);
+    }
+    document.addEventListener('selectionchange', handler);
+    return () => document.removeEventListener('selectionchange', handler);
+  }, [setRange]);
 
   const onPaste = useCallback(async (event) => {
     const cbData = (event.clipboardData || window.clipboardData);
@@ -252,6 +145,28 @@ export const Input = () => {
     }
   }, [store]);
 
+  const insertEmoji = useCallback(async (result) => {
+    const emoji = (() => {
+      if (result.unicode) {
+        return document.createTextNode(String.fromCodePoint(parseInt(result.unicode, 16)));
+      }
+      if (result.fileId) {
+        const img = document.createElement('img');
+        img.src = getUrl(result.fileId);
+        img.alt = result.shortname;
+        return img;
+      }
+    })();
+    range.deleteContents();
+    const node = document.createElement('span');
+    node.className = 'emoji';
+    node.setAttribute('emoji', result.shortname);
+    node.setAttribute('contenteditable', false);
+    node.appendChild(emoji);
+    range.insertNode(node);
+    range.collapse();
+  }, [range, store])
+
   return (
     <InputContainer>
       <div
@@ -264,17 +179,21 @@ export const Input = () => {
       />
       <Attachments />
       <div class='actionbar' onclick={(e) => dispatchEvent('click', e)} action='focus'>
-        <Info />
+        <div class={showEmojis ? 'action active' : 'action'} onclick={() => setShowEmojis(!showEmojis)}>
+          <i class="fa-solid fa-face-smile-beam"></i>
+        </div>
         <div class='action' onclick={() => fileInput.current.click()}>
           <i class="fa-solid fa-plus" />
         </div>
-        <ActionButton className={filesAreReady ? 'green' : ''} onClick={(e) => filesAreReady && dispatchEvent('click', e)} action='submit'>
+        <Info />
+        <ActionButton className={filesAreReady ? 'action green' : 'action'} onClick={(e) => filesAreReady && dispatchEvent('click', e)} action='submit'>
           <i class="fa-solid fa-paper-plane" />
         </ActionButton>
       </div>
       <input onChange={onChange} ref={fileInput} type="file" multiple style="height: 0; opacity: 0; width: 0; position:absolute; bottom:0; left: 0;" />
       <emojis.EmojiSelector input={input.current} />
       <channels.ChannelSelector input={input.current} />
+      {showEmojis && <EmojiSearch onSelect={insertEmoji}/>}
     </InputContainer>
   );
 };

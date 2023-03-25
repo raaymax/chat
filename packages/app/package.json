@@ -27,8 +27,10 @@
     "redux": "4.2.0",
     "socket.io-client": "4.5.1",
     "styled-components": "5.3.5",
+    "workbox-navigation-preload": "6.5.4",
     "workbox-precaching": "6.5.4",
-    "workbox-routing": "6.5.4"
+    "workbox-routing": "6.5.4",
+    "workbox-strategies": "6.5.4"
   },
   "devDependencies": {
     "@babel/core": "7.17.8",

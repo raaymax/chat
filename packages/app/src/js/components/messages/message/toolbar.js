@@ -15,7 +15,7 @@ const ToolbarContainer = styled.div`
   top: -15px;
   height: 32px;
   right: 10px;
-  z-index: 1000;
+  z-index: 50;
   background-color: var(--primary_background);
   border: 1px solid #565856;
   border-radius: 0.3em;

@@ -5,6 +5,11 @@ import {actions} from '../state';
 
 window.EMOJI = Emojis;
 
+
+
+
+
+
 export default Emojis;
 
 export const emojiFuse = new Fuse(Emojis, {
@@ -60,11 +65,21 @@ export const getEmojiFuse = (store) => {
   return fuse;
 };
 
-export const loadEmojis = () => async (dispatch) => {
+export const getEmojis = async (store) => {
+  return [
+    ...Emojis,
+    ...store.getState().customEmojis.filter((e) => !e.empty).map((e) => ({
+      ...e,
+      category: 'c',
+    })),
+  ];
+}
+
+export const loadJSON = () => async (dispatch) => {
   try {
-    const {data: emojis} = await client.req({ type: 'emojis:load' });
+    const emojis = await import('../../assets/emoji_list.json');
     if (emojis) {
-      emojis.forEach((emoji) => {
+      emojis.default.forEach((emoji) => {
         dispatch(actions.addEmoji(emoji));
       });
     }
@@ -73,6 +88,28 @@ export const loadEmojis = () => async (dispatch) => {
     console.log(err);
   }
 }
+
+export const loadCustom = () => async (dispatch) => {
+  try {
+    const {data: emojis} = await client.req({ type: 'emojis:load' });
+    if (emojis) {
+      emojis.forEach((emoji) => {
+        dispatch(actions.addEmoji({...emoji, category: 'c'}));
+      });
+    }
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(err);
+  }
+}
+
+export const loadEmojis = () => async (dispatch) => {
+  return Promise.all([
+    dispatch(loadJSON()),
+    dispatch(loadCustom()),
+  ]);
+}
+
 
 export const findEmoji = (shortname) => async (dispatch) => {
   try {
