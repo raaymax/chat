@@ -5,8 +5,8 @@ import { ThemeProvider } from 'styled-components';
 import '../setup';
 import { client } from '../core';
 import store from '../state';
-import { Workspace } from '../components/workspace';
-import { useUser } from '../components/auth/UserContext';
+import { Workspace } from './workspace';
+import { useUser } from '../contexts/user';
 
 const theme = {
   borderColor: '#565856',

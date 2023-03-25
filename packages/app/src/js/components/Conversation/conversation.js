@@ -1,18 +1,19 @@
 import { h } from 'preact';
 import { useEffect, useCallback } from 'preact/hooks';
-import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadPrevious, loadNext } from '../../services/messages';
 import { updateProgress } from '../../services/progress';
 import { selectors } from '../../state';
-import { messageFormatter } from './formatter';
-import { MessageList } from './messageList';
+import { messageFormatter } from '../messages/formatter';
+import { MessageList } from '../messages/messageList';
 import { uploadMany } from '../../services/file';
 import { Input } from '../Input/Input';
-import { Loader } from '../loader';
+import { Loader } from './elements/loader';
 import { reinit } from '../../services/init';
-import { ConversationContext } from './conversationContext';
-import { useStream } from '../streamContext';
+import { ConversationContext } from '../../contexts/conversation';
+import { useStream } from '../../contexts/stream';
+import { Container } from './elements/container';
+import { InitFailedButton } from './elements/initFailedButton';
 
 const drop = (dispatch) => async (e) => {
   e.preventDefault();
@@ -25,41 +26,6 @@ function dragOverHandler(ev) {
   ev.preventDefault();
   ev.stopPropagation();
 }
-
-const StyledConversation = styled.div`
-  flex: 1;
-  width: 100%;
-  height: calc(100vh - 50px);
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid var(--primary_border_color);
-`;
-
-const StyledLoader = styled.div`
-  position: relative;
-  height: 0;
-  width: 100%;
-
-  & div {
-    position: absolute;
-    top: -20px;
-    width: 100%;
-  }
-`;
-
-const ReInit = styled.div`
-  cursor: pointer;
-  border: 0;
-  text-align: center;
-  color: var(--color_danger);
-  vertical-align: middle;
-  height: 50px;
-  line-height: 25px;
-  border-top: 1px solid var(--border_color);
-  &:hover {
-    background-color: var(--secondary_background);
-  }
-`;
 
 export function Conversation() {
   const [stream, setStream] = useStream();
@@ -83,7 +49,7 @@ export function Conversation() {
   }, [bumpProgress]);
 
   return (
-    <StyledConversation onDrop={drop(dispatch)} onDragOver={dragOverHandler}>
+    <Container onDrop={drop(dispatch)} onDragOver={dragOverHandler}>
       <ConversationContext>
         <MessageList
           formatter={messageFormatter}
@@ -101,15 +67,10 @@ export function Conversation() {
             }
           }}
         />
-        {loading && <StyledLoader><div>
-          <Loader />
-        </div></StyledLoader>}
+        {loading && <Loader />}
         <Input />
-        {initFailed && <ReInit onClick={() => dispatch(reinit())}>
-          Failed to initialize<br />
-          Retry
-        </ReInit>}
+        {initFailed && <InitFailedButton onClick={() => dispatch(reinit())} />}
       </ConversationContext>
-    </StyledConversation>
+    </Container>
   )
 }

@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import styled from 'styled-components';
 import { Header } from './header';
-import { Conversation } from '../conversation';
+import { Conversation } from '../../Conversation/conversation';
 
 const Container = styled.div`
   flex: 1;

@@ -12,7 +12,7 @@ import { Info } from '../info';
 import { Attachments } from '../Files/Attachments';
 import { selectors } from '../../state';
 import { notifyTyping } from '../../services/typing';
-import { useStream } from '../streamContext';
+import { useStream } from '../../contexts/stream';
 import { EmojiSearch } from '../EmojiSearch/search';
 import { getUrl } from '../../services/file';
 import {InputContainer} from './elements/container';

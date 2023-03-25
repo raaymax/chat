@@ -3,9 +3,9 @@ refactor(server): new repositories
 refactor: normalization of rpc message types
 refactor: renamed actions to loadChannels and loadMessages
 fix: message from thread showing outside of thread
-feat: channels management
+feat: channels managementpop
 fix(share): share target redirect
-feat: emoji selector
+feat: added emoji selection popup
  
 v2.0.0 // first public release
 - feat: registration of users

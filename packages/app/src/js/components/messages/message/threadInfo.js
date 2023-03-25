@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { UserCircle } from './userCircle';
 import { formatTime, formatDateDetailed } from '../../../utils';
-import { useMessageData } from './messageContext';
-import { useStream } from '../../streamContext';
+import { useMessageData } from '../../../contexts/message';
+import { useStream } from '../../../contexts/stream';
 import { setStream } from '../../../services/stream';
 
 const Container = styled.div`

@@ -1,6 +1,6 @@
 import { h, createContext } from 'preact';
 import { useContext} from 'preact/hooks';
-import { useUser } from '../../../state';
+import { useUser } from '../state';
 
 const Context = createContext({
   data: {},

@@ -2,7 +2,7 @@ import { h } from 'preact';
 import styled from 'styled-components';
 import { useDispatch} from 'react-redux';
 import { addReaction } from '../../../services/messages';
-import { useMessageData } from './messageContext';
+import { useMessageData } from '../../../contexts/message';
 
 const StyledReactions = styled.div`
   i {

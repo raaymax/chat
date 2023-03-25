@@ -8,7 +8,7 @@ import { actions, selectors } from '../../state';
 import {Header} from './header';
 import {messageFormatter } from '../messages/formatter';
 import {MessageList} from '../messages/messageList';
-import { useStream } from '../streamContext';
+import { useStream } from '../../contexts/stream';
 
 const StyledPins = styled.div`
   width: 100vw;

@@ -6,7 +6,7 @@ import { Message } from '../messages/message/message';
 import { actions, selectors } from '../../state';
 import { formatTime, formatDate } from '../../utils';
 import { SearchSeparator } from './searchSeparator';
-import { useStream } from '../streamContext';
+import { useStream } from '../../contexts/stream';
 
 const StyledList = styled.div`
   display: flex;

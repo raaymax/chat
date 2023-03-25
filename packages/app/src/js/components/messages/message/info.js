@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import { useCallback } from 'preact/hooks';
 import { useDispatch } from 'react-redux';
-import { useMessageData } from './messageContext';
+import { useMessageData } from '../../../contexts/message';
 import { resend } from '../../../services/messages';
 
 export const Info = () => {

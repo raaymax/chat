@@ -1,7 +1,7 @@
 import { h, render } from 'preact';
 import { Suspense, lazy } from 'preact/compat';
 import '../core/registerSw';
-import { Login } from '../components/auth/login';
+import { Login } from './login';
 
 const Secured = lazy(() => import('./secured'));
 

@@ -5,7 +5,7 @@ import { Channel } from '../../channels';
 import { selectors, actions } from '../../../state';
 import { loadPinnedMessages } from '../../../services/pins';
 import { init } from '../../../services/init';
-import { useStream } from '../../streamContext';
+import { useStream } from '../../../contexts/stream';
 
 const StyledHeader = styled.div`
   display: flex;

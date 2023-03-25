@@ -7,9 +7,9 @@ import { Toolbar } from './toolbar';
 import { Progress } from './progress';
 import { Info } from './info';
 import { ThreadInfo } from './threadInfo';
-import { MessageContext, useMessageData, useMessageUser } from './messageContext';
-import { useHovered } from '../conversationContext';
-import { useStream } from '../../streamContext';
+import { MessageContext, useMessageData, useMessageUser } from '../../../contexts/message';
+import { useHovered } from '../../../contexts/conversation';
+import { useStream } from '../../../contexts/stream';
 import { buildMessageBody } from './messageBuilder';
 import { isToday, isOnlyEmoji } from './utils';
 

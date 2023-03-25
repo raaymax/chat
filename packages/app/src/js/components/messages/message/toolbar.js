@@ -6,9 +6,9 @@ import { removeMessage } from '../../../services/messages';
 import { pinMessage, unpinMessage } from '../../../services/pins';
 import { Reaction } from './reaction';
 import { setStream } from '../../../services/stream';
-import { useHovered } from '../conversationContext';
-import { useStream } from '../../streamContext';
-import { useMessageData, useMessageUser } from './messageContext';
+import { useHovered } from '../../../contexts/conversation';
+import { useStream } from '../../../contexts/stream';
+import { useMessageData, useMessageUser } from '../../../contexts/message';
 
 const ToolbarContainer = styled.div`
   position: absolute;
