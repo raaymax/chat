@@ -36,7 +36,8 @@ public class LauncherActivity
         // Oreo and below. We only set the orientation on Oreo and above. This only affects the
         // splash screen and Chrome will still respect the orientation.
         // See https://github.com/GoogleChromeLabs/bubblewrap/issues/496 for details.
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);     
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+            | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);     
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT);
         } else {
