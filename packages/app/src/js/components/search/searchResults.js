@@ -2,7 +2,7 @@ import { h } from 'preact';
 import { useCallback } from 'preact/hooks';
 import { useSelector, useDispatch} from 'react-redux';
 import styled from 'styled-components';
-import { Message } from '../messages/message/message';
+import { Message } from '../Message/message';
 import { actions, selectors } from '../../state';
 import { formatTime, formatDate } from '../../utils';
 import { SearchSeparator } from './searchSeparator';

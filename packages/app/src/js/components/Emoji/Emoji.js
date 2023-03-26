@@ -1,9 +1,9 @@
 import { h } from 'preact';
 import {useSelector, useDispatch} from 'react-redux';
 import styled from 'styled-components';
-import {selectors} from '../../../state';
-import Emojis, {findEmoji} from '../../../services/emoji';
-import {getUrl} from '../../../services/file';
+import {selectors} from '../../state';
+import Emojis, {findEmoji} from '../../services/emoji';
+import {getUrl} from '../../services/file';
 
 const StyledEmoji = styled.span`
   img{

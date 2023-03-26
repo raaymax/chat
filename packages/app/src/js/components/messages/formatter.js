@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import { Message } from './message/message';
+import { Message } from '../Message/message';
 import { Notification } from './notification';
 import { DateSeparator} from './dateSeparator';
 import { formatDate, formatDateDetailed } from '../../utils';

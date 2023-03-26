@@ -1,6 +1,6 @@
 import { h } from 'preact';
-import { Files } from '../../Files/Files';
-import { useMessageData } from '../../../contexts/message';
+import { Files } from '../Files/Files';
+import { useMessageData } from '../../contexts/message';
 
 export const Attachments = () => {
   const {attachments} = useMessageData();

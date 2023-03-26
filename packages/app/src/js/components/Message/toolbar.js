@@ -2,13 +2,13 @@ import { h } from 'preact';
 import styled from 'styled-components';
 import { useState, useCallback, useEffect } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeMessage } from '../../../services/messages';
-import { pinMessage, unpinMessage } from '../../../services/pins';
+import { removeMessage } from '../../services/messages';
+import { pinMessage, unpinMessage } from '../../services/pins';
 import { Reaction } from './reaction';
-import { setStream } from '../../../services/stream';
-import { useHovered } from '../../../contexts/conversation';
-import { useStream } from '../../../contexts/stream';
-import { useMessageData, useMessageUser } from '../../../contexts/message';
+import { setStream } from '../../services/stream';
+import { useHovered } from '../../contexts/conversation';
+import { useStream } from '../../contexts/stream';
+import { useMessageData, useMessageUser } from '../../contexts/message';
 
 const ToolbarContainer = styled.div`
   position: absolute;

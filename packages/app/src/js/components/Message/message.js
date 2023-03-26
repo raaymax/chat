@@ -1,15 +1,15 @@
 import { h } from 'preact';
 import { useCallback } from 'preact/hooks';
-import { formatTime, formatDateDetailed } from '../../../utils';
+import { formatTime, formatDateDetailed } from '../../utils';
 import { Attachments } from './attachments';
 import { Reactions } from './reaction';
 import { Toolbar } from './toolbar';
 import { Progress } from './progress';
 import { Info } from './info';
 import { ThreadInfo } from './threadInfo';
-import { MessageContext, useMessageData, useMessageUser } from '../../../contexts/message';
-import { useHovered } from '../../../contexts/conversation';
-import { useStream } from '../../../contexts/stream';
+import { MessageContext, useMessageData, useMessageUser } from '../../contexts/message';
+import { useHovered } from '../../contexts/conversation';
+import { useStream } from '../../contexts/stream';
 import { buildMessageBody } from './messageBuilder';
 import { isToday, isOnlyEmoji } from './utils';
 

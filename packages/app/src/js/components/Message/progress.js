@@ -1,6 +1,6 @@
 import { h } from 'preact';
 import styled from 'styled-components';
-import { useMessageData } from '../../../contexts/message';
+import { useMessageData } from '../../contexts/message';
 
 const StyledProgress = styled.div`
   position: relative;

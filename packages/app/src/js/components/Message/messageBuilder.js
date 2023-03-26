@@ -1,7 +1,7 @@
 import { h } from 'preact';
-import {Emoji} from './Emoji';
+import {Emoji} from '../Emoji/Emoji';
 import {Link} from './Link';
-import { ChannelInline } from '../../channelInline/channelInline';
+import { ChannelInline } from '../channelInline/channelInline';
 import { ThreadLink } from './threadInfo';
 
 const TYPES = {

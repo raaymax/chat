@@ -1,11 +1,11 @@
 import { h } from 'preact';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { UserCircle } from './userCircle';
-import { formatTime, formatDateDetailed } from '../../../utils';
-import { useMessageData } from '../../../contexts/message';
-import { useStream } from '../../../contexts/stream';
-import { setStream } from '../../../services/stream';
+import { UserCircle } from '../UserCircle/UserCircle';
+import { formatTime, formatDateDetailed } from '../../utils';
+import { useMessageData } from '../../contexts/message';
+import { useStream } from '../../contexts/stream';
+import { setStream } from '../../services/stream';
 
 const Container = styled.div`
   width: auto;
