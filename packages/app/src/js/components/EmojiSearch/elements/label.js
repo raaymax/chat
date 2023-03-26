@@ -1,4 +1,3 @@
-import {h } from 'preact';
 import styled from 'styled-components';
 
 export const Label = styled.div`
@@ -7,6 +6,5 @@ export const Label = styled.div`
   font-size: 12px;
   padding: 10px;
 
-  color: ${props => props.theme.labelColor};
+  color: ${(props) => props.theme.labelColor};
 `;
-

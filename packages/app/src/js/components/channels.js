@@ -14,7 +14,7 @@ const Badge = styled.span`
   padding: 3px 5px;
 `;
 
-export const Channel = ({channelId: id, onclick, icon }) => { 
+export const Channel = ({channelId: id, onclick, icon }) => {
   const dispatch = useDispatch();
   const channel = useSelector(selectors.getChannel({ id }));
   useEffect(() => {
@@ -32,7 +32,9 @@ export const Channel = ({channelId: id, onclick, icon }) => {
   );
 }
 
-const ListChannel = ({channelId: id, onclick, active, icon, badge }) => { 
+const ListChannel = ({
+  channelId: id, onclick, active, icon, badge,
+}) => {
   const dispatch = useDispatch();
   const channel = useSelector(selectors.getChannel({ id }));
   useEffect(() => {

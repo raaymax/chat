@@ -27,6 +27,9 @@ const MessageSchema = ObjectType({
       childId: IdType(),
     }),
   ),
+  links: ArrayType(StringType()),
+  linkPreviews: ArrayType(EmptyType()),
+  parsingErrors: ArrayType(EmptyType()),
   attachments: ArrayType(
     ObjectType({
       id: StringType(),

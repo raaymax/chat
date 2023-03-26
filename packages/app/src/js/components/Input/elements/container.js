@@ -1,4 +1,3 @@
-import {h} from 'preact';
 import styled from 'styled-components';
 
 export const InputContainer = styled.div`
@@ -126,4 +125,3 @@ export const InputContainer = styled.div`
     color: #3080a0;
   }
 `;
-

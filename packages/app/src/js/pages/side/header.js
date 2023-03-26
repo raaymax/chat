@@ -1,10 +1,10 @@
 import { h } from 'preact';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { Channel } from '../../channels';
-import { selectors } from '../../../state';
-import { useStream } from '../../../contexts/stream';
-import { setStream } from '../../../services/stream';
+import { Channel } from '../../components/channels';
+import { selectors } from '../../state';
+import { useStream } from '../../contexts/stream';
+import { setStream } from '../../services/stream';
 
 const StyledHeader = styled.div`
   display: flex;

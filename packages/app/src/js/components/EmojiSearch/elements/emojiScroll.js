@@ -19,6 +19,3 @@ export const EmojiScroll = ({children}) => (
     </div>
   </Scroll>
 )
-
-
-

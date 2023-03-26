@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import {Emoji} from '../Emoji/Emoji';
 import {Link} from './Link';
-import { ChannelInline } from '../channelInline/channelInline';
+import { ChannelInline } from '../ChannelInline/ChannelInline';
 import { ThreadLink } from './threadInfo';
 
 const TYPES = {
@@ -20,7 +20,7 @@ const TYPES = {
   strike: (props) => <s>{build(props.data)}</s>,
   img: (props) => <img src={props.data.src} alt={props.data.alt} />,
   link: (props) => (props.data.href.startsWith('#')
-    ? <InlineChannel cid={props.data.href.slice(1)} />
+    ? <ChannelInline cid={props.data.href.slice(1)} />
     : <Link href={props.data.href}>{build(props.data.children)}</Link>),
   emoji: (props) => <Emoji big={props.opts.emojiOnly} shortname={props.data} />,
   channel: (props) => <ChannelInline channelId={props.data} />,

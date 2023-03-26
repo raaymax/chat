@@ -3,18 +3,16 @@ import { useStore, useSelector } from 'react-redux';
 import {
   useCallback, useEffect, useRef, useState,
 } from 'preact/hooks';
-import styled from 'styled-components';
 import { sendFromDom } from '../../services/messages';
 import * as emojis from './EmojiSelector/EmojiSelector';
 import * as channels from './ChannelSelector/ChannelSelector';
-import { uploadMany } from '../../services/file';
+import { uploadMany, getUrl } from '../../services/file';
 import { StatusLine } from '../StatusLine/StatusLine';
 import { Attachments } from '../Attachments/Attachments';
 import { selectors } from '../../state';
 import { notifyTyping } from '../../services/typing';
 import { useStream } from '../../contexts/stream';
 import { EmojiSearch } from '../EmojiSearch/search';
-import { getUrl } from '../../services/file';
 import {InputContainer} from './elements/container';
 import {ActionButton} from './elements/actionButton';
 
@@ -109,14 +107,14 @@ export const Input = () => {
   useEffect(() => {
     const handler = (e) => {
       const range = document.getSelection().getRangeAt(0);
-      if(input.current.contains(range.commonAncestorContainer)) {
+      if (input.current.contains(range.commonAncestorContainer)) {
         setRange(document.getSelection().getRangeAt(0));
       }
       dispatchEvent('selectionChange', e);
     }
     document.addEventListener('selectionchange', handler);
     return () => document.removeEventListener('selectionchange', handler);
-  }, [setRange]);
+  }, [setRange, dispatchEvent]);
 
   const onPaste = useCallback(async (event) => {
     const cbData = (event.clipboardData || window.clipboardData);
@@ -165,7 +163,7 @@ export const Input = () => {
     node.appendChild(emoji);
     range.insertNode(node);
     range.collapse();
-  }, [range, store])
+  }, [range])
 
   return (
     <InputContainer>
@@ -180,7 +178,7 @@ export const Input = () => {
       <Attachments />
       <div class='actionbar' onclick={(e) => dispatchEvent('click', e)} action='focus'>
         <div class={showEmojis ? 'action active' : 'action'} onclick={() => setShowEmojis(!showEmojis)}>
-          <i class="fa-solid fa-face-smile-beam"></i>
+          <i class="fa-solid fa-face-smile-beam" />
         </div>
         <div class='action' onclick={() => fileInput.current.click()}>
           <i class="fa-solid fa-plus" />
@@ -193,7 +191,7 @@ export const Input = () => {
       <input onChange={onChange} ref={fileInput} type="file" multiple style="height: 0; opacity: 0; width: 0; position:absolute; bottom:0; left: 0;" />
       <emojis.EmojiSelector input={input.current} />
       <channels.ChannelSelector input={input.current} />
-      {showEmojis && <EmojiSearch onSelect={insertEmoji}/>}
+      {showEmojis && <EmojiSearch onSelect={insertEmoji} />}
     </InputContainer>
   );
 };

@@ -6,7 +6,7 @@ module.exports = (connect) => {
     require('./updateMessage.spec')(connect);
     require('./command.spec')(connect);
     require('./pins.spec')(connect);
-    //require('./badges.spec')(connect);
+    // require('./badges.spec')(connect);
     require('./search.spec')(connect);
   });
 };

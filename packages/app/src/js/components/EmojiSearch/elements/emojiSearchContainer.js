@@ -1,4 +1,3 @@
-import {h } from 'preact';
 import styled from 'styled-components';
 
 export const EmojiSearchContainer = styled.div`
@@ -13,8 +12,8 @@ export const EmojiSearchContainer = styled.div`
   z-index: 100;
   border-radius: 10px;
   padding-bottom: 10px;
-  background-color: ${props => props.theme.backgroundColor};
-  border: 1px solid ${props => props.theme.borderColor};
+  background-color: ${(props) => props.theme.backgroundColor};
+  border: 1px solid ${(props) => props.theme.borderColor};
   
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   * {

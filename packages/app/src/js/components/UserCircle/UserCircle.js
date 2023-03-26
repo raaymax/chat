@@ -13,7 +13,7 @@ const Image = styled.img`
 
 export const UserCircle = ({userId, className}) => {
   const user = useSelector(selectors.getUser(userId));
-  if(!user) return null;
+  if (!user) return null;
   return (
     <Image className={className} src={user.avatarUrl} alt={user.name} />
   );

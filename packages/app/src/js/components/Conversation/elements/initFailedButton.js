@@ -15,7 +15,6 @@ const ReInit = styled.div`
   }
 `;
 
-
 export const InitFailedButton = ({onClick}) => (
   <ReInit onClick={onClick}>
     Failed to initialize<br />

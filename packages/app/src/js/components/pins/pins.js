@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 // import {PinsList} from './pinsList';
 import { actions, selectors } from '../../state';
 import {Header} from './header';
-import {messageFormatter } from '../messages/formatter';
-import {MessageList} from '../messages/messageList';
+import {messageFormatter } from '../MessageList/formatter';
+import {MessageList} from '../MessageList/MessageList';
 import { useStream } from '../../contexts/stream';
 
 const StyledPins = styled.div`

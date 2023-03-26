@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import {
   useCallback, useEffect, useRef,
 } from 'preact/hooks';
-import { Info } from '../info';
+import { StatusLine } from '../StatusLine/StatusLine';
 import { search } from '../../services/search';
 
 export const SearchInput = () => {
@@ -35,7 +35,7 @@ export const SearchInput = () => {
     <div class="input-container" onclick={() => {}} >
       <div id="input" contenteditable='true' submitable='true' ref={input} />
       <div class='actionbar' onclick={() => document.getElementById('input').focus()}>
-        <Info />
+        <StatusLine />
         <div class='action green' onclick={() => submit()}>
           <i class="fa-solid fa-magnifying-glass" />
         </div>

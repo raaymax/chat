@@ -15,6 +15,8 @@ module.exports = {
       clientId: Joi.string().required(),
       emojiOnly: Joi.boolean().optional().default(false),
       debug: Joi.string().optional().allow(''),
+      links: Joi.array().items(Joi.string()).optional().default([]),
+
       attachments: Joi.array().items(Joi.object({
         id: Joi.string().required(),
         fileName: Joi.string().required(),
@@ -39,6 +41,7 @@ module.exports = {
       clientId: msg.clientId,
       emojiOnly: msg.emojiOnly,
       userId: req.userId,
+      links: msg.links,
       attachments: msg.attachments?.map((file) => ({
         id: file.id,
         fileName: file.fileName,
@@ -64,6 +67,12 @@ module.exports = {
     }
     await services.badge.messageSent(channel.id, msg.parentId, id, req.userId);
     res.ok(dup ? { duplicate: true } : {});
+    if (msg.links?.length) {
+      services.link.addPreview(
+        { messageId: id, links: msg.links },
+        { bus: res.bus },
+      );
+    }
   },
 };
 

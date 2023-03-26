@@ -11,10 +11,8 @@ const EmojiContainer = styled.div`
   width: 100%;
 `;
 
-export const EmojiBlock = ({children}) => {
-  return (
-    <EmojiContainer>
-      {children}
-    </EmojiContainer>
-  );
-}
+export const EmojiBlock = ({children}) => (
+  <EmojiContainer>
+    {children}
+  </EmojiContainer>
+)

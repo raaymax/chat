@@ -40,7 +40,9 @@ export const actions = {
 
 const getStreamMessages = (stream, messages) => messages
   .filter((m) => m.channelId === stream.channelId
-    && ((!stream.parentId && !m.parentId ) || m.parentId === stream.parentId));
+    && (
+      ((!stream.parentId && !m.parentId ) || m.parentId === stream.parentId)
+    || (!stream.parentId && m.parentId === m.id)));
 
 export const selectors = {
   getProgress: ({channelId, parentId}) => createSelector(
@@ -81,7 +83,9 @@ export const selectors = {
   getEmojis: (state) => state.customEmojis,
   getAllEmojis: () => (state) => state.customEmojis,
   getChannel: (q) => (state) => state.channels.list
-    .find((c) => (q.id && c.id === q.id) || (q.name && c.name === q.name) || (q.cid && c.cid && c.cid === q.cid)),
+    .find((c) => (q.id && c.id === q.id)
+      || (q.name && c.name === q.name)
+      || (q.cid && c.cid && c.cid === q.cid)),
   getChannels: createSelector(
     (state) => state.users.meId,
     (state) => state.channels.list,

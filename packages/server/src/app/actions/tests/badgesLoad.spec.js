@@ -9,7 +9,7 @@ describe('badges:load', () => {
   });
 
   it('should return list of badges', async () => {
-    const { res, data: badges } = await api.sendMessage({
+    const { data: badges } = await api.sendMessage({
       type: 'badges:load',
     }, { userId: user.id });
     const invalid = badges.filter((b) => b.userId !== user.id);

@@ -5,11 +5,6 @@ import {actions} from '../state';
 
 window.EMOJI = Emojis;
 
-
-
-
-
-
 export default Emojis;
 
 export const emojiFuse = new Fuse(Emojis, {
@@ -65,15 +60,13 @@ export const getEmojiFuse = (store) => {
   return fuse;
 };
 
-export const getEmojis = async (store) => {
-  return [
-    ...Emojis,
-    ...store.getState().customEmojis.filter((e) => !e.empty).map((e) => ({
-      ...e,
-      category: 'c',
-    })),
-  ];
-}
+export const getEmojis = async (store) => [
+  ...Emojis,
+  ...store.getState().customEmojis.filter((e) => !e.empty).map((e) => ({
+    ...e,
+    category: 'c',
+  })),
+]
 
 export const loadJSON = () => async (dispatch) => {
   try {
@@ -103,13 +96,10 @@ export const loadCustom = () => async (dispatch) => {
   }
 }
 
-export const loadEmojis = () => async (dispatch) => {
-  return Promise.all([
-    dispatch(loadJSON()),
-    dispatch(loadCustom()),
-  ]);
-}
-
+export const loadEmojis = () => async (dispatch) => Promise.all([
+  dispatch(loadJSON()),
+  dispatch(loadCustom()),
+])
 
 export const findEmoji = (shortname) => async (dispatch) => {
   try {

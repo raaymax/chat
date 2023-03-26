@@ -12,12 +12,14 @@ import { useHovered } from '../../contexts/conversation';
 import { useStream } from '../../contexts/stream';
 import { buildMessageBody } from './messageBuilder';
 import { isToday, isOnlyEmoji } from './utils';
+import { LinkPreviewList } from './elements/LinkPreview';
 
 const MessageBase = (props = {}) => {
   const msg = useMessageData();
   const {
     id, message, emojiOnly,
     flat, createdAt, pinned,
+    linkPreviews,
   } = msg;
   const [hovered, setHovered] = useHovered()
   const [{selected}] = useStream();
@@ -55,6 +57,7 @@ const MessageBase = (props = {}) => {
         </div>
 
         <Attachments />
+        <LinkPreviewList links={linkPreviews} />
         <Info />
         <Reactions />
         <ThreadInfo />

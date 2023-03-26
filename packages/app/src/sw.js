@@ -1,6 +1,7 @@
 import {precacheAndRoute} from 'workbox-precaching';
 import {registerRoute} from 'workbox-routing';
 import * as navigationPreload from 'workbox-navigation-preload';
+
 precacheAndRoute(self.__WB_MANIFEST);
 
 navigationPreload.enable();
@@ -8,7 +9,7 @@ navigationPreload.enable();
 registerRoute(
   '/share',
   shareTargetHandler,
-  'POST'
+  'POST',
 );
 
 async function shareTargetHandler ({event}) {
@@ -25,9 +26,7 @@ async function shareTargetHandler ({event}) {
     }
   });
   event.respondWith(Response.redirect('https://chat.codecat.io/'));
-};
-
-
+}
 
 function getOpenClient() {
   return clients.matchAll({
@@ -35,4 +34,3 @@ function getOpenClient() {
     type: 'window',
   }).then((clientList) => clientList[0]);
 }
-

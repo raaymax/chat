@@ -1,11 +1,11 @@
 import { h } from 'preact';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { Channel } from '../../channels';
-import { selectors, actions } from '../../../state';
-import { loadPinnedMessages } from '../../../services/pins';
-import { init } from '../../../services/init';
-import { useStream } from '../../../contexts/stream';
+import { Channel } from '../../components/channels';
+import { selectors, actions } from '../../state';
+import { loadPinnedMessages } from '../../services/pins';
+import { init } from '../../services/init';
+import { useStream } from '../../contexts/stream';
 
 const StyledHeader = styled.div`
   display: flex;
@@ -97,7 +97,7 @@ export const Header = ({onclick}) => {
 
   return (
     <StyledHeader>
-      <Channel onclick={onclick} channelId={channelId}/>
+      <Channel onclick={onclick} channelId={channelId} />
 
       {window.location.hash.slice(1) !== '' && (
         <div class="back">

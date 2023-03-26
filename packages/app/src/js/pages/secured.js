@@ -22,7 +22,7 @@ const theme = {
   actionButtonActiveBackgroundColor: '#3D2760',
   actionButtonFontColor: '#d9d9d9',
 
-  borderColor: '#2a2d31',
+  borderColorHover: 'white',
 
   searchBoxBackgroundColor: '#2a2d31',
   labelColor: 'gray',

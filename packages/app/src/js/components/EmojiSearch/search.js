@@ -14,16 +14,16 @@ import {loadEmojis} from '../../services/emoji';
 import {selectors} from '../../state';
 
 const CATEGORIES = {
-  'p': 'People',
-  'c': 'Custom',
-  'n': 'Nature',
-  'd': 'Food',
-  'a': 'Activity',
-  't': 'Travel',
-  'o': 'Objects',
-  's': 'Symbols',
-  'k': 'Flags',
-  'f': 'Font',
+  p: 'People',
+  c: 'Custom',
+  n: 'Nature',
+  d: 'Food',
+  a: 'Activity',
+  t: 'Travel',
+  o: 'Objects',
+  s: 'Symbols',
+  k: 'Flags',
+  f: 'Font',
 };
 
 export const EmojiSearch = ({onSelect}) => {
@@ -31,7 +31,7 @@ export const EmojiSearch = ({onSelect}) => {
   const [fuse, setFuse] = useState('');
   const [results, setResults] = useState([]);
   const dispatch = useDispatch();
-  const emojis= useSelector(selectors.getEmojis);
+  const emojis = useSelector(selectors.getEmojis);
 
   useEffect(() => dispatch(loadEmojis()), [dispatch]);
   useEffect(() => {
@@ -43,9 +43,9 @@ export const EmojiSearch = ({onSelect}) => {
     }));
   }, [emojis])
 
-  useEffect(async () => {
+  useEffect(() => {
     let all = emojis || [];
-    if(name && fuse) {
+    if (name && fuse) {
       const ret = fuse.search(name, {limit: 100});
       all = ret.map((r) => r.item);
     }
@@ -56,36 +56,36 @@ export const EmojiSearch = ({onSelect}) => {
           acc[emoji.category] = acc[emoji.category] || [];
           acc[emoji.category].push(emoji);
           return acc;
-        }, {})
+        }, {}),
     );
-  }, [name, fuse]);
+  }, [name, fuse, emojis]);
 
   return (
     <EmojiSearchContainer>
-      <SearchBox onChange={(e)=>setName(e.target.value)} value={name} /> 
+      <SearchBox onChange={(e) => setName(e.target.value)} value={name} />
       <EmojiScroll>
-        {Object.keys(CATEGORIES).filter(c=>results[c]).map((category) => (
-          <EmojiCategory>
+        {Object.keys(CATEGORIES).filter((c) => results[c]).map((category, idx) => (
+          <EmojiCategory key={idx}>
             <Label>{CATEGORIES[category]}</Label>
-              <EmojiBlock>
-                {(results[category] || []).map((result, idx) => (
-                  <Tooltip text={result.shortname} key={idx}>
-                    <Emoji 
-                      fileId={result.fileId} 
-                      unicode={result.unicode} 
-                      shortname={result.shortname}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        onSelect(result);
-                      }}
-                    />
-                  </Tooltip>
-                ))}
-              </EmojiBlock>
+            <EmojiBlock>
+              {(results[category] || []).map((result, idx) => (
+                <Tooltip text={result.shortname} key={idx}>
+                  <Emoji
+                    fileId={result.fileId}
+                    unicode={result.unicode}
+                    shortname={result.shortname}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      onSelect(result);
+                    }}
+                  />
+                </Tooltip>
+              ))}
+            </EmojiBlock>
           </EmojiCategory>
         ))}
-    </EmojiScroll>
+      </EmojiScroll>
     </EmojiSearchContainer>
   );
 };

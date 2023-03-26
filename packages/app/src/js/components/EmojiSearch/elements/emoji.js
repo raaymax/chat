@@ -1,6 +1,6 @@
 import { h } from 'preact';
-import {getUrl} from '../../../services/file';
 import styled from 'styled-components';
+import {getUrl} from '../../../services/file';
 
 const EmojiContainer = styled.div`
   width: 30px;
@@ -23,7 +23,9 @@ const EmojiContainer = styled.div`
   }
 `;
 
-export const Emoji = ({unicode, fileId, shortname, onClick}) => (
+export const Emoji = ({
+  unicode, fileId, shortname, onClick,
+}) => (
   <EmojiContainer onClick={onClick}>
     {fileId
       ? <img src={getUrl(fileId)} alt={shortname} />

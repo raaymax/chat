@@ -6,8 +6,10 @@ fix: message from thread showing outside of thread
 feat: channels managementpop
 fix(share): share target redirect
 feat: added emoji selection popup
+fix: going back from thread removes parent message from list
 - feat: ability to set main channel
 * fix: share is not working
+- feat: link preview
  
 v2.0.0 // first public release
 - feat: registration of users
@@ -16,7 +18,6 @@ v2.0.0 // first public release
 - chore: change all access keys
 
 backlog:
-- feat: link preview
 - feat: rss feeds (https://xkcd.com/2294/)
     needs job sheduler like agenda?
 - feat: reminders
@@ -41,6 +42,5 @@ backlog:
 - spike: how to build twa for development
 - fix: sending message sometimes is not working
 - fix: app should startup from memory if possible
--
 
 - chore: remove sentry cli from dependencies

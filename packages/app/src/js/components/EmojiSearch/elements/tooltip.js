@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import { useState, useRef } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 
 export const Tooltip = ({children, text}) => {
   const [show, setShow] = useState(false);
@@ -7,8 +7,8 @@ export const Tooltip = ({children, text}) => {
   return (
     <div
       style={{position: 'relative'}}
-      onMouseEnter={()=>setShow(true)}
-      onMouseLeave={()=>setShow(false)}
+      onMouseEnter={() => setShow(true)}
+      onMouseLeave={() => setShow(false)}
     >
       {children}
       {show && (
@@ -31,4 +31,3 @@ export const Tooltip = ({children, text}) => {
     </div>
   );
 }
-

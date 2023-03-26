@@ -9,10 +9,8 @@ const Container = styled.div`
   width: 100%;
 `;
 
-export const EmojiCategory= ({ children}) => {
-  return (
-    <Container>
-      {children}
-    </Container>
-  );
-}
+export const EmojiCategory = ({ children}) => (
+  <Container>
+    {children}
+  </Container>
+)

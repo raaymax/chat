@@ -6,17 +6,15 @@ const SearchBoxInput = styled.input`
   height: 30px;
   margin: 15px 10px;
   padding: 0 15px;
-  background-color: ${props => props.theme.searchBoxBackgroundColor};
-  border: 1px solid ${props => props.theme.borderColor};
+  background-color: ${(props) => props.theme.searchBoxBackgroundColor};
+  border: 1px solid ${(props) => props.theme.borderColor};
 `;
 
-export const SearchBox = ({onChange, value}) => {
-  return (
-    <SearchBoxInput
-      type="text"
-      onChange={onChange}
-      value={value}
-      placeholder="Search here..."
-    />
-  );
-}
+export const SearchBox = ({onChange, value}) => (
+  <SearchBoxInput
+    type="text"
+    onChange={onChange}
+    value={value}
+    placeholder="Search here..."
+  />
+)

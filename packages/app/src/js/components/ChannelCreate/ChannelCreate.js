@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { createChannel} from '../../services/channels';
 
-
 const NewChannelContainer = styled.div`
   width: 100%;
   padding: 0;
@@ -19,7 +18,7 @@ const NewChannelContainer = styled.div`
     padding: 0 0 0 19px;
     margin:0;
     border-radius: 0;
-    background-color: ${props => props.theme.inputBackgroundColor};
+    background-color: ${(props) => props.theme.inputBackgroundColor};
     border: 1px solid #000000;
     border-right: none;
     flex: 1;
@@ -30,20 +29,20 @@ const NewChannelContainer = styled.div`
   }
   button {
     margin:0;
-    background-color: ${props => props.theme.actionButtonBackgroundColor};
-    color: ${props => props.theme.actionButtonFontColor};
+    background-color: ${(props) => props.theme.actionButtonBackgroundColor};
+    color: ${(props) => props.theme.actionButtonFontColor};
     border-radius: 0;
     border: 1px solid #000000;
     height: 40px;
     width: 40px;
     flex: 0 40px;
     &:hover {
-      background-color: ${props => props.theme.actionButtonHoverBackgroundColor};
-      color: ${props => props.theme.actionButtonFontColor};
+      background-color: ${(props) => props.theme.actionButtonHoverBackgroundColor};
+      color: ${(props) => props.theme.actionButtonFontColor};
     }
     &:active {
-      background-color: ${props => props.theme.actionButtonActiveBackgroundColor};
-      color: ${props => props.theme.actionButtonFontColor};
+      background-color: ${(props) => props.theme.actionButtonActiveBackgroundColor};
+      color: ${(props) => props.theme.actionButtonFontColor};
     }
   }
 `;
@@ -60,9 +59,9 @@ export const ChannelCreate = () => {
   return (
     <NewChannelContainer>
       <form action="#" onSubmit={submit}>
-        <input type='text' placeholder='Channel name' onChange={(e)=>setName(e.target.value)} value={name} />
+        <input type='text' placeholder='Channel name' onChange={(e) => setName(e.target.value)} value={name} />
         <button type='submit'>
-          <i class="fa-solid fa-plus"></i>
+          <i class="fa-solid fa-plus" />
         </button>
       </form>
     </NewChannelContainer>
