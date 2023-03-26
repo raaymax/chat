@@ -7,9 +7,9 @@ feat: channels managementpop
 fix(share): share target redirect
 feat: added emoji selection popup
 fix: going back from thread removes parent message from list
-- feat: ability to set main channel
-* fix: share is not working
-- feat: link preview
+feat: link preview
+feat: ability to set main channel
+? fix: share is not working
  
 v2.0.0 // first public release
 - feat: registration of users
