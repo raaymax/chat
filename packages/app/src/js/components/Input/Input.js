@@ -8,8 +8,8 @@ import { sendFromDom } from '../../services/messages';
 import * as emojis from './EmojiSelector/EmojiSelector';
 import * as channels from './ChannelSelector/ChannelSelector';
 import { uploadMany } from '../../services/file';
-import { Info } from '../info';
-import { Attachments } from '../Files/Attachments';
+import { StatusLine } from '../StatusLine/StatusLine';
+import { Attachments } from '../Attachments/Attachments';
 import { selectors } from '../../state';
 import { notifyTyping } from '../../services/typing';
 import { useStream } from '../../contexts/stream';
@@ -185,7 +185,7 @@ export const Input = () => {
         <div class='action' onclick={() => fileInput.current.click()}>
           <i class="fa-solid fa-plus" />
         </div>
-        <Info />
+        <StatusLine />
         <ActionButton className={filesAreReady ? 'action green' : 'action'} onClick={(e) => filesAreReady && dispatchEvent('click', e)} action='submit'>
           <i class="fa-solid fa-paper-plane" />
         </ActionButton>

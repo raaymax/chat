@@ -7,7 +7,7 @@ export const EmojiSearchContainer = styled.div`
   display: flex;
   flex-direction: column;
   bottom: 100px;
-  right: 10px;
+  right: 30px;
   width: 400px;
   height: 500px;
   z-index: 100;

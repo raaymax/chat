@@ -1,9 +1,10 @@
 import { h} from 'preact';
-import { useState, useCallback, useEffect } from 'preact/hooks';
+import { useEffect } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { openChannel, createChannel, findChannel } from '../services/channels';
+import { openChannel, findChannel } from '../services/channels';
 import { selectors } from '../state';
+import { ChannelCreate } from './ChannelCreate/ChannelCreate';
 
 const Badge = styled.span`
   border-radius: 10px;
@@ -12,28 +13,6 @@ const Badge = styled.span`
   font-size: 0.8em;
   padding: 3px 5px;
 `;
-
-const InlineChannelLink = styled.a`
-span {
-  padding-left: 1px;
-}
-`;
-
-export const InlineChannel = ({channelId: id, cid}) => {
-  const dispatch = useDispatch();
-  const channel = useSelector(selectors.getChannel({id, cid}));
-  useEffect(() => {
-    if (!channel) {
-      dispatch(findChannel(id));
-    }
-  }, [id, channel, dispatch]);
-  return (
-    <InlineChannelLink className='channel' data-id={id} href={`#${channel?.id || id}`} >
-      { channel?.private ? <i class='fa-solid fa-lock' /> : <i class='fa-solid fa-hashtag' /> }
-      <span class='name'>{channel?.name || channel?.id || id}</span>
-    </InlineChannelLink>
-  );
-}
 
 export const Channel = ({channelId: id, onclick, icon }) => { 
   const dispatch = useDispatch();
@@ -50,70 +29,6 @@ export const Channel = ({channelId: id, onclick, icon }) => {
       {icon && <i class={icon} />}
       <span class='name'>{name}</span>
     </div>
-  );
-}
-
-const NewChannelContainer = styled.div`
-  width: 100%;
-  padding: 0;
-  margin: 10px 0;
-  form{ 
-    display: flex;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-  }
-  input {
-    padding: 0 0 0 19px;
-    margin:0;
-    border-radius: 0;
-    background-color: ${props => props.theme.inputBackgroundColor};
-    border: 1px solid #000000;
-    border-right: none;
-    flex: 1;
-    height: 40px;
-    &:focus {
-      outline: none;
-    }
-  }
-  button {
-    margin:0;
-    background-color: ${props => props.theme.actionButtonBackgroundColor};
-    color: ${props => props.theme.actionButtonFontColor};
-    border-radius: 0;
-    border: 1px solid #000000;
-    height: 40px;
-    width: 40px;
-    flex: 0 40px;
-    &:hover {
-      background-color: ${props => props.theme.actionButtonHoverBackgroundColor};
-      color: ${props => props.theme.actionButtonFontColor};
-    }
-    &:active {
-      background-color: ${props => props.theme.actionButtonActiveBackgroundColor};
-      color: ${props => props.theme.actionButtonFontColor};
-    }
-  }
-`;
-
-export const NewChannel = () => {
-  const [name, setName] = useState('');
-  const dispatch = useDispatch();
-  const submit = useCallback((e) => {
-    dispatch(createChannel(name));
-    setName('');
-    e.preventDefault();
-    e.stopPropagation();
-  }, [dispatch, name, setName]);
-  return (
-    <NewChannelContainer>
-      <form action="#" onSubmit={submit}>
-        <input type='text' placeholder='Channel name' onChange={(e)=>setName(e.target.value)} value={name} />
-        <button type='submit'>
-          <i class="fa-solid fa-plus"></i>
-        </button>
-      </form>
-    </NewChannelContainer>
   );
 }
 
@@ -156,7 +71,7 @@ export const Channels = ({icon}) => {
           onclick={() => dispatch(openChannel({id: c.id}))}
         />
       ))}
-      <NewChannel />
+      <ChannelCreate />
     </div>
   )
 }
