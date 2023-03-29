@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Fuse from 'fuse.js';
 import {Emoji} from './elements/emoji';
 import {EmojiBlock} from './elements/emojiBlock';
-import {Tooltip} from './elements/tooltip';
+import {Tooltip} from '../../elements/tooltip';
 import {Label} from './elements/label';
 import {SearchBox} from './elements/searchBox';
 import {EmojiScroll} from './elements/emojiScroll';

@@ -6,19 +6,22 @@ export const Tooltip = ({children, text}) => {
 
   return (
     <div
-      style={{position: 'relative'}}
+      className='tooltip-container'
+      style={{position: 'relative', display: 'inline-block'}}
       onMouseEnter={() => setShow(true)}
       onMouseLeave={() => setShow(false)}
     >
       {children}
       {show && (
         <div
+          className='tooltip'
           style={{
             position: 'absolute',
             zIndex: 101,
             left: '50%',
             transform: 'translateX(-50%)',
             backgroundColor: 'black',
+            width: 'max-content',
             color: 'white',
             padding: '5px 10px',
             borderRadius: '5px',
