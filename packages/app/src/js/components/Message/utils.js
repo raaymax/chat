@@ -7,11 +7,3 @@ export const isToday = (date) => {
     && someDate.getMonth() === today.getMonth()
     && someDate.getFullYear() === today.getFullYear();
 };
-
-export const isOnlyEmoji = (message, flat) => EMOJI_MATCHER().test(flat) || (
-  message
-  && message.length === 1
-  && message[0].line
-  && message[0].line.length === 1
-  && message[0].line[0].emoji
-);

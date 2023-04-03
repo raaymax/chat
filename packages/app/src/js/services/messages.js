@@ -296,15 +296,21 @@ const matchUrl = (text) => text.match(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]
 
 const trim = (arr) => {
   const copy = [...arr];
-  const idx = copy.reverse().findIndex(
-    (e) => !(e.text === '' || e.text === '\u200B' || e.text === '\u00A0' || e.br === true),
+  const startIdx = copy.findIndex(
+    (e) => !(e.text === '' || e.text === '\u200B' || e.text === '\u00A0' || e.text?.trim() === '' || e.br === true),
   );
-  return copy.slice(idx).reverse();
+  const endIdx = copy.findLastIndex(
+    (e) => !(e.text === '' || e.text === '\u200B' || e.text === '\u00A0' || e.text?.trim() === '' || e.br === true),
+  );
+  return copy.slice(startIdx, endIdx+1);
 }
 
 const isEmojiOnly = (tree) => {
-  const arr = trim(tree);
-  if (arr.length === 1 && arr[0].emoji) return true;
+  const a = trim(tree)
+  if (a.length === 1 && a[0].emoji) return true;
+  if (a.length === 1 && a[0].line) {
+    return isEmojiOnly(a[0].line);
+  }
   return false;
 }
 
@@ -361,7 +367,7 @@ export const fromDom = (dom, state) => {
 
   return build({
     type: 'message:send',
-    message: tree,
+    message: trim(tree),
     emojiOnly: isEmojiOnly(tree),
     parsingErrors: info.errors,
     links: info.links,
