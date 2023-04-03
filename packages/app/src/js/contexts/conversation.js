@@ -44,7 +44,6 @@ export const ConversationContext = ({children}) => {
       }
       const {el, scope: s} = findScope(r.commonAncestorContainer);
       if (s !== scope) {
-        console.log('setScope', s);
         setScope(s);
       }
       setScopeContainer(el);
@@ -88,6 +87,49 @@ export const ConversationContext = ({children}) => {
     s.addRange(r);
     setRange(r);
   }, [range, setRange]);
+
+  const wrapMatching = useCallback((regex, wrapperTagName) => {
+    const selection = window.getSelection();
+    if (!selection.rangeCount) {
+      console.warn('No text selected.');
+      return;
+    }
+    const range = selection.getRangeAt(0);
+    const { endContainer } = range;
+
+    if (endContainer.nodeType !== Node.TEXT_NODE) {
+      console.warn('End container is not a text node.');
+      return;
+    }
+
+    const { parentNode } = endContainer;
+    let { textContent } = endContainer;
+    const afterText = textContent.slice(range.endOffset);
+    textContent = textContent.slice(0, range.endOffset);
+    const documentFragment = document.createDocumentFragment();
+
+    const match = regex.exec(textContent);
+
+    if (match === null) return;
+    const matchedText = match[1] || match[0];
+    const matchedIndex = match.index;
+    documentFragment.appendChild(document.createTextNode(textContent.substring(0, matchedIndex)));
+    const wrapperElement = document.createElement(wrapperTagName);
+    wrapperElement.appendChild(document.createTextNode(matchedText));
+    documentFragment.appendChild(wrapperElement);
+    textContent = textContent.substring(matchedIndex + match[0].length);
+    const here = document.createTextNode(textContent || '\u00A0')
+    documentFragment.appendChild(here);
+    documentFragment.appendChild(document.createTextNode(afterText));
+    parentNode.replaceChild(documentFragment, endContainer);
+    const sel = document.getSelection();
+    const r = document.createRange();
+    r.setEnd(here, 1);
+    r.setStart(here, 1);
+    sel.removeAllRanges();
+    sel.addRange(r);
+    updateRange();
+  }, [updateRange]);
 
   const insert = useCallback((domNode) => {
     const r = document.getSelection().getRangeAt(0);
@@ -135,6 +177,7 @@ export const ConversationContext = ({children}) => {
     scope,
     scopeContainer,
     replace,
+    wrapMatching,
 
     send,
     range,

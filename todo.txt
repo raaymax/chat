@@ -19,6 +19,8 @@ feat: emoji on hover show name
 feat: replace <3 and ;) with emojis
 refactor: input element in react style
 fix: message with open selector is not sent - vanishes instead
+fix: infobar sometimes not showing
+
 - feat: message with checklist
 - feat: rss feeds (https://xkcd.com/2294/)
     needs job sheduler like agenda?
@@ -50,7 +52,7 @@ backlog:
 - fix: bob is not working - migrate to chatgpt?
 - fix: notifications are not taking user to correct message
 - improvement: emoji alternative names
-- fix: sending message sometimes is not working
+? fix: sending message sometimes is not working
 - fix: app should startup from memory if possible
 
 - chore: remove sentry cli from dependencies

@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import { useCallback, useState } from 'preact/hooks';
+import { useCallback, useState, useEffect } from 'preact/hooks';
 import { useInput } from '../../contexts/conversation';
 import { BaseInput } from '../BaseInput/BaseInput';
 import { Attachments } from '../Attachments/Attachments';
@@ -14,7 +14,7 @@ import { EmojiSelector } from '../EmojiSelector/EmojiSelector';
 export const Input = () => {
   const [showEmojis, setShowEmojis] = useState(false);
   const {
-    focus, addFile, insert, send,
+    input, focus, addFile, insert, send, scope, currentText, wrapMatching,
   } = useInput();
 
   const onEmojiInsert = useCallback((emoji) => {
@@ -22,6 +22,21 @@ export const Input = () => {
     setShowEmojis(!showEmojis);
     focus();
   }, [showEmojis, focus, insert, setShowEmojis])
+
+  const ctrl = useCallback((e) => {
+    if ( scope === 'root' && currentText.match(/`[^`]+$/) && e.key === '`') {
+      wrapMatching(/`([^`]+)$/, 'code');
+      e.preventDefault();
+    }
+  }, [currentText, scope, wrapMatching]);
+
+  useEffect(() => {
+    const { current } = input;
+    current.addEventListener('keydown', ctrl);
+    return () => {
+      current.removeEventListener('keydown', ctrl);
+    }
+  }, [input, ctrl]);
 
   return (
     <BaseInput>

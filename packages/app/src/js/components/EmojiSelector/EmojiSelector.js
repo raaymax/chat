@@ -17,7 +17,7 @@ export const EmojiSelector = () => {
   const dispatch = useDispatch();
   const [selected, setSelected] = useState(0);
   const {
-    input, currentText, scope, insert, scopeContainer, replace
+    input, currentText, scope, insert, scopeContainer, replace,
   } = useInput();
   const emojis = useSelector(selectors.getEmojis);
 
@@ -83,7 +83,7 @@ export const EmojiSelector = () => {
     container.replaceWith(node);
     event.preventDefault();
     event.stopPropagation();
-  }, [options, selected, scopeContainer, emojis, insert, create]);
+  }, [options, selected, scopeContainer, emojis, create, scope]);
 
   const remove = useCallback((event) => {
     if (scopeContainer.textContent.length === 1) {
@@ -94,7 +94,6 @@ export const EmojiSelector = () => {
   }, [scopeContainer]);
 
   const ctrl = useCallback((e) => {
-    console.log('---', scope, currentText, e.key);
     if ( scope === 'root' && currentText.match(/(^|\s)<$/) && e.key === '3') {
       replace(/<$/, '');
       submit(e, {shortName: ':heart:'});
@@ -129,7 +128,7 @@ export const EmojiSelector = () => {
         remove(e);
       }
     }
-  }, [currentText, scope, create, remove, submit]);
+  }, [currentText, scope, create, remove, submit, replace]);
 
   useEffect(() => {
     const { current } = input;

@@ -335,6 +335,7 @@ function flatten(tree) {
     if (n.line) return [flatten(n.line), '\n'];
     if (n.bullet) return flatten(n.bullet);
     if (n.item) return flatten(n.item);
+    if (n.code) return flatten(n.code);
     if (n.br) return '\n';
     // eslint-disable-next-line no-console
     console.log('unknown node', n);
@@ -378,6 +379,7 @@ export const fromDom = (dom, state) => {
 const mapNodes = (dom, info) => (!dom.childNodes ? [] : [...dom.childNodes].map((n) => {
   if (n.nodeName === '#text') return processUrls(n.nodeValue, info);
   if (n.nodeName === 'U') return { underline: mapNodes(n, info) };
+  if (n.nodeName === 'CODE') return { code: mapNodes(n, info) };
   if (n.nodeName === 'A') return { link: { href: n.attributes.href.nodeValue, children: mapNodes(n, info) } };
   if (n.nodeName === 'B') return { bold: mapNodes(n, info) };
   if (n.nodeName === 'I') return { italic: mapNodes(n, info) };
