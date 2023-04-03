@@ -5,6 +5,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { useStream } from './stream';
 import { sendFromDom } from '../services/messages';
+import { uploadMany } from '../services/file';
 
 const Context = createContext({
   hovered: [null, () => {}],
@@ -15,7 +16,7 @@ function findScope(element) {
   let currentElement = element;
   while (currentElement !== null) {
     if (currentElement.hasAttribute?.('scope')) {
-      return {el:currentElement, scope: currentElement.getAttribute('scope')};
+      return {el: currentElement, scope: currentElement.getAttribute('scope')};
     }
     currentElement = currentElement.parentElement;
   }
@@ -52,7 +53,14 @@ export const ConversationContext = ({children}) => {
   }, [input, setRange, scope, setScope, setCurrentText, setScopeContainer])
 
   const onPaste = useCallback(() => {}, []);
-  const onFileChange = useCallback(() => {}, []);
+
+  const onFileChange = useCallback((e) => {
+    if (e.target.files?.length > 0) {
+      const { files } = e.target;
+      dispatch(uploadMany(files));
+      e.target.value = '';
+    }
+  }, [dispatch]);
   const onInput = useCallback(() => {
     updateRange();
   }, [updateRange]);
@@ -91,6 +99,7 @@ export const ConversationContext = ({children}) => {
   const wrapMatching = useCallback((regex, wrapperTagName) => {
     const selection = window.getSelection();
     if (!selection.rangeCount) {
+      // eslint-disable-next-line no-console
       console.warn('No text selected.');
       return;
     }
@@ -98,6 +107,7 @@ export const ConversationContext = ({children}) => {
     const { endContainer } = range;
 
     if (endContainer.nodeType !== Node.TEXT_NODE) {
+      // eslint-disable-next-line no-console
       console.warn('End container is not a text node.');
       return;
     }
@@ -145,6 +155,10 @@ export const ConversationContext = ({children}) => {
     updateRange();
   }, [send, updateRange, scope]);
 
+  const addFile = useCallback(() => {
+    fileInput.current.click();
+  }, [fileInput]);
+
   useEffect(() => {
     document.addEventListener('selectionchange', updateRange);
     return () => document.removeEventListener('selectionchange', updateRange);
@@ -177,6 +191,7 @@ export const ConversationContext = ({children}) => {
     scopeContainer,
     replace,
     wrapMatching,
+    addFile,
 
     send,
     range,

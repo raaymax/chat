@@ -34,7 +34,7 @@ export const Login = ({children}) => {
     }
   };
 
-  if (status === 'pending') return 'Loading';
+  if (status === 'pending') return 'Auth - pending';
 
   return user ? (
     <UserContext value={user}>

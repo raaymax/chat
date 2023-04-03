@@ -10,7 +10,6 @@ export const TextMenu = ({
   const { input, range} = useInput();
 
   const getXPos = useCallback(() => {
-    const inBox = input.current.getBoundingClientRect();
     const width = parseInt(window.getComputedStyle(input.current).width.replace('px', ''), 10);
     if (coords[1] + 300 > width) {
       return width - 300;

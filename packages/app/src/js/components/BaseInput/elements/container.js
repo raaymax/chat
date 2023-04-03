@@ -125,4 +125,3 @@ export const InputContainer = styled.div`
     color: #3080a0;
   }
 `;
-

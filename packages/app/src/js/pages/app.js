@@ -7,7 +7,7 @@ const Secured = lazy(() => import('./secured'));
 
 export const App = () => (
   <Login>
-    <Suspense fallback={<div>loading...</div>}>
+    <Suspense fallback={<div>loading secured page...</div>}>
       <Secured />
     </Suspense>
   </Login>

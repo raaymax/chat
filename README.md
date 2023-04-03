@@ -46,6 +46,10 @@ module.exports = {
 ```
 In this case env variable `DATABSE_URL` will be used to connect to the database.
 
+## Environment variables
+
+`ENABLE_PUBSUB` [boolean] - will connect to google pubsub
+
 
 ## Requirements
 - MongoDB
