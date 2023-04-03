@@ -7,9 +7,6 @@ import {getUrl} from '../../services/file';
 import {Tooltip} from '../../elements/tooltip';
 
 const StyledEmoji = styled.span`
-  .tooltip-container {
-    display: inline-block;
-  }
   img{
     height: 1.5em;
     width: 1.5em;

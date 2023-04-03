@@ -99,3 +99,23 @@ export const createEventListener = () => {
     watch, once, notify, exists,
   };
 };
+
+export const buildEmojiNode = (result, getUrl) => {
+  const emoji = (() => {
+    if (result.unicode) {
+      return document.createTextNode(String.fromCodePoint(parseInt(result.unicode, 16)));
+    }
+    if (result.fileId) {
+      const img = document.createElement('img');
+      img.src = getUrl(result.fileId);
+      img.alt = result.shortname;
+      return img;
+    }
+  })();
+  const node = document.createElement('span');
+  node.className = 'emoji';
+  node.setAttribute('emoji', result.shortname);
+  node.setAttribute('contenteditable', false);
+  node.appendChild(emoji);
+  return node;
+}

@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/plugin-syntax-decorators": "7.21.0",
     "@capacitor/android": "^4.0.0",
     "@capacitor/core": "^4.0.0",
     "@capacitor/push-notifications": "^4.0.0",

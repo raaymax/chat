@@ -90,7 +90,7 @@ export const selectors = {
     (state) => state.users.meId,
     (state) => state.channels.list,
     (meId, channels) => channels
-      .filter((c) => c.users.includes(meId)),
+      .filter((c) => c.users?.includes(meId)),
   ),
   getConfig: (state) => state.config,
   // getCid: (state) => state.channels.current,
