@@ -132,12 +132,11 @@ export const ConversationContext = ({children}) => {
   }, [updateRange]);
 
   const insert = useCallback((domNode) => {
-    const r = document.getSelection().getRangeAt(0);
-    r.deleteContents();
-    r.insertNode(domNode);
-    r.collapse();
-    setRange(r);
-  }, [setRange]);
+    range.deleteContents();
+    range.insertNode(domNode);
+    range.collapse();
+    setRange(range);
+  }, [range, setRange]);
 
   const onKeyDown = useCallback((e) => {
     if (e.key === 'Enter' && !e.shiftKey && scope === 'root') {

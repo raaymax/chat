@@ -5,8 +5,7 @@ import { updateProgress } from './progress';
 
 const tempId = createCounter(`temp:${(Math.random() + 1).toString(36)}`);
 
-const loading = (dispatch, getState) => {
-  if (selectors.getMessagesLoading(getState())) throw new Error('busy');
+const loading = (dispatch) => {
   dispatch(actions.messagesLoading());
   const timer = setTimeout(() => dispatch(actions.messagesLoadingDone()), 1000);
   return () => {
@@ -302,7 +301,7 @@ const trim = (arr) => {
   const endIdx = copy.findLastIndex(
     (e) => !(e.text === '' || e.text === '\u200B' || e.text === '\u00A0' || e.text?.trim() === '' || e.br === true),
   );
-  return copy.slice(startIdx, endIdx+1);
+  return copy.slice(startIdx, endIdx + 1);
 }
 
 const isEmojiOnly = (tree) => {

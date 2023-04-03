@@ -19,7 +19,6 @@ const MessageSchema = ObjectType({
   channel: StringType(),
   clientId: StringType(),
   emojiOnly: BooleanType(),
-  createdAt: EmptyType(),
   pinned: BooleanType(),
   thread: ArrayType(
     ObjectType({
@@ -37,6 +36,8 @@ const MessageSchema = ObjectType({
       contentType: StringType(),
     }),
   ),
+  updatedAt: EmptyType(),
+  createdAt: EmptyType(),
 });
 
 const MessageQuerySchema = MessageSchema.extend({

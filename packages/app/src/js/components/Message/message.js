@@ -11,14 +11,14 @@ import { MessageContext, useMessageData, useMessageUser } from '../../contexts/m
 import { useHovered } from '../../contexts/conversation';
 import { useStream } from '../../contexts/stream';
 import { buildMessageBody } from './messageBuilder';
-import { isToday, isOnlyEmoji } from './utils';
+import { isToday } from './utils';
 import { LinkPreviewList } from './elements/LinkPreview';
 
 const MessageBase = (props = {}) => {
   const msg = useMessageData();
   const {
     id, message, emojiOnly,
-    flat, createdAt, pinned,
+    createdAt, pinned,
     linkPreviews,
   } = msg;
   const [hovered, setHovered] = useHovered()

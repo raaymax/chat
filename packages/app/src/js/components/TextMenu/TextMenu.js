@@ -9,13 +9,14 @@ export const TextMenu = ({
   const [coords, setCoords] = useState( [0, 0]);
   const { input, range} = useInput();
 
-  const getXPos = () => {
-    const width = parseInt(window.getComputedStyle(document.body).width.replace('px', ''), 10);
+  const getXPos = useCallback(() => {
+    const inBox = input.current.getBoundingClientRect();
+    const width = parseInt(window.getComputedStyle(input.current).width.replace('px', ''), 10);
     if (coords[1] + 300 > width) {
       return width - 300;
     }
     return coords[1];
-  }
+  }, [input, coords])
 
   const getYPos = () => coords[0];
 
@@ -24,7 +25,7 @@ export const TextMenu = ({
     if (!inputEl || !range) return;
     const box = range.getBoundingClientRect();
     const inBox = inputEl.getBoundingClientRect();
-    setCoords([box.bottom - inBox.top, box.left]);
+    setCoords([box.bottom - inBox.top, box.left - inBox.left]);
   }, [input, range]);
 
   const ctrl = useCallback((e) => {
