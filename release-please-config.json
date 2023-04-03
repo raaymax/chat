@@ -23,11 +23,6 @@
       "component": "rpc",
       "pull-request-title-pattern": "chore${scope}: release${component} ${version}",
       "group-pull-request-title-pattern": "chore${scope}: release${component} ${version}"
-    },
-    "packages/rpc-server": {
-      "component": "rpc-server",
-      "pull-request-title-pattern": "chore${scope}: release${component} ${version}",
-      "group-pull-request-title-pattern": "chore${scope}: release${component} ${version}"
     }
   },
   "plugins": [
