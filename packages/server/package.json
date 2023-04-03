@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/pubsub": "3.4.1",
     "@google-cloud/storage": "5.19.0",
     "@sentry/node": "6.19.7",
     "@sentry/tracing": "6.19.7",
