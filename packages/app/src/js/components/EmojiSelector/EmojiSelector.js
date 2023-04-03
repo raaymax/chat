@@ -44,7 +44,7 @@ export const EmojiSelector = () => {
   const create = useCallback((event) => {
     event.preventDefault();
     const span = document.createElement('span');
-    span.className = SCOPE;
+    span.className = 'emoji-selector';
     const text = document.createTextNode(':');
     span.appendChild(text);
     span.setAttribute('scope', SCOPE);

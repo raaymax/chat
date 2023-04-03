@@ -37,7 +37,7 @@ export const ChannelSelector = () => {
     event.preventDefault();
     event.stopPropagation();
     const span = document.createElement('span');
-    span.className = 'channel';
+    span.className = 'channel-selector';
     const text = document.createTextNode( '#' );
     span.appendChild(text);
     span.setAttribute('scope', SCOPE);
@@ -47,6 +47,7 @@ export const ChannelSelector = () => {
   const submit = useCallback((event) => {
     event.preventDefault();
     event.stopPropagation();
+    scopeContainer.className = 'channel';
     scopeContainer.textContent = `#${options[selected].name}`;
     scopeContainer.contentEditable = false;
     scopeContainer.setAttribute('channelId', options[selected].id);

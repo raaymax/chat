@@ -16,16 +16,16 @@ fix: ping command name
 fix: error busy in messages
 fix: emoji :/ makes it impossible to write links with http://
 feat: emoji on hover show name
+feat: replace <3 and ;) with emojis
+refactor: input element in react style
 - feat: message with checklist
 - feat: rss feeds (https://xkcd.com/2294/)
     needs job sheduler like agenda?
 - feat: reminders
     needs job sheduler like agenda?
 
-- refactor: input element in react style
 - fix: message with open selector is not sent - vanishes instead
 - fix: bigger emojis not always working
-feat: replace <3 and ;) with emojis
  
 v2.0.0 // first public release
 - feat: registration of users
