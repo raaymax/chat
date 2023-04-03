@@ -1,5 +1,33 @@
 # Changelog
 
+## [1.8.0](https://github.com/codecat-io/chat/compare/quack-v1.7.2...quack-v1.8.0) (2023-04-03)
+
+
+### Features
+
+* ability to set main channel ([101268c](https://github.com/codecat-io/chat/commit/101268c43aa42aded332860de58194ca049c4183))
+* added emoji selection popup ([b904935](https://github.com/codecat-io/chat/commit/b90493588a893f22feababcf7d7389d972647d4d))
+* added support for code tags using ` ([e0df2ef](https://github.com/codecat-io/chat/commit/e0df2efe37ce4262d1b8285b6e6bdb94ff75f40a))
+* **backend:** support for pubsub ([255766e](https://github.com/codecat-io/chat/commit/255766eece640d837461056591b54f7307af8663))
+* channels management ([58a27c1](https://github.com/codecat-io/chat/commit/58a27c12143ccc4eca1cc7a182d7f2165bbb4ba6))
+* emoji have now tooltip with its name ([9abe985](https://github.com/codecat-io/chat/commit/9abe9850b34d92692d9c70ae44821839b1ebec33))
+* link preview is added to messages ([58e2807](https://github.com/codecat-io/chat/commit/58e2807b99154b668b80a24bc0fe5dbd79a6a6e3))
+* replace &lt;3 and ;) with emojis ([aa7c64b](https://github.com/codecat-io/chat/commit/aa7c64b8b3734df801332db9b01b1df0f4b88551))
+
+
+### Bug Fixes
+
+* back to bottom button not working ([8374af6](https://github.com/codecat-io/chat/commit/8374af6e033958f6ab390c47867bbdc3d2c7bf07))
+* bigger emojis not always working ([e307865](https://github.com/codecat-io/chat/commit/e307865d52272d43aec9cab8d554b2fe3702814f))
+* emoji selector location and threads time and date ([cf5d773](https://github.com/codecat-io/chat/commit/cf5d773502905d3f6aa06daed47b594fc2da113d))
+* info bar sometimes not showing ([7c918c5](https://github.com/codecat-io/chat/commit/7c918c5ba4b52d1d8f7b7c10f7bca917988d61d2))
+* message from thread showing outside of thread ([98ed30a](https://github.com/codecat-io/chat/commit/98ed30aac6e8c339875cd43be2b40fbfd7d8990e))
+* message with open selector is not sent - vanishes instead ([d7e2065](https://github.com/codecat-io/chat/commit/d7e20658c4b35d9cbed1b7e9681d631d294cf77b))
+* paste not adding files and eof ([61ccf99](https://github.com/codecat-io/chat/commit/61ccf9976299b82d5af0b0aaf5417535cef9a1e8))
+* sending files not working ([b782c22](https://github.com/codecat-io/chat/commit/b782c22b1d857c5fee39ea2b6c0ca2e767857713))
+* share target redirect ([01fc36c](https://github.com/codecat-io/chat/commit/01fc36cd0f90ff21604370a42640a3b35be7608a))
+* TWA keyboard covers up portion of screen ([113e1cb](https://github.com/codecat-io/chat/commit/113e1cb7aee15926ab470a12e5937ca1cac72c89))
+
 ## [1.7.2](https://github.com/codecat-io/chat/compare/quack-v1.7.1...quack-v1.7.2) (2023-03-21)
 
 

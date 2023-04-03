@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.8.0](https://github.com/codecat-io/chat/compare/server-v1.7.2...server-v1.8.0) (2023-04-03)
+
+
+### Features
+
+* ability to set main channel ([101268c](https://github.com/codecat-io/chat/commit/101268c43aa42aded332860de58194ca049c4183))
+* added emoji selection popup ([b904935](https://github.com/codecat-io/chat/commit/b90493588a893f22feababcf7d7389d972647d4d))
+* **backend:** support for pubsub ([255766e](https://github.com/codecat-io/chat/commit/255766eece640d837461056591b54f7307af8663))
+* channels management ([58a27c1](https://github.com/codecat-io/chat/commit/58a27c12143ccc4eca1cc7a182d7f2165bbb4ba6))
+* link preview is added to messages ([58e2807](https://github.com/codecat-io/chat/commit/58e2807b99154b668b80a24bc0fe5dbd79a6a6e3))
+* replace &lt;3 and ;) with emojis ([aa7c64b](https://github.com/codecat-io/chat/commit/aa7c64b8b3734df801332db9b01b1df0f4b88551))
+
+
+### Bug Fixes
+
+* emoji selector location and threads time and date ([cf5d773](https://github.com/codecat-io/chat/commit/cf5d773502905d3f6aa06daed47b594fc2da113d))
+
 ## [1.7.2](https://github.com/codecat-io/chat/compare/server-v1.7.1...server-v1.7.2) (2023-03-21)
 
 
