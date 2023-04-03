@@ -12,6 +12,7 @@
     "npm": "8.x.x"
   },
   "scripts": {
+    "migrate": "migrate-mongo up",
     "start": "migrate-mongo up && pnpm run --filter @quack/server start ",
     "build": "pnpm run --filter @quack/rpc --filter @quack/app build",
     "dev:web": "pnpm run --filter @quack/app dev",

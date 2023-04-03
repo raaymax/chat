@@ -43,7 +43,7 @@ const actions = [
   [module.type]: module,
 })).reduce((acc, item) => ({ ...acc, ...item }), {});
 
-const dispatch = async ({ type, seqId, ...body }, { userId, bus, push }) => {
+const dispatch = async ({ type, seqId, ...body }, { userId, bus, push = () => {} }) => {
   let handler = actions[type];
   if (!handler) handler = actions.default;
   const wsreq = {

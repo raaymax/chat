@@ -3,7 +3,7 @@ process.env.DATABASE_URL = 'mongodb://chat:chat@localhost:27017/tests?authSource
 
 const request = require('supertest');
 const server = require('../src/server');
-const PushService = require('../src/infra/push');
+const PushService = require('../src/infra/firebase');
 
 PushService.push = async () => {};
 

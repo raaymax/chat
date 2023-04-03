@@ -1,28 +1,19 @@
-const { getMessaging } = require('./firebase');
-const db = require('./database');
-const conf = require('../../../../chat.config');
+const repo = require('../repository');
+const conf = require('../../../../../chat.config');
 
 const PushService = {
-  push: async (message) => {
-    try {
-      return getMessaging().sendMulticast(message);
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.log(e);
-      throw e;
-    }
-  },
-  send: async (msg) => {
+  send: async (msg, { push = {} } = {}) => {
     if (!msg.message) return Promise.resolve();
-    const channel = await db.channel.get({ id: msg.channelId });
+    const channel = await repo.channel.get({ id: msg.channelId });
     if (!channel) return;
-    const user = await db.user.get({ id: msg.userId });
+    const user = await repo.user.get({ id: msg.userId });
     if (!user) return;
-    const users = await db.user.getAll({
-      id: channel.users.filter((id) => id !== msg.userId),
+    const users = await repo.user.getAll({
+      ids: channel.users.filter((id) => id !== msg.userId),
     });
 
     const tokens = [...new Set(users.map((u) => Object.keys(u.notifications || {})).flat())];
+
     if (tokens.length === 0) return;
     const message = {
       tokens,
@@ -61,7 +52,7 @@ const PushService = {
         },
       },
     };
-    return PushService.push(message);
+    return push(message);
   },
 };
 

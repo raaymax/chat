@@ -1,6 +1,6 @@
 const assert = require('assert');
 const { db } = require('../../src/infra/database');
-const PushService = require('../../src/infra/push');
+const PushService = require('../../src/infra/firebase');
 
 module.exports = (connect) => {
   describe('message:send', () => {

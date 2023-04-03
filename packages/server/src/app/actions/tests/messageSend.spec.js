@@ -26,7 +26,7 @@ describe('message:send', () => {
       channelId: channel.id,
       message: { line: { text: 'Hello' } },
       flat: 'Hello',
-    }, { userId, push: { send: () => {} } });
+    }, { userId, push:  () => {} });
     assert.equal(res.type, 'response');
     assert.equal(res.status, 'ok');
     return msg;

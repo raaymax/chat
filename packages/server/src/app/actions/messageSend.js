@@ -63,7 +63,7 @@ module.exports = {
     const created = await repo.message.get({ id });
     if (!dup) {
       res.broadcast({ type: 'message', ...created });
-      await res.push.send(created);
+      await services.notifications.send(created, res);
     }
     await services.badge.messageSent(channel.id, msg.parentId, id, req.userId);
     res.ok(dup ? { duplicate: true } : {});

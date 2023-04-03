@@ -1,5 +1,5 @@
 const {
-  IdType, StringType, DictionaryType, DateType, ObjectType,
+  IdType, StringType, DictionaryType, DateType, ObjectType, ArrayType, EmptyType,
 } = require('./schemas');
 const { createRepo } = require('./repo');
 
@@ -16,9 +16,19 @@ const Model = ObjectType({
   notifications: DictionaryType(StringType(), ObjectType({
     mobile: StringType(),
     refreshedAt: DateType(),
-  })),
+  }), {
+    serializeEntry: ([key, value]) => {
+      const subKey = Object.keys(value)[0];
+      return [`${key}.${subKey}`, value[subKey]];
+    },
+  }),
 });
 
-const Query = Model.extend({});
+const Query = Model.extend({
+  ids: EmptyType({
+    serialize: (value) => ({ $in: ArrayType(IdType()).serialize(value) }),
+    serializeKey: () => '_id',
+  }),
+});
 
 module.exports = createRepo(TABLE_NAME, Query, Model);

@@ -12,8 +12,8 @@ describe('message:remove', () => {
     user = await api.repo.user.get({ name: 'Mateusz' });
     user2 = await api.repo.user.get({ name: 'Melisa' });
     channel = await api.repo.channel.get({ name: 'main' });
-    context = { userId: user.id, push: { send: () => {} } };
-    context2 = { userId: user2.id, push: { send: () => {} } };
+    context = { userId: user.id, push: () => {} };
+    context2 = { userId: user2.id, push: () => {} };
   });
 
   it('should remove message', async () => {

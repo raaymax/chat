@@ -21,8 +21,9 @@ module.exports = {
         forDelete[`notifications.${key}`] = '';
       }
     });
-    await repo.user.update(req.userId, forDelete, 'unset');
-    await repo.user.update(req.userId, { [`notifications.${msg.token}`]: { mobile: msg.mobile, refreshedAt: new Date() } });
+    await repo.user.update({id: req.userId}, forDelete, 'unset');
+    await repo.user.update({id: req.userId}, {notifications: { [msg.token]: { mobile: msg.mobile, refreshedAt: new Date() }} }, 'set');
+
     return res.ok();
   },
 };
