@@ -52,7 +52,24 @@ export const ConversationContext = ({children}) => {
     }
   }, [input, setRange, scope, setScope, setCurrentText, setScopeContainer])
 
-  const onPaste = useCallback(() => {}, []);
+  const onPaste = useCallback((event) => {
+    const cbData = (event.clipboardData || window.clipboardData);
+    if (cbData.files?.length > 0) {
+      event.preventDefault();
+      dispatch(uploadMany(cbData.files));
+    }
+
+    const range = document.getSelection().getRangeAt(0);
+    range.deleteContents();
+
+    cbData.getData('text').split('\n').reverse().forEach((line, idx) => {
+      if (idx) range.insertNode(document.createElement('br'));
+      range.insertNode(document.createTextNode(line));
+    });
+    document.getSelection().collapseToEnd();
+    event.preventDefault();
+    event.stopPropagation();
+  }, [dispatch]);
 
   const onFileChange = useCallback((e) => {
     if (e.target.files?.length > 0) {
@@ -61,6 +78,7 @@ export const ConversationContext = ({children}) => {
       e.target.value = '';
     }
   }, [dispatch]);
+
   const onInput = useCallback(() => {
     updateRange();
   }, [updateRange]);
