@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.8.1](https://github.com/codecat-io/chat/compare/server-v1.8.0...server-v1.8.1) (2023-04-03)
+
+
+### Bug Fixes
+
+* errors with notifications ([735784c](https://github.com/codecat-io/chat/commit/735784cb1ac68e462ad79034c4e4948f4ab0e9b1))
+* linter errors ([b0ae2f3](https://github.com/codecat-io/chat/commit/b0ae2f34b0ee892eee517ecf11be1c6c9d48f5e1))
+
 ## [1.8.0](https://github.com/codecat-io/chat/compare/server-v1.7.2...server-v1.8.0) (2023-04-03)
 
 
