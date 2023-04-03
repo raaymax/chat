@@ -21,7 +21,8 @@ refactor: input element in react style
 fix: message with open selector is not sent - vanishes instead
 fix: infobar sometimes not showing
 feat: added support for code tags using tilda
-- fix: adding files not working
+fix: adding files not working
+- fix: back to bottom
 
 - feat: message with checklist
 - feat: rss feeds (https://xkcd.com/2294/)

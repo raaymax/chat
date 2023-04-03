@@ -39,13 +39,14 @@ const messagesReducer = createReducer({
   [loadingDone]: (state) => {
     state.loading = false;
   },
-  [clear]: ({data}, action) => {
+  [clear]: (state, action) => {
+    const {data} = state;
     const {stream: {parentId, channelId}} = action.payload;
     const ids = data
       .filter(((m) => m.channelId === channelId && (!parentId || m.parentId === parentId)))
       .map((m) => m.id)
 
-    data = data.filter((m) => !ids.includes(m.id))
+    state.data = data.filter((m) => !ids.includes(m.id));
   },
   [addAll]: ({data}, action) => {
     action.payload.forEach((msg) => {
