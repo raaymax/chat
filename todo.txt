@@ -25,7 +25,6 @@ fix: message with open selector is not sent - vanishes instead
 - feat: reminders
     needs job sheduler like agenda?
 
-- fix: bigger emojis not always working
  
 v2.0.0 // first public release
 - feat: registration of users

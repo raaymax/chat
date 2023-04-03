@@ -8,7 +8,17 @@ export const StatusLine = () => {
 
   const names = (typing || []).map((u) => u.name).join(', ');
 
-  return info.type
-    ? <div class={['info', info.type].join(' ')}>{info.message}</div>
-    : (names && <div class='info'>{names} is typing!</div>); // FIXME: this should exist always
+  if (info?.type) {
+    return (
+      <div class={['info', info.type].join(' ')}>{info.message}</div>
+    );
+  }
+
+  if ( names ) {
+    return (
+      <div class='info'>{names} is typing!</div>
+    );
+  }
+
+  return <div class='info' />;
 };
