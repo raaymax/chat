@@ -12,7 +12,7 @@ module.exports = {
       throw new Error('Invalid emoji name');
     }
     const [{ id }] = req.body.attachments;
-    await repo.emoji.insert({ shortname, fileId: id });
+    await repo.emoji.create({ shortname, fileId: id });
     res.broadcast({ type: 'emoji', shortname, fileId: id });
     return res.ok();
   },
