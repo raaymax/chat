@@ -6,6 +6,7 @@ import { selectors, actions } from '../../state';
 import { loadPinnedMessages } from '../../services/pins';
 import { init } from '../../services/init';
 import { useStream } from '../../contexts/stream';
+import { BackToMain } from '../../components/BackToMain/BackToMain';
 
 const StyledHeader = styled.div`
   display: flex;
@@ -98,13 +99,7 @@ export const Header = ({onclick}) => {
   return (
     <StyledHeader>
       <Channel onclick={onclick} channelId={channelId} />
-
-      {window.location.hash.slice(1) !== '' && (
-        <div class="back">
-          <a href='/#'>
-            back to main
-          </a>
-        </div>)}
+      <BackToMain />
 
       <div class='toolbar'>
         <div class='tool' onclick={() => {
