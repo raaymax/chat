@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.2](https://github.com/codecat-io/chat/compare/rpc-v1.8.1...rpc-v1.8.2) (2023-04-04)
+
+
+### Miscellaneous Chores
+
+* **rpc:** Synchronize quack versions
+
 ## [1.8.1](https://github.com/codecat-io/chat/compare/rpc-v1.8.0...rpc-v1.8.1) (2023-04-03)
 
 

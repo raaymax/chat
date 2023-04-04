@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.8.2](https://github.com/codecat-io/chat/compare/quack-v1.8.1...quack-v1.8.2) (2023-04-04)
+
+
+### Bug Fixes
+
+* **conversation:** back to main button is showing on main ([baff089](https://github.com/codecat-io/chat/commit/baff0892035f1ec839a813f0486755169e4a0400))
+* **emojis:** custom emojis are not bigger if alone ([750e346](https://github.com/codecat-io/chat/commit/750e346ef6936d5719070e3754954bd518ff1e21))
+* **emojis:** emoji error repo.emoji.insert is not a function ([c06aa2a](https://github.com/codecat-io/chat/commit/c06aa2af60be58ef921782b4423c97fd4e132bd9))
+* linter errors ([0d67d3a](https://github.com/codecat-io/chat/commit/0d67d3a8430e24a62636d18daf9e2b2a727379a0))
+* **share:** unknown line instead of link? ([78eb6e8](https://github.com/codecat-io/chat/commit/78eb6e8a67bbe2ac7493a4b9184ef0e2ff66eb4a))
+* **twa:** screen keyboard fixing ([7e81627](https://github.com/codecat-io/chat/commit/7e8162712a31ce9ac264ee7a30030f09641efade))
+
 ## [1.8.1](https://github.com/codecat-io/chat/compare/quack-v1.8.0...quack-v1.8.1) (2023-04-03)
 
 

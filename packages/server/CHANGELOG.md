@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.2](https://github.com/codecat-io/chat/compare/server-v1.8.1...server-v1.8.2) (2023-04-04)
+
+
+### Bug Fixes
+
+* **emojis:** emoji error repo.emoji.insert is not a function ([c06aa2a](https://github.com/codecat-io/chat/commit/c06aa2af60be58ef921782b4423c97fd4e132bd9))
+
 ## [1.8.1](https://github.com/codecat-io/chat/compare/server-v1.8.0...server-v1.8.1) (2023-04-03)
 
 
