@@ -23,7 +23,9 @@
     package="io.codecat.chat.twa">
 
     
-        <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     
 
     
@@ -70,8 +72,10 @@
         
 
         <activity android:name="LauncherActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
             android:alwaysRetainTaskState="true"
             android:label="@string/launcherName"
+            android:windowSoftInputMode="adjustResize"
             android:exported="true">
             <meta-data android:name="android.support.customtabs.trusted.DEFAULT_URL"
                 android:value="@string/launchUrl" />

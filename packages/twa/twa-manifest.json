@@ -19,8 +19,8 @@
     "path": "/Users/raay/Workspace/CodeCat/Chat/packages/twa/android.keystore",
     "alias": "android-twa"
   },
-  "appVersionName": "12",
-  "appVersionCode": 12,
+  "appVersionName": "13",
+  "appVersionCode": 13,
   "shortcuts": [],
   "generatorApp": "bubblewrap-cli",
   "webManifestUrl": "https://chat.codecat.io/manifest.json",
@@ -48,5 +48,5 @@
   "fingerprints": [],
   "additionalTrustedOrigins": [],
   "retainedBundles": [],
-  "appVersion": "12"
+  "appVersion": "13"
 }

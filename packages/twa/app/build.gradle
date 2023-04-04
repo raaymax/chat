@@ -55,8 +55,8 @@ android {
         applicationId "io.codecat.chat.twa"
         minSdkVersion 19
         targetSdkVersion 31
-        versionCode 12
-        versionName "12"
+        versionCode 13
+        versionName "13"
 
         // The name for the application
         resValue "string", "appName", twaManifest.name
