@@ -174,15 +174,15 @@ export const send = (stream, msg) => (dispatch) => dispatch(msg.type === 'comman
 
 export const sendShareMessage = (data) => async (dispatch, getState) => {
   const {channelId, parentId} = selectors.getStream('main')(getState());
+  const info = {links: []};
   const msg = build({
     type: 'message:send',
     channelId,
     parentId,
     flat: `${data.title} ${data.text} ${data.url}`,
-    message: [
-      buildShareLink(data),
-    ],
+    message: buildShareMessage(data, info),
   }, getState());
+  msg.links = info.links;
   dispatch(actions.addMessage({...msg, pending: true}));
   try {
     await client.notif(msg);
@@ -200,23 +200,16 @@ export const sendShareMessage = (data) => async (dispatch, getState) => {
   }
 }
 
-const buildShareLink = (data) => {
-  if (data.url) {
-    return { link: { href: data.url, children: buildShareMessage(data) }};
-  }
-  return buildShareMessage(data);
-}
-
-const buildShareMessage = (data) => {
+const buildShareMessage = (data, info) => {
   const lines = [];
   if (data.title) {
-    lines.push({line: {bold: data.title}});
+    lines.push({line: {bold: processUrls(data.title, info)}});
   }
   if (data.text) {
-    lines.push({line: {text: data.text}});
+    lines.push({line: processUrls(data.text, info)});
   }
   if (data.url) {
-    lines.push({line: {text: data.url}});
+    lines.push({line: processUrls(data.url, info)});
   }
   return lines;
 }

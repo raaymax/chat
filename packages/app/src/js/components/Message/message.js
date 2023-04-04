@@ -53,7 +53,7 @@ const MessageBase = (props = {}) => {
           {!isToday(createdAt) && <span class='spacy time'>{formatDateDetailed(createdAt)}</span>}
         </div>}
         <div class={['content'].join(' ')}>
-          { buildMessageBody(message, { emojiOnly }) }
+          {buildMessageBody(message, { emojiOnly })}
         </div>
 
         <Attachments />

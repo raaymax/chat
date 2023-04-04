@@ -1,11 +1,11 @@
 v1.8.2
 fix(emojis): emoji error repo.emoji.insert is not a function
+fix(emojis): custom emojis are not bigger if alone 
 - fix(share): unknown line instead of link?
 - fix(emojis): selection window have too small icons on mobile
 - fix(emojis): unable to backspace emoji on mobile
 - fix(conversation): back to main button is showing on main
 - fix(twa): page size problems on mobile
-- fix(emojis): custom emojis are not bigger if alone 
 
  
 v2.0.0 // first public release

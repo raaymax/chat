@@ -13,7 +13,7 @@ const TYPES = {
   code: (props) => <code>{build(props.data)}</code>,
   line: (props) => <p>{build(props.data)}<br /></p>,
   br: () => <br />,
-  text: (props) => props.data,
+  text: (props) => typeof props.data === 'string' ? props.data : '__MESSAGE_CORUPTED__',
   bold: (props) => <b>{build(props.data)}</b>,
   italic: (props) => <em>{build(props.data)}</em>,
   underline: (props) => <u>{build(props.data)}</u>,
