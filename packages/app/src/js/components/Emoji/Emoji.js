@@ -8,8 +8,8 @@ import {Tooltip} from '../../elements/tooltip';
 
 const StyledEmoji = styled.span`
   img{
-    height: 1.5em;
-    width: 1.5em;
+    height: ${props=> (props.big ? 2 : 1.5)}em;
+    width: ${props=> (props.big ? 2 : 1.5)}em;
     vertical-align: bottom;
     display: inline-block;
   }
