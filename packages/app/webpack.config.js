@@ -17,7 +17,6 @@ module.exports = {
       SERVER_URL: JSON.stringify(config.serverUrl),
       IMAGES_URL: JSON.stringify(config.imagesUrl),
       FIREBASE_CONFIG: JSON.stringify(config.firebase),
-      SENTRY_DNS: JSON.stringify(config.sentryDns),
     }),
     new MiniCssExtractPlugin(),
     new CopyPlugin({

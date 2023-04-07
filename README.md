@@ -32,7 +32,6 @@ module.exports = {
   imagesUrl: '',
   serverWebUrl: '',
   openaiApiKey: '',
-  sentryDns: '',
   firebase: {
     apiKey: '',
     authDomain: '',

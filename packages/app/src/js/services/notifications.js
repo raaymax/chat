@@ -3,7 +3,6 @@ import { Capacitor } from '@capacitor/core';
 import { PushNotifications } from '@capacitor/push-notifications';
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
-import Sentry from '../core/sentry';
 import { client } from '../core';
 
 export const initNotifications = async (config) => {
@@ -30,7 +29,6 @@ const initWebNotifications = async (config) => {
       });
     }
   } catch (err) {
-    Sentry.captureException(err);
     console.log('An error occurred while retrieving token. ', err);
   }
 }
@@ -61,13 +59,11 @@ const initNativeNotifications = () => {
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
-      Sentry.captureException(err);
     }
   });
 
   PushNotifications.addListener('registrationError', (error) => {
     console.log('error', JSON.stringify(error, null, 4));
-    Sentry.captureException(error);
   });
 
   PushNotifications.addListener('pushNotificationReceived', (notification) => {

@@ -13,7 +13,6 @@ module.exports = {
   serverUrl: 'ws://localhost:8080/ws',
   serverWebUrl: 'http://localhost:8080',
   openaiApiKey: '',
-  sentryDns: '',
   firebase: {
     apiKey: '',
     authDomain: '',

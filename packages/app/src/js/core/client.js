@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
 import { Capacitor } from '@capacitor/core';
 import { Manager } from "socket.io-client";
-import Sentry from './sentry';
 
 import { createEventListener } from '../utils';
 
@@ -51,7 +50,8 @@ const client = {
   // eslint-disable-next-line no-console
   emit: async (name, data) => {
     if (!exists(name)) {
-      Sentry.captureException(new Error(`[client] handler not exists: ${name}`, {extra: {name, data}}));
+      // eslint-disable-next-line no-console
+      console.error(new Error(`[client] handler not exists: ${name}`, {extra: {name, data}}));
       return;
     }
     return notify(name, data);
