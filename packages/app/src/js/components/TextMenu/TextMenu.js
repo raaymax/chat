@@ -30,7 +30,7 @@ export const TextMenu = ({
 
   const ctrl = useCallback((e) => {
     if (e.key === 'ArrowUp') {
-      setSelected(selected + 1 > 4 ? 4 : selected + 1);
+      setSelected(selected + 1 > options.length - 1 ? options.length - 1 : selected + 1);
       e.preventDefault();
       e.stopPropagation();
     }
@@ -55,8 +55,8 @@ export const TextMenu = ({
         {options.map((e, idx) => (
           <li key={idx} onclick={(e) => select(idx, e)} class={idx === selected ? 'selected' : ''}>
             {e.icon && <span><i class={e.icon} /></span>}
-            {e.label && <span>{e.label}</span>}
             {e.url && <span><img src={e.url} alt="img" /></span>}
+            {!e.icon && !e.url && <span>{e.label || ''}</span>}
             <span>{e.name}</span>
           </li>
         ))}

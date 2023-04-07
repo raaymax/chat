@@ -2,16 +2,16 @@ v1.8.3
 fix(threads): ping is not working 
 improvement(auth): if users where logged in assume they are 
 chore(emojs): removed :D: emoji
-- fix(emojis): accepting emoji should be when atleast 2 chars matching
+chore(sentry): remove sentry cli from dependencies
+fix(emojis): ;) and <3 emojis are inserted always at the beginning
+fix(emojis): ability to select not emoji
 - fix(emojis): search window have too small icons on mobile
 - fix(emojis): unable to backspace emoji on mobile
-- fix(emojis): ;) and <3 emojis are inserted always at the beginning
 - fix(twa): page size problems on mobile
 - fix(attachments): attachment is displaying in all inputs
 - fix(push): notifications are not taking user to correct message
 - fix(push): notifications cumulate quickly - merge notifications
 - chore(mobile): migrate back to capacitor.js
-- chore(sentry): remove sentry cli from dependencies
 
 v1.9.0
 - feat(channels): ability to change channel name
