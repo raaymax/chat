@@ -5,7 +5,11 @@ const SESSION_URL = Capacitor.isNativePlatform()
   ? `${SERVER_URL}/session`
   : `${document.location.protocol}//${document.location.host}/session`;
 
-export const me = async () => {
+export const isProbablyLogged = () => !!localStorage.token;
+
+export const me = () => localStorage.getItem('userId');
+
+export const validate = async () => {
   const ret = await fetch(SESSION_URL, {
     credentials: 'include',
     headers: {
@@ -13,7 +17,11 @@ export const me = async () => {
       'Content-Type': 'application/json',
     },
   });
-  return ret.json();
+  const user = await ret.json();
+  if (user.status === 'ok') {
+    localStorage.setItem('userId', user.user);
+  }
+  return user;
 }
 
 export const login = async (value) => {
