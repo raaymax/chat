@@ -46,7 +46,9 @@ export class Message {
       this.timeout = setTimeout(() => {
         this.close();
         this.status = Message.STATUS_TIMEOUT;
-        this.reject(this);
+        const err: any = new Error("Request timeout");
+        err.request = this
+        this.reject(err);
       }, 4000);
     });
   }
@@ -62,6 +64,8 @@ export class Message {
       this.resolve(this);
     } else {
       this.status = Message.STATUS_ERROR;
+      const err: any = new Error(msg.error);
+      err.request = this
       this.reject(this);
     }
   }

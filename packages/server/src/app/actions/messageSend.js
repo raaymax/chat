@@ -16,6 +16,7 @@ module.exports = {
       emojiOnly: Joi.boolean().optional().default(false),
       debug: Joi.string().optional().allow(''),
       links: Joi.array().items(Joi.string()).optional().default([]),
+      parsingErrors: Joi.array().items(Joi.any()).optional().allow(null),
 
       attachments: Joi.array().items(Joi.object({
         id: Joi.string().required(),

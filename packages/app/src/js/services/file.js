@@ -4,6 +4,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Capacitor } from '@capacitor/core';
 import { createCounter } from '../utils';
 import { actions } from '../state';
+import { logErrors } from './logger';
 
 const tempId = createCounter(`file:${(Math.random() + 1).toString(36)}`);
 
@@ -65,15 +66,10 @@ export const getUrl = (id) => `${FILES_URL}/${id}`;
 export const getThumbnail = (id) => `${IMAGES_URL}/${id}?h=256&w=256&fit=clip`;
 const aborts = {}
 
-export const abort = createAsyncThunk('files/abort', async (clientId, {dispatch}) => {
-  try {
-    aborts[clientId] && aborts[clientId]();
-    dispatch(actions.removeFile(clientId));
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(err);
-  }
-})
+export const abort = createAsyncThunk('files/abort', logErrors(async (clientId, {dispatch}) => {
+  aborts[clientId] && aborts[clientId]();
+  dispatch(actions.removeFile(clientId));
+}))
 
 function uploadFile(method, url, { file, progress, clientId }) {
   return new Promise((resolve, reject) => {

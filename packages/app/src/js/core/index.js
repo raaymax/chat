@@ -1,6 +1,7 @@
 import { WebSocketTransport, Request, Notification} from '@quack/rpc';
 import './registerSw';
 import './sentry';
+import {createLogger} from './logger';
 
 const URI = `${document.location.protocol}//${document.location.host}`;
 
@@ -19,4 +20,6 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-export { client };
+const logger = createLogger(client);
+
+export { client, logger };

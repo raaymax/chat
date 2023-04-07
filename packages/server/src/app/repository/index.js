@@ -6,4 +6,5 @@ module.exports = {
   user: require('./user'),
   emoji: require('./emoji'),
   badge: require('./badge'),
+  log: require('./log'),
 };

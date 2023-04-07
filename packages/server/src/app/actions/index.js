@@ -31,6 +31,7 @@ const actions = [
   require('./progressUpdate'),
 
   require('./badgesLoad'),
+  require('./log'),
   {
     type: 'default',
     handler: (req) => {

@@ -2,6 +2,7 @@ import Fuse from 'fuse.js';
 import { client } from '../core';
 import Emojis from '../../assets/emoji_list.json';
 import {actions} from '../state';
+import {logErrors} from './logger';
 
 window.EMOJI = Emojis;
 
@@ -68,33 +69,23 @@ export const getEmojis = async (store) => [
   })),
 ]
 
-export const loadJSON = () => async (dispatch) => {
-  try {
-    const emojis = await import('../../assets/emoji_list.json');
-    if (emojis) {
-      emojis.default.forEach((emoji) => {
-        dispatch(actions.addEmoji(emoji));
-      });
-    }
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.log(err);
+export const loadJSON = () => logErrors(async (dispatch) => {
+  const emojis = await import('../../assets/emoji_list.json');
+  if (emojis) {
+    emojis.default.forEach((emoji) => {
+      dispatch(actions.addEmoji(emoji));
+    });
   }
-}
+})
 
-export const loadCustom = () => async (dispatch) => {
-  try {
-    const {data: emojis} = await client.req({ type: 'emojis:load' });
-    if (emojis) {
-      emojis.forEach((emoji) => {
-        dispatch(actions.addEmoji({...emoji, category: 'c'}));
-      });
-    }
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.log(err);
+export const loadCustom = () => logErrors(async (dispatch) => {
+  const {data: emojis} = await client.req({ type: 'emojis:load' });
+  if (emojis) {
+    emojis.forEach((emoji) => {
+      dispatch(actions.addEmoji({...emoji, category: 'c'}));
+    });
   }
-}
+})
 
 export const loadEmojis = () => async (dispatch) => Promise.all([
   dispatch(loadJSON()),
