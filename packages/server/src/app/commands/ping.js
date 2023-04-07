@@ -2,7 +2,7 @@ const crypto = require('crypto');
 const repo = require('../repository');
 
 module.exports = {
-  name: 'ping:send',
+  name: 'ping',
   description: 'sends ping on channel from thread',
   args: [],
   handler: async (req, res) => {
@@ -41,7 +41,7 @@ async function createMessage(msg) {
   let id; let
     dup = false;
   try {
-    (id = await repo.message.insert(data));
+    (id = await repo.message.create(data));
   } catch (err) {
     if (err.code !== 11000) {
       throw err;
