@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.3](https://github.com/codecat-io/chat/compare/server-v1.8.2...server-v1.8.3) (2023-04-07)
+
+
+### Bug Fixes
+
+* thread ping command not working ([19fc5df](https://github.com/codecat-io/chat/commit/19fc5dfa50cda20fde96cea09f01de9fced2334c))
+
 ## [1.8.2](https://github.com/codecat-io/chat/compare/server-v1.8.1...server-v1.8.2) (2023-04-04)
 
 
