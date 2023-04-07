@@ -7,7 +7,7 @@ export const TextMenu = ({
   className, options, open = false, select, selected = 0, setSelected,
 }) => {
   const [coords, setCoords] = useState( [0, 0]);
-  const { input, range} = useInput();
+  const { input, getRange} = useInput();
 
   const getXPos = useCallback(() => {
     const width = parseInt(window.getComputedStyle(input.current).width.replace('px', ''), 10);
@@ -21,11 +21,12 @@ export const TextMenu = ({
 
   useEffect(() => {
     const inputEl = input.current;
+    const range = getRange();
     if (!inputEl || !range) return;
     const box = range.getBoundingClientRect();
     const inBox = inputEl.getBoundingClientRect();
     setCoords([box.bottom - inBox.top, box.left - inBox.left]);
-  }, [input, range]);
+  }, [input, getRange]);
 
   const ctrl = useCallback((e) => {
     if (e.key === 'ArrowUp') {

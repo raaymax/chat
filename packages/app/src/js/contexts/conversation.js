@@ -35,22 +35,28 @@ export const ConversationContext = ({children}) => {
   const fileInput = useRef(null);
   const [range, setRange] = useState(null);
 
-  const updateRange = useCallback(() => {
+  const getRange = useCallback(() => {
     const r = document.getSelection().getRangeAt(0);
     if (input.current.contains(r.commonAncestorContainer)) {
-      if (r.endContainer.nodeName === '#text') {
-        setCurrentText(r.endContainer.textContent.slice(0, r.endOffset));
-      } else {
-        setCurrentText('');
-      }
-      const {el, scope: s} = findScope(r.commonAncestorContainer);
-      if (s !== scope) {
-        setScope(s);
-      }
-      setScopeContainer(el);
-      setRange(r);
+      return r;
     }
-  }, [input, setRange, scope, setScope, setCurrentText, setScopeContainer])
+    return range;
+  }, [range]);
+
+  const updateRange = useCallback(() => {
+    const r = getRange();
+    setRange(r)
+    if (r.endContainer.nodeName === '#text') {
+      setCurrentText(r.endContainer.textContent.slice(0, r.endOffset));
+    } else {
+      setCurrentText('');
+    }
+    const {el, scope: s} = findScope(r.commonAncestorContainer);
+    if (s !== scope) {
+      setScope(s);
+    }
+    setScopeContainer(el);
+  }, [getRange, setRange, scope, setScope, setCurrentText, setScopeContainer])
 
   const onPaste = useCallback((event) => {
     const cbData = (event.clipboardData || window.clipboardData);
@@ -59,7 +65,7 @@ export const ConversationContext = ({children}) => {
       dispatch(uploadMany(cbData.files));
     }
 
-    const range = document.getSelection().getRangeAt(0);
+    const range = getRange()
     range.deleteContents();
 
     cbData.getData('text').split('\n').reverse().forEach((line, idx) => {
@@ -69,7 +75,7 @@ export const ConversationContext = ({children}) => {
     document.getSelection().collapseToEnd();
     event.preventDefault();
     event.stopPropagation();
-  }, [dispatch]);
+  }, [getRange, dispatch]);
 
   const onFileChange = useCallback((e) => {
     if (e.target.files?.length > 0) {
@@ -99,20 +105,6 @@ export const ConversationContext = ({children}) => {
     input.current.innerHTML = '';
     focus(e);
   }, [input, stream, focus, dispatch]);
-
-  const replace = useCallback((regex, text = '') => {
-    const node = range.endContainer
-    const original = node.textContent;
-    const replacement = original.slice(0, range.endOffset).replace(regex, text);
-    node.textContent = replacement + original.slice(range.endOffset);
-    const s = document.getSelection();
-    const r = document.createRange();
-    r.setStart(node, replacement.length);
-    r.setEnd(node, replacement.length);
-    s.removeAllRanges();
-    s.addRange(r);
-    setRange(r);
-  }, [range, setRange]);
 
   const wrapMatching = useCallback((regex, wrapperTagName) => {
     const selection = window.getSelection();
@@ -152,19 +144,33 @@ export const ConversationContext = ({children}) => {
     parentNode.replaceChild(documentFragment, endContainer);
     const sel = document.getSelection();
     const r = document.createRange();
-    r.setEnd(here, 1);
-    r.setStart(here, 1);
+    r.setEnd(here, 0);
+    r.setStart(here, 0);
     sel.removeAllRanges();
     sel.addRange(r);
     updateRange();
   }, [updateRange]);
 
+  const replace = useCallback((regex, text = '') => {
+    const range = getRange();
+    const node = range.endContainer
+    const original = node.textContent;
+    const replacement = original.slice(0, range.endOffset).replace(regex, text);
+    node.textContent = replacement + original.slice(range.endOffset);
+    const s = document.getSelection();
+    const r = document.createRange();
+    r.setStart(node, replacement.length);
+    r.setEnd(node, replacement.length);
+    s.removeAllRanges();
+    s.addRange(r);
+  }, [getRange]);
+
   const insert = useCallback((domNode) => {
+    const range = getRange();
     range.deleteContents();
     range.insertNode(domNode);
     range.collapse();
-    setRange(range);
-  }, [range, setRange]);
+  }, [getRange]);
 
   const onKeyDown = useCallback((e) => {
     if (e.key === 'Enter' && !e.shiftKey && scope === 'root') {
@@ -181,10 +187,6 @@ export const ConversationContext = ({children}) => {
     document.addEventListener('selectionchange', updateRange);
     return () => document.removeEventListener('selectionchange', updateRange);
   }, [updateRange]);
-
-  useEffect(() => {
-
-  }, [range]);
 
   useEffect(() => {
     const {current} = input;
@@ -212,7 +214,7 @@ export const ConversationContext = ({children}) => {
     addFile,
 
     send,
-    range,
+    getRange,
     insert,
     focus,
   }
