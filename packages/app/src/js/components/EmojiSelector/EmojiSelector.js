@@ -32,7 +32,7 @@ export const EmojiSelector = () => {
   const options = useMemo(() => {
     let opts = fuse.search(currentText || '').slice(0, 5).map(({item}) => item)
     opts = opts.length ? opts : emojis.slice(0, 5);
-    opts = opts.map((item) => ({
+    opts = [...opts, {action: 'close', shortname: 'no emoji'}].map((item) => ({
       label: item.unicode && String.fromCodePoint(parseInt(item.unicode, 16)),
       url: item.fileId && getUrl(item.fileId),
       name: item.shortname,
@@ -93,6 +93,20 @@ export const EmojiSelector = () => {
     }
   }, [scopeContainer]);
 
+  const close = useCallback((e) => {
+    const text = scopeContainer.textContent;
+    const node = document.createTextNode(text);
+    scopeContainer.replaceWith(node);
+    const r = document.createRange();
+    r.setEnd(node, text.length);
+    r.setStart(node, text.length);
+    const sel = document.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(r);
+    e.preventDefault();
+    e.stopPropagation();
+  }, [scopeContainer]);
+
   const ctrl = useCallback((e) => {
     if ( scope === 'root' && currentText.match(/(^|\s)<$/) && e.key === '3') {
       replace(/<$/, '');
@@ -107,7 +121,11 @@ export const EmojiSelector = () => {
     }
     if (scope === SCOPE) {
       if (e.key === ' ' || e.key === 'Space' || e.keyCode === 32 || e.key === 'Enter') {
-        submit(e, {exact: false});
+        if (options[selected].item?.action === 'close') {
+          close(e);
+        } else {
+          submit(e, {exact: false});
+        }
       }
       if ( e.key === ':') {
         submit(e);
@@ -128,7 +146,7 @@ export const EmojiSelector = () => {
         remove(e);
       }
     }
-  }, [currentText, scope, create, remove, submit, replace]);
+  }, [currentText, scope, create, remove, submit, replace, options, selected, close]);
 
   useEffect(() => {
     const { current } = input;
