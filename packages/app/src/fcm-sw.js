@@ -2,7 +2,6 @@
 import { initializeApp } from 'firebase/app';
 import { getMessaging, onBackgroundMessage } from 'firebase/messaging/sw';
 
-// eslint-disable-next-line no-undef
 self.addEventListener('notificationclick', (event) => {
   // eslint-disable-next-line no-console
   console.log('click', event);
@@ -37,6 +36,7 @@ function getOpenClient() {
   }).then((clientList) => clientList[0]);
 }
 
+// eslint-disable-next-line no-undef
 const firebaseApp = initializeApp(FIREBASE_CONFIG);
 const messaging = getMessaging(firebaseApp);
 onBackgroundMessage(messaging, async (payload) => {

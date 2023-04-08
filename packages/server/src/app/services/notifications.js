@@ -1,6 +1,9 @@
 const repo = require('../repository');
 const conf = require('../../../../../chat.config');
-const _ = require('lodash');
+
+const omitUndefined = (obj) => Object.fromEntries(
+  Object.entries(obj).filter(([, v]) => v !== undefined),
+);
 
 const PushService = {
   send: async (msg, { push = {} } = {}) => {
@@ -19,12 +22,12 @@ const PushService = {
     const message = {
       tokens,
       topic: 'messages',
-      data: _.omitBy({
+      data: omitUndefined({
         channelId: channel.id,
         parentId: msg.parentId,
         messageId: msg.id,
         createdAt: new Date(msg.createdAt).toISOString(),
-      }, _.isUndefined),
+      }),
       notification: {
         title: `${user?.name || 'Guest'} on ${channel.name}`,
         body: msg.flat,

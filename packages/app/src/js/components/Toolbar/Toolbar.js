@@ -29,7 +29,7 @@ export const Toolbar = () => {
 
   if (hovered !== id) return null;
 
-  const stop = (e) => { console.log('stop'); e.stopPropagation(); e.preventDefault(); };
+  const stop = (e) => { e.stopPropagation(); e.preventDefault(); };
 
   if (view === 'reactions') {
     return (

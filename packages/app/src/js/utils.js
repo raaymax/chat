@@ -121,5 +121,5 @@ export const buildEmojiNode = (result, getUrl) => {
 }
 
 export const omitUndefined = (ob) => Object.fromEntries(
-  Object.entries(ob).filter(([, v]) => v !== undefined)
+  Object.entries(ob).filter(([, v]) => v !== undefined),
 );

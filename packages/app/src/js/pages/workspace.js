@@ -3,7 +3,6 @@ import {h} from 'preact';
 import { useDispatch, useSelector } from 'react-redux'
 
 import styled from 'styled-components';
-import { useEffect } from 'preact/hooks';
 import { Logo } from '../components/logo';
 import { Channels } from '../components/channels';
 import { MainConversation } from './main/mainConversaion';

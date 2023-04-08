@@ -1,4 +1,3 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
 import { client } from '../core';
 import { actions } from '../state';
 

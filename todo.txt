@@ -1,16 +1,24 @@
-v1.8.4
+v1.8.5
 fix(reactions): can't add many reactions
 fix(toolbar): not changing apearence on mobile
 fix(toolbar): should be bigger
 fix(emojis): search window have too small icons on mobile
+fix(push): notifications are not taking user to correct message
+v1.8.6
 - fix(emojis): unable to backspace emoji on mobile
 - fix(attachments): attachment is displaying in all inputs
-- fix(push): notifications are not taking user to correct message
-  - create links directly to message
 - fix(push): notifications cumulate quickly - merge notifications
+- fix(pins): hover in pins is not working
+- fix(app): app should startup from memory if possible
+- fix(messages): after long time away load more messages will not load all of them
+  |- [dup]: fix(messages): app not showing newest messages after time away
+  |- [note]: this is when number of new messages is greater than limit
+- fix(progress): load progress not working?
+  |- [note]: changing channels now not loading progresses
 
-- refactor: migrate selectors to separate files
-- refactor: 
+- refactor(app): migrate selectors to separate files
+- refactor(server): finish repository serialization?
+- refactor(app): use dixie instead of redux
 
 v1.9.0
 - feat(channels): ability to change channel name
@@ -24,7 +32,7 @@ v1.9.0
 - feat(attachments): image preview on fullscreen
  
 v2.0.0 // first public release
-- feat(users): registration of users
+- feat(users)!: registration of users
 - feat(users): invitations
 - chore: remove personal data
 - chore: change all access keys
@@ -38,10 +46,6 @@ backlog:
 - feat(channels): ability to invite/add people to channel
 - feat(channels): channels sorting
 - feat(users): users mentions
-? fix: app not showing newest messages after time away
-? fix: after long time away load more messages will not load all of them
-? fix: sending message sometimes is not working
-- fix: html parsing failed on production
+? fix: html parsing failed on production
 - fix: bob is not working - migrate to chatgpt?
-- fix: app should startup from memory if possible
 

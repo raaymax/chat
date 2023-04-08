@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-import { loadProgress } from './services/progress';
 import { play } from './services/sound';
 import { ackTyping } from './services/typing';
 import { sendShareMessage } from './services/messages';
