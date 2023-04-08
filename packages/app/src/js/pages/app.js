@@ -1,5 +1,5 @@
 import { h, render } from 'preact';
-import { useState, useCallback, useEffect } from 'preact/hooks';
+import { useState, useEffect } from 'preact/hooks';
 import { Suspense, lazy } from 'preact/compat';
 import '../core/registerSw';
 import { Login } from './login';

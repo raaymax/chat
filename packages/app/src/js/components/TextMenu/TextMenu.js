@@ -39,7 +39,7 @@ export const TextMenu = ({
       e.preventDefault();
       e.stopPropagation();
     }
-  }, [selected, setSelected]);
+  }, [selected, setSelected, options]);
 
   useEffect(() => {
     const { current } = input;
