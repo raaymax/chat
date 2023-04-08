@@ -5,7 +5,7 @@ import { actions } from '../state';
 import { initNotifications } from './notifications';
 import { loadEmojis } from './emoji';
 import { loadProgress, loadBadges } from './progress';
-import { reloadStream } from './stream';
+import { reloadStream, loadFromUrl } from './stream';
 
 const initApp = (withStream = false) => async (dispatch) => {
   if (navigator.userAgentData.mobile) {
@@ -32,6 +32,9 @@ const initApp = (withStream = false) => async (dispatch) => {
   if (config.appVersion !== APP_VERSION) {
     await dispatch(showUpdateMessage());
   }
+
+  await dispatch(loadFromUrl());
+
   if (withStream) {
     await dispatch(reloadStream('main'));
   }

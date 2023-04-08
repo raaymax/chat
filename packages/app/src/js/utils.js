@@ -119,3 +119,7 @@ export const buildEmojiNode = (result, getUrl) => {
   node.appendChild(emoji);
   return node;
 }
+
+export const omitUndefined = (ob) => Object.fromEntries(
+  Object.entries(ob).filter(([, v]) => v !== undefined)
+);

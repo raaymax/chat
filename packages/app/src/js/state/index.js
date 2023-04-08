@@ -61,7 +61,7 @@ export const selectors = {
         [p.lastMessageId]: [...(acc[p.lastMessageId] || []), p],
       }), {}) : {}),
   ),
-  getMainChannelId: (state) => state.channels.main,
+  getMainChannelId: (state) => state.stream.mainChannelId,
   getBadges: (userId) => createSelector(
     (state) => state.progress,
     (progress) => progress
@@ -93,12 +93,7 @@ export const selectors = {
       .filter((c) => c.users?.includes(meId)),
   ),
   getConfig: (state) => state.config,
-  // getCid: (state) => state.channels.current,
-  getChannelId: createSelector(
-    (state) => state.channels.current,
-    (state) => state.channels.list,
-    (channelId, channels) => channels.find((c) => c.id === channelId)?.id,
-  ),
+  getChannelId: (state) => state.stream.main.channelId,
   getMeId: (state) => state.users.meId,
   getMyId: (state) => state.users.meId,
   getFiles: (state) => state.files.list,
@@ -129,7 +124,7 @@ export const selectors = {
     .find((m) => m.id === id || m.clientId === id) || null,
   getCurrentChannel: createSelector(
     (state) => state.channels.list,
-    (state) => state.channels.current,
+    (state) => state.stream.main.channelId,
     (list, channelId) => list.find((c) => c.id === channelId) || {id: channelId},
   ),
   getInfo: (state) => state.info,
@@ -144,7 +139,7 @@ export const selectors = {
   ),
 
   getTyping: () => createSelector(
-    (state) => state.channels.current,
+    (state) => state.stream.main.channelId,
     (state) => state.typing,
     (state) => state.users.list,
     (channelId, typing, users) => Object.keys(typing[channelId] || {})

@@ -2,8 +2,9 @@ import { h} from 'preact';
 import { useEffect } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { openChannel, findChannel } from '../services/channels';
-import { selectors } from '../state';
+import { findChannel } from '../services/channels';
+import { setStream } from '../services/stream';
+import { actions, selectors } from '../state';
 import { ChannelCreate } from './ChannelCreate/ChannelCreate';
 
 const Badge = styled.span`
@@ -70,7 +71,10 @@ export const Channels = ({icon}) => {
           key={c.id}
           icon={icon}
           badge={badges[c.id]}
-          onclick={() => dispatch(openChannel({id: c.id}))}
+          onclick={() => {
+            dispatch(setStream('main', {type: 'live', channelId: c.id}));
+            dispatch(actions.setView(null));
+          }}
         />
       ))}
       <ChannelCreate />

@@ -1,13 +1,10 @@
 import {createReducer, createAction} from '@reduxjs/toolkit';
 
-const CHANNEL_ID = window.location.hash.slice(1);
-
 const add = createAction('channels/add');
-const setMain = createAction('channels/setMain');
 const remove = createAction('channels/remove');
 const set = createAction('channels/set');
 
-const channelReducer = createReducer({list: [], current: CHANNEL_ID, main: null}, {
+const channelReducer = createReducer({list: [], current: null}, {
   [add]: ({list}, action) => {
     [action.payload].flat().forEach((channel) => {
       const existing = list.find((c) => c.id === channel.id);
@@ -32,13 +29,6 @@ const channelReducer = createReducer({list: [], current: CHANNEL_ID, main: null}
       state.current = action.payload;
     }
   },
-  [setMain]: (state, action) => {
-    const id = action.payload;
-    state.main = id;
-    if (!state.current) {
-      state.current = id;
-    }
-  },
   logout: () => ({list: [], current: 'main'}),
 })
 
@@ -46,7 +36,6 @@ export const actions = {
   addChannel: add,
   removeChannel: remove,
   setChannel: set,
-  setMainChannel: setMain,
 }
 
 export default channelReducer;

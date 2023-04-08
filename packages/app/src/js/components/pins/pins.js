@@ -32,9 +32,8 @@ const StyledPins = styled.div`
 `;
 
 export const Pins = () => {
-  const [, setStream] = useStream()
+  const [{channelId}, setStream] = useStream()
   const dispatch = useDispatch();
-  const channelId = useSelector(selectors.getChannelId);
   const messages = useSelector(selectors.getPinnedMessages(channelId));
   const gotoMessage = useCallback((msg) => {
     dispatch(actions.setView('pins'));

@@ -9,6 +9,9 @@ fix(emojis): search window have too small icons on mobile
   - create links directly to message
 - fix(push): notifications cumulate quickly - merge notifications
 
+- refactor: migrate selectors to separate files
+- refactor: 
+
 v1.9.0
 - feat(channels): ability to change channel name
 - feat(share): ability to share files

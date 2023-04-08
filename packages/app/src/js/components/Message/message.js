@@ -46,11 +46,11 @@ const MessageBase = (props = {}) => {
 
   return (
     <div
+      onClick={onClick}
       {...props}
       class={['message', (pinned ? 'pinned' : ''), (selected === id ? 'selected' : ''), ...props.class].join(' ')}
       onmouseenter={onEnter}
       onmouseleave={onLeave}
-      onClick={onClick}
     >
       {!props.sameUser
         ? <div class='avatar'>{user?.avatarUrl && <img src={user?.avatarUrl} alt='avatar' />}</div>

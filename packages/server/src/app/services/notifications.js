@@ -1,5 +1,6 @@
 const repo = require('../repository');
 const conf = require('../../../../../chat.config');
+const _ = require('lodash');
 
 const PushService = {
   send: async (msg, { push = {} } = {}) => {
@@ -18,16 +19,18 @@ const PushService = {
     const message = {
       tokens,
       topic: 'messages',
-      data: {
-        channel: channel.name,
-      },
+      data: _.omitBy({
+        channelId: channel.id,
+        parentId: msg.parentId,
+        messageId: msg.id,
+        createdAt: new Date(msg.createdAt).toISOString(),
+      }, _.isUndefined),
       notification: {
         title: `${user?.name || 'Guest'} on ${channel.name}`,
         body: msg.flat,
       },
       android: {
         priority: 'high',
-        collapse_key: msg.userId,
         notification: {
           ...(user.avatarUrl ? { imageUrl: user.avatarUrl } : {}),
           channel_id: 'default',
