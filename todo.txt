@@ -1,14 +1,13 @@
 v1.8.4
-- fix(reactions): can't add many reactions
-- fix(toolbar): not changing apearence on mobile
-- fix(toolbar): should be bigger
-- fix(emojis): search window have too small icons on mobile
+fix(reactions): can't add many reactions
+fix(toolbar): not changing apearence on mobile
+fix(toolbar): should be bigger
+fix(emojis): search window have too small icons on mobile
 - fix(emojis): unable to backspace emoji on mobile
 - fix(attachments): attachment is displaying in all inputs
 - fix(push): notifications are not taking user to correct message
   - create links directly to message
 - fix(push): notifications cumulate quickly - merge notifications
-- chore(mobile): migrate back to capacitor.js
 
 v1.9.0
 - feat(channels): ability to change channel name
