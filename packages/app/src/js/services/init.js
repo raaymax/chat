@@ -8,7 +8,7 @@ import { loadProgress, loadBadges } from './progress';
 import { reloadStream } from './stream';
 
 const initApp = (withStream = false) => async (dispatch) => {
-  if (Capacitor.isNativePlatform()) {
+  if (navigator.userAgentData.mobile) {
     document.body.setAttribute('class', 'mobile');
   }
   await dispatch(actions.connected());
