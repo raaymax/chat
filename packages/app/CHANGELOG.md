@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.8.4](https://github.com/codecat-io/chat/compare/app-v1.8.3...app-v1.8.4) (2023-04-08)
+
+
+### Bug Fixes
+
+* release ([5a164ba](https://github.com/codecat-io/chat/commit/5a164babbc75033dff46e2727a3035f59af23f4b))
+* tests ([a317cd9](https://github.com/codecat-io/chat/commit/a317cd91d4ebf118967ebcad795534dab6f005fe))
+
 ## [1.8.3](https://github.com/codecat-io/chat/compare/app-v1.8.3...app-v1.8.3) (2023-04-08)
 
 
