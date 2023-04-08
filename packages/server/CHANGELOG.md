@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.4](https://github.com/codecat-io/chat/compare/server-v1.8.3...server-v1.8.4) (2023-04-08)
+
+
+### Bug Fixes
+
+* release ([5a164ba](https://github.com/codecat-io/chat/commit/5a164babbc75033dff46e2727a3035f59af23f4b))
+
 ## [1.8.3](https://github.com/codecat-io/chat/compare/server-v1.8.3...server-v1.8.3) (2023-04-08)
 
 
