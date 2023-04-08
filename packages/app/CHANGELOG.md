@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.8.3](https://github.com/codecat-io/chat/compare/app-v1.8.2...app-v1.8.3) (2023-04-08)
+
+
+### Bug Fixes
+
+* **app:** sizing problems on mobile and web ([d6b0e7d](https://github.com/codecat-io/chat/commit/d6b0e7de2d88df8c8c21c5d2a8e49580c580025c))
+* **emojis:** ;) and &lt;3 emojis are inserted always at the beginning ([adb59bc](https://github.com/codecat-io/chat/commit/adb59bc2449471faadfaffa75c90151d112cbe05))
+* **emojis:** disability to refuse emojis ([e2a7d1a](https://github.com/codecat-io/chat/commit/e2a7d1a07baab2ad1a02c1014bf577fa9104580c))
+* **emojis:** selections could go outside selector ([bc03b4d](https://github.com/codecat-io/chat/commit/bc03b4d7c0601ea32f6a691551aba553e1d798ff))
+
 ## [1.8.2](https://github.com/codecat-io/chat/compare/app-v1.8.1...app-v1.8.2) (2023-04-04)
 
 
