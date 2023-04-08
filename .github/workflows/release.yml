@@ -84,4 +84,4 @@ jobs:
       if: ${{ needs.release-please.outputs.release_created }}
       run: |
         git remote add prod ssh://raay@codecat.io:/var/docker/chat/app
-        git push --verbose prod master:master -f
+        git push --verbose prod main:master -f
