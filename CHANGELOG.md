@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.8.5](https://github.com/codecat-io/chat/compare/quack-v1.8.4...quack-v1.8.5) (2023-04-08)
+
+
+### Bug Fixes
+
+* **emojis:** search window have too small icons on mobile ([a4dedda](https://github.com/codecat-io/chat/commit/a4dedda6301d10c3a7a15864c3c87a5ac082d8a2))
+* **push:** notifications are not taking user to correct message ([35af9a4](https://github.com/codecat-io/chat/commit/35af9a41f9bd64b7a5db1691372585b926ed4595))
+* **reactions:** can't add many reactions ([66e877a](https://github.com/codecat-io/chat/commit/66e877ade85777f8314f4b9d1fe8749715537a0b))
+* **reactions:** reactions are not working ([b43c8ed](https://github.com/codecat-io/chat/commit/b43c8edd0dab7e8c61c8fd464d973e36723fe9ac))
+* release ([5954a0f](https://github.com/codecat-io/chat/commit/5954a0fc53dec3eb0388885ca9698b81b558f05d))
+* **toolbar:** not changing apearence on mobile ([0c2de11](https://github.com/codecat-io/chat/commit/0c2de11ec172f7954b6e87b424a2fa2532060eea))
+* **toolbar:** should be bigger ([b061615](https://github.com/codecat-io/chat/commit/b06161526c2570efb1e6ced58f38073b91cf9c9e))
+* **typing:** typing indicator is not working ([b84d454](https://github.com/codecat-io/chat/commit/b84d454ddcc0869dcaaae6ffe930881ea8abd0f4))
+
 ## [1.8.4](https://github.com/codecat-io/chat/compare/quack-v1.8.3...quack-v1.8.4) (2023-04-08)
 
 
