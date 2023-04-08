@@ -2,8 +2,8 @@ import { h } from 'preact';
 import { useCallback } from 'preact/hooks';
 import { formatTime, formatDateDetailed } from '../../utils';
 import { Attachments } from './attachments';
-import { Reactions } from './reaction';
-import { Toolbar } from './toolbar';
+import { Reactions } from '../Reaction/Reaction';
+import { Toolbar } from '../Toolbar/Toolbar';
 import { Progress } from './progress';
 import { Info } from './info';
 import { ThreadInfo } from './threadInfo';
@@ -29,6 +29,15 @@ const MessageBase = (props = {}) => {
     setHovered(id);
   }, [setHovered, id]);
 
+  const onClick = useCallback(() => {
+    if (!navigator.userAgentData.mobile) return;
+    if (hovered !== id) {
+      setHovered(id);
+    } else {
+      setHovered(null);
+    }
+  }, [hovered, setHovered, id]);
+
   const onLeave = useCallback(() => {
     if (hovered === id) {
       setHovered(null);
@@ -41,6 +50,7 @@ const MessageBase = (props = {}) => {
       class={['message', (pinned ? 'pinned' : ''), (selected === id ? 'selected' : ''), ...props.class].join(' ')}
       onmouseenter={onEnter}
       onmouseleave={onLeave}
+      onClick={onClick}
     >
       {!props.sameUser
         ? <div class='avatar'>{user?.avatarUrl && <img src={user?.avatarUrl} alt='avatar' />}</div>

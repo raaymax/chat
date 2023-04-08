@@ -1,11 +1,7 @@
-v1.8.3
-fix(threads): ping is not working 
-improvement(auth): if users where logged in assume they are 
-chore(emojs): removed :D: emoji
-chore(sentry): remove sentry cli from dependencies
-fix(emojis): ;) and <3 emojis are inserted always at the beginning
-fix(emojis): disability to refuse emojis
-fix(app): page size problems
+v1.8.4
+- fix(reactions): can't add many reactions
+- fix(toolbar): not changing apearence on mobile
+- fix(toolbar): should be bigger
 - fix(emojis): search window have too small icons on mobile
 - fix(emojis): unable to backspace emoji on mobile
 - fix(attachments): attachment is displaying in all inputs
@@ -26,19 +22,20 @@ v1.9.0
 - feat(attachments): image preview on fullscreen
  
 v2.0.0 // first public release
-- feat: registration of users
-- feat: invitations
+- feat(users): registration of users
+- feat(users): invitations
 - chore: remove personal data
 - chore: change all access keys
 
 backlog:
-- feat: save message parsing errors in database and display them in message
-- feat: add tags to messages
-- feat: searching using tags
-- feat: ability to search channels
-- feat: ability to invite/add people to channel
-- feat: channels sorting
-- feat: users mentions
+- feat(toolbar): custom emojis reactions
+- feat(logs): save message parsing errors in database and display them in message
+- feat(tags): add tags to messages
+- feat(tags): searching using tags
+- feat(channels): ability to search channels
+- feat(channels): ability to invite/add people to channel
+- feat(channels): channels sorting
+- feat(users): users mentions
 ? fix: app not showing newest messages after time away
 ? fix: after long time away load more messages will not load all of them
 ? fix: sending message sometimes is not working

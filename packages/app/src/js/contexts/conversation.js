@@ -45,6 +45,7 @@ export const ConversationContext = ({children}) => {
 
   const updateRange = useCallback(() => {
     const r = getRange();
+    if (!r) return;
     setRange(r)
     if (r.endContainer.nodeName === '#text') {
       setCurrentText(r.endContainer.textContent.slice(0, r.endOffset));

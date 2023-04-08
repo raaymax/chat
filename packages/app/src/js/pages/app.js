@@ -1,29 +1,19 @@
 import { h, render } from 'preact';
-import { useState, useEffect } from 'preact/hooks';
 import { Suspense, lazy } from 'preact/compat';
 import '../core/registerSw';
 import { Login } from './login';
+import { VisibleViewport } from '../components/VisibleViewport/VisibleViewport';
 
 const Secured = lazy(() => import('./secured'));
 
-export const App = () => {
-  const [height, setHeight] = useState(window.visualViewport.height);
-
-  useEffect(() => {
-    const updateHeight = (e) => {
-      setHeight(e.target.height);
-    }
-    window.visualViewport.addEventListener('resize', updateHeight);
-    return () => window.visualViewport.removeEventListener('resize', updateHeight);
-  }, [setHeight]);
-
-  return (
-    <Login height={height}>
+export const App = () => (
+  <VisibleViewport>
+    <Login>
       <Suspense fallback={<div>loading secured page...</div>}>
         <Secured />
       </Suspense>
     </Login>
-  );
-}
+  </VisibleViewport>
+)
 
 render(<App />, document.getElementById('root'));
