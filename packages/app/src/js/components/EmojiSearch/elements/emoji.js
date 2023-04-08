@@ -17,6 +17,16 @@ const EmojiContainer = styled.div`
     width: 28px;
     height: 28px;
   }
+  body.mobile & {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    font-size: 30px;
+    img {
+      width: 38px;
+      height: 38px;
+    }
+  }
   &:hover {
     border-radius: 5px;
     background-color: rgba(249,249,249,0.05);
