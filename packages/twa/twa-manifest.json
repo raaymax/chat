@@ -33,7 +33,7 @@
   "isChromeOSOnly": false,
   "isMetaQuest": false,
   "fullScopeUrl": "https://chat.codecat.io/",
-  "minSdkVersion": 19,
+  "minSdkVersion": 30,
   "shareTarget": {
     "action": "https://chat.codecat.io/share",
     "method": "POST",

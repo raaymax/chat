@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'preact/hooks';
 import * as session from '../services/session';
 import { UserContext } from '../contexts/user';
 
-export const Login = ({children}) => {
+export const Login = ({children, height}) => {
   const [status, setStatus] = useState('pending');
   const [user, setUser] = useState(null);
   const validate = useCallback(() => session.validate()
@@ -49,11 +49,13 @@ export const Login = ({children}) => {
   if (status === 'pending') return 'Auth - pending';
 
   return user ? (
-    <UserContext value={user}>
-      {children}
-    </UserContext>
+    <div style={{height: `${height}px`}}>
+      <UserContext value={user}>
+        {children}
+      </UserContext>
+    </div>
   ) : (
-    <div class='login'>
+    <div class='login' >
       <form onsubmit={onSubmit}>
         <input type='text' name='login' placeholder='user@example.com' />
         <input type='password' name='password' placeholder='password' />

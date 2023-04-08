@@ -48,6 +48,11 @@ body, html {
 	--sk_highlight_hover: 64,179,228;
 	color-scheme: dark;
   overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+#root {
+  height: 100%;
 }
 *, :after, :before {
   box-sizing: inherit;
