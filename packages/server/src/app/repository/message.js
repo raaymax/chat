@@ -26,6 +26,12 @@ const MessageSchema = ObjectType({
       childId: IdType(),
     }),
   ),
+  reactions: ArrayType(
+    ObjectType({
+      userId: IdType(),
+      reaction: StringType(),
+    }),
+  ),
   links: ArrayType(StringType()),
   linkPreviews: ArrayType(EmptyType()),
   parsingErrors: ArrayType(EmptyType()),
