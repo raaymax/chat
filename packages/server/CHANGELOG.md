@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.3](https://github.com/codecat-io/chat/compare/server-v1.8.3...server-v1.8.3) (2023-04-08)
+
+
+### Miscellaneous Chores
+
+* **server:** Synchronize quack versions
+
 ## [1.8.3](https://github.com/codecat-io/chat/compare/server-v1.8.2...server-v1.8.3) (2023-04-08)
 
 
