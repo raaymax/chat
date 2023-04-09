@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.5](https://github.com/codecat-io/chat/compare/rpc-v1.8.4...rpc-v1.8.5) (2023-04-08)
+
+
+### Bug Fixes
+
+* **reactions:** can't add many reactions ([66e877a](https://github.com/codecat-io/chat/commit/66e877ade85777f8314f4b9d1fe8749715537a0b))
+
 ## [1.8.4](https://github.com/codecat-io/chat/compare/rpc-v1.8.3...rpc-v1.8.4) (2023-04-08)
 
 
