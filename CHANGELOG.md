@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.7](https://github.com/codecat-io/chat/compare/quack-v1.8.6...quack-v1.8.7) (2023-04-10)
+
+
+### Bug Fixes
+
+* release process ([aefc9b9](https://github.com/codecat-io/chat/commit/aefc9b97f3ffcc8e53b0132e7a09e6915a68effe))
+
 ## [1.8.6](https://github.com/codecat-io/chat/compare/quack-v1.8.5...quack-v1.8.6) (2023-04-10)
 
 
