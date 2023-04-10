@@ -3,7 +3,8 @@ fix(push): notifications cumulate quickly - merge notifications
 fix(pins): hover in pins is not working
 fix(style): make toolbar bigger on desktop
 fix(link-preview): description can be too long
-- fix(messages): refrest takes to link location instead of live stream
+fix(toolbar): can't hide on mobile
+- fix(messages): refresh takes to link location instead of live stream
 
 v1.8.x
 - fix(emojis): unable to backspace emoji on mobile
@@ -13,7 +14,6 @@ v1.8.x
   |- [note]: this is when number of new messages is greater than limit
 - fix(style): remove left margin on mobile
 - fix(style): make bottom buttons bigger on mobile
-- fix(toolbar): can't hide on mobile
 - fix(style): align bottom buttons with left margin
 - fix(channels): wider desktop clicking on channel should not close sidebar
 - fix(style): remove border line on right edge of screen

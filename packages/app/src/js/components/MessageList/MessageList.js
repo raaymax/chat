@@ -1,5 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import { h, Component } from 'preact';
+import { useEffect } from 'preact/hooks';
 import styled from 'styled-components';
 
 const ListContainer = styled.div`
@@ -40,6 +41,7 @@ export class MessageList extends Component {
     }
 
     let scrollPosition;
+    if (!this.base) return;
     if (this.base.scrollHeight <= this.base.clientHeight) {
       scrollPosition = MessageList.SCROLL_AT_BOTTOM;
     } else if (this.base.scrollTop === 0) {
@@ -126,6 +128,7 @@ export class MessageList extends Component {
         this.base.scrollTop = this.base.scrollTop - heightDelta + scrollDelta;
       }
       this.previousScrollHeight = this.base.scrollHeight;
+      this.handleScroll();
       return;
     }
 

@@ -14,6 +14,6 @@ const Container = styled.div`
 export const MainConversation = ({className, onclick}) => (
   <Container className={className}>
     <Header onclick={onclick} />
-    <Conversation />
+    <Conversation saveLocation={true} />
   </Container>
 )

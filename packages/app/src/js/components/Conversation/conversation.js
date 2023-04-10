@@ -1,8 +1,8 @@
 import { h } from 'preact';
-import { useEffect, useCallback } from 'preact/hooks';
+import { useEffect, useCallback, useState } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadPrevious, loadNext } from '../../services/messages';
-import { updateProgress } from '../../services/progress';
+import { loadPrevious, loadNext, loadMessages } from '../../services/messages';
+import { updateProgress, loadProgress } from '../../services/progress';
 import { selectors } from '../../state';
 import { messageFormatter } from '../MessageList/formatter';
 import { MessageList } from '../MessageList/MessageList';
@@ -16,6 +16,7 @@ import { useStream } from '../../contexts/stream';
 import { Container } from './elements/container';
 import { InitFailedButton } from './elements/initFailedButton';
 
+
 const drop = (dispatch) => async (e) => {
   e.preventDefault();
   e.stopPropagation();
@@ -28,8 +29,9 @@ function dragOverHandler(ev) {
   ev.stopPropagation();
 }
 
-export function Conversation() {
-  const [stream, setStream] = useStream();
+export function Conversation({ saveLocation }) {
+  const [lastStream, setLastStream] = useState({});
+  const [stream] = useStream();
   const dispatch = useDispatch();
   const messages = useSelector(selectors.getStreamMessages(stream));
   const initFailed = useSelector(selectors.getInitFailed);
@@ -49,6 +51,14 @@ export function Conversation() {
     }
   }, [bumpProgress]);
 
+  useEffect(() => {
+    if (lastStream.channelId === stream.channelId
+      && lastStream.parentId === stream.parentId) return;
+    dispatch(loadMessages(stream, saveLocation));
+    dispatch(loadProgress(stream, saveLocation));
+    setLastStream(stream);
+  }, [dispatch, stream, lastStream, saveLocation]);
+
   return (
     <Container onDrop={drop(dispatch)} onDragOver={dragOverHandler}>
       <ConversationContext>
@@ -60,11 +70,11 @@ export function Conversation() {
             selected={stream.selected}
             onScrollTo={(dir) => {
               if (dir === 'top') {
-                dispatch(loadPrevious(stream, setStream))
+                dispatch(loadPrevious(stream, saveLocation))
                 bumpProgress();
               }
               if (dir === 'bottom') {
-                dispatch(loadNext(stream, setStream))
+                dispatch(loadNext(stream, saveLocation))
                 bumpProgress();
               }
             }}

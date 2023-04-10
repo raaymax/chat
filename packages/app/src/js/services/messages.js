@@ -2,6 +2,7 @@ import { client } from '../core';
 import { createCounter } from '../utils';
 import { actions, selectors } from '../state';
 import { updateProgress } from './progress';
+import * as url from './url';
 
 const tempId = createCounter(`temp:${(Math.random() + 1).toString(36)}`);
 
@@ -14,7 +15,7 @@ const loading = (dispatch) => {
   }
 }
 
-export const loadPrevious = (stream) => async (dispatch, getState) => {
+export const loadPrevious = (stream, saveLocation = false) => async (dispatch, getState) => {
   try {
     const loadingDone = loading(dispatch, getState);
     dispatch(actions.patchStream({
@@ -25,10 +26,11 @@ export const loadPrevious = (stream) => async (dispatch, getState) => {
       },
     }));
     dispatch(actions.selectMessage(null));
+    const date = selectors.getEarliestDate(stream)(getState());
     const req = await client.req({
       ...stream,
       type: 'messages:load',
-      before: selectors.getEarliestDate(stream)(getState()),
+      before: date,
       limit: 50,
     })
     dispatch(actions.addMessages(req.data));
@@ -38,6 +40,12 @@ export const loadPrevious = (stream) => async (dispatch, getState) => {
         dispatch(actions.takeHead({stream, count: 100}));
       }, 1)
     }
+    if (saveLocation) url.saveStream({
+      type: 'archive',
+      channelId: stream.channelId,
+      parentId: stream.parentId,
+      date,
+    });
     loadingDone();
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -46,7 +54,7 @@ export const loadPrevious = (stream) => async (dispatch, getState) => {
   }
 }
 
-export const loadNext = (stream) => async (dispatch, getState) => {
+export const loadNext = (stream, saveLocation = false) => async (dispatch, getState) => {
   try {
     const loadingDone = loading(dispatch, getState);
     dispatch(actions.patchStream({
@@ -57,24 +65,30 @@ export const loadNext = (stream) => async (dispatch, getState) => {
       },
     }));
     dispatch(actions.selectMessage(null));
+    const date = selectors.getLatestDate(stream)(getState());
     const req = await client.req({
       ...stream,
       type: 'messages:load',
-      after: selectors.getLatestDate(stream)(getState()),
+      after: date,
       limit: 50,
-    })
-    if (req.data?.length > 0) dispatch(updateProgress(req.data[0].id))
+    });
+    if (req.data?.length > 0) dispatch(updateProgress(req.data[0].id));
     dispatch(actions.addMessages(req.data));
     if (selectors.countMessagesInStream(stream)(getState()) > 100) {
       setTimeout(() => {
-        dispatch(actions.takeTail({stream, count: 100}));
-      }, 1)
+        dispatch(actions.takeTail({ stream, count: 100 }));
+      }, 1);
     }
     if (req.data.length < 50) {
       setTimeout(() => {
-        dispatch(actions.patchStream({id: stream.id, patch: { type: 'live'}}));
-      }, 2)
+        dispatch(actions.patchStream({ id: stream.id, patch: { type: 'live' } }));
+      }, 2);
     }
+    if (saveLocation) url.saveStream({
+      channelId: stream.channelId,
+      parentId: stream.parentId,
+      ...(req.data.length < 50 ? { type: 'live' } : { type: 'archive', date }),
+    });
     loadingDone();
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -83,7 +97,7 @@ export const loadNext = (stream) => async (dispatch, getState) => {
   }
 }
 
-export const loadMessagesArchive = (stream) => async (dispatch, getState) => {
+export const loadMessagesArchive = (stream, saveLocation = false) => async (dispatch, getState) => {
   if (!stream.channelId) return;
   const {date} = stream;
   try {
@@ -104,11 +118,11 @@ export const loadMessagesArchive = (stream) => async (dispatch, getState) => {
     })
     if (req.data?.length > 0) dispatch(updateProgress(req.data[0].id))
     dispatch(actions.addMessages(req.data));
-    if (req.data.length < 50) {
-      setTimeout(() => {
-        // setStream({...stream, type: 'live'});
-      }, 2)
-    }
+    if (saveLocation) url.saveStream({
+      channelId: stream.channelId,
+      parentId: stream.parentId,
+      ...(req.data.length < 50 ? {type: 'live'} : {type: 'archive', date}),
+    });
     loadingDone();
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -116,7 +130,8 @@ export const loadMessagesArchive = (stream) => async (dispatch, getState) => {
   }
 }
 
-export const loadMessagesLive = (stream) => async (dispatch, getState) => {
+
+export const loadMessagesLive = (stream, saveLocation = false) => async (dispatch, getState) => {
   if (!stream.channelId) return;
   try {
     const loadingDone = loading(dispatch, getState);
@@ -125,6 +140,11 @@ export const loadMessagesLive = (stream) => async (dispatch, getState) => {
       type: 'messages:load',
       limit: 50,
     })
+    if (saveLocation) url.saveStream({
+      type: 'live',
+      channelId: stream.channelId,
+      parentId: stream.parentId,
+    });
     dispatch(actions.addMessages(req.data));
     if (req.data?.length > 0) dispatch(updateProgress(req.data[0].id))
     loadingDone();
