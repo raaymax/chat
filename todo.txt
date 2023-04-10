@@ -1,13 +1,3 @@
-v1.8.5
-fix(reactions): can't add many reactions
-fix(toolbar): not changing apearence on mobile
-fix(toolbar): should be bigger
-fix(emojis): search window have too small icons on mobile
-fix(push): notifications are not taking user to correct message
-
-- fix(typing): typing indicator is not working
-
-
 v1.8.x
 - fix(emojis): unable to backspace emoji on mobile
 - fix(attachments): attachment is displaying in all inputs
@@ -16,12 +6,24 @@ v1.8.x
 - fix(messages): after long time away load more messages will not load all of them
   |- [dup]: fix(messages): app not showing newest messages after time away
   |- [note]: this is when number of new messages is greater than limit
+- fix(style): remove left margin on mobile
+- fix(style): make bottom buttons bigger on mobile
+- fix(style): make toolbar bigger on desktop
+- fix(toolbar): can't hide on mobile
+- fix(style): align bottom buttons with left margin
+- fix(link-preview): description can be too long
+- fix(channels): wider desktop clicking on channel should not close sidebar
+- fix(style): remove border line on right edge of screen
+- fix(commands): help should be contexted - no ping outside of thread
+- fix(commands): rename /setMain to /main)
 - improvement(app): app should startup from memory if possible
 - refactor(app): migrate selectors to separate files
 - refactor(server): finish repository serialization?
 - refactor(app): use dixie instead of redux
 
 v1.9.0
+- feat(avatar): ability to upload avatar
+- feat(link-preview): generate summary of link content
 - feat(channels): ability to change channel name
 - feat(share): ability to share files
 - feat(messages): message with checklist
