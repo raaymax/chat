@@ -9,7 +9,6 @@ import { uploadMany } from '../services/file';
 import { notifyTyping } from '../services/typing';
 
 const Context = createContext({
-  hovered: [null, () => {}],
   input: {},
 });
 
@@ -25,7 +24,6 @@ function findScope(element) {
 }
 
 export const ConversationContext = ({children}) => {
-  const hovered = useState(false);
   const dispatch = useDispatch();
   const [stream] = useStream();
   const [currentText, setCurrentText] = useState('');
@@ -202,7 +200,6 @@ export const ConversationContext = ({children}) => {
   }, [input, onInput, onKeyDown]);
 
   const api = {
-    hovered,
     input,
     fileInput,
     onPaste,
@@ -232,9 +229,4 @@ export const ConversationContext = ({children}) => {
 export const useInput = () => {
   const context = useContext(Context);
   return context;
-}
-
-export const useHovered = () => {
-  const context = useContext(Context);
-  return context.hovered;
 }

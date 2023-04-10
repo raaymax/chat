@@ -5,10 +5,11 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 // import {PinsList} from './pinsList';
 import { actions, selectors } from '../../state';
-import {Header} from './header';
-import {messageFormatter } from '../MessageList/formatter';
-import {MessageList} from '../MessageList/MessageList';
+import { HoverContext } from '../../contexts/hover';
+import { messageFormatter } from '../MessageList/formatter';
+import { MessageList } from '../MessageList/MessageList';
 import { useStream } from '../../contexts/stream';
+import { Header } from './header';
 
 const StyledPins = styled.div`
   width: 100vw;
@@ -18,6 +19,9 @@ const StyledPins = styled.div`
   flex-direction: column;
   border-left: 1px solid #565856;
   border-right: 1px solid #565856;
+  & .message:hover {
+      background-color: var(--primary_active_mask);
+  }
   &.hidden {
     flex: 0 0px;
     width: 0px;
@@ -47,23 +51,25 @@ export const Pins = () => {
   }, [dispatch, setStream])
   return (
     <StyledPins className='pins'>
-      <Header />
-      <MessageList
-        formatter={messageFormatter}
-        list={messages}
-        status='live'
-        onMessageClicked={(msg) => {
-          gotoMessage(msg);
-        }}
-        onScrollTo={(dir) => {
-          if (dir === 'top') {
-            // dispatch(loadPrevious(channel))
-          }
-          if (dir === 'bottom') {
-            // dispatch(loadNext(channel))
-          }
-        }}
-      />
+      <HoverContext>
+        <Header />
+        <MessageList
+          formatter={messageFormatter}
+          list={messages}
+          status='live'
+          onMessageClicked={(msg) => {
+            gotoMessage(msg);
+          }}
+          onScrollTo={(dir) => {
+            if (dir === 'top') {
+              // dispatch(loadPrevious(channel))
+            }
+            if (dir === 'bottom') {
+              // dispatch(loadNext(channel))
+            }
+          }}
+        />
+      </HoverContext>
     </StyledPins>
   );
 }

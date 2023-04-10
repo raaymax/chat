@@ -1,6 +1,7 @@
 /* eslint-disable no-await-in-loop */
 import {h} from 'preact';
 import styled from 'styled-components';
+import { HoverContext } from '../../contexts/hover';
 import {SearchResults} from './searchResults';
 import {Header} from './header';
 
@@ -27,7 +28,9 @@ const StyledSearch = styled.div`
 
 export const Search = () => (
   <StyledSearch>
-    <Header />
-    <SearchResults />
+    <HoverContext>
+      <Header />
+      <SearchResults />
+    </HoverContext>
   </StyledSearch>
 )

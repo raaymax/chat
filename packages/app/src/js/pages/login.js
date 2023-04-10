@@ -17,7 +17,7 @@ export const Login = ({children}) => {
     }).catch( (e) => {
       // eslint-disable-next-line no-console
       console.error(e);
-      setTimeout(validate, 100);
+      setTimeout(validate, 1000);
     }), []);
 
   const fastAccess = useCallback(() => {

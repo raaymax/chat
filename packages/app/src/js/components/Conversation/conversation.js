@@ -11,6 +11,7 @@ import { Input } from '../Input/Input';
 import { Loader } from './elements/loader';
 import { reinit } from '../../services/init';
 import { ConversationContext } from '../../contexts/conversation';
+import { HoverContext } from '../../contexts/hover';
 import { useStream } from '../../contexts/stream';
 import { Container } from './elements/container';
 import { InitFailedButton } from './elements/initFailedButton';
@@ -51,25 +52,27 @@ export function Conversation() {
   return (
     <Container onDrop={drop(dispatch)} onDragOver={dragOverHandler}>
       <ConversationContext>
-        <MessageList
-          formatter={messageFormatter}
-          list={list}
-          status={status}
-          selected={stream.selected}
-          onScrollTo={(dir) => {
-            if (dir === 'top') {
-              dispatch(loadPrevious(stream, setStream))
-              bumpProgress();
-            }
-            if (dir === 'bottom') {
-              dispatch(loadNext(stream, setStream))
-              bumpProgress();
-            }
-          }}
-        />
-        {loading && <Loader />}
-        <Input />
-        {initFailed && <InitFailedButton onClick={() => dispatch(reinit())} />}
+        <HoverContext>
+          <MessageList
+            formatter={messageFormatter}
+            list={list}
+            status={status}
+            selected={stream.selected}
+            onScrollTo={(dir) => {
+              if (dir === 'top') {
+                dispatch(loadPrevious(stream, setStream))
+                bumpProgress();
+              }
+              if (dir === 'bottom') {
+                dispatch(loadNext(stream, setStream))
+                bumpProgress();
+              }
+            }}
+          />
+          {loading && <Loader />}
+          <Input />
+          {initFailed && <InitFailedButton onClick={() => dispatch(reinit())} />}
+        </HoverContext>
       </ConversationContext>
     </Container>
   )

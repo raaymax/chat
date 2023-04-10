@@ -5,7 +5,7 @@ import { removeMessage } from '../../services/messages';
 import { pinMessage, unpinMessage } from '../../services/pins';
 import { Reaction } from '../Reaction/Reaction';
 import { setStream } from '../../services/stream';
-import { useHovered } from '../../contexts/conversation';
+import { useHovered } from '../../contexts/hover';
 import { useStream } from '../../contexts/stream';
 import { useMessageData, useMessageUser } from '../../contexts/message';
 

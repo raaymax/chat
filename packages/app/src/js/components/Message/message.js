@@ -8,7 +8,7 @@ import { Progress } from './progress';
 import { Info } from './info';
 import { ThreadInfo } from './threadInfo';
 import { MessageContext, useMessageData, useMessageUser } from '../../contexts/message';
-import { useHovered } from '../../contexts/conversation';
+import { useHovered } from '../../contexts/hover';
 import { useStream } from '../../contexts/stream';
 import { buildMessageBody } from './messageBuilder';
 import { isToday } from './utils';
