@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const Container = styled.div`
   position: absolute;
   top: -15px;
-  height: 32px;
+  height: 40px;
   right: 10px;
   z-index: 50;
   background-color: var(--primary_background);
@@ -12,17 +12,19 @@ export const Container = styled.div`
   padding: 1px 5px;
   font-size: 0.9em;
 
-
   i {
     padding: 2px 5px;
-    line-height: 24px;
-    width: 24px;
+    line-height: 33px;
+    width: 38px;
+    height: 38px;
     text-align: center;
     vertical-align: middle;
     display: inline;
     font-style: normal;
     cursor: pointer;
+    font-size: 1.3em;
     border-radius: 0.2em;
+    display: inline-block;
   }
 
   body.mobile & {
