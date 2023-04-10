@@ -1,6 +1,9 @@
 v1.8.6
 fix(push): notifications cumulate quickly - merge notifications
 fix(pins): hover in pins is not working
+fix(style): make toolbar bigger on desktop
+fix(link-preview): description can be too long
+- fix(messages): refrest takes to link location instead of live stream
 
 v1.8.x
 - fix(emojis): unable to backspace emoji on mobile
@@ -10,15 +13,12 @@ v1.8.x
   |- [note]: this is when number of new messages is greater than limit
 - fix(style): remove left margin on mobile
 - fix(style): make bottom buttons bigger on mobile
-- fix(style): make toolbar bigger on desktop
 - fix(toolbar): can't hide on mobile
 - fix(style): align bottom buttons with left margin
-- fix(link-preview): description can be too long
 - fix(channels): wider desktop clicking on channel should not close sidebar
 - fix(style): remove border line on right edge of screen
 - fix(commands): help should be contexted - no ping outside of thread
 - fix(commands): rename /setMain to /main)
-- fix(messages): refrest takes to link location instead of live stream
 - improvement(app): app should startup from memory if possible
 - refactor(app): migrate selectors to separate files
 - refactor(server): finish repository serialization?
@@ -44,6 +44,7 @@ v2.0.0 // first public release
 - chore: change all access keys
 
 backlog:
+- feat(history): add support for back button 
 - feat(toolbar): custom emojis reactions
 - feat(logs): save message parsing errors in database and display them in message
 - feat(tags): add tags to messages

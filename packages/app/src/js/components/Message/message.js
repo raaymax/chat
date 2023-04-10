@@ -14,7 +14,7 @@ import { buildMessageBody } from './messageBuilder';
 import { isToday } from './utils';
 import { LinkPreviewList } from './elements/LinkPreview';
 
-const MessageBase = (props = {}) => {
+const MessageBase = ({onClick, ...props} = {}) => {
   const msg = useMessageData();
   const {
     id, message, emojiOnly,
@@ -29,7 +29,7 @@ const MessageBase = (props = {}) => {
     setHovered(id);
   }, [setHovered, id]);
 
-  const onClick = useCallback(() => {
+  const toggleHovered = useCallback(() => {
     if (!navigator.userAgentData.mobile) return;
     if (hovered !== id) {
       setHovered(id);
@@ -46,7 +46,10 @@ const MessageBase = (props = {}) => {
 
   return (
     <div
-      onClick={onClick}
+      onClick={(e) => {
+        toggleHovered();
+        if (onClick) onClick(e);
+      }}
       {...props}
       class={['message', (pinned ? 'pinned' : ''), (selected === id ? 'selected' : ''), ...props.class].join(' ')}
       onmouseenter={onEnter}
