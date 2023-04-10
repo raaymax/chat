@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.8.6](https://github.com/codecat-io/chat/compare/quack-v1.8.5...quack-v1.8.6) (2023-04-10)
+
+
+### Bug Fixes
+
+* **link-preview:** description can be too long ([dcaa0b9](https://github.com/codecat-io/chat/commit/dcaa0b92f0a22e359c4e7fd52a0b73149ff2b462))
+* **messages:** saving location in url was breaking apps navigation ([2e76f5c](https://github.com/codecat-io/chat/commit/2e76f5c3d2c69b17c5c25d692b71c6069dc2688d))
+* **pins:** hover in pins is not working ([9511335](https://github.com/codecat-io/chat/commit/9511335fad2d3f16a923794657e64d12a157d994))
+* **push:** merge push notifications ([2e799d2](https://github.com/codecat-io/chat/commit/2e799d25b120871fcd9354f7fd3e9a2191aefd8e))
+* **style:** make toolbar bigger on desktop ([7ce9ea0](https://github.com/codecat-io/chat/commit/7ce9ea0118a7c794a2f916e8f999a820f43313d1))
+* **style:** remove border line on right edge of screen ([f1e0682](https://github.com/codecat-io/chat/commit/f1e0682a2a8728b2567f606ffa185b86be0b8221))
+* **toolbar:** can't hide on mobile ([4b9573b](https://github.com/codecat-io/chat/commit/4b9573b2e20c515ef99ec2bdebc02bb2335e6376))
+
 ## [1.8.5](https://github.com/codecat-io/chat/compare/quack-v1.8.4...quack-v1.8.5) (2023-04-08)
 
 
