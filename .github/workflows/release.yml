@@ -9,17 +9,6 @@ permissions:
   pull-requests: write
 
 jobs:
-  release-please:
-    runs-on: ubuntu-latest
-    outputs:
-      release_created: ${{steps.release.outputs.release_created}}
-    steps:
-      - uses: google-github-actions/release-please-action@v3
-        id: release
-        with:
-          release-type: node
-          token: ${{secrets.GITHUB_TOKEN}}
-          command: manifest
   tests:
     runs-on: ubuntu-latest
     name: Tests
@@ -60,6 +49,20 @@ jobs:
     - run: pnpm run lint:ci
     - run: pnpm exec migrate-mongo up
     - run: pnpm run test:ci
+
+  release-please:
+    needs: 
+    - tests
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{steps.release.outputs.release_created}}
+    steps:
+      - uses: google-github-actions/release-please-action@v3
+        id: release
+        with:
+          release-type: node
+          token: ${{secrets.GITHUB_TOKEN}}
+          command: manifest
 
   deploy:
     needs: 

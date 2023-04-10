@@ -1,6 +1,5 @@
 /* eslint-disable no-restricted-syntax */
 import { h, Component } from 'preact';
-import { useEffect } from 'preact/hooks';
 import styled from 'styled-components';
 
 const ListContainer = styled.div`

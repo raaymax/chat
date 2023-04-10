@@ -40,12 +40,14 @@ export const loadPrevious = (stream, saveLocation = false) => async (dispatch, g
         dispatch(actions.takeHead({stream, count: 100}));
       }, 1)
     }
-    if (saveLocation) url.saveStream({
-      type: 'archive',
-      channelId: stream.channelId,
-      parentId: stream.parentId,
-      date,
-    });
+    if (saveLocation) {
+      url.saveStream({
+        type: 'archive',
+        channelId: stream.channelId,
+        parentId: stream.parentId,
+        date,
+      });
+    }
     loadingDone();
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -84,11 +86,13 @@ export const loadNext = (stream, saveLocation = false) => async (dispatch, getSt
         dispatch(actions.patchStream({ id: stream.id, patch: { type: 'live' } }));
       }, 2);
     }
-    if (saveLocation) url.saveStream({
-      channelId: stream.channelId,
-      parentId: stream.parentId,
-      ...(req.data.length < 50 ? { type: 'live' } : { type: 'archive', date }),
-    });
+    if (saveLocation) {
+      url.saveStream({
+        channelId: stream.channelId,
+        parentId: stream.parentId,
+        ...(req.data.length < 50 ? { type: 'live' } : { type: 'archive', date }),
+      });
+    }
     loadingDone();
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -118,18 +122,19 @@ export const loadMessagesArchive = (stream, saveLocation = false) => async (disp
     })
     if (req.data?.length > 0) dispatch(updateProgress(req.data[0].id))
     dispatch(actions.addMessages(req.data));
-    if (saveLocation) url.saveStream({
-      channelId: stream.channelId,
-      parentId: stream.parentId,
-      ...(req.data.length < 50 ? {type: 'live'} : {type: 'archive', date}),
-    });
+    if (saveLocation) {
+      url.saveStream({
+        channelId: stream.channelId,
+        parentId: stream.parentId,
+        ...(req.data.length < 50 ? {type: 'live'} : {type: 'archive', date}),
+      });
+    }
     loadingDone();
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
   }
 }
-
 
 export const loadMessagesLive = (stream, saveLocation = false) => async (dispatch, getState) => {
   if (!stream.channelId) return;
@@ -140,11 +145,13 @@ export const loadMessagesLive = (stream, saveLocation = false) => async (dispatc
       type: 'messages:load',
       limit: 50,
     })
-    if (saveLocation) url.saveStream({
-      type: 'live',
-      channelId: stream.channelId,
-      parentId: stream.parentId,
-    });
+    if (saveLocation) {
+      url.saveStream({
+        type: 'live',
+        channelId: stream.channelId,
+        parentId: stream.parentId,
+      });
+    }
     dispatch(actions.addMessages(req.data));
     if (req.data?.length > 0) dispatch(updateProgress(req.data[0].id))
     loadingDone();

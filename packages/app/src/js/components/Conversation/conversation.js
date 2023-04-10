@@ -16,7 +16,6 @@ import { useStream } from '../../contexts/stream';
 import { Container } from './elements/container';
 import { InitFailedButton } from './elements/initFailedButton';
 
-
 const drop = (dispatch) => async (e) => {
   e.preventDefault();
   e.stopPropagation();
