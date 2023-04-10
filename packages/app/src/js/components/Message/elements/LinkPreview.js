@@ -19,22 +19,19 @@ const Link = styled.div`
   margin-bottom: 10px;
   margin-right: 10px;
   cursor: pointer;
-  * {
-    cusor: pointer;
-  }  
-  
-  -- text should not be bigger than div and should be truncated
-  div.text {
+
+  .text {
     width: 100%;
     height: 200px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: pre-wrap;
-    
-    
-    
-  
+    font-size: 0.8em;
   }
+  * {
+    cusor: pointer;
+  }  
+  
   
   .image {
     width: 100%;
