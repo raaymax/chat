@@ -4,7 +4,7 @@ fix(pins): hover in pins is not working
 fix(style): make toolbar bigger on desktop
 fix(link-preview): description can be too long
 fix(toolbar): can't hide on mobile
-- fix(messages): refresh takes to link location instead of live stream
+fix(messages): refresh takes to link location instead of live stream
 
 v1.8.x
 - fix(emojis): unable to backspace emoji on mobile

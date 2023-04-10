@@ -6,5 +6,4 @@ export const Container = styled.div`
   height: calc(100% - 50px);
   display: flex;
   flex-direction: column;
-  border-right: 1px solid var(--primary_border_color);
 `;
