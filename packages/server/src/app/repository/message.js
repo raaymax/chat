@@ -63,6 +63,14 @@ const MessageQuerySchema = MessageSchema.extend({
 
 const MessageRepo = createRepo('messages', MessageQuerySchema, MessageSchema);
 
+const quickFix = (query) => {
+  if (!query.parentId) {
+    query.parentId = { $exists: false };
+  }
+  console.log(query)
+  return query;
+};
+
 module.exports = {
   ...MessageRepo,
   getAll: async (arg, { limit = 50, offset = 0, order = 1 } = {}) => {
@@ -70,7 +78,7 @@ module.exports = {
 
     const raw = await (await db)
       .collection(MessageRepo.TABLE_NAME)
-      .find(query)
+      .find(quickFix(query))
       .sort({ createdAt: order })
       .skip(offset)
       .limit(limit)
