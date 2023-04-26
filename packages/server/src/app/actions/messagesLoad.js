@@ -32,7 +32,6 @@ module.exports = {
       res.send({ type: 'message', ...parent, parentId });
     }
 
-    console.log('ej tutaj', req.body);
     const msgs = await repo.message.getAll({
       channelId,
       parentId,
@@ -40,8 +39,6 @@ module.exports = {
       after: msg.after,
       ...(msg.pinned ? { pinned: msg.pinned } : {}),
     }, { limit: msg.limit, order: msg.after ? 1 : -1 });
-
-    console.log(msgs);
 
     if (msg.after) msgs.reverse();
 

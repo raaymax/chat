@@ -67,7 +67,6 @@ const quickFix = (query) => {
   if (!query.parentId) {
     query.parentId = { $exists: false };
   }
-  console.log(query)
   return query;
 };
 
