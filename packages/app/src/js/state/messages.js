@@ -14,6 +14,13 @@ const takeTail = createAction('message/take/tail');
 const clear = createAction('message/clear');
 const select = createAction('message/select');
 
+const getStreamMessages = (stream, messages) => [...messages
+  .filter((m) => m.channelId === stream.channelId
+    && (
+      ((!stream.parentId && !m.parentId ) || m.parentId === stream.parentId)
+    || (!stream.parentId && m.parentId === m.id)))]
+  .sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1));
+
 const messagesReducer = createReducer({
   data: [],
   loading: false,
@@ -49,6 +56,7 @@ const messagesReducer = createReducer({
     state.data = data.filter((m) => !ids.includes(m.id));
   },
   [addAll]: ({data}, action) => {
+    console.log(action);
     action.payload.forEach((msg) => {
       if (msg.createdAt) {
         msg.createdAt = (new Date(msg.createdAt)).toISOString();
@@ -83,23 +91,23 @@ const messagesReducer = createReducer({
     data.splice(pos, 0, msg);
   },
 
-  [takeHead]: ({ data }, action) => {
-    const {stream: {channelId, parentId}, count} = action.payload;
-    const ids = data
-      .filter((m) => m.channelId === channelId && (!parentId || m.parentId === parentId))
+  [takeHead]: (state, action) => {
+    console.log(action);
+    const {data} = state;
+    const {stream, count} = action.payload;
+    const ids = getStreamMessages(stream, data)
       .slice(0, Math.max(data.length - count, 0))
       .map((m) => m.id);
-    data = data.filter((m) => !ids.includes(m.id));
+    state.data = data.filter((m) => !ids.includes(m.id));
   },
 
-  [takeTail]: ({data}, action) => {
-    const {stream: {channelId, parentId}, count} = action.payload;
-    const ids = data
-      .filter((m) => m.channelId === channelId && (!parentId || m.parentId === parentId))
+  [takeTail]: (state, action) => {
+    const {data} = state;
+    const {stream, count} = action.payload;
+    const ids = getStreamMessages(stream, data)
       .slice(0, Math.min(count, data.length))
       .map((m) => m.id)
-
-    data = data.filter((m) => !ids.includes(m.id))
+    state.data = data.filter((m) => !ids.includes(m.id))
   },
 
   logout: () => ({ data: [], loading: false }),

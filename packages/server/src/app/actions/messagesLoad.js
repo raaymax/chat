@@ -12,6 +12,10 @@ module.exports = {
       pinned: Joi.string().optional(),
       before: Joi.string().optional(),
       after: Joi.string().optional(),
+      aroundIdx: Joi.number().optional(),
+      beforeIdx: Joi.number().optional(),
+      afterIdx: Joi.number().optional(),
+      page: Joi.number().optional(),
       limit: Joi.number().optional(),
     }),
   },
@@ -29,7 +33,7 @@ module.exports = {
         id: parentId,
         channelId,
       });
-      res.send({ type: 'message', ...parent, parentId });
+      res.send({ type: 'message', ...parent });
     }
 
     const msgs = await repo.message.getAll({
@@ -37,6 +41,9 @@ module.exports = {
       parentId,
       before: msg.before,
       after: msg.after,
+      beforeIdx: msg.beforeIdx,
+      afterIdx: msg.afterIdx,
+      page: msg.page,
       ...(msg.pinned ? { pinned: msg.pinned } : {}),
     }, { limit: msg.limit, order: msg.after ? 1 : -1 });
 

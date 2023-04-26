@@ -6,6 +6,7 @@ import { init } from './services/init';
 import { client } from './core';
 import { setStream } from './services/stream';
 import store, {actions} from './state';
+import {db} from './db/db';
 
 client
   .on('share', ({data}) => store.dispatch(sendShareMessage(data)))

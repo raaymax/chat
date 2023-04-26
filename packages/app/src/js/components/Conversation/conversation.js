@@ -15,6 +15,7 @@ import { HoverContext } from '../../contexts/hover';
 import { useStream } from '../../contexts/stream';
 import { Container } from './elements/container';
 import { InitFailedButton } from './elements/initFailedButton';
+import { MessagesContext, useMessages } from '../../contexts/messages';
 
 const drop = (dispatch) => async (e) => {
   e.preventDefault();
@@ -28,15 +29,16 @@ function dragOverHandler(ev) {
   ev.stopPropagation();
 }
 
-export function Conversation({ saveLocation }) {
+function ConversationBase({ saveLocation }) {
   const [lastStream, setLastStream] = useState({});
   const [stream] = useStream();
   const dispatch = useDispatch();
-  const messages = useSelector(selectors.getStreamMessages(stream));
+  const {messages, nextPage, prevPage} = useMessages();
   const initFailed = useSelector(selectors.getInitFailed);
   const loading = useSelector(selectors.getMessagesLoading);
   const status = stream.type;
   const progress = useSelector(selectors.getProgress(stream));
+  if (!messages) return null;
   const list = messages.map((m) => ({...m, progress: progress[m.id]}));
 
   const bumpProgress = useCallback(() => {
@@ -59,7 +61,7 @@ export function Conversation({ saveLocation }) {
   }, [dispatch, stream, lastStream, saveLocation]);
 
   return (
-    <Container onDrop={drop(dispatch)} onDragOver={dragOverHandler}>
+    <Container onDrop={drop(dispatch)} onDragOver={dragOverHandler} onScroll={(e) => console.log(e)}>
       <ConversationContext>
         <HoverContext>
           <MessageList
@@ -69,11 +71,13 @@ export function Conversation({ saveLocation }) {
             selected={stream.selected}
             onScrollTo={(dir) => {
               if (dir === 'top') {
-                dispatch(loadPrevious(stream, saveLocation))
+                //prevPage();
+                //dispatch(loadPrevious(stream, saveLocation))
                 bumpProgress();
               }
               if (dir === 'bottom') {
-                dispatch(loadNext(stream, saveLocation))
+                //nextPage();
+                //dispatch(loadNext(stream, saveLocation))
                 bumpProgress();
               }
             }}
@@ -86,3 +90,10 @@ export function Conversation({ saveLocation }) {
     </Container>
   )
 }
+
+
+export const Conversation = (args) => (
+  <MessagesContext>
+    <ConversationBase {...args} />
+  </MessagesContext>
+);

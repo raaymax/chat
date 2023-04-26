@@ -16,6 +16,7 @@ const loading = (dispatch) => {
 }
 
 export const loadPrevious = (stream, saveLocation = false) => async (dispatch, getState) => {
+  console.log('loadPrevious', stream)
   try {
     const loadingDone = loading(dispatch, getState);
     dispatch(actions.patchStream({
@@ -57,6 +58,7 @@ export const loadPrevious = (stream, saveLocation = false) => async (dispatch, g
 }
 
 export const loadNext = (stream, saveLocation = false) => async (dispatch, getState) => {
+  console.log('loadNext', stream)
   try {
     const loadingDone = loading(dispatch, getState);
     dispatch(actions.patchStream({
@@ -102,6 +104,7 @@ export const loadNext = (stream, saveLocation = false) => async (dispatch, getSt
 }
 
 export const loadMessagesArchive = (stream, saveLocation = false) => async (dispatch, getState) => {
+  console.log('loadMessagesArchive', stream)
   if (!stream.channelId) return;
   const {date} = stream;
   try {
@@ -137,6 +140,7 @@ export const loadMessagesArchive = (stream, saveLocation = false) => async (disp
 }
 
 export const loadMessagesLive = (stream, saveLocation = false) => async (dispatch, getState) => {
+  console.log('loadMessagesLive', stream)
   if (!stream.channelId) return;
   try {
     const loadingDone = loading(dispatch, getState);

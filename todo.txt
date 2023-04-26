@@ -1,11 +1,3 @@
-v1.8.6
-fix(push): notifications cumulate quickly - merge notifications
-fix(pins): hover in pins is not working
-fix(style): make toolbar bigger on desktop
-fix(link-preview): description can be too long
-fix(toolbar): can't hide on mobile
-fix(messages): refresh takes to link location instead of live stream
-
 v1.8.x
 - fix(emojis): unable to backspace emoji on mobile
 - fix(attachments): attachment is displaying in all inputs
@@ -16,13 +8,16 @@ v1.8.x
 - fix(style): make bottom buttons bigger on mobile
 - fix(style): align bottom buttons with left margin
 - fix(channels): wider desktop clicking on channel should not close sidebar
-- fix(style): remove border line on right edge of screen
 - fix(commands): help should be contexted - no ping outside of thread
 - fix(commands): rename /setMain to /main)
 - improvement(app): app should startup from memory if possible
 - refactor(app): migrate selectors to separate files
 - refactor(server): finish repository serialization?
 - refactor(app): use dixie instead of redux
+- fix(app): visible view on mobile is smaller than it should be
+- fix(links): allegro links are not working
+- refactor(server): repository serialization
+- fix(links): ability to remove link preview
 
 v1.9.0
 - feat(avatar): ability to upload avatar
@@ -44,6 +39,7 @@ v2.0.0 // first public release
 - chore: change all access keys
 
 backlog:
+- feat(links): generating summary of link contents
 - feat(history): add support for back button 
 - feat(toolbar): custom emojis reactions
 - feat(logs): save message parsing errors in database and display them in message

@@ -34,10 +34,6 @@ const initApp = (withStream = false) => async (dispatch) => {
   }
 
   await dispatch(loadFromUrl());
-
-  if (withStream) {
-    await dispatch(reloadStream('main'));
-  }
 };
 
 let tryCount = 1

@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import { useCallback } from 'preact/hooks';
+import { useCallback, useState, useRef, useEffect } from 'preact/hooks';
 import { formatTime, formatDateDetailed } from '../../utils';
 import { Attachments } from './attachments';
 import { Reactions } from '../Reaction/Reaction';
@@ -10,16 +10,19 @@ import { ThreadInfo } from './threadInfo';
 import { MessageContext, useMessageData, useMessageUser } from '../../contexts/message';
 import { useHovered } from '../../contexts/hover';
 import { useStream } from '../../contexts/stream';
+import { useStreamIdx } from '../../contexts/messages';
 import { buildMessageBody } from './messageBuilder';
 import { isToday } from './utils';
 import { LinkPreviewList } from './elements/LinkPreview';
 
 const MessageBase = ({onClick, ...props} = {}) => {
+  const ref = useRef();
   const msg = useMessageData();
+  const [, setStreamIdx] = useStreamIdx();
   const {
     id, message, emojiOnly,
     createdAt, pinned,
-    linkPreviews,
+    linkPreviews, streamIdx,
   } = msg;
   const [hovered, setHovered] = useHovered()
   const [{selected}] = useStream();
@@ -44,8 +47,24 @@ const MessageBase = ({onClick, ...props} = {}) => {
     }
   }, [setHovered, hovered, id]);
 
+  useEffect(() => {
+    const element = ref.current;
+    const cb = () => {
+      const c = element.parentElement.getBoundingClientRect();
+      const e = element.getBoundingClientRect();
+      if (e.y < c.height / 2 + 50 && (e.y + e.height) > c.height / 2 - 50) {
+        setStreamIdx(streamIdx);
+      }
+    }
+    element.parentElement.addEventListener('scroll', cb);
+    return () => {
+      element.parentElement.removeEventListener('scroll', cb);
+    }
+  }, [])
+
   return (
     <div
+      ref={ref}
       onClick={(e) => {
         toggleHovered();
         if (onClick) onClick(e);

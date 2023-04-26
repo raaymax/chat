@@ -42,6 +42,10 @@ module.exports = {
       emojiOnly: msg.emojiOnly,
       userId: req.userId,
       links: msg.links,
+      streamIdx: await services.streamIndex.nextId({
+        channelId: channel.id,
+        parentId: msg.parentId,
+      }),
       attachments: msg.attachments?.map((file) => ({
         id: file.id,
         fileName: file.fileName,

@@ -1,6 +1,6 @@
 const { db } = require('../../infra/database');
 const {
-  IdType, StringType, BooleanType, EmptyType, ObjectType, ArrayType,
+  IdType, StringType, BooleanType, EmptyType, ObjectType, ArrayType, NumberType,
 } = require('./schemas');
 const { createRepo } = require('./repo');
 
@@ -20,6 +20,7 @@ const MessageSchema = ObjectType({
   clientId: StringType(),
   emojiOnly: BooleanType(),
   pinned: BooleanType(),
+  streamIdx: NumberType(),
   thread: ArrayType(
     ObjectType({
       userId: IdType(),
@@ -58,6 +59,22 @@ const MessageQuerySchema = MessageSchema.extend({
   after: EmptyType({
     serialize: (value) => ({ $gte: new Date(value) }),
     serializeKey: () => 'createdAt',
+  }),
+  aroundIdx: EmptyType({
+    serialize: (value) => ({ $lte: value + 50, $gte: value - 50 }),
+    serializeKey: () => 'streamIdx',
+  }),
+  beforeIdx: EmptyType({
+    serialize: (value) => ({ $lte: value }),
+    serializeKey: () => 'streamIdx',
+  }),
+  afterIdx: EmptyType({
+    serialize: (value) => ({ $gte: value }),
+    serializeKey: () => 'streamIdx',
+  }),
+  page: EmptyType({
+    serialize: (value) => ({ $gte: value * 20, $lte: value * 20 + 19 }),
+    serializeKey: () => 'streamIdx',
   }),
 });
 
