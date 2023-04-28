@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const repo = require('../repository');
+const repo = require('../../infra/repositories');
 const { AccessDenied } = require('../common/errors');
 const channelHelper = require('../common/channel');
 const services = require('../services');
@@ -10,7 +10,7 @@ module.exports = {
     body: Joi.object({
       message: Joi.any().required(), // TODO: define message schema
       channelId: Joi.string().required(),
-      parentId: Joi.string().optional(),
+      parentId: Joi.string().optional().allow(null).default(null),
       flat: Joi.string().required().allow(''),
       clientId: Joi.string().required(),
       emojiOnly: Joi.boolean().optional().default(false),

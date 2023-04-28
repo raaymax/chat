@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const repo = require('../repository');
+const repo = require('../../infra/repositories');
 const { MissingChannel, AccessDenied } = require('../common/errors');
 const ChannelHelper = require('../common/channel');
 
@@ -8,7 +8,7 @@ module.exports = {
   schema: {
     body: Joi.object({
       channelId: Joi.string().required(),
-      parentId: Joi.string().optional(),
+      parentId: Joi.string().optional().allow(null).default(null),
       pinned: Joi.string().optional(),
       before: Joi.string().optional(),
       after: Joi.string().optional(),

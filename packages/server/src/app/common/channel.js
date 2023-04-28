@@ -1,4 +1,4 @@
-const repo = require('../repository');
+const repo = require('../../infra/repositories');
 
 module.exports = {
   haveAccess: async (userId, id) => {

@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const repo = require('../repository');
+const repo = require('../../infra/repositories');
 const { MissingId, MessageNotExist, AccessDenied } = require('../common/errors');
 const ChannelHelper = require('../common/channel');
 

@@ -1,4 +1,4 @@
-const { db } = require('../../src/infra/database');
+const { db } = require('../../src/infra/repositories');
 
 module.exports = {
   run: async () => {

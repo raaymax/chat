@@ -1,5 +1,5 @@
 const assert = require('assert');
-const { db } = require('../../src/infra/database');
+const { db } = require('../../src/infra/repositories');
 const PushService = require('../../src/infra/firebase');
 
 module.exports = (connect) => {

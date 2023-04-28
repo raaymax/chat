@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const repo = require('../repository');
+const repo = require('../../infra/repositories');
 
 module.exports = {
   name: 'ping',

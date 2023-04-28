@@ -1,4 +1,4 @@
-const repo = require('../repository');
+const repo = require('../../infra/repositories');
 const bus = require('../../infra/bus');
 
 const Service = {

@@ -1,4 +1,4 @@
-const repo = require('../repository');
+const repo = require('../../infra/repositories');
 const { AccessDenied, ChannelNotExist } = require('../common/errors');
 const channelHelper = require('../common/channel');
 const services = require('../services');

@@ -1,0 +1,24 @@
+{
+  "name": "@quack/repo",
+  "version": "1.8.5",
+  "description": "",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "tsc",
+    "install": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "4.5.0",
+    "typescript": "4.9.5",
+    "zod": "3.21.4"
+  },
+  "devDependencies": {
+    "@types/node": "18.14.0",
+    "@typescript-eslint/eslint-plugin": "5.53.0",
+    "@typescript-eslint/parser": "5.53.0",
+    "eslint": "8.34.0"
+  }
+}

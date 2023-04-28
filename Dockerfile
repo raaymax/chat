@@ -9,6 +9,7 @@ COPY packages/server/package*.json ./packages/server/
 COPY packages/app/package*.json ./packages/app/
 COPY packages/rpc/package*.json ./packages/rpc/
 COPY ./packages/rpc ./packages/rpc
+COPY ./packages/repo ./packages/repo
 #RUN npm install -g npm
 RUN pnpm i
 COPY chat.config.js ./
@@ -27,6 +28,7 @@ COPY pnpm-*.yaml ./
 COPY packages/server/package*.json ./packages/server/
 COPY packages/app/package*.json ./packages/app/
 COPY ./packages/rpc ./packages/rpc
+COPY ./packages/repo ./packages/repo
 #RUN npm install -g npm
 RUN pnpm i --prod
 COPY --from=appbuild /usr/src/app/packages/app/dist ./packages/app/dist

@@ -113,11 +113,13 @@ export const selectors = {
     .length,
   getStreamMessages: (stream) => (state) => getStreamMessages(stream, state.messages.data),
   getLatestDate: (stream) => (state) => {
-    const data = getStreamMessages(stream, state.messages.data);
+    const data = getStreamMessages(stream, state.messages.data)
+      .filter((m) => m.id !== stream.parentId);
     return data.length ? data[0].createdAt : new Date().toISOString();
   },
   getEarliestDate: (stream) => (state) => {
-    const data = getStreamMessages(stream, state.messages.data);
+    const data = getStreamMessages(stream, state.messages.data)
+      .filter((m) => m.id !== stream.parentId);
     return data.length ? data[data.length - 1].createdAt : new Date().toISOString();
   },
   getMessage: (id) => (state) => state.messages.data

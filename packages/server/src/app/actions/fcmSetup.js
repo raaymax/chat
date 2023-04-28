@@ -1,6 +1,6 @@
 const Joi = require('joi');
 const { MissingToken } = require('../common/errors');
-const repo = require('../repository');
+const repo = require('../../infra/repositories');
 
 module.exports = {
   type: 'fcm:setup',

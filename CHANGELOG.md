@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.8.8](https://github.com/codecat-io/chat/compare/quack-v1.8.7...quack-v1.8.8) (2023-04-26)
+
+
+### Bug Fixes
+
+* linter errors ([86b1759](https://github.com/codecat-io/chat/commit/86b17590da0466febce720a9f102e5c345ec1214))
+* messages not loading as expected ([89b120d](https://github.com/codecat-io/chat/commit/89b120d2f5af4b7ef6b795767d82ae8f26836eab))
+
+## [1.8.7](https://github.com/codecat-io/chat/compare/quack-v1.8.6...quack-v1.8.7) (2023-04-10)
+
+
+### Bug Fixes
+
+* release process ([aefc9b9](https://github.com/codecat-io/chat/commit/aefc9b97f3ffcc8e53b0132e7a09e6915a68effe))
+
 ## [1.8.6](https://github.com/codecat-io/chat/compare/quack-v1.8.5...quack-v1.8.6) (2023-04-10)
 
 
