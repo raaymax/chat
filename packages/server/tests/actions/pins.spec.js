@@ -1,6 +1,6 @@
 const assert = require('assert');
 const seeds = require('./seeds');
-const { db } = require('../../src/infra/database');
+const { db } = require('../../src/infra/repositories');
 
 module.exports = (connect) => {
   describe('messages:pins', () => {

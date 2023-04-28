@@ -1,4 +1,4 @@
-const repo = require('../repository');
+const repo = require('../../infra/repositories');
 const pack = require('../../../package.json');
 
 module.exports = {

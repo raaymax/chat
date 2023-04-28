@@ -1,5 +1,5 @@
 const { PubSub } = require('@google-cloud/pubsub');
-const repo = require('../../app/repository');
+const repo = require('../../infra/repositories');
 
 const pubsub = new PubSub();
 const subscriptionName = 'quack';

@@ -1,4 +1,4 @@
-const repo = require('../repository');
+const repo = require('../../infra/repositories');
 const conf = require('../../../../../chat.config');
 
 const omitUndefined = (obj) => Object.fromEntries(

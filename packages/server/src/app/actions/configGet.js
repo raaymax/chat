@@ -1,6 +1,6 @@
 const Joi = require('joi');
 const pack = require('../../../package.json');
-const repo = require('../repository');
+const repo = require('../../infra/repositories');
 
 module.exports = {
   type: 'config:get',

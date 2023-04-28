@@ -1,5 +1,5 @@
 const { getLinkPreview } = require('link-preview-js');
-const repo = require('../repository');
+const repo = require('../../infra/repositories');
 
 module.exports = {
   addPreview: async ({ messageId, links }, { bus }) => {

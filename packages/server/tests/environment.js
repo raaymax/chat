@@ -1,6 +1,6 @@
 process.env.DATABASE_URL = 'mongodb://chat:chat@localhost:27017/tests?authSource=admin';
 
-const { db } = require('../src/infra/database');
+const { db } = require('../src/infra/repositories');
 
 exports.mochaHooks = {
   beforeAll: async () => {

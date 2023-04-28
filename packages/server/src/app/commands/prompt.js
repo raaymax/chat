@@ -1,4 +1,4 @@
-const repo = require('../repository');
+const repo = require('../../infra/repositories');
 const openai = require('../../infra/openai');
 const channel = require('../common/channel');
 const { AccessDenied } = require('../common/errors');

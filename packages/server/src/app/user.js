@@ -1,4 +1,4 @@
-const repo = require('./repository');
+const repo = require('../infra/repositories');
 const { genHash } = require('./tools');
 
 module.exports = {

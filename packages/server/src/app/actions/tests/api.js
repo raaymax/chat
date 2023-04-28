@@ -1,5 +1,5 @@
 const { dispatch } = require('../index');
-const repo = require('../../repository');
+const repo = require('../../../infra/repositories');
 
 // eslint-disable-next-line no-async-promise-executor
 const createBus = (fn) => new Promise(async (resolve, reject) => {

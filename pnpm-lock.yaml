@@ -169,6 +169,31 @@ importers:
         specifier: 6.5.4
         version: 6.5.4(webpack@5.75.0)
 
+  packages/repositories:
+    dependencies:
+      mongodb:
+        specifier: 4.5.0
+        version: 4.5.0
+      typescript:
+        specifier: 4.9.5
+        version: 4.9.5
+      zod:
+        specifier: 3.21.4
+        version: 3.21.4
+    devDependencies:
+      '@types/node':
+        specifier: 18.14.0
+        version: 18.14.0
+      '@typescript-eslint/eslint-plugin':
+        specifier: 5.53.0
+        version: 5.53.0(@typescript-eslint/parser@5.53.0)(eslint@8.34.0)(typescript@4.9.5)
+      '@typescript-eslint/parser':
+        specifier: 5.53.0
+        version: 5.53.0(eslint@8.34.0)(typescript@4.9.5)
+      eslint:
+        specifier: 8.34.0
+        version: 8.34.0
+
   packages/rpc:
     dependencies:
       socket.io-client:
@@ -199,6 +224,9 @@ importers:
       '@google-cloud/storage':
         specifier: 5.19.0
         version: 5.19.0
+      '@quack/repositories':
+        specifier: workspace:*
+        version: link:../repositories
       body-parser:
         specifier: 1.20.0
         version: 1.20.0
@@ -10394,3 +10422,7 @@ packages:
   /yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
+
+  /zod@3.21.4:
+    resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
+    dev: false

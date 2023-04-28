@@ -1,5 +1,5 @@
 const assert = require('assert');
-const { db } = require('../../src/infra/database');
+const { db } = require('../../src/infra/repositories');
 
 module.exports = (connect) => {
   describe('message:update', () => {
@@ -9,7 +9,7 @@ module.exports = (connect) => {
         .findOne({ login: 'mateusz' });
       ({ insertedId: messageId } = await (await db).collection('messages')
         .insertOne({
-          message: { text: 'asd' }, flat: 'asd', userId: user._id.toHexString(), clientId: `x${Math.random()}`,
+          message: { text: 'asd' }, flat: 'asd', userId: user._id, clientId: `x${Math.random()}`,
         }));
     });
 

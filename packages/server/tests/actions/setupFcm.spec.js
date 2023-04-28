@@ -1,5 +1,5 @@
 const assert = require('assert');
-const { db, ObjectId } = require('../../src/infra/database');
+const { db, ObjectId } = require('../../src/infra/repositories');
 
 module.exports = (connect) => {
   describe('fcm:setup', () => {
