@@ -169,7 +169,7 @@ importers:
         specifier: 6.5.4
         version: 6.5.4(webpack@5.75.0)
 
-  packages/repositories:
+  packages/repo:
     dependencies:
       mongodb:
         specifier: 4.5.0
@@ -224,9 +224,9 @@ importers:
       '@google-cloud/storage':
         specifier: 5.19.0
         version: 5.19.0
-      '@quack/repositories':
+      '@quack/repo':
         specifier: workspace:*
-        version: link:../repositories
+        version: link:../repo
       body-parser:
         specifier: 1.20.0
         version: 1.20.0

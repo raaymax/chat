@@ -2,4 +2,4 @@ packages:
   - 'packages/rpc'
   - 'packages/app'
   - 'packages/server'
-  - 'packages/repositories'
+  - 'packages/repo'

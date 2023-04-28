@@ -1,5 +1,5 @@
 {
-  "name": "@quack/repositories",
+  "name": "@quack/repo",
   "version": "1.8.5",
   "description": "",
   "main": "build/index.js",

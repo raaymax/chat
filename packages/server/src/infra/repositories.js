@@ -1,5 +1,5 @@
 /* eslint-disable global-require */
-const { createRepositories } = require('@quack/repositories');
+const { createRepositories } = require('@quack/repo');
 const config = require('../../../../chat.config');
 
 if (config.databaseUrl.startsWith('mongodb')) {
