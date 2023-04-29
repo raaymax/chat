@@ -4,6 +4,7 @@ import { Id, ReplaceType, ReplaceId, ClientId } from '../types';
 
 export const Message = z.object({
   id: Id,
+  streamIdx: z.number(),
   flat: z.string(),
   message: z.any(),
   channelId: Id,

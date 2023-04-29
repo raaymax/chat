@@ -6,6 +6,7 @@ import { EmojiRepo } from './emoji/emojiRepo';
 import { BadgeRepo } from './badge/badgeRepo';
 import { SessionRepo } from './session/sessionRepo';
 import { ObjectId } from 'mongodb';
+import { StreamIndexRepo } from './streamIndex/streamIndexRepo';
 
 export * from './message/messageTypes';
 export * from './channel/channelTypes';
@@ -21,6 +22,7 @@ export const createRepositories = (databaseUrl) => {
     emoji: new EmojiRepo(),
     badge: new BadgeRepo(),
     session: new SessionRepo(),
+    streamIndex: new StreamIndexRepo(),
     close: () => client.close(),
   }
 }

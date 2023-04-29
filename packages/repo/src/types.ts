@@ -11,7 +11,7 @@ export type Id = z.infer<typeof Id>;
 export type ClientId = z.infer<typeof ClientId>;
 export type Uuid = string & { __uuid: true }
 
-export type ReplaceId<T> = T extends { id?: unknown } ? Omit<T, 'id'> & { _id: ObjectId } : T;
+export type ReplaceId<T> = T extends { id?: Id } ? Omit<T, 'id'> & { _id: ObjectId } : T;
 export type ReplaceMongoId<T> = T extends { _id?: unknown } ? Omit<T, '_id'> & { id: Id } : T;
 export type ReplaceType<T, F, B> = { [P in keyof T]: T[P] extends F ? B : (T[P] extends Array<unknown> ? ReplaceType<T[P], F,B> : (T[P] extends Record<string, unknown> ? ReplaceType<T[P], F, B> : T[P])) };
 

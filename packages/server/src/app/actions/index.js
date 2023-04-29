@@ -89,10 +89,11 @@ const dispatch = async ({ type, seqId, ...body }, { userId, bus, push = () => {}
     // console.error(err); // maybe attach logger
     bus.direct(userId, {
       seqId,
+      messageType: type,
       type: 'response',
       status: 'error',
       message: err.message,
-      stack: err.stack,
+      stack: err.stack.split('\n'),
       ...err,
     });
   }
