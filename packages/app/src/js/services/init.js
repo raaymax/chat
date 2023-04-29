@@ -16,11 +16,16 @@ const initApp = (withStream = false) => async (dispatch) => {
   await dispatch(actions.initFailed(false));
   const { data: [config] } = await client.req({type: 'config:get'});
   await dispatch(actions.setAppVersion(config.appVersion));
+  await db.global.put({key: 'appVersion', value: config.appVersion});
+  await db.global.put({key: 'channelId', value: config.mainChannelId});
   await dispatch(actions.setMainChannel(config.mainChannelId));
   await initNotifications(config);
   const { data: users } = await client.req({type: 'users:load'});
+  await db.users.bulkPut(users);
+
   await dispatch(actions.addUser(users));
   const { data: channels } = await client.req({type: 'channels:load'});
+  await db.channels.bulkPut(channels);
   await dispatch(actions.addChannel(channels));
   // FIXME: load messages from current channel or none
   // dispatch(loadMessages({channelId: config.mainChannelId}));

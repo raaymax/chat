@@ -82,10 +82,12 @@ export const selectors = {
     }, {}),
   getEmojis: (state) => state.customEmojis,
   getAllEmojis: () => (state) => state.customEmojis,
+  //TODO remove
   getChannel: (q) => (state) => state.channels.list
     .find((c) => (q.id && c.id === q.id)
       || (q.name && c.name === q.name)
       || (q.cid && c.cid && c.cid === q.cid)),
+  //TODO remove
   getChannels: createSelector(
     (state) => state.users.meId,
     (state) => state.channels.list,

@@ -2,10 +2,11 @@ import { h} from 'preact';
 import { useEffect } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { findChannel } from '../services/channels';
-import { setStream } from '../services/stream';
-import { actions, selectors } from '../state';
-import { ChannelCreate } from './ChannelCreate/ChannelCreate';
+import { findChannel } from '../../services/channels';
+import { setStream } from '../../services/stream';
+import { actions, selectors } from '../../state';
+import { ChannelCreate } from '../ChannelCreate/ChannelCreate';
+import { useChannels, useChannel } from '../../selectors';
 
 const Badge = styled.span`
   border-radius: 10px;
@@ -16,13 +17,8 @@ const Badge = styled.span`
 `;
 
 export const Channel = ({channelId: id, onclick, icon }) => {
-  const dispatch = useDispatch();
-  const channel = useSelector(selectors.getChannel({ id }));
-  useEffect(() => {
-    if (!channel) {
-      dispatch(findChannel(id));
-    }
-  }, [id, channel, dispatch]);
+  console.log(id);
+  const channel = useChannel(id);
   const { name, private: priv } = channel || {};
   return (
     <div className='channel' data-id={id} onClick={onclick}>
@@ -36,13 +32,7 @@ export const Channel = ({channelId: id, onclick, icon }) => {
 const ListChannel = ({
   channelId: id, onclick, active, icon, badge,
 }) => {
-  const dispatch = useDispatch();
-  const channel = useSelector(selectors.getChannel({ id }));
-  useEffect(() => {
-    if (!channel) {
-      dispatch(findChannel(id));
-    }
-  }, [id, channel, dispatch]);
+  const channel = useChannel(id);
   const { name, private: priv } = channel || {};
   return (
     <div class={`channel ${active ? 'active' : ''}`}data-id={id} onclick={onclick}>
@@ -56,7 +46,7 @@ const ListChannel = ({
 
 export const Channels = ({icon}) => {
   const dispatch = useDispatch();
-  const channels = useSelector(selectors.getChannels);
+  const channels = useChannels();
   const userId = useSelector(selectors.getMyId);
   const badges = useSelector(selectors.getBadges(userId));
   const id = useSelector(selectors.getChannelId);

@@ -1,10 +1,13 @@
 /* eslint-disable no-restricted-syntax */
-import { h, Component } from 'preact';
+import { h } from 'preact';
+import { useRef, useEffect, useState, useCallback } from 'preact/hooks';
 import styled from 'styled-components';
+import { useStream } from '../../contexts/stream';
+import { useMessages } from '../../contexts/messages';
 
 const ListContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   position: relative;
   background-color: var(--primary_background);
   overflow-y: scroll;
@@ -17,147 +20,62 @@ const ListContainer = styled.div`
   }
 `;
 
-export class MessageList extends Component {
-  static SCROLL_AT_TOP = 'top';
+const getMax = (list) => list.reduce((acc, item) => Math.max(acc, item.streamIdx), -Infinity);
 
-  static SCROLL_AT_BOTTOM = 'bottom';
+export const MessageList = (props) => {
+  const {formatter, list} = props;
+  const element = useRef(null);
+  const [oldList, setOldList] = useState([]);
+  const [idx, setIdx] = useState([]);
+  const [stream] = useStream();
+  const {streamIdx, setStreamIdx} = useMessages();
 
-  static SCROLL_FREE = 'free';
-
-  static STATUS_LIVE = 'live';
-
-  static STATUS_ARCHIVE = 'archive';
-
-  scrollPosition = MessageList.SCROLL_AT_BOTTOM;
-
-  scrollStatus = MessageList.STATUS_LIVE;
-
-  handleScroll = () => {
-    if (this.isResizingFromBottom) {
-      this.base.scrollTop = this.base.scrollHeight;
-      delete this.isResizingFromBottom;
-      return;
+  const detectStreamIdx = useCallback((e) => {
+    const c = e.target.getBoundingClientRect();
+    const r = [...e.target.children].find((child) => {
+      const e = child.getBoundingClientRect();
+      return e.y < c.height / 2 + 50 && (e.y + e.height) > c.height / 2 - 50;
+    });
+    if (r) {
+      const idx = r.getAttribute('data-idx');
+      if (setStreamIdx) setStreamIdx(idx)
     }
+  }, [setStreamIdx]);
 
-    let scrollPosition;
-    if (!this.base) return;
-    if (this.base.scrollHeight <= this.base.clientHeight) {
-      scrollPosition = MessageList.SCROLL_AT_BOTTOM;
-    } else if (this.base.scrollTop === 0) {
-      scrollPosition = MessageList.SCROLL_AT_TOP;
-    } else if (
-      Math.abs(
-        this.base.scrollHeight - Math.floor(this.base.scrollTop + this.base.clientHeight),
-      ) <= 2
-    ) {
-      scrollPosition = MessageList.SCROLL_AT_BOTTOM;
-    } else {
-      scrollPosition = MessageList.SCROLL_FREE;
+  useEffect(() => {
+    if (!element.current) return;
+    if (list === oldList) return;
+    const max = getMax(list);
+    const oldMax = getMax(oldList);
+    if (max !== oldMax) {
+      //if (stream.type === 'live') {
+      //  element.current.scrollTop = 0;
+      //} else {
+        const rect = [...element.current.children]
+          ?.find((child) => child.getAttribute('data-idx') === idx[0])
+          ?.getBoundingClientRect();
+        if (rect && idx) {
+          element.current.scrollTop += (rect.y - idx[1].y);
+        }
+      //}
     }
+    const rect = [...element.current.children]
+      ?.find((child) => child.getAttribute('data-idx') === streamIdx)
+      ?.getBoundingClientRect();
+    setIdx([streamIdx, rect]);
+    setOldList(list);
+  }, [list, stream, oldList, setOldList, streamIdx, idx, setIdx]);
 
-    if (this.scrollPosition !== scrollPosition) {
-      this.scrollPosition = scrollPosition;
-      const { onScrollTo } = this.props;
-      // eslint-disable-next-line no-unused-expressions
-      onScrollTo && onScrollTo(scrollPosition);
-    }
-  };
-
-  handleResize = () => {
-    if (this.scrollPosition === MessageList.SCROLL_AT_BOTTOM) {
-      this.base.scrollTop = this.base.scrollHeight;
-      this.isResizingFromBottom = true;
-      return;
-    }
-
-    if (this.base.scrollHeight <= this.base.clientHeight) {
-      const { onScrollTo } = this.props;
-      this.scrollPosition = MessageList.SCROLL_AT_BOTTOM;
-      // eslint-disable-next-line no-unused-expressions
-      onScrollTo && onScrollTo(MessageList.SCROLL_AT_BOTTOM);
-    }
-  };
-
-  shouldComponentUpdate(nextProps) {
-    const { props } = this;
-
-    if (nextProps.list !== this.props.list) {
-      this.updateScroll = true;
-    } else {
-      this.updateScroll = false;
-    }
-
-    for (const key in Object.keys(props)) {
-      if (props[key] !== nextProps[key]) {
-        return true;
-      }
-    }
-
-    for (const key in Object.keys(nextProps)) {
-      if (!(key in props)) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  // FIXME: deprecated
-  componentWillUpdate() {
-    document.elementFromPoint(10, 100);
-    this.previousScrollHeight = this.base.scrollHeight;
-    this.previousScrollTop = this.base.scrollTop;
-  }
-
-  componentDidUpdate() {
-    if (this.props.selected) {
-      const msgs = [...this.base.querySelectorAll('.message')];
-      const current = msgs.find((el) => el.getAttribute('data-id') === this.props.selected);
-      if (current) current.scrollIntoView();
-      return;
-    }
-    if (!this.updateScroll) return;
-    const {status} = this.props;
-    if (this.scrollPosition === MessageList.SCROLL_AT_BOTTOM) {
-      if (status === MessageList.STATUS_LIVE) {
-        this.base.scrollTop = this.base.scrollHeight;
-      } else if (this.previousScrollHeight >= this.base.scrollHeight) {
-        const heightDelta = this.previousScrollHeight - this.base.scrollHeight;
-        const scrollDelta = Math.max(this.previousScrollTop - this.base.scrollTop, 0);
-        this.base.scrollTop = this.base.scrollTop - heightDelta + scrollDelta;
-      }
-      this.previousScrollHeight = this.base.scrollHeight;
-      this.handleScroll();
-      return;
-    }
-
-    if (this.scrollPosition === MessageList.SCROLL_AT_TOP) {
-      const delta = this.base.scrollHeight - this.previousScrollHeight;
-      if (delta > 0) {
-        this.base.scrollTop = delta;
-      }
-      delete this.previousScrollHeight;
-    }
-  }
-
-  componentDidMount() {
-    this.handleResize();
-    window.addEventListener('resize', this.handleResize);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize);
-  }
-
-  render() {
-    const {props} = this;
-    return (
-      <ListContainer onScroll={this.handleScroll}>
-        {props.formatter ? props.formatter(props) : props.list}
-        <div class='space'>&nbsp;</div>
-      </ListContainer>
-    );
-  }
-}
+  const scroll = useCallback((e) => {
+    // TODO: on scroll up change stream type to archive
+    detectStreamIdx(e);
+  }, [detectStreamIdx]);
+  return (
+    <ListContainer ref={element} onScroll={scroll} >
+      {formatter ? formatter(props) : list}
+      <div class='space'>&nbsp;</div>
+    </ListContainer>
+  );
+};
 
 export default MessageList;

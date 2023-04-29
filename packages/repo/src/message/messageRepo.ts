@@ -16,7 +16,7 @@ export class MessageRepo extends Repo<MessageQuery, Message, MongoMessage> {
     const raw = await db
       .collection(this.tableName)
       .find(query)
-      .sort('createdAt', order)
+      .sort('streamIdx', order)
       .skip(offset)
       .limit(limit)
       .toArray();
@@ -29,7 +29,7 @@ export class MessageRepo extends Repo<MessageQuery, Message, MongoMessage> {
     return db
       .collection<MongoMessage>(this.tableName)
       .updateOne({
-        id: new ObjectId(parentId),
+        _id: new ObjectId(parentId),
       }, {
         $push: {
           thread: {

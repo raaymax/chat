@@ -8,7 +8,7 @@ module.exports = {
   schema: {
     body: Joi.object({
       channelId: Joi.string().required(),
-      parentId: Joi.string().optional().allow(null).default(null),
+      parentId: Joi.string().optional().allow(null).allow('').default(null),
       pinned: Joi.string().optional(),
       before: Joi.string().optional(),
       after: Joi.string().optional(),
@@ -39,7 +39,7 @@ module.exports = {
 
     const msgs = await repo.message.getAll({
       channelId,
-      parentId,
+      parentId: msg.parentId,
       before: msg.before,
       after: msg.after,
       beforeIdx: msg.beforeIdx,
@@ -54,8 +54,8 @@ module.exports = {
     msgs.forEach((m) => res.send({ type: 'message', ...m }));
     res.ok({
       count: msgs.length,
-      maxIdx: msgs.reduce((acc, v) => Math.max(acc, v), -Infinity),
-      minIdx: msgs.reduce((acc, v) => Math.min(acc, v), Infinity),
+      maxIdx: msgs.reduce((acc, v) => Math.max(acc, v.streamIdx || -Infinity), -Infinity),
+      minIdx: msgs.reduce((acc, v) => Math.min(acc, v.streamIdx || Infinity), Infinity),
     });
   },
 };

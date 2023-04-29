@@ -1,7 +1,6 @@
 import { h } from 'preact';
 import { useEffect, useCallback, useState } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadPrevious, loadNext, loadMessages } from '../../services/messages';
 import { updateProgress, loadProgress } from '../../services/progress';
 import { selectors } from '../../state';
 import { messageFormatter } from '../MessageList/formatter';
@@ -33,13 +32,12 @@ function ConversationBase({ saveLocation }) {
   const [lastStream, setLastStream] = useState({});
   const [stream] = useStream();
   const dispatch = useDispatch();
-  const {messages, nextPage, prevPage} = useMessages();
+  const {messages} = useMessages();
   const initFailed = useSelector(selectors.getInitFailed);
   const loading = useSelector(selectors.getMessagesLoading);
   const status = stream.type;
   const progress = useSelector(selectors.getProgress(stream));
-  if (!messages) return null;
-  const list = messages.map((m) => ({...m, progress: progress[m.id]}));
+  const list = messages?.map((m) => ({...m, progress: progress[m.id]})) || [];
 
   const bumpProgress = useCallback(() => {
     const latest = list.find(({priv}) => !priv);
@@ -55,13 +53,14 @@ function ConversationBase({ saveLocation }) {
   useEffect(() => {
     if (lastStream.channelId === stream.channelId
       && lastStream.parentId === stream.parentId) return;
-    dispatch(loadMessages(stream, saveLocation));
     dispatch(loadProgress(stream, saveLocation));
     setLastStream(stream);
   }, [dispatch, stream, lastStream, saveLocation]);
 
+  if (!messages) return null;
+
   return (
-    <Container onDrop={drop(dispatch)} onDragOver={dragOverHandler} onScroll={(e) => console.log(e)}>
+    <Container onDrop={drop(dispatch)} onDragOver={dragOverHandler}>
       <ConversationContext>
         <HoverContext>
           <MessageList
@@ -69,18 +68,6 @@ function ConversationBase({ saveLocation }) {
             list={list}
             status={status}
             selected={stream.selected}
-            onScrollTo={(dir) => {
-              if (dir === 'top') {
-                //prevPage();
-                //dispatch(loadPrevious(stream, saveLocation))
-                bumpProgress();
-              }
-              if (dir === 'bottom') {
-                //nextPage();
-                //dispatch(loadNext(stream, saveLocation))
-                bumpProgress();
-              }
-            }}
           />
           {loading && <Loader />}
           <Input />
@@ -90,7 +77,6 @@ function ConversationBase({ saveLocation }) {
     </Container>
   )
 }
-
 
 export const Conversation = (args) => (
   <MessagesContext>

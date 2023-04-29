@@ -10,7 +10,6 @@ import { ThreadInfo } from './threadInfo';
 import { MessageContext, useMessageData, useMessageUser } from '../../contexts/message';
 import { useHovered } from '../../contexts/hover';
 import { useStream } from '../../contexts/stream';
-import { useStreamIdx } from '../../contexts/messages';
 import { buildMessageBody } from './messageBuilder';
 import { isToday } from './utils';
 import { LinkPreviewList } from './elements/LinkPreview';
@@ -18,11 +17,10 @@ import { LinkPreviewList } from './elements/LinkPreview';
 const MessageBase = ({onClick, ...props} = {}) => {
   const ref = useRef();
   const msg = useMessageData();
-  const [, setStreamIdx] = useStreamIdx();
   const {
     id, message, emojiOnly,
     createdAt, pinned,
-    linkPreviews, streamIdx,
+    linkPreviews,
   } = msg;
   const [hovered, setHovered] = useHovered()
   const [{selected}] = useStream();
@@ -47,21 +45,6 @@ const MessageBase = ({onClick, ...props} = {}) => {
     }
   }, [setHovered, hovered, id]);
 
-  useEffect(() => {
-    const element = ref.current;
-    const cb = () => {
-      const c = element.parentElement.getBoundingClientRect();
-      const e = element.getBoundingClientRect();
-      if (e.y < c.height / 2 + 50 && (e.y + e.height) > c.height / 2 - 50) {
-        setStreamIdx(streamIdx);
-      }
-    }
-    element.parentElement.addEventListener('scroll', cb);
-    return () => {
-      element.parentElement.removeEventListener('scroll', cb);
-    }
-  }, [])
-
   return (
     <div
       ref={ref}
@@ -69,6 +52,7 @@ const MessageBase = ({onClick, ...props} = {}) => {
         toggleHovered();
         if (onClick) onClick(e);
       }}
+      data-idx={msg.streamIdx}
       {...props}
       class={['message', (pinned ? 'pinned' : ''), (selected === id ? 'selected' : ''), ...props.class].join(' ')}
       onmouseenter={onEnter}
@@ -85,6 +69,7 @@ const MessageBase = ({onClick, ...props} = {}) => {
           {!isToday(createdAt) && <span class='spacy time'>{formatDateDetailed(createdAt)}</span>}
         </div>}
         <div class={['content'].join(' ')}>
+          ({msg.streamIdx})
           {buildMessageBody(message, { emojiOnly })}
         </div>
 

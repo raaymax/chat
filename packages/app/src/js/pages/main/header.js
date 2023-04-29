@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { Channel } from '../../components/channels';
+import { Channel } from '../../components/Channels/Channels';
 import { selectors, actions } from '../../state';
 import { loadPinnedMessages } from '../../services/pins';
 import { init } from '../../services/init';

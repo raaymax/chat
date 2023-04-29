@@ -4,6 +4,6 @@ import { StreamIndexSerializer } from './streamIndexSerializer';
 
 export class StreamIndexRepo extends Repo<StreamIndexQuery, StreamIndex, MongoStreamIndex> {
   constructor() {
-    super('stream_indexses', new StreamIndexSerializer());
+    super('stream_index', new StreamIndexSerializer());
   }
 }

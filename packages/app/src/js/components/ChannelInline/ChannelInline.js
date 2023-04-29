@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { findChannel } from '../../services/channels';
 import { selectors } from '../../state';
+import { useChannel } from '../../selectors';
 
 const InlineChannelLink = styled.a`
   span {
@@ -11,14 +12,8 @@ const InlineChannelLink = styled.a`
   }
 `;
 
-export const ChannelInline = ({channelId: id, cid}) => {
-  const dispatch = useDispatch();
-  const channel = useSelector(selectors.getChannel({id, cid}));
-  useEffect(() => {
-    if (!channel) {
-      dispatch(findChannel(id));
-    }
-  }, [id, channel, dispatch]);
+export const ChannelInline = ({channelId: id}) => {
+  const channel = useChannel(id);
   return (
     <InlineChannelLink className='channel' data-id={id} href={`#${channel?.id || id}`} >
       { channel?.private ? <i class='fa-solid fa-lock' /> : <i class='fa-solid fa-hashtag' /> }
