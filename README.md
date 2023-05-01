@@ -83,4 +83,4 @@ npm run dev
 
 ## License
 
-MIT - Feel free to use this code however you want.
+MIT
