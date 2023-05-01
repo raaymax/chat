@@ -3,18 +3,18 @@ const { db } = require('../../src/infra/repositories');
 
 module.exports = (connect) => {
   describe('/name <name>', () => {
-    const NAME = 'Mateusz';
+    const NAME = 'Admin';
 
     let ws;
     before(async () => {
-      ws = await connect('mateusz');
+      ws = await connect('admin');
       await (await db)
         .collection('users')
-        .updateOne({ login: 'mateusz' }, { $set: { name: 'Johny' } });
+        .updateOne({ login: 'admin' }, { $set: { name: 'Johny' } });
     });
 
     after(async () => {
-      await (await db).collection('users').updateOne({ login: 'mateusz' }, { $set: { name: 'Mateusz' } });
+      await (await db).collection('users').updateOne({ login: 'admin' }, { $set: { name: 'Admin' } });
       ws.close();
     });
 
@@ -33,7 +33,7 @@ module.exports = (connect) => {
 
       const state = await (await db)
         .collection('users')
-        .findOne({ login: 'mateusz' });
+        .findOne({ login: 'admin' });
       assert.equal(state.name, NAME);
 
       assert.equal(user.type, 'user');

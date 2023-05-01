@@ -5,7 +5,7 @@ describe('users:load', () => {
   let user;
 
   before(async () => {
-    user = await api.repo.user.get({ name: 'Mateusz' });
+    user = await api.repo.user.get({ name: 'Admin' });
   });
 
   it('should return list of users', async () => {

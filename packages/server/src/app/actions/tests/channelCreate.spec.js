@@ -6,7 +6,7 @@ describe('channel:create', () => {
   let user;
 
   before(async () => {
-    user = await api.repo.user.get({ name: 'Mateusz' });
+    user = await api.repo.user.get({ name: 'Admin' });
   });
 
   it('should fail validation if name is not provided', async () => {

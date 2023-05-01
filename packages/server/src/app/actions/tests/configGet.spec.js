@@ -6,7 +6,7 @@ describe('config:get', () => {
   let user;
 
   before(async () => {
-    user = await api.repo.user.get({ name: 'Mateusz' });
+    user = await api.repo.user.get({ name: 'Admin' });
   });
 
   it('should return app configuration', async () => {
@@ -16,7 +16,7 @@ describe('config:get', () => {
     assert.equal(res.status, 'ok');
     assert.equal(config.appVersion, pack.version);
     const channel = await api.repo.channel.get({ id: config.mainChannelId });
-    assert.equal(channel.name, 'Mateusz');
+    assert.equal(channel.name, 'Admin');
   });
 
   it('should return main channel id selected by user', async () => {

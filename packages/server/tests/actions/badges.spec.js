@@ -16,51 +16,51 @@ module.exports = (connect) => {
     });
 
     it('should increment count when sending the message', async () => {
-      const melisa = await connect('melisa');
-      const user = await (await db).collection('users').findOne({ name: 'Mateusz' });
+      const member = await connect('member');
+      const user = await (await db).collection('users').findOne({ name: 'Admin' });
       await (await db).collection('messages').deleteMany({});
       await (await db).collection('badges').deleteMany({});
       await (await db).collection('badges').insertOne({ userId: user._id, channelId: channel._id, count: 0 });
-      await sendHello(melisa);
+      await sendHello(member);
       const badge = await (await db).collection('badges').findOne({ userId: user._id, channelId: channel._id });
       assert.equal(badge.count, 1);
-      melisa.close();
+      member.close();
     });
 
     it('should update counter to remaining messages', async () => {
-      const mateusz = await connect('mateusz');
-      const melisa = await connect('melisa');
-      const user = await (await db).collection('users').findOne({ name: 'Mateusz' });
+      const admin = await connect('admin');
+      const member = await connect('member');
+      const user = await (await db).collection('users').findOne({ name: 'Admin' });
       await (await db).collection('badges').deleteMany({});
       await (await db).collection('badges').insertOne({ userId: user._id, channelId: channel._id, count: 0 });
-      const [msg] = await sendHello(melisa);
+      const [msg] = await sendHello(member);
       await (new Promise((resolve) => {
         setTimeout(() => resolve(), 2);
-      })).then(() => sendHello(melisa));
+      })).then(() => sendHello(member));
 
-      await mateusz.send({
+      await admin.send({
         type: 'progress:update',
         messageId: msg.id,
       });
       const badge = await (await db).collection('badges').findOne({ userId: user._id, channelId: channel._id });
       assert.equal(badge.count, 1);
-      mateusz.close();
-      melisa.close();
+      admin.close();
+      member.close();
     });
 
     it('should reset counter when sending message', async () => {
-      const mateusz = await connect('mateusz');
-      const melisa = await connect('melisa');
-      const user = await (await db).collection('users').findOne({ name: 'Mateusz' });
+      const admin = await connect('admin');
+      const member = await connect('member');
+      const user = await (await db).collection('users').findOne({ name: 'Admin' });
       await (await db).collection('badges').deleteMany({});
       await (await db).collection('badges').insertOne({ userId: user._id, channelId: channel._id, count: 0 });
-      await sendHello(melisa);
-      await sendHello(melisa);
-      await sendHello(mateusz);
+      await sendHello(member);
+      await sendHello(member);
+      await sendHello(admin);
       const badge = await (await db).collection('badges').findOne({ userId: user._id, channelId: channel._id });
       assert.equal(badge.count, 0);
-      mateusz.close();
-      melisa.close();
+      admin.close();
+      member.close();
     });
   });
 };

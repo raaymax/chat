@@ -9,17 +9,17 @@ module.exports = (connect) => {
     });
 
     it('should be received by other users', async () => {
-      const melisa = await connect('melisa');
-      const mateusz = await connect('mateusz');
+      const member = await connect('member');
+      const admin = await connect('admin');
       return new Promise((resolve, reject) => {
         try {
-          melisa.on('type:typing', (msg) => {
+          member.on('type:typing', (msg) => {
             assert.equal(msg.type, 'typing');
             assert.equal(msg.channelId, channel._id.toHexString());
-            assert.equal(msg.userId, mateusz.userId);
+            assert.equal(msg.userId, admin.userId);
             resolve();
           });
-          mateusz.send({
+          admin.send({
             type: 'typing:send',
             channelId: channel._id.toHexString(),
           });
@@ -27,12 +27,12 @@ module.exports = (connect) => {
           reject(err);
         }
       }).catch((e) => {
-        melisa.close();
-        mateusz.close();
+        member.close();
+        admin.close();
         throw e;
       }).then(() => {
-        melisa.close();
-        mateusz.close();
+        member.close();
+        admin.close();
       });
     });
 

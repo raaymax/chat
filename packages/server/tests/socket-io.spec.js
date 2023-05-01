@@ -32,7 +32,7 @@ describe('socket.io', () => {
     }
   });
 
-  async function connectWs(login = 'mateusz') {
+  async function connectWs(login = 'admin') {
     return supertest(server)
       .post('/session')
       .send({ login, password: '123' })

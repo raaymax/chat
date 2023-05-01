@@ -7,8 +7,8 @@ describe('message:send', () => {
   let channel;
 
   before(async () => {
-    user = await api.repo.user.get({ login: 'mateusz' });
-    user2 = await api.repo.user.get({ login: 'melisa' });
+    user = await api.repo.user.get({ login: 'admin' });
+    user2 = await api.repo.user.get({ login: 'member' });
     channel = await api.repo.channel.get({ name: 'main' });
   });
 

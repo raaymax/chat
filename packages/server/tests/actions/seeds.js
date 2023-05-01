@@ -2,8 +2,8 @@ const { db } = require('../../src/infra/repositories');
 
 module.exports = {
   run: async () => {
-    const melisa = (await db).collection('users').findOne({ login: 'melisa' });
-    const mateusz = (await db).collection('users').findOne({ login: 'mateusz' });
+    const member = (await db).collection('users').findOne({ login: 'member' });
+    const admin = (await db).collection('users').findOne({ login: 'admin' });
     const channel = await (await db).collection('channels').findOne({ name: 'main' });
     const testChannel = await (await db).collection('channels').findOne({ name: 'test' });
     if (!testChannel) await (await db).collection('channels').insertOne({ name: 'test', private: false });
@@ -16,7 +16,7 @@ module.exports = {
         channel: 'main',
         channelId: channel._id,
         flat: 'Hello',
-        userId: melisa.id,
+        userId: member.id,
         createdAt: new Date('2022-01-01'),
       },
       {
@@ -26,7 +26,7 @@ module.exports = {
         channelId: channel._id,
         flat: 'Hello pinned',
         pinned: true,
-        userId: mateusz.id,
+        userId: admin.id,
         createdAt: new Date('2022-01-02'),
       },
       {
@@ -35,7 +35,7 @@ module.exports = {
         channel: 'main',
         channelId: channel._id,
         flat: 'Hello',
-        userId: melisa.id,
+        userId: member.id,
         createdAt: new Date('2022-01-03'),
       },
       {
@@ -44,7 +44,7 @@ module.exports = {
         channel: 'main',
         channelId: channel._id,
         flat: 'Hello',
-        userId: mateusz.id,
+        userId: admin.id,
         createdAt: new Date('2022-01-04'),
       },
       {
@@ -53,7 +53,7 @@ module.exports = {
         channel: 'main',
         channelId: channel._id,
         flat: 'Hello',
-        userId: melisa.id,
+        userId: member.id,
         createdAt: new Date('2022-01-05'),
       },
     ]);

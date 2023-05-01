@@ -5,7 +5,7 @@ describe('channels:load', () => {
   let user;
 
   before(async () => {
-    user = await api.repo.user.get({ name: 'Mateusz' });
+    user = await api.repo.user.get({ name: 'Admin' });
   });
 
   it('should return list of channels', async () => {
@@ -17,11 +17,11 @@ describe('channels:load', () => {
     assert.equal(main.type, 'channel');
     assert.equal(main.name, 'main');
     assert.equal(main.cid, 'main');
-    const mateusz = channels.find((c) => c.name === 'Mateusz');
-    assert.ok(mateusz);
-    assert.equal(mateusz.type, 'channel');
-    assert.equal(mateusz.name, 'Mateusz');
-    const melisa = channels.find((c) => c.name === 'Melisa');
-    assert(!melisa);
+    const admin = channels.find((c) => c.name === 'Admin');
+    assert.ok(admin);
+    assert.equal(admin.type, 'channel');
+    assert.equal(admin.name, 'Admin');
+    const member = channels.find((c) => c.name === 'Member');
+    assert(!member);
   });
 });

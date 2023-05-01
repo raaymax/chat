@@ -6,7 +6,7 @@ module.exports = (connect) => {
     let messageId;
     before(async () => {
       const user = await (await db).collection('users')
-        .findOne({ login: 'mateusz' });
+        .findOne({ login: 'admin' });
       ({ insertedId: messageId } = await (await db).collection('messages')
         .insertOne({
           message: { text: 'asd' }, flat: 'asd', userId: user._id, clientId: `x${Math.random()}`,
@@ -14,7 +14,7 @@ module.exports = (connect) => {
     });
 
     it('should update message', async () => {
-      const ws = await connect('mateusz');
+      const ws = await connect('admin');
       const [msg, ret] = await ws.send({
         type: 'message:update',
         id: messageId,
