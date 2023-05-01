@@ -82,18 +82,6 @@ export const selectors = {
     }, {}),
   getEmojis: (state) => state.customEmojis,
   getAllEmojis: () => (state) => state.customEmojis,
-  //TODO remove
-  getChannel: (q) => (state) => state.channels.list
-    .find((c) => (q.id && c.id === q.id)
-      || (q.name && c.name === q.name)
-      || (q.cid && c.cid && c.cid === q.cid)),
-  //TODO remove
-  getChannels: createSelector(
-    (state) => state.users.meId,
-    (state) => state.channels.list,
-    (meId, channels) => channels
-      .filter((c) => c.users?.includes(meId)),
-  ),
   getConfig: (state) => state.config,
   getChannelId: (state) => state.stream.main.channelId,
   getMeId: (state) => state.users.meId,
@@ -109,8 +97,6 @@ export const selectors = {
   getMessagesLoading: (state) => state.messages.loading,
   getMessagesPrevLoading: (state) => state.messages.loading || state.messages.loadingPrevious,
   getMessagesNextLoading: (state) => state.messages.loading || state.messages.loadingNext,
-  // getSelectedMessage: (state) => state.messages.selected,
-  // countMessagesInChannel: (channel, state) => state.messages.data[channel]?.length || 0,
   countMessagesInStream: (stream) => (state) => getStreamMessages(stream, state.messages.data)
     .length,
   getStreamMessages: (stream) => (state) => getStreamMessages(stream, state.messages.data),
@@ -126,11 +112,6 @@ export const selectors = {
   },
   getMessage: (id) => (state) => state.messages.data
     .find((m) => m.id === id || m.clientId === id) || null,
-  getCurrentChannel: createSelector(
-    (state) => state.channels.list,
-    (state) => state.stream.main.channelId,
-    (list, channelId) => list.find((c) => c.id === channelId) || {id: channelId},
-  ),
   getInfo: (state) => state.info,
   getUser: (userId) => createSelector(
     (state) => state.users.list.find((user) => user.id === userId),

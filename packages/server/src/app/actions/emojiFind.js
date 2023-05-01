@@ -18,7 +18,7 @@ module.exports = {
 
     const emoji = await repo.emoji.get({ shortname });
     if (emoji) {
-      res.send({ type: 'emoji', ...emoji });
+      res.send({ type: 'emoji', ...emoji, category: 'c' });
     } else {
       res.send({
         type: 'emoji',

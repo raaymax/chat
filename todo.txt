@@ -1,4 +1,22 @@
-v1.8.x
+v1.9.0
+feat(messages): better infinite scroll
+feat(app): data caching
+refactor(server): migrate repositories to TS
+- refactor(app): migrate selectors to separate files
+- refactor(app): use dixie instead of redux
+- improvement(app): app should startup from memory if possible
+- fix(links): don't show preview if not available
+- fix(emojis): selector does not include custom emojis
+- fix(messages): scroll live mode is not working
+- fix(messages): dates show in wrong places
+- fix(pins): fix history scrolling 
+- fix(search): scrolling for more results?
+- fix(messages): url navigation
+- fix(messages): updating url
+- chore: remove personal data
+- refactor(firebase): move firebase to optional package
+
+v1.9.x
 - fix(emojis): unable to backspace emoji on mobile
 - fix(attachments): attachment is displaying in all inputs
 - fix(messages): after long time away load more messages will not load all of them
@@ -10,16 +28,11 @@ v1.8.x
 - fix(channels): wider desktop clicking on channel should not close sidebar
 - fix(commands): help should be contexted - no ping outside of thread
 - fix(commands): rename /setMain to /main)
-- improvement(app): app should startup from memory if possible
-- refactor(app): migrate selectors to separate files
-- refactor(server): finish repository serialization?
-- refactor(app): use dixie instead of redux
 - fix(app): visible view on mobile is smaller than it should be
-- fix(links): allegro links are not working
-- refactor(server): repository serialization
 - fix(links): ability to remove link preview
+- fix(links): allegro links are not working
 
-v1.9.0
+v1.10.0
 - feat(avatar): ability to upload avatar
 - feat(link-preview): generate summary of link content
 - feat(channels): ability to change channel name
@@ -35,7 +48,6 @@ v1.9.0
 v2.0.0 // first public release
 - feat(users)!: registration of users
 - feat(users): invitations
-- chore: remove personal data
 - chore: change all access keys
 
 backlog:

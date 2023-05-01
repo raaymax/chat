@@ -6,6 +6,7 @@ import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 import { client } from '../core';
 
 export const initNotifications = async (config) => {
+  console.log('initNotifications', config);
   if (Capacitor.isNativePlatform()) {
     await initNativeNotifications(config);
   } else {
@@ -21,6 +22,7 @@ const initWebNotifications = async (config) => {
     onMessage(messaging, (payload) => {
       client.emit('notification', payload);
     });
+    console.log('config', config);
     const currentToken = await getToken(messaging, { vapidKey: config.applicationServerKey });
     if (currentToken) {
       await client.req({

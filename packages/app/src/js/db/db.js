@@ -10,4 +10,5 @@ db.version(1).stores({
   messagesIndex: '[channelId+parentId+page], refreshedAt',
   users: 'id, name, avatarUrl',
   channels: 'id, name, signed',
+  emojis: 'shortname',
 });

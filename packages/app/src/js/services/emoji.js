@@ -2,6 +2,7 @@ import Fuse from 'fuse.js';
 import { client } from '../core';
 import Emojis from '../../assets/emoji_list.json';
 import {actions} from '../state';
+import {db} from '../db/db';
 
 window.EMOJI = Emojis;
 
@@ -86,6 +87,7 @@ export const loadCustom = () => async (dispatch) => {
   try {
     const {data: emojis} = await client.req({ type: 'emojis:load' });
     if (emojis) {
+      await db.emojis.bulkPut(emojis);
       emojis.forEach((emoji) => {
         dispatch(actions.addEmoji({...emoji, category: 'c'}));
       });

@@ -6,11 +6,13 @@ import { initNotifications } from './notifications';
 import { loadEmojis } from './emoji';
 import { loadProgress, loadBadges } from './progress';
 import { reloadStream, loadFromUrl } from './stream';
+import Emojis from '../../assets/emoji_list.json';
 
 const initApp = (withStream = false) => async (dispatch) => {
   if (navigator.userAgentData.mobile) {
     document.body.setAttribute('class', 'mobile');
   }
+  await db.emojis.bulkPut(Emojis);
   await dispatch(actions.connected());
   await dispatch(actions.clearInfo());
   await dispatch(actions.initFailed(false));
@@ -22,7 +24,6 @@ const initApp = (withStream = false) => async (dispatch) => {
   await initNotifications(config);
   const { data: users } = await client.req({type: 'users:load'});
   await db.users.bulkPut(users);
-
   await dispatch(actions.addUser(users));
   const { data: channels } = await client.req({type: 'channels:load'});
   await db.channels.bulkPut(channels);
