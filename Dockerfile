@@ -39,4 +39,4 @@ COPY migrate-mongo-config.js ./
 COPY chat.config.js ./
 
 EXPOSE 8080
-CMD sh ./.deploy/startup.sh
+CMD sh ./entrypoint.sh
