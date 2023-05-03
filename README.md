@@ -2,6 +2,7 @@
   <img src="quack.png" title="hover text">
 </p>
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Welcome to the Quack - private chatting application.
 
