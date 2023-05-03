@@ -75,6 +75,17 @@ docker-compose up -d
 pnpm run dev
 ```
 
+## Default credentials
+
+```
+admin / 123
+member / 123
+```
+Currently there is no actual admin with special permissions all users are equal.
+There is also no way to create users in any other way than modifying database entries.
+Managing users TBA.
+
+
 ## License
 
 MIT
