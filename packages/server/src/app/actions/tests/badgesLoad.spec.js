@@ -5,7 +5,7 @@ describe('badges:load', () => {
   let user;
 
   before(async () => {
-    user = await api.repo.user.get({ login: 'mateusz' });
+    user = await api.repo.user.get({ login: 'admin' });
   });
 
   it('should return list of badges', async () => {

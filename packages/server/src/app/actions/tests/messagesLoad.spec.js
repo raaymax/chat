@@ -6,7 +6,7 @@ describe('messages:load', () => {
   let channel;
 
   before(async () => {
-    user = await api.repo.user.get({ login: 'mateusz' });
+    user = await api.repo.user.get({ login: 'admin' });
     channel = await api.repo.channel.get({ name: 'main' });
   });
 
@@ -90,10 +90,10 @@ describe('messages:load', () => {
   });
 
   it('should control access to private channels', async () => {
-    const melisaChannel = await api.repo.channel.get({ name: 'Melisa' });
+    const memberChannel = await api.repo.channel.get({ name: 'Member' });
     const { res, data: messages } = await api.sendMessage({
       type: 'messages:load',
-      channelId: melisaChannel.id,
+      channelId: memberChannel.id,
     }, { userId: user.id });
     assert.equal(res.status, 'error');
     assert.equal(res.message, 'ACCESS_DENIED');

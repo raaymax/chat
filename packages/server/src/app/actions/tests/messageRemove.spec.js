@@ -9,8 +9,8 @@ describe('message:remove', () => {
   let context2;
 
   before(async () => {
-    user = await api.repo.user.get({ name: 'Mateusz' });
-    user2 = await api.repo.user.get({ name: 'Melisa' });
+    user = await api.repo.user.get({ name: 'Admin' });
+    user2 = await api.repo.user.get({ name: 'Member' });
     channel = await api.repo.channel.get({ name: 'main' });
     context = { userId: user.id, push: () => {} };
     context2 = { userId: user2.id, push: () => {} };

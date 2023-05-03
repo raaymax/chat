@@ -63,28 +63,3 @@ jobs:
           release-type: node
           token: ${{secrets.GITHUB_TOKEN}}
           command: manifest
-
-  deploy:
-    needs: 
-    - tests
-    - release-please
-    name: Deploy to server
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-      if: ${{ needs.release-please.outputs.release_created }}
-      with:
-        fetch-depth: 0
-
-    - uses: kielabokkie/ssh-key-and-known-hosts-action@v1
-      if: ${{ needs.release-please.outputs.release_created }}
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-        ssh-host: ${{ secrets.SSH_HOST }}
-
-    - name: Push changes to remote
-      if: ${{ needs.release-please.outputs.release_created }}
-      run: |
-        git remote add prod ssh://raay@codecat.io:/var/docker/chat/app
-        git push --verbose prod main:master -f

@@ -11,14 +11,14 @@ module.exports = (agent) => {
     it('login failed', async () => {
       await agent
         .post('/session')
-        .send({ login: 'mateusz', password: '321' })
+        .send({ login: 'admin', password: '321' })
         .expect(401, { status: 'nok' });
     });
 
     it('login', async () => {
       await agent
         .post('/session')
-        .send({ login: 'mateusz', password: '123' })
+        .send({ login: 'admin', password: '123' })
         .expect(200)
         .expect((res) => {
           assert.equal(res.body.status, 'ok');

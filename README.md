@@ -69,18 +69,12 @@ Maybe pub/sub would work but it seems complicated.
 
 ## Local development setup
 
-Then create local mongo server with docker-compose
-
 ```bash
-docker-compose -f docker-compose.dev.yml up -d
-```
-
-next start local development server
-
-```bash
-npm run dev
+pnpm i
+docker-compose up -d
+pnpm run dev
 ```
 
 ## License
 
-MIT - Feel free to use this code however you want.
+MIT

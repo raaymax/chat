@@ -7,10 +7,10 @@ module.exports = (connect) => {
 
     let ws;
     before(async () => {
-      ws = await connect('mateusz');
+      ws = await connect('admin');
       await (await db)
         .collection('users')
-        .updateOne({ login: 'mateusz' }, { $set: { avatarUrl: null } });
+        .updateOne({ login: 'admin' }, { $set: { avatarUrl: null } });
     });
 
     after(async () => {
@@ -32,7 +32,7 @@ module.exports = (connect) => {
 
       const state = await (await db)
         .collection('users')
-        .findOne({ login: 'mateusz' });
+        .findOne({ login: 'admin' });
       assert.equal(state.avatarUrl, URL);
 
       assert.equal(user.type, 'user');

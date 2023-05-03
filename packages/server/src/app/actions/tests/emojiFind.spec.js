@@ -5,7 +5,7 @@ describe('emoji:find', () => {
   let user;
 
   before(async () => {
-    user = await api.repo.user.get({ name: 'Mateusz' });
+    user = await api.repo.user.get({ name: 'Admin' });
     await api.repo.emoji.create({ shortname: 'test', fileId: 'test' });
   });
 

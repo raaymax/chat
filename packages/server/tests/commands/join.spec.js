@@ -17,7 +17,7 @@ module.exports = (connect) => {
     });
 
     it('should add user to a channel', async () => {
-      const ws = await connect('mateusz');
+      const ws = await connect('admin');
       const [chan, ret] = await ws.send({
         type: 'command:execute',
         name: 'join',
@@ -42,7 +42,7 @@ module.exports = (connect) => {
     });
 
     it('should add user to a existing channel', async () => {
-      const ws = await connect('mateusz');
+      const ws = await connect('admin');
       const [, ret] = await ws.send({
         type: 'command:execute',
         name: 'join',
@@ -65,7 +65,7 @@ module.exports = (connect) => {
         .collection('channels')
         .updateOne({ cid: CHANNEL }, { $set: { private: true } });
 
-      const ws = await connect('mateusz');
+      const ws = await connect('admin');
       const [ret] = await ws.send({
         type: 'command:execute',
         name: 'join',

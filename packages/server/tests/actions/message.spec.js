@@ -9,19 +9,19 @@ module.exports = (connect) => {
       channel = await (await db).collection('channels').findOne({ name: 'main' });
     });
     it('should be received by other users', async () => {
-      const melisa = await connect('melisa');
-      const mateusz = await connect('mateusz');
+      const member = await connect('member');
+      const admin = await connect('admin');
       return new Promise((resolve, reject) => {
         try {
-          melisa.on('type:message', (msg) => {
+          member.on('type:message', (msg) => {
             assert.equal(msg.type, 'message');
             assert.equal(msg.message?.line?.text, 'Hello');
-            assert.equal(msg.userId, mateusz.userId);
-            melisa.close();
-            mateusz.close();
+            assert.equal(msg.userId, admin.userId);
+            member.close();
+            admin.close();
             resolve();
           });
-          mateusz.send({
+          admin.send({
             type: 'message:send',
             clientId: `test:${Math.random()}`,
             channelId: channel._id.toHexString(),
@@ -52,16 +52,16 @@ module.exports = (connect) => {
     });
 
     it('should send push notifications', async () => {
-      const mateusz = await connect('mateusz');
-      const melisa = await connect('melisa');
+      const admin = await connect('admin');
+      const member = await connect('member');
       let push;
       PushService.push = async (m) => { push = m; };
-      const token = 'melisaToken';
-      await melisa.send({
+      const token = 'memberToken';
+      await member.send({
         type: 'fcm:setup',
         token,
       });
-      await mateusz.send({
+      await admin.send({
         type: 'message:send',
         clientId: `test:${Math.random()}`,
         channelId: channel._id.toHexString(),
@@ -69,9 +69,9 @@ module.exports = (connect) => {
         flat: 'Hello',
       });
       assert.ok(push.tokens.includes(token));
-      assert.equal(push.notification.title, 'Mateusz on main');
-      mateusz.close();
-      melisa.close();
+      assert.equal(push.notification.title, 'Admin on main');
+      admin.close();
+      member.close();
     });
 
     it('should store message in database', async () => {
@@ -153,7 +153,7 @@ module.exports = (connect) => {
       const ws = await connect();
       const otherChannel = await (await db)
         .collection('channels')
-        .findOne({ name: 'Melisa' });
+        .findOne({ name: 'Member' });
       const [ret] = await ws.send({
         type: 'message:send',
         clientId: `test:${Math.random()}`,
