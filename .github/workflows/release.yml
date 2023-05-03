@@ -26,6 +26,7 @@ jobs:
         ports:
           - 27017:27017
     env:
+      NODE_ENV: 'test'
       DATABASE_URL: 'mongodb://chat:chat@localhost:27017/tests?authSource=admin'
     steps:
     - uses: actions/checkout@v3
