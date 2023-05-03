@@ -35,7 +35,6 @@ module.exports = {
   serverUrl: 'http://localhost:8080',
   imagesUrl: '',
   serverWebUrl: '',
-  openaiApiKey: '',
   firebase: {
     apiKey: '',
     authDomain: '',

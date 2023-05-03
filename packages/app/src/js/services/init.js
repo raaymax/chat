@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-import { Capacitor } from '@capacitor/core';
 import { client } from '../core';
 import { actions } from '../state';
 import { initNotifications } from './notifications';
@@ -65,34 +64,16 @@ export const reinit = () => async (dispatch) => {
 
 // FIXME: messages have no channel and are not showing
 const showUpdateMessage = () => (dispatch) => {
-  if (Capacitor.isNativePlatform()) {
-    dispatch(actions.addMessage({
-      clientId: 'update-version',
-      priv: true,
-      createdAt: new Date(),
-      user: {
-        name: 'System',
-      },
-      message: [
-        { line: { bold: { text: 'Your Quack app version is outdated!!' } } },
-        { line: { text: `Your app version: ${APP_VERSION}` } },
-        { line: { text: `Required version ${msg.config.appVersion}` } },
-        { line: { text: 'Please update' } },
-      ],
-    }));
-  } else {
-    // setTimeout(() => window.location.reload(true), 5000);
-    dispatch(actions.addMessage({
-      clientId: 'update-version',
-      priv: true,
-      createdAt: new Date(),
-      user: {
-        name: 'System',
-      },
-      message: [
-        { line: { bold: { text: 'Your Quack version is outdated!!' } } },
-        { line: { text: 'Please reload the page to update' } },
-      ],
-    }));
-  }
+  dispatch(actions.addMessage({
+    clientId: 'update-version',
+    priv: true,
+    createdAt: new Date(),
+    user: {
+      name: 'System',
+    },
+    message: [
+      { line: { bold: { text: 'Your Quack version is outdated!!' } } },
+      { line: { text: 'Please reload the page to update' } },
+    ],
+  }));
 }

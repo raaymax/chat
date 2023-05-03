@@ -1,15 +1,12 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { Capacitor } from '@capacitor/core';
 import { createCounter } from '../utils';
 import { actions } from '../state';
 
 const tempId = createCounter(`file:${(Math.random() + 1).toString(36)}`);
 
-const FILES_URL = Capacitor.isNativePlatform()
-  ? `${SERVER_URL}/files`
-  : `${document.location.protocol}//${document.location.host}/files`;
+const FILES_URL = `${document.location.protocol}//${document.location.host}/files`;
 
 export const uploadMany = createAsyncThunk('files/upload/many', async (files, {dispatch}) => {
   for (let i = 0, file; i < files.length; i++) {
