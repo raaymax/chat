@@ -19,7 +19,7 @@ async function uploadFile(req, res) {
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
-    res.status(500).send(err);
+    res.status(500).send({ errorCode: 'INTERNAL_SERVER_ERROR' });
   }
 }
 
@@ -41,7 +41,7 @@ async function downloadFile(req, res) {
     }
     // eslint-disable-next-line no-console
     // console.error(err);
-    res.status(500).send(err);
+    res.status(500).send({ errorCode: 'INTERNAL_SERVER_ERROR' });
   }
 }
 
