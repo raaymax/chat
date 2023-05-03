@@ -51,6 +51,9 @@ v2.0.0 // first public release
 - chore: change all access keys
 
 backlog:
+- chore: enable dependabot
+- chore: enable CodeQL
+- feat(plugins): create initial plugin system
 - feat(links): generating summary of link contents
 - feat(history): add support for back button 
 - feat(toolbar): custom emojis reactions
