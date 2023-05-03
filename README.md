@@ -92,4 +92,6 @@ Managing users TBA.
 
 ## License
 
-MIT
+MIT License
+
+Copyright (c) 2023 CodeCat
