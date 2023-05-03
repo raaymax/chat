@@ -44,6 +44,7 @@ v2.0.0 // first public release
 - chore: change all access keys
 
 backlog:
+- fix(login): login failed message is not displayed
 - feat(history): add support for back button 
 - feat(toolbar): custom emojis reactions
 - feat(logs): save message parsing errors in database and display them in message

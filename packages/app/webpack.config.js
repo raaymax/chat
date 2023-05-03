@@ -14,7 +14,6 @@ module.exports = {
     new webpack.DefinePlugin({
       APP_VERSION: JSON.stringify(pack.version),
       APP_NAME: JSON.stringify(pack.name),
-      SERVER_URL: JSON.stringify(config.serverUrl),
       IMAGES_URL: JSON.stringify(config.imagesUrl),
       FIREBASE_CONFIG: JSON.stringify(config.firebase),
     }),

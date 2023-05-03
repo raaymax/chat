@@ -20,21 +20,21 @@ Quack prioritizes privacy and security by allowing users to host their own app, 
 `chat.config.js` (example in `chat.config.example.js`)
 ```javascript
 module.exports = {
-  port: 8080, 
+  port: 8080,
+  sessionSecret: '',
   vapid: {
     public: '',
     secret: '',
   },
   databaseUrl: process.env.DATABASE_URL,
-  
+
   cors: [
-    'http://localhost:8080',
+    'https?://localhost(:[0-9]{,4})',
   ],
   fileStorage: process.env.NODE_ENV === 'test' ? 'memory' : 'gcs',
   gcsBucket: '',
-  serverUrl: 'http://localhost:8080',
+  serverWebUrl: 'http://localhost:8080',
   imagesUrl: '',
-  serverWebUrl: '',
   firebase: {
     apiKey: '',
     authDomain: '',
