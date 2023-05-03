@@ -16,6 +16,9 @@ importers:
       '@reduxjs/toolkit':
         specifier: 1.8.2
         version: 1.8.2(react-redux@8.0.2)(react@18.2.0)
+      bcrypt:
+        specifier: 5.1.0
+        version: 5.1.0
       express-session:
         specifier: 1.17.3
         version: 1.17.3
