@@ -1,4 +1,4 @@
-name: Release
+name: CI/CD
 
 on:
   push:
@@ -26,6 +26,7 @@ jobs:
         ports:
           - 27017:27017
     env:
+      NODE_ENV: 'test'
       DATABASE_URL: 'mongodb://chat:chat@localhost:27017/tests?authSource=admin'
     steps:
     - uses: actions/checkout@v3
@@ -39,12 +40,6 @@ jobs:
       with:
         node-version: 17.x
         cache: 'pnpm'
-    - name: apply secrets
-      run: echo $CONFIG_FILE >> chat.config.js
-      shell: bash
-      env:
-        CONFIG_FILE: ${{secrets.TEST_CONFIG}}
-        DATABASE_URL: 'mongodb://chat:chat@localhost:27017/tests?authSource=admin'
     - run: pnpm i
     - run: pnpm run lint:ci
     - run: pnpm exec migrate-mongo up

@@ -41,7 +41,7 @@ async function createSession(req, res) {
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
-    res.status(500).send(err);
+    res.status(500).send({ errorCode: 'INTERNAL_SERVER_ERROR' });
   }
 }
 

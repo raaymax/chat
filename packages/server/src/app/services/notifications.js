@@ -49,7 +49,7 @@ const PushService = {
           Urgency: 'high',
         },
         fcm_options: {
-          link: `${conf.serverWebUrl}/#${channel.name}`,
+          link: `${conf.serverWebUrl}/#/${channel.name}`,
         },
         notification: {
           silent: false,

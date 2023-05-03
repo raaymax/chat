@@ -2,6 +2,10 @@
   <img src="quack.png" title="hover text">
 </p>
 
+[![Tests](https://github.com/codecat-io/chat/actions/workflows/release.yml/badge.svg)](https://github.com/codecat-io/chat/actions/workflows/release.yml)
+[![Release](https://shields.io/github/v/release/codecat-io/chat?display_name=tag)](https://shields.io/github/v/release/codecat-io/chat?display_name=tag)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Welcome to the Quack - private chatting application.
 
@@ -16,22 +20,21 @@ Quack prioritizes privacy and security by allowing users to host their own app, 
 `chat.config.js` (example in `chat.config.example.js`)
 ```javascript
 module.exports = {
-  port: 8080, 
+  port: 8080,
+  sessionSecret: '',
   vapid: {
     public: '',
     secret: '',
   },
   databaseUrl: process.env.DATABASE_URL,
-  
+
   cors: [
-    'http://localhost:8080',
+    'https?://localhost(:[0-9]{,4})',
   ],
   fileStorage: process.env.NODE_ENV === 'test' ? 'memory' : 'gcs',
   gcsBucket: '',
-  serverUrl: 'http://localhost:8080',
+  serverWebUrl: 'http://localhost:8080',
   imagesUrl: '',
-  serverWebUrl: '',
-  openaiApiKey: '',
   firebase: {
     apiKey: '',
     authDomain: '',
@@ -75,6 +78,19 @@ docker-compose up -d
 pnpm run dev
 ```
 
+## Default credentials
+
+```
+admin / 123
+member / 123
+```
+Currently there is no actual admin with special permissions all users are equal.
+There is also no way to create users in any other way than modifying database entries.
+Managing users TBA.
+
+
 ## License
 
-MIT
+MIT License
+
+Copyright (c) 2023 CodeCat

@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-import { Capacitor } from '@capacitor/core';
 import { Manager } from "socket.io-client";
 
 import { createEventListener } from '../utils';
@@ -9,9 +8,7 @@ const {
 } = createEventListener();
 
 // eslint-disable-next-line no-nested-ternary
-const URI = Capacitor.isNativePlatform()
-  ? SERVER_URL
-  : `${document.location.protocol}//${document.location.host}`;
+const URI = `${document.location.protocol}//${document.location.host}`;
 
 // eslint-disable-next-line no-console
 const manager = new Manager(URI);

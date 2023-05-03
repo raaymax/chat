@@ -13,9 +13,6 @@
   "license": "ISC",
   "dependencies": {
     "@babel/plugin-syntax-decorators": "7.21.0",
-    "@capacitor/android": "^4.0.0",
-    "@capacitor/core": "^4.0.0",
-    "@capacitor/push-notifications": "^4.0.0",
     "@quack/rpc": "workspace:*",
     "@reduxjs/toolkit": "1.8.2",
     "dexie": "3.2.3",
@@ -37,7 +34,6 @@
     "@babel/plugin-syntax-class-properties": "7.12.13",
     "@babel/plugin-transform-react-jsx": "7.17.3",
     "@babel/preset-env": "7.16.11",
-    "@capacitor/cli": "^4.0.0",
     "babel-loader": "8.2.4",
     "chai": "4.3.6",
     "copy-webpack-plugin": "10.2.4",

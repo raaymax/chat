@@ -1,18 +1,20 @@
 module.exports = {
+  port: 8080,
+  sessionSecret: '',
   vapid: {
     public: '',
     secret: '',
   },
-  databaseUrl: 'mongodb://chat:chat@localhost:27017/chat?authSource=admin',
+
+  databaseUrl: process.env.DATABASE_URL,
 
   cors: [
-    'http://localhost:8080',
+    'https?://localhost(:[0-9]{,4})',
   ],
-
+  fileStorage: process.env.NODE_ENV === 'test' ? 'memory' : 'gcs',
   gcsBucket: '',
-  serverUrl: 'ws://localhost:8080/ws',
   serverWebUrl: 'http://localhost:8080',
-  openaiApiKey: '',
+  imagesUrl: '',
   firebase: {
     apiKey: '',
     authDomain: '',

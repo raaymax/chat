@@ -3,7 +3,7 @@ const MongoDBStore = require('connect-mongodb-session')(expressSession);
 const config = require('../../../../../chat.config');
 
 module.exports = expressSession({
-  secret: 'keyboard cat',
+  secret: config.sessionSecret,
   resave: false,
   saveUninitialized: true,
   store: new MongoDBStore({

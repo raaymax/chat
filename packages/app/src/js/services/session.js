@@ -1,9 +1,6 @@
 /* eslint-disable no-undef */
-import { Capacitor } from '@capacitor/core';
 
-const SESSION_URL = Capacitor.isNativePlatform()
-  ? `${SERVER_URL}/session`
-  : `${document.location.protocol}//${document.location.host}/session`;
+const SESSION_URL = `${document.location.protocol}//${document.location.host}/session`;
 
 export const isProbablyLogged = () => !!localStorage.token;
 

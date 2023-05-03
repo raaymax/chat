@@ -19,7 +19,7 @@ async function uploadFile(req, res) {
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
-    res.status(500).send(err);
+    res.status(500).send({ errorCode: 'INTERNAL_SERVER_ERROR' });
   }
 }
 
@@ -34,14 +34,14 @@ async function downloadFile(req, res) {
     file.stream.pipe(res);
   } catch (err) {
     if (err.code === 'ENOTFOUND') {
-      return res.status(404).send(err);
+      return res.status(404).send({ errorCode: 'RESOURCE_NOT_FOUND' });
     }
     if (typeof err.code === 'number') {
-      return res.status(err.code).send(err);
+      return res.status(err.code).send({ errorCode: 'CLIENT_ERROR', message: err.message });
     }
     // eslint-disable-next-line no-console
     // console.error(err);
-    res.status(500).send(err);
+    res.status(500).send({ errorCode: 'INTERNAL_SERVER_ERROR' });
   }
 }
 
