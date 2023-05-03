@@ -1,9 +1,9 @@
+const bcrypt = require('bcrypt');
 const repo = require('../infra/repositories');
-const { genHash } = require('./tools');
 
 module.exports = {
   login: async (login, password) => {
-    const user = await repo.user.get({ login, password: genHash(password) });
-    return user;
+    const user = await repo.user.get({ login });
+    return bcrypt.compareSync(password, user.password) ? user : null;
   },
 };
