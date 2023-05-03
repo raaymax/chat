@@ -51,6 +51,10 @@ v2.0.0 // first public release
 - chore: change all access keys
 
 backlog:
+<<<<<<< Updated upstream
+=======
+- chore: add screenshots to readme
+>>>>>>> Stashed changes
 - chore: enable dependabot
 - chore: enable CodeQL
 - feat(plugins): create initial plugin system
