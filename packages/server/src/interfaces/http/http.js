@@ -10,17 +10,15 @@ const sessionParser = require('./sessionParser');
 const corsConfig = require('./cors');
 
 const app = express();
-
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
-// Apply the rate limiting middleware to all requests
-app.use(helmet());
-app.use(limiter);
+if (process.env.NODE_ENV !== 'test') {
+  app.use(helmet());
+  app.use(rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    standardHeaders: true,
+    legacyHeaders: false,
+  }));
+}
 app.set('trust proxy', true);
 app.use(bodyParser.json());
 app.use(cors(corsConfig));
