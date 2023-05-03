@@ -1,7 +1,7 @@
-const crypto = require('crypto');
+const bcrypt = require('bcrypt');
 const { ObjectId } = require('mongodb');
 
-const genHash = (data) => crypto.createHash('sha256').update(data).digest('hex');
+const genHash = (data) => bcrypt.hashSync(data, 10);
 
 module.exports = {
   async up(db) {
