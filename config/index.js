@@ -4,6 +4,7 @@ module.exports = (() => {
     if (process.env.NODE_ENV === 'test') {
       return require('../tests/chat.config.tests');
     }
+    // eslint-disable-next-line import/no-unresolved
     return require('../chat.config');
   } catch (err) {
     // eslint-disable-next-line no-console
