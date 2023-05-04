@@ -6,7 +6,6 @@ const commands = [
   require('./avatar'),
   require('./name'),
   require('./me'),
-  require('./prompt'),
   require('./version'),
   require('./emoji'),
   require('./ping'),
