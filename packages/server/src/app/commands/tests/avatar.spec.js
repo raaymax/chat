@@ -27,6 +27,6 @@ describe('/avatar', () => {
     assert.equal(state.avatarFileId, '123');
 
     assert.equal(updatedUser.type, 'user');
-    assert.equal(updatedUser.avatarUrl, `${config.imagesUrl}/` + '123');
+    assert.equal(updatedUser.avatarUrl, `${config.imagesUrl}/123`);
   });
 });
