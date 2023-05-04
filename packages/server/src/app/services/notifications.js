@@ -37,7 +37,7 @@ const PushService = {
         notification: {
           ...(user.avatarUrl ? { imageUrl: user.avatarUrl } : {}),
           channel_id: 'default',
-          icon: 'stock_ticker_update',
+          icon: user.avatarUrl,
           color: '#7e55c3',
           sound: 'https://chat.codecat.io/assets/sound.mp3',
           tag: channel.id,
@@ -45,7 +45,7 @@ const PushService = {
       },
       webpush: {
         headers: {
-          image: user.avatarUrl,
+          icon: user.avatarUrl,
           Urgency: 'high',
         },
         fcm_options: {
@@ -55,7 +55,7 @@ const PushService = {
           silent: false,
           vibrate: [200, 100, 200],
           badge: user.avatarUrl,
-          image: user.avatarUrl,
+          icon: user.avatarUrl,
         },
       },
     };

@@ -9,6 +9,7 @@ export type User = {
   password: string
   clientId: string
   mainChannelId: Id | null
+  avatarFileId: string
   notifications: {
     [key: string]: {
       mobile: string

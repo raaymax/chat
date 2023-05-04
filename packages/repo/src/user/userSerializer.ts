@@ -12,6 +12,7 @@ export class UserSerializer implements Serializer<UserQuery, User, MongoUser> {
     password: arg.password,
     clientId: arg.clientId,
     mainChannelId: makeObjectId(arg.mainChannelId),
+    avatarFileId: arg.avatarFileId,
     ...(arg.notifications ? Object.fromEntries(
       Object.entries(arg.notifications)
         .map(([k, v]) => ([
@@ -37,6 +38,7 @@ export class UserSerializer implements Serializer<UserQuery, User, MongoUser> {
       password: arg.password,
       clientId: arg.clientId,
       mainChannelId: makeId(arg.mainChannelId),
+      avatarFileId: arg.avatarFileId,
       notifications: arg.notifications,
     }) as User;
   };
