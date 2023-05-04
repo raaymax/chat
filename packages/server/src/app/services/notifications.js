@@ -1,5 +1,6 @@
 const repo = require('../../infra/repositories');
 const conf = require('../../../../../config');
+const tools = require('../tools');
 
 const omitUndefined = (obj) => Object.fromEntries(
   Object.entries(obj).filter(([, v]) => v !== undefined),
@@ -11,6 +12,7 @@ const PushService = {
     const channel = await repo.channel.get({ id: msg.channelId });
     if (!channel) return;
     const user = await repo.user.get({ id: msg.userId });
+    user.avatarUrl = tools.createImageUrl(user.avatarFileId);
     if (!user) return;
     const users = await repo.user.getAll({
       ids: channel.users.filter((id) => id !== msg.userId),
