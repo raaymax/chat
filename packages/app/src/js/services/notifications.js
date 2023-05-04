@@ -11,7 +11,7 @@ export const initNotifications = async (config) => {
     onMessage(messaging, (payload) => {
       client.emit('notification', payload);
     });
-    const currentToken = await getToken(messaging, { vapidKey: config.applicationServerKey });
+    const currentToken = await getToken(messaging, { vapidKey: config.vapidPublicKey });
     if (currentToken) {
       await client.req({
         type: 'fcm:setup',

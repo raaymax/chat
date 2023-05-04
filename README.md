@@ -23,8 +23,8 @@ module.exports = {
   port: 8080,
   sessionSecret: '',
   vapid: {
-    public: '',
-    secret: '',
+    publicKey: '',
+    secretKey: '',
   },
   databaseUrl: process.env.DATABASE_URL,
 

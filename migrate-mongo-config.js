@@ -1,5 +1,5 @@
 // In this file you can configure migrate-mongo
-const appConfig = require('./chat.config');
+const appConfig = require('./config');
 
 const config = {
   mongodb: {

@@ -2,8 +2,8 @@ module.exports = {
   port: process.env.PORT || 8080,
   sessionSecret: 'test keyboard cat',
   vapid: {
-    public: 'BDUZ2J_pJn25op7SY_zq_4qqW1wV-wttUCW2FHFFdF65dGNlxWVO8SJL2YuCcnOtxluHQY_JqcDtPMRBqF6c6uE',
-    secret: 'jUSTaXOghTmsSRuKIhmtzL4IWv98r0ueLnhBiJ3RMPU',
+    publicKey: 'BMp9LOpPZ8I-lMGDPldXrQBQSbDjpqnY55KXrWKIOoNtZ4YxwP2B6vbq93AFgLE9E9kQhfoWzfn5LhqY73f3Vv4',
+    privateKey: 'WQ3qOA9iG-TcgGfM-XQqngSL0Bs2UD9f4hKpH_cwIeE',
   },
 
   databaseUrl: process.env.DATABASE_URL,

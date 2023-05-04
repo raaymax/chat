@@ -2,7 +2,7 @@
 const { Configuration, OpenAIApi } = require('openai');
 const { messageRepo } = require('../database/db');
 const Errors = require('../errors');
-const config = require('../../../../chat.config');
+const config = require('../../../../config');
 
 function initAI() {
   if (config.openaiApiKey) {

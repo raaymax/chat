@@ -3,7 +3,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const {InjectManifest} = require('workbox-webpack-plugin');
 const webpack = require('webpack');
 const pack = require('../../package.json');
-const config = require('../../chat.config');
+const config = require('../../config');
 
 module.exports = {
   entry: {

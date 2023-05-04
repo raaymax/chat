@@ -1,6 +1,6 @@
 const multer = require('multer');
 const express = require('express');
-const config = require('../../../../../../chat.config');
+const config = require('../../../../../../config');
 
 const router = new express.Router();
 
