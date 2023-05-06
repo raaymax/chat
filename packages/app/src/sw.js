@@ -26,7 +26,7 @@ async function shareTargetHandler ({event}) {
       });
     }
   });
-  event.respondWith(Response.redirect('https://chat.codecat.io/'));
+  event.respondWith(Response.redirect('/'));
 }
 
 function getOpenClient() {

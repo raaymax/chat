@@ -19,16 +19,26 @@ describe('message:send', () => {
     const badge = await api.repo.badge.get({ userId: user.id, channelId: channel.id });
     assert.equal(badge.count, 1);
   });
+
+  it('should push notification to the channel', async () => {
+    const res = await createMessage({ userId: user2.id });
+    const { push: [notif] } = res;
+    assert.equal(notif.data.title, 'Member on main');
+  });
+
+  it('should push notification to all user endpoints');
+
   async function createMessage({ userId }) {
+    const push = [];
     const { res, data: [msg] } = await api.sendMessage({
       clientId: `${Math.random()}`,
       type: 'message:send',
       channelId: channel.id,
       message: { line: { text: 'Hello' } },
       flat: 'Hello',
-    }, { userId, push: () => {} });
+    }, { userId, push: async (subs, notif) => push.push({ ...notif, subs }) });
     assert.equal(res.type, 'response');
     assert.equal(res.status, 'ok');
-    return msg;
+    return { ...msg, push };
   }
 });

@@ -13,9 +13,7 @@ const PushService = {
     const users = await repo.user.getAll({
       ids: channel.users.filter((id) => id !== msg.userId),
     });
-
     const subs = users.map((u) => Object.values(u.webPush || {})).flat();
-    console.log(subs);
 
     const notif = {
       timeout: 10000,
@@ -33,7 +31,6 @@ const PushService = {
       },
     };
 
-    console.log(notif);
     return push(
       subs,
       notif,
