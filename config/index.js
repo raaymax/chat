@@ -1,24 +1,45 @@
 /* eslint-disable global-require */
 const init = require('./init');
 
+const defaults = {
+  port: process.env.PORT || 8080,
+  databaseUrl: process.env.DATABASE_URL,
+  cors: [
+    'https?://localhost(:[0-9]{,4})',
+  ],
+  fileStorage: 'memory',
+  imagesUrl: 'http://localhost:8080',
+  serverWebUrl: 'http://localhost:8080',
+};
+
 try {
   init();
   if (process.env.NODE_ENV === 'test') {
     module.exports = {
+      ...defaults,
       // eslint-disable-next-line import/no-unresolved
       ...require('../secrets.json'),
-      ...require('../tests/chat.config.tests'),
+      ...safeLoad('../tests/chat.config.tests'),
     };
   } else {
     module.exports = {
+      ...defaults,
       // eslint-disable-next-line import/no-unresolved
-      ...require('../secrets.json'),
+      ...safeLoad('../secrets.json'),
       // eslint-disable-next-line import/no-unresolved
-      ...require('../chat.config'),
+      ...safeLoad('../chat.config'),
     };
   }
 } catch (err) {
   // eslint-disable-next-line no-console
   console.error('Config file is missing');
   process.exit(1);
+}
+
+function safeLoad(file) {
+  try {
+    return require(file);
+  } catch (err) {
+    return {};
+  }
 }

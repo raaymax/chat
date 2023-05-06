@@ -21,48 +21,50 @@ Quack prioritizes privacy and security by allowing users to host their own app, 
 
 ## Configuration
 
-`chat.config.js` (example in `chat.config.example.js`)
+To override default settings `chat.config.js` file can be created in root directory of the project.
+File should export folowing object:
 ```javascript
-module.exports = {
-  port: 8080,
-  sessionSecret: '',
-  vapid: {
-    publicKey: '',
-    secretKey: '',
+type ChatConfig = {
+  port?: number // default `PORT` env otherwise `8080`
+  sessionSecret?: string // auto generated on first run to `secrets.json` but can be overwritten here
+  vapid?: { // auto generated on first run to `secrets.json` but can be overwritten here
+    publicKey: string
+    secretKey: string
   },
-  databaseUrl: process.env.DATABASE_URL,
-
-  cors: [
-    'https?://localhost(:[0-9]{,4})',
-  ],
-  fileStorage: process.env.NODE_ENV === 'test' ? 'memory' : 'gcs',
-  gcsBucket: '',
-  serverWebUrl: 'http://localhost:8080',
-  imagesUrl: '',
+  databaseUrl?: string // default `DATABASE_URL` env
+  cors?: string[] // by default [ 'https?://localhost(:[0-9]{,4})' ],
+  fileStorage?: 'memory' | 'gcs' // default `memory`
+  gcsBucket?: string // google cloud bucket name
+  serverWebUrl?: string // default: 'http://localhost:8080',
+  imagesUrl: string // currently it's imgix.com integration but to be removed
 };
 ```
-In this case env variable `DATABSE_URL` will be used to connect to the database.
 
 ## Environment variables
 
-`ENABLE_PUBSUB` [boolean] - will connect to google pubsub
-
+`GOOGLE_APPLICATION_CREDENTIALS` [string] - (optional) when gcs storage method is used
 
 ## Requirements
 - MongoDB
 - google cloud key for GCS
 
 
+## Files persistence
+Currently supporting GCS. To enable it set `fileStorage` in config file to `gcs` specify `gcsBucket`
+and set `GOOGLE_APPLICATION_CREDENTIALS` environment variable.
+
 ## Decisions
 
 ### Database
-Serverless mongodb instance because it's reliable and we pay only for what we used.
+We're using a serverless MongoDB instance because of its reliability and cost-effectiveness - we only pay for what we use.
+The cheapest option available on Mongo Atlas is sufficient for application, as we don't require any internal pub/sub functionality.
+
 
 ### Server
-It would be nice to have a serverless solution but for now cheepest GCE is used.  
-No idea how to propagate messages to other serverless instances.  
-mongo, redis, postgres need to be hosted to be able to watch for messages.  
-Maybe pub/sub would work but it seems complicated.  
+It would be nice to have a serverless solution, but for now, the cheapest option is using GCE. 
+I have no idea how to propagate messages to other serverless instances without a hosted pub/sub service.
+MongoDB, Redis, and Postgres need to be hosted to watch for messages.
+Perhaps Google Cloud Pub/Sub would be a good option?
 
 ## Local development setup
 
@@ -78,10 +80,9 @@ pnpm run dev
 admin / 123
 member / 123
 ```
-Currently there is no actual admin with special permissions all users are equal.
-There is also no way to create users in any other way than modifying database entries.
-Managing users TBA.
-
+Currently, there is no actual admin with special permissions; all users are equal.
+Additionally, there is no way to create users other than modifying database entries.
+Managing users is yet to be added.
 
 ## License
 
