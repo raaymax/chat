@@ -1,5 +1,6 @@
 /* eslint-disable import/no-dynamic-require */
 /* eslint-disable global-require */
+const path = require('path');
 const init = require('./init');
 
 const defaults = {
@@ -8,8 +9,11 @@ const defaults = {
   cors: [
     'https?://localhost(:[0-9]{,4})',
   ],
-  fileStorage: 'memory',
-  imagesUrl: 'http://localhost:8080',
+  storage: {
+    type: 'fs',
+    directory: path.resolve(__dirname, '../uploads'),
+  },
+  imagesUrl: 'http://localhost:8080/files',
   serverWebUrl: 'http://localhost:8080',
 };
 
