@@ -1,6 +1,5 @@
 const assert = require('assert');
 const { db } = require('../../src/infra/repositories');
-const PushService = require('../../src/infra/firebase');
 
 module.exports = (connect) => {
   describe('message:send', () => {
@@ -49,29 +48,6 @@ module.exports = (connect) => {
       assert.equal(ret.type, 'response');
       assert.equal(ret.status, 'ok');
       ws.close();
-    });
-
-    it('should send push notifications', async () => {
-      const admin = await connect('admin');
-      const member = await connect('member');
-      let push;
-      PushService.push = async (m) => { push = m; };
-      const token = 'memberToken';
-      await member.send({
-        type: 'fcm:setup',
-        token,
-      });
-      await admin.send({
-        type: 'message:send',
-        clientId: `test:${Math.random()}`,
-        channelId: channel._id.toHexString(),
-        message: { line: { text: 'Hello' } },
-        flat: 'Hello',
-      });
-      assert.ok(push.tokens.includes(token));
-      assert.equal(push.notification.title, 'Admin on main');
-      admin.close();
-      member.close();
     });
 
     it('should store message in database', async () => {

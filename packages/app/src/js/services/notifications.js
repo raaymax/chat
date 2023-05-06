@@ -1,24 +1,39 @@
 /* eslint-disable no-console */
-import { initializeApp } from 'firebase/app';
-import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 import { client } from '../core';
 
 export const initNotifications = async (config) => {
-  try {
-    // eslint-disable-next-line no-undef
-    const app = initializeApp(FIREBASE_CONFIG);
-    const messaging = getMessaging(app);
-    onMessage(messaging, (payload) => {
-      client.emit('notification', payload);
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('message', ({data}) => {
+      if (data.type) {
+        client.emit(data.type, data);
+      }
     });
-    const currentToken = await getToken(messaging, { vapidKey: config.vapidPublicKey });
-    if (currentToken) {
-      await client.req({
-        type: 'fcm:setup',
-        token: currentToken,
+
+    console.log(config);
+    navigator.serviceWorker.getRegistration('/')
+      .then((registration) => registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        // eslint-disable-next-line no-undef
+        applicationServerKey: config.vapidPublicKey,
+      }))
+      .then(async (subscription) => {
+        console.log('Push subscription successful:', subscription);
+
+        console.log(subscription.toJSON());
+        return client.req({
+          type: 'push:setup',
+          ...subscription.toJSON(),
+        });
+      })
+      .catch((err) => {
+        console.log('Service Worker registration failed: ', err);
       });
+    if ('Notification' in window) {
+      document.querySelector('body').addEventListener('click', () => {
+        Notification.requestPermission((status) => {
+          console.log('Notification permission status:', status);
+        });
+      }, {once: true});
     }
-  } catch (err) {
-    console.log('An error occurred while retrieving token. ', err);
   }
 }

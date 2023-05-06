@@ -15,13 +15,4 @@ module.exports = {
   gcsBucket: '',
   serverWebUrl: 'http://localhost:8080',
   imagesUrl: '',
-  firebase: {
-    apiKey: '',
-    authDomain: '',
-    projectId: '',
-    storageBucket: '',
-    messagingSenderId: '',
-    appId: '',
-    measurementId: '',
-  },
 };

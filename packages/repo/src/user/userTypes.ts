@@ -16,6 +16,16 @@ export type User = {
       refreshedAt: Date
     }
   }
+  webPush: {
+    [key: string]: {
+      endpoint: string
+      expirationTime: number | null
+      keys: {
+        p256dh: string
+        auth: string
+      }
+    }
+  }
 };
 
 export type UserQuery = User & {

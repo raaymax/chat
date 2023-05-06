@@ -39,15 +39,6 @@ module.exports = {
   gcsBucket: '',
   serverWebUrl: 'http://localhost:8080',
   imagesUrl: '',
-  firebase: {
-    apiKey: '',
-    authDomain: '',
-    projectId: '',
-    storageBucket: '',
-    messagingSenderId: '',
-    appId: '',
-    measurementId: '',
-  },
 };
 ```
 In this case env variable `DATABSE_URL` will be used to connect to the database.
@@ -59,7 +50,6 @@ In this case env variable `DATABSE_URL` will be used to connect to the database.
 
 ## Requirements
 - MongoDB
-- Firebase (for notifications)
 - google cloud key for GCS
 
 
