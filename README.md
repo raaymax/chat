@@ -33,10 +33,13 @@ type ChatConfig = {
   },
   databaseUrl?: string // default `DATABASE_URL` env
   cors?: string[] // by default [ 'https?://localhost(:[0-9]{,4})' ],
-  fileStorage?: 'memory' | 'gcs' // default `memory`
-  gcsBucket?: string // google cloud bucket name
-  serverWebUrl?: string // default: 'http://localhost:8080',
-  imagesUrl: string // currently it's imgix.com integration but to be removed
+  storage?: {
+    type: 'memory' | 'gcs' | 'fs' // default `fs` / `memory` in tests
+    directory: string // where to save files when type `fs`
+    bucket: string // bucket name for `gcs`
+  }
+  serverWebUrl?: string // default: 'http://localhost:8080'
+  imagesUrl: string // default: 'http://localhost:8080/files' can be used for imgix.com 
 };
 ```
 
@@ -46,11 +49,11 @@ type ChatConfig = {
 
 ## Requirements
 - MongoDB
-- google cloud key for GCS
+- (optional) google cloud key for GCS
 
 
 ## Files persistence
-Currently supporting GCS. To enable it set `fileStorage` in config file to `gcs` specify `gcsBucket`
+Currently supporting Google Cloud Storage. To enable it set `fileStorage` in config file to `gcs` specify `gcsBucket`
 and set `GOOGLE_APPLICATION_CREDENTIALS` environment variable.
 
 ## Decisions

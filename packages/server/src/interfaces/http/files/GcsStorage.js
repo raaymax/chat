@@ -4,7 +4,7 @@ const { v4: uuid } = require('uuid');
 const config = require('../../../../../../config');
 
 const storage = new Storage();
-const bucket = storage.bucket(config.gcsBucket);
+const bucket = storage.bucket(config.storage.bucket);
 
 class GcsStorage {
   async _handleFile(req, file, cb) {
