@@ -25,7 +25,6 @@
     "express": "4.17.3",
     "express-rate-limit": "6.7.0",
     "express-session": "1.17.3",
-    "firebase-admin": "11.3.0",
     "helmet": "6.1.5",
     "joi": "17.6.0",
     "link-preview-js": "3.0.4",
@@ -34,7 +33,7 @@
     "openai": "2.0.5",
     "socket.io": "4.5.1",
     "uuid": "8.3.2",
-    "web-push": "3.4.5",
+    "web-push": "3.6.1",
     "ws": "8.5.0"
   },
   "devDependencies": {

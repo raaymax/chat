@@ -14,5 +14,4 @@ module.exports = {
   fileStorage: process.env.NODE_ENV === 'test' ? 'memory' : 'gcs',
   serverWebUrl: 'http://localhost:8080',
   imagesUrl: 'http://localhost:8080',
-  firebase: null,
 };

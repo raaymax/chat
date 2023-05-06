@@ -29,6 +29,7 @@ const actions = [
 
   require('./progressLoad'),
   require('./progressUpdate'),
+  require('./pushSetup'),
 
   require('./badgesLoad'),
   {

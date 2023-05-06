@@ -2,10 +2,6 @@ const repo = require('../../infra/repositories');
 const conf = require('../../../../../config');
 const tools = require('../tools');
 
-const omitUndefined = (obj) => Object.fromEntries(
-  Object.entries(obj).filter(([, v]) => v !== undefined),
-);
-
 const PushService = {
   send: async (msg, { push = {} } = {}) => {
     if (!msg.message) return Promise.resolve();
@@ -18,50 +14,30 @@ const PushService = {
       ids: channel.users.filter((id) => id !== msg.userId),
     });
 
-    const tokens = [...new Set(users.map((u) => Object.keys(u.notifications || {})).flat())];
+    const subs = users.map((u) => Object.values(u.webPush || {})).flat();
+    console.log(subs);
 
-    if (tokens.length === 0) return;
-    const message = {
-      tokens,
+    const notif = {
+      timeout: 10000,
+      urgency: 'high',
       topic: 'messages',
-      data: omitUndefined({
+      data: {
+        icon: user.avatarUrl,
         channelId: channel.id,
         parentId: msg.parentId,
         messageId: msg.id,
         createdAt: new Date(msg.createdAt).toISOString(),
-      }),
-      notification: {
         title: `${user?.name || 'Guest'} on ${channel.name}`,
         body: msg.flat,
-      },
-      android: {
-        priority: 'high',
-        notification: {
-          ...(user.avatarUrl ? { imageUrl: user.avatarUrl } : {}),
-          channel_id: 'default',
-          icon: user.avatarUrl,
-          color: '#7e55c3',
-          sound: 'https://chat.codecat.io/assets/sound.mp3',
-          tag: channel.id,
-        },
-      },
-      webpush: {
-        headers: {
-          icon: user.avatarUrl,
-          Urgency: 'high',
-        },
-        fcm_options: {
-          link: `${conf.serverWebUrl}/#/${channel.name}`,
-        },
-        notification: {
-          silent: false,
-          vibrate: [200, 100, 200],
-          badge: user.avatarUrl,
-          icon: user.avatarUrl,
-        },
+        link: `${conf.serverWebUrl}/#/${channel.name}`, // FIXME: use above ids
       },
     };
-    return push(message);
+
+    console.log(notif);
+    return push(
+      subs,
+      notif,
+    );
   },
 };
 

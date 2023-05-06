@@ -10,12 +10,4 @@ window.client = client;
 client.req = (msg) => Request.send(msg, client);
 client.notif = (msg) => Notification.send(msg, client);
 
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.addEventListener('message', ({data}) => {
-    if (data.type) {
-      client.emit(data.type, data);
-    }
-  });
-}
-
 export { client };

@@ -20,6 +20,7 @@ export class UserSerializer implements Serializer<UserQuery, User, MongoUser> {
           { mobile: v.mobile, refreshedAt: makeDate(v.refreshedAt) }
         ])) || []
     ) : {}),
+    webPush: arg.webPush,
   }) : undefined;
   serializeQuery: (arg: UserQuery) => Filter<MongoUser> = (arg) => arg ? removeUndefined({
     ...this.serializeModel(arg),
@@ -40,6 +41,7 @@ export class UserSerializer implements Serializer<UserQuery, User, MongoUser> {
       mainChannelId: makeId(arg.mainChannelId),
       avatarFileId: arg.avatarFileId,
       notifications: arg.notifications,
+      webPush: arg.webPush,
     }) as User;
   };
 
