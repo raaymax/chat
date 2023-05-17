@@ -1,7 +1,6 @@
 v1.9.0
 feat(messages): better infinite scroll
 feat(app): data caching
-refactor(server): migrate repositories to TS
 - refactor(app): migrate selectors to separate files
 - refactor(app): use dixie instead of redux
 - improvement(app): app should startup from memory if possible
@@ -16,7 +15,7 @@ refactor(server): migrate repositories to TS
 - chore: remove personal data
 - refactor(firebase): move firebase to optional package
 
-v1.9.x
+backlog
 - fix(emojis): unable to backspace emoji on mobile
 - fix(attachments): attachment is displaying in all inputs
 - fix(messages): after long time away load more messages will not load all of them
@@ -31,8 +30,6 @@ v1.9.x
 - fix(app): visible view on mobile is smaller than it should be
 - fix(links): ability to remove link preview
 - fix(links): allegro links are not working
-
-v1.10.0
 - feat(avatar): ability to upload avatar
 - feat(link-preview): generate summary of link content
 - feat(channels): ability to change channel name
@@ -44,22 +41,15 @@ v1.10.0
 - feat(reminders): reminders
     needs job sheduler like agenda?
 - feat(attachments): image preview on fullscreen
- 
-v2.0.0 // first public release
 - feat(users)!: registration of users
 - feat(users): invitations
 - chore: change all access keys
-
-backlog:
-<<<<<<< HEAD
 - chore: add screenshots to readme
 - chore: enable dependabot
 - chore: enable CodeQL
 - feat(plugins): create initial plugin system
 - feat(links): generating summary of link contents
-=======
 - fix: security issues with headers
->>>>>>> main
 - fix(login): login failed message is not displayed
 - feat(history): add support for back button 
 - feat(toolbar): custom emojis reactions
