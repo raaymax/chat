@@ -1,9 +1,18 @@
 const express = require('express');
 const crypto = require('crypto');
+const rateLimit = require('express-rate-limit');
 const userService = require('../../app/user');
 const db = require('../../infra/repositories');
 
 const router = new express.Router();
+if (process.env.NODE_ENV !== 'test') {
+  router.use(rateLimit({
+    windowMs: 5 * 60 * 1000,
+    max: 100,
+    standardHeaders: true,
+    legacyHeaders: false,
+  }));
+}
 
 router.post('/', createSession);
 router.delete('/', deleteSession);

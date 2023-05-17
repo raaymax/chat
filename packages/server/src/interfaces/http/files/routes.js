@@ -1,12 +1,21 @@
+/* eslint-disable global-require */
 const multer = require('multer');
 const express = require('express');
-const config = require('../../../../../../chat.config');
+const config = require('../../../../../../config');
 
 const router = new express.Router();
 
-const storage = config.fileStorage === 'memory'
-  ? require('./MemoryStorage')
-  : require('./GcsStorage');
+const storage = (() => {
+  switch (config.storage?.type) {
+  case 'fs':
+    return require('./FsStorage');
+  case 'gcs':
+    return require('./GcsStorage');
+  case 'memory':
+  default:
+    return require('./MemoryStorage');
+  }
+})();
 
 const upload = multer({ storage });
 

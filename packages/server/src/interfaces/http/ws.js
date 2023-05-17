@@ -4,7 +4,7 @@ const db = require('../../infra/repositories');
 const bus = require('../../infra/bus');
 const actions = require('../../app/actions');
 const corsConfig = require('./cors');
-const firebase = require('../../infra/firebase');
+const { push } = require('../../infra/webpush');
 
 module.exports = (server) => {
   const io = new Server(server, {
@@ -48,7 +48,7 @@ module.exports = (server) => {
     }
     bus.on(userId, sendHandler);
 
-    ws.on('message', async (msg) => actions.dispatch(msg, { userId, bus, push: (...args) => firebase.push(...args) }));
+    ws.on('message', async (msg) => actions.dispatch(msg, { userId, bus, push }));
 
     ws.on('close', () => {
       bus.off(userId, sendHandler);

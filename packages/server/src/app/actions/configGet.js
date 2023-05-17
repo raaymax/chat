@@ -1,6 +1,7 @@
 const Joi = require('joi');
 const pack = require('../../../package.json');
 const repo = require('../../infra/repositories');
+const config = require('../../../../../config');
 
 module.exports = {
   type: 'config:get',
@@ -13,6 +14,7 @@ module.exports = {
       type: 'config',
       appVersion: pack.version,
       mainChannelId: user.mainChannelId ?? (await repo.channel.get({ cid: user.id })).id,
+      vapidPublicKey: config.vapid.publicKey,
     });
     await res.ok();
   },

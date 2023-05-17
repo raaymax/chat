@@ -1,5 +1,5 @@
 const { Configuration, OpenAIApi } = require('openai');
-const config = require('../../../../chat.config');
+const config = require('../../../../config');
 
 let openai = { createCompletion: () => Promise.resolve('OpenAI is disabled') };
 if (config.openaiApiKey) {

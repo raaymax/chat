@@ -51,11 +51,15 @@ v2.0.0 // first public release
 - chore: change all access keys
 
 backlog:
+<<<<<<< HEAD
 - chore: add screenshots to readme
 - chore: enable dependabot
 - chore: enable CodeQL
 - feat(plugins): create initial plugin system
 - feat(links): generating summary of link contents
+=======
+- fix: security issues with headers
+>>>>>>> main
 - fix(login): login failed message is not displayed
 - feat(history): add support for back button 
 - feat(toolbar): custom emojis reactions

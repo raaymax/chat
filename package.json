@@ -33,7 +33,7 @@
     "express-session": "1.17.3",
     "migrate-mongo": "9.0.0",
     "mongodb": "4.5.0",
-    "web-push": "3.4.5"
+    "web-push": "3.6.1"
   },
   "devDependencies": {
     "cz-conventional-changelog": "3.3.0",

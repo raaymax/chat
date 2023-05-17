@@ -1,5 +1,6 @@
 const Joi = require('joi');
 const repo = require('../../infra/repositories');
+const tools = require('../tools');
 
 module.exports = {
   type: 'users:load',
@@ -12,7 +13,7 @@ module.exports = {
       type: 'user',
       id: user.id,
       name: user.name,
-      avatarUrl: user.avatarUrl,
+      avatarUrl: tools.createImageUrl(user.avatarFileId),
     }));
     res.ok();
   },

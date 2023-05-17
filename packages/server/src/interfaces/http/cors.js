@@ -1,4 +1,4 @@
-const config = require('../../../../../chat.config');
+const config = require('../../../../../config');
 
 module.exports = {
   credentials: true,

@@ -9,10 +9,21 @@ export type User = {
   password: string
   clientId: string
   mainChannelId: Id | null
+  avatarFileId: string
   notifications: {
     [key: string]: {
       mobile: string
       refreshedAt: Date
+    }
+  }
+  webPush: {
+    [key: string]: {
+      endpoint: string
+      expirationTime: number | null
+      keys: {
+        p256dh: string
+        auth: string
+      }
     }
   }
 };

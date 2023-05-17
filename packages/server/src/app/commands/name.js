@@ -1,4 +1,5 @@
 const repo = require('../../infra/repositories');
+const tools = require('../tools');
 
 module.exports = {
   name: 'name',
@@ -12,7 +13,7 @@ module.exports = {
       type: 'user',
       id: user.id,
       name: user.name,
-      avatarUrl: user.avatarUrl,
+      avatarUrl: tools.createImageUrl(user.avatarFileId),
     });
     return res.ok();
   },
