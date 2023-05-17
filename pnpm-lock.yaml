@@ -301,6 +301,40 @@ importers:
         specifier: 2.0.2
         version: 2.0.2(supertest@6.2.3)
 
+  plugins/todo:
+    dependencies:
+      '@quack/repo':
+        specifier: workspace:*
+        version: link:../../packages/repo
+      joi:
+        specifier: 17.6.0
+        version: 17.6.0
+      js-plugin:
+        specifier: 1.1.0
+        version: 1.1.0
+      mongodb:
+        specifier: 4.5.0
+        version: 4.5.0
+      typescript:
+        specifier: 4.9.5
+        version: 4.9.5
+      zod:
+        specifier: 3.21.4
+        version: 3.21.4
+    devDependencies:
+      '@types/node':
+        specifier: 18.14.0
+        version: 18.14.0
+      '@typescript-eslint/eslint-plugin':
+        specifier: 5.53.0
+        version: 5.53.0(@typescript-eslint/parser@5.53.0)(eslint@8.34.0)(typescript@4.9.5)
+      '@typescript-eslint/parser':
+        specifier: 5.53.0
+        version: 5.53.0(eslint@8.34.0)(typescript@4.9.5)
+      eslint:
+        specifier: 8.34.0
+        version: 8.34.0
+
 packages:
 
   /@ampproject/remapping@2.2.0:
@@ -5949,6 +5983,10 @@ packages:
       '@sideway/address': 4.1.4
       '@sideway/formula': 3.0.1
       '@sideway/pinpoint': 2.0.0
+    dev: false
+
+  /js-plugin@1.1.0:
+    resolution: {integrity: sha512-3r94apaqpPUhdgAHVTjOiRWf++NvJtuMd6EYi9t0BK2drNGLdOuyfecrsADKQ9sCiB0nud2nyyQM3ZfgNRTfsw==}
     dev: false
 
   /js-sdsl@4.3.0:

@@ -7,6 +7,11 @@ import { BadgeRepo } from './badge/badgeRepo';
 import { SessionRepo } from './session/sessionRepo';
 import { ObjectId } from 'mongodb';
 
+import Repo from './repo';
+export { Repo };
+
+export * from './util';
+export * from './types';
 export * from './message/messageTypes';
 export * from './channel/channelTypes';
 

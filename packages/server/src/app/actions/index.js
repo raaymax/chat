@@ -1,4 +1,6 @@
 const Joi = require('joi');
+const repo = require('../../infra/repositories');
+const service = require('../services');
 /* eslint-disable global-require */
 
 const actions = [
@@ -72,6 +74,11 @@ const dispatch = async ({ type, seqId, ...body }, { userId, bus, push = () => {}
       seqId,
     }),
   };
+
+  const srv = {
+    repo,
+    service,
+  };
   try {
     if (typeof handler === 'function') {
       await handler(wsreq, wsres);
@@ -84,7 +91,7 @@ const dispatch = async ({ type, seqId, ...body }, { userId, bus, push = () => {}
       }
       const { error: uerr } = await Joi.string().required().validate(wsreq.userId);
       if (uerr) throw uerr;
-      await handler.handler(wsreq, wsres);
+      await handler.handler(wsreq, wsres, srv);
     }
   } catch (err) {
     // console.error(err); // maybe attach logger

@@ -3,3 +3,4 @@ packages:
   - 'packages/app'
   - 'packages/server'
   - 'packages/repo'
+  - 'plugins/*'
