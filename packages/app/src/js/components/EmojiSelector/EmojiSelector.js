@@ -24,7 +24,7 @@ export const EmojiSelector = () => {
   useEffect(() => dispatch(loadEmojis()), [dispatch]);
 
   const fuse = useMemo(() => new Fuse(emojis, {
-    keys: ['name'],
+    keys: ['name', 'shortname'],
     findAllMatches: true,
     includeMatches: true,
   }), [emojis]);
@@ -68,7 +68,7 @@ export const EmojiSelector = () => {
       ? emojis.find((e) => e.shortname === name)
       : options[selected].item;
     const node = emoji
-      ? buildEmojiNode(emoji)
+      ? buildEmojiNode(emoji, getUrl)
       : document.createTextNode(name);
     const fresh = document.createTextNode('\u00A0');
     const r = document.createRange();
