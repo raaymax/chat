@@ -8,6 +8,7 @@ COPY pnpm-*.yaml ./
 COPY packages/server/package*.json ./packages/server/
 COPY packages/app/package*.json ./packages/app/
 COPY packages/rpc/package*.json ./packages/rpc/
+COPY ./config ./config
 COPY ./packages/rpc ./packages/rpc
 COPY ./packages/repo ./packages/repo
 #RUN npm install -g npm
@@ -27,6 +28,7 @@ COPY package*.json ./
 COPY pnpm-*.yaml ./
 COPY packages/server/package*.json ./packages/server/
 COPY packages/app/package*.json ./packages/app/
+COPY ./config ./config
 COPY ./packages/rpc ./packages/rpc
 COPY ./packages/repo ./packages/repo
 #RUN npm install -g npm
