@@ -194,6 +194,7 @@ export const sendFromDom = (stream, dom) => async (dispatch, getState) => {
     msg.parentId = stream.parentId;
     dispatch(actions.clearFiles());
     dispatch(send(stream, msg));
+    dispatch(loadMessagesLive(stream));
   }
 };
 

@@ -14,14 +14,11 @@ v1.8.x
 - fix(channels): wider desktop clicking on channel should not close sidebar
 - fix(style): remove border line on right edge of screen
 - fix(commands): help should be contexted - no ping outside of thread
-- fix(commands): rename /setMain to /main)
 - improvement(app): app should startup from memory if possible
 - refactor(app): migrate selectors to separate files
-- refactor(server): finish repository serialization?
 - refactor(app): use dixie instead of redux
 
 v1.9.0
-- feat(avatar): ability to upload avatar
 - feat(link-preview): generate summary of link content
 - feat(channels): ability to change channel name
 - feat(share): ability to share files

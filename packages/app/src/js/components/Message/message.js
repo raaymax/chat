@@ -2,13 +2,14 @@ import { h } from 'preact';
 import { useCallback } from 'preact/hooks';
 import { formatTime, formatDateDetailed } from '../../utils';
 import { Attachments } from './attachments';
+import { Files } from '../Files/Files';
 import { Reactions } from '../Reaction/Reaction';
 import { Toolbar } from '../Toolbar/Toolbar';
-import { Progress } from './progress';
+import { Progress } from './elements/Progress';
 import { Info } from './info';
 import { ThreadInfo } from './threadInfo';
 import { MessageContext, useMessageData, useMessageUser } from '../../contexts/message';
-import { useHovered } from '../../contexts/hover';
+import { useHoverCtrl } from '../../contexts/hover';
 import { useStream } from '../../contexts/stream';
 import { buildMessageBody } from './messageBuilder';
 import { isToday } from './utils';
@@ -21,28 +22,9 @@ const MessageBase = ({onClick, ...props} = {}) => {
     createdAt, pinned,
     linkPreviews,
   } = msg;
-  const [hovered, setHovered] = useHovered()
+  const { onEnter, toggleHovered, onLeave } = useHoverCtrl(id);
   const [{selected}] = useStream();
   const user = useMessageUser();
-
-  const onEnter = useCallback(() => {
-    setHovered(id);
-  }, [setHovered, id]);
-
-  const toggleHovered = useCallback(() => {
-    if (!navigator.userAgentData.mobile) return;
-    if (hovered !== id) {
-      setHovered(id);
-    } else {
-      setHovered(null);
-    }
-  }, [hovered, setHovered, id]);
-
-  const onLeave = useCallback(() => {
-    if (hovered === id) {
-      setHovered(null);
-    }
-  }, [setHovered, hovered, id]);
 
   return (
     <div
@@ -69,12 +51,12 @@ const MessageBase = ({onClick, ...props} = {}) => {
           {buildMessageBody(message, { emojiOnly })}
         </div>
 
-        <Attachments />
+        <Files list={msg.attachments} />
         <LinkPreviewList links={linkPreviews} />
         <Info />
         <Reactions />
         <ThreadInfo />
-        <Progress />
+        <Progress progress={msg.progress} />
         <Toolbar />
       </div>
     </div>
