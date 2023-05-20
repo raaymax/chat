@@ -36,6 +36,7 @@ RUN pnpm i --prod
 COPY --from=appbuild /usr/src/app/packages/app/dist ./packages/app/dist
 COPY ./packages/server/src ./packages/server/src
 COPY ./migrations ./migrations
+COPY ./entrypoint.sh ./
 COPY migrate-mongo-config.js ./
 COPY chat.config.js ./
 
