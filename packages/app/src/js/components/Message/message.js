@@ -53,6 +53,8 @@ const MessageBase = ({onClick, ...props} = {}) => {
         if (onClick) onClick(e);
       }}
       data-idx={msg.streamIdx}
+      data-id={msg.id}
+      data-date={msg.createdAt}
       {...props}
       class={['message', (pinned ? 'pinned' : ''), (selected === id ? 'selected' : ''), ...props.class].join(' ')}
       onmouseenter={onEnter}

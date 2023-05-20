@@ -40,6 +40,8 @@ export const messageFormatter = ({
           sameUser={sameUser}
           data={msg}
         />,
-    ].reverse();
-  }).flat().filter((e) => e !== null).reverse();
+    ];
+  }).flat()
+    .filter((e) => e !== null)
+    .reverse();
 }

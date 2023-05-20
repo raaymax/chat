@@ -14,7 +14,6 @@ export class MessageSerializer implements Serializer<MessageQuery, Message, Mong
       userId: makeObjectId(arg.userId),
       channelId: makeObjectId(arg.channelId),
       parentId: arg.parentId === '' ? null : makeObjectId(arg.parentId),
-      streamIdx: arg.streamIdx,
       channel: arg.channel,
       clientId: arg.clientId,
       emojiOnly: arg.emojiOnly,
@@ -42,10 +41,6 @@ export class MessageSerializer implements Serializer<MessageQuery, Message, Mong
       ...(arg.search ? {$text: {$search: arg.search}} : {}),
       ...(arg.before ? {createdAt: {$lte: makeDate(arg.before)}} : {}),
       ...(arg.after ? {createdAt: {$gte: makeDate(arg.after)}} : {}),
-      ...(arg.aroundIdx ? {streamIdx: { $lte: arg.aroundIdx + arg.pageSize, $gte: arg.aroundIdx - arg.pageSize } } : {}),
-      ...(arg.beforeIdx ? {streamIdx: { $lte: arg.beforeIdx } } : {}),
-      ...(arg.afterIdx ? {streamIdx: { $gte: arg.afterIdx } } : {}),
-      ...((arg.page || arg.page === 0) ? {streamIdx: { $gte: arg.page * arg.pageSize, $lte: arg.page * arg.pageSize + arg.pageSize - 1 } } : {}),
     });
   }
 
@@ -60,7 +55,6 @@ export class MessageSerializer implements Serializer<MessageQuery, Message, Mong
       userId: makeId(arg.userId),
       channelId: makeId(arg.channelId),
       parentId: makeId(arg.parentId) || '',
-      streamIdx: arg.streamIdx,
       channel: arg.channel,
       clientId: arg.clientId,
       emojiOnly: arg.emojiOnly,

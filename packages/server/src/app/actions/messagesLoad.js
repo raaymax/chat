@@ -12,12 +12,10 @@ module.exports = {
       pinned: Joi.string().optional(),
       before: Joi.string().optional(),
       after: Joi.string().optional(),
-      aroundIdx: Joi.number().optional(),
-      beforeIdx: Joi.number().optional(),
-      afterIdx: Joi.number().optional(),
       page: Joi.number().optional(),
       pageSize: Joi.number().optional().default(50),
       limit: Joi.number().optional(),
+      offset: Joi.number().optional(),
     }),
   },
   handler: async (req, res) => {
@@ -42,20 +40,18 @@ module.exports = {
       parentId: msg.parentId,
       before: msg.before,
       after: msg.after,
-      beforeIdx: msg.beforeIdx,
-      afterIdx: msg.afterIdx,
       page: msg.page,
       pageSize: msg.pageSize,
       ...(msg.pinned ? { pinned: msg.pinned } : {}),
-    }, { limit: msg.limit, order: msg.after ? 1 : -1 });
+    }, { limit: msg.limit, offset: msg.offset, order: msg.after ? 1 : -1 });
 
     if (msg.after) msgs.reverse();
 
     msgs.forEach((m) => res.send({ type: 'message', ...m }));
     res.ok({
       count: msgs.length,
-      maxIdx: msgs.reduce((acc, v) => Math.max(acc, v.streamIdx || -Infinity), -Infinity),
-      minIdx: msgs.reduce((acc, v) => Math.min(acc, v.streamIdx || Infinity), Infinity),
+      minDate: msgs[0].createdAt,
+      maxDate: msgs[msgs.length - 1].createdAt,
     });
   },
 };

@@ -16,7 +16,7 @@ export class MessageRepo extends Repo<MessageQuery, Message, MongoMessage> {
     const raw = await db
       .collection(this.tableName)
       .find(query)
-      .sort('streamIdx', order)
+      .sort('createdAt', order)
       .skip(offset)
       .limit(limit)
       .toArray();

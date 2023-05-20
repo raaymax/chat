@@ -1,3 +1,13 @@
+fix: url creation
+fix: url redirect
+fix: thread position jumping
+ |- feat: introduce global index
+fix: some messages from search dont have number
+fix: pins history scrolling
+fix: error after closing thread
+fix: opening links to channels
+
+
 v1.9.0
 feat(messages): better infinite scroll
 feat(app): data caching

@@ -4,7 +4,6 @@ import { Id, ReplaceType, ReplaceId, ClientId } from '../types';
 
 export const Message = z.object({
   id: Id,
-  streamIdx: z.number(),
   flat: z.string(),
   message: z.any(),
   channelId: Id,
@@ -40,9 +39,6 @@ export const MessageQuery = Message.extend({
   search: z.string(),
   before: z.date(),
   after: z.date(),
-  aroundIdx: z.number(),
-  beforeIdx: z.number(),
-  afterIdx: z.number(),
   page: z.number(),
   pageSize: z.number().default(20),
 });
