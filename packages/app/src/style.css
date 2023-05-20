@@ -53,6 +53,7 @@ body, html {
 }
 #root {
   height: 100%;
+  padding-bottom: env(keyboard-inset-height);
 }
 *, :after, :before {
   box-sizing: inherit;
