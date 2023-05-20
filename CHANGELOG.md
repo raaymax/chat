@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.1](https://github.com/codecat-io/chat/compare/quack-v1.9.0...quack-v1.9.1) (2023-05-20)
+
+
+### Bug Fixes
+
+* failing Docker image ([a0001f2](https://github.com/codecat-io/chat/commit/a0001f28d53fcdbc7414a42be37a458a1cc4d979))
+
 ## [1.9.0](https://github.com/codecat-io/chat/compare/quack-v1.8.8...quack-v1.9.0) (2023-05-20)
 
 
