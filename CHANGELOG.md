@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.9.4](https://github.com/codecat-io/chat/compare/quack-v1.9.3...quack-v1.9.4) (2023-05-20)
+
+
+### Bug Fixes
+
+* **commands:** renamed /setMain to /main ([01d4d1e](https://github.com/codecat-io/chat/commit/01d4d1eb21658147d26da132580ad77ff82cd4c7))
+* **links:** do not display links when no preview ([7eba530](https://github.com/codecat-io/chat/commit/7eba5309fd9f118403879a02bb52ca635aac5698))
+* **notifications:** merge instead of create new ([1d1bebf](https://github.com/codecat-io/chat/commit/1d1bebfef8f9eacadc05c24a03d8d4fc93bbb5ff))
+
 ## [1.9.3](https://github.com/codecat-io/chat/compare/quack-v1.9.2...quack-v1.9.3) (2023-05-20)
 
 
