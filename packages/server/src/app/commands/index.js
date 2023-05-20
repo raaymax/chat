@@ -11,7 +11,7 @@ const commands = [
   require('./ping'),
   require('./leave'),
   require('./join'),
-  require('./setMain'),
+  require('./main'),
 ];
 
 module.exports = async (req, res) => {
