@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.2](https://github.com/codecat-io/chat/compare/quack-v1.9.1...quack-v1.9.2) (2023-05-20)
+
+
+### Bug Fixes
+
+* Dockerfile ([9f94fd7](https://github.com/codecat-io/chat/commit/9f94fd7936677795722dcf484df0eb6a1ea50957))
+
 ## [1.9.1](https://github.com/codecat-io/chat/compare/quack-v1.9.0...quack-v1.9.1) (2023-05-20)
 
 
