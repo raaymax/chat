@@ -1,7 +1,5 @@
 import { h } from 'preact';
-import { useCallback } from 'preact/hooks';
 import { formatTime, formatDateDetailed } from '../../utils';
-import { Attachments } from './attachments';
 import { Files } from '../Files/Files';
 import { Reactions } from '../Reaction/Reaction';
 import { Toolbar } from '../Toolbar/Toolbar';
