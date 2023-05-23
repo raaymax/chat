@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
     "outDir": "./dist",
+    "baseUrl": "./",
     "allowJs": true,
     "target": "es6",
     "lib": [ "es2022" ],
     "sourceMap": true,
     "module": "commonjs",
-    "moduleResolution": "node",
-    "declaration": true
+    "moduleResolution": "node"
   },
-  "include": ["./src/**/*"]
+  "include": [
+    "./src/**/*"
+  ]
 }

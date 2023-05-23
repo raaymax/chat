@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unresolved */
 const webpush = require('web-push');
-const conf = require('../../../../config');
+const conf = require('@quack/config');
 
 webpush.setVapidDetails(
   'mailto:user@example.org',

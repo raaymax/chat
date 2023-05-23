@@ -49,7 +49,7 @@ const MessageBase = ({onClick, ...props} = {}) => {
           {buildMessageBody(message, { emojiOnly })}
         </div>
 
-        <Files list={msg.attachments} />
+        <Files list={msg.attachments || []} />
         <LinkPreviewList links={linkPreviews} />
         <Info />
         <Reactions />

@@ -1,5 +1,5 @@
 const { Configuration, OpenAIApi } = require('openai');
-const config = require('../../../../config');
+const config = require('@quack/config');
 
 let openai = { createCompletion: () => Promise.resolve('OpenAI is disabled') };
 if (config.openaiApiKey) {

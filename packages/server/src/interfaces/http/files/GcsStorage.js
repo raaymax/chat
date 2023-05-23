@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
 const { Storage } = require('@google-cloud/storage');
 const { v4: uuid } = require('uuid');
-const config = require('../../../../../../config');
+const config = require('@quack/config');
 
 const storage = new Storage();
 const bucket = storage.bucket(config.storage.bucket);

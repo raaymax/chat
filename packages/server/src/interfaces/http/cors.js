@@ -1,4 +1,4 @@
-const config = require('../../../../../config');
+const config = require('@quack/config');
 
 module.exports = {
   credentials: true,

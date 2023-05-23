@@ -1,6 +1,6 @@
 const expressSession = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(expressSession);
-const config = require('../../../../../config');
+const config = require('@quack/config');
 
 module.exports = expressSession({
   secret: config.sessionSecret,

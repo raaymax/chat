@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
-const config = require('../../../../config');
+const config = require('@quack/config');
 
 exports.genToken = () => crypto.randomBytes(48).toString('hex');
 exports.genHash = (data) => bcrypt.hashSync(data, 10);

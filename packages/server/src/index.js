@@ -1,5 +1,5 @@
+const config = require('@quack/config');
 const server = require('./server');
-const config = require('../../../config');
 require('./plugins');
 
 // eslint-disable-next-line no-console

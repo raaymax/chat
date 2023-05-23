@@ -1,6 +1,6 @@
 /* eslint-disable global-require */
 const { createRepositories } = require('@quack/repo');
-const config = require('../../../../config');
+const config = require('@quack/config');
 
 if (config.databaseUrl.startsWith('mongodb')) {
   module.exports = createRepositories(config.databaseUrl);

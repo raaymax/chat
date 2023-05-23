@@ -3,7 +3,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const {InjectManifest} = require('workbox-webpack-plugin');
 const webpack = require('webpack');
 const pack = require('../../package.json');
-const config = require('../../config');
+const config = require('@quack/config');
 
 module.exports = {
   entry: {

@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
 const { v4: uuid } = require('uuid');
 const fs = require('fs');
-const config = require('../../../../../../config');
+const config = require('@quack/config');
 
 class FsStorage {
   files = {};
