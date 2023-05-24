@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.9.5](https://github.com/codecat-io/chat/compare/quack-v1.9.4...quack-v1.9.5) (2023-05-24)
+
+
+### Bug Fixes
+
+* **emojis:** emoji selector don't see custom emojis ([e6c9fd6](https://github.com/codecat-io/chat/commit/e6c9fd6a023444a863e9075b172bac2752d8294f))
+* eslint errors ([003a7ae](https://github.com/codecat-io/chat/commit/003a7ae99a41ea166832c4bc1b320b2114c8793a))
+* eslint failing config ([2771cb8](https://github.com/codecat-io/chat/commit/2771cb86d7e9301f1fc9d628618c3526e11218e7))
+* userId is not ObjectId in messages ([761ad85](https://github.com/codecat-io/chat/commit/761ad853be94789e64a33038e69d384cdb62a767))
+
 ## [1.9.4](https://github.com/codecat-io/chat/compare/quack-v1.9.3...quack-v1.9.4) (2023-05-20)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.6](https://github.com/codecat-io/chat/compare/rpc-v1.8.5...rpc-v1.8.6) (2023-05-24)
+
+
+### Bug Fixes
+
+* eslint failing config ([2771cb8](https://github.com/codecat-io/chat/commit/2771cb86d7e9301f1fc9d628618c3526e11218e7))
+
 ## [1.8.5](https://github.com/codecat-io/chat/compare/rpc-v1.8.4...rpc-v1.8.5) (2023-04-08)
 
 
