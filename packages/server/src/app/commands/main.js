@@ -2,7 +2,7 @@ const repo = require('../../infra/repositories');
 const pack = require('../../../package.json');
 
 module.exports = {
-  name: 'setMain',
+  name: 'main',
   description: 'Sets current channel as main',
   args: [],
   handler: async (req, res) => {

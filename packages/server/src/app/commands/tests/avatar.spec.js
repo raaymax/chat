@@ -1,6 +1,6 @@
 const assert = require('assert');
+const config = require('@quack/config');
 const api = require('../../actions/tests/api');
-const config = require('../../../../../../config');
 
 describe('/avatar', () => {
   let user;

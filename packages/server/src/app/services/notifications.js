@@ -1,5 +1,5 @@
+const conf = require('@quack/config');
 const repo = require('../../infra/repositories');
-const conf = require('../../../../../config');
 const tools = require('../tools');
 
 const PushService = {

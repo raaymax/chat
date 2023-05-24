@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
+    "lint": "eslint --ext .ts,.js .",
     "test": "NODE_ENV='test' DATABASE_URL='mongodb://chat:chat@localhost:27017/tests?authSource=admin' mocha  --watch",
     "test:ci": "NODE_ENV='test' mocha --exit"
   },
@@ -14,6 +15,7 @@
   "dependencies": {
     "@google-cloud/pubsub": "3.4.1",
     "@google-cloud/storage": "5.19.0",
+    "@quack/config": "workspace:*",
     "@quack/repo": "workspace:*",
     "bcrypt": "5.1.0",
     "body-parser": "1.20.0",
@@ -32,6 +34,7 @@
     "multer": "1.4.5-lts.1",
     "openai": "2.0.5",
     "socket.io": "4.5.1",
+    "ts-node": "10.9.1",
     "uuid": "8.3.2",
     "web-push": "3.6.1",
     "ws": "8.5.0"
@@ -43,6 +46,7 @@
     "npm-run-all": "4.1.5",
     "socket.io-client": "4.5.1",
     "supertest": "6.2.3",
-    "superwstest": "2.0.2"
+    "superwstest": "2.0.2",
+    "turbo": "1.9.8"
   }
 }

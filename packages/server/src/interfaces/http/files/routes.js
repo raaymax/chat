@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 const multer = require('multer');
 const express = require('express');
-const config = require('../../../../../../config');
+const config = require('@quack/config');
 
 const router = new express.Router();
 

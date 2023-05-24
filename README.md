@@ -4,6 +4,7 @@
 
 [![Tests](https://github.com/codecat-io/chat/actions/workflows/release.yml/badge.svg)](https://github.com/codecat-io/chat/actions/workflows/release.yml)
 [![Release](https://shields.io/github/v/release/codecat-io/chat?display_name=tag)](https://shields.io/github/v/release/codecat-io/chat?display_name=tag)
+[![CodeFactor](https://img.shields.io/codefactor/grade/github/codecat-io/chat)](https://www.codefactor.io/repository/github/codecat-io/chat)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -39,7 +40,7 @@ type ChatConfig = {
     bucket: string // bucket name for `gcs`
   }
   serverWebUrl?: string // default: 'http://localhost:8080'
-  imagesUrl: string // default: 'http://localhost:8080/files' can be used for imgix.com 
+  imagesUrl?: string // default: 'http://localhost:8080/files' can be used for imgix.com 
 };
 ```
 

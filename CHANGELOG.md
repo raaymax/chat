@@ -1,5 +1,68 @@
 # Changelog
 
+## [1.9.4](https://github.com/codecat-io/chat/compare/quack-v1.9.3...quack-v1.9.4) (2023-05-20)
+
+
+### Bug Fixes
+
+* **commands:** renamed /setMain to /main ([01d4d1e](https://github.com/codecat-io/chat/commit/01d4d1eb21658147d26da132580ad77ff82cd4c7))
+* **links:** do not display links when no preview ([7eba530](https://github.com/codecat-io/chat/commit/7eba5309fd9f118403879a02bb52ca635aac5698))
+* **notifications:** merge instead of create new ([1d1bebf](https://github.com/codecat-io/chat/commit/1d1bebfef8f9eacadc05c24a03d8d4fc93bbb5ff))
+
+## [1.9.3](https://github.com/codecat-io/chat/compare/quack-v1.9.2...quack-v1.9.3) (2023-05-20)
+
+
+### Bug Fixes
+
+* Dockerfile ([b858a44](https://github.com/codecat-io/chat/commit/b858a449dbe7566aed24acc87107d87c5390c6d1))
+
+## [1.9.2](https://github.com/codecat-io/chat/compare/quack-v1.9.1...quack-v1.9.2) (2023-05-20)
+
+
+### Bug Fixes
+
+* Dockerfile ([9f94fd7](https://github.com/codecat-io/chat/commit/9f94fd7936677795722dcf484df0eb6a1ea50957))
+
+## [1.9.1](https://github.com/codecat-io/chat/compare/quack-v1.9.0...quack-v1.9.1) (2023-05-20)
+
+
+### Bug Fixes
+
+* failing Docker image ([a0001f2](https://github.com/codecat-io/chat/commit/a0001f28d53fcdbc7414a42be37a458a1cc4d979))
+
+## [1.9.0](https://github.com/codecat-io/chat/compare/quack-v1.8.8...quack-v1.9.0) (2023-05-20)
+
+
+### Features
+
+* avatars served from self hosted service ([8be0bc4](https://github.com/codecat-io/chat/commit/8be0bc4ffbacbdbe60e09181840072171da759d5))
+* **files:** added FS storage option ([955a147](https://github.com/codecat-io/chat/commit/955a1471434aa8c8600d58c7b173beaf8e210e80))
+* **notifications:** replaced firebase with web-push ([#74](https://github.com/codecat-io/chat/issues/74)) ([21b3b96](https://github.com/codecat-io/chat/commit/21b3b9647a614ca5993f78bc1153101cc278c868))
+
+
+### Bug Fixes
+
+* adding initial config temporary ([89ff41f](https://github.com/codecat-io/chat/commit/89ff41fa8cbbb3c57d81700a5a21fda5d72324cd))
+* adding limiting only for non test env ([04e9b67](https://github.com/codecat-io/chat/commit/04e9b675b12b33f9a4c18866aaeaf0c43c9d555f))
+* avatarUrl missing in some commands ([eff36fa](https://github.com/codecat-io/chat/commit/eff36fa553b25ba12e1e9599a67ae9b1b1f0c298))
+* changed hash algorithm for passwords ([72ad3e6](https://github.com/codecat-io/chat/commit/72ad3e67d7e931c4adf92a4f8a586b204b97b8e3))
+* disabling helmet for now ([f0f59f0](https://github.com/codecat-io/chat/commit/f0f59f0528cd49e5922f84938ae8e2ac24f7a7ae))
+* docker file without new repositories ([a10e8e4](https://github.com/codecat-io/chat/commit/a10e8e4dc1106c57696509c0f863a15d3fb9e143))
+* failing tests ([8b71a80](https://github.com/codecat-io/chat/commit/8b71a805f8ee33af8a3390f95c76ec337027bf1b))
+* fixing chat config file ([d3d8221](https://github.com/codecat-io/chat/commit/d3d82214cb2fc9b0d5dd72472e9dd7ce3f8379a7))
+* linter error ([845b5d0](https://github.com/codecat-io/chat/commit/845b5d087b4e1f3a4816352c129603d9258a0359))
+* linter error ([08c4fd0](https://github.com/codecat-io/chat/commit/08c4fd0453adf85c95d7662bc7bd8c293b090c03))
+* linter error ([fb70311](https://github.com/codecat-io/chat/commit/fb7031198d7338ec0f98d921134004dee49a76b5))
+* linter errors ([3864c78](https://github.com/codecat-io/chat/commit/3864c788264154d90b712fa6b4db8b2f7591c13d))
+* linter errors ([9f677e8](https://github.com/codecat-io/chat/commit/9f677e8da4de698c91d816d26b12ef2257c57a62))
+* missing config file ([b8e82a9](https://github.com/codecat-io/chat/commit/b8e82a935dee90f965029a41a52980d28f4731d0))
+* **mobile:** keyboard is jumping ([173e661](https://github.com/codecat-io/chat/commit/173e661d7b87d1802f32a49a4cabadfe3f51869c))
+* node env for tests ([782cd0e](https://github.com/codecat-io/chat/commit/782cd0e99edfd6cc745157e0cf73c8568726a655))
+* removed need for secrets in test env ([6bb183b](https://github.com/codecat-io/chat/commit/6bb183ba9b764fc2511837533fed95b5136916e5))
+* removed remaining stack traces ([4e0dad8](https://github.com/codecat-io/chat/commit/4e0dad8f010874908eec8ae279ae2c9e602e3067))
+* sending stack trace to client ([c87c551](https://github.com/codecat-io/chat/commit/c87c5518820a6f7aee1a47e1de7044ce7c11628e))
+* session secret moved to config ([91f3b19](https://github.com/codecat-io/chat/commit/91f3b19d7a0dae79c984f9a6c8c61178a57c4e72))
+
 ## [1.8.8](https://github.com/codecat-io/chat/compare/quack-v1.8.7...quack-v1.8.8) (2023-04-26)
 
 

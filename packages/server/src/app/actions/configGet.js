@@ -1,7 +1,7 @@
 const Joi = require('joi');
+const config = require('@quack/config');
 const pack = require('../../../package.json');
 const repo = require('../../infra/repositories');
-const config = require('../../../../../config');
 
 module.exports = {
   type: 'config:get',

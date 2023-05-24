@@ -2,10 +2,10 @@
   "name": "@quack/rpc",
   "version": "1.8.5",
   "description": "",
-  "main": "build/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "install": "tsc",
+    "postinstall": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

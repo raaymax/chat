@@ -1,6 +1,5 @@
 import { h } from 'preact';
 import styled from 'styled-components';
-import { useMessageData } from '../../contexts/message';
 
 const StyledProgress = styled.div`
   position: relative;
@@ -21,9 +20,7 @@ const StyledProgress = styled.div`
   }
 `
 
-export const Progress = () => {
-  const {progress = []} = useMessageData();
-
+export const Progress = ({progress}) => {
   if (!progress) return null;
 
   return (
