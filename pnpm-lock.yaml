@@ -60,7 +60,11 @@ importers:
         specifier: 0.0.0
         version: 0.0.0
 
-  config: {}
+  config:
+    dependencies:
+      web-push:
+        specifier: 3.6.1
+        version: 3.6.1
 
   packages/app:
     dependencies:
@@ -283,9 +287,6 @@ importers:
       ts-node:
         specifier: 10.9.1
         version: 10.9.1(@types/node@18.14.0)(typescript@4.9.5)
-      typescript:
-        specifier: 4.9.5
-        version: 4.9.5
       uuid:
         specifier: 8.3.2
         version: 8.3.2

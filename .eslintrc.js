@@ -12,9 +12,8 @@ module.exports = {
   },
   ignorePatterns: [
     'packages/app/dist',
-    'packages/app/android',
-    'packages/app2/dist',
-    'packages/app2/android',
+    'packages/rpc/dist',
+    'packages/repo/dist',
     'chat.config.js',
   ],
   overrides: [

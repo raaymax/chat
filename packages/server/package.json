@@ -4,10 +4,8 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "start": "node dist/index.js",
-    "dev": "nodemon -x ts-node -e ts,js src/index.js",
-    "build": "tsc",
-    "install": "tsc",
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
     "lint": "eslint --ext .ts,.js .",
     "test": "NODE_ENV='test' DATABASE_URL='mongodb://chat:chat@localhost:27017/tests?authSource=admin' mocha  --watch",
     "test:ci": "NODE_ENV='test' mocha --exit"
@@ -15,7 +13,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "typescript": "4.9.5",
     "@google-cloud/pubsub": "3.4.1",
     "@google-cloud/storage": "5.19.0",
     "@quack/config": "workspace:*",
