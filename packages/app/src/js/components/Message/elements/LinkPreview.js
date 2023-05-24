@@ -12,17 +12,15 @@ const Link = styled.div`
   flex: 0 0 300px;
   display: block;
   max-width: 300px;
-  border: 1px solid ${(props) => props.theme.borderColor};
-  border-radius: 3px;
+  border-left: 2px solid ${(props) => props.theme.borderColor};
+  border-radius: 0;
   padding: 10px;  
-  background-color: ${(props) => props.theme.backgroundColor};
   margin-bottom: 10px;
   margin-right: 10px;
   cursor: pointer;
 
   .text {
     width: 100%;
-    height: 200px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: pre-wrap;
