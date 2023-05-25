@@ -2,10 +2,9 @@
   "name": "@quack/plugin-todo",
   "version": "1.8.5",
   "description": "",
-  "main": "dist/index.js",
+  "main": "src/index.js",
   "scripts": {
-    "build": "tsc",
-    "postinstall": "tsc",
+    "postinstall": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -17,12 +16,19 @@
     "mongodb": "4.5.0",
     "preact": "10.7.0",
     "typescript": "4.9.5",
+    "webpack": "5.75.0",
     "zod": "3.21.4"
   },
   "devDependencies": {
     "@types/node": "18.14.0",
     "@typescript-eslint/eslint-plugin": "5.53.0",
     "@typescript-eslint/parser": "5.53.0",
-    "eslint": "8.34.0"
+    "eslint": "8.34.0",
+    "@babel/core": "7.17.8",
+    "@babel/plugin-syntax-class-properties": "7.12.13",
+    "@babel/plugin-transform-react-jsx": "7.17.3",
+    "@babel/preset-env": "7.16.11",
+    "source-map-loader": "3.0.1",
+    "babel-loader": "8.2.4"
   }
 }

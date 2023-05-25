@@ -93,7 +93,7 @@ export const Workspace = () => {
       {view === 'sidebar' && <SideMenu>
         <Logo onClick={() => dispatch(actions.setView('sidebar'))} />
         <Channels />
-        {plugins.get('sidebar')}
+        {plugins.get('sidebar').map((El, key) => <El key={key} />)}
       </SideMenu>}
       <MainView className={view === 'sidebar' ? ['sidebar'] : []}>
         <StreamContext value={[stream, (val) => dispatch(setStream('main', val))]}>

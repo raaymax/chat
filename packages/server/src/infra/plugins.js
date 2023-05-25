@@ -17,6 +17,7 @@ const plugins = {
 if (config.plugins) {
   config.plugins.forEach((plugin) => {
     const p = require(path.resolve('../../plugins/', plugin));
+    console.log(p);
     plugins.register('commands', p.commands);
     plugins.register('actions', p.actions);
   });
