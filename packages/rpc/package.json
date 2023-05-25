@@ -1,6 +1,6 @@
 {
   "name": "@quack/rpc",
-  "version": "1.8.6",
+  "version": "1.9.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
