@@ -2,10 +2,10 @@
   "name": "@quack/plugin-todo",
   "version": "1.8.5",
   "description": "",
-  "main": "build/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "install": "tsc",
+    "postinstall": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -15,6 +15,7 @@
     "joi": "17.6.0",
     "js-plugin": "1.1.0",
     "mongodb": "4.5.0",
+    "preact": "10.7.0",
     "typescript": "4.9.5",
     "zod": "3.21.4"
   },

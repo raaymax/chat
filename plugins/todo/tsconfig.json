@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
-    "outDir": "./build",
+    "outDir": "./dist",
     "allowJs": true,
     "target": "es6",
-    "lib": [ "es2022" ],
+    "lib": [ "es2022", "dom" ],
     "sourceMap": true,
     "module": "commonjs",
     "moduleResolution": "node",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "jsx": "react"
   },
   "include": ["./src/**/*"]
 }

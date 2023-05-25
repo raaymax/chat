@@ -1,7 +1,3 @@
-import * as manifest from '../manifest.json';
-
-export { manifest };
-
 export const commands = {
   name: 'time',
   description: 'returns server time',
