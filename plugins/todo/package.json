@@ -26,6 +26,7 @@
     "eslint": "8.34.0",
     "@babel/core": "7.17.8",
     "@babel/plugin-syntax-class-properties": "7.12.13",
+    "mini-css-extract-plugin": "2.6.0",
     "@babel/plugin-transform-react-jsx": "7.17.3",
     "@babel/preset-env": "7.16.11",
     "source-map-loader": "3.0.1",

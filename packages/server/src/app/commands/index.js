@@ -1,6 +1,5 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable global-require */
-const repo = require('../../infra/repositories');
 const plugins = require('../../infra/plugins');
 
 const commands = [

@@ -45,6 +45,7 @@ function safeLoad(file) {
   try {
     return require(file);
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.log(err);
     return {};
   }

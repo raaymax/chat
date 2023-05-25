@@ -376,6 +376,9 @@ importers:
       eslint:
         specifier: 8.34.0
         version: 8.34.0
+      mini-css-extract-plugin:
+        specifier: 2.6.0
+        version: 2.6.0(webpack@5.75.0)
       source-map-loader:
         specifier: 3.0.1
         version: 3.0.1(webpack@5.75.0)

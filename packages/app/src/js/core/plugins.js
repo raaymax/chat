@@ -19,7 +19,7 @@ window.plugins = plugins;
 if (PLUGIN_LIST) {
   PLUGIN_LIST.forEach((plugin) => {
     document.head.appendChild(Object.assign(document.createElement('script'), {
-      src: '/plugins/' + plugin + '/plugin.js',
+      src: `/plugins/${plugin}/plugin.js`,
     }));
   });
 }

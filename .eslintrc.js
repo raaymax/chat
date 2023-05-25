@@ -14,15 +14,13 @@ module.exports = {
     'packages/app/dist',
     'packages/rpc/dist',
     'packages/repo/dist',
+    'plugins/todo/dist',
     'chat.config.js',
   ],
   overrides: [
     {
       files: [
         'packages/app/src/sw.js',
-        'packages/app/src/fcm-sw.js',
-        'packages/app2/src/sw.js',
-        'packages/app2/src/fcm-sw.js',
       ],
       env: {
         serviceworker: true,
@@ -80,8 +78,7 @@ module.exports = {
     },
     {
       files: [
-        'packages/app/**/*.js',
-        'packages/app2/**/*.js',
+        'plugins/todo/public/**/*.js',
       ],
       extends: 'preact',
       env: {
@@ -93,8 +90,30 @@ module.exports = {
         sourceType: 'module',
       },
       globals: {
-        Quill: 'readonly',
-        QuillEmoji: 'readonly',
+        Preact: 'readonly',
+        PreactHooks: 'readonly',
+        plugins: 'readonly',
+      },
+      rules: {
+        'jest/no-deprecated-functions': 'off',
+        'import/prefer-default-export': 'off',
+        'import/extensions': ['off'],
+      },
+    },
+    {
+      files: [
+        'packages/app/**/*.js',
+      ],
+      extends: 'preact',
+      env: {
+        browser: true,
+        es2021: true,
+      },
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+      },
+      globals: {
         EMOJI: 'writable',
       },
       rules: {
