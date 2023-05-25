@@ -322,7 +322,7 @@ importers:
         specifier: 1.9.8
         version: 1.9.8
 
-  plugins/todo:
+  plugins/example:
     dependencies:
       '@quack/repo':
         specifier: workspace:*
