@@ -1,6 +1,7 @@
 const Joi = require('joi');
 const repo = require('../../infra/repositories');
 const service = require('../services');
+const plugins = require('../../infra/plugins');
 /* eslint-disable global-require */
 
 const actions = [
@@ -34,6 +35,7 @@ const actions = [
   require('./pushSetup'),
 
   require('./badgesLoad'),
+  ...plugins.get('actions'),
   {
     type: 'default',
     handler: (req) => {

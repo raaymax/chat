@@ -45,6 +45,7 @@ function safeLoad(file) {
   try {
     return require(file);
   } catch (err) {
+    console.log(err);
     return {};
   }
 }

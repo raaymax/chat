@@ -14,6 +14,7 @@ module.exports = {
       APP_VERSION: JSON.stringify(pack.version),
       APP_NAME: JSON.stringify(pack.name),
       IMAGES_URL: JSON.stringify(config.imagesUrl),
+      PLUGIN_LIST: JSON.stringify(config.plugins),
     }),
     new MiniCssExtractPlugin(),
     new CopyPlugin({

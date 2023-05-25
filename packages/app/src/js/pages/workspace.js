@@ -12,6 +12,7 @@ import { Pins } from '../components/pins/pins';
 import {StreamContext} from '../contexts/stream';
 import { selectors, actions, useStream} from '../state';
 import { setStream } from '../services/stream';
+import plugins from '../core/plugins';
 
 const SideView = styled.div`
   flex: 0;
@@ -92,6 +93,7 @@ export const Workspace = () => {
       {view === 'sidebar' && <SideMenu>
         <Logo onClick={() => dispatch(actions.setView('sidebar'))} />
         <Channels />
+        {plugins.get('sidebar')}
       </SideMenu>}
       <MainView className={view === 'sidebar' ? ['sidebar'] : []}>
         <StreamContext value={[stream, (val) => dispatch(setStream('main', val))]}>
