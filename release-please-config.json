@@ -8,11 +8,6 @@
       "component": "quack",
       "pull-request-title-pattern": "chore${scope}: release${component} ${version}",
       "group-pull-request-title-pattern": "chore${scope}: release${component} ${version}"
-    },
-    "packages/rpc": {
-      "component": "rpc",
-      "pull-request-title-pattern": "chore${scope}: release${component} ${version}",
-      "group-pull-request-title-pattern": "chore${scope}: release${component} ${version}"
     }
   }
 }
