@@ -14,7 +14,7 @@ const plugins = {
   get: (slot) => registry[slot] || [],
 };
 
-window.plugins = plugins;
+window.Chat = plugins;
 
 if (PLUGIN_LIST) {
   PLUGIN_LIST.forEach((plugin) => {

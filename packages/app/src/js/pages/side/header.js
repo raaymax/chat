@@ -65,7 +65,7 @@ const StyledHeader = styled.div`
 `;
 
 export const Header = ({ onclick }) => {
-  const [{ channelId, parentId}, setSideStream] = useStream();
+  const [{ channelId, parentId }, setSideStream] = useStream();
   const message = useSelector(selectors.getMessage(parentId));
   const dispatch = useDispatch();
 

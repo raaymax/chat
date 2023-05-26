@@ -6,8 +6,8 @@ const addUser = createAction('users/add');
 
 const setMe = createAction('users/me/set');
 
-const usersReducer = createReducer({list: [], meId: null}, {
-  [addUser]: ({list}, action) => {
+const usersReducer = createReducer({ list: [], meId: null }, {
+  [addUser]: ({ list }, action) => {
     [action.payload].flat().forEach((msg) => {
       const existing = list.find((m) => m.id === msg.id);
       if (existing) {
@@ -25,6 +25,6 @@ const usersReducer = createReducer({list: [], meId: null}, {
 export const actions = {
   setMe,
   addUser,
-}
+};
 
 export default usersReducer;

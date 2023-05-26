@@ -2,10 +2,14 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   entry: {
-    plugin: './public/index.js',
+    plugin: './public/index.ts',
   },
   module: {
     rules: [
+      {
+        test: /\.tsx?$/,
+        loader: 'babel-loader',
+      },
       {
         test: /\.css$/i,
         use: [MiniCssExtractPlugin.loader, 'css-loader'],

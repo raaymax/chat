@@ -5,10 +5,10 @@ import { sendShareMessage } from './services/messages';
 import { init } from './services/init';
 import { client } from './core';
 import { setStream } from './services/stream';
-import store, {actions} from './state';
+import store, { actions } from './state';
 
 client
-  .on('share', ({data}) => store.dispatch(sendShareMessage(data)))
+  .on('share', ({ data }) => store.dispatch(sendShareMessage(data)))
   .on('user', (msg) => store.dispatch(actions.addUser(msg)))
   .on('emoji', (msg) => store.dispatch(actions.addEmoji(msg)))
   .on('badge', (msg) => store.dispatch(actions.addProgress(msg)))
@@ -25,7 +25,7 @@ client
       type: 'error',
     }));
   })
-  .on('message', (msg) => store.dispatch(actions.addMessage({...msg, pending: false })))
+  .on('message', (msg) => store.dispatch(actions.addMessage({ ...msg, pending: false })))
   .on('notification', () => { try { navigator.vibrate([100, 30, 100]); } catch (err) { /* ignore */ } })
   .on('notification:click', (e) => {
     store.dispatch(setStream('main', {

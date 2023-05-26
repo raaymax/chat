@@ -106,6 +106,9 @@ module.exports = {
     {
       files: [
         'packages/app/**/*.js',
+        'packages/app/**/*.ts',
+        'packages/app/**/*.tsx',
+        'packages/app/**/*.jsx',
       ],
       extends: 'preact',
       env: {

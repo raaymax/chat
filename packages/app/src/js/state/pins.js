@@ -1,4 +1,4 @@
-import {createReducer, createAction} from '@reduxjs/toolkit';
+import { createReducer, createAction } from '@reduxjs/toolkit';
 
 const addAll = createAction('pins/addAll');
 const clear = createAction('pins/clear');
@@ -10,9 +10,9 @@ const pinsReducer = createReducer({
     const channelId = action.payload;
     state.data[channelId] = [];
   },
-  [addAll]: ({data}, action) => {
+  [addAll]: ({ data }, action) => {
     action.payload.forEach((msg) => {
-      const {channelId} = msg;
+      const { channelId } = msg;
       // eslint-disable-next-line no-multi-assign
       const list = data[channelId] = data[channelId] || [];
       if (msg.createdAt) {
@@ -28,11 +28,11 @@ const pinsReducer = createReducer({
       let pos = list.findIndex((m) => m.createdAt < msg.createdAt);
       if (pos === -1 && list.some((m) => m.createdAt > msg.createdAt)) pos = list.length;
       list.splice(pos, 0, msg);
-    })
+    });
   },
 
   logout: () => ({ data: {} }),
-})
+});
 
 export const actions = {
   clearPinMessages: clear,

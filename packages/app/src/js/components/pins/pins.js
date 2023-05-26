@@ -1,5 +1,5 @@
 /* eslint-disable no-await-in-loop */
-import {h} from 'preact';
+import { h } from 'preact';
 import { useCallback } from 'preact/hooks';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
@@ -36,7 +36,7 @@ const StyledPins = styled.div`
 `;
 
 export const Pins = () => {
-  const [{channelId}, setStream] = useStream()
+  const [{ channelId }, setStream] = useStream();
   const dispatch = useDispatch();
   const messages = useSelector(selectors.getPinnedMessages(channelId));
   const gotoMessage = useCallback((msg) => {
@@ -48,7 +48,7 @@ export const Pins = () => {
       selected: msg.id,
       date: msg.createdAt,
     });
-  }, [dispatch, setStream])
+  }, [dispatch, setStream]);
   return (
     <StyledPins className='pins'>
       <HoverContext>
@@ -72,4 +72,4 @@ export const Pins = () => {
       </HoverContext>
     </StyledPins>
   );
-}
+};

@@ -20,8 +20,8 @@ const drop = (dispatch) => async (e) => {
   e.preventDefault();
   e.stopPropagation();
   const { files } = e.dataTransfer;
-  dispatch(uploadMany(files))
-}
+  dispatch(uploadMany(files));
+};
 
 function dragOverHandler(ev) {
   ev.preventDefault();
@@ -37,17 +37,17 @@ export function Conversation({ saveLocation }) {
   const loading = useSelector(selectors.getMessagesLoading);
   const status = stream.type;
   const progress = useSelector(selectors.getProgress(stream));
-  const list = messages.map((m) => ({...m, progress: progress[m.id]}));
+  const list = messages.map((m) => ({ ...m, progress: progress[m.id] }));
 
   const bumpProgress = useCallback(() => {
-    const latest = list.find(({priv}) => !priv);
+    const latest = list.find(({ priv }) => !priv);
     if (latest?.id) dispatch(updateProgress(latest.id));
   }, [dispatch, list]);
   useEffect(() => {
     window.addEventListener('focus', bumpProgress);
     return () => {
       window.removeEventListener('focus', bumpProgress);
-    }
+    };
   }, [bumpProgress]);
 
   useEffect(() => {
@@ -69,11 +69,11 @@ export function Conversation({ saveLocation }) {
             selected={stream.selected}
             onScrollTo={(dir) => {
               if (dir === 'top') {
-                dispatch(loadPrevious(stream, saveLocation))
+                dispatch(loadPrevious(stream, saveLocation));
                 bumpProgress();
               }
               if (dir === 'bottom') {
-                dispatch(loadNext(stream, saveLocation))
+                dispatch(loadNext(stream, saveLocation));
                 bumpProgress();
               }
             }}
@@ -84,5 +84,5 @@ export function Conversation({ saveLocation }) {
         </HoverContext>
       </ConversationContext>
     </Container>
-  )
+  );
 }

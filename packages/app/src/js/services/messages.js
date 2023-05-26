@@ -12,8 +12,8 @@ const loading = (dispatch) => {
   return () => {
     dispatch(actions.messagesLoadingDone());
     clearTimeout(timer);
-  }
-}
+  };
+};
 
 export const loadPrevious = (stream, saveLocation = false) => async (dispatch, getState) => {
   try {
@@ -32,13 +32,13 @@ export const loadPrevious = (stream, saveLocation = false) => async (dispatch, g
       type: 'messages:load',
       before: date,
       limit: 50,
-    })
+    });
     dispatch(actions.addMessages(req.data));
     if (selectors.countMessagesInStream(stream)(getState()) > 100) {
-      dispatch(actions.patchStream({id: stream.id, patch: {type: 'archive'}}));
+      dispatch(actions.patchStream({ id: stream.id, patch: { type: 'archive' } }));
       setTimeout(() => {
-        dispatch(actions.takeHead({stream, count: 100}));
-      }, 1)
+        dispatch(actions.takeHead({ stream, count: 100 }));
+      }, 1);
     }
     if (saveLocation) {
       url.saveStream({
@@ -54,7 +54,7 @@ export const loadPrevious = (stream, saveLocation = false) => async (dispatch, g
     console.error(err);
     // TODO: handle error message
   }
-}
+};
 
 export const loadNext = (stream, saveLocation = false) => async (dispatch, getState) => {
   try {
@@ -99,34 +99,34 @@ export const loadNext = (stream, saveLocation = false) => async (dispatch, getSt
     console.error(err);
     // TODO: handle error message
   }
-}
+};
 
 export const loadMessagesArchive = (stream, saveLocation = false) => async (dispatch, getState) => {
   if (!stream.channelId) return;
-  const {date} = stream;
+  const { date } = stream;
   try {
     const loadingDone = loading(dispatch, getState);
-    dispatch(actions.messagesClear({stream}))
+    dispatch(actions.messagesClear({ stream }));
     const req2 = await client.req({
       ...stream,
       type: 'messages:load',
       before: date,
       limit: 50,
-    })
+    });
     dispatch(actions.addMessages(req2.data));
     const req = await client.req({
       ...stream,
       type: 'messages:load',
       after: date,
       limit: 50,
-    })
-    if (req.data?.length > 0) dispatch(updateProgress(req.data[0].id))
+    });
+    if (req.data?.length > 0) dispatch(updateProgress(req.data[0].id));
     dispatch(actions.addMessages(req.data));
     if (saveLocation) {
       url.saveStream({
         channelId: stream.channelId,
         parentId: stream.parentId,
-        ...(req.data.length < 50 ? {type: 'live'} : {type: 'archive', date}),
+        ...(req.data.length < 50 ? { type: 'live' } : { type: 'archive', date }),
       });
     }
     loadingDone();
@@ -134,7 +134,7 @@ export const loadMessagesArchive = (stream, saveLocation = false) => async (disp
     // eslint-disable-next-line no-console
     console.error(err);
   }
-}
+};
 
 export const loadMessagesLive = (stream, saveLocation = false) => async (dispatch, getState) => {
   if (!stream.channelId) return;
@@ -144,7 +144,7 @@ export const loadMessagesLive = (stream, saveLocation = false) => async (dispatc
       ...stream,
       type: 'messages:load',
       limit: 50,
-    })
+    });
     if (saveLocation) {
       url.saveStream({
         type: 'live',
@@ -153,14 +153,14 @@ export const loadMessagesLive = (stream, saveLocation = false) => async (dispatc
       });
     }
     dispatch(actions.addMessages(req.data));
-    if (req.data?.length > 0) dispatch(updateProgress(req.data[0].id))
+    if (req.data?.length > 0) dispatch(updateProgress(req.data[0].id));
     loadingDone();
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
     // TODO: handle error message
   }
-}
+};
 
 export const loadMessages = (stream) => async (dispatch) => {
   if (stream.type === 'archive') {
@@ -201,8 +201,8 @@ export const sendFromDom = (stream, dom) => async (dispatch, getState) => {
 export const send = (stream, msg) => (dispatch) => dispatch(msg.type === 'command:execute' ? sendCommand(stream, msg) : sendMessage(msg));
 
 export const sendShareMessage = (data) => async (dispatch, getState) => {
-  const {channelId, parentId} = selectors.getStream('main')(getState());
-  const info = {links: []};
+  const { channelId, parentId } = selectors.getStream('main')(getState());
+  const info = { links: [] };
   const msg = build({
     type: 'message:send',
     channelId,
@@ -211,7 +211,7 @@ export const sendShareMessage = (data) => async (dispatch, getState) => {
     message: buildShareMessage(data, info),
   }, getState());
   msg.links = info.links;
-  dispatch(actions.addMessage({...msg, pending: true}));
+  dispatch(actions.addMessage({ ...msg, pending: true }));
   try {
     await client.notif(msg);
   } catch (err) {
@@ -226,21 +226,21 @@ export const sendShareMessage = (data) => async (dispatch, getState) => {
       },
     }));
   }
-}
+};
 
 const buildShareMessage = (data, info) => {
   const lines = [];
   if (data.title) {
-    lines.push({line: {bold: processUrls(data.title, info)}});
+    lines.push({ line: { bold: processUrls(data.title, info) } });
   }
   if (data.text) {
-    lines.push({line: processUrls(data.text, info)});
+    lines.push({ line: processUrls(data.text, info) });
   }
   if (data.url) {
-    lines.push({line: processUrls(data.url, info)});
+    lines.push({ line: processUrls(data.url, info) });
   }
   return lines;
-}
+};
 
 export const sendCommand = (stream, msg) => async (dispatch) => {
   const notif = {
@@ -254,7 +254,7 @@ export const sendCommand = (stream, msg) => async (dispatch) => {
     createdAt: (new Date()).toISOString(),
   };
   // eslint-disable-next-line no-undef
-  msg.context = {...stream, appVersion: APP_VERSION};
+  msg.context = { ...stream, appVersion: APP_VERSION };
   dispatch(actions.addMessage(notif));
   try {
     await client.notif(msg);
@@ -265,7 +265,7 @@ export const sendCommand = (stream, msg) => async (dispatch) => {
 };
 
 const sendMessage = (msg) => async (dispatch) => {
-  dispatch(actions.addMessage({...msg, pending: true}));
+  dispatch(actions.addMessage({ ...msg, pending: true }));
   try {
     await client.notif(msg);
   } catch (err) {
@@ -323,16 +323,16 @@ const trim = (arr) => {
     (e) => !(e.text === '' || e.text === '\u200B' || e.text === '\u00A0' || e.text?.trim() === '' || e.br === true),
   );
   return copy.slice(startIdx, endIdx + 1);
-}
+};
 
 const isEmojiOnly = (tree) => {
-  const a = trim(tree)
+  const a = trim(tree);
   if (a.length === 1 && a[0].emoji) return true;
   if (a.length === 1 && a[0].line) {
     return isEmojiOnly(a[0].line);
   }
   return false;
-}
+};
 
 export function build(msg, state) {
   msg.clientId = tempId();
@@ -407,7 +407,7 @@ const mapNodes = (dom, info) => (!dom.childNodes ? [] : [...dom.childNodes].map(
   if (n.nodeName === 'DIV') return { line: mapNodes(n, info) };
   if (n.nodeName === 'UL') return { bullet: mapNodes(n, info) };
   if (n.nodeName === 'LI') return { item: mapNodes(n, info) };
-  if (n.nodeName === 'IMG') return { img: {src: n.attributes.src.nodeValue, alt: n.attributes.alt.nodeValue }};
+  if (n.nodeName === 'IMG') return { img: { src: n.attributes.src.nodeValue, alt: n.attributes.alt.nodeValue } };
   if (n.nodeName === 'SPAN' && n.className === 'emoji') return { emoji: n.attributes.emoji.value };
   if (n.nodeName === 'SPAN' && n.className === 'channel') return { channel: n.attributes.channelId.value };
   if (n.nodeName === 'SPAN') return mapNodes(n, info);
@@ -415,7 +415,7 @@ const mapNodes = (dom, info) => (!dom.childNodes ? [] : [...dom.childNodes].map(
   // eslint-disable-next-line no-console
   console.log('unknown node', n, n.nodeName);
   info.errors = info.errors || [];
-  info.errors.push({message: 'unknown node', nodeAttributes: Object.keys(n.attributes).reduce((acc, key) => ({...acc, [key]: n.attributes[key].nodeValue})), nodeName: n.nodeName});
+  info.errors.push({ message: 'unknown node', nodeAttributes: Object.keys(n.attributes).reduce((acc, key) => ({ ...acc, [key]: n.attributes[key].nodeValue })), nodeName: n.nodeName });
   return { text: '' };
 }).flat());
 
@@ -423,12 +423,12 @@ function processUrls(text, info) {
   const m = matchUrl(text);
   if (m) {
     const parts = text.split(m[0]);
-    info.links.push(m[0])
+    info.links.push(m[0]);
     return [
       { text: parts[0] },
       { link: { href: m[0], children: [{ text: m[0] }] } },
       ...processUrls(parts[1]),
     ];
   }
-  return [{text}];
+  return [{ text }];
 }

@@ -18,9 +18,9 @@ const StyledProgress = styled.div`
       border-radius: 50%;
     }
   }
-`
+`;
 
-export const Progress = ({progress}) => {
+export const Progress = ({ progress }) => {
   if (!progress) return null;
 
   return (
@@ -34,5 +34,5 @@ export const Progress = ({progress}) => {
         }
       </div>
     </StyledProgress>
-  )
-}
+  );
+};

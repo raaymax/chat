@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
-import {precacheAndRoute} from 'workbox-precaching';
-import {registerRoute} from 'workbox-routing';
+import { precacheAndRoute } from 'workbox-precaching';
+import { registerRoute } from 'workbox-routing';
 import * as navigationPreload from 'workbox-navigation-preload';
 
 precacheAndRoute(self.__WB_MANIFEST);
@@ -13,16 +13,16 @@ registerRoute(
   'POST',
 );
 
-async function shareTargetHandler ({event}) {
+async function shareTargetHandler({ event }) {
   getOpenClient().then((client) => {
     if (client) {
       event.request.formData().then((formData) => {
-        const data = {}
+        const data = {};
         // eslint-disable-next-line no-restricted-syntax
         for (const [key, val] of formData.entries()) {
           data[key] = val;
         }
-        client.postMessage({type: 'share', data});
+        client.postMessage({ type: 'share', data });
       });
     }
   });
@@ -78,7 +78,7 @@ async function handleNotificationClick(event) {
     client = await client.focus();
   }
   if (!client) return;
-  return client.postMessage({type: 'notification:click', ...event.notification.data});
+  return client.postMessage({ type: 'notification:click', ...event.notification.data });
 }
 
 async function handleNotification(title, options, data) {
@@ -96,7 +96,7 @@ async function handleNotification(title, options, data) {
   const clientList = await getClientList();
   if (hasVisibleClients(clientList)) {
     for (const client of clientList) {
-      client.postMessage({type: 'notification', data});
+      client.postMessage({ type: 'notification', data });
     }
   }
 }

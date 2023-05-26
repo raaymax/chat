@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { Manager } from "socket.io-client";
+import { Manager } from 'socket.io-client';
 
 import { createEventListener } from '../utils';
 
@@ -15,7 +15,7 @@ const manager = new Manager(URI);
 
 const socket = manager.socket('/', {
   auth: (cb) => {
-    cb({ token: localStorage.token })
+    cb({ token: localStorage.token });
   },
 });
 
@@ -48,7 +48,7 @@ const client = {
   emit: async (name, data) => {
     if (!exists(name)) {
       // eslint-disable-next-line no-console
-      console.error(new Error(`[client] handler not exists: ${name}`, {extra: {name, data}}));
+      console.error(new Error(`[client] handler not exists: ${name}`, { extra: { name, data } }));
       return;
     }
     return notify(name, data);

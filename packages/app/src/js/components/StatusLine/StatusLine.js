@@ -14,7 +14,7 @@ export const StatusLine = () => {
     );
   }
 
-  if ( names ) {
+  if (names) {
     return (
       <div class='info'>{names} is typing!</div>
     );

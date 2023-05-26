@@ -67,9 +67,9 @@ const StyledHeader = styled.div`
   }
 `;
 
-export const Header = ({onclick}) => {
+export const Header = ({ onclick }) => {
   const [stream, setStream] = useStream();
-  const {channelId, parentId} = stream;
+  const { channelId, parentId } = stream;
   const dispatch = useDispatch();
   const message = useSelector(selectors.getMessage(parentId));
 
@@ -118,8 +118,8 @@ export const Header = ({onclick}) => {
         </div>
         {stream.type === 'archive' && (
           <div class='tool' onclick={() => {
-            dispatch(actions.messagesClear({stream}));
-            setStream({...stream, type: 'live' })
+            dispatch(actions.messagesClear({ stream }));
+            setStream({ ...stream, type: 'live' });
           }}>
             <i class="fa-solid fa-down-long" />
           </div>

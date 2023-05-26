@@ -19,7 +19,7 @@ export const validate = async () => {
     localStorage.setItem('userId', user.user);
   }
   return user;
-}
+};
 
 export const login = async (value) => {
   const ret = await fetch(SESSION_URL, {
@@ -31,7 +31,7 @@ export const login = async (value) => {
     body: JSON.stringify(value),
   });
   return ret.json();
-}
+};
 
 export const logout = async () => {
   await fetch(SESSION_URL, {
@@ -41,4 +41,4 @@ export const logout = async () => {
       'Content-Type': 'application/json',
     },
   });
-}
+};

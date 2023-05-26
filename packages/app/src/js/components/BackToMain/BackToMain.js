@@ -1,6 +1,6 @@
 import { h } from 'preact';
 import useMainChannelId from '../../selectors/useMainChannelId';
-import {useStream} from '../../contexts/stream';
+import { useStream } from '../../contexts/stream';
 
 export const BackToMain = () => {
   const mainChannelId = useMainChannelId();
@@ -12,4 +12,4 @@ export const BackToMain = () => {
       </a>
     </div>
   );
-}
+};

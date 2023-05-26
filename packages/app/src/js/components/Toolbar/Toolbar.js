@@ -14,12 +14,12 @@ import { Container } from './elements/container';
 export const Toolbar = () => {
   const message = useMessageData();
   const user = useMessageUser();
-  const {id, pinned, channelId} = message;
+  const { id, pinned, channelId } = message;
   const [view, setView] = useState(null);
   const dispatch = useDispatch();
   const [stream] = useStream();
   const onDelete = useCallback(() => {
-    dispatch(removeMessage({id}));
+    dispatch(removeMessage({ id }));
   }, [dispatch, id]);
   const meId = useSelector((state) => state.users.meId);
   const isMe = user?.id === meId;
@@ -61,8 +61,8 @@ export const Toolbar = () => {
         : <i class="fa-solid fa-thumbtack" style="color:Tomato" onClick={() => dispatch(unpinMessage(id, channelId))} />}
       { isMe && <i class='fa-solid fa-trash-can' onclick={() => setView('delete')} /> }
       {
-        !stream.parentId && <i class="fa-solid fa-reply" onClick={() => dispatch(setStream('side', {type: 'live', channelId, parentId: id}))} />
+        !stream.parentId && <i class="fa-solid fa-reply" onClick={() => dispatch(setStream('side', { type: 'live', channelId, parentId: id }))} />
       }
     </Container>
   );
-}
+};

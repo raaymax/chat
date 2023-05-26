@@ -1,6 +1,6 @@
 import { h } from 'preact';
 import { useEffect } from 'preact/hooks';
-import { Provider } from 'react-redux'
+import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
 import '../setup';
 import { client } from '../core';
@@ -28,7 +28,7 @@ const theme = {
   labelColor: 'gray',
 
   linkColor: '#4a90e2',
-}
+};
 
 const Secured = () => {
   const user = useUser();
@@ -43,6 +43,6 @@ const Secured = () => {
       </ThemeProvider>
     </Provider>
   );
-}
+};
 
 export default Secured;

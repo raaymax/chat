@@ -11,9 +11,9 @@ const Container = styled.div`
   flex-direction: column;
   border-right: 1px solid var(--primary_border_color);
 `;
-export const MainConversation = ({className, onclick}) => (
+export const MainConversation = ({ className, onclick }) => (
   <Container className={className}>
     <Header onclick={onclick} />
     <Conversation saveLocation={true} />
   </Container>
-)
+);

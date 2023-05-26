@@ -5,7 +5,7 @@ import { useMessageData } from '../../contexts/message';
 import { resend } from '../../services/messages';
 
 export const Info = () => {
-  const {clientId, info} = useMessageData();
+  const { clientId, info } = useMessageData();
   const dispatch = useDispatch();
 
   const onAction = useCallback(() => {
@@ -19,5 +19,5 @@ export const Info = () => {
     <div onclick={onAction} class={['info', info.type, ...(info.action ? ['action'] : [])].join(' ')}>
       {info.msg}
     </div>
-  )
+  );
 };

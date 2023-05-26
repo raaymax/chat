@@ -1,10 +1,10 @@
 import { h } from 'preact';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import {selectors} from '../../state';
-import Emojis, {findEmoji} from '../../services/emoji';
-import {getUrl} from '../../services/file';
-import {Tooltip} from '../../elements/tooltip';
+import { selectors } from '../../state';
+import Emojis, { findEmoji } from '../../services/emoji';
+import { getUrl } from '../../services/file';
+import { Tooltip } from '../../elements/tooltip';
 
 const StyledEmoji = styled.span`
   img{
@@ -19,7 +19,7 @@ const StyledEmoji = styled.span`
   }
 `;
 
-export const Emoji = ({shortname, big}) => {
+export const Emoji = ({ shortname, big }) => {
   const dispatch = useDispatch();
   const custom = useSelector(selectors.getEmoji(shortname));
   const emoji = Emojis.find((e) => e.shortname === shortname);
@@ -47,4 +47,4 @@ export const Emoji = ({shortname, big}) => {
       </StyledEmoji>
     </Tooltip>
   );
-}
+};

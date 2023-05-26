@@ -1,4 +1,4 @@
-import {h } from 'preact';
+import { h } from 'preact';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -9,8 +9,8 @@ const Container = styled.div`
   width: 100%;
 `;
 
-export const EmojiCategory = ({ children}) => (
+export const EmojiCategory = ({ children }) => (
   <Container>
     {children}
   </Container>
-)
+);

@@ -1,13 +1,13 @@
 import { h } from 'preact';
 import { useState } from 'preact/hooks';
 
-export const Tooltip = ({children, text}) => {
+export const Tooltip = ({ children, text }) => {
   const [show, setShow] = useState(false);
 
   return (
     <div
       className='tooltip-container'
-      style={{position: 'relative', display: 'inline-block'}}
+      style={{ position: 'relative', display: 'inline-block' }}
       onMouseEnter={() => setShow(true)}
       onMouseLeave={() => setShow(false)}
     >
@@ -33,4 +33,4 @@ export const Tooltip = ({children, text}) => {
       )}
     </div>
   );
-}
+};

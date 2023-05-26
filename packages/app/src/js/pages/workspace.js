@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
-import {h} from 'preact';
-import { useDispatch, useSelector } from 'react-redux'
+import { h } from 'preact';
+import { useDispatch, useSelector } from 'react-redux';
 
 import styled from 'styled-components';
 import { Logo } from '../components/logo';
@@ -9,8 +9,8 @@ import { MainConversation } from './main/mainConversaion';
 import { SideConversation } from './side/sideConversation';
 import { Search } from '../components/search/search';
 import { Pins } from '../components/pins/pins';
-import {StreamContext} from '../contexts/stream';
-import { selectors, actions, useStream} from '../state';
+import { StreamContext } from '../contexts/stream';
+import { selectors, actions, useStream } from '../state';
 import { setStream } from '../services/stream';
 import plugins from '../core/plugins';
 
@@ -38,7 +38,7 @@ const MainView = styled.div`
       display: none;
     }
   }
-`
+`;
 
 const SideMenu = styled.div`
   flex: 0 0 200px;
@@ -111,5 +111,5 @@ export const Workspace = () => {
         </StreamContext>
       </SideView>}
     </Container>
-  )
-}
+  );
+};

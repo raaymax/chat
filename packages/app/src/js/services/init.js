@@ -13,18 +13,18 @@ const initApp = (withStream = false) => async (dispatch) => {
   await dispatch(actions.connected());
   await dispatch(actions.clearInfo());
   await dispatch(actions.initFailed(false));
-  const { data: [config] } = await client.req({type: 'config:get'});
+  const { data: [config] } = await client.req({ type: 'config:get' });
   await dispatch(actions.setAppVersion(config.appVersion));
   await dispatch(actions.setMainChannel(config.mainChannelId));
   await initNotifications(config);
-  const { data: users } = await client.req({type: 'users:load'});
+  const { data: users } = await client.req({ type: 'users:load' });
   await dispatch(actions.addUser(users));
-  const { data: channels } = await client.req({type: 'channels:load'});
+  const { data: channels } = await client.req({ type: 'channels:load' });
   await dispatch(actions.addChannel(channels));
   // FIXME: load messages from current channel or none
   // dispatch(loadMessages({channelId: config.mainChannelId}));
   await dispatch(loadEmojis());
-  await dispatch(loadProgress({channelId: config.mainChannelId}));
+  await dispatch(loadProgress({ channelId: config.mainChannelId }));
   await dispatch(loadBadges());
   // eslint-disable-next-line no-console
   console.log('version check: ', APP_VERSION, config.appVersion);
@@ -39,10 +39,10 @@ const initApp = (withStream = false) => async (dispatch) => {
   }
 };
 
-let tryCount = 1
+let tryCount = 1;
 export const init = (withStream) => async (dispatch) => {
   try {
-    await dispatch(initApp(withStream))
+    await dispatch(initApp(withStream));
     tryCount = 1;
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -54,13 +54,13 @@ export const init = (withStream) => async (dispatch) => {
     }
     dispatch(actions.initFailed(true));
   }
-}
+};
 
 export const reinit = () => async (dispatch) => {
   tryCount = 1;
   await dispatch(actions.initFailed(false));
   await dispatch(init());
-}
+};
 
 // FIXME: messages have no channel and are not showing
 const showUpdateMessage = () => (dispatch) => {
@@ -76,4 +76,4 @@ const showUpdateMessage = () => (dispatch) => {
       { line: { text: 'Please reload the page to update' } },
     ],
   }));
-}
+};

@@ -5,7 +5,7 @@ const Context = createContext({
   hovered: [null, () => {}],
 });
 
-export const HoverContext = ({children}) => {
+export const HoverContext = ({ children }) => {
   const hovered = useState(false);
   return (
     <Context.Provider value={hovered}>
@@ -14,10 +14,10 @@ export const HoverContext = ({children}) => {
   );
 };
 
-export const useHovered = () => useContext(Context)
+export const useHovered = () => useContext(Context);
 
 export const useHoverCtrl = (id) => {
-  const [hovered, setHovered] = useHovered()
+  const [hovered, setHovered] = useHovered();
 
   const onEnter = useCallback(() => {
     setHovered(id);
@@ -38,5 +38,5 @@ export const useHoverCtrl = (id) => {
     }
   }, [setHovered, hovered, id]);
 
-  return {onEnter, onLeave, toggleHovered}
-}
+  return { onEnter, onLeave, toggleHovered };
+};

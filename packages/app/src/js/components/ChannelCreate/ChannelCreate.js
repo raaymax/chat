@@ -1,8 +1,8 @@
-import { h} from 'preact';
+import { h } from 'preact';
 import { useState, useCallback } from 'preact/hooks';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { createChannel} from '../../services/channels';
+import { createChannel } from '../../services/channels';
 
 const NewChannelContainer = styled.div`
   width: 100%;
@@ -66,4 +66,4 @@ export const ChannelCreate = () => {
       </form>
     </NewChannelContainer>
   );
-}
+};

@@ -6,8 +6,8 @@ import { Menu } from './elements/menu';
 export const TextMenu = ({
   className, options, open = false, select, selected = 0, setSelected,
 }) => {
-  const [coords, setCoords] = useState( [0, 0]);
-  const { input, getRange} = useInput();
+  const [coords, setCoords] = useState([0, 0]);
+  const { input, getRange } = useInput();
 
   const getXPos = useCallback(() => {
     const width = parseInt(window.getComputedStyle(input.current).width.replace('px', ''), 10);
@@ -15,7 +15,7 @@ export const TextMenu = ({
       return width - 300;
     }
     return coords[1];
-  }, [input, coords])
+  }, [input, coords]);
 
   const getYPos = () => coords[0];
 
@@ -46,7 +46,7 @@ export const TextMenu = ({
     current.addEventListener('keydown', ctrl);
     return () => {
       current.removeEventListener('keydown', ctrl);
-    }
+    };
   }, [input, ctrl]);
 
   return open && (
@@ -63,4 +63,4 @@ export const TextMenu = ({
       </ul>
     </Menu>
   );
-}
+};

@@ -13,7 +13,7 @@ import { buildMessageBody } from './messageBuilder';
 import { isToday } from './utils';
 import { LinkPreviewList } from './elements/LinkPreview';
 
-const MessageBase = ({onClick, ...props} = {}) => {
+const MessageBase = ({ onClick, ...props } = {}) => {
   const msg = useMessageData();
   const {
     id, message, emojiOnly,
@@ -21,7 +21,7 @@ const MessageBase = ({onClick, ...props} = {}) => {
     linkPreviews,
   } = msg;
   const { onEnter, toggleHovered, onLeave } = useHoverCtrl(id);
-  const [{selected}] = useStream();
+  const [{ selected }] = useStream();
   const user = useMessageUser();
 
   return (
@@ -62,7 +62,7 @@ const MessageBase = ({onClick, ...props} = {}) => {
 };
 
 export const Message = (props) => (
-  <MessageContext value={{data: props.data}}>
+  <MessageContext value={{ data: props.data }}>
     <MessageBase {...props} />
   </MessageContext>
 );

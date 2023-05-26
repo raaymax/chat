@@ -1,6 +1,6 @@
 import { h } from 'preact';
 import { useCallback } from 'preact/hooks';
-import { useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { Message } from '../Message/message';
 import { actions, selectors } from '../../state';
@@ -20,7 +20,7 @@ const StyledList = styled.div`
 `;
 
 export function SearchResults() {
-  const [, setStream] = useStream()
+  const [, setStream] = useStream();
   const results = useSelector(selectors.getSearchResults);
   const dispatch = useDispatch();
   const gotoMessage = useCallback((msg) => {
@@ -32,7 +32,7 @@ export function SearchResults() {
       selected: msg.id,
       date: msg.createdAt,
     });
-  }, [dispatch, setStream])
+  }, [dispatch, setStream]);
   return (
     <StyledList>
       <div key='bottom' id='scroll-stop' />
@@ -56,5 +56,5 @@ export function SearchResults() {
         </div>
       ))}
     </StyledList>
-  )
+  );
 }

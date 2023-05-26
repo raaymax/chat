@@ -1,6 +1,6 @@
 import { h } from 'preact';
 import styled from 'styled-components';
-import {getUrl} from '../../../services/file';
+import { getUrl } from '../../../services/file';
 
 const EmojiContainer = styled.div`
   width: 30px;
@@ -41,4 +41,4 @@ export const Emoji = ({
       ? <img src={getUrl(fileId)} alt={shortname} />
       : <span>{String.fromCodePoint(parseInt(unicode, 16))}</span>}
   </EmojiContainer>
-)
+);

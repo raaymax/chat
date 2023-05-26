@@ -1,4 +1,4 @@
-import {h} from 'preact';
+import { h } from 'preact';
 import styled from 'styled-components';
 
 const ReInit = styled.div`
@@ -15,7 +15,7 @@ const ReInit = styled.div`
   }
 `;
 
-export const InitFailedButton = ({onClick}) => (
+export const InitFailedButton = ({ onClick }) => (
   <ReInit onClick={onClick}>
     Failed to initialize<br />
     Click to retry...

@@ -1,4 +1,4 @@
-import { h} from 'preact';
+import { h } from 'preact';
 import { useEffect } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -11,9 +11,9 @@ const InlineChannelLink = styled.a`
   }
 `;
 
-export const ChannelInline = ({channelId: id, cid}) => {
+export const ChannelInline = ({ channelId: id, cid }) => {
   const dispatch = useDispatch();
-  const channel = useSelector(selectors.getChannel({id, cid}));
+  const channel = useSelector(selectors.getChannel({ id, cid }));
   useEffect(() => {
     if (!channel) {
       dispatch(findChannel(id));
@@ -25,4 +25,4 @@ export const ChannelInline = ({channelId: id, cid}) => {
       <span class='name'>{channel?.name || channel?.id || id}</span>
     </InlineChannelLink>
   );
-}
+};

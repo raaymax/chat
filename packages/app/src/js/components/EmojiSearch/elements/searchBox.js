@@ -1,4 +1,4 @@
-import {h } from 'preact';
+import { h } from 'preact';
 import styled from 'styled-components';
 
 const SearchBoxInput = styled.input`
@@ -10,11 +10,11 @@ const SearchBoxInput = styled.input`
   border: 1px solid ${(props) => props.theme.borderColor};
 `;
 
-export const SearchBox = ({onChange, value}) => (
+export const SearchBox = ({ onChange, value }) => (
   <SearchBoxInput
     type="text"
     onChange={onChange}
     value={value}
     placeholder="Search here..."
   />
-)
+);

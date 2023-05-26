@@ -1,4 +1,4 @@
-import {createReducer, createAction} from '@reduxjs/toolkit';
+import { createReducer, createAction } from '@reduxjs/toolkit';
 
 const setAppVersion = createAction('app-version/set');
 
@@ -9,7 +9,7 @@ const configReducer = createReducer(null, {
     return state;
   },
   logout: () => null,
-})
+});
 
 export const actions = {
   setAppVersion,
