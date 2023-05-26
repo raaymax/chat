@@ -15,10 +15,10 @@ export class Message {
   static STATUS_TIMEOUT = 'timeout';
 
   status: string = Message.STATUS_CREATED;
-  
+
   seqId = genSeqId();
 
-  res: ResponseMessage = null
+  res: ResponseMessage = null;
 
   private timeout = null;
 
@@ -28,10 +28,10 @@ export class Message {
 
   private closed = false;
 
-  constructor(private req: RequestMessage, private transport: WebSocketTransport){
-      this.res = null;
-      this.seqId = genSeqId();
-      this.status = Message.STATUS_CREATED;
+  constructor(private req: RequestMessage, private transport: WebSocketTransport) {
+    this.res = null;
+    this.seqId = genSeqId();
+    this.status = Message.STATUS_CREATED;
   }
 
   isClosed(): boolean {
@@ -71,20 +71,18 @@ export class Message {
     this.transport.offSeq(this.seqId);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  processSequnce(_msg: SequenceMessage, _ev: Event): void {
-    return;
-  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+  processSequnce(_msg: SequenceMessage, _ev: Event): void {}
 
   handle = (msg: SequenceMessage, ev: Event) => {
     if (this.closed) return;
     if (msg.seqId !== this.seqId) return;
-    if (msg.type == 'response'){
+    if (msg.type === 'response') {
       ev.preventDefault();
       return this.finish(msg as ResponseMessage);
     }
     this.processSequnce(msg, ev);
-  }
+  };
 
   async send(): Promise<ResponseMessage> {
     this.status = Message.STATUS_IN_PROGRESS;

@@ -1,4 +1,4 @@
-export type Result<S,E> = S | E;
+export type Result<S, E> = S | E;
 
 export type NotifMessage = {
   type: string;
@@ -37,13 +37,13 @@ export type SequenceMessage = ResponseMessage | RequestMessage | DataMessage;
 export type Message = SequenceMessage | NotifMessage;
 
 export const isMessage = (value: unknown): value is Message => (
-  typeof value === 'object' 
-    && value !== null 
-    && 'type' in value 
+  typeof value === 'object'
+    && value !== null
+    && 'type' in value
     && typeof value.type === 'string'
 );
 
 export const isSequenceMessage = (value: Message): value is SequenceMessage => (
-  'seqId' in value 
+  'seqId' in value
     && typeof value.seqId === 'string'
 );

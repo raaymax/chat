@@ -172,6 +172,28 @@ importers:
         specifier: 6.5.4
         version: 6.5.4(webpack@5.75.0)
 
+  packages/dateRanges:
+    dependencies:
+      socket.io-client:
+        specifier: 4.6.1
+        version: 4.6.1
+      typescript:
+        specifier: 4.9.5
+        version: 4.9.5
+    devDependencies:
+      '@types/node':
+        specifier: 18.14.0
+        version: 18.14.0
+      '@typescript-eslint/eslint-plugin':
+        specifier: 5.53.0
+        version: 5.53.0(@typescript-eslint/parser@5.53.0)(eslint@8.34.0)(typescript@4.9.5)
+      '@typescript-eslint/parser':
+        specifier: 5.53.0
+        version: 5.53.0(eslint@8.34.0)(typescript@4.9.5)
+      eslint:
+        specifier: 8.34.0
+        version: 8.34.0
+
   packages/repo:
     dependencies:
       mongodb:
@@ -321,6 +343,31 @@ importers:
       turbo:
         specifier: 1.9.8
         version: 1.9.8
+
+  packages/utils:
+    dependencies:
+      mongodb:
+        specifier: 4.5.0
+        version: 4.5.0
+      typescript:
+        specifier: 4.9.5
+        version: 4.9.5
+      zod:
+        specifier: 3.21.4
+        version: 3.21.4
+    devDependencies:
+      '@types/node':
+        specifier: 18.14.0
+        version: 18.14.0
+      '@typescript-eslint/eslint-plugin':
+        specifier: 5.53.0
+        version: 5.53.0(@typescript-eslint/parser@5.53.0)(eslint@8.34.0)(typescript@4.9.5)
+      '@typescript-eslint/parser':
+        specifier: 5.53.0
+        version: 5.53.0(eslint@8.34.0)(typescript@4.9.5)
+      eslint:
+        specifier: 8.34.0
+        version: 8.34.0
 
   plugins/example:
     dependencies:

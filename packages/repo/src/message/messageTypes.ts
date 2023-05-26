@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import { ObjectId } from 'mongodb';
-import { Id, ReplaceType, ReplaceId, ClientId } from '../types';
+import {
+  Id, ReplaceType, ReplaceId, ClientId,
+} from '../types';
 
 export const Message = z.object({
   id: Id,
@@ -44,4 +46,3 @@ export const MessageQuery = Message.extend({
 export type MessageQuery = z.infer<typeof MessageQuery>;
 
 export type MongoMessage = ReplaceType<ReplaceId<Message>, Id, ObjectId>;
-

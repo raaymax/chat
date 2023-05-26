@@ -1,5 +1,5 @@
-import { ObjectId } from "mongodb";
-import { Id, ReplaceId, ReplaceType } from "../types";
+import { ObjectId } from 'mongodb';
+import { Id, ReplaceId, ReplaceType } from '../types';
 
 export type User = {
   id: Id,

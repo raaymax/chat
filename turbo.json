@@ -3,10 +3,11 @@
   "pipeline": {
     "build": {
       "outputs": ["dist/**"],
-      "inputs": ["src/**/*"]
+      "inputs": ["src/**"]
     },
     "//#migrate": {},
     "//#lint:ci": {},
+    "//#lint": {},
     "start": {
       "dependsOn": ["build", "//#migrate"],
       "cache": false

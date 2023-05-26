@@ -1,7 +1,4 @@
 packages:
   - 'config'
-  - 'packages/rpc'
-  - 'packages/app'
-  - 'packages/server'
-  - 'packages/repo'
+  - 'packages/*'
   - 'plugins/*'

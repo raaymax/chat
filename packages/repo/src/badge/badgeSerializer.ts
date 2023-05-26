@@ -1,10 +1,12 @@
-import { Serializer, MongoId, Id} from '../types';
+import {
+  ObjectId, Filter, InsertOneResult, Document,
+} from 'mongodb';
+import { Serializer, MongoId, Id } from '../types';
 import { removeUndefined, makeObjectId, makeId } from '../util';
-import { ObjectId, Filter, InsertOneResult, Document } from 'mongodb';
 import { Badge, BadgeQuery, MongoBadge } from './badgeTypes';
 
 export class BadgeSerializer implements Serializer<BadgeQuery, Badge, MongoBadge> {
-  serializeModel(arg: Badge): Document{
+  serializeModel(arg: Badge): Document {
     return removeUndefined({
       _id: makeObjectId(arg.id),
       count: arg.count,
@@ -16,12 +18,12 @@ export class BadgeSerializer implements Serializer<BadgeQuery, Badge, MongoBadge
     });
   }
 
-  serializeQuery(arg: BadgeQuery): Filter<Document>{
+  serializeQuery(arg: BadgeQuery): Filter<Document> {
     return this.serializeModel(arg);
   }
 
   deserializeModel(arg: MongoBadge): Badge | null {
-    if(typeof arg !== 'object' || arg === null) {
+    if (typeof arg !== 'object' || arg === null) {
       return null;
     }
     return removeUndefined({
@@ -35,22 +37,18 @@ export class BadgeSerializer implements Serializer<BadgeQuery, Badge, MongoBadge
     });
   }
 
-  deserializeModelMany(arg: Array<MongoBadge>): Array<Badge>{
+  deserializeModelMany(arg: Array<MongoBadge>): Array<Badge> {
     return arg.map((c) => this.deserializeModel(c)).filter((c) => c !== null) as Array<Badge>;
   }
 
-
   deserializeInsertedId(arg: InsertOneResult<Document>): Id | null {
-    if(typeof arg === 'object' && arg !== null && 'insertedId' in arg && arg.insertedId instanceof ObjectId) {
+    if (typeof arg === 'object' && arg !== null && 'insertedId' in arg && arg.insertedId instanceof ObjectId) {
       return makeId(arg.insertedId);
-    }else{
-      return null;
     }
+    return null;
   }
 
   serializeId(arg: { id: Id }): MongoId {
     return { _id: makeObjectId(arg.id) };
   }
 }
-
-

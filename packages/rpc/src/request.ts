@@ -7,8 +7,8 @@ export class Request extends Message {
   static send = async (msg: RequestMessage, transport: WebSocketTransport) => (new Request(msg, transport)).send();
 
   data: SequenceMessage[] = [];
-  
-  res: ResponseMessage = null
+
+  res: ResponseMessage = null;
 
   addPart(msg: SequenceMessage) {
     this.data.push(msg);
