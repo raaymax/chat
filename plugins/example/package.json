@@ -1,5 +1,5 @@
 {
-  "name": "@quack/plugin-todo",
+  "name": "@quack/plugin-example",
   "version": "1.8.5",
   "description": "",
   "main": "src/index.js",
