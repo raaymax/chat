@@ -6,6 +6,7 @@ import { UserRepo } from './user/userRepo';
 import { EmojiRepo } from './emoji/emojiRepo';
 import { BadgeRepo } from './badge/badgeRepo';
 import { SessionRepo } from './session/sessionRepo';
+import { InvitationRepo } from './invitation/invitationRepo';
 
 import Repo from './repo';
 
@@ -27,6 +28,7 @@ export const createRepositories = (databaseUrl) => {
     emoji: new EmojiRepo(),
     badge: new BadgeRepo(),
     session: new SessionRepo(),
+    invitation: new InvitationRepo(),
     close: () => client.close(),
   };
 };

@@ -12,6 +12,7 @@ const commands = [
   require('./leave'),
   require('./join'),
   require('./main'),
+  require('./invite'),
 ];
 
 module.exports = async (req, res, srv) => {

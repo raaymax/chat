@@ -14,9 +14,19 @@ if (process.env.NODE_ENV !== 'test') {
   }));
 }
 
+router.post('/register', createUser);
 router.post('/', createSession);
 router.delete('/', deleteSession);
 router.get('/', getSession);
+
+async function createUser(req, res) {
+  try {
+    const userId = await userService.create(req.body);
+    res.status(200).send({ status: 'ok', user: userId });
+  } catch (e) {
+    res.status(400).send({ status: 'error', message: e.message });
+  }
+}
 
 async function getSession(req, res) {
   if (req.session.userId) {
@@ -46,7 +56,7 @@ async function createSession(req, res) {
       req.session.token = crypto.randomBytes(64).toString('hex');
       return res.status(200).send({ status: 'ok', user, token: req.session.token });
     }
-    res.status(401).send({ status: 'nok' });
+    res.status(401).send({ status: 'nok', message: 'Invalid credentials' });
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);

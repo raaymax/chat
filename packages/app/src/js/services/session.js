@@ -33,6 +33,18 @@ export const login = async (value) => {
   return ret.json();
 };
 
+export const register = async (value) => {
+  const ret = await fetch(SESSION_URL+'/register', {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(value),
+  });
+  return ret.json();
+};
+
 export const logout = async () => {
   await fetch(SESSION_URL, {
     method: 'DELETE',

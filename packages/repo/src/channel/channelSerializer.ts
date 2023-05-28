@@ -12,6 +12,7 @@ export class ChannelSerializer implements Serializer<ChannelQuery, Channel, Mong
       name: arg.name,
       cid: arg.cid,
       private: arg.private,
+      direct: arg.direct,
       users: arg.users?.map(makeObjectId),
     });
   }
@@ -32,6 +33,7 @@ export class ChannelSerializer implements Serializer<ChannelQuery, Channel, Mong
       name: arg.name,
       cid: arg.cid,
       private: arg.private,
+      direct: arg.direct,
       users: arg.users?.map(makeId),
     }) as Channel;
   }

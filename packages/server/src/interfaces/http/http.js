@@ -16,9 +16,8 @@ app.use(sessionParser);
 app.get('/ping', (req, res) => res.status(204).send());
 app.use('/session', session);
 app.use('/files', files);
+app.use('/plugins/:pluginName', (req, res, next) => express.static(`../../plugins/${req.params.pluginName}/dist/`)(req, res, next));
 
 app.use(express.static('../app/dist'));
-
-app.use('/plugins/:pluginName', (req, res, next) => express.static(`../../plugins/${req.params.pluginName}/dist/`)(req, res, next));
 
 module.exports = app;

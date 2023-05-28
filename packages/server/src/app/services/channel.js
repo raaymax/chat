@@ -2,13 +2,20 @@ const repo = require('../../infra/repositories');
 
 module.exports = {
 
-  create: async (name, userId) => {
-    const channel = await repo.channel.get({ name, userId });
-    if (channel) {
-      return channel.id;
+  create: async ({ name, userId, ...rest }, { bus } = {}) => {
+    const existing = await repo.channel.get({ name, userId });
+    if (existing) {
+      return existing.id;
     }
 
-    return repo.channel.create({ name, users: [userId] }).then(({ id }) => id);
+    const channelId = await repo.channel.create({ name, ...rest }).then(({ id }) => id);
+
+    if (bus) {
+      const channel = await repo.channel.get({ id: channelId });
+      bus.broadcast({ type: 'channel', ...channel });
+    }
+
+    return channelId;
   },
 
   join: async (id, userId) => {
