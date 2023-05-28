@@ -89,9 +89,8 @@ pnpm run dev
 admin / 123
 member / 123
 ```
-Currently, there is no actual admin with special permissions; all users are equal.
-Additionally, there is no way to create users other than modifying database entries.
-Managing users is yet to be added.
+New users can be invited with `/invite` command which will generate single use link for user registration.
+
 
 ## License
 

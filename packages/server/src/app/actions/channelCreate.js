@@ -13,10 +13,12 @@ module.exports = {
   handler: async (req, res) => {
     const msg = req.body;
 
-    const channelId = await services.channel.create(
-      msg.name,
-      req.userId,
-    );
+    const channelId = await services.channel.create({
+      name: msg.name,
+      userId: req.userId,
+      private: msg.private,
+      users: [req.userId],
+    });
 
     await repo.channel.update({ id: channelId }, { private: msg.private });
     const ret = await repo.channel.get({ id: channelId });

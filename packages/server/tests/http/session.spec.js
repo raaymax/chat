@@ -12,7 +12,7 @@ module.exports = (agent) => {
       await agent
         .post('/session')
         .send({ login: 'admin', password: '321' })
-        .expect(401, { status: 'nok' });
+        .expect(401, { status: 'nok', message: 'Invalid credentials' });
     });
 
     it('login', async () => {

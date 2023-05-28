@@ -7,6 +7,7 @@ export const Channel = z.object({
   name: z.string(),
   cid: z.string(),
   private: z.boolean(),
+  direct: z.boolean(),
   users: z.array(Id),
 });
 
