@@ -2,10 +2,10 @@ import { omitUndefined } from '../utils';
 
 export const loadStream = () => {
   const { hash } = document.location;
-  const matcher = /(?<channelId>[0-9a-f]{24})(\/(?<parentId>[0-9a-f]{24}))?(\?(?<query>.*))?/
+  const matcher = /(?<channelId>[0-9a-f]{24})(\/(?<parentId>[0-9a-f]{24}))?(\?(?<query>.*))?/;
   const m = hash.match(matcher);
-  if (!m) return {type: 'live'};
-  const {channelId, parentId, query} = m.groups;
+  if (!m) return { type: 'live' };
+  const { channelId, parentId, query } = m.groups;
   const params = new URLSearchParams(query);
   const date = params.get('date');
   const selected = params.get('selected');
@@ -14,11 +14,11 @@ export const loadStream = () => {
   return {
     type,
     channelId,
-    ...(selected ? {selected} : {}),
-    ...(parentId ? {parentId} : {}),
-    ...(date ? {date} : {}),
+    ...(selected ? { selected } : {}),
+    ...(parentId ? { parentId } : {}),
+    ...(date ? { date } : {}),
   };
-}
+};
 
 export const saveStream = (stream) => {
   const query = new URLSearchParams(omitUndefined({

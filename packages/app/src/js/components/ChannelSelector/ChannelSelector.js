@@ -23,7 +23,7 @@ export const ChannelSelector = () => {
   }), [channels]);
 
   const options = useMemo(() => {
-    let opts = fuse.search(currentText || '').slice(0, 5).map(({item}) => item)
+    let opts = fuse.search(currentText || '').slice(0, 5).map(({ item }) => item);
     opts = opts.length ? opts : channels.slice(0, 5);
     opts = opts.map((channel) => ({
       name: channel.name,
@@ -31,14 +31,14 @@ export const ChannelSelector = () => {
       icon: channel.private ? 'fa-solid fa-lock' : 'fa-solid fa-hashtag',
     }));
     return opts;
-  }, [fuse, channels, currentText])
+  }, [fuse, channels, currentText]);
 
   const create = useCallback((event) => {
     event.preventDefault();
     event.stopPropagation();
     const span = document.createElement('span');
     span.className = 'channel-selector';
-    const text = document.createTextNode( '#' );
+    const text = document.createTextNode('#');
     span.appendChild(text);
     span.setAttribute('scope', SCOPE);
     insert(span);
@@ -90,7 +90,7 @@ export const ChannelSelector = () => {
     current.addEventListener('keydown', ctrl);
     return () => {
       current.removeEventListener('keydown', ctrl);
-    }
+    };
   }, [input, ctrl]);
 
   if (scope !== SCOPE) return null;

@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import { Message } from '../Message/message';
 import { Notification } from './notification';
-import { DateSeparator} from './dateSeparator';
+import { DateSeparator } from './dateSeparator';
 import { formatDate, formatDateDetailed } from '../../utils';
 
 export const messageFormatter = ({
@@ -17,7 +17,7 @@ export const messageFormatter = ({
         && (new Date(msg.createdAt) - new Date(prev.createdAt)) < 60000;
     }
     sameDate = prev
-      && formatDate(prev?.createdAt) === formatDate(msg?.createdAt)
+      && formatDate(prev?.createdAt) === formatDate(msg?.createdAt);
     prev = msg;
     return [
       !sameDate ? <DateSeparator key={`dateChange:${formatDate(msg.createdAt)}`}>
@@ -42,4 +42,4 @@ export const messageFormatter = ({
         />,
     ];
   }).flat().filter((e) => e !== null);
-}
+};

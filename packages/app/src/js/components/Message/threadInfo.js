@@ -39,14 +39,14 @@ const Link = styled.span`
   }
 `;
 
-export const ThreadLink = ({channelId, parentId, text}) => {
+export const ThreadLink = ({ channelId, parentId, text }) => {
   const dispatch = useDispatch();
   return (
-    <Link onClick={() => dispatch(setStream('side', {type: 'live', channelId, parentId }))}>
+    <Link onClick={() => dispatch(setStream('side', { type: 'live', channelId, parentId }))}>
       {text || 'Thread'}
     </Link>
   );
-}
+};
 
 export const ThreadInfo = () => {
   const {
@@ -56,7 +56,7 @@ export const ThreadInfo = () => {
   const [stream] = useStream();
   if (!thread || stream.parentId) return null;
   return (
-    <Container onClick={() => dispatch(setStream('side', {type: 'live', channelId, parentId: id}))}>
+    <Container onClick={() => dispatch(setStream('side', { type: 'live', channelId, parentId: id }))}>
       {[...new Set(thread.map((t) => t.userId))]
         .map((userId) => (
           <UserCircle key={userId} userId={userId} />

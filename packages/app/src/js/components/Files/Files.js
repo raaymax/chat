@@ -4,7 +4,7 @@ import { getUrl, getThumbnail } from '../../services/file';
 
 const download = async (fileId) => {
   window.open(getUrl(fileId));
-}
+};
 
 const IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/webp'];
 const RAW_IMAGE_TYPES = ['image/gif', 'image/webp'];
@@ -59,14 +59,14 @@ const Container = styled.div`
   }
 `;
 
-export const File = ({data: {fileName, contentType, id}}) => (
+export const File = ({ data: { fileName, contentType, id } }) => (
   <div class='file' data-id={id} onclick={() => download(id)}>
     <div class='type'><i class='fa-solid fa-file' /></div>
     <div class='name'>{fileName} [{contentType}]</div>
   </div>
-)
+);
 
-export const Image = ({raw, data: {fileName, id}}) => (
+export const Image = ({ raw, data: { fileName, id } }) => (
   <div class='file image' data-id={id} onclick={() => download(id)}>
     {
       raw
@@ -74,9 +74,9 @@ export const Image = ({raw, data: {fileName, id}}) => (
         : <img src={getThumbnail(id)} alt={fileName} />
     }
   </div>
-)
+);
 
-export const Files = ({list}) => (
+export const Files = ({ list }) => (
   <Container>
     <div class='file-list'>
       {list
@@ -94,4 +94,4 @@ export const Files = ({list}) => (
         .map((file) => <File key={file.clientId} data={file} />)}
     </div>
   </Container>
-)
+);

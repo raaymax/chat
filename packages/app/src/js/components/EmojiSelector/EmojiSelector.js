@@ -30,16 +30,16 @@ export const EmojiSelector = () => {
   }), [emojis]);
 
   const options = useMemo(() => {
-    let opts = fuse.search(currentText || '').slice(0, 5).map(({item}) => item)
+    let opts = fuse.search(currentText || '').slice(0, 5).map(({ item }) => item);
     opts = opts.length ? opts : emojis.slice(0, 5);
-    opts = [...opts, {action: 'close', shortname: 'no emoji'}].map((item) => ({
+    opts = [...opts, { action: 'close', shortname: 'no emoji' }].map((item) => ({
       label: item.unicode && String.fromCodePoint(parseInt(item.unicode, 16)),
       url: item.fileId && getUrl(item.fileId),
       name: item.shortname,
       item,
     }));
     return opts;
-  }, [fuse, emojis, currentText])
+  }, [fuse, emojis, currentText]);
 
   const create = useCallback((event) => {
     event.preventDefault();
@@ -58,7 +58,7 @@ export const EmojiSelector = () => {
     return span;
   }, [insert]);
 
-  const submit = useCallback((event, {shortName, exact = true} = {}) => {
+  const submit = useCallback((event, { shortName, exact = true } = {}) => {
     let container = scopeContainer;
     if (scope !== SCOPE) {
       container = create(event);
@@ -108,13 +108,13 @@ export const EmojiSelector = () => {
   }, [scopeContainer]);
 
   const ctrl = useCallback((e) => {
-    if ( scope === 'root' && currentText.match(/(^|\s)<$/) && e.key === '3') {
+    if (scope === 'root' && currentText.match(/(^|\s)<$/) && e.key === '3') {
       replace(/<$/, '');
-      submit(e, {shortName: ':heart:'});
+      submit(e, { shortName: ':heart:' });
     }
-    if ( scope === 'root' && currentText.match(/(^|\s);$/) && e.key === ')') {
+    if (scope === 'root' && currentText.match(/(^|\s);$/) && e.key === ')') {
       replace(/;$/, '');
-      submit(e, {shortName: ':wink:'});
+      submit(e, { shortName: ':wink:' });
     }
     if (scope === 'root' && currentText.match(/(^|\s)$/) && e.key === ':') {
       create(e);
@@ -124,23 +124,23 @@ export const EmojiSelector = () => {
         if (options[selected].item?.action === 'close') {
           close(e);
         } else {
-          submit(e, {exact: false});
+          submit(e, { exact: false });
         }
       }
-      if ( e.key === ':') {
+      if (e.key === ':') {
         submit(e);
       }
-      if ( currentText.match(/^:$/) && e.key === '*') submit(e, {shortName: ':kissing_heart:'});
-      if ( currentText.match(/^:$/) && e.key === '/') submit(e, {shortName: ':confused:'});
-      if ( currentText.match(/^:$/) && e.key === ')') submit(e, {shortName: ':slight_smile:'});
-      if ( currentText.match(/^:$/) && e.key === 'D') submit(e, {shortName: ':smiley:'});
-      if ( currentText.match(/^:$/) && e.key === '(') submit(e, {shortName: ':disappointed:'});
-      if ( currentText.match(/^:'$/) && e.key === '(') submit(e, {shortName: ':cry:'});
-      if ( currentText.match(/^:$/) && e.key === 'O') submit(e, {shortName: ':open_mouth:'});
-      if ( currentText.match(/^:$/) && e.key === 'P') submit(e, {shortName: ':stuck_out_tongue:'});
-      if ( currentText.match(/^:$/) && e.key === 'S') submit(e, {shortName: ':confounded:'});
-      if ( currentText.match(/^:$/) && e.key === 'X') submit(e, {shortName: ':mask:'});
-      if ( currentText.match(/^:$/) && e.key === 'Z') submit(e, {shortName: ':sleeping:'});
+      if (currentText.match(/^:$/) && e.key === '*') submit(e, { shortName: ':kissing_heart:' });
+      if (currentText.match(/^:$/) && e.key === '/') submit(e, { shortName: ':confused:' });
+      if (currentText.match(/^:$/) && e.key === ')') submit(e, { shortName: ':slight_smile:' });
+      if (currentText.match(/^:$/) && e.key === 'D') submit(e, { shortName: ':smiley:' });
+      if (currentText.match(/^:$/) && e.key === '(') submit(e, { shortName: ':disappointed:' });
+      if (currentText.match(/^:'$/) && e.key === '(') submit(e, { shortName: ':cry:' });
+      if (currentText.match(/^:$/) && e.key === 'O') submit(e, { shortName: ':open_mouth:' });
+      if (currentText.match(/^:$/) && e.key === 'P') submit(e, { shortName: ':stuck_out_tongue:' });
+      if (currentText.match(/^:$/) && e.key === 'S') submit(e, { shortName: ':confounded:' });
+      if (currentText.match(/^:$/) && e.key === 'X') submit(e, { shortName: ':mask:' });
+      if (currentText.match(/^:$/) && e.key === 'Z') submit(e, { shortName: ':sleeping:' });
 
       if (e.key === 'Backspace') {
         remove(e);
@@ -153,7 +153,7 @@ export const EmojiSelector = () => {
     current.addEventListener('keydown', ctrl);
     return () => {
       current.removeEventListener('keydown', ctrl);
-    }
+    };
   }, [input, ctrl]);
 
   if (scope !== SCOPE) return null;

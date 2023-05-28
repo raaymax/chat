@@ -1,9 +1,9 @@
-import {createReducer, createAction} from '@reduxjs/toolkit';
+import { createReducer, createAction } from '@reduxjs/toolkit';
 
 const show = createAction('info/show');
 const clear = createAction('info/clear');
 
-const reducer = createReducer({type: null, message: ''}, {
+const reducer = createReducer({ type: null, message: '' }, {
   [show]: (state, action) => {
     state.type = action.payload.type;
     state.message = action.payload.message;
@@ -12,8 +12,8 @@ const reducer = createReducer({type: null, message: ''}, {
     state.type = null;
     state.message = '';
   },
-  logout: () => ({ type: null, message: ''}),
-})
+  logout: () => ({ type: null, message: '' }),
+});
 
 export const actions = {
   showInfo: show,

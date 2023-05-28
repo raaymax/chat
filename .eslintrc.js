@@ -1,12 +1,13 @@
 module.exports = {
+  extends: ['eslint:recommended', 'airbnb-base', 'plugin:@typescript-eslint/recommended'],
+  parser: '@typescript-eslint/parser',
+  plugins: ['@typescript-eslint'],
+  root: true,
   env: {
     commonjs: true,
     es2021: true,
     node: true,
   },
-  extends: [
-    'airbnb-base',
-  ],
   parserOptions: {
     ecmaVersion: 'latest',
   },
@@ -14,15 +15,14 @@ module.exports = {
     'packages/app/dist',
     'packages/rpc/dist',
     'packages/repo/dist',
+    'plugins/todo/dist',
     'chat.config.js',
+    '**/dist/**/*',
   ],
   overrides: [
     {
       files: [
         'packages/app/src/sw.js',
-        'packages/app/src/fcm-sw.js',
-        'packages/app2/src/sw.js',
-        'packages/app2/src/fcm-sw.js',
       ],
       env: {
         serviceworker: true,
@@ -80,8 +80,7 @@ module.exports = {
     },
     {
       files: [
-        'packages/app/**/*.js',
-        'packages/app2/**/*.js',
+        'plugins/*/public/**/*.js',
       ],
       extends: 'preact',
       env: {
@@ -93,8 +92,34 @@ module.exports = {
         sourceType: 'module',
       },
       globals: {
-        Quill: 'readonly',
-        QuillEmoji: 'readonly',
+        Chat: 'readonly',
+        Preact: 'readonly',
+        PreactHooks: 'readonly',
+        plugins: 'readonly',
+      },
+      rules: {
+        'jest/no-deprecated-functions': 'off',
+        'import/prefer-default-export': 'off',
+        'import/extensions': ['off'],
+      },
+    },
+    {
+      files: [
+        'packages/app/**/*.js',
+        'packages/app/**/*.ts',
+        'packages/app/**/*.tsx',
+        'packages/app/**/*.jsx',
+      ],
+      extends: 'preact',
+      env: {
+        browser: true,
+        es2021: true,
+      },
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+      },
+      globals: {
         EMOJI: 'writable',
       },
       rules: {
@@ -103,8 +128,43 @@ module.exports = {
         'import/extensions': ['off'],
       },
     },
+    {
+      files: [
+        '**/*.ts',
+      ],
+      rules: {
+        'no-useless-constructor': 'off',
+        'import/no-unresolved': 'off',
+        'no-redeclare': 'off',
+        'no-unused-vars': 'off',
+      },
+    },
+    {
+      files: [
+        '**/*.js',
+      ],
+      rules: {
+        '@typescript-eslint/no-empty-function': 'warn',
+        '@typescript-eslint/no-var-requires': 'off',
+        'import/no-unresolved': [2, { commonjs: true }],
+      },
+    },
   ],
   rules: {
+    'max-len': [
+      'error',
+      {
+        code: 120,
+        ignoreComments: true,
+        ignoreStrings: true,
+        ignoreTemplateLiterals: true,
+        ignoreRegExpLiterals: true,
+      },
+    ],
+    '@typescript-eslint/no-unused-vars': ['warn', { varsIgnorePattern: '^_' }],
+    'import/extensions': [1, 'never'],
+    'import/prefer-default-export': 'off',
+    'class-methods-use-this': 'off',
     'no-await-in-loop': 'off',
     'consistent-return': 'off',
     'no-use-before-define': 'off',

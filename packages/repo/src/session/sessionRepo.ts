@@ -9,7 +9,7 @@ export class SessionRepo extends Repo<SessionQuery, Session, MongoSession> {
   }
 
   async getByToken(token: string) {
-    const {db} = await connect();
+    const { db } = await connect();
     return db.collection(this.tableName)
       .findOne({ 'session.token': token })
       .then(this.serializer.deserializeModel);

@@ -4,7 +4,7 @@ import {
 
 const setView = createAction('view/set');
 
-const viewReducer = createReducer({current: null}, {
+const viewReducer = createReducer({ current: null }, {
   [setView]: (state, action) => {
     const view = action.payload;
     if (state.current === view) {
@@ -13,11 +13,11 @@ const viewReducer = createReducer({current: null}, {
       state.current = view;
     }
   },
-  logout: () => ({ current: null}),
+  logout: () => ({ current: null }),
 });
 
 export const actions = {
   setView,
-}
+};
 
 export default viewReducer;

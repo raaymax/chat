@@ -8,8 +8,8 @@ const StyledLink = styled.a`
   hyphens: auto;
 `;
 
-export const Link = ({children, href}) => (
+export const Link = ({ children, href }) => (
   <StyledLink href={href} target="_blank" rel="noopener noreferrer">
     {children}
   </StyledLink>
-)
+);

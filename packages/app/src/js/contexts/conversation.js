@@ -16,14 +16,14 @@ function findScope(element) {
   let currentElement = element;
   while (currentElement !== null) {
     if (currentElement.hasAttribute?.('scope')) {
-      return {el: currentElement, scope: currentElement.getAttribute('scope')};
+      return { el: currentElement, scope: currentElement.getAttribute('scope') };
     }
     currentElement = currentElement.parentElement;
   }
   return null;
 }
 
-export const ConversationContext = ({children}) => {
+export const ConversationContext = ({ children }) => {
   const dispatch = useDispatch();
   const [stream] = useStream();
   const [currentText, setCurrentText] = useState('');
@@ -45,18 +45,18 @@ export const ConversationContext = ({children}) => {
   const updateRange = useCallback(() => {
     const r = getRange();
     if (!r) return;
-    setRange(r)
+    setRange(r);
     if (r.endContainer.nodeName === '#text') {
       setCurrentText(r.endContainer.textContent.slice(0, r.endOffset));
     } else {
       setCurrentText('');
     }
-    const {el, scope: s} = findScope(r.commonAncestorContainer);
+    const { el, scope: s } = findScope(r.commonAncestorContainer);
     if (s !== scope) {
       setScope(s);
     }
     setScopeContainer(el);
-  }, [getRange, setRange, scope, setScope, setCurrentText, setScopeContainer])
+  }, [getRange, setRange, scope, setScope, setCurrentText, setScopeContainer]);
 
   const onPaste = useCallback((event) => {
     const cbData = (event.clipboardData || window.clipboardData);
@@ -65,7 +65,7 @@ export const ConversationContext = ({children}) => {
       dispatch(uploadMany(cbData.files));
     }
 
-    const range = getRange()
+    const range = getRange();
     range.deleteContents();
 
     cbData.getData('text').split('\n').reverse().forEach((line, idx) => {
@@ -138,7 +138,7 @@ export const ConversationContext = ({children}) => {
     wrapperElement.appendChild(document.createTextNode(matchedText));
     documentFragment.appendChild(wrapperElement);
     textContent = textContent.substring(matchedIndex + match[0].length);
-    const here = document.createTextNode(textContent || '\u00A0')
+    const here = document.createTextNode(textContent || '\u00A0');
     documentFragment.appendChild(here);
     documentFragment.appendChild(document.createTextNode(afterText));
     parentNode.replaceChild(documentFragment, endContainer);
@@ -153,7 +153,7 @@ export const ConversationContext = ({children}) => {
 
   const replace = useCallback((regex, text = '') => {
     const range = getRange();
-    const node = range.endContainer
+    const node = range.endContainer;
     const original = node.textContent;
     const replacement = original.slice(0, range.endOffset).replace(regex, text);
     node.textContent = replacement + original.slice(range.endOffset);
@@ -176,7 +176,7 @@ export const ConversationContext = ({children}) => {
     if (e.key === 'Enter' && !e.shiftKey && scope === 'root') {
       return send(e);
     }
-    dispatch(notifyTyping())
+    dispatch(notifyTyping());
     updateRange();
   }, [dispatch, send, updateRange, scope]);
 
@@ -190,13 +190,13 @@ export const ConversationContext = ({children}) => {
   }, [updateRange]);
 
   useEffect(() => {
-    const {current} = input;
+    const { current } = input;
     current.addEventListener('keydown', onKeyDown);
     current.addEventListener('input', onInput);
     return () => {
       current.removeEventListener('input', onInput);
       current.removeEventListener('keydown', onKeyDown);
-    }
+    };
   }, [input, onInput, onKeyDown]);
 
   const api = {
@@ -217,7 +217,7 @@ export const ConversationContext = ({children}) => {
     getRange,
     insert,
     focus,
-  }
+  };
 
   return (
     <Context.Provider value={api}>
@@ -229,4 +229,4 @@ export const ConversationContext = ({children}) => {
 export const useInput = () => {
   const context = useContext(Context);
   return context;
-}
+};

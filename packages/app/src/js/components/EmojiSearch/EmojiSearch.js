@@ -26,7 +26,7 @@ const CATEGORIES = {
   f: 'Font',
 };
 
-export const EmojiSearch = ({onSelect}) => {
+export const EmojiSearch = ({ onSelect }) => {
   const [name, setName] = useState('');
   const [results, setResults] = useState([]);
   const dispatch = useDispatch();
@@ -42,7 +42,7 @@ export const EmojiSearch = ({onSelect}) => {
   useEffect(() => {
     let all = emojis || [];
     if (name && fuse) {
-      const ret = fuse.search(name, {limit: 100});
+      const ret = fuse.search(name, { limit: 100 });
       all = ret.map((r) => r.item);
     }
 

@@ -1,4 +1,4 @@
-import { h} from 'preact';
+import { h } from 'preact';
 import { useEffect } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -15,7 +15,7 @@ const Badge = styled.span`
   padding: 3px 5px;
 `;
 
-export const Channel = ({channelId: id, onclick, icon }) => {
+export const Channel = ({ channelId: id, onclick, icon }) => {
   const dispatch = useDispatch();
   const channel = useSelector(selectors.getChannel({ id }));
   useEffect(() => {
@@ -26,12 +26,12 @@ export const Channel = ({channelId: id, onclick, icon }) => {
   const { name, private: priv } = channel || {};
   return (
     <div className='channel' data-id={id} onClick={onclick}>
-      {!icon && ( priv ? <i class='fa-solid fa-lock' /> : <i class='fa-solid fa-hashtag' />) }
+      {!icon && (priv ? <i class='fa-solid fa-lock' /> : <i class='fa-solid fa-hashtag' />) }
       {icon && <i class={icon} />}
       <span class='name'>{name}</span>
     </div>
   );
-}
+};
 
 const ListChannel = ({
   channelId: id, onclick, active, icon, badge,
@@ -46,15 +46,15 @@ const ListChannel = ({
   const { name, private: priv } = channel || {};
   return (
     <div class={`channel ${active ? 'active' : ''}`}data-id={id} onclick={onclick}>
-      {!icon && ( priv ? <i class='fa-solid fa-lock' /> : <i class='fa-solid fa-hashtag' />) }
+      {!icon && (priv ? <i class='fa-solid fa-lock' /> : <i class='fa-solid fa-hashtag' />) }
       {icon && <i class={icon} />}
       <span class='name'>{name}</span>
       {badge > 0 && <Badge>{badge}</Badge>}
     </div>
   );
-}
+};
 
-export const Channels = ({icon}) => {
+export const Channels = ({ icon }) => {
   const dispatch = useDispatch();
   const channels = useSelector(selectors.getChannels);
   const userId = useSelector(selectors.getMyId);
@@ -72,12 +72,12 @@ export const Channels = ({icon}) => {
           icon={icon}
           badge={badges[c.id]}
           onclick={() => {
-            dispatch(setStream('main', {type: 'live', channelId: c.id}));
+            dispatch(setStream('main', { type: 'live', channelId: c.id }));
             dispatch(actions.setView(null));
           }}
         />
       ))}
       <ChannelCreate />
     </div>
-  )
-}
+  );
+};

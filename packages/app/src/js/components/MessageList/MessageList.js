@@ -117,7 +117,7 @@ export class MessageList extends Component {
       return;
     }
     if (!this.updateScroll) return;
-    const {status} = this.props;
+    const { status } = this.props;
     if (this.scrollPosition === MessageList.SCROLL_AT_BOTTOM) {
       if (status === MessageList.STATUS_LIVE) {
         this.base.scrollTop = this.base.scrollHeight;
@@ -150,7 +150,7 @@ export class MessageList extends Component {
   }
 
   render() {
-    const {props} = this;
+    const { props } = this;
     return (
       <ListContainer onScroll={this.handleScroll}>
         {props.formatter ? props.formatter(props) : props.list}

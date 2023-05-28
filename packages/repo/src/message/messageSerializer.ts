@@ -1,12 +1,16 @@
-import { Serializer, MongoId, Id, WithoutUndefined } from '../types';
-import { removeUndefined } from '../util';
-import { ObjectId, Filter, WithId, InsertOneResult, Document } from 'mongodb';
+import {
+  ObjectId, Filter, WithId, InsertOneResult, Document,
+} from 'mongodb';
+import {
+  Serializer, MongoId, Id,
+} from '../types';
+import {
+  removeUndefined, makeObjectId, makeId, makeDate,
+} from '../util';
 import { Message, MessageQuery, MongoMessage } from './messageTypes';
-import { makeObjectId, makeId, makeDate } from '../util';
-
 
 export class MessageSerializer implements Serializer<MessageQuery, Message, MongoMessage> {
-  serializeModel(arg: Message): Document{
+  serializeModel(arg: Message): Document {
     return removeUndefined({
       _id: makeObjectId(arg.id),
       flat: arg.flat,
@@ -18,11 +22,11 @@ export class MessageSerializer implements Serializer<MessageQuery, Message, Mong
       clientId: arg.clientId,
       emojiOnly: arg.emojiOnly,
       pinned: arg.pinned,
-      thread: arg.thread?.map(t => ({
+      thread: arg.thread?.map((t) => ({
         userId: makeObjectId(t.userId),
         childId: makeObjectId(t.childId),
       })),
-      reactions: arg.reactions?.map(r => ({
+      reactions: arg.reactions?.map((r) => ({
         userId: makeObjectId(r.userId),
         reaction: r.reaction,
       })),
@@ -35,17 +39,17 @@ export class MessageSerializer implements Serializer<MessageQuery, Message, Mong
     });
   }
 
-  serializeQuery(arg: MessageQuery): Filter<Document>{
+  serializeQuery(arg: MessageQuery): Filter<Document> {
     return removeUndefined({
       ...this.serializeModel(arg),
-      ...(arg.search ? {$text: {$search: arg.search}} : {}),
-      ...(arg.before ? {createdAt: {$lte: makeDate(arg.before)}} : {}),
-      ...(arg.after ? {createdAt: {$gte: makeDate(arg.after)}} : {}),
+      ...(arg.search ? { $text: { $search: arg.search } } : {}),
+      ...(arg.before ? { createdAt: { $lte: makeDate(arg.before) } } : {}),
+      ...(arg.after ? { createdAt: { $gte: makeDate(arg.after) } } : {}),
     });
   }
 
   deserializeModel(arg: MongoMessage): Message | null {
-    if(typeof arg !== 'object' || arg === null) {
+    if (typeof arg !== 'object' || arg === null) {
       return null;
     }
     return removeUndefined({
@@ -59,11 +63,11 @@ export class MessageSerializer implements Serializer<MessageQuery, Message, Mong
       clientId: arg.clientId,
       emojiOnly: arg.emojiOnly,
       pinned: arg.pinned,
-      thread: arg.thread?.map(t => ({
+      thread: arg.thread?.map((t) => ({
         userId: makeId(t.userId),
         childId: makeId(t.childId),
       })),
-      reactions: arg.reactions?.map(r => ({
+      reactions: arg.reactions?.map((r) => ({
         userId: makeId(r.userId),
         reaction: r.reaction,
       })),
@@ -76,21 +80,18 @@ export class MessageSerializer implements Serializer<MessageQuery, Message, Mong
     }) as Message;
   }
 
-  deserializeModelMany(arg: Array<WithId<Document>>): Array<Message>{
+  deserializeModelMany(arg: Array<WithId<Document>>): Array<Message> {
     return arg.map(this.deserializeModel);
   }
 
-
   deserializeInsertedId(arg: InsertOneResult<Document>): Id | null {
-    if(typeof arg === 'object' && arg !== null && 'insertedId' in arg && arg.insertedId instanceof ObjectId) {
+    if (typeof arg === 'object' && arg !== null && 'insertedId' in arg && arg.insertedId instanceof ObjectId) {
       return arg.insertedId.toHexString() as Id;
-    }else{
-      return null;
     }
+    return null;
   }
 
   serializeId(arg: { id: Id }): MongoId {
     return { _id: new ObjectId(arg.id) };
   }
-
 }

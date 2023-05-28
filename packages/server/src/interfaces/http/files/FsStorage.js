@@ -18,7 +18,9 @@ class FsStorage {
       metadata: {
         filename: file.originalname,
       },
-    }), () => {});
+    }), () => {
+      // nothing
+    });
     file.stream.pipe(sink)
       .on('error', (err) => {
         // eslint-disable-next-line no-console
@@ -31,8 +33,8 @@ class FsStorage {
   };
 
   _removeFile = (req, file, cb) => {
-    fs.unlink(`${config.storage.directory}/${file.fileId}`, () => {});
-    fs.unlink(`${config.storage.directory}/${file.fileId}.metadata.json`, () => {});
+    fs.unlink(`${config.storage.directory}/${file.fileId}`, () => { /* empty */ });
+    fs.unlink(`${config.storage.directory}/${file.fileId}.metadata.json`, () => { /* empty */ });
     cb(null);
   };
 

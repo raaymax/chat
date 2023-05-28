@@ -1,6 +1,6 @@
 import { h } from 'preact';
-import {Emoji} from '../Emoji/Emoji';
-import {Link} from './elements/Link';
+import { Emoji } from '../Emoji/Emoji';
+import { Link } from './elements/Link';
 import { ChannelInline } from '../ChannelInline/ChannelInline';
 import { ThreadLink } from './threadInfo';
 

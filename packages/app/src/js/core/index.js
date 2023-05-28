@@ -1,4 +1,4 @@
-import { WebSocketTransport, Request, Notification} from '@quack/rpc';
+import { WebSocketTransport, Request, Notification } from '@quack/rpc';
 import './registerSw';
 
 const URI = `${document.location.protocol}//${document.location.host}`;

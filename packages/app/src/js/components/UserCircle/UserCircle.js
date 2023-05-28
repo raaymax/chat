@@ -11,7 +11,7 @@ const Image = styled.img`
   vertical-align: middle;
 `;
 
-export const UserCircle = ({userId, className}) => {
+export const UserCircle = ({ userId, className }) => {
   const user = useSelector(selectors.getUser(userId));
   if (!user) return null;
   return (

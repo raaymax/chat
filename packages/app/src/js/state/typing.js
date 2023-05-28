@@ -1,4 +1,4 @@
-import {createReducer, createAction} from '@reduxjs/toolkit';
+import { createReducer, createAction } from '@reduxjs/toolkit';
 
 const add = createAction('typing/add');
 const clear = createAction('typing/clear');
@@ -20,7 +20,7 @@ const reducer = createReducer({}, {
       ]),
   ),
   logout: () => ({ }),
-})
+});
 
 export const actions = {
   addTyping: add,

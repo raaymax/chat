@@ -15,6 +15,6 @@ export const App = () => (
       <Secured />
     </Suspense>
   </Login>
-)
+);
 
 render(<App />, document.getElementById('root'));

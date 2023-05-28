@@ -3,18 +3,18 @@ import { useCallback, useEffect, useState } from 'preact/hooks';
 import * as session from '../services/session';
 import { UserContext } from '../contexts/user';
 
-export const Login = ({children}) => {
+export const Login = ({ children }) => {
   const [status, setStatus] = useState('pending');
   const [user, setUser] = useState(null);
   const validate = useCallback(() => session.validate()
-    .then(async ({status, user}) => {
+    .then(async ({ status, user }) => {
       setStatus(status);
       if (status === 'ok') {
         setUser(user);
       } else {
         setUser(null);
       }
-    }).catch( (e) => {
+    }).catch((e) => {
       // eslint-disable-next-line no-console
       console.error(e);
       setTimeout(validate, 1000);
@@ -30,8 +30,8 @@ export const Login = ({children}) => {
   }, [validate]);
 
   useEffect(() => {
-    fastAccess()
-    validate()
+    fastAccess();
+    validate();
   }, [validate, fastAccess]);
 
   const onSubmit = async (e) => {
@@ -61,4 +61,4 @@ export const Login = ({children}) => {
       </form>
     </div>
   );
-}
+};

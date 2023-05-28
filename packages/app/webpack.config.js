@@ -1,6 +1,6 @@
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const {InjectManifest} = require('workbox-webpack-plugin');
+const { InjectManifest } = require('workbox-webpack-plugin');
 const webpack = require('webpack');
 const config = require('@quack/config');
 const pack = require('../../package.json');
@@ -14,6 +14,7 @@ module.exports = {
       APP_VERSION: JSON.stringify(pack.version),
       APP_NAME: JSON.stringify(pack.name),
       IMAGES_URL: JSON.stringify(config.imagesUrl),
+      PLUGIN_LIST: JSON.stringify(config.plugins),
     }),
     new MiniCssExtractPlugin(),
     new CopyPlugin({
@@ -54,10 +55,10 @@ module.exports = {
   },
   resolve: {
     alias: {
-      react: "preact/compat",
-      "react-dom/test-utils": "preact/test-utils",
-      "react-dom": "preact/compat",
-      "react/jsx-runtime": "preact/jsx-runtime",
+      react: 'preact/compat',
+      'react-dom/test-utils': 'preact/test-utils',
+      'react-dom': 'preact/compat',
+      'react/jsx-runtime': 'preact/jsx-runtime',
     },
   },
   mode: 'development',

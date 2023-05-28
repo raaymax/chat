@@ -13,6 +13,6 @@ const StyledDateSeparator = styled.div`
   margin-bottom: 10px;
 `;
 
-export const DateSeparator = ({children}) => (
+export const DateSeparator = ({ children }) => (
   <StyledDateSeparator>{children}</StyledDateSeparator>
-)
+);

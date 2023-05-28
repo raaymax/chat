@@ -1,4 +1,4 @@
-import {h} from 'preact';
+import { h } from 'preact';
 import styled from 'styled-components';
 
 const Spinner = styled.span`

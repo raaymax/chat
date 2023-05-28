@@ -21,14 +21,14 @@ export const SearchInput = () => {
       await submit();
       e.preventDefault();
     }
-  }, [submit])
+  }, [submit]);
 
   useEffect(() => {
     const el = input.current;
     el.addEventListener('keydown', onSubmit);
     return () => {
       el.removeEventListener('keydown', onSubmit);
-    }
+    };
   }, [input, dispatch, onSubmit]);
 
   return (

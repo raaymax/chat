@@ -1,6 +1,8 @@
-import { Socket, Manager } from "socket.io-client";
+import { Socket, Manager } from 'socket.io-client';
 import { createEventListener } from './utils';
-import { Message, SequenceMessage, isMessage, isSequenceMessage } from './types';
+import {
+  Message, SequenceMessage, isMessage, isSequenceMessage,
+} from './types';
 import { Event } from './event';
 
 export interface Transport {
@@ -14,15 +16,18 @@ export interface Transport {
 
 export class WebSocketTransport implements Transport {
   private bus = createEventListener<Message>();
+
   private seqHandlers = createEventListener<SequenceMessage>();
+
   private socket: Socket;
+
   private manager: Manager;
 
   constructor(url: string) {
     this.manager = new Manager(url);
     this.socket = this.manager.socket('/', {
       auth: (cb) => {
-        cb({ token: localStorage.token })
+        cb({ token: localStorage.token });
       },
     });
 
@@ -31,16 +36,16 @@ export class WebSocketTransport implements Transport {
       // eslint-disable-next-line no-console
       console.debug('recv', JSON.stringify(msg, null, 4));
       if (isMessage(msg)) {
-        if(isSequenceMessage(msg)) {
+        if (isSequenceMessage(msg)) {
           if (this.seqHandlers.exists(msg.seqId)) {
             this.seqHandlers.notify(msg.seqId, msg, ev);
-            if(!ev.isHandled()) {
+            if (!ev.isHandled()) {
               this.emit(msg.type, msg);
             }
           } else {
             this.emit(msg.type, msg);
           }
-        }else {
+        } else {
           this.emit(msg.type, msg);
         }
       }
@@ -88,4 +93,3 @@ export class WebSocketTransport implements Transport {
     return this.bus.notify(event, data);
   }
 }
-

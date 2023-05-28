@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable global-require */
-const repo = require('../../infra/repositories');
+const plugins = require('../../infra/plugins');
 
 const commands = [
   require('./avatar'),
@@ -14,13 +14,13 @@ const commands = [
   require('./main'),
 ];
 
-module.exports = async (req, res) => {
+module.exports = async (req, res, srv) => {
   res.systemMessage = async (msg) => {
     const { channelId } = req.body.context || {};
     await res.send({
       type: 'message',
       id: `sys:${Math.random().toString(10)}`,
-      userId: (await repo.user.get({ name: 'System' })).id,
+      userId: (await srv.repo.user.get({ name: 'System' })).id,
       priv: true,
       message: msg,
       channelId,
@@ -28,10 +28,11 @@ module.exports = async (req, res) => {
     });
   };
   const { name } = req.body;
+  const pluginCommands = plugins.get('commands');
   if (name === 'help') return sendHelp(req, res);
-  const command = commands.find((cmd) => cmd.name === name);
+  const command = [...commands, ...pluginCommands].find((cmd) => cmd.name === name);
   if (!command) return unknownCommand(req, res);
-  return command.handler(req, res);
+  return command.handler(req, res, srv);
 };
 
 async function sendHelp(req, res) {

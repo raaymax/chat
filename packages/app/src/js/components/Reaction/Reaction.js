@@ -1,6 +1,6 @@
 import { h } from 'preact';
 import styled from 'styled-components';
-import { useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { addReaction } from '../../services/messages';
 import { useMessageData } from '../../contexts/message';
 
@@ -13,14 +13,14 @@ const StyledReactions = styled.div`
     border: 1px solid #565856;
     font-style: normal;
   }
-`
+`;
 
 export const Reactions = () => {
-  const {id, reactions = []} = useMessageData();
+  const { id, reactions = [] } = useMessageData();
   const dispatch = useDispatch();
 
   const reactionMap = reactions
-    .reduce((acc, r) => ({...acc, [r.reaction]: (acc[r.reaction] || 0) + 1}), {});
+    .reduce((acc, r) => ({ ...acc, [r.reaction]: (acc[r.reaction] || 0) + 1 }), {});
   return (
     <StyledReactions>
       {Object.entries(reactionMap).map(([key, count], idx) => (
@@ -30,7 +30,7 @@ export const Reactions = () => {
   );
 };
 
-export const Reaction = ({messageId, children}) => {
+export const Reaction = ({ messageId, children }) => {
   const dispatch = useDispatch();
 
   return (

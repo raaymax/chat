@@ -2,7 +2,7 @@ import { h } from 'preact';
 import { useInput } from '../../contexts/conversation';
 import { InputContainer } from './elements/container';
 
-const Input = ({children}) => {
+const Input = ({ children }) => {
   const {
     input, onPaste, onInput, onKeyDown, onFileChange, fileInput,
   } = useInput();

@@ -21,11 +21,11 @@ export const notifyTyping = () => (dispatch, getState) => {
       dispatch(notifyTyping());
     }
   }, 1000);
-}
+};
 
 export const ackTyping = (msg) => (dispatch, getState) => {
   const meId = selectors.getMeId(getState());
   if (msg.userId === meId) return;
   dispatch(actions.addTyping(msg));
   setTimeout(() => dispatch(actions.clearTyping()), 1100);
-}
+};

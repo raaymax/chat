@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
-import { configureStore, createSelector, createAction } from '@reduxjs/toolkit'
-import {useSelector} from 'react-redux';
-import messages, { actions as messageActions} from './messages';
+import { configureStore, createSelector, createAction } from '@reduxjs/toolkit';
+import { useSelector } from 'react-redux';
+import messages, { actions as messageActions } from './messages';
 import connected, { actions as connectionActions } from './connection';
 import config, { actions as configActions } from './config';
 import channels, { actions as channelActions } from './channels';
@@ -36,16 +36,16 @@ export const actions = {
   ...cusotmEmojisActions,
   ...progressActions,
   ...streamActions,
-}
+};
 
 const getStreamMessages = (stream, messages) => messages
   .filter((m) => m.channelId === stream.channelId
     && (
-      ((!stream.parentId && !m.parentId ) || m.parentId === stream.parentId)
+      ((!stream.parentId && !m.parentId) || m.parentId === stream.parentId)
     || (!stream.parentId && m.parentId === m.id)));
 
 export const selectors = {
-  getProgress: ({channelId, parentId}) => createSelector(
+  getProgress: ({ channelId, parentId }) => createSelector(
     (state) => state.channels.list.find((c) => c.id === channelId),
     (state) => state.progress,
     (state) => state.users.list,
@@ -127,7 +127,7 @@ export const selectors = {
   getCurrentChannel: createSelector(
     (state) => state.channels.list,
     (state) => state.stream.main.channelId,
-    (list, channelId) => list.find((c) => c.id === channelId) || {id: channelId},
+    (list, channelId) => list.find((c) => c.id === channelId) || { id: channelId },
   ),
   getInfo: (state) => state.info,
   getUser: (userId) => createSelector(

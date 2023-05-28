@@ -23,7 +23,7 @@ try {
     module.exports = {
       ...defaults,
       // eslint-disable-next-line import/no-unresolved
-      ...require('../secrets.json'),
+      ...safeLoad('../secrets.json'),
       ...safeLoad('../tests/chat.config.tests'),
     };
   } else {
@@ -45,6 +45,8 @@ function safeLoad(file) {
   try {
     return require(file);
   } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(err);
     return {};
   }
 }

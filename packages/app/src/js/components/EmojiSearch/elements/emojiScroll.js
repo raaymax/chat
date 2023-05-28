@@ -12,10 +12,10 @@ const Scroll = styled.div`
   }
 `;
 
-export const EmojiScroll = ({children}) => (
+export const EmojiScroll = ({ children }) => (
   <Scroll>
     <div>
       {children}
     </div>
   </Scroll>
-)
+);

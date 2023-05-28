@@ -13,6 +13,6 @@ const StyledSearchSeparator = styled.div`
   padding-left: 30px;
 `;
 
-export const SearchSeparator = ({children}) => (
+export const SearchSeparator = ({ children }) => (
   <StyledSearchSeparator>{children}</StyledSearchSeparator>
-)
+);

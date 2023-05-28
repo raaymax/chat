@@ -19,6 +19,7 @@
     "dev:srv": "pnpm run --filter @quack/server dev",
     "dev": "run-p dev:srv dev:web",
     "test": "pnpm run --filter @quack/server test",
+    "lint": "FORCE_COLOR=true eslint --fix .",
     "lint:ci": "eslint .",
     "test:ci": "pnpm run --filter @quack/server test:ci"
   },

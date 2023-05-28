@@ -1,4 +1,5 @@
-import {Event} from './event'
+import { Event } from './event';
+
 type HandlerStore<ArgType> = {
   [key: string]: ((data: ArgType, ev?: Event) => Promise<void> | void)[];
 }
@@ -23,18 +24,18 @@ export const createEventListener = <ArgType>() => {
     );
   };
   // eslint-disable-next-line no-return-assign
-  const watch = (evid: string, fn: (arg: ArgType, ev?: Event) => void ) => {
+  const watch = (evid: string, fn: (arg: ArgType, ev?: Event) => void) => {
     (handlers[evid] = handlers[evid] || []).push(fn);
   };
 
   const offAll = (id: string) => {
     handlers[id] = [];
-  }
+  };
 
-  const off = (id: string, fn: (arg: ArgType, ev?: Event) => void ) => {
+  const off = (id: string, fn: (arg: ArgType, ev?: Event) => void) => {
     handlers[id] = (handlers[id] || [])
       .filter((listener) => listener !== fn);
-  }
+  };
   const once = (id: string, fn: (arg: ArgType, ev?: Event) => void) => {
     handlers[id] = handlers[id] || [];
     const cb = async (arg: ArgType, ev?: Event) => {

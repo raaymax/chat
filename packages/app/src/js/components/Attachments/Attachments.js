@@ -54,7 +54,7 @@ const Container = styled.div`
   }
 `;
 
-export const Attachment = ({data: {fileName, contentType, progress}, ondelete}) => (
+export const Attachment = ({ data: { fileName, contentType, progress }, ondelete }) => (
   <div class='attachment'>
     <div class='type'><i class='fa-solid fa-file' /></div>
     <div class='name'>{fileName} [{contentType}]</div>
@@ -72,12 +72,12 @@ export const Attachments = () => {
       {list.map((file) => (
         <Attachment
           key={file.clientId}
-          data={{...file}}
+          data={{ ...file }}
           ondelete={() => {
-            dispatch(abort(file.clientId))
+            dispatch(abort(file.clientId));
           }}
         />
       ))}
     </Container>
   );
-}
+};

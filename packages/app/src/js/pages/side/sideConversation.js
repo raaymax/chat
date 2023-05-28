@@ -11,9 +11,9 @@ const Container = styled.div`
   flex-direction: column;
   border-right: 1px solid var(--primary_border_color);
 `;
-export const SideConversation = ({className}) => (
+export const SideConversation = ({ className }) => (
   <Container className={className}>
     <Header />
     <Conversation />
   </Container>
-)
+);

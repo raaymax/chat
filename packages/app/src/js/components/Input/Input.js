@@ -21,10 +21,10 @@ export const Input = () => {
     insert(buildEmojiNode(emoji, getUrl));
     setShowEmojis(!showEmojis);
     focus();
-  }, [showEmojis, focus, insert, setShowEmojis])
+  }, [showEmojis, focus, insert, setShowEmojis]);
 
   const ctrl = useCallback((e) => {
-    if ( scope === 'root' && currentText.match(/`[^`]+$/) && e.key === '`') {
+    if (scope === 'root' && currentText.match(/`[^`]+$/) && e.key === '`') {
       wrapMatching(/`([^`]+)$/, 'code');
       e.preventDefault();
     }
@@ -35,7 +35,7 @@ export const Input = () => {
     current.addEventListener('keydown', ctrl);
     return () => {
       current.removeEventListener('keydown', ctrl);
-    }
+    };
   }, [input, ctrl]);
 
   return (
@@ -58,4 +58,4 @@ export const Input = () => {
       {showEmojis && <EmojiSearch onSelect={onEmojiInsert} />}
     </BaseInput>
   );
-}
+};

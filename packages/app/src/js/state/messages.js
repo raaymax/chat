@@ -1,5 +1,5 @@
-import {createReducer, createAsyncThunk, createAction} from '@reduxjs/toolkit';
-import {client} from '../core';
+import { createReducer, createAsyncThunk, createAction } from '@reduxjs/toolkit';
+import { client } from '../core';
 
 const add = createAction('message/add');
 const hover = createAction('message/hover');
@@ -40,15 +40,15 @@ const messagesReducer = createReducer({
     state.loading = false;
   },
   [clear]: (state, action) => {
-    const {data} = state;
-    const {stream: {parentId, channelId}} = action.payload;
+    const { data } = state;
+    const { stream: { parentId, channelId } } = action.payload;
     const ids = data
       .filter(((m) => m.channelId === channelId && (!parentId || m.parentId === parentId)))
-      .map((m) => m.id)
+      .map((m) => m.id);
 
     state.data = data.filter((m) => !ids.includes(m.id));
   },
-  [addAll]: ({data}, action) => {
+  [addAll]: ({ data }, action) => {
     action.payload.forEach((msg) => {
       if (msg.createdAt) {
         msg.createdAt = (new Date(msg.createdAt)).toISOString();
@@ -63,9 +63,9 @@ const messagesReducer = createReducer({
       let pos = data.findIndex((m) => m.createdAt < msg.createdAt);
       if (pos === -1 && data.some((m) => m.createdAt > msg.createdAt)) pos = data.length;
       data.splice(pos, 0, msg);
-    })
+    });
   },
-  [add]: ({data, status}, action) => {
+  [add]: ({ data, status }, action) => {
     if (status === 'archive') return;
     const msg = action.payload;
     if (msg.createdAt) {
@@ -84,7 +84,7 @@ const messagesReducer = createReducer({
   },
 
   [takeHead]: ({ data }, action) => {
-    const {stream: {channelId, parentId}, count} = action.payload;
+    const { stream: { channelId, parentId }, count } = action.payload;
     const ids = data
       .filter((m) => m.channelId === channelId && (!parentId || m.parentId === parentId))
       .slice(0, Math.max(data.length - count, 0))
@@ -92,18 +92,18 @@ const messagesReducer = createReducer({
     data = data.filter((m) => !ids.includes(m.id));
   },
 
-  [takeTail]: ({data}, action) => {
-    const {stream: {channelId, parentId}, count} = action.payload;
+  [takeTail]: ({ data }, action) => {
+    const { stream: { channelId, parentId }, count } = action.payload;
     const ids = data
       .filter((m) => m.channelId === channelId && (!parentId || m.parentId === parentId))
       .slice(0, Math.min(count, data.length))
-      .map((m) => m.id)
+      .map((m) => m.id);
 
-    data = data.filter((m) => !ids.includes(m.id))
+    data = data.filter((m) => !ids.includes(m.id));
   },
 
   logout: () => ({ data: [], loading: false }),
-})
+});
 
 export const actions = {
   messagesSetStatus: setStatus,
@@ -116,8 +116,8 @@ export const actions = {
   addMessages: addAll,
   addMessage: add,
   removeMessagesBefore: removeBefore,
-  loadMessages: createAsyncThunk('messages/load', async ({limit = 50}, {getState}) => {
-    const {channel} = getState();
+  loadMessages: createAsyncThunk('messages/load', async ({ limit = 50 }, { getState }) => {
+    const { channel } = getState();
     return client.notif({ type: 'messages:load', limit, channel });
   }),
   takeTail,

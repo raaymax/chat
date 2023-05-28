@@ -3,7 +3,7 @@ import { client } from '../core';
 
 export const initNotifications = async (config) => {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.addEventListener('message', ({data}) => {
+    navigator.serviceWorker.addEventListener('message', ({ data }) => {
       if (data.type) {
         client.emit(data.type, data);
       }
@@ -33,7 +33,7 @@ export const initNotifications = async (config) => {
         Notification.requestPermission((status) => {
           console.log('Notification permission status:', status);
         });
-      }, {once: true});
+      }, { once: true });
     }
   }
-}
+};

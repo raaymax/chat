@@ -1,4 +1,4 @@
-import {h } from 'preact';
+import { h } from 'preact';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -58,12 +58,12 @@ export const LinkPreview = ({ link }) => (
       <p>{link.description}</p>
     </div>
   </Link>
-)
+);
 
-export const LinkPreviewList = ({links = []}) => (
+export const LinkPreviewList = ({ links = [] }) => (
   <Container>
     {links.map((link, key) => (
       <LinkPreview link={link} key={key} />
     ))}
   </Container>
-)
+);
