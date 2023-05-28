@@ -31,9 +31,6 @@ importers:
       ts-node:
         specifier: 10.9.1
         version: 10.9.1(@types/node@18.14.0)(typescript@4.9.5)
-      turbo:
-        specifier: 1.9.8
-        version: 1.9.8
       web-push:
         specifier: 3.6.1
         version: 3.6.1
@@ -174,28 +171,6 @@ importers:
       workbox-webpack-plugin:
         specifier: 6.5.4
         version: 6.5.4(webpack@5.75.0)
-
-  packages/dateRanges:
-    dependencies:
-      socket.io-client:
-        specifier: 4.6.1
-        version: 4.6.1
-      typescript:
-        specifier: 4.9.5
-        version: 4.9.5
-    devDependencies:
-      '@types/node':
-        specifier: 18.14.0
-        version: 18.14.0
-      '@typescript-eslint/eslint-plugin':
-        specifier: 5.53.0
-        version: 5.53.0(@typescript-eslint/parser@5.53.0)(eslint@8.34.0)(typescript@4.9.5)
-      '@typescript-eslint/parser':
-        specifier: 5.53.0
-        version: 5.53.0(eslint@8.34.0)(typescript@4.9.5)
-      eslint:
-        specifier: 8.34.0
-        version: 8.34.0
 
   packages/repo:
     dependencies:
@@ -346,31 +321,6 @@ importers:
       turbo:
         specifier: 1.9.8
         version: 1.9.8
-
-  packages/utils:
-    dependencies:
-      mongodb:
-        specifier: 4.5.0
-        version: 4.5.0
-      typescript:
-        specifier: 4.9.5
-        version: 4.9.5
-      zod:
-        specifier: 3.21.4
-        version: 3.21.4
-    devDependencies:
-      '@types/node':
-        specifier: 18.14.0
-        version: 18.14.0
-      '@typescript-eslint/eslint-plugin':
-        specifier: 5.53.0
-        version: 5.53.0(@typescript-eslint/parser@5.53.0)(eslint@8.34.0)(typescript@4.9.5)
-      '@typescript-eslint/parser':
-        specifier: 5.53.0
-        version: 5.53.0(eslint@8.34.0)(typescript@4.9.5)
-      eslint:
-        specifier: 8.34.0
-        version: 8.34.0
 
   plugins/example:
     dependencies:
@@ -8874,6 +8824,7 @@ packages:
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
+    dev: true
     optional: true
 
   /turbo-darwin-arm64@1.9.8:
@@ -8881,6 +8832,7 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
+    dev: true
     optional: true
 
   /turbo-linux-64@1.9.8:
@@ -8888,6 +8840,7 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
+    dev: true
     optional: true
 
   /turbo-linux-arm64@1.9.8:
@@ -8895,6 +8848,7 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
+    dev: true
     optional: true
 
   /turbo-windows-64@1.9.8:
@@ -8902,6 +8856,7 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
+    dev: true
     optional: true
 
   /turbo-windows-arm64@1.9.8:
@@ -8909,6 +8864,7 @@ packages:
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
+    dev: true
     optional: true
 
   /turbo@1.9.8:
@@ -8922,6 +8878,7 @@ packages:
       turbo-linux-arm64: 1.9.8
       turbo-windows-64: 1.9.8
       turbo-windows-arm64: 1.9.8
+    dev: true
 
   /type-check@0.3.2:
     resolution: {integrity: sha512-ZCmOJdvOWDBYJlzAoFkC+Q0+bUyEOS1ltgp1MGU03fqHG+dbi9tBFU2Rd9QKiDZFAYrhPh2JUf7rZRIuHRKtOg==}
