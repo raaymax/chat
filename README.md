@@ -70,6 +70,11 @@ I have no idea how to propagate messages to other serverless instances without a
 MongoDB, Redis, and Postgres need to be hosted to watch for messages.
 Perhaps Google Cloud Pub/Sub would be a good option?
 
+## Plugins
+Chat have plugin system. Example plugin can be found in `plugins/example`.
+How to use plugins and plugin hook points TBA.
+
+
 ## Local development setup
 
 ```bash
