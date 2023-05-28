@@ -15,6 +15,7 @@ const defaults = {
   },
   imagesUrl: 'http://localhost:8080/files',
   serverWebUrl: 'http://localhost:8080',
+  baseUrl: 'http://localhost:8080',
 };
 
 try {
