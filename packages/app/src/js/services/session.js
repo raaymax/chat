@@ -34,7 +34,7 @@ export const login = async (value) => {
 };
 
 export const register = async (value) => {
-  const ret = await fetch(SESSION_URL+'/register', {
+  const ret = await fetch(`${SESSION_URL}/register`, {
     method: 'POST',
     credentials: 'include',
     headers: {

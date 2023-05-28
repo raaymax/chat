@@ -13,7 +13,7 @@ module.exports = {
       token,
       userId: req.userId,
       createdAt: new Date().toISOString(),
-    })
+    });
     await repo.invitation.create({
       token,
       userId: req.userId,
