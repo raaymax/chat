@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.9.6](https://github.com/codecat-io/chat/compare/quack-v1.9.5...quack-v1.9.6) (2023-05-25)
+
+
+### Bug Fixes
+
+* removed rpc from release list ([966dd0e](https://github.com/codecat-io/chat/commit/966dd0e4de6bd92a2969a96e8e0deb790cedb2de))
+* **threads:** messages are not linked to parent message ([e469896](https://github.com/codecat-io/chat/commit/e469896639130987619967c85dbb862e9944b038))
+
 ## [1.9.5](https://github.com/codecat-io/chat/compare/quack-v1.9.4...quack-v1.9.5) (2023-05-24)
 
 
