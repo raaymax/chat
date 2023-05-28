@@ -36,6 +36,8 @@ async function getSession(req, res) {
     if (token) {
       const record = await db.session.getByToken(token);
       if (record?.session?.userId) {
+        req.session.lastIp = req.ip;
+        req.session.lastUserAgent = req.headers['user-agent'];
         return res.status(200).send({ status: 'ok', user: record.session.userId });
       }
     }
@@ -54,6 +56,8 @@ async function createSession(req, res) {
     if (user) {
       req.session.userId = user.id;
       req.session.token = crypto.randomBytes(64).toString('hex');
+      req.session.ip = req.ip;
+      req.session.userAgent = req.headers['user-agent'];
       return res.status(200).send({ status: 'ok', user, token: req.session.token });
     }
     res.status(401).send({ status: 'nok', message: 'Invalid credentials' });
