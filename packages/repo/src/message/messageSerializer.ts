@@ -2,7 +2,7 @@ import {
   ObjectId, Filter, WithId, InsertOneResult, Document,
 } from 'mongodb';
 import {
-  Serializer, MongoId, Id, WithoutUndefined,
+  Serializer, MongoId, Id,
 } from '../types';
 import {
   removeUndefined, makeObjectId, makeId, makeDate,
