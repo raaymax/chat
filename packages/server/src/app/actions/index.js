@@ -80,6 +80,8 @@ const dispatch = async ({ type, seqId, ...body }, { userId, bus, push = () => {}
   const srv = {
     repo,
     service,
+    bus,
+    push,
   };
   try {
     if (typeof handler === 'function') {
