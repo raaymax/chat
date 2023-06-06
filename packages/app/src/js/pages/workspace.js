@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Logo } from '../components/logo';
 import { Channels } from '../components/channels';
+import { UserList } from '../components/UserList/UserList';
 import { MainConversation } from './main/mainConversaion';
 import { SideConversation } from './side/sideConversation';
 import { Search } from '../components/search/search';
@@ -42,6 +43,11 @@ const MainView = styled.div`
 
 const SideMenu = styled.div`
   flex: 0 0 200px;
+  & .slider {
+    flex: 1;
+    overflow-y: auto;
+    height: calc(100% - 50px);
+  }
   @media (max-width : 710px) {
     flex: none;
     width: 100%;
@@ -92,8 +98,11 @@ export const Workspace = () => {
     <Container className={sideStream ? ['side-stream'] : ['main-stream']}>
       {view === 'sidebar' && <SideMenu>
         <Logo onClick={() => dispatch(actions.setView('sidebar'))} />
-        <Channels />
-        {plugins.get('sidebar').map((El, key) => <El key={key} />)}
+        <div className='slider'>
+          <Channels />
+          <UserList />
+          {plugins.get('sidebar').map((El, key) => <El key={key} />)}
+        </div>
       </SideMenu>}
       <MainView className={view === 'sidebar' ? ['sidebar'] : []}>
         <StreamContext value={[stream, (val) => dispatch(setStream('main', val))]}>

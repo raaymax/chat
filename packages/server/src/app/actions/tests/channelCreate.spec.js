@@ -9,6 +9,10 @@ describe('channel:create', () => {
     user = await api.repo.user.get({ name: 'Admin' });
   });
 
+  beforeEach(async () => {
+    await api.repo.channel.remove({ name: CHANNEL_NAME });
+  });
+
   it('should fail validation if name is not provided', async () => {
     const { res } = await api.sendMessage({ type: 'channel:create' }, { userId: user.id });
     assert.equal(res.status, 'error');

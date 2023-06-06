@@ -17,6 +17,11 @@ const theme = {
   fontColor: '#d9d9d9',
   frontHoverColor: 'var(--primary_active_mask)',
 
+  userActive: '#3c7e3c',
+  userConnected: '#8f8f45',
+  userSystem: '#d9d9d9',
+  userDisconnected: '#4f4f4f',
+
   actionButtonBackgroundColor: '#2E1A4E',
   actionButtonHoverBackgroundColor: '#3D2760',
   actionButtonActiveBackgroundColor: '#3D2760',

@@ -8,7 +8,7 @@ module.exports = {
       return existing.id;
     }
 
-    const channelId = await repo.channel.create({ name, ...rest }).then(({ id }) => id);
+    const channelId = await repo.channel.create({ name, ...rest });
 
     if (bus) {
       const channel = await repo.channel.get({ id: channelId });

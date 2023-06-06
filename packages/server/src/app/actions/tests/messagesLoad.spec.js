@@ -18,7 +18,7 @@ describe('messages:load', () => {
       clientId,
       message: { line: { text: 'Hello' } },
       flat: 'Hello',
-    }, { userId: user.id, push: { send: () => {} } });
+    }, { userId: user.id, push: () => {} });
     const { res, data: [msg] } = await api.sendMessage({
       type: 'messages:load',
       channelId: channel.id,

@@ -1,34 +1,36 @@
+import { z } from 'zod';
 import { ObjectId } from 'mongodb';
-import { Id, ReplaceId, ReplaceType } from '../types';
+import { Id, ReplaceType, ReplaceId } from '../types';
 
-export type User = {
+export const User = z.object({
   id: Id,
-  name: string
-  avatarUrl: string
-  login: string
-  password: string
-  clientId: string
-  mainChannelId: Id | null
-  avatarFileId: string
-  notifications: {
-    [key: string]: {
-      mobile: string
-      refreshedAt: Date
-    }
-  }
-  webPush: {
-    [key: string]: {
-      endpoint: string
-      expirationTime: number | null
-      keys: {
-        p256dh: string
-        auth: string
-      }
-    }
-  }
-};
+  name: z.string(),
+  avatarUrl: z.string(),
+  login: z.string(),
+  password: z.string(),
+  clientId: z.string(),
+  mainChannelId: Id.nullable(),
+  avatarFileId: z.string(),
+  lastSeen: z.date(),
+  system: z.boolean().default(false),
+  notifications: z.record(z.string(), z.object({
+    mobile: z.string(),
+    refreshedAt: z.date(),
+  })),
+  webPush: z.record(z.string(), z.object({
+    endpoint: z.string(),
+    expirationTime: z.number().nullable(),
+    keys: z.object({
+      p256dh: z.string(),
+      auth: z.string(),
+    }),
+  })),
+});
 
-export type UserQuery = User & {
-  ids: Id[]
-};
+export const UserQuery = User.extend({
+  ids: z.array(Id),
+});
+
+export type User = z.infer<typeof User>;
+export type UserQuery = z.infer<typeof UserQuery>;
 export type MongoUser = ReplaceType<ReplaceId<User>, Id, ObjectId>;

@@ -17,6 +17,8 @@ export class UserSerializer implements Serializer<UserQuery, User, MongoUser> {
     login: arg.login,
     password: arg.password,
     clientId: arg.clientId,
+    lastSeen: makeDate(arg.lastSeen),
+    system: arg.system,
     mainChannelId: makeObjectId(arg.mainChannelId),
     avatarFileId: arg.avatarFileId,
     ...(arg.notifications ? Object.fromEntries(
@@ -45,6 +47,8 @@ export class UserSerializer implements Serializer<UserQuery, User, MongoUser> {
       login: arg.login,
       password: arg.password,
       clientId: arg.clientId,
+      lastSeen: makeDate(arg.lastSeen),
+      system: arg.system,
       mainChannelId: makeId(arg.mainChannelId),
       avatarFileId: arg.avatarFileId,
       notifications: arg.notifications,

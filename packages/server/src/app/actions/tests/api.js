@@ -6,6 +6,8 @@ const createBus = (fn) => new Promise(async (resolve, reject) => {
   const data = [];
   try {
     await fn({
+      hasKey: () => true,
+      getListeners: () => ({ all: 0 }),
       direct: (userId, msg) => {
         msg._userId = userId;
         if (msg.type === 'response') {

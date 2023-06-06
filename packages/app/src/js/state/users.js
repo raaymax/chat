@@ -7,13 +7,14 @@ const addUser = createAction('users/add');
 const setMe = createAction('users/me/set');
 
 const usersReducer = createReducer({ list: [], meId: null }, {
-  [addUser]: ({ list }, action) => {
+  [addUser]: (state, action) => {
     [action.payload].flat().forEach((msg) => {
-      const existing = list.find((m) => m.id === msg.id);
+      const existing = state.list.find((m) => m.id === msg.id);
       if (existing) {
         Object.assign(existing, msg);
+      } else {
+        state.list.push(msg);
       }
-      list.push(msg);
     });
   },
   [setMe]: (state, action) => {

@@ -1,15 +1,14 @@
-
-v2.0.0
-
 backlog:
-- feat(users): invitations
-- feat(users): registration of users
+- fix(link-preview): crashes when link is a redirect
+
+- chore: check if serverWebUrl and baseUrl are the same
 - chore: create default avatar for user
 - feat(users): logout
 - chore: add default avatar for system user
 
+- feat(users): list of active users
+
 - fix: security issues with headers
-- fix(login): login failed message is not displayed
 - feat(history): add support for back button 
 - feat(toolbar): custom emojis reactions
 - feat(logs): save message parsing errors in database and display them in message
