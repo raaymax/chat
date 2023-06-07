@@ -71,6 +71,18 @@ const SideMenu = styled.div`
         font-size: 20px;
       }
     }
+    & .user{
+      height: 40px;
+      line-height: 40px;
+      vertical-align: middle;
+      font-size: 20px;
+      & .name {
+      height: 40px;
+        line-height: 40px;
+        vertical-align: middle;
+        font-size: 20px;
+      }
+    }
   }
   border-left: 1px solid ${(props) => props.theme.borderColor};
   border-right: 1px solid ${(props) => props.theme.borderColor};

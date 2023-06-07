@@ -21,9 +21,7 @@ module.exports = {
     });
 
     await repo.channel.update({ id: channelId }, { private: msg.private });
-    console.log({ id: channelId });
     const ret = await repo.channel.get({ id: channelId });
-    console.log(ret);
     res.broadcast({ type: 'channel', ...ret });
     res.ok({});
   },
