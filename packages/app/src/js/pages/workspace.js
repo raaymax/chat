@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import styled from 'styled-components';
 import { Logo } from '../components/logo';
-import { Channels } from '../components/channels';
+import { Channels } from '../components/Channels/Channels';
 import { UserList } from '../components/UserList/UserList';
 import { MainConversation } from './main/mainConversaion';
 import { SideConversation } from './side/sideConversation';

@@ -1,5 +1,6 @@
 import { client } from '../core';
 import { actions } from '../state';
+import { setStream } from './stream';
 
 export const loadChannels = () => async (dispatch) => {
   try {
@@ -35,3 +36,10 @@ export const findChannel = (id) => async (dispatch) => {
     console.log(err);
   }
 };
+
+export const gotoDirectChannel = (userId) => async (dispatch, getState) => {
+  const direct = getState().channels.list.find((c) => c.direct === true && c.users.includes(userId));
+  if (!direct) return;
+  dispatch(setStream('main', { type: 'live', channelId: direct.id }));
+  dispatch(actions.setView(null));
+}

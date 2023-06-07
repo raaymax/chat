@@ -8,6 +8,7 @@
     "//#migrate": {},
     "//#lint:ci": {},
     "//#lint": {},
+    "//#test": {},
     "start": {
       "dependsOn": ["build", "//#migrate"],
       "cache": false

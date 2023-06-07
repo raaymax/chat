@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { Channel } from '../channels';
+import { Channel } from '../Channels/Channel';
 import { selectors, actions } from '../../state';
 
 const StyledHeader = styled.div`

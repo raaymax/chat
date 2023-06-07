@@ -1,12 +1,10 @@
 backlog:
 - fix(link-preview): crashes when link is a redirect
-
+- feat(users): user list should redirect to direct conversations
 - chore: check if serverWebUrl and baseUrl are the same
 - chore: create default avatar for user
 - feat(users): logout
 - chore: add default avatar for system user
-
-- feat(users): list of active users
 
 - fix: security issues with headers
 - feat(history): add support for back button 

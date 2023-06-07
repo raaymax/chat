@@ -1,0 +1,33 @@
+import { h } from 'preact';
+import { useEffect } from 'preact/hooks';
+import { useDispatch, useSelector } from 'react-redux';
+import { findChannel } from '../../services/channels';
+import { selectors } from '../../state';
+import { InlineChannel } from './elements/inlineChannel';
+
+const DirectChannel = ({ channel, badge, onClick }) => {
+  const me = useSelector(selectors.getMeId);
+  const other = channel.users.find((u) => u !== me.id);
+  const user = useSelector(selectors.getUser(other));
+  if (!user) {
+    return ( <InlineChannel id={channel.id} onClick={onClick} badge={badge}>{channel.name}</InlineChannel> );
+  }
+  return ( <InlineChannel id={channel.id} onClick={onClick} icon='fa-solid fa-user' badge={badge}>{user.name}</InlineChannel> );
+};
+
+export const Channel = ({
+  channelId: id, onclick, icon, badge,
+}) => {
+  const dispatch = useDispatch();
+  const channel = useSelector(selectors.getChannel({ id }));
+  useEffect(() => {
+    if (!channel) {
+      dispatch(findChannel(id));
+    }
+  }, [id, channel, dispatch]);
+  const { name, private: priv, direct } = channel || {};
+  let ico = icon;
+  if (priv) ico = 'fa-solid fa-lock';
+  if (direct) return ( <DirectChannel channel={channel || {}} onClick={onclick} badge={badge} /> );
+  return ( <InlineChannel id={id} onClick={onclick} icon={ico} badge={badge}>{name}</InlineChannel> );
+};

@@ -1,7 +1,8 @@
 import { h } from 'preact';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { selectors } from '../../state';
+import { gotoDirectChannel } from '../../services/channels';
 
 const Header = styled.div`
  padding: 5px 10px;
@@ -49,6 +50,7 @@ export const User = ({ userId, onClick }) => {
 };
 
 export const UserList = () => {
+  const dispatch = useDispatch();
   const users = useSelector(selectors.getUsers());
   return (
     <div class='user-list'>
@@ -57,6 +59,9 @@ export const UserList = () => {
         <User
           userId={c.userId}
           key={c.userId}
+          onClick={() => {
+            dispatch(gotoDirectChannel(c.userId));
+          }}
         />
       ))}
     </div>
