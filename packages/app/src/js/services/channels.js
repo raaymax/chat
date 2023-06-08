@@ -1,5 +1,5 @@
 import { client } from '../core';
-import { actions } from '../state';
+import { actions, selectors } from '../state';
 import { setStream } from './stream';
 
 export const loadChannels = () => async (dispatch) => {
@@ -38,7 +38,13 @@ export const findChannel = (id) => async (dispatch) => {
 };
 
 export const gotoDirectChannel = (userId) => async (dispatch, getState) => {
-  const direct = getState().channels.list.find((c) => c.direct === true && c.users.includes(userId));
+  const meId = selectors.getMeId(getState());
+  const direct = getState().channels.list.find((c) => (
+    c.direct === true
+    && c.users.includes(userId)
+    && (userId === meId
+      ? c.users.length === 0
+      : true )));
   if (!direct) {
     return;
   }

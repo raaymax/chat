@@ -1,10 +1,15 @@
 backlog:
-- fix(link-preview): crashes when link is a redirect
-- feat(users): user list should redirect to direct conversations
+* feat(users): logout
+- feat(channels): direct channels should be created on the fly
+- feat(users): mentions
+- feat(channels): ability to invite/add people to channel
+- feat(channels): ability to change channel name
+- fix: not everyone should receive broadcast messages
+
 - chore: check if serverWebUrl and baseUrl are the same
 - chore: create default avatar for user
-- feat(users): logout
 - chore: add default avatar for system user
+- fix(link-preview): crashes when link is a redirect
 
 - fix: security issues with headers
 - feat(history): add support for back button 
@@ -13,9 +18,7 @@ backlog:
 - feat(tags): add tags to messages
 - feat(tags): searching using tags
 - feat(channels): ability to search channels
-- feat(channels): ability to invite/add people to channel
 - feat(channels): channels sorting
-- feat(users): users mentions
 ? fix: html parsing failed on production
 - fix: bob is not working - migrate to chatgpt?
 
@@ -34,7 +37,6 @@ backlog:
 - refactor(app): use dixie instead of redux
 
 - feat(link-preview): generate summary of link content
-- feat(channels): ability to change channel name
 - feat(share): ability to share files
 - feat(messages): message with checklist
 - feat(rss): rss feeds (https://xkcd.com/2294/)

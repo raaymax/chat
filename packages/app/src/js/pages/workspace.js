@@ -14,6 +14,7 @@ import { StreamContext } from '../contexts/stream';
 import { selectors, actions, useStream } from '../state';
 import { setStream } from '../services/stream';
 import plugins from '../core/plugins';
+import { logout } from '../services/session';
 
 const SideView = styled.div`
   flex: 0;
@@ -43,10 +44,28 @@ const MainView = styled.div`
 
 const SideMenu = styled.div`
   flex: 0 0 200px;
-  & .slider {
-    flex: 1;
+  display: flex;
+  flex-direction: column;
+  .slider {
+    flex: 1 calc(100% - 50px);
     overflow-y: auto;
-    height: calc(100% - 50px);
+  }
+  .bottom {
+    flex: 0 50px;
+    .logout {
+      i {
+        padding-right: 10px;
+      }
+      height: 50px;
+      line-height: 50px;
+      vertical-align: middle;
+      font-size: 16px;
+      padding-left: 20px;
+      cursor: pointer;
+      &:hover {
+        background-color: ${(props) => props.theme.highlightedBackgroundColor};
+      }
+    }
   }
   @media (max-width : 710px) {
     flex: none;
@@ -114,6 +133,14 @@ export const Workspace = () => {
           <Channels />
           <UserList />
           {plugins.get('sidebar').map((El, key) => <El key={key} />)}
+        </div>
+        <div className='bottom'>
+          <div className='logout' onClick={() => {
+            dispatch(logout());
+          }}>
+            <i class="fa-solid fa-right-from-bracket" />
+        Logout
+          </div>
         </div>
       </SideMenu>}
       <MainView className={view === 'sidebar' ? ['sidebar'] : []}>
