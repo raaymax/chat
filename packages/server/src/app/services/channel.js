@@ -15,6 +15,7 @@ module.exports = {
     const channelId = await repo.channel.create({
       name,
       userId,
+      channelType,
       private: (channelType === 'PRIVATE' || channelType === 'DIRECT'),
       direct: (channelType === 'DIRECT'),
       users: (channelType === 'DIRECT' ? [userId, ...users] : [userId]),

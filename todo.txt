@@ -1,6 +1,7 @@
+- migrate channels to new format
+
 backlog:
 * feat(users): logout
-- feat(channels): direct channels should be created on the fly
 - feat(users): mentions
 - feat(channels): ability to invite/add people to channel
 - feat(channels): ability to change channel name

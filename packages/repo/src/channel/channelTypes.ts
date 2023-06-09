@@ -4,6 +4,7 @@ import { Id, ReplaceType, ReplaceId } from '../types';
 
 export const Channel = z.object({
   id: Id,
+  channelType: z.string(),
   name: z.string(),
   cid: z.string(),
   private: z.boolean(),
