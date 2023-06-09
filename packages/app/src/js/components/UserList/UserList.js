@@ -41,7 +41,7 @@ export const User = ({ userId, onClick }) => {
   const active = user.lastSeen && new Date(user.lastSeen).getTime() > Date.now() - 1000 * 60 * 5;
   if (!user) return null;
   return (
-    <UserContainer onClick={onClick} className={'user ' + (user.connected ? 'connected ' : '') + (active ? 'recent' : '') + (user.system ? 'system' : '')} data-id={userId}>
+    <UserContainer onClick={onClick} className={`user ${user.connected ? 'connected ' : ''}${active ? 'recent' : ''}${user.system ? 'system' : ''}`} data-id={userId}>
       {!user.system ? (<i class='fa-solid fa-user' />) : (
         <i class="fa-solid fa-user-gear" />)}
       <span class='name'>{user.name}</span>

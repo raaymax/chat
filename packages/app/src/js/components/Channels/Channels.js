@@ -1,12 +1,11 @@
 import { h } from 'preact';
 import {useState} from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import { setStream } from '../../services/stream';
 import { actions, selectors } from '../../state';
 import { ChannelCreate } from '../ChannelCreate/ChannelCreate';
 import { Channel } from './Channel';
-import styled from 'styled-components';
-
 
 const ChannelsContainer = styled.div`
   .header {

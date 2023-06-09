@@ -1,4 +1,4 @@
-//import {actions} from '../state';
+// import {actions} from '../state';
 /* eslint-disable no-undef */
 
 const SESSION_URL = `${document.location.protocol}//${document.location.host}/session`;
