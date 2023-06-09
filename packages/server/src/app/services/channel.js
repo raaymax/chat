@@ -6,7 +6,13 @@ module.exports = {
     channelType, name, userId, users, ...rest
   }, { bus } = {}) => {
     if (channelType === 'PUBLIC' || channelType === 'PRIVATE') {
-      const existing = await repo.channel.get({ name, userId });
+      const existing = await repo.channel.get({ channelType, name, userId });
+      if (existing) {
+        return existing.id;
+      }
+    }
+    if (channelType === 'DIRECT') {
+      const existing = await repo.channel.get({ channelType, users: [userId, ...users].sort() });
       if (existing) {
         return existing.id;
       }
