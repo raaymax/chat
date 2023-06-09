@@ -1,5 +1,4 @@
-- !!channel name have wrong icon for system users
-
+- !! user should not be able to leave direct channel
 backlog:
 - !feat(users): mentions
 - !feat(channels): ability to invite/add people to channel

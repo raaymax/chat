@@ -48,6 +48,7 @@ module.exports = {
 
   leave: async (id, userId) => {
     const channel = await repo.channel.get({ id, userId });
+    if (channel.channelType === 'DIRECT') throw new Error('Can\'t leave direct channel');
     if (channel) {
       await repo.channel.update({ id }, { users: channel.users.filter((user) => user !== userId) });
       return id;
