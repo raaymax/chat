@@ -1,5 +1,3 @@
-- migrate channels to new format
-
 backlog:
 * feat(users): logout
 - feat(users): mentions
