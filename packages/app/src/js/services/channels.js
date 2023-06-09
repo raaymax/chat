@@ -40,13 +40,7 @@ export const findChannel = (id) => async (dispatch) => {
 };
 
 export const gotoDirectChannel = (userId, x = false) => async (dispatch, getState) => {
-  const meId = selectors.getMeId(getState());
-  const direct = getState().channels.list.find((c) => (
-    c.direct === true
-    && c.users.includes(userId)
-    && (userId === meId
-      ? (c.users.length === 2 && c.users.every(u => u === meId))
-      : true )));
+  const direct = selectors.getDirectChannel(userId)(getState());
   if (!x && !direct) {
     dispatch(createChannel({channelType: 'DIRECT', name: 'Direct', users: [userId]}));
     setTimeout(() => {
@@ -54,7 +48,7 @@ export const gotoDirectChannel = (userId, x = false) => async (dispatch, getStat
     }, 1000);
     return;
   }
-  if(!direct) return;
+  if (!direct) return;
   dispatch(setStream('main', { type: 'live', channelId: direct.id }));
   dispatch(actions.setView(null));
 }
