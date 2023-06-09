@@ -13,6 +13,9 @@ const DirectChannel = ({ channel, badge, onClick }) => {
   if (!user) {
     return ( <InlineChannel id={channel.id} onClick={onClick} badge={badge}>{channel.name}</InlineChannel> );
   }
+  if (user.system) {
+    return ( <InlineChannel id={channel.id} onClick={onClick} icon='fa-solid fa-user-gear' badge={badge}>{user.name}</InlineChannel> );
+  }
   return ( <InlineChannel id={channel.id} onClick={onClick} icon='fa-solid fa-user' badge={badge}>{user.name}</InlineChannel> );
 };
 

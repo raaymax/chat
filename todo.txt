@@ -1,6 +1,4 @@
 - !!channel name have wrong icon for system users
-- !!gotoDirectChannel should use selector instead of getting data directly from state
-
 
 backlog:
 - !feat(users): mentions
