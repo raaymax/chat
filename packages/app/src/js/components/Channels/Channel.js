@@ -7,7 +7,8 @@ import { InlineChannel } from './elements/inlineChannel';
 
 const DirectChannel = ({ channel, badge, onClick }) => {
   const me = useSelector(selectors.getMeId);
-  const other = channel.users.find((u) => u !== me.id);
+  let other = channel.users.find((u) => u !== me);
+  if (!other) [other] = channel.users;
   const user = useSelector(selectors.getUser(other));
   if (!user) {
     return ( <InlineChannel id={channel.id} onClick={onClick} badge={badge}>{channel.name}</InlineChannel> );

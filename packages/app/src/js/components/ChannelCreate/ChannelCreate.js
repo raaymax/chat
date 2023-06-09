@@ -51,7 +51,7 @@ export const ChannelCreate = () => {
   const [name, setName] = useState('');
   const dispatch = useDispatch();
   const submit = useCallback((e) => {
-    dispatch(createChannel(name));
+    dispatch(createChannel({name}));
     setName('');
     e.preventDefault();
     e.stopPropagation();
