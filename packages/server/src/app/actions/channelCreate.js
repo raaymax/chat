@@ -6,21 +6,23 @@ module.exports = {
   type: 'channel:create',
   schema: {
     body: Joi.object({
+      channelType: Joi.string().valid('PUBLIC', 'PRIVATE', 'DIRECT').optional().default('PUBLIC'),
       name: Joi.string().required(),
-      private: Joi.boolean().optional().default(false),
+      users: Joi.array().items(Joi.string()).optional(),
     }),
   },
   handler: async (req, res) => {
     const msg = req.body;
 
+    // TODO: check if users exist
+
     const channelId = await services.channel.create({
       name: msg.name,
       userId: req.userId,
-      private: msg.private,
-      users: [req.userId],
+      channelType: msg.channelType,
+      users: msg.users,
     });
 
-    await repo.channel.update({ id: channelId }, { private: msg.private });
     const ret = await repo.channel.get({ id: channelId });
     res.broadcast({ type: 'channel', ...ret });
     res.ok({});

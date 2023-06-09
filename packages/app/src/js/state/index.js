@@ -86,11 +86,22 @@ export const selectors = {
     .find((c) => (q.id && c.id === q.id)
       || (q.name && c.name === q.name)
       || (q.cid && c.cid && c.cid === q.cid)),
+  getDirectChannel: (userId) => createSelector(
+    (state) => state.users.meId,
+    (state) => state.channels.list,
+    (meId, channels) => channels.find((c) => (
+      c.direct === true
+      && c.users.includes(userId)
+      && (userId === meId
+        ? (c.users.length === 2 && c.users.every((u) => u === meId))
+        : true ))),
+  ),
   getChannels: createSelector(
     (state) => state.users.meId,
     (state) => state.channels.list,
     (meId, channels) => channels
-      .filter((c) => c.users?.includes(meId)),
+      .filter((c) => c.users?.includes(meId))
+      .filter((c) => !c.direct),
   ),
   getConfig: (state) => state.config,
   getChannelId: (state) => state.stream.main.channelId,

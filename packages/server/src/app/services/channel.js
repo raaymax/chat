@@ -2,13 +2,31 @@ const repo = require('../../infra/repositories');
 
 module.exports = {
 
-  create: async ({ name, userId, ...rest }, { bus } = {}) => {
-    const existing = await repo.channel.get({ name, userId });
-    if (existing) {
-      return existing.id;
+  create: async ({
+    channelType, name, userId, users, ...rest
+  }, { bus } = {}) => {
+    if (channelType === 'PUBLIC' || channelType === 'PRIVATE') {
+      const existing = await repo.channel.get({ channelType, name, userId });
+      if (existing) {
+        return existing.id;
+      }
+    }
+    if (channelType === 'DIRECT') {
+      const existing = await repo.channel.get({ channelType, users: [userId, ...users].sort() });
+      if (existing) {
+        return existing.id;
+      }
     }
 
-    const channelId = await repo.channel.create({ name, ...rest });
+    const channelId = await repo.channel.create({
+      name,
+      userId,
+      channelType,
+      private: (channelType === 'PRIVATE' || channelType === 'DIRECT'),
+      direct: (channelType === 'DIRECT'),
+      users: (channelType === 'DIRECT' ? [userId, ...users] : [userId]),
+      ...rest,
+    });
 
     if (bus) {
       const channel = await repo.channel.get({ id: channelId });
@@ -30,6 +48,7 @@ module.exports = {
 
   leave: async (id, userId) => {
     const channel = await repo.channel.get({ id, userId });
+    if (channel.channelType === 'DIRECT') throw new Error('Can\'t leave direct channel');
     if (channel) {
       await repo.channel.update({ id }, { users: channel.users.filter((user) => user !== userId) });
       return id;

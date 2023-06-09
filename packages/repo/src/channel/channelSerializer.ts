@@ -9,6 +9,7 @@ export class ChannelSerializer implements Serializer<ChannelQuery, Channel, Mong
   serializeModel(arg: Channel): Document {
     return removeUndefined({
       _id: makeObjectId(arg.id),
+      channelType: arg.channelType,
       name: arg.name,
       cid: arg.cid,
       private: arg.private,
@@ -30,6 +31,7 @@ export class ChannelSerializer implements Serializer<ChannelQuery, Channel, Mong
     }
     return removeUndefined({
       id: makeId(arg._id),
+      channelType: arg.channelType,
       name: arg.name,
       cid: arg.cid,
       private: arg.private,
