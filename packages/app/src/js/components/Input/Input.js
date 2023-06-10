@@ -7,6 +7,7 @@ import { StatusLine } from '../StatusLine/StatusLine';
 import { ActionButton } from './elements/actionButton';
 import { EmojiSearch } from '../EmojiSearch/EmojiSearch';
 import { ChannelSelector } from '../ChannelSelector/ChannelSelector';
+import { UserSelector } from '../UserSelector/UserSelector';
 import { buildEmojiNode } from '../../utils';
 import { getUrl } from '../../services/file';
 import { EmojiSelector } from '../EmojiSelector/EmojiSelector';
@@ -54,6 +55,7 @@ export const Input = () => {
         </ActionButton>
       </div>
       <ChannelSelector />
+      <UserSelector />
       <EmojiSelector />
       {showEmojis && <EmojiSearch onSelect={onEmojiInsert} />}
     </BaseInput>
