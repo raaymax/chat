@@ -36,7 +36,8 @@ module.exports = {
     });
 
     const myProgress = await repo.badge.get({ channelId, parentId, userId: req.userId });
-    res.broadcast({ type: 'badge', ...myProgress });
+    const channel = await repo.channel.get({ id: channelId });
+    res.group(channel.users, { type: 'badge', ...myProgress });
     res.ok({ });
   },
 };

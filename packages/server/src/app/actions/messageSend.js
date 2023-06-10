@@ -57,12 +57,12 @@ module.exports = {
         userId: req.userId,
       });
       const parent = await repo.message.get({ id: msg.parentId });
-      res.broadcast({ type: 'message', ...parent });
+      res.group(channel.users, { type: 'message', ...parent });
     }
 
     const created = await repo.message.get({ id });
     if (!dup) {
-      res.broadcast({ type: 'message', ...created });
+      res.group(channel.users, { type: 'message', ...created });
       await services.notifications.send(created, res);
     }
     await services.badge.messageSent(channel.id, msg.parentId, id, req.userId);

@@ -18,8 +18,9 @@ module.exports = {
 
     if (req.userId !== message.userId) throw NotOwnerOfMessage();
 
+    const channel = await repo.channel.get({ id: message.channelId });
     await repo.message.remove({ id });
-    await res.broadcast({
+    await res.group(channel.users, {
       id,
       type: 'message',
       channelId: message.channelId,

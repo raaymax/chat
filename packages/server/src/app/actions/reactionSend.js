@@ -31,7 +31,8 @@ module.exports = {
     }
 
     await repo.message.update({ id }, { reactions: message.reactions });
-    await res.broadcast({
+    const channel = await repo.channel.get({ id: message.channelId });
+    await res.group(channel.users, {
       id,
       type: 'message',
       ...message,
