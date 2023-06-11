@@ -24,6 +24,7 @@ export const Message = z.object({
     reaction: z.string(),
   })),
   links: z.array(z.string()),
+  mentions: z.array(z.string()),
   linkPreviews: z.array(z.any()),
   parsingErrors: z.array(z.any()),
   attachments: z.array(z.object({
