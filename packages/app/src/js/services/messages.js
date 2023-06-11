@@ -410,6 +410,7 @@ const mapNodes = (dom, info) => (!dom.childNodes ? [] : [...dom.childNodes].map(
   if (n.nodeName === 'IMG') return { img: { src: n.attributes.src.nodeValue, alt: n.attributes.alt.nodeValue } };
   if (n.nodeName === 'SPAN' && n.className === 'emoji') return { emoji: n.attributes.emoji.value };
   if (n.nodeName === 'SPAN' && n.className === 'channel') return { channel: n.attributes.channelId.value };
+  if (n.nodeName === 'SPAN' && n.className === 'user') return { user: n.attributes.userId.value };
   if (n.nodeName === 'SPAN') return mapNodes(n, info);
   if (n.nodeName === 'BR') return { br: true };
   // eslint-disable-next-line no-console
