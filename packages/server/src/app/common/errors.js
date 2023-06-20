@@ -10,4 +10,5 @@ module.exports = {
   AccessDenied: () => new Error('ACCESS_DENIED'),
   ChannelAlreadyExist: () => new Error('CHANNEL_ALREADY_EXIST'),
   ChannelNotExist: () => new Error('CHANNEL_NOT_EXIST'),
+  CantRenameChannel: () => new Error('CANT_RENAME_CHANNEL'),
 };

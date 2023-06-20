@@ -1,8 +1,9 @@
 backlog:
-- !feat(users): mentions
-- !feat(channels): ability to invite/add people to channel
 - !feat(channels): ability to change channel name
 - !feat(channels): channels sorting
+
+- feat(channels): number of unread messages in direct channels
+
 - fix: remove openai and bob users
 - fix: rpc message body should be aggregated, now type is reserved word or change type to _type
 

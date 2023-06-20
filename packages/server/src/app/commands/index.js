@@ -14,6 +14,7 @@ const commands = [
   require('./main'),
   require('./invite'),
   require('./stats'),
+  require('./renameChannel'),
 ];
 
 module.exports = async (req, res, srv) => {
