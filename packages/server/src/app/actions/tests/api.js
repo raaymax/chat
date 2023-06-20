@@ -16,6 +16,14 @@ const createBus = (fn) => new Promise(async (resolve, reject) => {
         }
         data.push(msg);
       },
+      group: (userIds, msg) => {
+        msg._userIds = userIds;
+        if (msg.type === 'response') {
+          resolve({ res: msg, data });
+          return;
+        }
+        data.push(msg);
+      },
       broadcast: (msg) => data.push(msg),
     });
   } catch (err) {

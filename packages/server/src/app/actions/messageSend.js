@@ -54,7 +54,6 @@ module.exports = {
       createdAt: new Date(),
     });
 
-    console.log(msg.mentions, channel.users);
     const usersToAdd = msg.mentions.filter((m) => !channel.users.includes(m));
     if (usersToAdd.length) {
       const group = [...new Set([...channel.users, ...usersToAdd])];
