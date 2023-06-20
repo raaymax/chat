@@ -24,7 +24,7 @@ module.exports = {
     });
 
     const ret = await repo.channel.get({ id: channelId });
-    res.broadcast({ type: 'channel', ...ret });
+    res.group(ret.users, { type: 'channel', ...ret });
     res.ok({});
   },
 };

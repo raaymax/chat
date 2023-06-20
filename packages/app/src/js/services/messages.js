@@ -383,6 +383,7 @@ export const fromDom = (dom, state) => {
   }
   const info = {
     links: [],
+    mentions: [],
   };
   const tree = mapNodes(dom, info);
 
@@ -391,8 +392,8 @@ export const fromDom = (dom, state) => {
     message: trim(tree),
     emojiOnly: isEmojiOnly(tree),
     parsingErrors: info.errors,
-    links: info.links,
     flat: flatten(tree),
+    ...info,
   }, state);
 };
 
@@ -410,6 +411,7 @@ const mapNodes = (dom, info) => (!dom.childNodes ? [] : [...dom.childNodes].map(
   if (n.nodeName === 'IMG') return { img: { src: n.attributes.src.nodeValue, alt: n.attributes.alt.nodeValue } };
   if (n.nodeName === 'SPAN' && n.className === 'emoji') return { emoji: n.attributes.emoji.value };
   if (n.nodeName === 'SPAN' && n.className === 'channel') return { channel: n.attributes.channelId.value };
+  if (n.nodeName === 'SPAN' && n.className === 'user') return processUser(n, info);
   if (n.nodeName === 'SPAN') return mapNodes(n, info);
   if (n.nodeName === 'BR') return { br: true };
   // eslint-disable-next-line no-console
@@ -418,6 +420,11 @@ const mapNodes = (dom, info) => (!dom.childNodes ? [] : [...dom.childNodes].map(
   info.errors.push({ message: 'unknown node', nodeAttributes: Object.keys(n.attributes).reduce((acc, key) => ({ ...acc, [key]: n.attributes[key].nodeValue })), nodeName: n.nodeName });
   return { text: '' };
 }).flat());
+
+function processUser(n, info) {
+  info.mentions.push(n.attributes.userId.value);
+  return { user: n.attributes.userId.value };
+}
 
 function processUrls(text, info) {
   const m = matchUrl(text);

@@ -57,10 +57,10 @@ export const UserList = () => {
       <Header>users</Header>
       { users && users.map((c) => (
         <User
-          userId={c.userId}
-          key={c.userId}
+          userId={c.id}
+          key={c.id}
           onClick={() => {
-            dispatch(gotoDirectChannel(c.userId));
+            dispatch(gotoDirectChannel(c.id));
           }}
         />
       ))}

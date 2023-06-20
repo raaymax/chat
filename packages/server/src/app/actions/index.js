@@ -60,6 +60,11 @@ const dispatch = async ({ type, seqId, ...body }, { userId, bus, push = () => {}
   const wsres = {
     bus,
     push,
+    group: (userIds, m, opts) => bus.group(userIds, {
+      ...m,
+      seqId,
+      _opts: opts,
+    }),
     broadcast: (m, opts) => bus.broadcast({
       ...m,
       seqId,

@@ -24,12 +24,13 @@ module.exports = {
     if (!id) throw MissingId();
 
     const message = await repo.message.get({ id });
+    const channel = await repo.channel.get({ id: message.channelId });
     if (!message) throw MessageNotExist();
 
     if (req.userId !== message.userId) throw NotOwnerOfMessage();
 
     await repo.message.update({ id }, body);
-    await res.broadcast({
+    await res.group(channel.users, {
       id,
       type: 'message',
       ...message,

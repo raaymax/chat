@@ -150,10 +150,7 @@ export const selectors = {
     (state) => state.users.list.find((user) => user.id === userId),
     (user) => user,
   ),
-  getUsers: () => createSelector(
-    (state) => state.users.list.map((user) => ({userId: user.id})),
-    (user) => user,
-  ),
+  getUsers: () => (state) => state.users.list,
   filesAreReady: createSelector(
     (state) => state.files,
     filesAreReady,
