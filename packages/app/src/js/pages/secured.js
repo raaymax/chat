@@ -33,6 +33,7 @@ const theme = {
   labelColor: 'gray',
 
   linkColor: '#4a90e2',
+  mentionsColor: '#4ac0e2',
 };
 
 const Secured = () => {

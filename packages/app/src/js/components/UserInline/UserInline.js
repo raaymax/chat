@@ -3,9 +3,10 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { selectors } from '../../state';
 
-const InlineUserLink = styled.a`
+const InlineUserLink = styled.span`
   span {
     padding-left: 1px;
+    color: ${props => props.theme.mentionsColor};
   }
 `;
 
