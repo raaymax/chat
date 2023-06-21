@@ -1,16 +1,16 @@
 import { client } from '../core';
 import { createCounter } from '../utils';
-import { actions, selectors } from '../state';
+import { selectors } from '../state';
 import { updateProgress } from './progress';
 import * as url from './url';
 
 const tempId = createCounter(`temp:${(Math.random() + 1).toString(36)}`);
 
 const loading = (dispatch) => {
-  dispatch(actions.messagesLoading());
-  const timer = setTimeout(() => dispatch(actions.messagesLoadingDone()), 1000);
+  dispatch.actions.messages.loading();
+  const timer = setTimeout(() => dispatch.actions.messages.loadingDone(), 1000);
   return () => {
-    dispatch(actions.messagesLoadingDone());
+    dispatch.actions.messages.loadingDone();
     clearTimeout(timer);
   };
 };
@@ -18,14 +18,14 @@ const loading = (dispatch) => {
 export const loadPrevious = (stream, saveLocation = false) => async (dispatch, getState) => {
   try {
     const loadingDone = loading(dispatch, getState);
-    dispatch(actions.patchStream({
+    dispatch.actions.stream.patch({
       id: stream.id,
       patch: {
         selected: null,
         date: null,
       },
-    }));
-    dispatch(actions.selectMessage(null));
+    });
+    dispatch.actions.messages.select(null);
     const date = selectors.getEarliestDate(stream)(getState());
     const req = await client.req({
       ...stream,
@@ -33,11 +33,11 @@ export const loadPrevious = (stream, saveLocation = false) => async (dispatch, g
       before: date,
       limit: 50,
     });
-    dispatch(actions.addMessages(req.data));
+    dispatch.actions.messages.add(req.data);
     if (selectors.countMessagesInStream(stream)(getState()) > 100) {
-      dispatch(actions.patchStream({ id: stream.id, patch: { type: 'archive' } }));
+      dispatch.actions.stream.patch({ id: stream.id, patch: { type: 'archive' } });
       setTimeout(() => {
-        dispatch(actions.takeHead({ stream, count: 100 }));
+        dispatch.actions.messages.takeHead({ stream, count: 100 });
       }, 1);
     }
     if (saveLocation) {
@@ -59,14 +59,14 @@ export const loadPrevious = (stream, saveLocation = false) => async (dispatch, g
 export const loadNext = (stream, saveLocation = false) => async (dispatch, getState) => {
   try {
     const loadingDone = loading(dispatch, getState);
-    dispatch(actions.patchStream({
+    dispatch.actions.stream.patch({
       id: stream.id,
       patch: {
         selected: null,
         date: null,
       },
-    }));
-    dispatch(actions.selectMessage(null));
+    });
+    dispatch.actions.messages.select(null);
     const date = selectors.getLatestDate(stream)(getState());
     const req = await client.req({
       ...stream,
@@ -75,15 +75,15 @@ export const loadNext = (stream, saveLocation = false) => async (dispatch, getSt
       limit: 50,
     });
     if (req.data?.length > 0) dispatch(updateProgress(req.data[0].id));
-    dispatch(actions.addMessages(req.data));
+    dispatch.actions.messages.add(req.data);
     if (selectors.countMessagesInStream(stream)(getState()) > 100) {
       setTimeout(() => {
-        dispatch(actions.takeTail({ stream, count: 100 }));
+        dispatch.actions.messages.takeTail({ stream, count: 100 });
       }, 1);
     }
     if (req.data.length < 50) {
       setTimeout(() => {
-        dispatch(actions.patchStream({ id: stream.id, patch: { type: 'live' } }));
+        dispatch.actions.stream.patch({ id: stream.id, patch: { type: 'live' } });
       }, 2);
     }
     if (saveLocation) {
@@ -106,14 +106,14 @@ export const loadMessagesArchive = (stream, saveLocation = false) => async (disp
   const { date } = stream;
   try {
     const loadingDone = loading(dispatch, getState);
-    dispatch(actions.messagesClear({ stream }));
+    dispatch.actions.messages.clear({ stream });
     const req2 = await client.req({
       ...stream,
       type: 'messages:load',
       before: date,
       limit: 50,
     });
-    dispatch(actions.addMessages(req2.data));
+    dispatch.actions.messages.add(req2.data);
     const req = await client.req({
       ...stream,
       type: 'messages:load',
@@ -121,7 +121,7 @@ export const loadMessagesArchive = (stream, saveLocation = false) => async (disp
       limit: 50,
     });
     if (req.data?.length > 0) dispatch(updateProgress(req.data[0].id));
-    dispatch(actions.addMessages(req.data));
+    dispatch.actions.messages.add(req.data);
     if (saveLocation) {
       url.saveStream({
         channelId: stream.channelId,
@@ -152,7 +152,7 @@ export const loadMessagesLive = (stream, saveLocation = false) => async (dispatc
         parentId: stream.parentId,
       });
     }
-    dispatch(actions.addMessages(req.data));
+    dispatch.actions.messages.add(req.data);
     if (req.data?.length > 0) dispatch(updateProgress(req.data[0].id));
     loadingDone();
   } catch (err) {
@@ -177,7 +177,7 @@ export const addReaction = (id, text) => async (dispatch) => {
       id,
       reaction: text.trim(),
     });
-    dispatch(actions.addMessages(req.data));
+    dispatch.actions.messages.add(req.data);
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
@@ -192,7 +192,7 @@ export const sendFromDom = (stream, dom) => async (dispatch, getState) => {
     msg.debug = dom.innerHTML;
     msg.channelId = stream.channelId;
     msg.parentId = stream.parentId;
-    dispatch(actions.clearFiles());
+    dispatch.actions.files.clear();
     dispatch(send(stream, msg));
     dispatch(loadMessagesLive(stream));
   }
@@ -211,11 +211,11 @@ export const sendShareMessage = (data) => async (dispatch, getState) => {
     message: buildShareMessage(data, info),
   }, getState());
   msg.links = info.links;
-  dispatch(actions.addMessage({ ...msg, pending: true }));
+  dispatch.actions.messages.add({ ...msg, pending: true });
   try {
     await client.notif(msg);
   } catch (err) {
-    dispatch(actions.addMessage({
+    dispatch.actions.messages.add({
       clientId: msg.clientId,
       channelId: msg.channelId,
       parentId: msg.parentId,
@@ -224,7 +224,7 @@ export const sendShareMessage = (data) => async (dispatch, getState) => {
         type: 'error',
         action: 'resend',
       },
-    }));
+    });
   }
 };
 
@@ -255,21 +255,21 @@ export const sendCommand = (stream, msg) => async (dispatch) => {
   };
   // eslint-disable-next-line no-undef
   msg.context = { ...stream, appVersion: APP_VERSION };
-  dispatch(actions.addMessage(notif));
+  dispatch.actions.messages.add(notif);
   try {
     await client.notif(msg);
-    dispatch(actions.addMessage({ ...notif, notifType: 'success', notif: `${msg.name} executed successfully` }));
+    dispatch.actions.messages.add({ ...notif, notifType: 'success', notif: `${msg.name} executed successfully` });
   } catch (err) {
-    dispatch(actions.addMessage({ ...notif, notifType: 'error', notif: `${msg.name} error ${err.res.message || err.message}` }));
+    dispatch.actions.messages.add({ ...notif, notifType: 'error', notif: `${msg.name} error ${err.res.message || err.message}` });
   }
 };
 
 const sendMessage = (msg) => async (dispatch) => {
-  dispatch(actions.addMessage({ ...msg, pending: true }));
+  dispatch.actions.messages.add({ ...msg, pending: true });
   try {
     await client.notif(msg);
   } catch (err) {
-    dispatch(actions.addMessage({
+    dispatch.actions.messages.add({
       clientId: msg.clientId,
       channelId: msg.channelId,
       parentId: msg.parentId,
@@ -278,7 +278,7 @@ const sendMessage = (msg) => async (dispatch) => {
         type: 'error',
         action: 'resend',
       },
-    }));
+    });
   }
 };
 
@@ -299,7 +299,7 @@ export const removeMessage = (msg) => async (dispatch) => {
   try {
     await client.notif({ type: 'message:remove', id: msg.id });
   } catch (err) {
-    dispatch(actions.addMessage({
+    dispatch.actions.messages.add({
       id: msg.id,
       notifType: null,
       notif: null,
@@ -307,7 +307,7 @@ export const removeMessage = (msg) => async (dispatch) => {
         type: 'error',
         msg: 'Could not delete message',
       },
-    }));
+    });
   }
 };
 

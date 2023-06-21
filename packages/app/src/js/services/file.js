@@ -2,7 +2,6 @@
 /* eslint-disable no-undef */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { createCounter } from '../utils';
-import { actions } from '../state';
 
 const tempId = createCounter(`file:${(Math.random() + 1).toString(36)}`);
 
@@ -23,7 +22,7 @@ export const upload = createAsyncThunk('files/upload', async (file, { dispatch }
     progress: 0,
   };
 
-  dispatch(actions.addFile(local));
+  dispatch.actions.files.add(local);
 
   try {
     const { status, fileId } = await uploadFile('POST', FILES_URL, {
@@ -31,28 +30,28 @@ export const upload = createAsyncThunk('files/upload', async (file, { dispatch }
       clientId: local.clientId,
       dispatch,
       progress: (progress) => {
-        dispatch(actions.updateFile({ id: local.clientId, file: { progress } }));
+        dispatch.actions.files.update({ id: local.clientId, file: { progress } });
       },
     });
     if (status === 'ok') {
-      dispatch(actions.updateFile({ id: local.clientId, file: { id: fileId, progress: 100 } }));
+      dispatch.actions.files.update({ id: local.clientId, file: { id: fileId, progress: 100 } });
     } else {
-      dispatch(actions.updateFile({
+      dispatch.actions.files.update({
         id: local.clientId,
         file: {
           error: 'something went wrong',
           progress: 0,
         },
-      }));
+      });
     }
   } catch (err) {
-    dispatch(actions.updateFile({
+    dispatch.actions.files.update({
       id: local.clientId,
       file: {
         error: err.message,
         progress: 0,
       },
-    }));
+    });
     // eslint-disable-next-line no-console
     console.error(err);
   }
@@ -65,7 +64,7 @@ const aborts = {};
 export const abort = createAsyncThunk('files/abort', async (clientId, { dispatch }) => {
   try {
     aborts[clientId] && aborts[clientId]();
-    dispatch(actions.removeFile(clientId));
+    dispatch.actions.files.remove(clientId);
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);

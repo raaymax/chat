@@ -5,27 +5,27 @@ import { sendShareMessage } from './services/messages';
 import { init } from './services/init';
 import { client } from './core';
 import { setStream } from './services/stream';
-import store, { actions } from './state';
+import { store, actions } from './store';
 
 client
   .on('share', ({ data }) => store.dispatch(sendShareMessage(data)))
-  .on('user', (msg) => store.dispatch(actions.addUser(msg)))
-  .on('emoji', (msg) => store.dispatch(actions.addEmoji(msg)))
-  .on('badge', (msg) => store.dispatch(actions.addProgress(msg)))
-  .on('channel', (msg) => store.dispatch(actions.addChannel(msg)))
-  .on('removeChannel', (msg) => store.dispatch(actions.removeChannel(msg.channelId)))
+  .on('user', (msg) => actions.users.add(msg))
+  .on('emoji', (msg) => actions.emoji.add(msg))
+  .on('badge', (msg) => actions.progress.add(msg))
+  .on('channel', (msg) => actions.channels.add(msg))
+  .on('removeChannel', (msg) => actions.channel.remove(msg.channelId))
   .on('typing', (msg) => store.dispatch(ackTyping(msg)))
   .on('con:open', () => store.dispatch(init(true)))
-  .on('auth:user', (user) => store.dispatch(actions.setMe(user)))
-  .on('auth:logout', () => store.dispatch(actions.setMe(null))) // TODO: check if that works
+  .on('auth:user', (user) => actions.me.set(user))
+  .on('auth:logout', () => actions.me.set(null))
   .on('con:close', () => {
-    store.dispatch(actions.disconnected());
-    store.dispatch(actions.showInfo({
+    actions.connections.disconnected();
+    actions.info.show({
       message: 'Disconnected - reconnect attempt in 1s',
       type: 'error',
-    }));
+    });
   })
-  .on('message', (msg) => store.dispatch(actions.addMessage({ ...msg, pending: false })))
+  .on('message', (msg) => actions.messages.add({ ...msg, pending: false }))
   .on('notification', () => { try { navigator.vibrate([100, 30, 100]); } catch (err) { /* ignore */ } })
   .on('notification:click', (e) => {
     store.dispatch(setStream('main', {

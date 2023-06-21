@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { Channel } from '../../components/Channels/Channel';
 import { selectors, actions } from '../../state';
-import { loadPinnedMessages } from '../../services/pins';
 import { init } from '../../services/init';
 import { useStream } from '../../contexts/stream';
 import { BackToMain } from '../../components/BackToMain/BackToMain';
@@ -111,7 +110,7 @@ export const Header = ({ onclick }) => {
           <i class="fa-solid fa-magnifying-glass" />
         </div>
         <div class='tool' onclick={() => {
-          dispatch(loadPinnedMessages(channelId));
+          dispatch.methods.pins.load(channelId);
           dispatch(actions.setView('pins'));
         }}>
           <i class="fa-solid fa-thumbtack" />

@@ -5,7 +5,7 @@ export const loadBadges = () => async (dispatch) => {
   const { data } = await client.req({
     type: 'badges:load',
   });
-  data.forEach((p) => dispatch(actions.addProgress(p)));
+  data.forEach((p) => dispatch.actions.progress.add(p));
 };
 
 export const loadProgress = (stream) => async (dispatch) => {
@@ -15,7 +15,7 @@ export const loadProgress = (stream) => async (dispatch) => {
     channelId: stream.channelId,
     parentId: stream.parentId,
   });
-  data.forEach((p) => dispatch(actions.addProgress(p)));
+  data.forEach((p) => dispatch.actions.progress.add(p));
 };
 
 export const updateProgress = (messageId) => async (dispatch) => {
@@ -24,7 +24,7 @@ export const updateProgress = (messageId) => async (dispatch) => {
       type: 'progress:update',
       messageId,
     });
-    await Promise.all(data.map((p) => dispatch(actions.addProgress(p))));
+    await Promise.all(data.map((p) => dispatch.actions.progress.add(p)));
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);

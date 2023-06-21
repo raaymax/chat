@@ -26,6 +26,6 @@ export const notifyTyping = () => (dispatch, getState) => {
 export const ackTyping = (msg) => (dispatch, getState) => {
   const meId = selectors.getMeId(getState());
   if (msg.userId === meId) return;
-  dispatch(actions.addTyping(msg));
-  setTimeout(() => dispatch(actions.clearTyping()), 1100);
+  dispatch.actions.typing.add(msg);
+  setTimeout(() => dispatch.actions.typing.clear(), 1100);
 };

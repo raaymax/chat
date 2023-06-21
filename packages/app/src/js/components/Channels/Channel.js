@@ -1,7 +1,6 @@
 import { h } from 'preact';
 import { useEffect } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { findChannel } from '../../services/channels';
 import { selectors } from '../../state';
 import { InlineChannel } from './elements/inlineChannel';
 
@@ -26,7 +25,7 @@ export const Channel = ({
   const channel = useSelector(selectors.getChannel({ id }));
   useEffect(() => {
     if (!channel) {
-      dispatch(findChannel(id));
+      dispatch.methods.channels.find(id);
     }
   }, [id, channel, dispatch]);
   const { name, private: priv, direct } = channel || {};

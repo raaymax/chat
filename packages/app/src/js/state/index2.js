@@ -4,8 +4,7 @@ import { useSelector } from 'react-redux';
 import messages, { actions as messageActions } from './messages';
 import connected, { actions as connectionActions } from './connection';
 import config, { actions as configActions } from './config';
-import channels from '../store/modules/channels';
-import {store, actions as storeActions} from '../store';
+import channels, { actions as channelActions } from './channels';
 import users, { actions as userActions } from './users';
 import info, { actions as infoActions } from './info';
 import files, { actions as fileActions, filesAreReady } from './files';
@@ -18,18 +17,14 @@ import customEmojis, { actions as cusotmEmojisActions } from './customEmojis';
 import progress, { actions as progressActions } from './progress';
 import stream, { actions as streamActions } from './stream';
 
-
 const logout = createAction('logout');
 
 export const actions = {
-  store,
   logout,
-  addChannel: channels.actions.add,
-  removeChannel: channels.actions.remove,
-  setChannel: (data) => ({type: 'channels/setChannel', payload: data}),
   ...messageActions,
   ...connectionActions,
   ...configActions,
+  ...channelActions,
   ...userActions,
   ...infoActions,
   ...fileActions,
@@ -41,7 +36,6 @@ export const actions = {
   ...cusotmEmojisActions,
   ...progressActions,
   ...streamActions,
-  ...storeActions,
 };
 
 const getStreamMessages = (stream, messages) => messages
@@ -52,9 +46,9 @@ const getStreamMessages = (stream, messages) => messages
 
 export const selectors = {
   getProgress: ({ channelId, parentId }) => createSelector(
-    (state) => Object.values(state.channels).find((c) => c.id === channelId),
+    (state) => state.channels.list.find((c) => c.id === channelId),
     (state) => state.progress,
-    (state) => Object.values(state.users),
+    (state) => state.users.list,
     (channel, progress, users) => (channel ? progress
       .filter((p) => p.channelId === channel.id)
       .filter((p) => (!p.parentId && !parentId) || p.parentId === parentId)
@@ -78,22 +72,22 @@ export const selectors = {
         [p.channelId]: p.count,
       }), {}),
   ),
-  getEmoji: (shortname) => (state) => state.emojis
+  getEmoji: (shortname) => (state) => state.customEmojis
     .find((emoji) => emoji.shortname === shortname),
-  getCategorizedEmojis: (state) => state.emojis
+  getCategorizedEmojis: (state) => state.customEmojis
     .reduce((acc, emoji) => {
       acc[emoji.category] = acc[emoji.category] || [];
       acc[emoji.category].push(emoji);
       return acc;
     }, {}),
-  getEmojis: (state) => state.emojis,
-  getAllEmojis: () => (state) => state.emojis,
-  getChannel: (q) => (state) => Object.values(state.channels)
+  getEmojis: (state) => state.customEmojis,
+  getAllEmojis: () => (state) => state.customEmojis,
+  getChannel: (q) => (state) => state.channels.list
     .find((c) => (q.id && c.id === q.id)
       || (q.name && c.name === q.name)
       || (q.cid && c.cid && c.cid === q.cid)),
   getDirectChannel: (userId) => createSelector(
-    (state) => state.me,
+    (state) => state.users.meId,
     (state) => state.channels.list,
     (meId, channels) => channels.find((c) => (
       c.direct === true
@@ -103,20 +97,20 @@ export const selectors = {
         : true ))),
   ),
   getChannels: createSelector(
-    (state) => state.me,
-    (state) => Object.values(state.channels),
+    (state) => state.users.meId,
+    (state) => state.channels.list,
     (meId, channels) => channels
       .filter((c) => c.users?.includes(meId))
       .filter((c) => !c.direct),
   ),
   getConfig: (state) => state.config,
-  getChannelId: (state) => state.stream?.main?.channelId,
-  getMeId: (state) => state.me,
-  getMyId: (state) => state.me,
-  getFiles: (state) => state.files,
-  getView: (state) => state.view?.current,
+  getChannelId: (state) => state.stream.main.channelId,
+  getMeId: (state) => state.users.meId,
+  getMyId: (state) => state.users.meId,
+  getFiles: (state) => state.files.list,
+  getView: (state) => state.view.current,
   getSearchResults: (state) => state.search.results,
-  getPinnedMessages: (channel) => (state) => state.pins[channel] || [],
+  getPinnedMessages: (channel) => (state) => state.pins.data[channel] || [],
   getMessagesStatus: (state) => state.messages.status,
   getHoveredMessage: (state) => state.messages.hovered,
   getInitFailed: (state) => state.system.initFailed,
@@ -143,37 +137,56 @@ export const selectors = {
     .find((m) => m.id === id || m.clientId === id) || null,
   getCurrentChannel: createSelector(
     (state) => state.channels.list,
-    (state) => state.stream?.main?.channelId,
+    (state) => state.stream.main.channelId,
     (list, channelId) => list.find((c) => c.id === channelId) || { id: channelId },
   ),
   getInfo: (state) => state.info,
   getUser: (userId) => createSelector(
-    (state) => state.users[userId],
-    (state) => state.users.system, // do I need this?
+    (state) => state.users.list.find((user) => user.id === userId),
+    (state) => state.users.list.find((user) => user.id === 'system'),
     (user, system) => user || system,
   ),
   getExactUser: (userId) => createSelector(
-    (state) => state.users[userId],
+    (state) => state.users.list.find((user) => user.id === userId),
     (user) => user,
   ),
-  getUsers: () => (state) => Object.values(state.users),
+  getUsers: () => (state) => state.users.list,
   filesAreReady: createSelector(
     (state) => state.files,
-    (list) => list.every((f) => f.progress === 100),
+    filesAreReady,
   ),
 
   getTyping: () => createSelector(
     (state) => state.stream.main.channelId,
     (state) => state.typing,
-    (state) => state.users,
+    (state) => state.users.list,
     (channelId, typing, users) => Object.keys(typing[channelId] || {})
-      .map((id) => users[id]),
+      .map((id) => users.find((u) => u.id === id)),
   ),
 
-  getStream: (id) => (state) => state?.stream?.[id],
+  getStream: (id) => (state) => state.stream[id],
 };
 
 export const useUser = (userId) => useSelector(selectors.getUser(userId));
 export const useStream = (id) => useSelector(selectors.getStream(id));
 
-export default store;
+export default configureStore({
+  devTools: true,
+  reducer: {
+    config,
+    connected,
+    messages,
+    users,
+    channels,
+    info,
+    files,
+    typing,
+    view,
+    search,
+    pins,
+    system,
+    customEmojis,
+    progress,
+    stream,
+  },
+});

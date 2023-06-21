@@ -7,20 +7,19 @@ import { loadProgress, loadBadges } from './progress';
 import { reloadStream, loadFromUrl } from './stream';
 
 const initApp = (withStream = false) => async (dispatch) => {
+  const {actions, methods} = dispatch;
   if (navigator.userAgentData.mobile) {
     document.body.setAttribute('class', 'mobile');
   }
-  await dispatch(actions.connected());
-  await dispatch(actions.clearInfo());
-  await dispatch(actions.initFailed(false));
+  actions.connection.connected();
+  actions.info.reset();
+  actions.system.initFailed(false);
   const { data: [config] } = await client.req({ type: 'config:get' });
-  await dispatch(actions.setAppVersion(config.appVersion));
-  await dispatch(actions.setMainChannel(config.mainChannelId));
+  actions.config.setAppVersion(config.appVersion);
+  actions.stream.setMain(config.mainChannelId);
   await initNotifications(config);
-  const { data: users } = await client.req({ type: 'users:load' });
-  await dispatch(actions.addUser(users));
-  const { data: channels } = await client.req({ type: 'channels:load' });
-  await dispatch(actions.addChannel(channels));
+  methods.users.load();
+  methods.channels.load();
   // FIXME: load messages from current channel or none
   // dispatch(loadMessages({channelId: config.mainChannelId}));
   await dispatch(loadEmojis());
@@ -52,7 +51,7 @@ export const init = (withStream) => async (dispatch) => {
       tryCount += 1;
       return;
     }
-    dispatch(actions.initFailed(true));
+    actions.system.initFailed(true);
   }
 };
 
@@ -64,7 +63,7 @@ export const reinit = () => async (dispatch) => {
 
 // FIXME: messages have no channel and are not showing
 const showUpdateMessage = () => (dispatch) => {
-  dispatch(actions.addMessage({
+  dispatch.actions.messages.add({
     clientId: 'update-version',
     priv: true,
     createdAt: new Date(),
@@ -75,5 +74,5 @@ const showUpdateMessage = () => (dispatch) => {
       { line: { bold: { text: 'Your Quack version is outdated!!' } } },
       { line: { text: 'Please reload the page to update' } },
     ],
-  }));
+  });
 };

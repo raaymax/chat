@@ -2,7 +2,6 @@ import { h } from 'preact';
 import { useState, useCallback, useEffect } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeMessage } from '../../services/messages';
-import { pinMessage, unpinMessage } from '../../services/pins';
 import { Reaction } from '../Reaction/Reaction';
 import { setStream } from '../../services/stream';
 import { useHovered } from '../../contexts/hover';
@@ -57,8 +56,8 @@ export const Toolbar = () => {
     <Container onClick={stop}>
       <i class="fa-solid fa-icons" onClick={() => setView('reactions')} />
       {!pinned
-        ? <i class="fa-solid fa-thumbtack" onClick={() => dispatch(pinMessage(id, channelId))} />
-        : <i class="fa-solid fa-thumbtack" style="color:Tomato" onClick={() => dispatch(unpinMessage(id, channelId))} />}
+        ? <i class="fa-solid fa-thumbtack" onClick={() => dispatch.methods.pins.pin(id, channelId)} />
+        : <i class="fa-solid fa-thumbtack" style="color:Tomato" onClick={() => dispatch.methods.pins.unpin(id, channelId)} />}
       { isMe && <i class='fa-solid fa-trash-can' onclick={() => setView('delete')} /> }
       {
         !stream.parentId && <i class="fa-solid fa-reply" onClick={() => dispatch(setStream('side', { type: 'live', channelId, parentId: id }))} />

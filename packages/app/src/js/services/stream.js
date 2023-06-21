@@ -1,4 +1,4 @@
-import { actions, selectors } from '../state';
+import { selectors } from '../state';
 import { loadMessages } from './messages';
 import { loadProgress } from './progress';
 import * as url from './url';
@@ -8,7 +8,7 @@ export const setStream = (id, value) => async (dispatch, getState) => {
   const mainChannelId = selectors.getMainChannelId(getState());
   const stream = value ? { channelId: mainChannelId, ...value } : value;
   if (id === 'main') url.saveStream(stream);
-  dispatch(actions.setStream({ id, value: stream }));
+  dispatch.actions.stream.set({ id, value: stream });
 };
 
 export const reloadStream = (id) => async (dispatch, getState) => {
