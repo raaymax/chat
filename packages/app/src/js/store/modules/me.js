@@ -1,13 +1,9 @@
 import {createModule} from '../tools';
 
-const INIT = null;
 export default createModule({
   name: 'me',
-  initialState: INIT,
+  initialState: null,
   reducers: {
-    set: (state, action) => {
-      return action.payload;
-    },
-    reset: () => INTI,
+    set: (state, action) => action.payload,
   },
 });

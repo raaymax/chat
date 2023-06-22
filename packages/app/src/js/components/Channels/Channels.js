@@ -3,7 +3,6 @@ import {useState} from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { setStream } from '../../services/stream';
-import { selectors } from '../../store';
 import { ChannelCreate } from '../ChannelCreate/ChannelCreate';
 import { Channel } from './Channel';
 import { useBadges, useChannels } from '../../hooks';

@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { Channel } from '../../components/Channels/Channel';
 import { init } from '../../services/init';

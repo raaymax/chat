@@ -3,7 +3,7 @@ import { client } from '../core';
 let cooldown = false;
 let queue = false;
 
-export const notifyTyping = ({channelId, parentId}) => (dispatch, getState) => {
+export const notifyTyping = ({channelId, parentId}) => (dispatch) => {
   if (cooldown) {
     queue = true;
     return;

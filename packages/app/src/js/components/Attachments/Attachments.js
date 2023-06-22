@@ -63,7 +63,7 @@ export const Attachment = ({ data: { fileName, contentType, progress }, ondelete
 );
 
 export const Attachments = () => {
-  const list = useSelector(state => state.files);
+  const list = useSelector((state) => state.files);
   const dispatch = useDispatch();
 
   return (

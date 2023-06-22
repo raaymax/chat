@@ -13,5 +13,5 @@ export default createModule({
       const data = await client.req({ type: 'messages:search', channelId, text });
       actions.search.push({ text, data: data.data, searchedAt: new Date().toISOString() });
     },
-  }
+  },
 });

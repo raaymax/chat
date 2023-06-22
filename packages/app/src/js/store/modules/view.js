@@ -8,9 +8,8 @@ export default createModule({
       const view = action.payload;
       if (state.current === view) {
         return {current: null};
-      } else {
-        return {current: view};
       }
+      return {current: view};
     },
   },
 });
