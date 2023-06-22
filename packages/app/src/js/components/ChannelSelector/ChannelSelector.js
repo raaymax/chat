@@ -1,12 +1,11 @@
 import { h } from 'preact';
-import { useSelector } from 'react-redux';
 import {
   useCallback, useEffect, useState, useMemo,
 } from 'preact/hooks';
 import Fuse from 'fuse.js';
 import { TextMenu } from '../TextMenu/TextMenu';
-import { selectors } from '../../state';
 import { useInput } from '../../contexts/conversation';
+import { useChannels } from '../../hooks';
 
 const SCOPE = 'channel';
 
@@ -15,7 +14,7 @@ export const ChannelSelector = () => {
   const {
     input, currentText, scope, insert, scopeContainer,
   } = useInput();
-  const channels = useSelector(selectors.getChannels);
+  const channels = useChannels();
   const fuse = useMemo(() => new Fuse(channels, {
     keys: ['name'],
     findAllMatches: true,

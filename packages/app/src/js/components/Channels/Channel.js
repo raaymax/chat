@@ -1,14 +1,13 @@
 import { h } from 'preact';
 import { useEffect } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectors } from '../../state';
 import { InlineChannel } from './elements/inlineChannel';
 
 const DirectChannel = ({ channel, badge, onClick }) => {
-  const me = useSelector(selectors.getMeId);
+  const me = useSelector((state) => state.me);
   let other = channel.users.find((u) => u !== me);
   if (!other) [other] = channel.users;
-  const user = useSelector(selectors.getUser(other));
+  const user = useSelector((state) => state.users[other]);
   if (!user) {
     return ( <InlineChannel id={channel.id} onClick={onClick} badge={badge}>{channel.name}</InlineChannel> );
   }
@@ -22,7 +21,7 @@ export const Channel = ({
   channelId: id, onclick, icon, badge,
 }) => {
   const dispatch = useDispatch();
-  const channel = useSelector(selectors.getChannel({ id }));
+  const channel = useSelector((state) => state.channels[id]);
   useEffect(() => {
     if (!channel) {
       dispatch.methods.channels.find(id);

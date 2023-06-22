@@ -4,8 +4,6 @@ import {
 import { client } from '../core';
 import * as modules from './modules';
 
-export * as selectors from './selectors';
-
 const middleware = ({ dispatch, getState }) => (next) => async (action) => {
   if (typeof action === 'function') {
     dispatch.actions = actions;
@@ -22,7 +20,10 @@ const middleware = ({ dispatch, getState }) => (next) => async (action) => {
 
 export const store = createStore(
   modules.reducer,
-  compose(applyMiddleware(middleware), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()),
+  compose(
+    applyMiddleware(middleware),
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+  ),
 );
 
 export const actions = Object.keys(modules.actions).reduce((acc, module) => {

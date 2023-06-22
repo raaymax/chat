@@ -176,9 +176,9 @@ export const ConversationContext = ({ children }) => {
     if (e.key === 'Enter' && !e.shiftKey && scope === 'root') {
       return send(e);
     }
-    dispatch(notifyTyping());
+    dispatch(notifyTyping(stream));
     updateRange();
-  }, [dispatch, send, updateRange, scope]);
+  }, [dispatch, send, updateRange, scope, stream]);
 
   const addFile = useCallback(() => {
     fileInput.current.click();

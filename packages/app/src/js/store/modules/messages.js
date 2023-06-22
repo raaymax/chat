@@ -68,6 +68,5 @@ export default createModule({
       newState.data = newState.data.filter((m) => !ids.includes(m.id));
       return newState;
     },
-
   },
 });

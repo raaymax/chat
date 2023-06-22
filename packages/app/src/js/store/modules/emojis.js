@@ -18,14 +18,13 @@ export default createModule({
     },
   },
   methods: {
-    loadJSON: () => async ({actions}) => {
-      const emojis = await import('../../../assets/emoji_list.json');
-      if (emojis) actions.emojis.add(emojis.default);
-    },
-
-    loadCustom: () => async ({actions}, getState, {client}) => {
-      const { data: emojis } = await client.req({ type: 'emojis:load' });
-      if (emojis) actions.emojis.add(emojis.map((e) => ({...e, category: 'c'})));
+    load: () => async ({actions}, getState, {client}) => {
+      const [baseEmojis, { data: emojis }] = await Promise.all([
+        import('../../../assets/emoji_list.json'),
+        client.req({ type: 'emojis:load' }),
+      ]);
+      actions.emojis.add(baseEmojis.default);
+      actions.emojis.add(emojis.map((e) => ({...e, category: 'c'})));
     },
 
     find: (shortname) => async ({actions}, getState, {client}) => {

@@ -1,8 +1,8 @@
 import { h } from 'preact';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { Channel } from '../Channels/Channel';
-import { selectors, actions } from '../../state';
+import { useStream } from '../../contexts/stream';
 
 const StyledHeader = styled.div`
   display: flex;
@@ -57,13 +57,13 @@ const StyledHeader = styled.div`
 
 export const Header = () => {
   const dispatch = useDispatch();
-  const channelId = useSelector(selectors.getChannelId);
+  const [{channelId}] = useStream();
 
   return (
     <StyledHeader>
       <Channel channelId={channelId} icon="fa-solid fa-thumbtack" />
       <div class='toolbar'>
-        <div class='tool' onclick={() => dispatch(actions.setView('pins'))}>
+        <div class='tool' onclick={() => dispatch.actions.view.set('pins')}>
           <i class="fa-solid fa-xmark" />
         </div>
       </div>

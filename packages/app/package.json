@@ -15,7 +15,6 @@
     "@babel/plugin-syntax-decorators": "7.21.0",
     "@quack/config": "workspace:*",
     "@quack/rpc": "workspace:*",
-    "@reduxjs/toolkit": "1.8.2",
     "fuse.js": "6.5.3",
     "preact": "10.7.0",
     "react-redux": "8.0.2",

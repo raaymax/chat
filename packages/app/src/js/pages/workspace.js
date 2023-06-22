@@ -11,10 +11,10 @@ import { SideConversation } from './side/sideConversation';
 import { Search } from '../components/search/search';
 import { Pins } from '../components/pins/pins';
 import { StreamContext } from '../contexts/stream';
-import { selectors, actions, useStream } from '../state';
 import { setStream } from '../services/stream';
 import plugins from '../core/plugins';
 import { logout } from '../services/session';
+import { useStream } from '../hooks';
 
 const SideView = styled.div`
   flex: 0;
@@ -120,7 +120,7 @@ const Container = styled.div`
 `;
 
 export const Workspace = () => {
-  const view = useSelector(selectors.getView);
+  const view = useSelector((state) => state.view?.current);
   const dispatch = useDispatch();
   const stream = useStream('main');
   const sideStream = useStream('side');
@@ -128,7 +128,7 @@ export const Workspace = () => {
   return (
     <Container className={sideStream ? ['side-stream'] : ['main-stream']}>
       {view === 'sidebar' && <SideMenu>
-        <Logo onClick={() => dispatch(actions.setView('sidebar'))} />
+        <Logo onClick={() => dispatch.actions.view.set('sidebar')} />
         <div className='slider'>
           <Channels />
           <UserList />
@@ -149,7 +149,7 @@ export const Workspace = () => {
           {view === 'pins' && <Pins />}
           {(view === null || view === 'sidebar' || view === 'thread')
             && <MainConversation
-              onclick={() => dispatch(actions.setView('sidebar'))} />
+              onclick={() => dispatch.actions.view.set('sidebar')} />
           }
         </StreamContext>
       </MainView>

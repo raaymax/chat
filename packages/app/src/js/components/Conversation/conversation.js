@@ -2,8 +2,6 @@ import { h } from 'preact';
 import { useEffect, useCallback, useState } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadPrevious, loadNext, loadMessages } from '../../services/messages';
-import { updateProgress, loadProgress } from '../../services/progress';
-import { selectors } from '../../state';
 import { messageFormatter } from '../MessageList/formatter';
 import { MessageList } from '../MessageList/MessageList';
 import { uploadMany } from '../../services/file';
@@ -15,6 +13,7 @@ import { HoverContext } from '../../contexts/hover';
 import { useStream } from '../../contexts/stream';
 import { Container } from './elements/container';
 import { InitFailedButton } from './elements/initFailedButton';
+import { useProgress, useStreamMessages } from '../../hooks';
 
 const drop = (dispatch) => async (e) => {
   e.preventDefault();
@@ -32,16 +31,16 @@ export function Conversation({ saveLocation }) {
   const [lastStream, setLastStream] = useState({});
   const [stream] = useStream();
   const dispatch = useDispatch();
-  const messages = useSelector(selectors.getStreamMessages(stream));
-  const initFailed = useSelector(selectors.getInitFailed);
-  const loading = useSelector(selectors.getMessagesLoading);
+  const messages = useStreamMessages(stream);
+  const initFailed = useSelector((state) => state.system.initFailed);
+  const loading = useSelector((state) => state.messages.loading);
   const status = stream.type;
-  const progress = useSelector(selectors.getProgress(stream));
+  const progress = useProgress(stream);
   const list = messages.map((m) => ({ ...m, progress: progress[m.id] }));
 
   const bumpProgress = useCallback(() => {
     const latest = list.find(({ priv }) => !priv);
-    if (latest?.id) dispatch(updateProgress(latest.id));
+    if (latest?.id) dispatch.methods.progress.update(latest.id);
   }, [dispatch, list]);
   useEffect(() => {
     window.addEventListener('focus', bumpProgress);
@@ -54,7 +53,7 @@ export function Conversation({ saveLocation }) {
     if (lastStream.channelId === stream.channelId
       && lastStream.parentId === stream.parentId) return;
     dispatch(loadMessages(stream, saveLocation));
-    dispatch(loadProgress(stream, saveLocation));
+    dispatch.methods.progress.loadProgress(stream, saveLocation);
     setLastStream(stream);
   }, [dispatch, stream, lastStream, saveLocation]);
 

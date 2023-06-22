@@ -1,7 +1,6 @@
 import { h } from 'preact';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { selectors } from '../../state';
 
 const Image = styled.img`
   display: inline-block;
@@ -12,7 +11,7 @@ const Image = styled.img`
 `;
 
 export const UserCircle = ({ userId, className }) => {
-  const user = useSelector(selectors.getUser(userId));
+  const user = useSelector((state) => state.users[userId]);
   if (!user) return null;
   return (
     <Image className={className} src={user.avatarUrl} alt={user.name} />

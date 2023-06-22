@@ -20,7 +20,7 @@ export const Toolbar = () => {
   const onDelete = useCallback(() => {
     dispatch(removeMessage({ id }));
   }, [dispatch, id]);
-  const meId = useSelector((state) => state.users.meId);
+  const meId = useSelector((state) => state.me);
   const isMe = user?.id === meId;
   const [hovered] = useHovered();
 

@@ -1,8 +1,8 @@
 import { h } from 'preact';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { selectors } from '../../state';
 import { gotoDirectChannel } from '../../services/channels';
+import { useUsers } from '../../hooks';
 
 const Header = styled.div`
  padding: 5px 10px;
@@ -37,7 +37,7 @@ const UserContainer = styled.div`
 `;
 
 export const User = ({ userId, onClick }) => {
-  const user = useSelector(selectors.getExactUser(userId));
+  const user = useSelector((state) => state.users[userId]);
   const active = user.lastSeen && new Date(user.lastSeen).getTime() > Date.now() - 1000 * 60 * 5;
   if (!user) return null;
   return (
@@ -51,7 +51,7 @@ export const User = ({ userId, onClick }) => {
 
 export const UserList = () => {
   const dispatch = useDispatch();
-  const users = useSelector(selectors.getUsers());
+  const users = useUsers();
   return (
     <div class='user-list'>
       <Header>users</Header>

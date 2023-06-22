@@ -2,10 +2,10 @@ import { h } from 'preact';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { Channel } from '../../components/Channels/Channel';
-import { selectors, actions } from '../../state';
 import { init } from '../../services/init';
 import { useStream } from '../../contexts/stream';
 import { BackToMain } from '../../components/BackToMain/BackToMain';
+import { useMessage } from '../../hooks';
 
 const StyledHeader = styled.div`
   display: flex;
@@ -70,7 +70,7 @@ export const Header = ({ onclick }) => {
   const [stream, setStream] = useStream();
   const { channelId, parentId } = stream;
   const dispatch = useDispatch();
-  const message = useSelector(selectors.getMessage(parentId));
+  const message = useMessage(parentId);
 
   if (parentId) {
     return (
@@ -106,18 +106,18 @@ export const Header = ({ onclick }) => {
         }}>
           <i class="fa-solid fa-arrows-rotate" />
         </div>
-        <div class='tool' onclick={() => dispatch(actions.setView('search'))}>
+        <div class='tool' onclick={() => dispatch.actions.view.set('search')}>
           <i class="fa-solid fa-magnifying-glass" />
         </div>
         <div class='tool' onclick={() => {
           dispatch.methods.pins.load(channelId);
-          dispatch(actions.setView('pins'));
+          dispatch.actions.view.set('pins');
         }}>
           <i class="fa-solid fa-thumbtack" />
         </div>
         {stream.type === 'archive' && (
           <div class='tool' onclick={() => {
-            dispatch(actions.messagesClear({ stream }));
+            dispatch.actions.messages.clear({ stream });
             setStream({ ...stream, type: 'live' });
           }}>
             <i class="fa-solid fa-down-long" />

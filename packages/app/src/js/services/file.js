@@ -1,20 +1,19 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
-import { createAsyncThunk } from '@reduxjs/toolkit';
 import { createCounter } from '../utils';
 
 const tempId = createCounter(`file:${(Math.random() + 1).toString(36)}`);
 
 const FILES_URL = `${document.location.protocol}//${document.location.host}/files`;
 
-export const uploadMany = createAsyncThunk('files/upload/many', async (files, { dispatch }) => {
+export const uploadMany = (files) => async (dispatch) => {
   for (let i = 0, file; i < files.length; i++) {
     file = files.item(i);
     dispatch(upload(file));
   }
-});
+};
 
-export const upload = createAsyncThunk('files/upload', async (file, { dispatch }) => {
+export const upload = (file) => async (dispatch) => {
   const local = {
     clientId: tempId(),
     fileName: file.name,
@@ -55,13 +54,13 @@ export const upload = createAsyncThunk('files/upload', async (file, { dispatch }
     // eslint-disable-next-line no-console
     console.error(err);
   }
-});
+};
 
 export const getUrl = (id) => `${FILES_URL}/${id}`;
 export const getThumbnail = (id) => `${IMAGES_URL}/${id}?h=256&w=256&fit=clip`;
 const aborts = {};
 
-export const abort = createAsyncThunk('files/abort', async (clientId, { dispatch }) => {
+export const abort = (clientId) => async (dispatch) => {
   try {
     aborts[clientId] && aborts[clientId]();
     dispatch.actions.files.remove(clientId);
@@ -69,7 +68,7 @@ export const abort = createAsyncThunk('files/abort', async (clientId, { dispatch
     // eslint-disable-next-line no-console
     console.error(err);
   }
-});
+};
 
 function uploadFile(method, url, { file, progress, clientId }) {
   return new Promise((resolve, reject) => {

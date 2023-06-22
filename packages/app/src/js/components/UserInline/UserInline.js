@@ -1,7 +1,6 @@
 import { h } from 'preact';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { selectors } from '../../state';
 import { gotoDirectChannel } from '../../services/channels';
 
 const InlineUserLink = styled.a`
@@ -13,7 +12,7 @@ const InlineUserLink = styled.a`
 
 export const UserInline = ({ userId: id }) => {
   const dispatch = useDispatch();
-  const user = useSelector(selectors.getUser(id));
+  const user = useSelector((state) => state.users[id]);
 
   return (
     <InlineUserLink className='channel' onClick={() => dispatch(gotoDirectChannel(id))} data-id={id} href={`#`} >

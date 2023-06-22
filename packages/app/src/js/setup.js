@@ -19,7 +19,7 @@ client
   .on('auth:user', (user) => actions.me.set(user))
   .on('auth:logout', () => actions.me.set(null))
   .on('con:close', () => {
-    actions.connections.disconnected();
+    actions.connection.disconnected();
     actions.info.show({
       message: 'Disconnected - reconnect attempt in 1s',
       type: 'error',

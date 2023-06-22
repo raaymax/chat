@@ -2,7 +2,6 @@ import { h } from 'preact';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { abort } from '../../services/file';
-import { selectors } from '../../state';
 
 const Container = styled.div`
   .attachment {
@@ -64,7 +63,7 @@ export const Attachment = ({ data: { fileName, contentType, progress }, ondelete
 );
 
 export const Attachments = () => {
-  const list = useSelector(selectors.getFiles);
+  const list = useSelector(state => state.files);
   const dispatch = useDispatch();
 
   return (

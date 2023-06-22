@@ -2,7 +2,6 @@ import { h } from 'preact';
 import { useEffect } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { selectors } from '../../state';
 
 const InlineChannelLink = styled.a`
   span {
@@ -10,9 +9,9 @@ const InlineChannelLink = styled.a`
   }
 `;
 
-export const ChannelInline = ({ channelId: id, cid }) => {
+export const ChannelInline = ({ channelId: id }) => {
   const dispatch = useDispatch();
-  const channel = useSelector(selectors.getChannel({ id, cid }));
+  const channel = useSelector((state) => state.channels[id]);
   useEffect(() => {
     if (!channel) {
       dispatch.methods.channels.find(id);

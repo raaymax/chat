@@ -1,9 +1,9 @@
 import { h } from 'preact';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { selectors } from '../../state';
 import { getUrl } from '../../services/file';
 import { Tooltip } from '../../elements/tooltip';
+import { useEmoji } from '../../hooks';
 
 const StyledEmoji = styled.span`
   img{
@@ -20,7 +20,7 @@ const StyledEmoji = styled.span`
 
 export const Emoji = ({ shortname, big }) => {
   const dispatch = useDispatch();
-  const emoji = useSelector(selectors.getEmoji(shortname));
+  const emoji = useEmoji(shortname);
 
   if (!emoji) {
     dispatch.methods.emojis.find(shortname);

@@ -18,4 +18,30 @@ export default createModule({
       return newState;
     },
   },
+  methods: {
+    loadBadges: () => async ({actions}, getState, {client}) => {
+      const { data } = await client.req({
+        type: 'badges:load',
+      });
+      actions.progress.add(data);
+    },
+
+    loadProgress: (stream) => async ({actions}, getState, {client}) => {
+      if (!stream.channelId) return;
+      const { data } = await client.req({
+        type: 'progress:load',
+        channelId: stream.channelId,
+        parentId: stream.parentId,
+      });
+      actions.progress.add(data);
+    },
+
+    update: (messageId) => async ({actions}, getState, {client}) => {
+      const { data } = await client.req({
+        type: 'progress:update',
+        messageId,
+      });
+      actions.progress.add(data);
+    },
+  },
 });

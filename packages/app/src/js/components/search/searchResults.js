@@ -3,7 +3,6 @@ import { useCallback } from 'preact/hooks';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { Message } from '../Message/message';
-import { actions, selectors } from '../../state';
 import { formatTime, formatDate } from '../../utils';
 import { SearchSeparator } from './searchSeparator';
 import { useStream } from '../../contexts/stream';
@@ -21,10 +20,10 @@ const StyledList = styled.div`
 
 export function SearchResults() {
   const [, setStream] = useStream();
-  const results = useSelector(selectors.getSearchResults);
+  const results = useSelector((state) => state.search.results);
   const dispatch = useDispatch();
   const gotoMessage = useCallback((msg) => {
-    dispatch(actions.setView('search'));
+    dispatch.actions.view.set('search');
     setStream({
       type: 'archive',
       channelId: msg.channelId,

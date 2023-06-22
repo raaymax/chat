@@ -1,7 +1,5 @@
 import { client } from '../core';
 import { createCounter } from '../utils';
-import { selectors } from '../state';
-import { updateProgress } from './progress';
 import * as url from './url';
 
 const tempId = createCounter(`temp:${(Math.random() + 1).toString(36)}`);
@@ -15,6 +13,28 @@ const loading = (dispatch) => {
   };
 };
 
+const getStreamMessages = (stream, messages) => messages
+  .filter((m) => m.channelId === stream.channelId
+    && (
+      ((!stream.parentId && !m.parentId) || m.parentId === stream.parentId)
+    || (!stream.parentId && m.parentId === m.id)));
+
+export const selectors = {
+  countMessagesInStream: (stream, state) => getStreamMessages(stream, state.messages.data).length,
+  getLatestDate: (stream, state) => {
+    const data = getStreamMessages(stream, state.messages.data)
+      .filter((m) => m.id !== stream.parentId);
+    return data.length ? data[0].createdAt : new Date().toISOString();
+  },
+  getEarliestDate: (stream, state) => {
+    const data = getStreamMessages(stream, state.messages.data)
+      .filter((m) => m.id !== stream.parentId);
+    return data.length ? data[data.length - 1].createdAt : new Date().toISOString();
+  },
+  getMessage: (id, state) => state.messages.data
+    .find((m) => m.id === id || m.clientId === id) || null,
+};
+
 export const loadPrevious = (stream, saveLocation = false) => async (dispatch, getState) => {
   try {
     const loadingDone = loading(dispatch, getState);
@@ -26,7 +46,7 @@ export const loadPrevious = (stream, saveLocation = false) => async (dispatch, g
       },
     });
     dispatch.actions.messages.select(null);
-    const date = selectors.getEarliestDate(stream)(getState());
+    const date = selectors.getEarliestDate(stream, getState());
     const req = await client.req({
       ...stream,
       type: 'messages:load',
@@ -34,7 +54,7 @@ export const loadPrevious = (stream, saveLocation = false) => async (dispatch, g
       limit: 50,
     });
     dispatch.actions.messages.add(req.data);
-    if (selectors.countMessagesInStream(stream)(getState()) > 100) {
+    if (selectors.countMessagesInStream(stream, getState()) > 100) {
       dispatch.actions.stream.patch({ id: stream.id, patch: { type: 'archive' } });
       setTimeout(() => {
         dispatch.actions.messages.takeHead({ stream, count: 100 });
@@ -67,16 +87,16 @@ export const loadNext = (stream, saveLocation = false) => async (dispatch, getSt
       },
     });
     dispatch.actions.messages.select(null);
-    const date = selectors.getLatestDate(stream)(getState());
+    const date = selectors.getLatestDate(stream, getState());
     const req = await client.req({
       ...stream,
       type: 'messages:load',
       after: date,
       limit: 50,
     });
-    if (req.data?.length > 0) dispatch(updateProgress(req.data[0].id));
+    if (req.data?.length > 0) dispatch.methods.progress.update(req.data[0].id);
     dispatch.actions.messages.add(req.data);
-    if (selectors.countMessagesInStream(stream)(getState()) > 100) {
+    if (selectors.countMessagesInStream(stream, getState()) > 100) {
       setTimeout(() => {
         dispatch.actions.messages.takeTail({ stream, count: 100 });
       }, 1);
@@ -120,7 +140,7 @@ export const loadMessagesArchive = (stream, saveLocation = false) => async (disp
       after: date,
       limit: 50,
     });
-    if (req.data?.length > 0) dispatch(updateProgress(req.data[0].id));
+    if (req.data?.length > 0) dispatch.methods.progress.update(req.data[0].id);
     dispatch.actions.messages.add(req.data);
     if (saveLocation) {
       url.saveStream({
@@ -153,7 +173,7 @@ export const loadMessagesLive = (stream, saveLocation = false) => async (dispatc
       });
     }
     dispatch.actions.messages.add(req.data);
-    if (req.data?.length > 0) dispatch(updateProgress(req.data[0].id));
+    if (req.data?.length > 0) dispatch.methods.progress.update(req.data[0].id);
     loadingDone();
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -187,7 +207,7 @@ export const addReaction = (id, text) => async (dispatch) => {
 export const sendFromDom = (stream, dom) => async (dispatch, getState) => {
   const msg = fromDom(dom, getState());
   if (msg) {
-    msg.attachments = [...selectors.getFiles(getState())];
+    msg.attachments = [...getState().files];
     if (msg.flat.length === 0 && msg.attachments.length === 0) return;
     msg.debug = dom.innerHTML;
     msg.channelId = stream.channelId;
@@ -201,7 +221,7 @@ export const sendFromDom = (stream, dom) => async (dispatch, getState) => {
 export const send = (stream, msg) => (dispatch) => dispatch(msg.type === 'command:execute' ? sendCommand(stream, msg) : sendMessage(msg));
 
 export const sendShareMessage = (data) => async (dispatch, getState) => {
-  const { channelId, parentId } = selectors.getStream('main')(getState());
+  const { channelId, parentId } = getState().stream.main;
   const info = { links: [] };
   const msg = build({
     type: 'message:send',
@@ -283,7 +303,7 @@ const sendMessage = (msg) => async (dispatch) => {
 };
 
 export const resend = (id) => (dispatch, getState) => {
-  const msg = selectors.getMessage(id)(getState());
+  const msg = selectors.getMessage(id, getState());
   dispatch(sendMessage({
     clientId: msg.clientId,
     channelId: msg.channelId,
@@ -336,7 +356,7 @@ const isEmojiOnly = (tree) => {
 
 export function build(msg, state) {
   msg.clientId = tempId();
-  msg.userId = state.users.meId;
+  msg.userId = state.me;
   msg.createdAt = new Date().toISOString();
   msg.info = null;
   return msg;

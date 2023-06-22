@@ -1,9 +1,6 @@
 /* eslint-disable no-undef */
 import { client } from '../core';
-import { actions } from '../state';
 import { initNotifications } from './notifications';
-import { loadEmojis } from './emoji';
-import { loadProgress, loadBadges } from './progress';
 import { reloadStream, loadFromUrl } from './stream';
 
 const initApp = (withStream = false) => async (dispatch) => {
@@ -22,9 +19,9 @@ const initApp = (withStream = false) => async (dispatch) => {
   methods.channels.load();
   // FIXME: load messages from current channel or none
   // dispatch(loadMessages({channelId: config.mainChannelId}));
-  await dispatch(loadEmojis());
-  await dispatch(loadProgress({ channelId: config.mainChannelId }));
-  await dispatch(loadBadges());
+  await methods.emojis.load();
+  await methods.progress.loadProgress({ channelId: config.mainChannelId });
+  await methods.progress.loadBadges();
   // eslint-disable-next-line no-console
   console.log('version check: ', APP_VERSION, config.appVersion);
   if (config.appVersion !== APP_VERSION) {
