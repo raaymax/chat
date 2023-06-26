@@ -1,11 +1,10 @@
 /* eslint-disable no-undef */
 import { play } from './services/sound';
-import { ackTyping } from './services/typing';
 import { sendShareMessage } from './services/messages';
 import { init } from './services/init';
 import { client } from './core';
 import { setStream } from './services/stream';
-import { store, actions } from './store';
+import { store, actions, methods } from './store';
 
 client
   .on('share', ({ data }) => store.dispatch(sendShareMessage(data)))
@@ -14,7 +13,7 @@ client
   .on('badge', (msg) => actions.progress.add(msg))
   .on('channel', (msg) => actions.channels.add(msg))
   .on('removeChannel', (msg) => actions.channel.remove(msg.channelId))
-  .on('typing', (msg) => store.dispatch(ackTyping(msg)))
+  .on('typing', (msg) => methods.typing.ack(msg))
   .on('con:open', () => store.dispatch(init(true)))
   .on('auth:user', (user) => actions.me.set(user))
   .on('auth:logout', () => actions.me.set(null))

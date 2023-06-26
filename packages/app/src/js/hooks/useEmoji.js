@@ -1,10 +1,16 @@
 import { useMemo } from 'preact/hooks';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 export const useEmoji = (shortname) => {
+  const dispatch = useDispatch();
   const emojis = useSelector((state) => state.emojis);
-  return useMemo(
+  const emoji = useMemo(
     () => emojis.find((emoji) => emoji.shortname === shortname),
     [emojis, shortname],
   );
+  if (!emoji) {
+    dispatch.methods.emojis.find(shortname);
+  }
+
+  return emoji;
 };

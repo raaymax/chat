@@ -9,7 +9,7 @@ export default createModule({
       [action.payload].flat().forEach((emoji) => {
         const idx = state.findIndex((e) => e.shortname === emoji.shortname);
         if (idx !== -1) {
-          newState[idx] = { ...newState[idx], ...emoji, empty: false };
+          newState[idx] = { ...newState[idx], ...emoji };
           return newState;
         }
         newState.push(emoji);

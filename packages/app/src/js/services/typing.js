@@ -18,10 +18,3 @@ export const notifyTyping = ({channelId, parentId}) => (dispatch) => {
     }
   }, 1000);
 };
-
-export const ackTyping = (msg) => (dispatch, getState) => {
-  const meId = getState().me;
-  if (msg.userId === meId) return;
-  dispatch.actions.typing.add(msg);
-  setTimeout(() => dispatch.actions.typing.clear(), 1100);
-};
