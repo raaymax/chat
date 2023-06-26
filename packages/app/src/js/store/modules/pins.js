@@ -43,7 +43,6 @@ export default createModule({
       actions.pins.add(req.data);
     },
     pin: (id, channelId) => async ({actions, methods}, getState, {client}) => {
-      actions.messages.select(null);
       const req = await client.req({
         type: 'message:pin',
         channelId,
@@ -55,7 +54,6 @@ export default createModule({
     },
 
     unpin: (id, channelId) => async ({actions, methods}, getState, {client}) => {
-      actions.messages.select(null);
       const req = await client.req({
         type: 'message:pin',
         channelId,

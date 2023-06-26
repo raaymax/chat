@@ -1,5 +1,3 @@
-import { setStream } from './stream';
-
 export const gotoDirectChannel = (userId, x = false) => async (dispatch, getState) => {
   const {me: meId, channels} = getState();
   const direct = Object.values(channels).find((c) => (
@@ -17,6 +15,6 @@ export const gotoDirectChannel = (userId, x = false) => async (dispatch, getStat
     return;
   }
   if (!direct) return;
-  dispatch(setStream('main', { type: 'live', channelId: direct.id }));
+  dispatch.actions.stream.open('main', { type: 'live', channelId: direct.id });
   dispatch.actions.view.set(null);
 }

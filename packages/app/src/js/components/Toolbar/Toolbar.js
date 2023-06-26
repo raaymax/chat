@@ -3,7 +3,6 @@ import { useState, useCallback, useEffect } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeMessage } from '../../services/messages';
 import { Reaction } from '../Reaction/Reaction';
-import { setStream } from '../../services/stream';
 import { useHovered } from '../../contexts/hover';
 import { useStream } from '../../contexts/stream';
 import { useMessageData, useMessageUser } from '../../contexts/message';
@@ -60,7 +59,7 @@ export const Toolbar = () => {
         : <i class="fa-solid fa-thumbtack" style="color:Tomato" onClick={() => dispatch.methods.pins.unpin(id, channelId)} />}
       { isMe && <i class='fa-solid fa-trash-can' onclick={() => setView('delete')} /> }
       {
-        !stream.parentId && <i class="fa-solid fa-reply" onClick={() => dispatch(setStream('side', { type: 'live', channelId, parentId: id }))} />
+        !stream.parentId && <i class="fa-solid fa-reply" onClick={() => dispatch.actions.stream.open('side', { type: 'live', channelId, parentId: id })} />
       }
     </Container>
   );

@@ -5,7 +5,7 @@ import { ThemeProvider } from 'styled-components';
 import '../setup';
 import { client } from '../core';
 import { store } from '../store';
-import { Workspace } from './workspace';
+import { Workspace } from './workspace/workspace';
 import { useUser } from '../contexts/user';
 
 const theme = {

@@ -1,8 +1,7 @@
 /* eslint-disable no-undef */
 import { initNotifications } from './notifications';
-import { reloadStream, loadFromUrl } from './stream';
 
-const initApp = (withStream = false) => async (dispatch) => {
+const initApp = () => async (dispatch) => {
   const {actions, methods} = dispatch;
   if (navigator.userAgentData.mobile) {
     document.body.setAttribute('class', 'mobile');
@@ -15,26 +14,14 @@ const initApp = (withStream = false) => async (dispatch) => {
   await initNotifications(config);
   methods.users.load();
   methods.channels.load();
-  // FIXME: load messages from current channel or none
-  // dispatch(loadMessages({channelId: config.mainChannelId}));
   await methods.emojis.load();
-  //await methods.progress.loadProgress({ channelId: config.mainChannelId });
   await methods.progress.loadBadges();
-  // eslint-disable-next-line no-console
-  console.log('version check: ', APP_VERSION, config.appVersion);
-  if (config.appVersion !== APP_VERSION) {
-    await dispatch(showUpdateMessage());
-  }
-  await dispatch(loadFromUrl());
-  if (withStream) {
-    await dispatch(reloadStream('main'));
-  }
 };
 
 let tryCount = 1;
-export const init = (withStream) => async (dispatch) => {
+export const init = () => async (dispatch) => {
   try {
-    await dispatch(initApp(withStream));
+    await dispatch(initApp());
     tryCount = 1;
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -52,20 +39,4 @@ export const reinit = () => async (dispatch) => {
   tryCount = 1;
   await dispatch(actions.initFailed(false));
   await dispatch(init());
-};
-
-// FIXME: messages have no channel and are not showing
-const showUpdateMessage = () => (dispatch) => {
-  dispatch.actions.messages.add({
-    clientId: 'update-version',
-    priv: true,
-    createdAt: new Date(),
-    user: {
-      name: 'System',
-    },
-    message: [
-      { line: { bold: { text: 'Your Quack version is outdated!!' } } },
-      { line: { text: 'Please reload the page to update' } },
-    ],
-  });
 };

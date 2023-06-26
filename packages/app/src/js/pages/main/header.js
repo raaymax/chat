@@ -102,7 +102,7 @@ export const Header = ({ onclick }) => {
 
       <div class='toolbar'>
         <div class='tool' onclick={() => {
-          dispatch(init(true));
+          dispatch(init());
         }}>
           <i class="fa-solid fa-arrows-rotate" />
         </div>

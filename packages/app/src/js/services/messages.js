@@ -1,6 +1,5 @@
 import { client } from '../core';
 import { createCounter } from '../utils';
-import * as url from './url';
 
 const tempId = createCounter(`temp:${(Math.random() + 1).toString(36)}`);
 

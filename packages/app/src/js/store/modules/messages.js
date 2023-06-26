@@ -6,12 +6,10 @@ export default createModule({
     data: [],
     loading: false,
     status: 'live',
-    selected: null,
     hovered: null,
   },
   reducers: {
     hover: (state, action) => ({...state, hovered: action.payload}),
-    select: (state, action) => ({...state, selected: action.payload}),
     setStatus: (state, action) => ({...state, status: action.payload}),
     loadingFailed: (state, action) => ({...state, loadingFailed: action.payload}),
     loading: (state) => ({...state, loading: true}),
