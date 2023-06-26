@@ -39,7 +39,7 @@ export const Workspace = () => {
         </div>
       </SideMenu>}
       <MainView className={view === 'sidebar' ? ['sidebar'] : []}>
-        <StreamContext value={[stream, (val) => dispatch.actions.stream.open('main', val)]}>
+        <StreamContext value={[stream, (val) => dispatch.actions.stream.open({id: 'main', value: val})]}>
           {view === 'search' && <Search />}
           {view === 'pins' && <Pins />}
           {(view === null || view === 'sidebar' || view === 'thread')
@@ -49,7 +49,7 @@ export const Workspace = () => {
         </StreamContext>
       </MainView>
       {sideStream && <SideView>
-        <StreamContext value={[sideStream, (val) => dispatch.actions.stream.open('side', val)]}>
+        <StreamContext value={[sideStream, (val) => dispatch.actions.stream.open({id: 'side', value: val})]}>
           <SideConversation />
         </StreamContext>
       </SideView>}

@@ -59,7 +59,10 @@ export const Toolbar = () => {
         : <i class="fa-solid fa-thumbtack" style="color:Tomato" onClick={() => dispatch.methods.pins.unpin(id, channelId)} />}
       { isMe && <i class='fa-solid fa-trash-can' onclick={() => setView('delete')} /> }
       {
-        !stream.parentId && <i class="fa-solid fa-reply" onClick={() => dispatch.actions.stream.open('side', { type: 'live', channelId, parentId: id })} />
+        !stream.parentId
+          && <i class="fa-solid fa-reply"
+            onClick={() => dispatch.actions.stream.open({id: 'side', value: { type: 'live', channelId, parentId: id }})}
+          />
       }
     </Container>
   );

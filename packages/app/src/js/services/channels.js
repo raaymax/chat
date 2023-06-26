@@ -15,6 +15,6 @@ export const gotoDirectChannel = (userId, x = false) => async (dispatch, getStat
     return;
   }
   if (!direct) return;
-  dispatch.actions.stream.open('main', { type: 'live', channelId: direct.id });
+  dispatch.actions.stream.open({id: 'main', value: { type: 'live', channelId: direct.id }});
   dispatch.actions.view.set(null);
 }

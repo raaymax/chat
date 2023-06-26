@@ -1,14 +1,13 @@
 /* eslint-disable no-undef */
 import { initNotifications } from './notifications';
 
-const initApp = () => async (dispatch) => {
+const initApp = () => async (dispatch, getState) => {
   const {actions, methods} = dispatch;
   if (navigator.userAgentData.mobile) {
     document.body.setAttribute('class', 'mobile');
   }
   actions.connection.connected();
   actions.info.reset();
-  actions.system.initFailed(false);
   const config = await methods.config.load();
   actions.stream.setMain(config.mainChannelId);
   await initNotifications(config);
@@ -16,6 +15,9 @@ const initApp = () => async (dispatch) => {
   methods.channels.load();
   await methods.emojis.load();
   await methods.progress.loadBadges();
+  if (!getState().stream.main.channelId) {
+    actions.stream.open({id: 'main', value: {type: 'live'}});
+  }
 };
 
 let tryCount = 1;
@@ -27,7 +29,10 @@ export const init = () => async (dispatch) => {
     // eslint-disable-next-line no-console
     console.log(err);
     if (tryCount < 4) {
-      setTimeout(() => dispatch(init()), 1000 * tryCount ** 2);
+      setTimeout(() => {
+        actions.system.initFailed(false);
+        dispatch(init())
+      }, 1000 * tryCount ** 2);
       tryCount += 1;
       return;
     }

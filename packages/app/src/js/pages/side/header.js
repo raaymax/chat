@@ -75,13 +75,16 @@ export const Header = ({ onclick }) => {
       <div class='toolbar'>
         <div class='tool' onclick={() => {
           setSideStream(null);
-          dispatch.actions.stream.open('main', {
-            channelId, type: 'archive', selected: message.id, date: message.createdAt,
+          dispatch.actions.stream.open({
+            id: 'main',
+            value: {
+              channelId, type: 'archive', selected: message.id, date: message.createdAt,
+            },
           });
         }}>
           <i class="fa-solid fa-arrow-left" />
         </div>
-        <div class='tool' onclick={() => dispatch.actions.stream.open('side', null)}>
+        <div class='tool' onclick={() => dispatch.actions.stream.open({id: 'side', value: null})}>
           <i class="fa-solid fa-xmark" />
         </div>
       </div>

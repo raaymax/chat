@@ -10,10 +10,10 @@ import { Loader } from './elements/loader';
 import { reinit } from '../../services/init';
 import { ConversationContext } from '../../contexts/conversation';
 import { HoverContext } from '../../contexts/hover';
-import { useStream } from '../../contexts/stream';
+import { useStream, useMessages } from '../../contexts/stream';
 import { Container } from './elements/container';
 import { InitFailedButton } from './elements/initFailedButton';
-import { useProgress, useStreamMessages } from '../../hooks';
+import { useProgress } from '../../hooks';
 
 const drop = (dispatch, streamId) => async (e) => {
   e.preventDefault();
@@ -27,11 +27,11 @@ function dragOverHandler(ev) {
   ev.stopPropagation();
 }
 
-export function Conversation({ saveLocation }) {
+export function Conversation() {
   const [lastStream, setLastStream] = useState({});
   const [stream] = useStream();
   const dispatch = useDispatch();
-  const messages = useStreamMessages(stream);
+  const messages = useMessages();
   const initFailed = useSelector((state) => state.system.initFailed);
   const loading = useSelector((state) => state.messages.loading);
   const status = stream.type;
@@ -42,20 +42,13 @@ export function Conversation({ saveLocation }) {
     const latest = list.find(({ priv }) => !priv);
     if (latest?.id) dispatch.methods.progress.update(latest.id);
   }, [dispatch, list]);
+
   useEffect(() => {
     window.addEventListener('focus', bumpProgress);
     return () => {
       window.removeEventListener('focus', bumpProgress);
     };
   }, [bumpProgress]);
-
-  useEffect(() => {
-    if (lastStream.channelId === stream.channelId
-      && lastStream.parentId === stream.parentId) return;
-    dispatch(loadMessages(stream, saveLocation));
-    dispatch.methods.progress.loadProgress(stream, saveLocation);
-    setLastStream(stream);
-  }, [dispatch, stream, lastStream, saveLocation]);
 
   return (
     <Container onDrop={drop(dispatch, stream.id)} onDragOver={dragOverHandler}>
@@ -68,11 +61,11 @@ export function Conversation({ saveLocation }) {
             selected={stream.selected}
             onScrollTo={(dir) => {
               if (dir === 'top') {
-                dispatch(loadPrevious(stream, saveLocation));
+                dispatch(loadPrevious(stream));
                 bumpProgress();
               }
               if (dir === 'bottom') {
-                dispatch(loadNext(stream, saveLocation));
+                dispatch(loadNext(stream));
                 bumpProgress();
               }
             }}

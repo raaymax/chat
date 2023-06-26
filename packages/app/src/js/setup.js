@@ -26,12 +26,15 @@ client
   .on('message', (msg) => actions.messages.add({ ...msg, pending: false }))
   .on('notification', () => { try { navigator.vibrate([100, 30, 100]); } catch (err) { /* ignore */ } })
   .on('notification:click', (e) => {
-    actions.stream.open('main', {
-      type: 'archive',
-      date: e.createdAt,
-      channelId: e.channelId,
-      selected: e.messageId,
-      parentId: e.parentId,
+    actions.stream.open({
+      id: 'main',
+      value: {
+        type: 'archive',
+        date: e.createdAt,
+        channelId: e.channelId,
+        selected: e.messageId,
+        parentId: e.parentId,
+      },
     });
   })
   .on('notification', () => { try { play(); } catch (err) { /* ignore */ } });

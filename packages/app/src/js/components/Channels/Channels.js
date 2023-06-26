@@ -62,7 +62,7 @@ export const Channels = ({ icon }) => {
           icon={icon}
           badge={badges[c.id]}
           onclick={() => {
-            dispatch.actions.stream.open('main', { type: 'live', channelId: c.id });
+            dispatch.actions.stream.open({id: 'main', value: { type: 'live', channelId: c.id }});
             dispatch.actions.view.set(null);
           }}
         />
