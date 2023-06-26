@@ -35,151 +35,60 @@ export const selectors = {
     .find((m) => m.id === id || m.clientId === id) || null,
 };
 
-export const loadPrevious = (stream, saveLocation = false) => async (dispatch, getState) => {
-  try {
-    const loadingDone = loading(dispatch, getState);
-    dispatch.actions.stream.patch({
-      id: stream.id,
-      patch: {
-        selected: null,
-        date: null,
-      },
-    });
-    dispatch.actions.messages.select(null);
-    const date = selectors.getEarliestDate(stream, getState());
-    const req = await client.req({
-      ...stream,
-      type: 'messages:load',
-      before: date,
-      limit: 50,
-    });
-    dispatch.actions.messages.add(req.data);
-    if (selectors.countMessagesInStream(stream, getState()) > 100) {
-      dispatch.actions.stream.patch({ id: stream.id, patch: { type: 'archive' } });
-      setTimeout(() => {
-        dispatch.actions.messages.takeHead({ stream, count: 100 });
-      }, 1);
-    }
-    if (saveLocation) {
-      url.saveStream({
-        type: 'archive',
-        channelId: stream.channelId,
-        parentId: stream.parentId,
-        date,
-      });
-    }
-    loadingDone();
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(err);
-    // TODO: handle error message
+export const loadPrevious = (stream) => async (dispatch, getState) => {
+  const loadingDone = loading(dispatch, getState);
+  const date = selectors.getEarliestDate(stream, getState());
+  await dispatch.methods.messages.load({
+    ...stream,
+    before: date,
+  });
+  if (selectors.countMessagesInStream(stream, getState()) > 100) {
+    setTimeout(() => {
+      dispatch.actions.messages.takeHead({ stream, count: 100 });
+    }, 1);
   }
+  loadingDone();
 };
 
-export const loadNext = (stream, saveLocation = false) => async (dispatch, getState) => {
-  try {
-    const loadingDone = loading(dispatch, getState);
-    dispatch.actions.stream.patch({
-      id: stream.id,
-      patch: {
-        selected: null,
-        date: null,
-      },
-    });
-    dispatch.actions.messages.select(null);
-    const date = selectors.getLatestDate(stream, getState());
-    const req = await client.req({
-      ...stream,
-      type: 'messages:load',
-      after: date,
-      limit: 50,
-    });
-    if (req.data?.length > 0) dispatch.methods.progress.update(req.data[0].id);
-    dispatch.actions.messages.add(req.data);
-    if (selectors.countMessagesInStream(stream, getState()) > 100) {
-      setTimeout(() => {
-        dispatch.actions.messages.takeTail({ stream, count: 100 });
-      }, 1);
-    }
-    if (req.data.length < 50) {
-      setTimeout(() => {
-        dispatch.actions.stream.patch({ id: stream.id, patch: { type: 'live' } });
-      }, 2);
-    }
-    if (saveLocation) {
-      url.saveStream({
-        channelId: stream.channelId,
-        parentId: stream.parentId,
-        ...(req.data.length < 50 ? { type: 'live' } : { type: 'archive', date }),
-      });
-    }
-    loadingDone();
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(err);
-    // TODO: handle error message
+export const loadNext = (stream) => async (dispatch, getState) => {
+  const loadingDone = loading(dispatch, getState);
+  const date = selectors.getLatestDate(stream, getState());
+  const messages = await dispatch.methods.messages.load({
+    ...stream,
+    after: date,
+  });
+  if (messages?.length > 0) dispatch.methods.progress.update(messages[0].id);
+  if (selectors.countMessagesInStream(stream, getState()) > 100) {
+    setTimeout(() => {
+      dispatch.actions.messages.takeTail({ stream, count: 100 });
+    }, 1);
   }
+  loadingDone();
 };
 
-export const loadMessagesArchive = (stream, saveLocation = false) => async (dispatch, getState) => {
+export const loadMessagesArchive = (stream) => async (dispatch, getState) => {
   if (!stream.channelId) return;
   const { date } = stream;
-  try {
-    const loadingDone = loading(dispatch, getState);
-    dispatch.actions.messages.clear({ stream });
-    const req2 = await client.req({
-      ...stream,
-      type: 'messages:load',
-      before: date,
-      limit: 50,
-    });
-    dispatch.actions.messages.add(req2.data);
-    const req = await client.req({
-      ...stream,
-      type: 'messages:load',
-      after: date,
-      limit: 50,
-    });
-    if (req.data?.length > 0) dispatch.methods.progress.update(req.data[0].id);
-    dispatch.actions.messages.add(req.data);
-    if (saveLocation) {
-      url.saveStream({
-        channelId: stream.channelId,
-        parentId: stream.parentId,
-        ...(req.data.length < 50 ? { type: 'live' } : { type: 'archive', date }),
-      });
-    }
-    loadingDone();
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(err);
-  }
+  const loadingDone = loading(dispatch, getState);
+  dispatch.actions.messages.clear({ stream });
+  await dispatch.methods.messages.load({
+    ...stream,
+    before: date,
+  });
+  const messages = await dispatch.methods.messages.load({
+    ...stream,
+    after: date,
+  });
+  if (messages?.length > 0) dispatch.methods.progress.update(messages[0].id);
+  loadingDone();
 };
 
-export const loadMessagesLive = (stream, saveLocation = false) => async (dispatch, getState) => {
+export const loadMessagesLive = (stream) => async (dispatch, getState) => {
   if (!stream.channelId) return;
-  try {
-    const loadingDone = loading(dispatch, getState);
-    const req = await client.req({
-      ...stream,
-      type: 'messages:load',
-      limit: 50,
-    });
-    if (saveLocation) {
-      url.saveStream({
-        type: 'live',
-        channelId: stream.channelId,
-        parentId: stream.parentId,
-      });
-    }
-    dispatch.actions.messages.add(req.data);
-    if (req.data?.length > 0) dispatch.methods.progress.update(req.data[0].id);
-    loadingDone();
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(err);
-    // TODO: handle error message
-  }
+  const loadingDone = loading(dispatch, getState);
+  const messages = await dispatch.methods.messages.load(stream);
+  if (messages?.length > 0) dispatch.methods.progress.update(messages[0].id);
+  loadingDone();
 };
 
 export const loadMessages = (stream) => async (dispatch) => {
@@ -190,29 +99,15 @@ export const loadMessages = (stream) => async (dispatch) => {
   }
 };
 
-export const addReaction = (id, text) => async (dispatch) => {
-  try {
-    const req = await client.req({
-      type: 'reaction:send',
-      id,
-      reaction: text.trim(),
-    });
-    dispatch.actions.messages.add(req.data);
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(err);
-  }
-};
-
 export const sendFromDom = (stream, dom) => async (dispatch, getState) => {
   const msg = fromDom(dom, getState());
   if (msg) {
-    msg.attachments = [...getState().files];
+    msg.attachments = [...getState().files.filter((f) => f.streamId === stream.id)];
     if (msg.flat.length === 0 && msg.attachments.length === 0) return;
     msg.debug = dom.innerHTML;
     msg.channelId = stream.channelId;
     msg.parentId = stream.parentId;
-    dispatch.actions.files.clear();
+    dispatch.actions.files.clear(stream.id);
     dispatch(send(stream, msg));
     dispatch(loadMessagesLive(stream));
   }

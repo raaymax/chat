@@ -22,6 +22,6 @@ export default createModule({
       newState.splice(idx, 1);
       return newState;
     },
-    clear: () => [],
+    clear: (state, action) => state.filter((f) => f.streamId !== action.payload),
   },
 });

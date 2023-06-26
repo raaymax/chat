@@ -20,10 +20,12 @@ const middleware = ({ dispatch, getState }) => (next) => async (action) => {
 
 export const store = createStore(
   modules.reducer,
-  compose(
-    applyMiddleware(middleware),
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-  ),
+  window.__REDUX_DEVTOOLS_EXTENSION__
+    ? compose(
+      applyMiddleware(middleware),
+      window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+    )
+    : applyMiddleware(middleware),
 );
 
 export const actions = Object.keys(modules.actions).reduce((acc, module) => {

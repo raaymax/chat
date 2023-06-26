@@ -6,7 +6,6 @@ import { useDispatch } from 'react-redux';
 import { useStream } from './stream';
 import { sendFromDom } from '../services/messages';
 import { uploadMany } from '../services/file';
-import { notifyTyping } from '../services/typing';
 
 const Context = createContext({
   input: {},
@@ -62,7 +61,7 @@ export const ConversationContext = ({ children }) => {
     const cbData = (event.clipboardData || window.clipboardData);
     if (cbData.files?.length > 0) {
       event.preventDefault();
-      dispatch(uploadMany(cbData.files));
+      dispatch(uploadMany(stream.id, cbData.files));
     }
 
     const range = getRange();
@@ -75,15 +74,15 @@ export const ConversationContext = ({ children }) => {
     document.getSelection().collapseToEnd();
     event.preventDefault();
     event.stopPropagation();
-  }, [getRange, dispatch]);
+  }, [getRange, dispatch, stream]);
 
   const onFileChange = useCallback((e) => {
     if (e.target.files?.length > 0) {
       const { files } = e.target;
-      dispatch(uploadMany(files));
+      dispatch(uploadMany(stream.id, files));
       e.target.value = '';
     }
-  }, [dispatch]);
+  }, [dispatch, stream]);
 
   const onInput = useCallback(() => {
     updateRange();
@@ -176,7 +175,7 @@ export const ConversationContext = ({ children }) => {
     if (e.key === 'Enter' && !e.shiftKey && scope === 'root') {
       return send(e);
     }
-    dispatch(notifyTyping(stream));
+    dispatch.methods.typing.notify(stream);
     updateRange();
   }, [dispatch, send, updateRange, scope, stream]);
 

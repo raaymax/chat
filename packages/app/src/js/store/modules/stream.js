@@ -7,7 +7,7 @@ export default createModule({
     set: (state, action) => {
       const { id, value } = action.payload;
       if (value) {
-        return {...state, [id]: { id, ...value }};
+        return {...state, [id]: { id, channelId: state.mainChannelId, ...value }};
       }
       return {...state, [id]: value };
     },

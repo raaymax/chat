@@ -1,10 +1,7 @@
 import { loadMessages } from './messages';
 import * as url from './url';
 
-export const setStream = (id, value) => async (dispatch, getState) => {
-  if (getState().stream[id] === value) return;
-  const { mainChannelId } = getState().stream;
-  const stream = value ? { channelId: mainChannelId, ...value } : value;
+export const setStream = (id, stream) => async (dispatch) => {
   if (id === 'main') url.saveStream(stream);
   dispatch.actions.stream.set({ id, value: stream });
 };
@@ -19,5 +16,5 @@ export const reloadStream = (id) => async (dispatch, getState) => {
 
 export const loadFromUrl = () => async (dispatch) => {
   const stream = url.loadStream();
-  dispatch(setStream('main', stream));
+  dispatch.actions.stream.set({ id: 'main', value: stream });
 };

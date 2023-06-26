@@ -69,4 +69,23 @@ export default createModule({
       return newState;
     },
   },
+  methods: {
+    load: (query) => async ({actions}, getState, { client }) => {
+      const req = await client.req({
+        limit: 50,
+        ...query,
+        type: 'messages:load',
+      });
+      actions.messages.add(req.data);
+      return req.data;
+    },
+    addReaction: (id, text) => async ({actions}, getState, { client }) => {
+      const req = await client.req({
+        type: 'reaction:send',
+        id,
+        reaction: text.trim(),
+      });
+      actions.messages.add(req.data);
+    },
+  },
 });

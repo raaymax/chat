@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-import { client } from '../core';
 import { initNotifications } from './notifications';
 import { reloadStream, loadFromUrl } from './stream';
 
@@ -11,8 +10,7 @@ const initApp = (withStream = false) => async (dispatch) => {
   actions.connection.connected();
   actions.info.reset();
   actions.system.initFailed(false);
-  const { data: [config] } = await client.req({ type: 'config:get' });
-  actions.config.setAppVersion(config.appVersion);
+  const config = await methods.config.load();
   actions.stream.setMain(config.mainChannelId);
   await initNotifications(config);
   methods.users.load();
@@ -20,16 +18,14 @@ const initApp = (withStream = false) => async (dispatch) => {
   // FIXME: load messages from current channel or none
   // dispatch(loadMessages({channelId: config.mainChannelId}));
   await methods.emojis.load();
-  await methods.progress.loadProgress({ channelId: config.mainChannelId });
+  //await methods.progress.loadProgress({ channelId: config.mainChannelId });
   await methods.progress.loadBadges();
   // eslint-disable-next-line no-console
   console.log('version check: ', APP_VERSION, config.appVersion);
   if (config.appVersion !== APP_VERSION) {
     await dispatch(showUpdateMessage());
   }
-
   await dispatch(loadFromUrl());
-
   if (withStream) {
     await dispatch(reloadStream('main'));
   }

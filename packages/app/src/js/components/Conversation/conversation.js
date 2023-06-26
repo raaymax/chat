@@ -15,11 +15,11 @@ import { Container } from './elements/container';
 import { InitFailedButton } from './elements/initFailedButton';
 import { useProgress, useStreamMessages } from '../../hooks';
 
-const drop = (dispatch) => async (e) => {
+const drop = (dispatch, streamId) => async (e) => {
   e.preventDefault();
   e.stopPropagation();
   const { files } = e.dataTransfer;
-  dispatch(uploadMany(files));
+  dispatch(uploadMany(streamId, files));
 };
 
 function dragOverHandler(ev) {
@@ -58,7 +58,7 @@ export function Conversation({ saveLocation }) {
   }, [dispatch, stream, lastStream, saveLocation]);
 
   return (
-    <Container onDrop={drop(dispatch)} onDragOver={dragOverHandler}>
+    <Container onDrop={drop(dispatch, stream.id)} onDragOver={dragOverHandler}>
       <ConversationContext>
         <HoverContext>
           <MessageList

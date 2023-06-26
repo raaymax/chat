@@ -1,7 +1,9 @@
 import { h } from 'preact';
+import { useMemo } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { abort } from '../../services/file';
+import { useStream } from '../../contexts/stream';
 
 const Container = styled.div`
   .attachment {
@@ -63,12 +65,14 @@ export const Attachment = ({ data: { fileName, contentType, progress }, ondelete
 );
 
 export const Attachments = () => {
-  const list = useSelector((state) => state.files);
+  const [stream] = useStream();
+  const files = useSelector((state) => state.files);
+  const list = useMemo(() => files.filter((file) => file.streamId === stream.id), [files, stream.id]);
   const dispatch = useDispatch();
 
   return (
     <Container>
-      {list.map((file) => (
+      {(list || []).map((file) => (
         <Attachment
           key={file.clientId}
           data={{ ...file }}

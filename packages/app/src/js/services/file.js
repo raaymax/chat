@@ -6,15 +6,16 @@ const tempId = createCounter(`file:${(Math.random() + 1).toString(36)}`);
 
 const FILES_URL = `${document.location.protocol}//${document.location.host}/files`;
 
-export const uploadMany = (files) => async (dispatch) => {
+export const uploadMany = (streamId, files) => async (dispatch) => {
   for (let i = 0, file; i < files.length; i++) {
     file = files.item(i);
-    dispatch(upload(file));
+    dispatch(upload(streamId, file));
   }
 };
 
-export const upload = (file) => async (dispatch) => {
+export const upload = (streamId, file) => async (dispatch) => {
   const local = {
+    streamId,
     clientId: tempId(),
     fileName: file.name,
     contentType: file.type,

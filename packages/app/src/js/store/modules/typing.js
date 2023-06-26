@@ -2,7 +2,7 @@ import {createModule} from '../tools';
 
 export default createModule({
   name: 'typing',
-  initialState: { },
+  initialState: { cooldown: false, queue: false },
   reducers: {
     add: (state, action) => {
       const newState = {...state};
@@ -22,6 +22,7 @@ export default createModule({
           ),
         ]),
     ),
+    set: (state, action) => ({...state, ...action.payload}),
   },
   methods: {
     ack: (msg) => (dispatch, getState) => {
@@ -29,6 +30,21 @@ export default createModule({
       if (msg.userId === meId) return;
       dispatch.actions.typing.add(msg);
       setTimeout(() => dispatch.actions.typing.clear(), 1100);
+    },
+    notify: ({channelId, parentId}) => ({ actions, methods }, getState, {client}) => {
+      const {cooldown} = getState().typing;
+      if (cooldown) {
+        actions.typing.set({ queue: true });
+        return;
+      }
+      actions.typing.set({ cooldown: true, queue: false });
+      client.send({ type: 'typing:send', channelId, parentId });
+      setTimeout(() => {
+        actions.typing.set({ cooldown: false });
+        if (getState().typing.queue) {
+          methods.typing.notify({channelId, parentId});
+        }
+      }, 1000);
     },
   },
 });
