@@ -14,7 +14,7 @@ export class ChannelSerializer implements Serializer<ChannelQuery, Channel, Mong
       cid: arg.cid,
       private: arg.private,
       direct: arg.direct,
-      users: arg.users?.map(makeObjectId),
+      users: arg.users?.map(makeObjectId).sort(),
     });
   }
 
@@ -36,7 +36,7 @@ export class ChannelSerializer implements Serializer<ChannelQuery, Channel, Mong
       cid: arg.cid,
       private: arg.private,
       direct: arg.direct,
-      users: arg.users?.map(makeId),
+      users: arg.users?.map(makeId).sort(),
     }) as Channel;
   }
 

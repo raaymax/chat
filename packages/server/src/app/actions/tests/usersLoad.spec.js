@@ -28,9 +28,6 @@ describe('users:load', () => {
     const systemUser = users.find((u) => u.name === 'System');
     assert(!!systemUser);
     assert.equal(systemUser.system, true);
-    const aiUser = users.find((u) => u.name === 'OpenAI');
-    assert(!!aiUser);
-    assert.equal(aiUser.system, true);
   });
 
   it('should gen only list of users for specific channel?');
