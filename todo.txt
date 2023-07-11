@@ -1,5 +1,7 @@
+
+- Server Sent Events ?
+
 backlog:
-- !feat(channels): ability to change channel name
 - !feat(channels): channels sorting
 
 - feat(channels): number of unread messages in direct channels

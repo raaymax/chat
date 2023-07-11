@@ -24,7 +24,7 @@ module.exports = {
     }
 
     await repo.message.update({ id }, { pinned });
-    const channel = repo.channel.get({ id: message.channelId });
+    const channel = await repo.channel.get({ id: message.channelId });
     await res.group(channel.users, {
       id,
       type: 'message',

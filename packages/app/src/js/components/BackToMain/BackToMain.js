@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import useMainChannelId from '../../selectors/useMainChannelId';
+import { useMainChannelId } from '../../hooks';
 import { useStream } from '../../contexts/stream';
 
 export const BackToMain = () => {

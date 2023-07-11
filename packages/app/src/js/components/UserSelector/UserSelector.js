@@ -1,12 +1,11 @@
 import { h } from 'preact';
-import { useSelector } from 'react-redux';
 import {
   useCallback, useEffect, useState, useMemo,
 } from 'preact/hooks';
 import Fuse from 'fuse.js';
 import { TextMenu } from '../TextMenu/TextMenu';
-import { selectors } from '../../state';
 import { useInput } from '../../contexts/conversation';
+import { useUsers } from '../../hooks';
 
 const SCOPE = 'user';
 
@@ -15,7 +14,7 @@ export const UserSelector = () => {
   const {
     input, currentText, scope, insert, scopeContainer,
   } = useInput();
-  const users = useSelector(selectors.getUsers());
+  const users = useUsers();
   const fuse = useMemo(() => new Fuse(users, {
     keys: ['name'],
     findAllMatches: true,

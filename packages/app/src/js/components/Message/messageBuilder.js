@@ -20,9 +20,7 @@ const TYPES = {
   underline: (props) => <u>{build(props.data)}</u>,
   strike: (props) => <s>{build(props.data)}</s>,
   img: (props) => <img src={props.data.src} alt={props.data.alt} />,
-  link: (props) => (props.data.href.startsWith('#')
-    ? <ChannelInline cid={props.data.href.slice(1)} />
-    : <Link href={props.data.href}>{build(props.data.children)}</Link>),
+  link: (props) => <Link href={props.data.href}>{build(props.data.children)}</Link>,
   emoji: (props) => <Emoji big={props.opts.emojiOnly} shortname={props.data} />,
   channel: (props) => <ChannelInline channelId={props.data} />,
   user: (props) => <UserInline userId={props.data} />,

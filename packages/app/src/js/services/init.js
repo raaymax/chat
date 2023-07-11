@@ -1,58 +1,42 @@
 /* eslint-disable no-undef */
-import { client } from '../core';
-import { actions } from '../state';
 import { initNotifications } from './notifications';
-import { loadEmojis } from './emoji';
-import { loadProgress, loadBadges } from './progress';
-import { reloadStream, loadFromUrl } from './stream';
 
-const initApp = (withStream = false) => async (dispatch) => {
+const initApp = () => async (dispatch, getState) => {
+  const {actions, methods} = dispatch;
   if (navigator.userAgentData.mobile) {
     document.body.setAttribute('class', 'mobile');
   }
-  await dispatch(actions.connected());
-  await dispatch(actions.clearInfo());
-  await dispatch(actions.initFailed(false));
-  const { data: [config] } = await client.req({ type: 'config:get' });
-  await dispatch(actions.setAppVersion(config.appVersion));
-  await dispatch(actions.setMainChannel(config.mainChannelId));
+  actions.connection.connected();
+  actions.info.reset();
+  const config = await methods.config.load();
+  actions.stream.setMain(config.mainChannelId);
   await initNotifications(config);
-  const { data: users } = await client.req({ type: 'users:load' });
-  await dispatch(actions.addUser(users));
-  const { data: channels } = await client.req({ type: 'channels:load' });
-  await dispatch(actions.addChannel(channels));
-  // FIXME: load messages from current channel or none
-  // dispatch(loadMessages({channelId: config.mainChannelId}));
-  await dispatch(loadEmojis());
-  await dispatch(loadProgress({ channelId: config.mainChannelId }));
-  await dispatch(loadBadges());
-  // eslint-disable-next-line no-console
-  console.log('version check: ', APP_VERSION, config.appVersion);
-  if (config.appVersion !== APP_VERSION) {
-    await dispatch(showUpdateMessage());
-  }
-
-  await dispatch(loadFromUrl());
-
-  if (withStream) {
-    await dispatch(reloadStream('main'));
+  methods.users.load();
+  methods.channels.load();
+  await methods.emojis.load();
+  await methods.progress.loadBadges();
+  if (!getState().stream.main.channelId) {
+    actions.stream.open({id: 'main', value: {type: 'live'}});
   }
 };
 
 let tryCount = 1;
-export const init = (withStream) => async (dispatch) => {
+export const init = () => async (dispatch) => {
   try {
-    await dispatch(initApp(withStream));
+    await dispatch(initApp());
     tryCount = 1;
   } catch (err) {
     // eslint-disable-next-line no-console
     console.log(err);
     if (tryCount < 4) {
-      setTimeout(() => dispatch(init()), 1000 * tryCount ** 2);
+      setTimeout(() => {
+        actions.system.initFailed(false);
+        dispatch(init())
+      }, 1000 * tryCount ** 2);
       tryCount += 1;
       return;
     }
-    dispatch(actions.initFailed(true));
+    actions.system.initFailed(true);
   }
 };
 
@@ -60,20 +44,4 @@ export const reinit = () => async (dispatch) => {
   tryCount = 1;
   await dispatch(actions.initFailed(false));
   await dispatch(init());
-};
-
-// FIXME: messages have no channel and are not showing
-const showUpdateMessage = () => (dispatch) => {
-  dispatch(actions.addMessage({
-    clientId: 'update-version',
-    priv: true,
-    createdAt: new Date(),
-    user: {
-      name: 'System',
-    },
-    message: [
-      { line: { bold: { text: 'Your Quack version is outdated!!' } } },
-      { line: { text: 'Please reload the page to update' } },
-    ],
-  }));
 };

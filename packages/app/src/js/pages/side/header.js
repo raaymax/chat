@@ -1,10 +1,9 @@
 import { h } from 'preact';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { Channel } from '../../components/Channels/Channel';
-import { selectors } from '../../state';
 import { useStream } from '../../contexts/stream';
-import { setStream } from '../../services/stream';
+import { useMessage } from '../../hooks';
 
 const StyledHeader = styled.div`
   display: flex;
@@ -66,7 +65,7 @@ const StyledHeader = styled.div`
 
 export const Header = ({ onclick }) => {
   const [{ channelId, parentId }, setSideStream] = useStream();
-  const message = useSelector(selectors.getMessage(parentId));
+  const message = useMessage(parentId);
   const dispatch = useDispatch();
 
   return (
@@ -76,13 +75,16 @@ export const Header = ({ onclick }) => {
       <div class='toolbar'>
         <div class='tool' onclick={() => {
           setSideStream(null);
-          dispatch(setStream('main', {
-            channelId, type: 'archive', selected: message.id, date: message.createdAt,
-          }));
+          dispatch.actions.stream.open({
+            id: 'main',
+            value: {
+              channelId, type: 'archive', selected: message.id, date: message.createdAt,
+            },
+          });
         }}>
           <i class="fa-solid fa-arrow-left" />
         </div>
-        <div class='tool' onclick={() => dispatch(setStream('side', null))}>
+        <div class='tool' onclick={() => dispatch.actions.stream.open({id: 'side', value: null})}>
           <i class="fa-solid fa-xmark" />
         </div>
       </div>

@@ -35,11 +35,13 @@ export const messageFormatter = ({
           onClick={() => onMessageClicked(msg)}
           class={msg.priv ? ['private'] : []}
           data-id={msg.id}
+          data-date={msg.createdAt}
           client-id={msg.clientId}
           key={`${msg.id}-${msg.clientId}`}
           sameUser={sameUser}
           data={msg}
         />,
     ];
-  }).flat().filter((e) => e !== null);
+  }).flat().filter((e) => e !== null)
+    .reverse();
 };

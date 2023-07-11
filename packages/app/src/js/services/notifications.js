@@ -9,22 +9,15 @@ export const initNotifications = async (config) => {
       }
     });
 
-    console.log(config);
     navigator.serviceWorker.getRegistration('/')
       .then((registration) => registration.pushManager.subscribe({
         userVisibleOnly: true,
-        // eslint-disable-next-line no-undef
         applicationServerKey: config.vapidPublicKey,
       }))
-      .then(async (subscription) => {
-        console.log('Push subscription successful:', subscription);
-
-        console.log(subscription.toJSON());
-        return client.req({
-          type: 'push:setup',
-          ...subscription.toJSON(),
-        });
-      })
+      .then(async (subscription) => client.req({
+        type: 'push:setup',
+        ...subscription.toJSON(),
+      }))
       .catch((err) => {
         console.log('Service Worker registration failed: ', err);
       });

@@ -1,9 +1,6 @@
 import { h } from 'preact';
-import { useEffect, useCallback, useState } from 'preact/hooks';
+import { useEffect, useCallback} from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadPrevious, loadNext, loadMessages } from '../../services/messages';
-import { updateProgress, loadProgress } from '../../services/progress';
-import { selectors } from '../../state';
 import { messageFormatter } from '../MessageList/formatter';
 import { MessageList } from '../MessageList/MessageList';
 import { uploadMany } from '../../services/file';
@@ -12,15 +9,16 @@ import { Loader } from './elements/loader';
 import { reinit } from '../../services/init';
 import { ConversationContext } from '../../contexts/conversation';
 import { HoverContext } from '../../contexts/hover';
-import { useStream } from '../../contexts/stream';
+import { useStream, useMessages } from '../../contexts/stream';
 import { Container } from './elements/container';
 import { InitFailedButton } from './elements/initFailedButton';
+import { useProgress } from '../../hooks';
 
-const drop = (dispatch) => async (e) => {
+const drop = (dispatch, streamId) => async (e) => {
   e.preventDefault();
   e.stopPropagation();
   const { files } = e.dataTransfer;
-  dispatch(uploadMany(files));
+  dispatch(uploadMany(streamId, files));
 };
 
 function dragOverHandler(ev) {
@@ -28,21 +26,21 @@ function dragOverHandler(ev) {
   ev.stopPropagation();
 }
 
-export function Conversation({ saveLocation }) {
-  const [lastStream, setLastStream] = useState({});
-  const [stream] = useStream();
+export function Conversation() {
+  const [stream, setStream] = useStream();
   const dispatch = useDispatch();
-  const messages = useSelector(selectors.getStreamMessages(stream));
-  const initFailed = useSelector(selectors.getInitFailed);
-  const loading = useSelector(selectors.getMessagesLoading);
+  const {messages, next, prev} = useMessages();
+  const initFailed = useSelector((state) => state.system.initFailed);
+  const loading = useSelector((state) => state.messages.loading);
   const status = stream.type;
-  const progress = useSelector(selectors.getProgress(stream));
+  const progress = useProgress(stream);
   const list = messages.map((m) => ({ ...m, progress: progress[m.id] }));
 
   const bumpProgress = useCallback(() => {
     const latest = list.find(({ priv }) => !priv);
-    if (latest?.id) dispatch(updateProgress(latest.id));
+    if (latest?.id) dispatch.methods.progress.update(latest.id);
   }, [dispatch, list]);
+
   useEffect(() => {
     window.addEventListener('focus', bumpProgress);
     return () => {
@@ -50,16 +48,8 @@ export function Conversation({ saveLocation }) {
     };
   }, [bumpProgress]);
 
-  useEffect(() => {
-    if (lastStream.channelId === stream.channelId
-      && lastStream.parentId === stream.parentId) return;
-    dispatch(loadMessages(stream, saveLocation));
-    dispatch(loadProgress(stream, saveLocation));
-    setLastStream(stream);
-  }, [dispatch, stream, lastStream, saveLocation]);
-
   return (
-    <Container onDrop={drop(dispatch)} onDragOver={dragOverHandler}>
+    <Container onDrop={drop(dispatch, stream.id)} onDragOver={dragOverHandler}>
       <ConversationContext>
         <HoverContext>
           <MessageList
@@ -67,15 +57,18 @@ export function Conversation({ saveLocation }) {
             list={list}
             status={status}
             selected={stream.selected}
-            onScrollTo={(dir) => {
-              if (dir === 'top') {
-                dispatch(loadPrevious(stream, saveLocation));
-                bumpProgress();
+            onDateChange={(date) => setStream({ ...stream, date })}
+            onScrollTop={() => {
+              prev();
+              setStream({...stream, type: 'archive', selected: undefined});
+              bumpProgress();
+            }}
+            onScrollBottom={async () => {
+              const count = await next();
+              if (count === 1) {
+                setStream({...stream, type: 'live', selected: undefined});
               }
-              if (dir === 'bottom') {
-                dispatch(loadNext(stream, saveLocation));
-                bumpProgress();
-              }
+              bumpProgress();
             }}
           />
           {loading && <Loader />}
