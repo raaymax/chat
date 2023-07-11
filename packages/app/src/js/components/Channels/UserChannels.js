@@ -1,10 +1,8 @@
 import { h } from 'preact';
-import {useState} from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { ChannelCreate } from '../ChannelCreate/ChannelCreate';
 import { Channel } from './Channel';
-import { useBadges, useChannels, useUserChannels } from '../../hooks';
+import { useBadges, useUserChannels } from '../../hooks';
 
 const ChannelsContainer = styled.div`
   .header {
@@ -42,7 +40,7 @@ const ChannelsContainer = styled.div`
   }
 `;
 
-export const UserChannels = ({ icon }) => {
+export const UserChannels = () => {
   const dispatch = useDispatch();
   const channels = useUserChannels();
   const userId = useSelector((state) => state.me);

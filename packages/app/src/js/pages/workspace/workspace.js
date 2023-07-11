@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Logo } from '../../components/logo';
 import { Channels } from '../../components/Channels/Channels';
 import { UserChannels } from '../../components/Channels/UserChannels';
-import { UserList } from '../../components/UserList/UserList';
 import { MainConversation } from '../main/mainConversaion';
 import { SideConversation } from '../side/sideConversation';
 import { Search } from '../../components/search/search';
