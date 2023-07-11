@@ -6,6 +6,7 @@ import { init } from '../../services/init';
 import { useStream } from '../../contexts/stream';
 import { BackToMain } from '../../components/BackToMain/BackToMain';
 import { useMessage } from '../../hooks';
+import { loadMessages } from '../../services/messages'
 
 const StyledHeader = styled.div`
   display: flex;
@@ -119,6 +120,7 @@ export const Header = ({ onclick }) => {
           <div class='tool' onclick={() => {
             dispatch.actions.messages.clear({ stream });
             setStream({ ...stream, type: 'live' });
+            dispatch(loadMessages({ ...stream, type: 'live' }))
           }}>
             <i class="fa-solid fa-down-long" />
           </div>

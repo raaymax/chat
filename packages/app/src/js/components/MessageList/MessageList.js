@@ -59,7 +59,9 @@ export const MessageList = (props) => {
     const oldMax = getMax(oldList);
     if (max.toISOString() !== oldMax.toISOString()) {
       const rect = getRect();
-      if (rect && current && current[1]?.y) {
+      if (stream.type === 'live') {
+        element.current.scrollTop = 0;
+      } else if (rect && current && current[1]?.y) {
         element.current.scrollTop += (rect.y - current[1].y);
       }
     }

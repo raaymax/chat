@@ -60,13 +60,13 @@ export function Conversation() {
             onDateChange={(date) => setStream({ ...stream, date })}
             onScrollTop={() => {
               prev();
-              setStream({...stream, type: 'archive'});
+              setStream({...stream, type: 'archive', selected: undefined});
               bumpProgress();
             }}
             onScrollBottom={async () => {
               const count = await next();
               if (count === 1) {
-                setStream({...stream, type: 'live'});
+                setStream({...stream, type: 'live', selected: undefined});
               }
               bumpProgress();
             }}

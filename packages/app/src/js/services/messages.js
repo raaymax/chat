@@ -35,7 +35,6 @@ export const selectors = {
 };
 
 export const loadPrevious = (stream) => async (dispatch, getState) => {
-  console.log('loadPrevious', stream);
   const loadingDone = loading(dispatch, getState);
   const date = selectors.getEarliestDate(stream, getState());
 
@@ -52,7 +51,6 @@ export const loadPrevious = (stream) => async (dispatch, getState) => {
 };
 
 export const loadNext = (stream) => async (dispatch, getState) => {
-  console.log('loadNext', stream);
   const loadingDone = loading(dispatch, getState);
   const date = selectors.getLatestDate(stream, getState());
 
