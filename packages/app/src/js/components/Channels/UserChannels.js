@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { ChannelCreate } from '../ChannelCreate/ChannelCreate';
 import { Channel } from './Channel';
-import { useBadges, useChannels } from '../../hooks';
+import { useBadges, useChannels, useUserChannels } from '../../hooks';
 
 const ChannelsContainer = styled.div`
   .header {
@@ -42,27 +42,24 @@ const ChannelsContainer = styled.div`
   }
 `;
 
-export const Channels = ({ icon }) => {
-  const [show, setShow] = useState(false);
+export const UserChannels = ({ icon }) => {
   const dispatch = useDispatch();
-  const channels = useChannels();
+  const channels = useUserChannels();
   const userId = useSelector((state) => state.me);
   const badges = useBadges(userId);
   const id = useSelector((state) => state.stream.mainChannelId);
   return (
     <ChannelsContainer>
       <div class='header'>
-        <span class='title'>channels</span>
-        <i class={show ? 'fa-solid fa-minus' : 'fa-solid fa-plus'} onClick={() => setShow(!show)} />
+        <span class='title'>users</span>
       </div>
-      {show && <ChannelCreate />}
       { channels && channels.map((c) => (
         <Channel
           channelId={c.id}
           {...c}
           className={id === c.id ? 'active' : ''}
           key={c.id}
-          icon={icon}
+          icon='fa-solid fa-user'
           badge={badges[c.id]}
           onclick={() => {
             dispatch.actions.stream.open({id: 'main', value: { type: 'live', channelId: c.id }});

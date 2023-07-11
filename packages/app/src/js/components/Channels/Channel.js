@@ -14,7 +14,10 @@ const DirectChannel = ({ channel, badge, onClick }) => {
   if (user.system) {
     return ( <InlineChannel id={channel.id} onClick={onClick} icon='fa-solid fa-user-gear' badge={badge}>{user.name}</InlineChannel> );
   }
-  return ( <InlineChannel id={channel.id} onClick={onClick} icon='fa-solid fa-user' badge={badge}>{user.name}</InlineChannel> );
+  const active = user.lastSeen && new Date(user.lastSeen).getTime() > Date.now() - 1000 * 60 * 5;
+  return ( <InlineChannel
+    className={`user ${user.connected ? 'connected ' : 'offline'}${active ? 'recent' : ''}${user.system ? 'system' : ''}`}
+    id={channel.id} onClick={onClick} icon='fa-solid fa-user' badge={badge}>{user.name}</InlineChannel>);
 };
 
 export const Channel = ({

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Logo } from '../../components/logo';
 import { Channels } from '../../components/Channels/Channels';
+import { UserChannels } from '../../components/Channels/UserChannels';
 import { UserList } from '../../components/UserList/UserList';
 import { MainConversation } from '../main/mainConversaion';
 import { SideConversation } from '../side/sideConversation';
@@ -31,7 +32,8 @@ export const Workspace = () => {
         <Logo onClick={() => dispatch.actions.view.set('sidebar')} />
         <div className='slider'>
           <Channels />
-          <UserList />
+          <UserChannels />
+          {/* <UserList /> */}
           {plugins.get('sidebar').map((El, key) => <El key={key} />)}
         </div>
         <div className='bottom'>
