@@ -1,5 +1,5 @@
-!!!REWRITE STATE OF THE APP
 
+- Server Sent Events ?
 
 - fix(messages): can't move forward in history
 

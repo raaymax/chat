@@ -35,34 +35,42 @@ export const selectors = {
 };
 
 export const loadPrevious = (stream) => async (dispatch, getState) => {
+  console.log('loadPrevious', stream);
   const loadingDone = loading(dispatch, getState);
   const date = selectors.getEarliestDate(stream, getState());
+
   await dispatch.methods.messages.load({
     ...stream,
     before: date,
   });
   if (selectors.countMessagesInStream(stream, getState()) > 100) {
     setTimeout(() => {
-      dispatch.actions.messages.takeHead({ stream, count: 100 });
+      dispatch.actions.messages.takeOldest({ stream, count: 100 });
     }, 1);
   }
   loadingDone();
 };
 
 export const loadNext = (stream) => async (dispatch, getState) => {
+  console.log('loadNext', stream);
   const loadingDone = loading(dispatch, getState);
   const date = selectors.getLatestDate(stream, getState());
+
   const messages = await dispatch.methods.messages.load({
     ...stream,
     after: date,
   });
-  if (messages?.length > 0) dispatch.methods.progress.update(messages[0].id);
+  if (messages?.length > 0) {
+    dispatch.methods.progress.update(messages[0].id);
+  }
+
   if (selectors.countMessagesInStream(stream, getState()) > 100) {
     setTimeout(() => {
-      dispatch.actions.messages.takeTail({ stream, count: 100 });
+      dispatch.actions.messages.takeYoungest({ stream, count: 100 });
     }, 1);
   }
   loadingDone();
+  return messages.length
 };
 
 export const loadMessagesArchive = (stream) => async (dispatch, getState) => {

@@ -1,7 +1,6 @@
 import { h } from 'preact';
-import { useEffect, useCallback, useState } from 'preact/hooks';
+import { useEffect, useCallback} from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadPrevious, loadNext, loadMessages } from '../../services/messages';
 import { messageFormatter } from '../MessageList/formatter';
 import { MessageList } from '../MessageList/MessageList';
 import { uploadMany } from '../../services/file';
@@ -28,10 +27,9 @@ function dragOverHandler(ev) {
 }
 
 export function Conversation() {
-  const [lastStream, setLastStream] = useState({});
-  const [stream] = useStream();
+  const [stream, setStream] = useStream();
   const dispatch = useDispatch();
-  const messages = useMessages();
+  const {messages, next, prev} = useMessages();
   const initFailed = useSelector((state) => state.system.initFailed);
   const loading = useSelector((state) => state.messages.loading);
   const status = stream.type;
@@ -59,15 +57,18 @@ export function Conversation() {
             list={list}
             status={status}
             selected={stream.selected}
-            onScrollTo={(dir) => {
-              if (dir === 'top') {
-                dispatch(loadPrevious(stream));
-                bumpProgress();
+            onDateChange={(date) => setStream({ ...stream, date })}
+            onScrollTop={() => {
+              prev();
+              setStream({...stream, type: 'archive'});
+              bumpProgress();
+            }}
+            onScrollBottom={async () => {
+              const count = await next();
+              if (count === 1) {
+                setStream({...stream, type: 'live'});
               }
-              if (dir === 'bottom') {
-                dispatch(loadNext(stream));
-                bumpProgress();
-              }
+              bumpProgress();
             }}
           />
           {loading && <Loader />}

@@ -31,8 +31,8 @@ client
       value: {
         type: 'archive',
         date: e.createdAt,
-        channelId: e.channelId,
         selected: e.messageId,
+        channelId: e.channelId,
         parentId: e.parentId,
       },
     });

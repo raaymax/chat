@@ -3,9 +3,10 @@ import { omitUndefined } from '../../utils';
 
 /*
 type Stream = {
-  type: 'live' | 'archive',
   channelId: string,
   parentId: string,
+
+  type: 'live' | 'archive',
   selected: string,
   date: Date,
 };
@@ -56,6 +57,7 @@ export default createModule({
       }
       return {...state, [id]: value };
     },
+
     setMain: (state, action) => {
       const id = action.payload;
       return {...state, mainChannelId: id };

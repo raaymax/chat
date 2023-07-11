@@ -28,6 +28,8 @@ export const store = createStore(
     : applyMiddleware(middleware),
 );
 
+window.store = store;
+
 export const actions = Object.keys(modules.actions).reduce((acc, module) => {
   acc[module] = Object.keys(modules.actions[module]).reduce((acc2, action) => {
     acc2[action] = (data) => store.dispatch(modules.actions[module][action](data));

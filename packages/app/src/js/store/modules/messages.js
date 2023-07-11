@@ -44,29 +44,36 @@ export default createModule({
       return newState;
     },
 
-    takeHead: (state, action) => {
+    takeOldest: (state, action) => {
       const newState = {...state, data: [...state.data] };
       const { stream: { channelId, parentId }, count } = action.payload;
-      const ids = newState.data
-        .filter((m) => m.channelId === channelId && (!parentId || m.parentId === parentId))
-        .slice(0, Math.max(newState.data.length - count, 0))
-        .map((m) => m.id);
-      newState.data = newState.data.filter((m) => !ids.includes(m.id));
+
+      const channel = newState.data
+        .filter((m) => m.channelId === channelId && m.parentId === parentId && m.id !== parentId);
+      const toRemove = new Set(channel
+        .slice(0, Math.max(channel.length - count, 0))
+        .map((m) => m.id))
+      newState.data = newState.data.filter((m) => !toRemove.has(m.id));
       return newState;
     },
 
-    takeTail: (state, action) => {
+    takeYoungest: (state, action) => {
       const newState = {...state, data: [...state.data] };
       const { stream: { channelId, parentId }, count } = action.payload;
-      const ids = newState.data
-        .filter((m) => m.channelId === channelId && (!parentId || m.parentId === parentId))
-        .slice(0, Math.min(count, newState.data.length))
-        .map((m) => m.id);
 
-      newState.data = newState.data.filter((m) => !ids.includes(m.id));
+      const channel = newState.data
+        .filter((m) => m.channelId === channelId && m.parentId === parentId && m.id !== parentId);
+
+      const toRemove = new Set(channel.map((m) => m.id));
+      channel
+        .slice(0, Math.min(count, channel.length))
+        .forEach((m) => toRemove.delete(m.id));
+
+      newState.data = newState.data.filter((m) => !toRemove.has(m.id));
       return newState;
     },
   },
+
   methods: {
     load: (query) => async ({actions}, getState, { client }) => {
       const req = await client.req({
