@@ -18,7 +18,10 @@ export const ChannelInline = ({ channelId: id }) => {
     }
   }, [id, channel, dispatch]);
   return (
-    <InlineChannelLink className='channel' data-id={id} href={`#${channel?.id || id}`} >
+    <InlineChannelLink className='channel' data-id={id} href={`#${channel?.id || id}`} onClick={() => {
+      dispatch.actions.stream.open({id: 'main', value: { type: 'live', channelId: channel?.id || id }});
+      dispatch.actions.view.set(null);
+    }} >
       { channel?.private ? <i class='fa-solid fa-lock' /> : <i class='fa-solid fa-hashtag' /> }
       <span class='name'>{channel?.name || channel?.id || id}</span>
     </InlineChannelLink>

@@ -1,8 +1,6 @@
 
 - Server Sent Events ?
 
-- fix(messages): can't move forward in history
-
 backlog:
 - !feat(channels): channels sorting
 
