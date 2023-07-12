@@ -39,8 +39,6 @@ type ChatConfig = {
     directory: string // where to save files when type `fs`
     bucket: string // bucket name for `gcs`
   }
-  serverWebUrl?: string // default: 'http://localhost:8080'
-  imagesUrl?: string // default: 'http://localhost:8080/files' can be used for imgix.com 
   baseUrl?: string // default 'http://localhost:8080' base url for links creation
 };
 ```

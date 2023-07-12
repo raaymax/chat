@@ -1,6 +1,8 @@
 
 - Server Sent Events ?
 
+- fix: redirect to channel after inline user click
+
 backlog:
 - !feat(channels): channels sorting
 

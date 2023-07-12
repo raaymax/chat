@@ -58,7 +58,7 @@ export const upload = (streamId, file) => async (dispatch) => {
 };
 
 export const getUrl = (id) => `${FILES_URL}/${id}`;
-export const getThumbnail = (id) => `${IMAGES_URL}/${id}?h=256&w=256&fit=clip`;
+export const getThumbnail = (id) => `${getUrl(id)}?h=256&w=256`;
 const aborts = {};
 
 export const abort = (clientId) => async (dispatch) => {
