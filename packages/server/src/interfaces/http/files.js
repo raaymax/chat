@@ -13,6 +13,7 @@ const storageMulter = {
     storage.upload(file.stream, file).then((f) => {
       cb(null, f);
     }).catch((err) => {
+      console.log(err);
       cb(err);
     });
   },
@@ -21,6 +22,7 @@ const storageMulter = {
     storage.remove(file.fileId).then((f) => {
       cb(null, f);
     }).catch((err) => {
+      console.log(err);
       cb(err);
     });
   },
