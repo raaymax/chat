@@ -53,7 +53,7 @@ async function downloadFile(req, res) {
     const file = await storage.get(fileId, options);
     res.set({
       'Content-Type': file.contentType,
-      'Content-disposition': file.contentDisposition,
+      'Content-Disposition': `inline; filename="${file.metadata.filename}"`,
     });
     file.getStream().pipe(res);
   } catch (err) {
