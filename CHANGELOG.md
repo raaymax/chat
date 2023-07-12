@@ -1,5 +1,37 @@
 # Changelog
 
+## [2.0.0](https://github.com/codecat-io/chat/compare/quack-v1.9.6...quack-v2.0.0) (2023-07-12)
+
+
+### ⚠ BREAKING CHANGES
+
+* **users:** registration and invitations ([#86](https://github.com/codecat-io/chat/issues/86))
+
+### Features
+
+* added bus stats command ([9105a13](https://github.com/codecat-io/chat/commit/9105a1381406b5e6e216bbc3f7b808690d5e0f21))
+* **channels:** ability to rename channels ([70891ff](https://github.com/codecat-io/chat/commit/70891ffe73723ab5e0dc81855410168974a7e3fd))
+* **channels:** channel creation form hidden by default ([f3d202e](https://github.com/codecat-io/chat/commit/f3d202ef807a2aadc1225267da512a5605e107f2))
+* **channels:** direct channels between users ([951e5db](https://github.com/codecat-io/chat/commit/951e5dbf67ca4678645c28c9d143bbc9a04e2c83))
+* **channels:** direct channels creation ([#87](https://github.com/codecat-io/chat/issues/87)) ([cdf11e2](https://github.com/codecat-io/chat/commit/cdf11e26f56fb155d72eed1f0df37db3a458d1ca))
+* **images:** generating image thumbnails ([#92](https://github.com/codecat-io/chat/issues/92)) ([ca2413a](https://github.com/codecat-io/chat/commit/ca2413aa6c416e7acc62202beb892ae162658a9f))
+* **plugins:** plugin system - example ([#76](https://github.com/codecat-io/chat/issues/76)) ([172afb9](https://github.com/codecat-io/chat/commit/172afb92b18b9e5545a32a7a51f6e0475f9202b1))
+* saving user agent data to database ([734102b](https://github.com/codecat-io/chat/commit/734102b8acf97aeee8ff9a98aa769f644142986e))
+* **users:** added logout button in side pannel ([1a30109](https://github.com/codecat-io/chat/commit/1a301099ca739014b5bb498739741c2f3011b89c))
+* **users:** mentions ([#89](https://github.com/codecat-io/chat/issues/89)) ([408f555](https://github.com/codecat-io/chat/commit/408f555ea20b731ac021a4821997532c9d7c4664))
+* **users:** registration and invitations ([#86](https://github.com/codecat-io/chat/issues/86)) ([e1c9f3c](https://github.com/codecat-io/chat/commit/e1c9f3c0d7ef91559fba42289e602e13b7582ac8))
+* **users:** user list with status in side panel ([c14acbc](https://github.com/codecat-io/chat/commit/c14acbc8666fde480c80de514dd588ab94e76c09))
+
+
+### Bug Fixes
+
+* **config:** added default value for baseUrl ([101eec2](https://github.com/codecat-io/chat/commit/101eec21520d1e6d765a454c24f4ea6023050c46))
+* failing tests ([6a8d0d0](https://github.com/codecat-io/chat/commit/6a8d0d04efaa0daed76ae559a58c2e73086562bf))
+* failing tests ([47e6aec](https://github.com/codecat-io/chat/commit/47e6aecb2abc8d2fd2d4922eef31e461b7b87c67))
+* **images:** fileId can lead to any file ([db7b237](https://github.com/codecat-io/chat/commit/db7b2371add873f275416b408655209422ec8cf1))
+* tests ([bdbd75a](https://github.com/codecat-io/chat/commit/bdbd75a26f891667e15a138532561747727a7faa))
+* too many connections crash - failing to disconnect ([33f5b6a](https://github.com/codecat-io/chat/commit/33f5b6a29f2e296cb2a16473e256e892dfba0011))
+
 ## [1.9.6](https://github.com/codecat-io/chat/compare/quack-v1.9.5...quack-v1.9.6) (2023-05-25)
 
 
