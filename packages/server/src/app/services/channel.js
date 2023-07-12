@@ -12,7 +12,7 @@ module.exports = {
       }
     }
     if (channelType === 'DIRECT') {
-      const existing = await repo.channel.get({ channelType, users: [userId, ...users]});
+      const existing = await repo.channel.get({ channelType, users: [userId, ...users] });
       if (existing) {
         return existing.id;
       }
