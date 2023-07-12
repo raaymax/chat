@@ -48,5 +48,4 @@ class Files implements Storage {
   }
 }
 
-
 export const initStorage = (config: Config) => new Files(config);
