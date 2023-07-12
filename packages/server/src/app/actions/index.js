@@ -60,6 +60,11 @@ const dispatch = async ({ type, seqId, ...body }, { userId, bus, push = () => {}
   const wsres = {
     bus,
     push,
+    group: (userIds, m, opts) => bus.group(userIds, {
+      ...m,
+      seqId,
+      _opts: opts,
+    }),
     broadcast: (m, opts) => bus.broadcast({
       ...m,
       seqId,
@@ -80,6 +85,8 @@ const dispatch = async ({ type, seqId, ...body }, { userId, bus, push = () => {}
   const srv = {
     repo,
     service,
+    bus,
+    push,
   };
   try {
     if (typeof handler === 'function') {
@@ -93,10 +100,14 @@ const dispatch = async ({ type, seqId, ...body }, { userId, bus, push = () => {}
       }
       const { error: uerr } = await Joi.string().required().validate(wsreq.userId);
       if (uerr) throw uerr;
+      await service.user.setLastSeen({ userId }, { bus });
       await handler.handler(wsreq, wsres, srv);
     }
   } catch (err) {
-    // console.error(err); // maybe attach logger
+    if (!(err instanceof Joi.ValidationError)) {
+      // eslint-disable-next-line no-console
+      console.error(err); // maybe attach logger
+    }
     bus.direct(userId, {
       seqId,
       type: 'response',

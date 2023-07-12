@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const repo = require('../../infra/repositories');
 
 module.exports = {
   type: 'typing:send',
@@ -7,10 +8,12 @@ module.exports = {
       channelId: Joi.string().required(),
     }),
   },
-  handler: (req, res) => {
+  handler: async (req, res) => {
     const { channelId } = req.body;
 
-    res.broadcast({
+    const channel = await repo.channel.get({ id: channelId });
+
+    res.group(channel.users, {
       type: 'typing',
       userId: req.userId,
       channelId,

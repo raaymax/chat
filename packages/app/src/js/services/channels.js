@@ -1,37 +1,20 @@
-import { client } from '../core';
-import { actions } from '../state';
+export const gotoDirectChannel = (userId, x = false) => async (dispatch, getState) => {
+  const {me: meId, channels} = getState();
+  const direct = Object.values(channels).find((c) => (
+    c.direct === true
+    && c.users.includes(userId)
+    && (userId === meId
+      ? (c.users.length === 2 && c.users.every((u) => u === meId))
+      : true )));
 
-export const loadChannels = () => async (dispatch) => {
-  try {
-    const res = await client.req({ type: 'channels:load' });
-    res.data.forEach((chan) => {
-      dispatch(actions.addChannel(chan));
-    });
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.log(err);
+  if (!x && !direct) {
+    dispatch.methods.channels.create({channelType: 'DIRECT', name: 'Direct', users: [userId]});
+    setTimeout(() => {
+      dispatch(gotoDirectChannel(userId, x = !x));
+    }, 1000);
+    return;
   }
-};
-
-export const createChannel = (name, priv = false) => async (dispatch) => {
-  try {
-    const res = await client.req({ type: 'channel:create', name, private: priv });
-    res.data.forEach((chan) => {
-      dispatch(actions.addChannel(chan));
-    });
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.log(err);
-  }
-};
-export const findChannel = (id) => async (dispatch) => {
-  try {
-    const res = await client.req({ type: 'channel:find', id });
-    res.data.forEach((chan) => {
-      dispatch(actions.addChannel(chan));
-    });
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.log(err);
-  }
-};
+  if (!direct) return;
+  dispatch.actions.stream.open({id: 'main', value: { channelId: direct.id }});
+  dispatch.actions.view.set(null);
+}

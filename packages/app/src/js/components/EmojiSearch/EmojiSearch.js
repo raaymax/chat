@@ -1,7 +1,6 @@
 import { h } from 'preact';
-import { useState, useEffect, useMemo } from 'preact/hooks';
-import { useDispatch, useSelector } from 'react-redux';
-import Fuse from 'fuse.js';
+import { useState, useEffect} from 'preact/hooks';
+import { useSelector } from 'react-redux';
 import { Emoji } from './elements/emoji';
 import { EmojiBlock } from './elements/emojiBlock';
 import { Tooltip } from '../../elements/tooltip';
@@ -10,8 +9,7 @@ import { SearchBox } from './elements/searchBox';
 import { EmojiScroll } from './elements/emojiScroll';
 import { EmojiCategory } from './elements/emojiCategory';
 import { EmojiSearchContainer } from './elements/emojiSearchContainer';
-import { loadEmojis } from '../../services/emoji';
-import { selectors } from '../../state';
+import { useEmojiFuse } from '../../hooks';
 
 const CATEGORIES = {
   p: 'People',
@@ -29,15 +27,8 @@ const CATEGORIES = {
 export const EmojiSearch = ({ onSelect }) => {
   const [name, setName] = useState('');
   const [results, setResults] = useState([]);
-  const dispatch = useDispatch();
-  const emojis = useSelector(selectors.getEmojis);
-
-  useEffect(() => dispatch(loadEmojis()), [dispatch]);
-  const fuse = useMemo(() => new Fuse(emojis, {
-    keys: ['name', 'shortname'],
-    findAllMatches: true,
-    includeMatches: true,
-  }), [emojis]);
+  const emojis = useSelector((state) => state.emojis);
+  const fuse = useEmojiFuse();
 
   useEffect(() => {
     let all = emojis || [];

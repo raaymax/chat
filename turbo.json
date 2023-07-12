@@ -6,8 +6,12 @@
       "inputs": ["src/**"]
     },
     "//#migrate": {},
+    "//#migrate:tests": {},
     "//#lint:ci": {},
     "//#lint": {},
+    "//#test": {
+      "dependsOn": ["//#migrate:tests"]
+    },
     "start": {
       "dependsOn": ["build", "//#migrate"],
       "cache": false

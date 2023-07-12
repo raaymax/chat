@@ -3,8 +3,6 @@ import { h } from 'preact';
 import { useCallback } from 'preact/hooks';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-// import {PinsList} from './pinsList';
-import { actions, selectors } from '../../state';
 import { HoverContext } from '../../contexts/hover';
 import { messageFormatter } from '../MessageList/formatter';
 import { MessageList } from '../MessageList/MessageList';
@@ -38,9 +36,9 @@ const StyledPins = styled.div`
 export const Pins = () => {
   const [{ channelId }, setStream] = useStream();
   const dispatch = useDispatch();
-  const messages = useSelector(selectors.getPinnedMessages(channelId));
+  const messages = useSelector((state) => state.pins[channelId]);
   const gotoMessage = useCallback((msg) => {
-    dispatch(actions.setView('pins'));
+    dispatch.actions.view.set('pins');
     setStream({
       type: 'archive',
       channelId: msg.channelId,
@@ -55,7 +53,7 @@ export const Pins = () => {
         <Header />
         <MessageList
           formatter={messageFormatter}
-          list={messages}
+          list={messages || []}
           status='live'
           onMessageClicked={(msg) => {
             gotoMessage(msg);

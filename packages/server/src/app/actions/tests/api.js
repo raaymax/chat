@@ -6,8 +6,18 @@ const createBus = (fn) => new Promise(async (resolve, reject) => {
   const data = [];
   try {
     await fn({
+      hasKey: () => true,
+      getListeners: () => ({ all: 0 }),
       direct: (userId, msg) => {
         msg._userId = userId;
+        if (msg.type === 'response') {
+          resolve({ res: msg, data });
+          return;
+        }
+        data.push(msg);
+      },
+      group: (userIds, msg) => {
+        msg._userIds = userIds;
         if (msg.type === 'response') {
           resolve({ res: msg, data });
           return;
@@ -21,7 +31,7 @@ const createBus = (fn) => new Promise(async (resolve, reject) => {
   }
 });
 
-const sendMessage = async (msg, opts = {}) => createBus((bus) => dispatch(msg, { bus, ...opts }));
+const sendMessage = async (msg, opts = {}) => createBus((bus) => dispatch(msg, { bus, push: () => null, ...opts }));
 
 module.exports = {
   sendMessage,

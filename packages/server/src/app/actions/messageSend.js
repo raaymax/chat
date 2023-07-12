@@ -16,6 +16,7 @@ module.exports = {
       emojiOnly: Joi.boolean().optional().default(false),
       debug: Joi.string().optional().allow(''),
       links: Joi.array().items(Joi.string()).optional().default([]),
+      mentions: Joi.array().items(Joi.string()).optional().default([]),
 
       attachments: Joi.array().items(Joi.object({
         id: Joi.string().required(),
@@ -32,6 +33,8 @@ module.exports = {
       throw AccessDenied();
     }
 
+    // TODO: check users from mentions
+
     const { id, dup } = await createMessage({
       message: msg.message,
       flat: msg.flat,
@@ -42,6 +45,7 @@ module.exports = {
       emojiOnly: msg.emojiOnly,
       userId: req.userId,
       links: msg.links,
+      mentions: msg.mentions,
       attachments: msg.attachments?.map((file) => ({
         id: file.id,
         fileName: file.fileName,
@@ -50,6 +54,14 @@ module.exports = {
       createdAt: new Date(),
     });
 
+    const usersToAdd = msg.mentions.filter((m) => !channel.users.includes(m));
+    if (usersToAdd.length) {
+      const group = [...new Set([...channel.users, ...usersToAdd])];
+      await repo.channel.update({ id: channel.id }, { users: group });
+      const c = await repo.channel.get({ id: msg.channelId });
+      res.group(group, { type: 'channel', ...c });
+    }
+
     if (msg.parentId) {
       await repo.message.updateThread({
         id,
@@ -57,12 +69,12 @@ module.exports = {
         userId: req.userId,
       });
       const parent = await repo.message.get({ id: msg.parentId });
-      res.broadcast({ type: 'message', ...parent });
+      res.group(channel.users, { type: 'message', ...parent });
     }
 
     const created = await repo.message.get({ id });
     if (!dup) {
-      res.broadcast({ type: 'message', ...created });
+      res.group(channel.users, { type: 'message', ...created });
       await services.notifications.send(created, res);
     }
     await services.badge.messageSent(channel.id, msg.parentId, id, req.userId);

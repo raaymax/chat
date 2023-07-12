@@ -409,31 +409,6 @@ ul {
   width: 0px;
 }
 
-.channels {
-
-}
-
-.channels .header {
- padding: 5px 10px;
- padding-top: 20px;
- font-weight: bold;
-}
-
-.channels .channel {
- padding: 5px 5px 5px 20px; 
- cursor: pointer;
-}
-.channels .channel .name {
- padding: 0px 10px; 
- cursor: pointer;
-}
-.channels .channel.active {
-  background-color: var(--primary_active_mask);
-}
-
-.channels .channel:hover {
-  background-color: var(--primary_active_mask);
-}
 .pins .message.pinned {
   background-color: transparent;
   animation-name: fade;

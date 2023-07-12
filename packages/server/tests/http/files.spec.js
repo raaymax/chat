@@ -25,7 +25,7 @@ module.exports = (agent) => {
         });
     });
 
-    it('should be able to download uploaded file', async () => agent
+    it('should return 404 if file not exists', async () => agent
       .get('/files/random')
       .expect(404));
   });

@@ -9,11 +9,6 @@ module.exports = {
   handler: async (req, res) => {
     const token = crypto.randomBytes(16).toString('hex');
 
-    console.log({
-      token,
-      userId: req.userId,
-      createdAt: new Date().toISOString(),
-    });
     await repo.invitation.create({
       token,
       userId: req.userId,

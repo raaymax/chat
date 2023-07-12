@@ -1,10 +1,10 @@
 import { h } from 'preact';
 import { useSelector } from 'react-redux';
-import { selectors } from '../../state';
+import { useTyping } from '../../hooks';
 
 export const StatusLine = () => {
-  const info = useSelector(selectors.getInfo);
-  const typing = useSelector(selectors.getTyping()); // FIXME: status line should work in context
+  const info = useSelector((state) => state.info);
+  const typing = useTyping(); // FIXME: status line should work in context
 
   const names = (typing || []).map((u) => u.name).join(', ');
 

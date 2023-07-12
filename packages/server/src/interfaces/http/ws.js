@@ -53,5 +53,8 @@ module.exports = (server) => {
     ws.on('close', () => {
       bus.off(userId, sendHandler);
     });
+    ws.on('disconnect', () => {
+      bus.off(userId, sendHandler);
+    });
   });
 };

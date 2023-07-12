@@ -1,33 +1,23 @@
 import { h } from 'preact';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   useCallback, useEffect, useState, useMemo,
 } from 'preact/hooks';
-import Fuse from 'fuse.js';
 import { TextMenu } from '../TextMenu/TextMenu';
-import { selectors } from '../../state';
 import { useInput } from '../../contexts/conversation';
-import { loadEmojis } from '../../services/emoji';
 import { getUrl } from '../../services/file';
 import { buildEmojiNode } from '../../utils';
+import { useEmojiFuse } from '../../hooks';
 
 const SCOPE = 'emoji';
 
 export const EmojiSelector = () => {
-  const dispatch = useDispatch();
   const [selected, setSelected] = useState(0);
   const {
     input, currentText, scope, insert, scopeContainer, replace,
   } = useInput();
-  const emojis = useSelector(selectors.getEmojis);
-
-  useEffect(() => dispatch(loadEmojis()), [dispatch]);
-
-  const fuse = useMemo(() => new Fuse(emojis, {
-    keys: ['name', 'shortname'],
-    findAllMatches: true,
-    includeMatches: true,
-  }), [emojis]);
+  const emojis = useSelector((state) => state.emojis);
+  const fuse = useEmojiFuse();
 
   const options = useMemo(() => {
     let opts = fuse.search(currentText || '').slice(0, 5).map(({ item }) => item);

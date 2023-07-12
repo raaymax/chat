@@ -45,7 +45,10 @@ export const register = async (value) => {
   return ret.json();
 };
 
-export const logout = async () => {
+export const logout = () => async (dispatch) => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('userId');
+  await dispatch({type: 'logout'});
   await fetch(SESSION_URL, {
     method: 'DELETE',
     credentials: 'include',
@@ -53,4 +56,5 @@ export const logout = async () => {
       'Content-Type': 'application/json',
     },
   });
+  window.location.reload();
 };

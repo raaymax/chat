@@ -108,6 +108,10 @@ export const InputContainer = styled.div`
       display: inline-block;
       vertical-align: bottom;
     }
+
+    .user { 
+      color: ${(props) => props.theme.mentionsColor};
+    }
   }
   .input:focus-visible {
     outline: none;

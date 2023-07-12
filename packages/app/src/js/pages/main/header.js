@@ -1,12 +1,12 @@
 import { h } from 'preact';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { Channel } from '../../components/channels';
-import { selectors, actions } from '../../state';
-import { loadPinnedMessages } from '../../services/pins';
+import { Channel } from '../../components/Channels/Channel';
 import { init } from '../../services/init';
 import { useStream } from '../../contexts/stream';
 import { BackToMain } from '../../components/BackToMain/BackToMain';
+import { useMessage } from '../../hooks';
+import { loadMessages } from '../../services/messages'
 
 const StyledHeader = styled.div`
   display: flex;
@@ -71,7 +71,7 @@ export const Header = ({ onclick }) => {
   const [stream, setStream] = useStream();
   const { channelId, parentId } = stream;
   const dispatch = useDispatch();
-  const message = useSelector(selectors.getMessage(parentId));
+  const message = useMessage(parentId);
 
   if (parentId) {
     return (
@@ -103,23 +103,24 @@ export const Header = ({ onclick }) => {
 
       <div class='toolbar'>
         <div class='tool' onclick={() => {
-          dispatch(init(true));
+          dispatch(init());
         }}>
           <i class="fa-solid fa-arrows-rotate" />
         </div>
-        <div class='tool' onclick={() => dispatch(actions.setView('search'))}>
+        <div class='tool' onclick={() => dispatch.actions.view.set('search')}>
           <i class="fa-solid fa-magnifying-glass" />
         </div>
         <div class='tool' onclick={() => {
-          dispatch(loadPinnedMessages(channelId));
-          dispatch(actions.setView('pins'));
+          dispatch.methods.pins.load(channelId);
+          dispatch.actions.view.set('pins');
         }}>
           <i class="fa-solid fa-thumbtack" />
         </div>
         {stream.type === 'archive' && (
           <div class='tool' onclick={() => {
-            dispatch(actions.messagesClear({ stream }));
+            dispatch.actions.messages.clear({ stream });
             setStream({ ...stream, type: 'live' });
+            dispatch(loadMessages({ ...stream, type: 'live' }))
           }}>
             <i class="fa-solid fa-down-long" />
           </div>

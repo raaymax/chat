@@ -2,7 +2,6 @@ import { h } from 'preact';
 import { useState, useCallback } from 'preact/hooks';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { createChannel } from '../../services/channels';
 
 const NewChannelContainer = styled.div`
   width: 100%;
@@ -51,10 +50,10 @@ export const ChannelCreate = () => {
   const [name, setName] = useState('');
   const dispatch = useDispatch();
   const submit = useCallback((e) => {
-    dispatch(createChannel(name));
-    setName('');
     e.preventDefault();
     e.stopPropagation();
+    dispatch.methods.channels.create({name});
+    setName('');
   }, [dispatch, name, setName]);
   return (
     <NewChannelContainer>

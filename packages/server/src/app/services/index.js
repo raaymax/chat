@@ -4,4 +4,5 @@ module.exports = {
   channel: require('./channel'),
   link: require('./link'),
   notifications: require('./notifications'),
+  user: require('./user'),
 };

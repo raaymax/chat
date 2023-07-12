@@ -4,8 +4,8 @@ import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
 import '../setup';
 import { client } from '../core';
-import store from '../state';
-import { Workspace } from './workspace';
+import { store } from '../store';
+import { Workspace } from './workspace/workspace';
 import { useUser } from '../contexts/user';
 
 const theme = {
@@ -16,6 +16,11 @@ const theme = {
   dateBarBackgroundColor: '#2a2d31',
   fontColor: '#d9d9d9',
   frontHoverColor: 'var(--primary_active_mask)',
+
+  userActive: '#3c7e3c',
+  userConnected: '#8f8f45',
+  userSystem: '#d9d9d9',
+  userDisconnected: '#4f4f4f',
 
   actionButtonBackgroundColor: '#2E1A4E',
   actionButtonHoverBackgroundColor: '#3D2760',
@@ -28,6 +33,7 @@ const theme = {
   labelColor: 'gray',
 
   linkColor: '#4a90e2',
+  mentionsColor: '#4ac0e2',
 };
 
 const Secured = () => {

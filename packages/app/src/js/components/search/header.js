@@ -2,8 +2,7 @@ import { h } from 'preact';
 import { useEffect, useCallback, useRef } from 'preact/hooks';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { actions } from '../../state';
-import { search } from '../../services/search';
+import {useStream} from '../../contexts/stream';
 
 const StyledHeader = styled.div`
   display: flex;
@@ -65,11 +64,12 @@ const StyledHeader = styled.div`
 export const Header = ({}) => {
   const input = useRef(null);
   const dispatch = useDispatch();
+  const [stream] = useStream();
 
   const submit = useCallback(async () => {
     const text = input.current.value;
-    dispatch(search(text));
-  }, [dispatch]);
+    dispatch.methods.search.find(stream.channelId, text);
+  }, [dispatch, stream]);
 
   const onSubmit = useCallback(async (e) => {
     if (e.key === 'Enter' && e.shiftKey === false) {
@@ -94,7 +94,7 @@ export const Header = ({}) => {
         <div class='tool' onclick={() => submit()}>
           <i class="fa-solid fa-paper-plane" />
         </div>
-        <div class='tool' onclick={() => dispatch(actions.setView('search'))}>
+        <div class='tool' onclick={() => dispatch.actions.view.set('search')}>
           <i class="fa-solid fa-xmark" />
         </div>
       </div>
