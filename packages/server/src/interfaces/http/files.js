@@ -45,9 +45,13 @@ async function uploadFile(req, res) {
   }
 }
 
+const uuidExp = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
 async function downloadFile(req, res) {
   try {
     const { fileId } = req.params;
+    if (!uuidExp.test(fileId)) {
+      return res.status(400).send({ errorCode: 'INVALID_FILE_ID' });
+    }
     const options = req.query.w || req.query.h ? {
       width: parseInt(req.query?.w, 10),
       height: parseInt(req.query?.h, 10),

@@ -7,6 +7,8 @@ import {
   Config, File, FileUploadOpts, Storage,
 } from '../types';
 
+const uuidExp = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
+
 class FsStorage implements Storage {
   constructor(private config: Config) {
   }
@@ -18,6 +20,11 @@ class FsStorage implements Storage {
   async upload(stream: NodeJS.ReadableStream, file?: FileUploadOpts): Promise<File> {
     return new Promise((resolve, reject) => {
       const fileId = file?.id || uuid();
+      if (!uuidExp.test(fileId)) {
+        reject(new Error('Invalid file id'));
+        return;
+      }
+
       if (!existsSync(this.config.storage.directory)) {
         mkdirSync(this.config.storage.directory);
       }
