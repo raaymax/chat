@@ -50,7 +50,7 @@ async function downloadFile(req, res) {
   try {
     const { fileId } = req.params;
     if (!uuidExp.test(fileId)) {
-      return res.status(400).send({ errorCode: 'INVALID_FILE_ID' });
+      return res.status(404).send({ errorCode: 'RESOURCE_NOT_FOUND' });
     }
     const options = req.query.w || req.query.h ? {
       width: parseInt(req.query?.w, 10),
