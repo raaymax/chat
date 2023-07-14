@@ -29,18 +29,23 @@ async function createUser(req, res) {
 }
 
 async function getSession(req, res) {
+  console.log('getSession', JSON.stringify(req.session));
   if (req.session.userId) {
+    console.log('getSession', { status: 'ok', user: req.session.userId });
     res.status(200).send({ status: 'ok', user: req.session.userId });
   } else {
     const token = req.headers?.authorization?.split(' ')[1];
+    console.log('getSession token', token);
     if (token) {
       const record = await db.session.getByToken(token);
       if (record?.session?.userId) {
         req.session.lastIp = req.ip;
         req.session.lastUserAgent = req.headers['user-agent'];
+        console.log('getSession token', { status: 'ok', user: record.session.userId });
         return res.status(200).send({ status: 'ok', user: record.session.userId });
       }
     }
+    console.log('getSession', { status: 'no-session' });
     res.status(200).send({ status: 'no-session' });
   }
 }
@@ -51,18 +56,24 @@ async function deleteSession(req, res) {
 }
 
 async function createSession(req, res) {
+  console.log('createSession', JSON.stringify(req.body));
   try {
     const user = await userService.login(req.body.login, req.body.password);
+    console.log('createSession', user);
     if (user) {
       req.session.userId = user.id;
       req.session.token = crypto.randomBytes(64).toString('hex');
       req.session.ip = req.ip;
       req.session.userAgent = req.headers['user-agent'];
+      console.log('createSession', { status: 'ok', user, token: req.session.token });
       return res.status(200).send({ status: 'ok', user, token: req.session.token });
     }
+    
+    console.log('createSession', { status: 'nok', message: 'Invalid credentials' });
     res.status(401).send({ status: 'nok', message: 'Invalid credentials' });
   } catch (err) {
     // eslint-disable-next-line no-console
+    console.log('createSession internal error');
     console.error(err);
     res.status(500).send({ errorCode: 'INTERNAL_SERVER_ERROR' });
   }
