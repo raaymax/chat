@@ -38,6 +38,8 @@ async function getSession(req, res) {
     console.log('getSession token', token);
     if (token) {
       const record = await db.session.getByToken(token);
+      console.log('getSession', record);
+      
       if (record?.session?.userId) {
         req.session.lastIp = req.ip;
         req.session.lastUserAgent = req.headers['user-agent'];
