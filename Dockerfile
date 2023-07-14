@@ -2,6 +2,7 @@ FROM node:17-alpine AS appbuild
 RUN npm i -g pnpm
 RUN npm i -g turbo 
 RUN apk -U upgrade
+RUN apk add python3
 ENV ENVIRONMENT=production
 WORKDIR /usr/src/app
 COPY package*.json ./
@@ -23,6 +24,7 @@ RUN turbo build
 FROM node:17-alpine
 RUN npm i -g pnpm
 RUN apk -U upgrade
+RUN apk add python3
 ENV NODE_ENV=production
 WORKDIR /usr/src/app
 COPY package*.json ./

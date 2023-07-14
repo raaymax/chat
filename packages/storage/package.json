@@ -15,6 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "typescript": "4.9.5",
     "@google-cloud/storage": "5.19.0",
     "@quack/config": "workspace:*",
     "concat-stream": "2.0.0",
@@ -24,7 +25,6 @@
     "zod": "3.21.4"
   },
   "devDependencies": {
-    "typescript": "4.9.5",
     "@types/node": "18.14.0",
     "@typescript-eslint/eslint-plugin": "5.53.0",
     "@typescript-eslint/parser": "5.53.0",
