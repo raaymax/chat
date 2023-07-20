@@ -10,8 +10,8 @@ export const removeUndefined = <T extends Record<string, unknown>>(arg: T): With
 export const makeObjectId = (id: Id | undefined | null): ObjectId | undefined | null => (
   id ? new ObjectId(id) : (typeof id === 'undefined' ? undefined : null)
 );
-export const makeId = (id: ObjectId | undefined): Id | undefined => (
-  id ? id.toHexString() as Id : undefined
+export const makeId = (id: ObjectId | Id | undefined): Id | undefined => (
+  id ? (id instanceof ObjectId ? id.toHexString() as Id : id) : undefined
 );
 export const makeDate = (date: Date | undefined): Date | undefined => (
   date ? (date instanceof Date ? date : new Date(date)) : undefined

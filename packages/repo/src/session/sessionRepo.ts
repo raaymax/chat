@@ -5,7 +5,7 @@ import { connect } from '../db';
 
 export class SessionRepo extends Repo<SessionQuery, Session, MongoSession> {
   constructor() {
-    super('sessions', new SessionSerializer());
+    super('httpSessions', new SessionSerializer());
   }
 
   async getByToken(token: string) {

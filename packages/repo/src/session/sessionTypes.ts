@@ -1,6 +1,5 @@
 import { z } from 'zod';
-import { ObjectId } from 'mongodb';
-import { Id, ReplaceType, ReplaceId } from '../types';
+import { Id, ReplaceId } from '../types';
 
 export const Session = z.object({
   id: Id,
@@ -26,4 +25,4 @@ export const SessionQuery = Session.extend({});
 
 export type SessionQuery = z.infer<typeof SessionQuery>;
 
-export type MongoSession = ReplaceType<ReplaceId<Session>, Id, ObjectId>;
+export type MongoSession = ReplaceId<Session>;

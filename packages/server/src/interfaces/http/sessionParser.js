@@ -11,6 +11,7 @@ module.exports = expressSession({
     collection: 'httpSessions',
   }),
   cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 30 * 6,
     secure: config.production,
     sameSite: config.production ? 'None' : 'Lax',
   },
