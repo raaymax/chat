@@ -14,7 +14,7 @@ export const initNotifications = async (config) => {
         userVisibleOnly: true,
         applicationServerKey: config.vapidPublicKey,
       }))
-      .then(async (subscription) => client.req({
+      .then((subscription) => client.req({
         type: 'push:setup',
         ...subscription.toJSON(),
       }))

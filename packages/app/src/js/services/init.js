@@ -10,6 +10,7 @@ const initApp = () => async (dispatch, getState) => {
   actions.info.reset();
   const config = await methods.config.load();
   actions.stream.setMain(config.mainChannelId);
+  console.log(config);
   await initNotifications(config);
   methods.users.load();
   methods.channels.load();
