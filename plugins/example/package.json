@@ -19,7 +19,7 @@
     "mongodb": "4.5.0",
     "preact": "10.7.0",
     "typescript": "4.9.5",
-    "webpack": "5.75.0",
+    "webpack": "5.76.0",
     "zod": "3.21.4"
   },
   "devDependencies": {
