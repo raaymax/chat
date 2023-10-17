@@ -8,7 +8,7 @@ import { store, actions, methods } from './store';
 client
   .on('share', ({ data }) => store.dispatch(sendShareMessage(data)))
   .on('user', (msg) => actions.users.add(msg))
-  .on('emoji', (msg) => actions.emoji.add(msg))
+  .on('emoji', (msg) => actions.emojis.add(msg))
   .on('badge', (msg) => actions.progress.add(msg))
   .on('channel', (msg) => actions.channels.add(msg))
   .on('removeChannel', (msg) => actions.channel.remove(msg.channelId))
