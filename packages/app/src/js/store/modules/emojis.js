@@ -2,17 +2,18 @@ import {createModule} from '../tools';
 
 export default createModule({
   name: 'emojis',
-  initialState: [],
+  initialState: {ready: false, data: []},
   reducers: {
+    ready: (state) => ({...state, ready: true}),
     add: (state, action) => {
-      const newState = [...state];
+      const newState = {...state, data: [...state.data]};
       [action.payload].flat().forEach((emoji) => {
-        const idx = state.findIndex((e) => e.shortname === emoji.shortname);
+        const idx = state.data.findIndex((e) => e.shortname === emoji.shortname);
         if (idx !== -1) {
-          newState[idx] = { ...newState[idx], ...emoji };
+          newState.data[idx] = { ...newState.data[idx], ...emoji };
           return newState;
         }
-        newState.push(emoji);
+        newState.data.push(emoji);
       });
       return newState;
     },
@@ -25,6 +26,7 @@ export default createModule({
       ]);
       actions.emojis.add(baseEmojis.default);
       actions.emojis.add(emojis.map((e) => ({...e, category: 'c'})));
+      actions.emojis.ready({});
     },
 
     find: (shortname) => async ({actions}, getState, {client}) => {
@@ -32,7 +34,7 @@ export default createModule({
         const { data: [emoji] } = await client.req({ type: 'emoji:find', shortname });
         if (emoji) actions.emojis.add(emoji);
       } catch (err) {
-        actions.emojis.add({ empty: true, shortname });
+        // ignore
       }
     },
   },

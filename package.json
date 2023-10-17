@@ -8,8 +8,9 @@
     "packages/server"
   ],
   "engines": {
-    "node": "17.x.x",
-    "npm": "8.x.x"
+    "node": "20.x.x",
+    "npm": "9.x.x",
+    "pnpm": "8.x.x"
   },
   "scripts": {
     "migrate": "migrate-mongo up",

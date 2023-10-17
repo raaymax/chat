@@ -86,6 +86,7 @@ export const UserSelector = () => {
 
   useEffect(() => {
     const { current } = input;
+    if (!current) return;
     current.addEventListener('keydown', ctrl);
     return () => {
       current.removeEventListener('keydown', ctrl);
