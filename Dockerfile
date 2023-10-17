@@ -1,4 +1,4 @@
-FROM node:17-alpine AS appbuild
+FROM node:20-alpine AS appbuild
 RUN npm i -g pnpm
 RUN npm i -g turbo 
 RUN apk -U upgrade
@@ -20,7 +20,7 @@ COPY chat.config.js ./
 COPY turbo.json ./
 RUN turbo build
 
-FROM node:17-alpine
+FROM node:20-alpine
 RUN npm i -g pnpm
 RUN apk -U upgrade
 ENV NODE_ENV=production

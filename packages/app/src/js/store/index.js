@@ -13,8 +13,10 @@ const middleware = ({ dispatch, getState }) => (next) => async (action) => {
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
+      return;
     }
   }
+
   return next(action);
 }
 
