@@ -44,13 +44,13 @@ async function uploadFile(req, res) {
     res.status(500).send({ errorCode: 'INTERNAL_SERVER_ERROR' });
   }
 }
+const validateFileId = (fileId) => /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi.test(fileId);
 
-const uuidExp = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
 async function downloadFile(req, res) {
   try {
     const { fileId } = req.params;
-    if (!uuidExp.test(fileId)) {
-      return res.status(404).send({ errorCode: 'RESOURCE_NOT_FOUND' });
+    if (!validateFileId(fileId)) {
+      return res.status(404).send({ errorCode: 'RESOURCE_NOT_FOUND', message: 'Invalid file id' });
     }
     const options = req.query.w || req.query.h ? {
       width: parseInt(req.query?.w, 10),
