@@ -24,7 +24,6 @@ export const Workspace = () => {
   const dispatch = useDispatch();
   const stream = useStream('main');
   const sideStream = useStream('side');
-
   return (
     <Container className={sideStream ? ['side-stream'] : ['main-stream']}>
       {view === 'sidebar' && <SideMenu>
