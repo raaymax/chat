@@ -17,6 +17,7 @@
   "dependencies": {
     "@google-cloud/storage": "5.19.0",
     "@quack/config": "workspace:*",
+    "@types/node": "18.14.0",
     "concat-stream": "2.0.0",
     "mongodb": "4.5.0",
     "sharp": "0.32.2",
@@ -25,7 +26,6 @@
     "zod": "3.21.4"
   },
   "devDependencies": {
-    "@types/node": "18.14.0",
     "@typescript-eslint/eslint-plugin": "5.53.0",
     "@typescript-eslint/parser": "5.53.0",
     "eslint": "8.34.0"
