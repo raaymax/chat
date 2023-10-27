@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.0.1](https://github.com/codecat-io/chat/compare/quack-v2.0.0...quack-v2.0.1) (2023-10-27)
+
+
+### Bug Fixes
+
+* CI/CD ([ba8d73d](https://github.com/codecat-io/chat/commit/ba8d73d8a1bee205998cc3bc235d2fd4e33e10a4))
+* emojis display only by shortname ([7913156](https://github.com/codecat-io/chat/commit/7913156fd60758751fe06078390867255a3608a7))
+* github actions ([55dd0c0](https://github.com/codecat-io/chat/commit/55dd0c06dad96baeca9483f4cfcbeac3179a5926))
+* **images:** fileId validation not working ([dc82c25](https://github.com/codecat-io/chat/commit/dc82c256887ef0324c2da3e1aea736a49f453a70))
+* linter error ([ed55b4e](https://github.com/codecat-io/chat/commit/ed55b4ef86beba4cf7059d7f0fe31bc673662dcf))
+* longer message timeout for slower networks ([f616b14](https://github.com/codecat-io/chat/commit/f616b14ff873e475d06b2c193b8e994a22e1556e))
+* message resend information does not disapear ([a757632](https://github.com/codecat-io/chat/commit/a75763239733bcccd1a813282c0b662d33ab9f07))
+
 ## [2.0.0](https://github.com/codecat-io/chat/compare/quack-v1.9.6...quack-v2.0.0) (2023-07-12)
 
 
