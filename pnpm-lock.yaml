@@ -331,6 +331,9 @@ importers:
       '@quack/config':
         specifier: workspace:*
         version: link:../../config
+      '@types/node':
+        specifier: 18.14.0
+        version: 18.14.0
       concat-stream:
         specifier: 2.0.0
         version: 2.0.0
@@ -350,9 +353,6 @@ importers:
         specifier: 3.21.4
         version: 3.21.4
     devDependencies:
-      '@types/node':
-        specifier: 18.14.0
-        version: 18.14.0
       '@typescript-eslint/eslint-plugin':
         specifier: 5.53.0
         version: 5.53.0(@typescript-eslint/parser@5.53.0)(eslint@8.34.0)(typescript@4.9.5)
