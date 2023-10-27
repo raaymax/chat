@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.3](https://github.com/codecat-io/chat/compare/quack-v2.0.2...quack-v2.0.3) (2023-10-27)
+
+
+### Bug Fixes
+
+* missing lock file ([9606748](https://github.com/codecat-io/chat/commit/96067481e27ce5fabfa5b4396268f2a947acf9a3))
+* missing types ([34fed1f](https://github.com/codecat-io/chat/commit/34fed1f011c14a690220cc144a0764241f598476))
+
 ## [2.0.2](https://github.com/codecat-io/chat/compare/quack-v2.0.1...quack-v2.0.2) (2023-10-27)
 
 
