@@ -2,9 +2,9 @@
   <img src="quack.png" title="hover text">
 </p>
 
-[![Tests](https://github.com/codecat-io/chat/actions/workflows/release.yml/badge.svg)](https://github.com/codecat-io/chat/actions/workflows/release.yml)
-[![Release](https://shields.io/github/v/release/codecat-io/chat?display_name=tag)](https://shields.io/github/v/release/codecat-io/chat?display_name=tag)
-[![CodeFactor](https://img.shields.io/codefactor/grade/github/codecat-io/chat)](https://www.codefactor.io/repository/github/codecat-io/chat)
+[![Tests](https://github.com/raaymax/chat/actions/workflows/release.yml/badge.svg)](https://github.com/raaymax/chat/actions/workflows/release.yml)
+[![Release](https://shields.io/github/v/release/raaymax/chat?display_name=tag)](https://shields.io/github/v/release/raaymax/chat?display_name=tag)
+[![CodeFactor](https://img.shields.io/codefactor/grade/github/raaymax/chat)](https://www.codefactor.io/repository/github/raaymax/chat)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
