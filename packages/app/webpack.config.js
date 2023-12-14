@@ -1,6 +1,6 @@
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { InjectManifest } = require('workbox-webpack-plugin');
+const { InjectManifest} = require('workbox-webpack-plugin');
 const webpack = require('webpack');
 const config = require('@quack/config');
 const pack = require('../../package.json');

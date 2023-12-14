@@ -96,6 +96,7 @@ export const MessageList = (props) => {
       onScrollTop();
     }
   }, [detectDate, list, oldList, onScrollTop, onScrollBottom]);
+
   return (
     <ListContainer ref={element} onScroll={scroll} >
       <div class='space'>&nbsp;</div>

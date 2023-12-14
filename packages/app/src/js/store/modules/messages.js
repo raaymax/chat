@@ -25,6 +25,7 @@ export default createModule({
     },
 
     add: (state, action) => {
+      action.payload.info = action.payload.info || null;
       const newState = {...state, data: [...state.data] };
       [action.payload].flat().forEach((msg) => {
         if (msg.createdAt) {

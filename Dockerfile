@@ -1,7 +1,8 @@
-FROM node:17-alpine AS appbuild
+FROM node:20-alpine3.18 AS appbuild
 RUN npm i -g pnpm
 RUN npm i -g turbo 
 RUN apk -U upgrade
+run apk add vips-cpp build-base vips vips-dev
 ENV ENVIRONMENT=production
 WORKDIR /usr/src/app
 COPY package*.json ./
@@ -20,9 +21,10 @@ COPY chat.config.js ./
 COPY turbo.json ./
 RUN turbo build
 
-FROM node:17-alpine
+FROM node:20-alpine3.18
 RUN npm i -g pnpm
 RUN apk -U upgrade
+run apk add vips-cpp build-base vips vips-dev
 ENV NODE_ENV=production
 WORKDIR /usr/src/app
 COPY package*.json ./

@@ -82,16 +82,6 @@ async function handleNotificationClick(event) {
 }
 
 async function handleNotification(title, options, data) {
-  const prev = [];
-  const notifs = await self.registration.getNotifications();
-  for (const notif of notifs) {
-    if (notif.title === title) {
-      notif.close();
-      prev.push(notif.body);
-    }
-  }
-  options.body = (`${prev.join(';\n')};\n${options.body}`)
-    .split(';\n').slice(-3).reverse().join(';\n');
   await self.registration.showNotification(title, options);
   const clientList = await getClientList();
   if (hasVisibleClients(clientList)) {

@@ -5,7 +5,6 @@ import { messageFormatter } from '../MessageList/formatter';
 import { MessageList } from '../MessageList/MessageList';
 import { uploadMany } from '../../services/file';
 import { Input } from '../Input/Input';
-import { Loader } from './elements/loader';
 import { reinit } from '../../services/init';
 import { ConversationContext } from '../../contexts/conversation';
 import { HoverContext } from '../../contexts/hover';
@@ -13,6 +12,7 @@ import { useStream, useMessages } from '../../contexts/stream';
 import { Container } from './elements/container';
 import { InitFailedButton } from './elements/initFailedButton';
 import { useProgress } from '../../hooks';
+import { LoadingIndicator } from './LoadingIndicator';
 
 const drop = (dispatch, streamId) => async (e) => {
   e.preventDefault();
@@ -31,7 +31,6 @@ export function Conversation() {
   const dispatch = useDispatch();
   const {messages, next, prev} = useMessages();
   const initFailed = useSelector((state) => state.system.initFailed);
-  const loading = useSelector((state) => state.messages.loading);
   const status = stream.type;
   const progress = useProgress(stream);
   const list = messages.map((m) => ({ ...m, progress: progress[m.id] }));
@@ -47,7 +46,6 @@ export function Conversation() {
       window.removeEventListener('focus', bumpProgress);
     };
   }, [bumpProgress]);
-
   return (
     <Container onDrop={drop(dispatch, stream.id)} onDragOver={dragOverHandler}>
       <ConversationContext>
@@ -71,7 +69,7 @@ export function Conversation() {
               bumpProgress();
             }}
           />
-          {loading && <Loader />}
+          <LoadingIndicator />
           <Input />
           {initFailed && <InitFailedButton onClick={() => dispatch(reinit())} />}
         </HoverContext>

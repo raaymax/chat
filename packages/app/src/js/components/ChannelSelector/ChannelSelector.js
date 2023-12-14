@@ -85,6 +85,7 @@ export const ChannelSelector = () => {
   }, [currentText, scope, create, remove, submit]);
 
   useEffect(() => {
+    if (!input.current) return;
     const { current } = input;
     current.addEventListener('keydown', ctrl);
     return () => {
