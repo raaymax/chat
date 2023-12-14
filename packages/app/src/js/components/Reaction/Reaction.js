@@ -11,6 +11,7 @@ const StyledReactions = styled.div`
     margin-right: 5px;
     border: 1px solid #565856;
     font-style: normal;
+    cursor: pointer;
   }
 `;
 
