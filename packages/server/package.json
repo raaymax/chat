@@ -31,7 +31,7 @@
     "helmet": "6.1.5",
     "joi": "17.6.0",
     "link-preview-js": "3.0.4",
-    "mongodb": "4.5.0",
+    "mongodb": "6.3.0",
     "multer": "1.4.5-lts.1",
     "nyc": "15.1.0",
     "openai": "2.0.5",

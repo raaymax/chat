@@ -13,7 +13,7 @@ module.exports = (connect) => {
       assert.equal(ret.type, 'response');
       assert.equal(ret.status, 'ok');
       const user = await (await db).collection('users')
-        .findOne({ _id: ObjectId(ws.userId) });
+        .findOne({ _id: new ObjectId(ws.userId) });
       assert.ok(user.notifications[token]);
       ws.close();
     });
