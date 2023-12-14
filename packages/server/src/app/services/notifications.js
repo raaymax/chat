@@ -17,6 +17,7 @@ const PushService = {
 
     const notif = {
       timeout: 10000,
+      TTL: 3600,
       urgency: 'high',
       topic: 'messages',
       data: {
