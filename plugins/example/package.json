@@ -16,7 +16,7 @@
     "@quack/repo": "workspace:*",
     "joi": "17.6.0",
     "js-plugin": "1.1.0",
-    "mongodb": "4.5.0",
+    "mongodb": "4.17.0",
     "preact": "10.7.0",
     "typescript": "4.9.5",
     "webpack": "5.75.0",
