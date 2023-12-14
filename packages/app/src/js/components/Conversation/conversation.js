@@ -26,9 +26,6 @@ function dragOverHandler(ev) {
   ev.stopPropagation();
 }
 
-let lastStream; let lastMessages; let lastInitFailed; let
-  lastProgress;
-
 export function Conversation() {
   const [stream, setStream] = useStream();
   const dispatch = useDispatch();
@@ -49,11 +46,6 @@ export function Conversation() {
       window.removeEventListener('focus', bumpProgress);
     };
   }, [bumpProgress]);
-  console.log('rerender', stream === lastStream, messages === lastMessages, initFailed === lastInitFailed, progress === lastProgress);
-  lastStream = stream;
-  lastMessages = messages;
-  lastInitFailed = initFailed;
-  lastProgress = progress;
   return (
     <Container onDrop={drop(dispatch, stream.id)} onDragOver={dragOverHandler}>
       <ConversationContext>
