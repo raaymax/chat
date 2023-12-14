@@ -47,7 +47,7 @@ export class Message {
         this.close();
         this.status = Message.STATUS_TIMEOUT;
         this.reject(this);
-      }, 4000);
+      }, 40000);
     });
   }
 

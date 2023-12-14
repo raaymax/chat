@@ -16,7 +16,7 @@ export const EmojiSelector = () => {
   const {
     input, currentText, scope, insert, scopeContainer, replace,
   } = useInput();
-  const emojis = useSelector((state) => state.emojis);
+  const emojis = useSelector((state) => state.emojis.data);
   const fuse = useEmojiFuse();
 
   const options = useMemo(() => {
