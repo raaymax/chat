@@ -20,7 +20,7 @@
     "preact": "10.7.0",
     "typescript": "4.9.5",
     "webpack": "5.75.0",
-    "zod": "3.21.4"
+    "zod": "3.22.3"
   },
   "devDependencies": {
     "@babel/core": "7.17.8",
