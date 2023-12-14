@@ -10,7 +10,7 @@ export default createModule({
     add: (state, action) => ([...state, ...[action.payload].flat()]),
     update: (state, action) => {
       const idx = findIdx(state, action.payload.id);
-      if (idx === -1) return;
+      if (idx === -1) return state;
       const newState = [...state];
       newState[idx] = { ...newState[idx], ...action.payload.file};
       return newState;
