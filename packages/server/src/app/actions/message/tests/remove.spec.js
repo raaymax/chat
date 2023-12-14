@@ -1,5 +1,5 @@
 const assert = require('assert');
-const api = require('./api');
+const api = require('../../tests/api');
 
 describe('message:remove', () => {
   let user;
@@ -44,7 +44,7 @@ describe('message:remove', () => {
   async function createMessage(ctx) {
     const { res, data: [msg] } = await api.sendMessage({
       clientId: `${Math.random()}`,
-      type: 'message:send',
+      type: 'message:create',
       channelId: channel.id,
       message: { line: { text: 'Hello' } },
       flat: 'Hello',

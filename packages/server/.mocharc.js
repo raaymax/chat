@@ -23,7 +23,7 @@ module.exports = {
   spec: ['src/app/**/*.spec.js'],
   timeout: '2s',
   ui: 'bdd',
-  watch: false,
-  'watch-files': ['**/*.js'],
-  'watch-ignore': ['./node_modules'],
+  //watch: false,
+  //'watch-files': ['**/*.js'],
+  //'watch-ignore': ['./node_modules'],
 };

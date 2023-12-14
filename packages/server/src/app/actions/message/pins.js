@@ -1,7 +1,7 @@
 const Joi = require('joi');
-const repo = require('../../infra/repositories');
-const { AccessDenied } = require('../common/errors');
-const channelHelper = require('../common/channel');
+const repo = require('../../../infra/repositories');
+const { AccessDenied } = require('../../common/errors');
+const channelHelper = require('../../common/channel');
 
 module.exports = {
   type: 'messages:pins',

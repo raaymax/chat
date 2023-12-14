@@ -1,11 +1,11 @@
 const Joi = require('joi');
-const repo = require('../../infra/repositories');
-const { AccessDenied } = require('../common/errors');
-const channelHelper = require('../common/channel');
-const services = require('../services');
+const repo = require('../../../infra/repositories');
+const { AccessDenied } = require('../../common/errors');
+const channelHelper = require('../../common/channel');
+const services = require('../../services');
 
 module.exports = {
-  type: 'message:send',
+  type: 'message:create',
   schema: {
     body: Joi.object({
       message: Joi.any().required(), // TODO: define message schema

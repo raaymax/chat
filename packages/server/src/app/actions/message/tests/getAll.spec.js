@@ -1,5 +1,5 @@
 const assert = require('assert');
-const api = require('./api');
+const api = require('../../tests/api');
 
 describe('messages:load', () => {
   let user;
@@ -13,14 +13,14 @@ describe('messages:load', () => {
   it('should return last added message', async () => {
     const clientId = `${Math.random() + 1}`;
     await api.sendMessage({
-      type: 'message:send',
+      type: 'message:create',
       channelId: channel.id,
       clientId,
       message: { line: { text: 'Hello' } },
       flat: 'Hello',
     }, { userId: user.id, push: () => {} });
     const { res, data: [msg] } = await api.sendMessage({
-      type: 'messages:load',
+      type: 'message:getAll',
       channelId: channel.id,
       limit: 1,
     }, { userId: user.id });
@@ -33,7 +33,7 @@ describe('messages:load', () => {
 
   it('should return list of messages', async () => {
     const { res, data: messages } = await api.sendMessage({
-      type: 'messages:load',
+      type: 'message:getAll',
       channelId: channel.id,
       limit: 5,
     }, { userId: user.id });
@@ -46,7 +46,7 @@ describe('messages:load', () => {
 
   it('should return messages before date', async () => {
     const { res, data: [msg, msg2, msg3] } = await api.sendMessage({
-      type: 'messages:load',
+      type: 'message:getAll',
       channelId: channel.id,
       before: '2022-01-03',
       limit: 5,
@@ -61,7 +61,7 @@ describe('messages:load', () => {
 
   it('should return messages after date', async () => {
     const { res, data: [msg, msg2] } = await api.sendMessage({
-      type: 'messages:load',
+      type: 'message:getAll',
       channelId: channel.id,
       after: '2022-01-02',
       limit: 2,
@@ -73,7 +73,7 @@ describe('messages:load', () => {
 
   it('should return error when channel is missing', async () => {
     const { res } = await api.sendMessage({
-      type: 'messages:load',
+      type: 'message:getAll',
     }, { userId: user.id });
     assert.equal(res.status, 'error');
     assert.equal(res.message, '"channelId" is required');
@@ -82,7 +82,7 @@ describe('messages:load', () => {
   it('should load messages from other channels', async () => {
     const testChannel = await api.repo.channel.get({ name: 'test' });
     const { res, data: messages } = await api.sendMessage({
-      type: 'messages:load',
+      type: 'message:getAll',
       channelId: testChannel.id,
     }, { userId: user.id });
     assert.equal(res.status, 'ok');
@@ -92,7 +92,7 @@ describe('messages:load', () => {
   it('should control access to private channels', async () => {
     const memberChannel = await api.repo.channel.get({ name: 'Member' });
     const { res, data: messages } = await api.sendMessage({
-      type: 'messages:load',
+      type: 'message:getAll',
       channelId: memberChannel.id,
     }, { userId: user.id });
     assert.equal(res.status, 'error');
