@@ -1,6 +1,6 @@
 const Joi = require('joi');
-const repo = require('../../infra/repositories');
-const { MissingId, NotOwnerOfMessage, MessageNotExist } = require('../common/errors');
+const repo = require('../../../infra/repositories');
+const { MissingId, NotOwnerOfMessage, MessageNotExist } = require('../../common/errors');
 
 module.exports = {
   type: 'message:remove',

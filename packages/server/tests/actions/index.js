@@ -4,7 +4,5 @@ module.exports = (connect) => {
     require('./setupFcm.spec')(connect);
     require('./typing.spec')(connect);
     require('./command.spec')(connect);
-    require('./pins.spec')(connect);
-    require('./search.spec')(connect);
   });
 };

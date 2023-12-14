@@ -8,17 +8,8 @@ const actions = [
   require('./pingSend'),
   require('./fcmSetup'),
 
-  require('./messageSend'),
-  require('./messageRemove'),
-  require('./messageUpdate'),
-  require('./messagesLoad'),
-  require('./messagesSearch'),
-  require('./messagesPins'),
-  require('./messagePin'),
-
-  require('./channelsLoad'),
-  require('./channelFind'),
-  require('./channelCreate'),
+  ...require('./message'),
+  ...require('./channel'),
 
   require('./typingSend'),
   require('./greetSend'),

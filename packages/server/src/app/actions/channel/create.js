@@ -1,6 +1,6 @@
 const Joi = require('joi');
-const repo = require('../../infra/repositories');
-const services = require('../services');
+const repo = require('../../../infra/repositories');
+const services = require('../../services');
 
 module.exports = {
   type: 'channel:create',

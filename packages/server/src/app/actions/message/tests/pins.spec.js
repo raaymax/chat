@@ -1,13 +1,13 @@
 const assert = require('assert');
-const seeds = require('./seeds');
-const { db } = require('../../src/infra/repositories');
+const api = require('../../tests/api');
+const seeds = require('../../../../../tests/actions/seeds');
 
 module.exports = (connect) => {
   describe('messages:pins', () => {
     let channel;
     before(async () => {
       await seeds.run();
-      channel = await (await db).collection('channels').findOne({ name: 'main' });
+      channel = await api.repo.channel.get({ name: 'main' });
     });
     it('should return last added messsage', async () => {
       const ws = await connect();

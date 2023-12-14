@@ -1,5 +1,5 @@
 const assert = require('assert');
-const api = require('./api');
+const api = require('../../tests/api');
 
 describe('channel:create', () => {
   const CHANNEL_NAME = 'some_name';

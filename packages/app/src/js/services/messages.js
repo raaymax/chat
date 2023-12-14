@@ -124,7 +124,7 @@ export const sendShareMessage = (data) => async (dispatch, getState) => {
   const { channelId, parentId } = getState().stream.main;
   const info = { links: [] };
   const msg = build({
-    type: 'message:send',
+    type: 'message:create',
     channelId,
     parentId,
     flat: `${data.title} ${data.text} ${data.url}`,
@@ -296,7 +296,7 @@ export const fromDom = (dom, state) => {
   }
   if (dom.childNodes.length === 0) {
     return build({
-      type: 'message:send',
+      type: 'message:create',
       message: [],
       flat: '',
     }, state);
@@ -308,7 +308,7 @@ export const fromDom = (dom, state) => {
   const tree = mapNodes(dom, info);
 
   return build({
-    type: 'message:send',
+    type: 'message:create',
     message: trim(tree),
     emojiOnly: isEmojiOnly(tree),
     parsingErrors: info.errors,

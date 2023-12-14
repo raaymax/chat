@@ -1,7 +1,7 @@
 const assert = require('assert');
-const api = require('./api');
+const api = require('../../tests/api');
 
-describe('message:send', () => {
+describe('message:update', () => {
   let user;
   let channel;
   let messageId;

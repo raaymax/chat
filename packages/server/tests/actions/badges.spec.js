@@ -8,7 +8,7 @@ module.exports = (connect) => {
       channel = await (await db).collection('channels').findOne({ name: 'main' });
     });
     const sendHello = (ws) => ws.send({
-      type: 'message:send',
+      type: 'message:create',
       clientId: `test:${Math.random()}`,
       channelId: channel._id.toHexString(),
       message: { line: { text: 'Hello' } },

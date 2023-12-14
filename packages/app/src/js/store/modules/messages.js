@@ -80,7 +80,7 @@ export default createModule({
       const req = await client.req({
         limit: 50,
         ...query,
-        type: 'messages:load',
+        type: 'message:getAll',
       });
       actions.messages.add(req.data);
       return req.data;
