@@ -20,6 +20,7 @@ export const upload = (streamId, file) => async (dispatch) => {
     fileName: file.name,
     contentType: file.type,
     progress: 0,
+    status: 'uploading',
   };
 
   dispatch.actions.files.add(local);
@@ -34,7 +35,7 @@ export const upload = (streamId, file) => async (dispatch) => {
       },
     });
     if (status === 'ok') {
-      dispatch.actions.files.update({ id: local.clientId, file: { id: fileId, progress: 100 } });
+      dispatch.actions.files.update({ id: local.clientId, file: { id: fileId, progress: 100, status: 'ok' } });
     } else {
       dispatch.actions.files.update({
         id: local.clientId,

@@ -2,7 +2,7 @@ import { h, createContext } from 'preact';
 import {
   useRef, useState, useCallback, useEffect, useContext,
 } from 'preact/hooks';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useStream } from './stream';
 import { sendFromDom } from '../services/messages';
 import { uploadMany } from '../services/file';
@@ -28,6 +28,8 @@ export const ConversationContext = ({ children }) => {
   const [currentText, setCurrentText] = useState('');
   const [scope, setScope] = useState('');
   const [scopeContainer, setScopeContainer] = useState(null);
+  const files = useSelector((state) => state.files);
+  const filesAreReady = !files || files.every((f) => f.status === 'ok');
 
   const input = useRef();
   const fileInput = useRef(null);
@@ -100,10 +102,12 @@ export const ConversationContext = ({ children }) => {
   }, [input, range]);
 
   const send = useCallback((e) => {
+    console.log('send', filesAreReady);
+    if (!filesAreReady) return;
     dispatch(sendFromDom(stream, input.current));
     input.current.innerHTML = '';
     focus(e);
-  }, [input, stream, focus, dispatch]);
+  }, [input, stream, focus, dispatch, filesAreReady]);
 
   const wrapMatching = useCallback((regex, wrapperTagName) => {
     const selection = window.getSelection();
