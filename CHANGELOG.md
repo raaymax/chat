@@ -1,5 +1,34 @@
 # Changelog
 
+## [2.0.3](https://github.com/codecat-io/chat/compare/quack-v2.0.2...quack-v2.0.3) (2023-10-27)
+
+
+### Bug Fixes
+
+* missing lock file ([9606748](https://github.com/codecat-io/chat/commit/96067481e27ce5fabfa5b4396268f2a947acf9a3))
+* missing types ([34fed1f](https://github.com/codecat-io/chat/commit/34fed1f011c14a690220cc144a0764241f598476))
+
+## [2.0.2](https://github.com/codecat-io/chat/compare/quack-v2.0.1...quack-v2.0.2) (2023-10-27)
+
+
+### Bug Fixes
+
+* adding missing lock file ([a85c1e9](https://github.com/codecat-io/chat/commit/a85c1e95614e898175d7bcf15302630d2013a73f))
+* build process ([251bb1d](https://github.com/codecat-io/chat/commit/251bb1dd7d2a2b8b7f4ad856f7aec53b99c0e8ff))
+
+## [2.0.1](https://github.com/codecat-io/chat/compare/quack-v2.0.0...quack-v2.0.1) (2023-10-27)
+
+
+### Bug Fixes
+
+* CI/CD ([ba8d73d](https://github.com/codecat-io/chat/commit/ba8d73d8a1bee205998cc3bc235d2fd4e33e10a4))
+* emojis display only by shortname ([7913156](https://github.com/codecat-io/chat/commit/7913156fd60758751fe06078390867255a3608a7))
+* github actions ([55dd0c0](https://github.com/codecat-io/chat/commit/55dd0c06dad96baeca9483f4cfcbeac3179a5926))
+* **images:** fileId validation not working ([dc82c25](https://github.com/codecat-io/chat/commit/dc82c256887ef0324c2da3e1aea736a49f453a70))
+* linter error ([ed55b4e](https://github.com/codecat-io/chat/commit/ed55b4ef86beba4cf7059d7f0fe31bc673662dcf))
+* longer message timeout for slower networks ([f616b14](https://github.com/codecat-io/chat/commit/f616b14ff873e475d06b2c193b8e994a22e1556e))
+* message resend information does not disapear ([a757632](https://github.com/codecat-io/chat/commit/a75763239733bcccd1a813282c0b662d33ab9f07))
+
 ## [2.0.0](https://github.com/codecat-io/chat/compare/quack-v1.9.6...quack-v2.0.0) (2023-07-12)
 
 

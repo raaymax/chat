@@ -28,11 +28,12 @@ jobs:
     - uses: pnpm/action-setup@v2
       with:
         version: 7
-    - name: Use Node.js 17.x
+    - name: Use Node.js 20.x
       uses: actions/setup-node@v3
       with:
-        node-version: 17.x
+        node-version: 20.x
         cache: 'pnpm'
+    - run: pnpm i -g pnpm
     - run: pnpm i
     - run: pnpm run lint:ci
     - run: pnpm exec migrate-mongo up

@@ -9,18 +9,7 @@ export const initNotifications = async (config) => {
       }
     });
 
-    navigator.serviceWorker.getRegistration('/')
-      .then((registration) => registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: config.vapidPublicKey,
-      }))
-      .then(async (subscription) => client.req({
-        type: 'push:setup',
-        ...subscription.toJSON(),
-      }))
-      .catch((err) => {
-        console.log('Service Worker registration failed: ', err);
-      });
+    await register(config);
     if ('Notification' in window) {
       document.querySelector('body').addEventListener('click', () => {
         Notification.requestPermission((status) => {
@@ -30,3 +19,22 @@ export const initNotifications = async (config) => {
     }
   }
 };
+
+const register = async (config, retry = false) => navigator.serviceWorker.getRegistration('/')
+  .then((registration) => registration.pushManager.subscribe({
+    userVisibleOnly: true,
+    applicationServerKey: config.vapidPublicKey,
+  }))
+  .then(async (subscription) => client.req({
+    type: 'push:setup',
+    ...subscription.toJSON(),
+  }))
+  .then(() => console.log('Notifications service worker registered successfully'))
+  .catch((err) => {
+    console.log('Service Worker registration failed: ', err);
+    if (retry) return;
+    navigator.serviceWorker.getRegistration('/')
+      .then((registration) => registration.pushManager.getSubscription())
+      .then((sub) => sub && sub.unsubscribe())
+      .then(() => register(config, true));
+  });
