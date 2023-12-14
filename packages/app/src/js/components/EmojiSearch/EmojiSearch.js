@@ -27,7 +27,7 @@ const CATEGORIES = {
 export const EmojiSearch = ({ onSelect }) => {
   const [name, setName] = useState('');
   const [results, setResults] = useState([]);
-  const emojis = useSelector((state) => state.emojis);
+  const emojis = useSelector((state) => state.emojis.data);
   const fuse = useEmojiFuse();
 
   useEffect(() => {
