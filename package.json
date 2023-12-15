@@ -35,7 +35,6 @@
     "express-session": "1.17.3",
     "migrate-mongo": "9.0.0",
     "mongodb": "6.3.0",
-    "ts-node": "10.9.1",
     "web-push": "3.6.1"
   },
   "devDependencies": {
