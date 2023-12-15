@@ -4,10 +4,6 @@ const appConfig = require('./config');
 const config = {
   mongodb: {
     url: appConfig.databaseUrl,
-    options: {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    },
   },
   migrationsDir: 'migrations',
   changelogCollectionName: 'changelog',

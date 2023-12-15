@@ -1,14 +1,6 @@
 const assert = require('assert');
-const WebSocket = require('ws');
 const crypto = require('crypto');
 const { EventEmitter } = require('events');
-const server = require('../src/server');
-
-const connect = (opts) => new Promise((resolve, reject) => {
-  const ws = new WebSocket(`ws://localhost:${server.address().port}/ws`, opts);
-  ws.addEventListener('open', () => resolve(ws));
-  ws.addEventListener('error', (err) => reject(err));
-});
 
 const request = (con) => {
   const bus = new EventEmitter();
@@ -114,7 +106,6 @@ const match = (matched, expected) => {
 };
 
 module.exports = {
-  connect,
   request,
   match,
   partial,
