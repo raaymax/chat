@@ -1,5 +1,27 @@
 # Changelog
 
+## [2.1.0](https://github.com/raaymax/chat/compare/quack-v2.0.3...quack-v2.1.0) (2023-12-15)
+
+
+### Features
+
+* ability to pecify trust proxy parameter for api ([a816840](https://github.com/raaymax/chat/commit/a816840d8f851af21cd66b5908a3fb9b66442e2b))
+* indication that file has uploaded successfully ([648b228](https://github.com/raaymax/chat/commit/648b228db5a69098d407f2b8c64a6dcfbdc2cc74))
+
+
+### Bug Fixes
+
+* emoji search modal not showing emojis ([d0794c4](https://github.com/raaymax/chat/commit/d0794c455414abd79eba2113e64a3e95ba7bc3c4))
+* linter errors + bump be packages ([9e48427](https://github.com/raaymax/chat/commit/9e484273dfcf8bd8975488549edd456ccd217a89))
+* migrations ([e5b31f2](https://github.com/raaymax/chat/commit/e5b31f27cfb99c72c91d05429335099ef1611cff))
+* notifications ([5baf817](https://github.com/raaymax/chat/commit/5baf8175475dd33df4fda9ec444c1f8c2fbfe9fc))
+* pinning messages not working ([3b9248a](https://github.com/raaymax/chat/commit/3b9248a0901550f38a730e2be38448907b2f8c02))
+* problems with uploading files ([dabdaa6](https://github.com/raaymax/chat/commit/dabdaa6c45410423a8a149e2b554099340de2b48))
+* sharp building failed in docker image ([6d57a37](https://github.com/raaymax/chat/commit/6d57a37cb390a490efc1a1c0af04e33becb1f768))
+* storage build ([c789514](https://github.com/raaymax/chat/commit/c7895146e123ffbca217ac7551d1604415944fbf))
+* uploaded file sometimes failing if too soon sent ([8e4ebe0](https://github.com/raaymax/chat/commit/8e4ebe0ae86922a9a47c16fcfe833e414cd144e7))
+* wrong cursor over added reaction ([6321da5](https://github.com/raaymax/chat/commit/6321da5f8ac2d547f679ab08c65e508b89551c9d))
+
 ## [2.0.3](https://github.com/codecat-io/chat/compare/quack-v2.0.2...quack-v2.0.3) (2023-10-27)
 
 
