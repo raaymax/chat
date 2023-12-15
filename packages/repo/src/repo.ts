@@ -4,6 +4,7 @@ import { connect } from './db';
 export default class Repo<Query, Model, MongoModel> {
   // eslint-disable-next-line no-useless-constructor
   constructor(protected tableName: string, protected serializer: Serializer<Query, Model, MongoModel>) {
+    // empty
   }
 
   async get(arg: Query): Promise<Model> {

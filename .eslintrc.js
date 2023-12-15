@@ -164,6 +164,8 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': ['warn', { varsIgnorePattern: '^_' }],
     'import/extensions': [1, 'never'],
     'import/prefer-default-export': 'off',
+    '@typescript-eslint/no-explicit-any': 'warn',
+    'no-empty-function': 'off',
     'class-methods-use-this': 'off',
     'no-await-in-loop': 'off',
     'consistent-return': 'off',

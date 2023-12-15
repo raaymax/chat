@@ -41,7 +41,7 @@
     "eslint-plugin-import": "2.25.4",
     "mini-css-extract-plugin": "2.6.0",
     "mocha": "10.2.0",
-    "nodemon": "2.0.15",
+    "nodemon": "3.0.2",
     "source-map-loader": "4.0.1",
     "webpack": "5.89.0",
     "webpack-bundle-analyzer": "4.10.1",

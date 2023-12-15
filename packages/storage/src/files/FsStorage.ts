@@ -11,6 +11,7 @@ const validateFileId = (fileId) => /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-
 
 class FsStorage implements Storage {
   constructor(private config: Config) {
+    // empty
   }
 
   async exists(fileId: string): Promise<boolean> {
