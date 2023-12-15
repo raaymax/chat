@@ -46,21 +46,29 @@ const Container = styled.div`
     }
 
     .progress {
-      background-color: green;
+      background-color: #216dad;
       position: absolute;
       left: 0;
       bottom: 0;
       height: 3px;
     }
+
+    .progress.done {
+      background-color: green;
+    }
   }
 `;
 
-export const Attachment = ({ data: { fileName, contentType, progress }, ondelete }) => (
+export const Attachment = ({
+  data: {
+    fileName, contentType, progress, status,
+  }, ondelete,
+}) => (
   <div class='attachment'>
     <div class='type'><i class='fa-solid fa-file' /></div>
     <div class='name'>{fileName} [{contentType}]</div>
     <div class='remove' onclick={ondelete}><i class='fa-solid fa-xmark' /></div>
-    <div class='progress' style={`width: ${progress}%;`} />
+    <div class={status === 'ok' ? 'progress done' : 'progress'} style={`width: ${progress}%;`} />
   </div>
 );
 
