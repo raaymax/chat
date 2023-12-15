@@ -28,6 +28,7 @@ File should export folowing object:
 type ChatConfig = {
   port?: number // default `PORT` env otherwise `8080`
   sessionSecret?: string // auto generated on first run to `secrets.json` but can be overwritten here
+  trustProxy?: bool | string | number // default `uniquelocal` ref: https://expressjs.com/en/guide/behind-proxies.html
   vapid?: { // auto generated on first run to `secrets.json` but can be overwritten here
     publicKey: string
     secretKey: string

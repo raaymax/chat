@@ -6,6 +6,8 @@ const init = require('./init');
 const defaults = {
   port: process.env.PORT || 8080,
   databaseUrl: process.env.DATABASE_URL,
+  // https://expressjs.com/en/guide/behind-proxies.html
+  trustProxy: 'uniquelocal',
   cors: [
     'https?://localhost(:[0-9]{,4})',
   ],
