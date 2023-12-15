@@ -14,7 +14,7 @@
     "@babel/preset-react": "7.23.3",
     "@babel/preset-typescript": "7.23.3",
     "@quack/repo": "workspace:*",
-    "joi": "17.6.0",
+    "joi": "17.11.0",
     "js-plugin": "1.1.0",
     "mongodb": "6.3.0",
     "preact": "10.19.3",

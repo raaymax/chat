@@ -31,11 +31,11 @@
     "@babel/plugin-syntax-class-properties": "7.12.13",
     "@babel/plugin-syntax-decorators": "7.23.3",
     "@babel/plugin-syntax-jsx": "7.23.3",
-    "bcrypt": "5.1.0",
+    "bcrypt": "5.1.1",
     "express-session": "1.17.3",
     "migrate-mongo": "11.0.0",
     "mongodb": "6.3.0",
-    "web-push": "3.6.1"
+    "web-push": "3.6.6"
   },
   "devDependencies": {
     "cz-conventional-changelog": "3.3.0",
