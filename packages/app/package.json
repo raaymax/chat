@@ -19,7 +19,7 @@
     "preact": "10.19.3",
     "react-redux": "9.0.4",
     "redux": "5.0.0",
-    "socket.io-client": "4.5.1",
+    "socket.io-client": "4.7.2",
     "styled-components": "6.1.1",
     "workbox-navigation-preload": "7.0.0",
     "workbox-precaching": "7.0.0",
