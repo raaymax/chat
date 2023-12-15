@@ -2,7 +2,7 @@
 import { Storage, Bucket } from '@google-cloud/storage';
 import { v4 as uuid } from 'uuid';
 import {
-  Config, File, FileUploadOpts, Storage as StorageInterface,
+  Config, File, FileOpts, FileUploadOpts, Storage as StorageInterface,
 } from '../types';
 
 class GcsStorage implements StorageInterface {
@@ -53,14 +53,17 @@ class GcsStorage implements StorageInterface {
     await this.bucket.file(fileId).delete();
   }
 
-  get = async (fileId: string) => {
+  get = async (fileId: string, options?: FileOpts): Promise<File> => {
     const file = this.bucket.file(fileId);
     const [metadata] = await file.getMetadata();
     return {
       fileId,
       contentType: metadata.contentType,
       contentDisposition: metadata.contentDisposition,
-      metadata: metadata.metadata,
+      metadata: metadata.metadata as {
+        filename: string,
+        [key: string]: any,
+      },
       getStream: () => file.createReadStream(),
     };
   };

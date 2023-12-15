@@ -2,11 +2,11 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const compression = require('compression');
+const config = require('@quack/config');
 const session = require('./session');
 const files = require('./files');
 const sessionParser = require('./sessionParser');
 const corsConfig = require('./cors');
-const config = require('@quack/config');
 
 const app = express();
 app.set('trust proxy', config.trustProxy);
