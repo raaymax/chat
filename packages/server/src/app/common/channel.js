@@ -5,7 +5,7 @@ module.exports = {
     const channel = await repo.channel.get({ id });
 
     if (channel?.private
-        && !channel.users.includes(userId)) {
+        && !channel.users?.includes(userId)) {
       return false;
     }
     return true;

@@ -1,12 +1,12 @@
 const assert = require('assert');
-const repo = require('../../src/infra/repositories');
+const api = require('../../actions/tests/api');
 
 module.exports = (connect) => {
   describe('/help', () => {
     it('should return help message', async () => {
       const ws = await connect();
-      const channel = await repo.channel.get({ name: 'main' });
-      const [help, ret] = await ws.send({
+      const channel = await api.repo.channel.get({ name: 'main' });
+      const { res, data: [help] } = await api.sendMessage({
         type: 'command:execute',
         name: 'help',
         args: [],
@@ -14,8 +14,8 @@ module.exports = (connect) => {
           channelId: channel.id,
         },
       });
-      assert.equal(ret.type, 'response');
-      assert.equal(ret.status, 'ok');
+      assert.equal(res.type, 'response');
+      assert.equal(res.status, 'ok');
       assert.equal(help.type, 'message');
       assert.equal(help.id.slice(0, 3), 'sys');
       assert.equal(help.priv, true);

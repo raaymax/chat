@@ -30,6 +30,10 @@ export default class Repo<Query, Model, MongoModel> {
       .then(this.serializer.deserializeInsertedId);
   }
 
+  async createMany(data: Model[]): Promise<Id[]> {
+    return Promise.all(data.map((d) => this.create(d)));
+  }
+
   async update(query: Query, data: Model, type = 'set') {
     const { db } = await connect();
     return db.collection(this.tableName)
@@ -52,6 +56,12 @@ export default class Repo<Query, Model, MongoModel> {
     const { db } = await connect();
     return db.collection(this.tableName)
       .deleteOne(this.serializer.serializeQuery(query));
+  }
+
+  async removeMany(query: Query) {
+    const { db } = await connect();
+    return db.collection(this.tableName)
+      .deleteMany(this.serializer.serializeQuery(query));
   }
 
   async count(query: Query) {

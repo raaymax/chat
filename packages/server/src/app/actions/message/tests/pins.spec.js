@@ -1,31 +1,59 @@
 const assert = require('assert');
 const api = require('../../tests/api');
-const seeds = require('../../../../../tests/actions/seeds');
+const seeds = require('./seeds');
 
-module.exports = (connect) => {
-  describe('messages:pins', () => {
-    let channel;
-    before(async () => {
-      await seeds.run();
-      channel = await api.repo.channel.get({ name: 'main' });
-    });
+describe('messages:pins', () => {
+  let channel;
+  let user;
+  before(async () => {
+    await seeds.run();
+    channel = await api.repo.channel.get({ name: 'main' });
+    user = await api.repo.user.get({ login: 'admin' });
+  });
   after(async () => {
     await api.repo.close();
   });
-    it('should return last added messsage', async () => {
-      const ws = await connect();
-      const [msg, ret] = await ws.send({
-        type: 'messages:pins',
-        channelId: channel._id.toHexString(),
-        limit: 1,
-      });
-      assert.equal(ret.type, 'response');
-      assert.equal(ret.status, 'ok');
-      assert.equal(ret.count, 1);
-      assert.equal(msg.flat, 'Hello pinned');
-      ws.close();
-    });
-    it('should return pins with before filter');
-    it('should return pins with after filter');
+
+  it('should return last added messsage', async () => {
+    const { res, data: [msg] } = await api.sendMessage({
+      type: 'messages:pins',
+      channelId: channel.id,
+      limit: 1,
+    }, { userId: user.id });
+    assert.equal(res.type, 'response');
+    assert.equal(res.status, 'ok');
+    assert.equal(res.count, 1);
+    assert.equal(msg.flat, 'Hello pinned');
   });
-};
+
+  it('should have no access to someones private channel', async () => {
+    const deniedChannel = await api.repo.channel.get({ name: 'denied' });
+    const { res } = await api.sendMessage({
+      type: 'messages:pins',
+      channelId: deniedChannel.id,
+      limit: 1,
+    }, { userId: user.id });
+    assert.equal(res.type, 'response');
+    assert.equal(res.status, 'error');
+    assert.equal(res.message, 'ACCESS_DENIED');
+  });
+
+  it('should ', async () => {
+    const { res, data: [msg1, msg2] } = await api.sendMessage({
+      type: 'messages:pins',
+      channelId: channel.id,
+      limit: 2,
+    }, { userId: user.id });
+    assert.equal(res.type, 'response');
+    assert.equal(res.status, 'ok');
+    const { res: res2, data: [msg] } = await api.sendMessage({
+      type: 'messages:pins',
+      channelId: channel.id,
+      after: msg1.id,
+      limit: 1,
+    }, { userId: user.id });
+    assert.equal(res2.type, 'response');
+    assert.equal(res2.status, 'ok');
+    assert.equal(msg.id, msg2.id);
+  });
+});
