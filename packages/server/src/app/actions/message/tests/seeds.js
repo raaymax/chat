@@ -12,7 +12,7 @@ module.exports = {
     }
     const testChannel = await api.repo.channel.get({ name: 'test' });
     if (!testChannel) await api.repo.channel.create({ name: 'test', private: false });
-    const {db} = await api.repo.connect();
+    const { db } = await api.repo.connect();
     db.collection('messages').deleteMany({});
     await api.repo.badge.removeMany({});
     await api.repo.message.createMany([

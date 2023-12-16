@@ -7,9 +7,9 @@ module.exports = (connect) => {
     before(async () => {
       channel = await api.repo.channel.get({ name: 'main' });
     });
-  after(async () => {
-    await api.repo.close();
-  });
+    after(async () => {
+      await api.repo.close();
+    });
     it('should search for messages', async () => {
       const ws = await connect();
       const newMsg = await createMessage(ws);
