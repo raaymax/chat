@@ -1,17 +1,18 @@
 process.env.DATABASE_URL = 'mongodb://chat:chat@localhost:27017/tests?authSource=admin';
 
-const { db } = require('../src/infra/repositories');
+const { connect } = require('../src/infra/repositories');
 
 exports.mochaHooks = {
   beforeAll: async () => {
-    const member = (await db).collection('users').findOne({ login: 'member' });
-    const admin = (await db).collection('users').findOne({ login: 'admin' });
-    const channel = await (await db).collection('channels').findOne({ name: 'main' });
-    const testChannel = await (await db).collection('channels').findOne({ name: 'test' });
-    if (!testChannel) await (await db).collection('channels').insertOne({ name: 'test', private: false });
-    await (await db).collection('messages').deleteMany({});
-    await (await db).collection('badges').deleteMany({});
-    await (await db).collection('messages').insertMany([
+    const { db } = await connect();
+    const member = db.collection('users').findOne({ login: 'member' });
+    const admin = db.collection('users').findOne({ login: 'admin' });
+    const channel = await db.collection('channels').findOne({ name: 'main' });
+    const testChannel = await db.collection('channels').findOne({ name: 'test' });
+    if (!testChannel) await db.collection('channels').insertOne({ name: 'test', private: false });
+    await db.collection('messages').deleteMany({});
+    await db.collection('badges').deleteMany({});
+    await db.collection('messages').insertMany([
       {
         clientId: 1 + (`${Math.random()}`).slice(2),
         message: { line: { text: 'Hello' } },

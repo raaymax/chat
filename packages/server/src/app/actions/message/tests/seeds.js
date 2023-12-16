@@ -12,7 +12,8 @@ module.exports = {
     }
     const testChannel = await api.repo.channel.get({ name: 'test' });
     if (!testChannel) await api.repo.channel.create({ name: 'test', private: false });
-    await api.repo.message.removeMany({ flat: 'Hello' });
+    const {db} = await api.repo.connect();
+    db.collection('messages').deleteMany({});
     await api.repo.badge.removeMany({});
     await api.repo.message.createMany([
       {
@@ -70,7 +71,7 @@ module.exports = {
         pinned: true,
         flat: 'Hello',
         userId: member.id,
-        createdAt: new Date('2022-01-05'),
+        createdAt: new Date('2022-01-06'),
       },
     ]);
   },

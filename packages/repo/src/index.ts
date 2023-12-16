@@ -20,7 +20,7 @@ export * from './channel/channelTypes';
 export const createRepositories = (databaseUrl) => {
   const client = init(databaseUrl);
   return {
-    db: connect().then(({ db }) => db),
+    connect,
     ObjectId,
     message: new MessageRepo(),
     channel: new ChannelRepo(),

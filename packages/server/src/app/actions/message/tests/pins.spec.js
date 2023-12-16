@@ -23,7 +23,7 @@ describe('messages:pins', () => {
     assert.equal(res.type, 'response');
     assert.equal(res.status, 'ok');
     assert.equal(res.count, 1);
-    assert.equal(msg.flat, 'Hello pinned');
+    assert.equal(msg.flat, 'Hello');
   });
 
   it('should have no access to someones private channel', async () => {
@@ -38,7 +38,7 @@ describe('messages:pins', () => {
     assert.equal(res.message, 'ACCESS_DENIED');
   });
 
-  it('should ', async () => {
+  it('should return continuation if after is specified', async () => {
     const { res, data: [msg1, msg2] } = await api.sendMessage({
       type: 'messages:pins',
       channelId: channel.id,
@@ -46,14 +46,14 @@ describe('messages:pins', () => {
     }, { userId: user.id });
     assert.equal(res.type, 'response');
     assert.equal(res.status, 'ok');
-    const { res: res2, data: [msg] } = await api.sendMessage({
+    const { res: res2, data: msgs } = await api.sendMessage({
       type: 'messages:pins',
       channelId: channel.id,
       after: msg1.id,
-      limit: 1,
+      limit: 10,
     }, { userId: user.id });
     assert.equal(res2.type, 'response');
     assert.equal(res2.status, 'ok');
-    assert.equal(msg.id, msg2.id);
+    assert.equal(msgs[0].id, msg2.id);
   });
 });

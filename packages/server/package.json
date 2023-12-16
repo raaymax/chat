@@ -8,6 +8,7 @@
     "dev": "nodemon src/index.js",
     "lint": "eslint --ext .ts,.js .",
     "test": "NODE_ENV='test' DATABASE_URL='mongodb://chat:chat@localhost:27017/tests?authSource=admin' mocha  --watch",
+    "testx": "NODE_ENV='test' DATABASE_URL='mongodb://chat:chat@localhost:27017/tests?authSource=admin' mocha",
     "test:ci": "NODE_ENV='test' mocha --exit"
   },
   "author": "",

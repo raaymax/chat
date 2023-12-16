@@ -7,6 +7,10 @@ module.exports = (connect) => {
     before(async () => {
       channel = await repo.channel.get({ name: 'main' });
     });
+
+    after(async () => {
+      await repo.close();
+    });
     it('should be received by other users', async () => {
       const member = await connect('member');
       const admin = await connect('admin');
