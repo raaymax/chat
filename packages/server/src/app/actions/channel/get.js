@@ -2,7 +2,7 @@ const Joi = require('joi');
 const repo = require('../../../infra/repositories');
 
 module.exports = {
-  type: 'channel:find',
+  type: 'channel:get',
   schema: {
     id: Joi.string().required(),
   },

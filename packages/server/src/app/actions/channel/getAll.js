@@ -2,7 +2,7 @@ const Joi = require('joi');
 const repo = require('../../../infra/repositories');
 
 module.exports = {
-  type: 'channels:load',
+  type: 'channel:get_all',
   schema: {
     body: Joi.any(),
   },

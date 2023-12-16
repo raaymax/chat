@@ -20,7 +20,7 @@ export default createModule({
   },
   methods: {
     load: () => async ({actions}, getState, {client}) => {
-      const res = await client.req({ type: 'channels:load' });
+      const res = await client.req({ type: 'channel:get_all' });
       actions.channels.add(res.data);
     },
     create: ({channelType, name, users}) => async ({actions}, getState, {client}) => {
@@ -30,7 +30,7 @@ export default createModule({
       actions.channels.add(res.data);
     },
     find: (id) => async ({actions}, getState, {client}) => {
-      const res = await client.req({ type: 'channel:find', id });
+      const res = await client.req({ type: 'channel:get', id });
       actions.channels.add(res.data);
     },
   },

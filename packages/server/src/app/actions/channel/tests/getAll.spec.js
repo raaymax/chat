@@ -1,7 +1,7 @@
 const assert = require('assert');
 const api = require('../../tests/api');
 
-describe('channels:load', () => {
+describe('channel:get_all', () => {
   let user;
 
   before(async () => {
@@ -9,7 +9,7 @@ describe('channels:load', () => {
   });
 
   it('should return list of channels', async () => {
-    const { res, data: channels } = await api.sendMessage({ type: 'channels:load' }, { userId: user.id });
+    const { res, data: channels } = await api.sendMessage({ type: 'channel:get_all' }, { userId: user.id });
     assert.equal(res.type, 'response');
     assert.equal(res.status, 'ok');
     const main = channels.find((c) => c.name === 'main');
