@@ -7,6 +7,9 @@ describe('users:load', () => {
   before(async () => {
     user = await api.repo.user.get({ name: 'Admin' });
   });
+  after(async () => {
+    await api.repo.close();
+  });
 
   it('should return list of users', async () => {
     const { res, data: users } = await api.sendMessage({

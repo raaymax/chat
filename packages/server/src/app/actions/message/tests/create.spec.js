@@ -11,6 +11,9 @@ describe('message:create', () => {
     user2 = await api.repo.user.get({ login: 'member' });
     channel = await api.repo.channel.get({ name: 'main' });
   });
+  after(async () => {
+    await api.repo.close();
+  });
 
   it('should update badge counter', async () => {
     await api.repo.badge.remove({ userId: user.id, channelId: channel.id });

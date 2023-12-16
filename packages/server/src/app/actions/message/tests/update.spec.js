@@ -13,6 +13,9 @@ describe('message:update', () => {
       message: { text: 'asd' }, channelId: channel.id, flat: 'asd', userId: user.id, clientId: `x${Math.random()}`,
     });
   });
+  after(async () => {
+    await api.repo.close();
+  });
 
   it('should update message', async () => {
     const { res, data: [msg] } = await api.sendMessage({

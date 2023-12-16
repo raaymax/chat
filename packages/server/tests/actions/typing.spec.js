@@ -1,11 +1,11 @@
 const assert = require('assert');
-const { db } = require('../../src/infra/repositories');
+const repo = require('../../src/infra/repositories');
 
 module.exports = (connect) => {
   describe('typing:send', () => {
     let channel;
     before(async () => {
-      channel = await (await db).collection('channels').findOne({ name: 'main' });
+      channel = await repo.channel.get({ name: 'main' });
     });
 
     it('should be received by other users', async () => {
@@ -15,13 +15,13 @@ module.exports = (connect) => {
         try {
           member.on('type:typing', (msg) => {
             assert.equal(msg.type, 'typing');
-            assert.equal(msg.channelId, channel._id.toHexString());
+            assert.equal(msg.channelId, channel.id);
             assert.equal(msg.userId, admin.userId);
             resolve();
           });
           admin.send({
             type: 'typing:send',
-            channelId: channel._id.toHexString(),
+            channelId: channel.id,
           });
         } catch (err) {
           reject(err);
@@ -50,7 +50,7 @@ module.exports = (connect) => {
       const ws = await connect();
       const [ret] = await ws.send({
         type: 'typing:send',
-        channelId: channel._id.toHexString(),
+        channelId: channel.id,
       });
       assert.equal(ret.type, 'response');
       assert.equal(ret.status, 'ok');

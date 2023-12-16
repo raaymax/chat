@@ -15,6 +15,9 @@ describe('message:remove', () => {
     context = { userId: user.id, push: () => {} };
     context2 = { userId: user2.id, push: () => {} };
   });
+  after(async () => {
+    await api.repo.close();
+  });
 
   it('should remove message', async () => {
     const toBeRemoved = await createMessage(context);

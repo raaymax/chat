@@ -31,7 +31,8 @@ const createBus = (fn) => new Promise(async (resolve, reject) => {
   }
 });
 
-const sendMessage = async (msg, opts = {}) => createBus((bus) => dispatch(msg, { bus, push: () => null, ...opts }));
+let seqId = 0;
+const sendMessage = async (msg, opts = {}) => createBus((bus) => dispatch({ ...msg, seqId: seqId++ }, { bus, push: () => null, ...opts }));
 
 module.exports = {
   sendMessage,

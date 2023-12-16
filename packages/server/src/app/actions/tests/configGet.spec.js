@@ -8,6 +8,9 @@ describe('config:get', () => {
   before(async () => {
     user = await api.repo.user.get({ name: 'Admin' });
   });
+  after(async () => {
+    await api.repo.close();
+  });
 
   it('should return app configuration', async () => {
     await api.repo.user.update({ id: user.id }, { mainChannelId: null });

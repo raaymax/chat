@@ -9,6 +9,9 @@ describe('messages:load', () => {
     user = await api.repo.user.get({ login: 'admin' });
     channel = await api.repo.channel.get({ name: 'main' });
   });
+  after(async () => {
+    await api.repo.close();
+  });
 
   it('should return last added message', async () => {
     const clientId = `${Math.random() + 1}`;

@@ -32,6 +32,7 @@
     "link-preview-js": "3.0.5",
     "mongodb": "6.3.0",
     "multer": "1.4.5-lts.1",
+    "nyc": "15.1.0",
     "socket.io": "4.7.2",
     "uuid": "9.0.1",
     "web-push": "3.6.6"

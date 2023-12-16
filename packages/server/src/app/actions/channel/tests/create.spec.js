@@ -11,6 +11,10 @@ describe('channel:create', () => {
     otherUser = await api.repo.user.get({ name: 'Member' });
   });
 
+  after(async () => {
+    await api.repo.close();
+  });
+
   beforeEach(async () => {
     await api.repo.channel.remove({ name: CHANNEL_NAME });
   });

@@ -9,6 +9,9 @@ module.exports = (connect) => {
       await seeds.run();
       channel = await api.repo.channel.get({ name: 'main' });
     });
+  after(async () => {
+    await api.repo.close();
+  });
     it('should return last added messsage', async () => {
       const ws = await connect();
       const [msg, ret] = await ws.send({

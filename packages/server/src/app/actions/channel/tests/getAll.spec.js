@@ -7,6 +7,9 @@ describe('channel:get_all', () => {
   before(async () => {
     user = await api.repo.user.get({ name: 'Admin' });
   });
+  after(async () => {
+    await api.repo.close();
+  });
 
   it('should return list of channels', async () => {
     const { res, data: channels } = await api.sendMessage({ type: 'channel:get_all' }, { userId: user.id });

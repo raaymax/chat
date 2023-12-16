@@ -1,5 +1,5 @@
 const assert = require('assert');
-const { db, ObjectId } = require('../../src/infra/repositories');
+const repo = require('../../src/infra/repositories');
 
 module.exports = (connect) => {
   describe('fcm:setup', () => {
@@ -12,8 +12,7 @@ module.exports = (connect) => {
       });
       assert.equal(ret.type, 'response');
       assert.equal(ret.status, 'ok');
-      const user = await (await db).collection('users')
-        .findOne({ _id: new ObjectId(ws.userId) });
+      const user = await repo.user.get({ id: ws.userId });
       assert.ok(user.notifications[token]);
       ws.close();
     });

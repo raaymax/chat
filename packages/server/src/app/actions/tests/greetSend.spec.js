@@ -7,6 +7,9 @@ describe('greet:send', () => {
   before(async () => {
     user = await api.repo.user.get({ name: 'Admin' });
   });
+  after(async () => {
+    await api.repo.close();
+  });
 
   it('should return welcome message', async () => {
     const { res, data: [msg] } = await api.sendMessage({ type: 'greet:send' }, { userId: user.id });

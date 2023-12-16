@@ -1,11 +1,11 @@
 const assert = require('assert');
-const { db } = require('../../src/infra/repositories');
+const repo = require('../../src/infra/repositories');
 
 module.exports = (connect) => {
   describe('message:create', () => {
     let channel;
     before(async () => {
-      channel = await (await db).collection('channels').findOne({ name: 'main' });
+      channel = await repo.channel.get({ name: 'main' });
     });
     it('should be received by other users', async () => {
       const member = await connect('member');
@@ -23,7 +23,7 @@ module.exports = (connect) => {
           admin.send({
             type: 'message:create',
             clientId: `test:${Math.random()}`,
-            channelId: channel._id.toHexString(),
+            channelId: channel.id,
             message: { line: { text: 'Hello' } },
             flat: 'Hello',
           });

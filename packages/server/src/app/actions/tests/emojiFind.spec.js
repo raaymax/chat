@@ -8,6 +8,9 @@ describe('emoji:find', () => {
     user = await api.repo.user.get({ name: 'Admin' });
     await api.repo.emoji.create({ shortname: 'test', fileId: 'test' });
   });
+  after(async () => {
+    await api.repo.close();
+  });
 
   it('should return empty emoji for unknown shortname', async () => {
     const { res, data: [emoji] } = await api.sendMessage({ type: 'emoji:find', shortname: 'party_parrot' }, { userId: user.id });

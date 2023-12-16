@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import { connect, init } from './db';
+import { connect, init, disconnect } from './db';
 import { MessageRepo } from './message/messageRepo';
 import { ChannelRepo } from './channel/channelRepo';
 import { UserRepo } from './user/userRepo';
@@ -29,6 +29,6 @@ export const createRepositories = (databaseUrl) => {
     badge: new BadgeRepo(),
     session: new SessionRepo(),
     invitation: new InvitationRepo(),
-    close: () => client.close(),
+    close: () => disconnect(),
   };
 };
