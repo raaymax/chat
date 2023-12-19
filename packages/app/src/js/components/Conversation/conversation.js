@@ -6,7 +6,6 @@ import { MessageList } from '../MessageList/MessageList';
 import { uploadMany } from '../../services/file';
 import { Input } from '../Input/Input';
 import { reinit } from '../../services/init';
-import { ConversationContext } from '../../contexts/conversation';
 import { HoverContext } from '../../contexts/hover';
 import { useStream, useMessages } from '../../contexts/stream';
 import { Container } from './elements/container';
@@ -48,32 +47,30 @@ export function Conversation() {
   }, [bumpProgress]);
   return (
     <Container onDrop={drop(dispatch, stream.id)} onDragOver={dragOverHandler}>
-      <ConversationContext>
-        <HoverContext>
-          <MessageList
-            formatter={messageFormatter}
-            list={list}
-            status={status}
-            selected={stream.selected}
-            onDateChange={(date) => setStream({ ...stream, date })}
-            onScrollTop={() => {
-              prev();
-              setStream({...stream, type: 'archive', selected: undefined});
-              bumpProgress();
-            }}
-            onScrollBottom={async () => {
-              const count = await next();
-              if (count === 1) {
-                setStream({...stream, type: 'live', selected: undefined});
-              }
-              bumpProgress();
-            }}
-          />
-          <LoadingIndicator />
-          <Input />
-          {initFailed && <InitFailedButton onClick={() => dispatch(reinit())} />}
-        </HoverContext>
-      </ConversationContext>
+      <HoverContext>
+        <MessageList
+          formatter={messageFormatter}
+          list={list}
+          status={status}
+          selected={stream.selected}
+          onDateChange={(date) => setStream({ ...stream, date })}
+          onScrollTop={() => {
+            prev();
+            setStream({...stream, type: 'archive', selected: undefined});
+            bumpProgress();
+          }}
+          onScrollBottom={async () => {
+            const count = await next();
+            if (count === 1) {
+              setStream({...stream, type: 'live', selected: undefined});
+            }
+            bumpProgress();
+          }}
+        />
+        <LoadingIndicator />
+        <Input />
+        {initFailed && <InitFailedButton onClick={() => dispatch(reinit())} />}
+      </HoverContext>
     </Container>
   );
 }

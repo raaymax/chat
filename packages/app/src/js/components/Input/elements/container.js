@@ -2,7 +2,11 @@ import styled from 'styled-components';
 
 export const InputContainer = styled.div`
   position: relative;
-  border-top: 1px solid #565856;
+  &.edit {
+  }
+  &.default {
+    border-top: 1px solid #565856;
+  }
   background-color: var(--secondary_background);
   display: flex;
   flex-direction: column;
@@ -64,15 +68,18 @@ export const InputContainer = styled.div`
 
   & .actionbar .action {
     flex: 0 0 30px;
-    width: 30px;
+    width: auto;
     height: 30px;
     padding: 0 6px;
-    border-radius: 100%;
+    border-radius: 15px;
     line-height: 30px;
     align-items: center;
     align-content: center;
     justify-content: center;
     text-align: center;
+    cursor: pointer;
+    line-break: normal;
+    hyphens: none;
     
     vertical-align: middle;
     margin-left: 10px;

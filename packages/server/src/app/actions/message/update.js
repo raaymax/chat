@@ -30,11 +30,11 @@ module.exports = {
     if (req.userId !== message.userId) throw NotOwnerOfMessage();
 
     await repo.message.update({ id }, body);
+    const resMessage = await repo.message.get({ id });
     await res.group(channel.users, {
       id,
       type: 'message',
-      ...message,
-      ...body,
+      ...resMessage,
     });
     return res.ok();
   },

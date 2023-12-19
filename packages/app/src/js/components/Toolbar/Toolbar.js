@@ -54,6 +54,7 @@ export const Toolbar = () => {
   return (
     <Container onClick={stop}>
       <i class="fa-solid fa-icons" onClick={() => setView('reactions')} />
+      <i class="fa-solid fa-pen-to-square" onClick={() => dispatch.actions.messages.toggleEdit(id)}/>
       {!pinned
         ? <i class="fa-solid fa-thumbtack" onClick={() => dispatch.methods.pins.pin(id, channelId)} />
         : <i class="fa-solid fa-thumbtack" style="color:Tomato" onClick={() => dispatch.methods.pins.unpin(id, channelId)} />}

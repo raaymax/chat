@@ -3,11 +3,11 @@ import { useSelector } from 'react-redux';
 import {
   useCallback, useEffect, useState, useMemo,
 } from 'preact/hooks';
-import { TextMenu } from '../TextMenu/TextMenu';
-import { useInput } from '../../contexts/conversation';
-import { getUrl } from '../../services/file';
-import { buildEmojiNode } from '../../utils';
-import { useEmojiFuse } from '../../hooks';
+import { TextMenu } from '../TextMenu';
+import { useInput } from '../InputContext';
+import { getUrl } from '../../../services/file';
+import { buildEmojiNode } from '../../../utils';
+import { useEmojiFuse } from '../../../hooks';
 
 const SCOPE = 'emoji';
 

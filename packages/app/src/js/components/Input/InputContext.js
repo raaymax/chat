@@ -3,9 +3,10 @@ import {
   useRef, useState, useCallback, useEffect, useContext,
 } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { useStream } from './stream';
-import { sendFromDom } from '../services/messages';
-import { uploadMany } from '../services/file';
+import { useStream } from '../../contexts/stream';
+import * as messageService from '../../services/messages';
+import { uploadMany } from '../../services/file';
+import { fromDom } from './serializer';
 
 const Context = createContext({
   input: {},
@@ -22,7 +23,8 @@ function findScope(element) {
   return null;
 }
 
-export const ConversationContext = ({ children }) => {
+export const InputContext = (args) => {
+  const { children, mode = 'default', messageId = null } = args;
   const dispatch = useDispatch();
   const [stream] = useStream();
   const [currentText, setCurrentText] = useState('');
@@ -91,6 +93,7 @@ export const ConversationContext = ({ children }) => {
   }, [updateRange]);
 
   const focus = useCallback((e) => {
+    if (!input.current) return;
     input.current.focus();
     if (!range) return;
     getSelection().removeAllRanges();
@@ -102,12 +105,27 @@ export const ConversationContext = ({ children }) => {
   }, [input, range]);
 
   const send = useCallback((e) => {
-    console.log('send', filesAreReady);
     if (!filesAreReady) return;
-    dispatch(sendFromDom(stream, input.current));
-    input.current.innerHTML = '';
-    focus(e);
-  }, [input, stream, focus, dispatch, filesAreReady]);
+    const payload = fromDom(input.current);
+    if (payload.type === 'message:create' && mode === 'edit') {
+      payload.type = 'message:update';
+      payload.id = messageId;
+    }
+    payload.attachments = [...files.filter((f) => f.streamId === stream.id)];
+    if (payload.flat.length === 0 && payload.attachments.length === 0) return;
+    payload.channelId = stream.channelId;
+    payload.parentId = stream.parentId;
+
+    dispatch.actions.files.clear(stream.id);
+    dispatch(messageService.send(stream, payload));
+    if (mode === 'default') {
+      input.current.innerHTML = '';
+      focus(e);
+    } else {
+      dispatch.actions.messages.editClose(messageId);
+    }
+  }, [input, stream, focus, dispatch,
+    filesAreReady, files, messageId, mode]);
 
   const wrapMatching = useCallback((regex, wrapperTagName) => {
     const selection = window.getSelection();
@@ -203,6 +221,8 @@ export const ConversationContext = ({ children }) => {
   }, [input, onInput, onKeyDown]);
 
   const api = {
+    mode,
+    messageId,
     input,
     fileInput,
     onPaste,

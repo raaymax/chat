@@ -1,6 +1,6 @@
 import { h } from 'preact';
 import { useState, useEffect, useCallback } from 'preact/hooks';
-import { useInput } from '../../contexts/conversation';
+import { useInput } from './InputContext';
 import { Menu } from './elements/menu';
 
 export const TextMenu = ({

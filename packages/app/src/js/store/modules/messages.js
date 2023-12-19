@@ -73,6 +73,27 @@ export default createModule({
       newState.data = newState.data.filter((m) => !toRemove.has(m.id));
       return newState;
     },
+
+    toggleEdit: (state, action) => {
+      const id = action.payload;
+      const newState = {...state, data: [...state.data] };
+      const idx = newState.data.findIndex((m) => (m.id && m.id === id));
+      if (idx !== -1) {
+        newState.data[idx] = { ...newState.data[idx], editing: !newState.data[idx].editing};
+        return newState;
+      }
+      return state;
+    },
+    editClose: (state, action) => {
+      const id = action.payload;
+      const newState = {...state, data: [...state.data] };
+      const idx = newState.data.findIndex((m) => (m.id && m.id === id));
+      if (idx !== -1) {
+        newState.data[idx] = { ...newState.data[idx], editing: false};
+        return newState;
+      }
+      return state;
+    },
   },
 
   methods: {

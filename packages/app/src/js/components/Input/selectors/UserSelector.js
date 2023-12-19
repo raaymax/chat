@@ -3,9 +3,9 @@ import {
   useCallback, useEffect, useState, useMemo,
 } from 'preact/hooks';
 import Fuse from 'fuse.js';
-import { TextMenu } from '../TextMenu/TextMenu';
-import { useInput } from '../../contexts/conversation';
-import { useUsers } from '../../hooks';
+import { TextMenu } from '../TextMenu';
+import { useInput } from '../InputContext';
+import { useUsers } from '../../../hooks';
 
 const SCOPE = 'user';
 

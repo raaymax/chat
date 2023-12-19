@@ -12,17 +12,23 @@ import { useStream } from '../../contexts/stream';
 import { buildMessageBody } from './messageBuilder';
 import { isToday } from './utils';
 import { LinkPreviewList } from './elements/LinkPreview';
+import {Input} from '../Input/Input';
 
 const MessageBase = ({ onClick, ...props } = {}) => {
   const msg = useMessageData();
   const {
     id, message, emojiOnly,
     createdAt, pinned,
+    editing,
     linkPreviews,
   } = msg;
   const { onEnter, toggleHovered, onLeave } = useHoverCtrl(id);
   const [{ selected }] = useStream();
   const user = useMessageUser();
+
+  if (id === '657cc1ce6e2946a508d11163') {
+    console.log(msg);
+  }
 
   return (
     <div
@@ -45,9 +51,12 @@ const MessageBase = ({ onClick, ...props } = {}) => {
           <span class='spacy time'>{formatTime(createdAt)}</span>
           {!isToday(createdAt) && <span class='spacy time'>{formatDateDetailed(createdAt)}</span>}
         </div>}
-        <div class={['content'].join(' ')}>
-          {buildMessageBody(message, { emojiOnly })}
-        </div>
+        {editing
+          ? <Input mode='edit' messageId={id}>{buildMessageBody(message, { emojiOnly })}</Input>
+          : <div class={['content'].join(' ')}>
+            {buildMessageBody(message, { emojiOnly })}
+          </div>
+        }
 
         <Files list={msg.attachments || []} />
         <LinkPreviewList links={linkPreviews} />

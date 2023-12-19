@@ -1,22 +1,26 @@
 import { h } from 'preact';
 import { useCallback, useState, useEffect } from 'preact/hooks';
-import { useInput } from '../../contexts/conversation';
-import { BaseInput } from '../BaseInput/BaseInput';
+import { useDispatch } from 'react-redux';
+import { InputContext, useInput } from './InputContext';
 import { Attachments } from '../Attachments/Attachments';
 import { StatusLine } from '../StatusLine/StatusLine';
 import { ActionButton } from './elements/actionButton';
 import { EmojiSearch } from '../EmojiSearch/EmojiSearch';
-import { ChannelSelector } from '../ChannelSelector/ChannelSelector';
-import { UserSelector } from '../UserSelector/UserSelector';
 import { buildEmojiNode } from '../../utils';
 import { getUrl } from '../../services/file';
-import { EmojiSelector } from '../EmojiSelector/EmojiSelector';
+import { EmojiSelector } from './selectors/EmojiSelector';
+import { ChannelSelector } from './selectors/ChannelSelector';
+import { UserSelector } from './selectors/UserSelector';
+import { InputContainer } from './elements/container';
 
-export const Input = () => {
+export const InputForm = ({children }) => {
   const [showEmojis, setShowEmojis] = useState(false);
   const {
-    input, focus, addFile, insert, send, scope, currentText, wrapMatching,
+    mode, messageId,
+    input, onPaste, onInput, onKeyDown, onFileChange, fileInput,
+    focus, addFile, insert, send, scope, currentText, wrapMatching,
   } = useInput();
+  const dispatch = useDispatch();
 
   const onEmojiInsert = useCallback((emoji) => {
     insert(buildEmojiNode(emoji, getUrl));
@@ -40,7 +44,16 @@ export const Input = () => {
   }, [input, ctrl]);
 
   return (
-    <BaseInput>
+    <InputContainer className={mode}>
+      <div
+        scope='root'
+        class='input'
+        ref={input}
+        contenteditable='true'
+        onPaste={onPaste}
+        onInput={(e) => onInput(e)}
+        onKeyDown={(e) => onKeyDown(e)}
+      >{children}</div>
       <Attachments />
       <div class='actionbar' onclick={focus} action='focus'>
         <div class={showEmojis ? 'action active' : 'action'} onclick={() => setShowEmojis(!showEmojis)}>
@@ -50,14 +63,38 @@ export const Input = () => {
           <i class="fa-solid fa-plus" />
         </div>
         <StatusLine />
-        <ActionButton className={'action green'} onClick={send} action='submit'>
-          <i class="fa-solid fa-paper-plane" />
-        </ActionButton>
+        {mode === 'edit' && (
+          <ActionButton className={'action'} onClick={() => dispatch.actions.messages.editClose(messageId)} action='submit'>
+           cancel
+          </ActionButton>
+        )}
+        {mode === 'edit' ? (
+          <ActionButton className={'action green'} onClick={send} action='submit'>
+            save
+          </ActionButton>
+        ) : (
+          <ActionButton className={'action green'} onClick={send} action='submit'>
+            <i class="fa-solid fa-paper-plane" />
+          </ActionButton>
+        )}
       </div>
       <ChannelSelector />
       <UserSelector />
       <EmojiSelector />
       {showEmojis && <EmojiSearch onSelect={onEmojiInsert} />}
-    </BaseInput>
+      <input
+        onChange={onFileChange}
+        ref={fileInput}
+        type="file"
+        multiple
+        style="height: 0; opacity: 0; width: 0; position:absolute; bottom:0; left: 0;"
+      />
+    </InputContainer>
   );
 };
+
+export const Input = ({ children, ...args }) => (
+  <InputContext {...args} >
+    <InputForm>{children}</InputForm>
+  </InputContext>
+);
