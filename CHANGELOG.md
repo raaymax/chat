@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.2.0](https://github.com/raaymax/chat/compare/quack-v2.1.0...quack-v2.2.0) (2023-12-20)
+
+
+### Features
+
+* ability to edit messages ([b5498cc](https://github.com/raaymax/chat/commit/b5498ccfe010413cbe5d1ff104b1acbd3d3c7081))
+* added pleading face emoji ([40d284d](https://github.com/raaymax/chat/commit/40d284d3c3e3a27304544ba7373412a22e54335e))
+
 ## [2.1.0](https://github.com/raaymax/chat/compare/quack-v2.0.3...quack-v2.1.0) (2023-12-15)
 
 
