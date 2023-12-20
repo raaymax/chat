@@ -1,5 +1,13 @@
 [
   {
+    "name":  "pleading_face",
+    "unicode": "1f97a",
+    "shortname": ":pleading_face:",
+    "code_decimal": "&#129306;",
+    "category": "p",
+    "emoji_order": "15"
+  },
+  {
     "name": "100",
     "unicode": "1f4af",
     "shortname": ":100:",
