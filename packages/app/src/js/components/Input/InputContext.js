@@ -7,6 +7,7 @@ import { useStream } from '../../contexts/stream';
 import * as messageService from '../../services/messages';
 import { uploadMany } from '../../services/file';
 import { fromDom } from './serializer';
+import { useMessage } from '../../hooks/useMessage';
 
 const Context = createContext({
   input: {},
@@ -32,6 +33,7 @@ export const InputContext = (args) => {
   const [scopeContainer, setScopeContainer] = useState(null);
   const files = useSelector((state) => state.files);
   const filesAreReady = !files || files.every((f) => f.status === 'ok');
+  const message = useMessage(messageId);
 
   const input = useRef();
   const fileInput = useRef(null);
@@ -110,6 +112,7 @@ export const InputContext = (args) => {
     if (payload.type === 'message:create' && mode === 'edit') {
       payload.type = 'message:update';
       payload.id = messageId;
+      payload.clientId = message.clientId;
     }
     payload.attachments = [...files.filter((f) => f.streamId === stream.id)];
     if (payload.flat.length === 0 && payload.attachments.length === 0) return;
