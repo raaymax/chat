@@ -4,7 +4,7 @@ import { useInput } from './InputContext';
 import { Menu } from './elements/menu';
 
 export const TextMenu = ({
-  className, options, open = false, select, selected = 0, setSelected,
+  className, options, open = false, select, selected = 0, setSelected, labelClass = '',
 }) => {
   const [coords, setCoords] = useState([0, 0]);
   const { input, getRange } = useInput();
@@ -54,9 +54,9 @@ export const TextMenu = ({
       <ul>
         {options.map((e, idx) => (
           <li key={idx} onclick={(e) => select(idx, e)} class={idx === selected ? 'selected' : ''}>
-            {e.icon && <span><i class={e.icon} /></span>}
+            {e.icon && <span ><i class={e.icon} /></span>}
             {e.url && <span><img src={e.url} alt="img" /></span>}
-            {!e.icon && !e.url && <span>{e.label || ''}</span>}
+            {!e.icon && !e.url && <span className={labelClass}>{e.label || ''}</span>}
             <span>{e.name}</span>
           </li>
         ))}

@@ -21,7 +21,7 @@ export default createModule({
   methods: {
     load: () => async ({actions}, getState, {client}) => {
       const [baseEmojis, { data: emojis }] = await Promise.all([
-        import('../../../assets/emoji_list.json'),
+        import('../../../assets/emojis.json'),
         client.req({ type: 'emojis:load' }),
       ]);
       actions.emojis.add(baseEmojis.default);

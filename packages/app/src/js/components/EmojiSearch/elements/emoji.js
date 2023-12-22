@@ -13,6 +13,7 @@ const EmojiContainer = styled.div`
   line-height: 30px;
   cursor: pointer;
   user-select: none;
+  font-family: 'Noto Color Emoji', 'Roboto';
   img {
     width: 28px;
     height: 28px;
@@ -39,6 +40,6 @@ export const Emoji = ({
   <EmojiContainer onClick={onClick}>
     {fileId
       ? <img src={getUrl(fileId)} alt={shortname} />
-      : <span>{String.fromCodePoint(parseInt(unicode, 16))}</span>}
+      : <span className='emoji'>{unicode.map((code) => String.fromCodePoint(parseInt(code, 16))).join('')}</span>}
   </EmojiContainer>
 );

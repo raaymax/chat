@@ -138,6 +138,10 @@ ul {
     padding-inline-start: 30px;
 }
 
+.emoji {
+  font-family: 'Noto Color Emoji', 'Roboto';
+}
+
 .danger {
   color: red;
 }
