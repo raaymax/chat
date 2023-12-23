@@ -109,6 +109,9 @@ export const InputContainer = styled.div`
     border: 0;
     padding: 5px 30px;
 
+    .emoji {
+      font-family: 'Noto Color Emoji', 'Roboto';
+    }
     .emoji img {
       width: 1.5em;
       height: 1.5em;

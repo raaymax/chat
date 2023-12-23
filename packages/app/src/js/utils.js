@@ -103,7 +103,7 @@ export const createEventListener = () => {
 export const buildEmojiNode = (result, getUrl) => {
   const emoji = (() => {
     if (result.unicode) {
-      return document.createTextNode(String.fromCodePoint(parseInt(result.unicode, 16)));
+      return document.createTextNode(result.unicode.map((code) => String.fromCodePoint(parseInt(code, 16))).join(''));
     }
     if (result.fileId) {
       const img = document.createElement('img');

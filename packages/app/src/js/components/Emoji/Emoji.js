@@ -12,6 +12,7 @@ const StyledEmoji = styled.span`
     display: inline-block;
   }
   span {
+    font-family: 'Noto Color Emoji', 'Roboto';
     font-size: ${(props) => (props.big ? 2 : 1)}em;
     line-height: ${(props) => (props.big ? 40 : 24)}px;
   }
@@ -26,7 +27,7 @@ export const Emoji = ({ shortname, big }) => {
     <Tooltip text={shortname}>
       <StyledEmoji big={big} emoji={shortname}>
         {emoji.unicode
-          ? <span>{String.fromCodePoint(parseInt(emoji.unicode, 16))}</span>
+          ? <span>{emoji.unicode.map((code) => String.fromCodePoint(parseInt(code, 16))).join('')}</span>
           : <img src={getUrl(emoji.fileId)} alt={shortname} />}
       </StyledEmoji>
     </Tooltip>

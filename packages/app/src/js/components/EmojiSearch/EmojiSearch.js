@@ -12,12 +12,14 @@ import { EmojiSearchContainer } from './elements/emojiSearchContainer';
 import { useEmojiFuse } from '../../hooks';
 
 const CATEGORIES = {
-  p: 'People',
+  p: 'Smileys & Emotion',
   c: 'Custom',
-  n: 'Nature',
-  d: 'Food',
-  a: 'Activity',
-  t: 'Travel',
+  e: 'Components',
+  b: 'People & Body',
+  n: 'Animals & Nature',
+  d: 'Food & Drink',
+  a: 'Activities',
+  t: 'Travel & Places',
   o: 'Objects',
   s: 'Symbols',
   k: 'Flags',

@@ -23,7 +23,7 @@ export const EmojiSelector = () => {
     let opts = fuse.search(currentText || '').slice(0, 5).map(({ item }) => item);
     opts = opts.length ? opts : emojis.slice(0, 5);
     opts = [...opts, { action: 'close', shortname: 'no emoji' }].map((item) => ({
-      label: item.unicode && String.fromCodePoint(parseInt(item.unicode, 16)),
+      label: item.unicode && item.unicode.map((code) => String.fromCodePoint(parseInt(code, 16))).join(''),
       url: item.fileId && getUrl(item.fileId),
       name: item.shortname,
       item,
@@ -149,6 +149,6 @@ export const EmojiSelector = () => {
   if (scope !== SCOPE) return null;
 
   return (
-    <TextMenu open={true} options={options} selected={selected} setSelected={setSelected} />
+    <TextMenu labelClass="emoji" open={true} options={options} selected={selected} setSelected={setSelected} />
   );
 };
