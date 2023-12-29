@@ -6,26 +6,14 @@ const plugins = require('../../infra/plugins');
 
 const actions = [
   require('./pingSend'),
-  require('./fcmSetup'),
 
+  ...require('./command'),
   ...require('./message'),
   ...require('./channel'),
+  ...require('./emoji'),
+  ...require('./user'),
+  ...require('./readReceipt'),
 
-  require('./typingSend'),
-  require('./greetSend'),
-  require('./reactionSend'),
-  require('./commandExecute'),
-  require('./configGet'),
-  require('./usersLoad'),
-
-  require('./emojiFind'),
-  require('./emojisLoad'),
-
-  require('./progressLoad'),
-  require('./progressUpdate'),
-  require('./pushSetup'),
-
-  require('./badgesLoad'),
   ...plugins.get('actions'),
   {
     type: 'default',
@@ -97,7 +85,7 @@ const dispatch = async ({ type, seqId, ...body }, { userId, bus, push = () => {}
   } catch (err) {
     if (!(err instanceof Joi.ValidationError)) {
       // eslint-disable-next-line no-console
-      console.error(err); // maybe attach logger
+      // console.error(err); // maybe attach logger
     }
     bus.direct(userId, {
       seqId,

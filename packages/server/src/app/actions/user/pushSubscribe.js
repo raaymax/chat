@@ -1,8 +1,8 @@
 const Joi = require('joi');
-const repo = require('../../infra/repositories');
+const repo = require('../../../infra/repositories');
 
 module.exports = {
-  type: 'push:setup',
+  type: 'user:push:subscribe',
   schema: {
     body: Joi.object({
       endpoint: Joi.string().required(),

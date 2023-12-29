@@ -1,7 +1,7 @@
 const assert = require('assert');
-const api = require('./api');
+const api = require('../../tests/api');
 
-describe('users:load', () => {
+describe('user:getAll', () => {
   let user;
 
   before(async () => {
@@ -13,7 +13,7 @@ describe('users:load', () => {
 
   it('should return list of users', async () => {
     const { res, data: users } = await api.sendMessage({
-      type: 'users:load',
+      type: 'user:getAll',
     }, { userId: user.id });
     assert.equal(res.type, 'response');
     assert.equal(res.status, 'ok');
@@ -26,7 +26,7 @@ describe('users:load', () => {
 
   it('should get system user', async () => {
     const { data: users } = await api.sendMessage({
-      type: 'users:load',
+      type: 'user:getAll',
     }, { userId: user.id });
     const systemUser = users.find((u) => u.name === 'System');
     assert(!!systemUser);

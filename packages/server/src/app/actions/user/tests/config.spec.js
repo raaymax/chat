@@ -1,8 +1,8 @@
 const assert = require('assert');
-const api = require('./api');
-const pack = require('../../../../package.json');
+const api = require('../../tests/api');
+const pack = require('../../../../../package.json');
 
-describe('config:get', () => {
+describe('user:config', () => {
   let user;
 
   before(async () => {
@@ -14,7 +14,7 @@ describe('config:get', () => {
 
   it('should return app configuration', async () => {
     await api.repo.user.update({ id: user.id }, { mainChannelId: null });
-    const { res, data: [config] } = await api.sendMessage({ type: 'config:get' }, { userId: user.id });
+    const { res, data: [config] } = await api.sendMessage({ type: 'user:config' }, { userId: user.id });
     assert.equal(res.type, 'response');
     assert.equal(res.status, 'ok');
     assert.equal(config.appVersion, pack.version);
@@ -25,7 +25,7 @@ describe('config:get', () => {
   it('should return main channel id selected by user', async () => {
     const channel = await api.repo.channel.get({ name: 'main' });
     await api.repo.user.update({ id: user.id }, { mainChannelId: channel.id });
-    const { res, data: [config] } = await api.sendMessage({ type: 'config:get' }, { userId: user.id });
+    const { res, data: [config] } = await api.sendMessage({ type: 'user:config' }, { userId: user.id });
     assert.equal(res.type, 'response');
     assert.equal(res.status, 'ok');
     assert.equal(config.appVersion, pack.version);

@@ -1,11 +1,11 @@
 const Joi = require('joi');
-const repo = require('../../infra/repositories');
-const services = require('../services');
-const { MissingChannel, AccessDenied } = require('../common/errors');
-const ChannelHelper = require('../common/channel');
+const repo = require('../../../infra/repositories');
+const services = require('../../services');
+const { MissingChannel, AccessDenied } = require('../../common/errors');
+const ChannelHelper = require('../../common/channel');
 
 module.exports = {
-  type: 'progress:update',
+  type: 'readReceipt:update',
   schema: {
     body: Joi.object({
       messageId: Joi.string().required(),

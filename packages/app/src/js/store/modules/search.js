@@ -10,7 +10,7 @@ export default createModule({
   },
   methods: {
     find: (channelId, text) => async ({actions}, getState, {client}) => {
-      const data = await client.req({ type: 'messages:search', channelId, text });
+      const data = await client.req({ type: 'message:search', channelId, text });
       actions.search.push({ text, data: data.data, searchedAt: new Date().toISOString() });
     },
   },

@@ -22,7 +22,7 @@ export default createModule({
     load: () => async ({actions}, getState, {client}) => {
       const [baseEmojis, { data: emojis }] = await Promise.all([
         import('../../../assets/emoji_list.json'),
-        client.req({ type: 'emojis:load' }),
+        client.req({ type: 'emoji:getAll' }),
       ]);
       actions.emojis.add(baseEmojis.default);
       actions.emojis.add(emojis.map((e) => ({...e, category: 'c'})));
@@ -31,7 +31,7 @@ export default createModule({
 
     find: (shortname) => async ({actions}, getState, {client}) => {
       try {
-        const { data: [emoji] } = await client.req({ type: 'emoji:find', shortname });
+        const { data: [emoji] } = await client.req({ type: 'emoji:get', shortname });
         if (emoji) actions.emojis.add(emoji);
       } catch (err) {
         // ignore

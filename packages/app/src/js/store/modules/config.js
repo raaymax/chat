@@ -8,7 +8,7 @@ export default createModule({
   },
   methods: {
     load: () => async ({ actions }, getState, { client }) => {
-      const { data: [config] } = await client.req({ type: 'config:get' });
+      const { data: [config] } = await client.req({ type: 'user:config' });
       actions.config.setAppVersion(config.appVersion);
       return config;
     },

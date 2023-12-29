@@ -14,7 +14,7 @@ module.exports = (connect) => {
       const ws = await connect();
       const newMsg = await createMessage(ws);
       const [msg, ret] = await api.sendMessage({
-        type: 'messages:search',
+        type: 'message:search',
         channelId: channel._id.toHexString(),
         text: 'Search',
         limit: 1,

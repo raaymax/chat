@@ -39,7 +39,7 @@ module.exports = (connect) => {
       })).then(() => sendHello(member));
 
       await admin.send({
-        type: 'progress:update',
+        type: 'readReceipt:update',
         messageId: msg.id,
       });
       const badge = await (await db).collection('badges').findOne({ userId: user._id, channelId: channel._id });

@@ -1,7 +1,7 @@
 const assert = require('assert');
-const api = require('./api');
+const api = require('../../tests/api');
 
-describe('greet:send', () => {
+describe('user:typing', () => {
   let user;
   let channel;
 
@@ -15,7 +15,7 @@ describe('greet:send', () => {
 
   it('should return welcome message', async () => {
     const { res, data: [msg] } = await api.sendMessage({
-      type: 'typing:send',
+      type: 'user:typing',
       channelId: channel.id,
     }, {
       userId: user.id,

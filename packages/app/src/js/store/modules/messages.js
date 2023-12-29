@@ -108,7 +108,7 @@ export default createModule({
     },
     addReaction: (id, text) => async ({actions}, getState, { client }) => {
       const req = await client.req({
-        type: 'reaction:send',
+        type: 'message:react',
         id,
         reaction: text.trim(),
       });

@@ -1,7 +1,7 @@
 const assert = require('assert');
-const api = require('./api');
+const api = require('../../tests/api');
 
-describe('badges:load', () => {
+describe('readReceipt:getOwn', () => {
   let user;
 
   before(async () => {
@@ -13,7 +13,7 @@ describe('badges:load', () => {
 
   it('should return list of badges', async () => {
     const { data: badges } = await api.sendMessage({
-      type: 'badges:load',
+      type: 'readReceipt:getOwn',
     }, { userId: user.id });
     const invalid = badges.filter((b) => b.userId !== user.id);
     assert.equal(invalid.length, 0);

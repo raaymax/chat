@@ -26,7 +26,7 @@ const register = async (config, retry = false) => navigator.serviceWorker.getReg
     applicationServerKey: config.vapidPublicKey,
   }))
   .then(async (subscription) => client.req({
-    type: 'push:setup',
+    type: 'user:push:subscribe',
     ...subscription.toJSON(),
   }))
   .then(() => console.log('Notifications service worker registered successfully'))

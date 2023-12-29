@@ -2,7 +2,7 @@ const assert = require('assert');
 const repo = require('../../src/infra/repositories');
 
 module.exports = (connect) => {
-  describe('typing:send', () => {
+  describe('user:typing', () => {
     let channel;
     before(async () => {
       channel = await repo.channel.get({ name: 'main' });
@@ -24,7 +24,7 @@ module.exports = (connect) => {
             resolve();
           });
           admin.send({
-            type: 'typing:send',
+            type: 'user:typing',
             channelId: channel.id,
           });
         } catch (err) {
@@ -43,7 +43,7 @@ module.exports = (connect) => {
     it('should throw error when channel is not present', async () => {
       const ws = await connect();
       const [ret] = await ws.send({
-        type: 'typing:send',
+        type: 'user:typing',
       }).catch((e) => e);
       assert.equal(ret.status, 'error');
       assert.equal(ret.message, '"channelId" is required');
@@ -53,7 +53,7 @@ module.exports = (connect) => {
     it('should not send notification to source user', async () => {
       const ws = await connect();
       const [ret] = await ws.send({
-        type: 'typing:send',
+        type: 'user:typing',
         channelId: channel.id,
       });
       assert.equal(ret.type, 'response');

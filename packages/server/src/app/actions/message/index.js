@@ -7,4 +7,5 @@ module.exports = [
   require('./remove'),
   require('./search'),
   require('./update'),
+  require('./react'),
 ];

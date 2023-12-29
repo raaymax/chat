@@ -1,7 +1,7 @@
 const assert = require('assert');
-const api = require('./api');
+const api = require('../../tests/api');
 
-describe('emoji:find', () => {
+describe('emoji:get', () => {
   let user;
 
   before(async () => {
@@ -13,7 +13,7 @@ describe('emoji:find', () => {
   });
 
   it('should return empty emoji for unknown shortname', async () => {
-    const { res, data: [emoji] } = await api.sendMessage({ type: 'emoji:find', shortname: 'party_parrot' }, { userId: user.id });
+    const { res, data: [emoji] } = await api.sendMessage({ type: 'emoji:get', shortname: 'party_parrot' }, { userId: user.id });
     assert.equal(res.type, 'response');
     assert.equal(res.status, 'ok');
     assert.equal(emoji.type, 'emoji');
@@ -22,7 +22,7 @@ describe('emoji:find', () => {
   });
 
   it('should return test emoji', async () => {
-    const { res, data: [emoji] } = await api.sendMessage({ type: 'emoji:find', shortname: 'test' }, { userId: user.id });
+    const { res, data: [emoji] } = await api.sendMessage({ type: 'emoji:get', shortname: 'test' }, { userId: user.id });
     assert.equal(res.type, 'response');
     assert.equal(res.status, 'ok');
     assert.equal(emoji.type, 'emoji');

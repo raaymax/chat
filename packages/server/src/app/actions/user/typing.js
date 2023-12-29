@@ -1,8 +1,8 @@
 const Joi = require('joi');
-const repo = require('../../infra/repositories');
+const repo = require('../../../infra/repositories');
 
 module.exports = {
-  type: 'typing:send',
+  type: 'user:typing',
   schema: {
     body: Joi.object({
       channelId: Joi.string().required(),

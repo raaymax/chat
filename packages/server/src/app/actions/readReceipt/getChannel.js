@@ -1,10 +1,10 @@
 const Joi = require('joi');
-const repo = require('../../infra/repositories');
-const { MissingChannel, AccessDenied } = require('../common/errors');
-const ChannelHelper = require('../common/channel');
+const repo = require('../../../infra/repositories');
+const { MissingChannel, AccessDenied } = require('../../common/errors');
+const ChannelHelper = require('../../common/channel');
 
 module.exports = {
-  type: 'progress:load',
+  type: 'readReceipt:getChannel',
   schema: {
     body: Joi.object({
       channelId: Joi.string().required(),

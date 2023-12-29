@@ -36,7 +36,7 @@ export default createModule({
     load: (channelId) => async ({actions}, getState, {client}) => {
       actions.pins.clear(channelId);
       const req = await client.req({
-        type: 'messages:pins',
+        type: 'message:pins',
         channelId,
         limit: 50,
       });

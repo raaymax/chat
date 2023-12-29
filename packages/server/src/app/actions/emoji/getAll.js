@@ -1,8 +1,8 @@
 const Joi = require('joi');
-const repo = require('../../infra/repositories');
+const repo = require('../../../infra/repositories');
 
 module.exports = {
-  type: 'emojis:load',
+  type: 'emoji:getAll',
   schema: {
     body: Joi.any(),
   },

@@ -14,7 +14,7 @@ export default createModule({
   },
   methods: {
     load: () => async ({actions}, getState, {client}) => {
-      const res = await client.req({ type: 'users:load' });
+      const res = await client.req({ type: 'user:getAll' });
       actions.users.add(res.data);
     },
   },

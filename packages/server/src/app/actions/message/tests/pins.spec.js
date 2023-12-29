@@ -2,7 +2,7 @@ const assert = require('assert');
 const api = require('../../tests/api');
 const seeds = require('./seeds');
 
-describe('messages:pins', () => {
+describe('message:pins', () => {
   let channel;
   let user;
   before(async () => {
@@ -16,7 +16,7 @@ describe('messages:pins', () => {
 
   it('should return last added messsage', async () => {
     const { res, data: [msg] } = await api.sendMessage({
-      type: 'messages:pins',
+      type: 'message:pins',
       channelId: channel.id,
       limit: 1,
     }, { userId: user.id });
@@ -29,7 +29,7 @@ describe('messages:pins', () => {
   it('should have no access to someones private channel', async () => {
     const deniedChannel = await api.repo.channel.get({ name: 'denied' });
     const { res } = await api.sendMessage({
-      type: 'messages:pins',
+      type: 'message:pins',
       channelId: deniedChannel.id,
       limit: 1,
     }, { userId: user.id });
@@ -40,14 +40,14 @@ describe('messages:pins', () => {
 
   it('should return continuation if after is specified', async () => {
     const { res, data: [msg1, msg2] } = await api.sendMessage({
-      type: 'messages:pins',
+      type: 'message:pins',
       channelId: channel.id,
       limit: 2,
     }, { userId: user.id });
     assert.equal(res.type, 'response');
     assert.equal(res.status, 'ok');
     const { res: res2, data: msgs } = await api.sendMessage({
-      type: 'messages:pins',
+      type: 'message:pins',
       channelId: channel.id,
       after: msg1.id,
       limit: 10,

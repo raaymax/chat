@@ -38,7 +38,7 @@ export default createModule({
         return;
       }
       actions.typing.set({ cooldown: true, queue: false });
-      client.send({ type: 'typing:send', channelId, parentId });
+      client.send({ type: 'user:typing', channelId, parentId });
       setTimeout(() => {
         actions.typing.set({ cooldown: false });
         if (getState().typing.queue) {

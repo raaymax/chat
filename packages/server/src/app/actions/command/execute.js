@@ -1,6 +1,6 @@
 const Joi = require('joi');
-const commands = require('../commands');
-const pack = require('../../../package.json');
+const commands = require('../../commands');
+const pack = require('../../../../package.json');
 
 module.exports = {
   type: 'command:execute',

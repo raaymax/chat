@@ -21,7 +21,7 @@ export default createModule({
   methods: {
     loadBadges: () => async ({actions}, getState, {client}) => {
       const { data } = await client.req({
-        type: 'badges:load',
+        type: 'readReceipt:getOwn',
       });
       actions.progress.add(data);
     },
@@ -29,7 +29,7 @@ export default createModule({
     loadProgress: (stream) => async ({actions}, getState, {client}) => {
       if (!stream.channelId) return;
       const { data } = await client.req({
-        type: 'progress:load',
+        type: 'readReceipt:getChannel',
         channelId: stream.channelId,
         parentId: stream.parentId,
       });
@@ -38,7 +38,7 @@ export default createModule({
 
     update: (messageId) => async ({actions}, getState, {client}) => {
       const { data } = await client.req({
-        type: 'progress:update',
+        type: 'readReceipt:update',
         messageId,
       });
       actions.progress.add(data);

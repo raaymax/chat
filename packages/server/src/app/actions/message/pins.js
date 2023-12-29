@@ -4,7 +4,7 @@ const { AccessDenied } = require('../../common/errors');
 const channelHelper = require('../../common/channel');
 
 module.exports = {
-  type: 'messages:pins',
+  type: 'message:pins',
   schema: {
     body: Joi.object({
       channelId: Joi.string().required(),

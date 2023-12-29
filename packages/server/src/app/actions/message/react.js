@@ -1,10 +1,10 @@
 const Joi = require('joi');
-const repo = require('../../infra/repositories');
-const { MissingId, MessageNotExist } = require('../common/errors');
+const repo = require('../../../infra/repositories');
+const { MissingId, MessageNotExist } = require('../../common/errors');
 
 // FIXME: add tests for this action
 module.exports = {
-  type: 'reaction:send',
+  type: 'message:react',
   schema: {
     body: Joi.object({
       id: Joi.string().required(),

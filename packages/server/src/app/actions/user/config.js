@@ -1,10 +1,10 @@
 const Joi = require('joi');
 const config = require('@quack/config');
-const pack = require('../../../package.json');
-const repo = require('../../infra/repositories');
+const pack = require('../../../../package.json');
+const repo = require('../../../infra/repositories');
 
 module.exports = {
-  type: 'config:get',
+  type: 'user:config',
   schema: {
     body: Joi.any(),
   },

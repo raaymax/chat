@@ -1,8 +1,8 @@
 const Joi = require('joi');
-const repo = require('../../infra/repositories');
+const repo = require('../../../infra/repositories');
 
 module.exports = {
-  type: 'badges:load',
+  type: 'readReceipt:getOwn',
   schema: {
     body: Joi.any(),
   },

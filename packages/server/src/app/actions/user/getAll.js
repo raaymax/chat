@@ -1,9 +1,9 @@
 const Joi = require('joi');
-const repo = require('../../infra/repositories');
-const tools = require('../tools');
+const repo = require('../../../infra/repositories');
+const tools = require('../../tools');
 
 module.exports = {
-  type: 'users:load',
+  type: 'user:getAll',
   schema: {
     body: Joi.any(),
   },
