@@ -3,7 +3,7 @@ import { initNotifications } from './notifications';
 
 const initApp = () => async (dispatch, getState) => {
   const {actions, methods} = dispatch;
-  if (navigator.userAgentData.mobile) {
+  if (navigator?.userAgentData?.mobile) {
     document.body.setAttribute('class', 'mobile');
   }
   actions.connection.connected();
