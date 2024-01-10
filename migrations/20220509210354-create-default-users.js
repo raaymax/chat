@@ -15,14 +15,6 @@ module.exports = {
           name: 'Admin',
           avatarUrl: '',
         },
-        {
-          _id: new ObjectId('6255a4156c28443c92c26d7d'),
-          clientId: 'c3875674-61f1-4793-a558-a733293f3527',
-          login: 'member',
-          password: genHash('123'),
-          name: 'Member',
-          avatarUrl: '',
-        },
       ]);
     }
   },

@@ -15,7 +15,9 @@ module.exports = {
     const msg = req.body;
 
     if (!msg.channelId) throw MissingChannel();
+    console.log(msg);
     const channel = await repo.channel.get({ id: msg.channelId });
+    console.log(channel);
 
     if (!await ChannelHelper.haveAccess(req.userId, channel.id)) {
       throw AccessDenied();

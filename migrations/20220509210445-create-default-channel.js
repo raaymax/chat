@@ -12,6 +12,7 @@ module.exports = {
       name: u.name,
       users: [u._id],
       private: true,
+      direct: true,
       createdAt: new Date(),
     })));
   },
