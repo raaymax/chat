@@ -39,6 +39,39 @@ const UserService = {
 
     return userId;
   },
+
+  create: async ({name, login, password}, { bus }) => {
+    const existing = await repo.user.get({ login });
+    if (existing) throw new Error('Login already exists');
+
+    const userId = await repo.user.create({
+      name,
+      login,
+      password: bcrypt.hashSync(password, 10),
+    });
+
+    const channelId = await repo.channel.create({
+      cid: userId,
+      private: true,
+      name,
+      users: [userId],
+    });
+
+    await repo.user.update({ id: userId }, { mainChannelId: channelId });
+    
+    return userId;
+  },
+
+  connect: async (user1Id, user2Id) => {
+    const channelId = await repo.channel.create({
+      direct: true,
+      private: true,
+      name: 'Direct',
+      users: [user1Id, user2Id],
+    });
+
+    return channelId;
+  }
 };
 
 module.exports = UserService;

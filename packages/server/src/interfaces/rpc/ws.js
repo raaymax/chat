@@ -2,7 +2,7 @@ const { Server } = require('socket.io');
 const sessionParser = require('./sessionParser');
 const db = require('../../infra/repositories');
 const bus = require('../../infra/bus');
-const actions = require('../../app/actions');
+const actions = require('./rpc');
 const corsConfig = require('./cors');
 const { push } = require('../../infra/webpush');
 

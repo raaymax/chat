@@ -1,6 +1,7 @@
 const Joi = require('joi');
-const repo = require('../../infra/repositories');
-const plugins = require('../../infra/plugins');
+const repo = require('../../../../infra/repositories');
+const {services} = require('../../../app');
+const plugins = require('../../../infra/plugins');
 /* eslint-disable global-require */
 
 const actions = [
@@ -62,6 +63,8 @@ const dispatch = async ({ type, seqId, ...body }, { userId, bus, push = () => {}
 
   const srv = {
     repo,
+    service: services,
+    services,
     bus,
     push,
   };
@@ -77,7 +80,7 @@ const dispatch = async ({ type, seqId, ...body }, { userId, bus, push = () => {}
       }
       const { error: uerr } = await Joi.string().required().validate(wsreq.userId);
       if (uerr) throw uerr;
-      await service.user.setLastSeen({ userId }, { bus });
+      await services.user.setLastSeen({ userId }, { bus });
       await handler.handler(wsreq, wsres, srv);
     }
   } catch (err) {
