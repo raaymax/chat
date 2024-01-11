@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import { Message } from '../Message/message';
 import { Notification } from './notification';
 import { DateSeparator } from './dateSeparator';
@@ -33,7 +32,7 @@ export const messageFormatter = ({
           stream={stream}
           context={context}
           onClick={() => onMessageClicked(msg)}
-          class={msg.priv ? ['private'] : []}
+          className={msg.priv ? ['private'] : []}
           data-id={msg.id}
           data-date={msg.createdAt}
           client-id={msg.clientId}

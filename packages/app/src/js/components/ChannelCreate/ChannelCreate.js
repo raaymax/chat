@@ -1,5 +1,4 @@
-import { h } from 'preact';
-import { useState, useCallback } from 'preact/hooks';
+import { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
@@ -60,7 +59,7 @@ export const ChannelCreate = () => {
       <form action="#" onSubmit={submit}>
         <input type='text' placeholder='Channel name' onChange={(e) => setName(e.target.value)} value={name} />
         <button type='submit'>
-          <i class="fa-solid fa-plus" />
+          <i className="fa-solid fa-plus" />
         </button>
       </form>
     </NewChannelContainer>

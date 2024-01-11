@@ -17,7 +17,7 @@
     "joi": "17.11.0",
     "js-plugin": "1.1.0",
     "mongodb": "6.3.0",
-    "preact": "10.19.3",
+    "react": "18.2.0",
     "typescript": "5.3.3",
     "webpack": "5.89.0",
     "zod": "3.22.4"
@@ -25,7 +25,6 @@
   "devDependencies": {
     "@babel/core": "7.23.6",
     "@babel/plugin-syntax-class-properties": "7.12.13",
-    "@babel/plugin-transform-react-jsx": "7.23.4",
     "@babel/preset-env": "7.23.6",
     "@types/node": "20.10.4",
     "@typescript-eslint/eslint-plugin": "6.14.0",
@@ -34,5 +33,13 @@
     "eslint": "8.55.0",
     "mini-css-extract-plugin": "2.7.6",
     "source-map-loader": "4.0.1"
+  },
+  "browserslist": {
+    "production": [
+      "last 2 chrome version"
+    ],
+    "development": [
+      "last 2 chrome version"
+    ]
   }
 }

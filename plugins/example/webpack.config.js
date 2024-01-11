@@ -20,7 +20,11 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env'],
+            presets: [
+              '@babel/preset-env',
+              ['@babel/preset-react', { runtime: 'automatic' }],
+              '@babel/preset-typescript',
+            ],
           },
         },
       },
@@ -30,14 +34,6 @@ module.exports = {
         use: ['source-map-loader'],
       },
     ],
-  },
-  resolve: {
-    alias: {
-      react: 'preact/compat',
-      'react-dom/test-utils': 'preact/test-utils',
-      'react-dom': 'preact/compat',
-      'react/jsx-runtime': 'preact/jsx-runtime',
-    },
   },
   mode: 'development',
   devtool: 'eval-source-map',

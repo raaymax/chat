@@ -1,5 +1,4 @@
-import { h } from 'preact';
-import { useState } from 'preact/hooks';
+import { useState } from 'react';
 
 export const Tooltip = ({ children, text }) => {
   const [show, setShow] = useState(false);

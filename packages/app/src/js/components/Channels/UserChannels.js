@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Channel } from './Channel';
@@ -48,8 +47,8 @@ export const UserChannels = () => {
   const id = useSelector((state) => state.stream.mainChannelId);
   return (
     <ChannelsContainer>
-      <div class='header'>
-        <span class='title'>users</span>
+      <div className='header'>
+        <span className='title'>users</span>
       </div>
       { channels && channels.map((c) => (
         <Channel
@@ -59,7 +58,7 @@ export const UserChannels = () => {
           key={c.id}
           icon='fa-solid fa-user'
           badge={badges[c.id]}
-          onclick={() => {
+          onClick={() => {
             dispatch.actions.stream.open({id: 'main', value: { type: 'live', channelId: c.id }});
             dispatch.actions.view.set(null);
           }}

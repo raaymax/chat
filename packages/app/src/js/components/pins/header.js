@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { Channel } from '../Channels/Channel';
@@ -62,9 +61,9 @@ export const Header = () => {
   return (
     <StyledHeader>
       <Channel channelId={channelId} icon="fa-solid fa-thumbtack" />
-      <div class='toolbar'>
-        <div class='tool' onclick={() => dispatch.actions.view.set('pins')}>
-          <i class="fa-solid fa-xmark" />
+      <div className='toolbar'>
+        <div className='tool' onClick={() => dispatch.actions.view.set('pins')}>
+          <i className="fa-solid fa-xmark" />
         </div>
       </div>
     </StyledHeader>

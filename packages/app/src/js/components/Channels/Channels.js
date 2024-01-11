@@ -1,5 +1,4 @@
-import { h } from 'preact';
-import {useState} from 'preact/hooks';
+import {useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { ChannelCreate } from '../ChannelCreate/ChannelCreate';
@@ -51,9 +50,9 @@ export const Channels = ({ icon }) => {
   const id = useSelector((state) => state.stream.mainChannelId);
   return (
     <ChannelsContainer>
-      <div class='header'>
-        <span class='title'>channels</span>
-        <i class={show ? 'fa-solid fa-minus' : 'fa-solid fa-plus'} onClick={() => setShow(!show)} />
+      <div className='header'>
+        <span className='title'>channels</span>
+        <i className={show ? 'fa-solid fa-minus' : 'fa-solid fa-plus'} onClick={() => setShow(!show)} />
       </div>
       {show && <ChannelCreate />}
       { channels && channels.map((c) => (
@@ -64,7 +63,7 @@ export const Channels = ({ icon }) => {
           key={c.id}
           icon={icon}
           badge={badges[c.id]}
-          onclick={() => {
+          onClick={() => {
             dispatch.actions.stream.open({id: 'main', value: { type: 'live', channelId: c.id }});
             dispatch.actions.view.set(null);
           }}

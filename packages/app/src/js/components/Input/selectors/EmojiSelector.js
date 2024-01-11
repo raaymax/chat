@@ -1,8 +1,7 @@
-import { h } from 'preact';
 import { useSelector } from 'react-redux';
 import {
   useCallback, useEffect, useState, useMemo,
-} from 'preact/hooks';
+} from 'react';
 import { TextMenu } from '../TextMenu';
 import { useInput } from '../InputContext';
 import { getUrl } from '../../../services/file';

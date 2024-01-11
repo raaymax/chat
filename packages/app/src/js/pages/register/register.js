@@ -1,5 +1,4 @@
-import { h } from 'preact';
-import { useCallback, useState } from 'preact/hooks';
+import { useCallback, useState } from 'react';
 import * as session from '../../services/session';
 import './register.css';
 
@@ -31,22 +30,22 @@ export const Register = () => {
 
   if (!token) {
     return (
-      <div class='register' >
-        <div class='err'>
+      <div className='register' >
+        <div className='err'>
           Missing registration token
         </div>
       </div>
     );
   }
   return (
-    <div class='register' >
+    <div className='register' >
       <form onSubmit={submit}>
         <input type='text' name='name' placeholder='Your name' />
         <input type='text' name='login' placeholder='user@example.com' />
         <input type='password' name='password' placeholder='password' />
         <input type='submit' value='Register' />
       </form>
-      {msg && <div class='err'>
+      {msg && <div className='err'>
         {msg}
       </div>}
     </div>

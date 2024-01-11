@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import styled from 'styled-components';
 import {Badge} from './badge';
 
@@ -34,8 +33,8 @@ export const InlineChannel = ({
   id, children, badge, className, onClick, icon = 'fa-solid fa-hashtag',
 }) => (
   <Container className={`channel ${className || ''}`} data-id={id} onClick={onClick}>
-    <i class={icon} />
-    <span class='name'>{children}</span>
+    <i className={icon} />
+    <span className='name'>{children}</span>
     {badge > 0 && <Badge>{badge}</Badge>}
   </Container>
 )

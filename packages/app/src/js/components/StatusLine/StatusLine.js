@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import { useSelector } from 'react-redux';
 import { useTyping } from '../../hooks';
 
@@ -10,15 +9,15 @@ export const StatusLine = () => {
 
   if (info?.type) {
     return (
-      <div class={['info', info.type].join(' ')}>{info.message}</div>
+      <div className={['info', info.type].join(' ')}>{info.message}</div>
     );
   }
 
   if (names) {
     return (
-      <div class='info'>{names} is typing!</div>
+      <div className='info'>{names} is typing!</div>
     );
   }
 
-  return <div class='info' />;
+  return <div className='info' />;
 };

@@ -1,6 +1,5 @@
 /* eslint-disable no-await-in-loop */
-import { h } from 'preact';
-import { useCallback } from 'preact/hooks';
+import { useCallback } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { HoverContext } from '../../contexts/hover';

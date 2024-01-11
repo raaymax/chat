@@ -1,5 +1,5 @@
-import { h, render } from 'preact';
-import { Suspense, lazy } from 'preact/compat';
+import { createRoot } from 'react-dom/client';
+import { Suspense, lazy } from 'react';
 import '../core/registerSw';
 import { Register } from './register/register';
 import { Login } from './login/login';
@@ -26,4 +26,5 @@ export const App = () => {
   );
 };
 
-render(<App />, document.getElementById('root'));
+const root = createRoot(document.getElementById('root'));
+root.render(<App />);

@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { Channel } from '../../components/Channels/Channel';
@@ -63,7 +62,7 @@ const StyledHeader = styled.div`
   }
 `;
 
-export const Header = ({ onclick }) => {
+export const Header = ({ onClick }) => {
   const [{ channelId, parentId }, setSideStream] = useStream();
   const message = useMessage(parentId);
   const dispatch = useDispatch();
@@ -71,9 +70,9 @@ export const Header = ({ onclick }) => {
   return (
     <StyledHeader>
       <h1>Thread</h1>
-      <Channel onclick={onclick} channelId={channelId} />
-      <div class='toolbar'>
-        <div class='tool' onclick={() => {
+      <Channel onClick={onClick} channelId={channelId} />
+      <div className='toolbar'>
+        <div className='tool' onClick={() => {
           setSideStream(null);
           dispatch.actions.stream.open({
             id: 'main',
@@ -82,10 +81,10 @@ export const Header = ({ onclick }) => {
             },
           });
         }}>
-          <i class="fa-solid fa-arrow-left" />
+          <i className="fa-solid fa-arrow-left" />
         </div>
-        <div class='tool' onclick={() => dispatch.actions.stream.open({id: 'side', value: null})}>
-          <i class="fa-solid fa-xmark" />
+        <div className='tool' onClick={() => dispatch.actions.stream.open({id: 'side', value: null})}>
+          <i className="fa-solid fa-xmark" />
         </div>
       </div>
     </StyledHeader>

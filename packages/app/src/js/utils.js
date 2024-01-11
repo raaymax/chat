@@ -1,15 +1,5 @@
 /* eslint-disable import/no-unresolved */
-import * as preact from 'preact';
-import * as hooks from 'preact/hooks';
-
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
-export const {
-  useEffect, useState, useMemo, useRef,
-} = hooks;
-export const { Component } = preact;
-export const { render } = preact;
-export const { h } = preact;
 
 export const formatDate = (raw) => {
   const date = new Date(raw);
@@ -115,7 +105,7 @@ export const buildEmojiNode = (result, getUrl) => {
   const node = document.createElement('span');
   node.className = 'emoji';
   node.setAttribute('emoji', result.shortname);
-  node.setAttribute('contenteditable', false);
+  node.setAttribute('contentEditable', false);
   node.appendChild(emoji);
   return node;
 };

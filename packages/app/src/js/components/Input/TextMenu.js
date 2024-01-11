@@ -1,5 +1,4 @@
-import { h } from 'preact';
-import { useState, useEffect, useCallback } from 'preact/hooks';
+import { useState, useEffect, useCallback } from 'react';
 import { useInput } from './InputContext';
 import { Menu } from './elements/menu';
 
@@ -53,8 +52,8 @@ export const TextMenu = ({
     <Menu className={className} top={getYPos()} left={getXPos()} height={options.length} >
       <ul>
         {options.map((e, idx) => (
-          <li key={idx} onclick={(e) => select(idx, e)} class={idx === selected ? 'selected' : ''}>
-            {e.icon && <span><i class={e.icon} /></span>}
+          <li key={idx} onClick={(e) => select(idx, e)} className={idx === selected ? 'selected' : ''}>
+            {e.icon && <span><i className={e.icon} /></span>}
             {e.url && <span><img src={e.url} alt="img" /></span>}
             {!e.icon && !e.url && <span>{e.label || ''}</span>}
             <span>{e.name}</span>

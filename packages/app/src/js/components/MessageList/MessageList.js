@@ -1,8 +1,7 @@
 /* eslint-disable no-restricted-syntax */
-import { h } from 'preact';
 import {
   useRef, useEffect, useState, useCallback,
-} from 'preact/hooks';
+} from 'react';
 import styled from 'styled-components';
 import { useStream } from '../../contexts/stream';
 
@@ -99,7 +98,7 @@ export const MessageList = (props) => {
 
   return (
     <ListContainer ref={element} onScroll={scroll} >
-      <div class='space'>&nbsp;</div>
+      <div className='space'>&nbsp;</div>
       {formatter ? formatter(props) : list}
     </ListContainer>
   );

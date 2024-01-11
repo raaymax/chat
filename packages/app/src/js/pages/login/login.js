@@ -1,5 +1,4 @@
-import { h } from 'preact';
-import { useCallback, useEffect, useState } from 'preact/hooks';
+import { useCallback, useEffect, useState } from 'react';
 import * as session from '../../services/session';
 import { UserContext } from '../../contexts/user';
 import './login.css';
@@ -58,8 +57,8 @@ export const Login = ({ children }) => {
       {children}
     </UserContext>
   ) : (
-    <div class='login' >
-      {loginMessage && <div class='message'>
+    <div className='login' >
+      {loginMessage && <div className='message'>
         {loginMessage}
       </div>}
       <form onsubmit={onSubmit}>
@@ -67,7 +66,7 @@ export const Login = ({ children }) => {
         <input type='password' name='password' placeholder='password' />
         <input type='submit' value='Login' />
       </form>
-      {msg && <div class='err'>
+      {msg && <div className='err'>
         {msg}
       </div>}
     </div>

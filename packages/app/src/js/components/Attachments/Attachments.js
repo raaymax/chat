@@ -1,5 +1,4 @@
-import { h } from 'preact';
-import { useMemo } from 'preact/hooks';
+import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { abort } from '../../services/file';
@@ -64,11 +63,11 @@ export const Attachment = ({
     fileName, contentType, progress, status,
   }, ondelete,
 }) => (
-  <div class='attachment'>
-    <div class='type'><i class='fa-solid fa-file' /></div>
-    <div class='name'>{fileName} [{contentType}]</div>
-    <div class='remove' onclick={ondelete}><i class='fa-solid fa-xmark' /></div>
-    <div class={status === 'ok' ? 'progress done' : 'progress'} style={`width: ${progress}%;`} />
+  <div className='attachment'>
+    <div className='type'><i className='fa-solid fa-file' /></div>
+    <div className='name'>{fileName} [{contentType}]</div>
+    <div className='remove' onClick={ondelete}><i className='fa-solid fa-xmark' /></div>
+    <div className={status === 'ok' ? 'progress done' : 'progress'} style={{width: `${progress}%`}} />
   </div>
 );
 

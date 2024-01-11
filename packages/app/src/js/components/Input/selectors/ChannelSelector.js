@@ -1,7 +1,6 @@
-import { h } from 'preact';
 import {
   useCallback, useEffect, useState, useMemo,
-} from 'preact/hooks';
+} from 'react';
 import Fuse from 'fuse.js';
 import { TextMenu } from '../TextMenu';
 import { useInput } from '../InputContext';

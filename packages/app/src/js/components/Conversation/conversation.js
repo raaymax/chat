@@ -1,5 +1,4 @@
-import { h } from 'preact';
-import { useEffect, useCallback} from 'preact/hooks';
+import { useEffect, useCallback} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { messageFormatter } from '../MessageList/formatter';
 import { MessageList } from '../MessageList/MessageList';

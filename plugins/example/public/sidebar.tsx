@@ -1,4 +1,4 @@
-const { useCallback, useState } = PreactHooks;
+const { useCallback, useState } = React;
 
 Chat.register('sidebar', (client) => function TimeButton() {
   const [time, setTime] = useState('Click to proble time');

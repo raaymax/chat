@@ -1,5 +1,4 @@
-import { h } from 'preact';
-import { useState, useEffect} from 'preact/hooks';
+import { useState, useEffect} from 'react';
 import { useSelector } from 'react-redux';
 import { Emoji } from './elements/emoji';
 import { EmojiBlock } from './elements/emojiBlock';

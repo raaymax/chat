@@ -1,5 +1,4 @@
-import { h } from 'preact';
-import { useEffect } from 'preact/hooks';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { InlineChannel } from './elements/inlineChannel';
 
@@ -21,7 +20,7 @@ const DirectChannel = ({ channel, badge, onClick }) => {
 };
 
 export const Channel = ({
-  channelId: id, onclick, icon, badge,
+  channelId: id, onClick, icon, badge,
 }) => {
   const dispatch = useDispatch();
   const channel = useSelector((state) => state.channels[id]);
@@ -33,6 +32,6 @@ export const Channel = ({
   const { name, private: priv, direct } = channel || {};
   let ico = icon;
   if (priv) ico = 'fa-solid fa-lock';
-  if (direct) return ( <DirectChannel channel={channel || {}} onClick={onclick} badge={badge} /> );
-  return ( <InlineChannel id={id} onClick={onclick} icon={ico} badge={badge}>{name}</InlineChannel> );
+  if (direct) return ( <DirectChannel channel={channel || {}} onClick={onClick} badge={badge} /> );
+  return ( <InlineChannel id={id} onClick={onClick} icon={ico} badge={badge}>{name}</InlineChannel> );
 };

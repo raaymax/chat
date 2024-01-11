@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import styled from 'styled-components';
 import { getUrl } from '../../services/file';
 import { Tooltip } from '../../elements/tooltip';
@@ -20,7 +19,7 @@ const StyledEmoji = styled.span`
 export const Emoji = ({ shortname, big }) => {
   const emoji = useEmoji(shortname);
 
-  if (!emoji || emoji.empty) return <span class='emoji' emoji={shortname}>{shortname}</span>;
+  if (!emoji || emoji.empty) return <span className='emoji' emoji={shortname}>{shortname}</span>;
 
   return (
     <Tooltip text={shortname}>

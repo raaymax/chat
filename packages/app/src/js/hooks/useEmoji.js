@@ -1,4 +1,4 @@
-import { useMemo, useEffect } from 'preact/hooks';
+import { useMemo, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 export const useEmoji = (shortname) => {

@@ -1,5 +1,6 @@
-import { h, createContext } from 'preact';
-import { useState, useContext, useCallback } from 'preact/hooks';
+import {
+  useState, useContext, useCallback, createContext,
+} from 'react';
 
 const Context = createContext({
   hovered: [null, () => {}],

@@ -1,7 +1,5 @@
-import { h } from 'preact';
-
 export const BackToMainButton = () => (
-  <div class="back">
+  <div className="back">
     <a href='/#'>
       back to main
     </a>

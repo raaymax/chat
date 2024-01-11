@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import styled from 'styled-components';
 import { Header } from './header';
 import { Conversation } from '../../components/Conversation/conversation';

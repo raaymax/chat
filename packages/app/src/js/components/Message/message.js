@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import { formatTime, formatDateDetailed } from '../../utils';
 import { Files } from '../Files/Files';
 import { Reactions } from '../Reaction/Reaction';
@@ -14,7 +13,7 @@ import { isToday } from './utils';
 import { LinkPreviewList } from './elements/LinkPreview';
 import {Input} from '../Input/Input';
 
-const MessageBase = ({ onClick, ...props } = {}) => {
+const MessageBase = ({ onClick, sameUser, ...props } = {}) => {
   const msg = useMessageData();
   const {
     id, message, emojiOnly,
@@ -26,10 +25,6 @@ const MessageBase = ({ onClick, ...props } = {}) => {
   const [{ selected }] = useStream();
   const user = useMessageUser();
 
-  if (id === '657cc1ce6e2946a508d11163') {
-    console.log(msg);
-  }
-
   return (
     <div
       onClick={(e) => {
@@ -37,23 +32,23 @@ const MessageBase = ({ onClick, ...props } = {}) => {
         if (onClick) onClick(e);
       }}
       {...props}
-      class={['message', (pinned ? 'pinned' : ''), (selected === id ? 'selected' : ''), ...props.class].join(' ')}
-      onmouseenter={onEnter}
-      onmouseleave={onLeave}
+      className={['message', (pinned ? 'pinned' : ''), (selected === id ? 'selected' : ''), ...props.className].join(' ')}
+      onMouseEnter={onEnter}
+      onMouseLeave={onLeave}
     >
-      {!props.sameUser
-        ? <div class='avatar'>{user?.avatarUrl && <img src={user?.avatarUrl} alt='avatar' />}</div>
-        : <div class='spacy side-time'>{formatTime(createdAt)}</div>
+      {!sameUser
+        ? <div className='avatar'>{user?.avatarUrl && <img src={user?.avatarUrl} alt='avatar' />}</div>
+        : <div className='spacy side-time'>{formatTime(createdAt)}</div>
       }
-      <div class='body'>
-        {!props.sameUser && <div class='header'>
-          <span class='author'>{user?.name || 'Guest'}</span>
-          <span class='spacy time'>{formatTime(createdAt)}</span>
-          {!isToday(createdAt) && <span class='spacy time'>{formatDateDetailed(createdAt)}</span>}
+      <div className='body'>
+        {!sameUser && <div className='header'>
+          <span className='author'>{user?.name || 'Guest'}</span>
+          <span className='spacy time'>{formatTime(createdAt)}</span>
+          {!isToday(createdAt) && <span className='spacy time'>{formatDateDetailed(createdAt)}</span>}
         </div>}
         {editing
           ? <Input mode='edit' messageId={id}>{buildMessageBody(message, { emojiOnly })}</Input>
-          : <div class={['content'].join(' ')}>
+          : <div className={['content'].join(' ')}>
             {buildMessageBody(message, { emojiOnly })}
           </div>
         }

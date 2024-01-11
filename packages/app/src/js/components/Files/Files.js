@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import styled from 'styled-components';
 import { getUrl, getThumbnail } from '../../services/file';
 
@@ -60,17 +59,17 @@ const Container = styled.div`
 `;
 
 export const File = ({ data: { fileName, contentType, id } }) => (
-  <div class='file' data-id={id} onclick={() => download(id)}>
-    <div class='type'><i class='fa-solid fa-file' /></div>
-    <div class='name'>{fileName} [{contentType}]</div>
+  <div className='file' data-id={id} onClick={() => download(id)}>
+    <div className='type'><i className='fa-solid fa-file' /></div>
+    <div className='name'>{fileName} [{contentType}]</div>
   </div>
 );
 
 export const Image = ({ raw, data: { fileName, id } }) => (
-  <div class='file image' data-id={id} onclick={() => download(id)}>
+  <div className='file image' data-id={id} onClick={() => download(id)}>
     {
       raw
-        ? <img class='raw-image' src={getUrl(id)} alt={fileName} />
+        ? <img className='raw-image' src={getUrl(id)} alt={fileName} />
         : <img src={getThumbnail(id)} alt={fileName} />
     }
   </div>
@@ -78,7 +77,7 @@ export const Image = ({ raw, data: { fileName, id } }) => (
 
 export const Files = ({ list }) => (
   <Container>
-    <div class='file-list'>
+    <div className='file-list'>
       {list
         .filter((file) => IMAGE_TYPES.includes(file.contentType))
         .map((file) => (
@@ -88,7 +87,7 @@ export const Files = ({ list }) => (
             data={file} />
         ))}
     </div>
-    <div class='file-list'>
+    <div className='file-list'>
       {list
         .filter((file) => !IMAGE_TYPES.includes(file.contentType))
         .map((file) => <File key={file.clientId} data={file} />)}

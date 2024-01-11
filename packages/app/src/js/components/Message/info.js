@@ -1,5 +1,4 @@
-import { h } from 'preact';
-import { useCallback } from 'preact/hooks';
+import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useMessageData } from '../../contexts/message';
 import { resend } from '../../services/messages';
@@ -16,7 +15,7 @@ export const Info = () => {
 
   if (!info) return null;
   return (
-    <div onclick={onAction} class={['info', info.type, ...(info.action ? ['action'] : [])].join(' ')}>
+    <div onClick={onAction} className={['info', info.type, ...(info.action ? ['action'] : [])].join(' ')}>
       {info.msg}
     </div>
   );

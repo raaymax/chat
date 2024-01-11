@@ -1,5 +1,4 @@
-import { h } from 'preact';
-import { useEffect } from 'preact/hooks';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
@@ -22,8 +21,8 @@ export const ChannelInline = ({ channelId: id }) => {
       dispatch.actions.stream.open({id: 'main', value: { type: 'live', channelId: channel?.id || id }});
       dispatch.actions.view.set(null);
     }} >
-      { channel?.private ? <i class='fa-solid fa-lock' /> : <i class='fa-solid fa-hashtag' /> }
-      <span class='name'>{channel?.name || channel?.id || id}</span>
+      { channel?.private ? <i className='fa-solid fa-lock' /> : <i className='fa-solid fa-hashtag' /> }
+      <span className='name'>{channel?.name || channel?.id || id}</span>
     </InlineChannelLink>
   );
 };

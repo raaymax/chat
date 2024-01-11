@@ -1,13 +1,12 @@
-import { h } from 'preact';
-import { useState } from 'preact/hooks';
+import { useState } from 'react';
 
 export const Delete = ({ accept }) => {
   const [show, setShow] = useState(false);
 
   return (
-    <span class={`confirm ${show ? 'active' : ''}`} >
-      {show && <i class={`fa-solid fa-circle-check ${show ? 'danger' : ''}`} onclick={accept} />}
-      <i class={`fa-solid ${show ? 'fa-circle-xmark' : 'fa-trash-can'}`} onclick={() => setShow(!show)} />
+    <span className={`confirm ${show ? 'active' : ''}`} >
+      {show && <i className={`fa-solid fa-circle-check ${show ? 'danger' : ''}`} onClick={accept} />}
+      <i className={`fa-solid ${show ? 'fa-circle-xmark' : 'fa-trash-can'}`} onClick={() => setShow(!show)} />
     </span>
   );
 };

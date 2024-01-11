@@ -1,7 +1,6 @@
-import { h, createContext } from 'preact';
 import {
-  useRef, useState, useCallback, useEffect, useContext,
-} from 'preact/hooks';
+  useRef, useState, useCallback, useEffect, useContext, createContext
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useStream } from '../../contexts/stream';
 import * as messageService from '../../services/messages';

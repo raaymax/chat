@@ -1,5 +1,4 @@
 /* eslint-disable no-await-in-loop */
-import { h } from 'preact';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Logo } from '../../components/logo';
@@ -44,7 +43,7 @@ export const Workspace = () => {
           {view === 'pins' && <Pins />}
           {(view === null || view === 'sidebar' || view === 'thread')
             && <MainConversation
-              onclick={() => dispatch.actions.view.set('sidebar')} />
+              onClick={() => dispatch.actions.view.set('sidebar')} />
           }
         </StreamContext>
       </MainView>

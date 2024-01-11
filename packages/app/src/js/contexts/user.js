@@ -1,5 +1,4 @@
-import { h, createContext } from 'preact';
-import { useContext } from 'preact/hooks';
+import { createContext, useContext } from 'react';
 
 const Context = createContext(null);
 

@@ -1,5 +1,4 @@
-import { h } from 'preact';
-import { useState, useCallback, useEffect } from 'preact/hooks';
+import { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeMessage } from '../../services/messages';
 import { Reaction } from '../Reaction/Reaction';
@@ -45,23 +44,23 @@ export const Toolbar = () => {
   if (view === 'delete') {
     return (
       <Container onClick={stop}>
-        <i class='fa-solid fa-circle-check danger' onclick={onDelete} />
-        <i class='fa-solid fa-circle-xmark' onclick={() => setView(null)} />
+        <i className='fa-solid fa-circle-check danger' onClick={onDelete} />
+        <i className='fa-solid fa-circle-xmark' onClick={() => setView(null)} />
       </Container>
     );
   }
 
   return (
     <Container onClick={stop}>
-      <i class="fa-solid fa-icons" onClick={() => setView('reactions')} />
-      <i class="fa-solid fa-pen-to-square" onClick={() => dispatch.actions.messages.toggleEdit(id)} />
+      <i className="fa-solid fa-icons" onClick={() => setView('reactions')} />
+      <i className="fa-solid fa-pen-to-square" onClick={() => dispatch.actions.messages.toggleEdit(id)} />
       {!pinned
-        ? <i class="fa-solid fa-thumbtack" onClick={() => dispatch.methods.pins.pin(id, channelId)} />
-        : <i class="fa-solid fa-thumbtack" style="color:Tomato" onClick={() => dispatch.methods.pins.unpin(id, channelId)} />}
-      { isMe && <i class='fa-solid fa-trash-can' onclick={() => setView('delete')} /> }
+        ? <i className="fa-solid fa-thumbtack" onClick={() => dispatch.methods.pins.pin(id, channelId)} />
+        : <i className="fa-solid fa-thumbtack" style={{color:"Tomato"}} onClick={() => dispatch.methods.pins.unpin(id, channelId)} />}
+      { isMe && <i className='fa-solid fa-trash-can' onClick={() => setView('delete')} /> }
       {
         !stream.parentId
-          && <i class="fa-solid fa-reply"
+          && <i className="fa-solid fa-reply"
             onClick={() => dispatch.actions.stream.open({id: 'side', value: { type: 'live', channelId, parentId: id }})}
           />
       }

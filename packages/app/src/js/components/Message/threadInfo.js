@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { UserCircle } from '../UserCircle/UserCircle';

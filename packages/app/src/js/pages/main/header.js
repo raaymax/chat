@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { Channel } from '../../components/Channels/Channel';
@@ -67,7 +66,7 @@ const StyledHeader = styled.div`
   }
 `;
 
-export const Header = ({ onclick }) => {
+export const Header = ({ onClick }) => {
   const [stream, setStream] = useStream();
   const { channelId, parentId } = stream;
   const dispatch = useDispatch();
@@ -77,19 +76,19 @@ export const Header = ({ onclick }) => {
     return (
       <StyledHeader>
         {parentId && <h1>Thread</h1>}
-        <Channel onclick={onclick} channelId={channelId} />
+        <Channel onClick={onClick} channelId={channelId} />
 
-        <div class='toolbar'>
+        <div className='toolbar'>
 
-          {stream.id !== 'main' && <div class='tool' onclick={() => setStream(null)}>
-            <i class="fa-solid fa-xmark" />
+          {stream.id !== 'main' && <div className='tool' onClick={() => setStream(null)}>
+            <i className="fa-solid fa-xmark" />
           </div>}
-          <div class='tool' onclick={() => (
+          <div className='tool' onClick={() => (
             setStream({
               channelId, type: 'archive', selected: message.id, date: message.createdAt,
             })
           )}>
-            <i class="fa-solid fa-arrow-left" />
+            <i className="fa-solid fa-arrow-left" />
           </div>
         </div>
       </StyledHeader>
@@ -98,31 +97,31 @@ export const Header = ({ onclick }) => {
 
   return (
     <StyledHeader>
-      <Channel onclick={onclick} channelId={channelId} />
+      <Channel onClick={onClick} channelId={channelId} />
       <BackToMain />
 
-      <div class='toolbar'>
-        <div class='tool' onclick={() => {
+      <div className='toolbar'>
+        <div className='tool' onClick={() => {
           dispatch(init());
         }}>
-          <i class="fa-solid fa-arrows-rotate" />
+          <i className="fa-solid fa-arrows-rotate" />
         </div>
-        <div class='tool' onclick={() => dispatch.actions.view.set('search')}>
-          <i class="fa-solid fa-magnifying-glass" />
+        <div className='tool' onClick={() => dispatch.actions.view.set('search')}>
+          <i className="fa-solid fa-magnifying-glass" />
         </div>
-        <div class='tool' onclick={() => {
+        <div className='tool' onClick={() => {
           dispatch.methods.pins.load(channelId);
           dispatch.actions.view.set('pins');
         }}>
-          <i class="fa-solid fa-thumbtack" />
+          <i className="fa-solid fa-thumbtack" />
         </div>
         {stream.type === 'archive' && (
-          <div class='tool' onclick={() => {
+          <div className='tool' onClick={() => {
             dispatch.actions.messages.clear({ stream });
             setStream({ ...stream, type: 'live' });
             dispatch(loadMessages({ ...stream, type: 'live' }))
           }}>
-            <i class="fa-solid fa-down-long" />
+            <i className="fa-solid fa-down-long" />
           </div>
         )}
       </div>

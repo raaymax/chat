@@ -1,5 +1,4 @@
-import { h } from 'preact';
-import { useEffect, useCallback, useRef } from 'preact/hooks';
+import { useEffect, useCallback, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import {useStream} from '../../contexts/stream';
@@ -88,14 +87,14 @@ export const Header = ({}) => {
 
   return (
     <StyledHeader>
-      <i class='fa-solid fa-magnifying-glass' />
-      <input class='search-input' placeholder='search...' ref={input} onSubmit={submit} />
-      <div class='toolbar'>
-        <div class='tool' onclick={() => submit()}>
-          <i class="fa-solid fa-paper-plane" />
+      <i className='fa-solid fa-magnifying-glass' />
+      <input className='search-input' placeholder='search...' ref={input} onSubmit={submit} />
+      <div className='toolbar'>
+        <div className='tool' onClick={() => submit()}>
+          <i className="fa-solid fa-paper-plane" />
         </div>
-        <div class='tool' onclick={() => dispatch.actions.view.set('search')}>
-          <i class="fa-solid fa-xmark" />
+        <div className='tool' onClick={() => dispatch.actions.view.set('search')}>
+          <i className="fa-solid fa-xmark" />
         </div>
       </div>
     </StyledHeader>

@@ -1,5 +1,4 @@
-import { h } from 'preact';
-import { useCallback, useState, useEffect } from 'preact/hooks';
+import { useCallback, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { InputContext, useInput } from './InputContext';
 import { Attachments } from '../Attachments/Attachments';
@@ -47,20 +46,20 @@ export const InputForm = ({children }) => {
     <InputContainer className={mode}>
       <div
         scope='root'
-        class='input'
+        className='input'
         ref={input}
-        contenteditable='true'
+        contentEditable='true'
         onPaste={onPaste}
         onInput={(e) => onInput(e)}
         onKeyDown={(e) => onKeyDown(e)}
       >{children}</div>
       <Attachments />
-      <div class='actionbar' onclick={focus} action='focus'>
-        <div class={showEmojis ? 'action active' : 'action'} onclick={() => setShowEmojis(!showEmojis)}>
-          <i class="fa-solid fa-face-smile-beam" />
+      <div className='actionbar' onClick={focus} action='focus'>
+        <div className={showEmojis ? 'action active' : 'action'} onClick={() => setShowEmojis(!showEmojis)}>
+          <i className="fa-solid fa-face-smile-beam" />
         </div>
-        <div class='action' onclick={addFile}>
-          <i class="fa-solid fa-plus" />
+        <div className='action' onClick={addFile}>
+          <i className="fa-solid fa-plus" />
         </div>
         <StatusLine />
         {mode === 'edit' && (
@@ -74,7 +73,7 @@ export const InputForm = ({children }) => {
           </ActionButton>
         ) : (
           <ActionButton className={'action green'} onClick={send} action='submit'>
-            <i class="fa-solid fa-paper-plane" />
+            <i className="fa-solid fa-paper-plane" />
           </ActionButton>
         )}
       </div>
@@ -87,7 +86,9 @@ export const InputForm = ({children }) => {
         ref={fileInput}
         type="file"
         multiple
-        style="height: 0; opacity: 0; width: 0; position:absolute; bottom:0; left: 0;"
+        style={{
+          height: 0, opacity: 0, width: 0, position: 'absolute', bottom: 0, left: 0,
+        }}
       />
     </InputContainer>
   );

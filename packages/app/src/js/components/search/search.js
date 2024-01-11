@@ -1,5 +1,4 @@
 /* eslint-disable no-await-in-loop */
-import { h } from 'preact';
 import styled from 'styled-components';
 import { HoverContext } from '../../contexts/hover';
 import { SearchResults } from './searchResults';

@@ -1,5 +1,4 @@
-import { h } from 'preact';
-import { useCallback } from 'preact/hooks';
+import { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { Message } from '../Message/message';
@@ -44,7 +43,7 @@ export function SearchResults() {
           {result.data.map((msg) => (
             <Message
               onClick={() => gotoMessage(msg)}
-              class={msg.priv ? ['private'] : []}
+              className={msg.priv ? ['private'] : []}
               data-id={msg.id}
               client-id={msg.clientId}
               key={`search:${result.text}:${msg.id || msg.clientId}`}

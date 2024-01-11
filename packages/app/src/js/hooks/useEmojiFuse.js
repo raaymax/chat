@@ -1,4 +1,4 @@
-import { useMemo } from 'preact/hooks';
+import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import Fuse from 'fuse.js';
 

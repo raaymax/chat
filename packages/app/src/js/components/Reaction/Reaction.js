@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useMessageData } from '../../contexts/message';
@@ -34,7 +33,7 @@ export const Reaction = ({ messageId, children }) => {
   const dispatch = useDispatch();
 
   return (
-    <i onclick={() => dispatch.methods.messages.addReaction(messageId, children)}>
+    <i onClick={() => dispatch.methods.messages.addReaction(messageId, children)}>
       {children}
     </i>
   );

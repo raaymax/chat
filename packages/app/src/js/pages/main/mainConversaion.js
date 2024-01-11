@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import styled from 'styled-components';
 import { Header } from './header';
 import { Conversation } from '../../components/Conversation/conversation';
@@ -11,9 +10,9 @@ const Container = styled.div`
   flex-direction: column;
   border-right: 1px solid var(--primary_border_color);
 `;
-export const MainConversation = ({ className, onclick }) => (
+export const MainConversation = ({ className, onClick }) => (
   <Container className={className}>
-    <Header onclick={onclick} />
+    <Header onClick={onClick} />
     <Conversation />
   </Container>
 );

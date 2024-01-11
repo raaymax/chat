@@ -1,5 +1,4 @@
-import { h } from 'preact';
-import { useEffect } from 'preact/hooks';
+import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
 import '../setup';

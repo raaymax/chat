@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { gotoDirectChannel } from '../../services/channels';
@@ -50,9 +49,9 @@ export const User = ({ userId, onClick }) => {
   if (!user) return null;
   return (
     <UserContainer onClick={onClick} className={`user ${user.connected ? 'connected ' : ''}${active ? 'recent' : ''}${user.system ? 'system' : ''}`} data-id={userId}>
-      {!user.system ? (<i class='fa-solid fa-user' />) : (
-        <i class="fa-solid fa-user-gear" />)}
-      <span class='name'>{user.name}</span>
+      {!user.system ? (<i className='fa-solid fa-user' />) : (
+        <i className="fa-solid fa-user-gear" />)}
+      <span className='name'>{user.name}</span>
     </UserContainer>
   );
 };
@@ -61,7 +60,7 @@ export const UserList = () => {
   const dispatch = useDispatch();
   const users = useUsers();
   return (
-    <div class='user-list'>
+    <div className='user-list'>
       <Header>users</Header>
       { users && users.map((c) => (
         <User
