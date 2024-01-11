@@ -15,7 +15,7 @@ module.exports = {
       name: user.name,
       lastSeen: user.lastSeen,
       system: user.system,
-      avatarUrl: tools.createImageUrl(user.avatarFileId),
+      avatarUrl: user.avatarFileId ? tools.createImageUrl(user.avatarFileId) : user.avatarUrl,
       connected: bus.hasKey(user.id),
     }));
     res.ok();

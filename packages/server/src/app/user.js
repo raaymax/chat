@@ -23,13 +23,16 @@ module.exports = {
     const userId = await repo.user.create({
       name,
       login,
+      avatarUrl: '/assets/avatar.png',
       password: bcrypt.hashSync(password, 10),
     });
 
     const channelId = await repo.channel.create({
       cid: userId,
       private: true,
+      direct: true,
       name,
+      channelType: 'DIRECT',
       users: [userId],
     }, { bus });
 
@@ -39,6 +42,7 @@ module.exports = {
       direct: true,
       private: true,
       name: 'Direct',
+      channelType: 'DIRECT',
       users: [userId, invitation.userId],
     }, { bus });
 

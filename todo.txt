@@ -1,3 +1,4 @@
+- feat: if channel from link is not found redirectt to main or show message
 
 - Server Sent Events ?
 
@@ -8,12 +9,10 @@ backlog:
 
 - feat(channels): number of unread messages in direct channels
 
-- fix: remove openai and bob users
 - fix: rpc message body should be aggregated, now type is reserved word or change type to _type
 
 - feat: add key based hardcoded urls for some files (system avatars)
 - chore: check if serverWebUrl and baseUrl are the same
-- chore: create default avatar for user
 - chore: add default avatar for system user
 - fix(link-preview): crashes when link is a redirect
 
@@ -25,7 +24,6 @@ backlog:
 - feat(tags): searching using tags
 - feat(channels): ability to search channels
 ? fix: html parsing failed on production
-- fix: bob is not working - migrate to chatgpt?
 
 - fix(emojis): unable to backspace emoji on mobile
 - fix(attachments): attachment is displaying in all inputs
@@ -41,7 +39,6 @@ backlog:
 - refactor(app): migrate selectors to separate files
 - refactor(app): use dixie instead of redux
 
-- feat(images): alternative for imgix? implement in api?
 - feat(link-preview): generate summary of link content
 - feat(share): ability to share files
 - feat(messages): message with checklist
