@@ -87,7 +87,6 @@ pnpm run dev
 
 ```
 admin / 123
-member / 123
 ```
 New users can be invited with `/invite` command which will generate single use link for user registration.
 
