@@ -1,5 +1,5 @@
 import {
-  useContext, useMemo, useEffect, useState,createContext 
+  useContext, useMemo, useEffect, useState, createContext,
 } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { loadMessages, loadNext, loadPrevious } from '../services/messages';

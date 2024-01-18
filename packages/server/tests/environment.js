@@ -5,9 +5,21 @@ const { connect } = require('../src/infra/repositories');
 exports.mochaHooks = {
   beforeAll: async () => {
     const { db } = await connect();
-    const member = db.collection('users').findOne({ login: 'member' });
-    const admin = db.collection('users').findOne({ login: 'admin' });
+    const admin = await db.collection('users').findOne({ login: 'admin' });
+    let member = await db.collection('users').findOne({ login: 'member' });
+    if (!member) {
+      await db.collection('users').insertOne({
+        clientId: 'c3875674-61f1-4793-a558-a733293f3527',
+        login: 'member',
+        password: admin.password,
+        name: 'Member',
+        avatarUrl: '',
+      });
+      member = await db.collection('users').findOne({ login: 'member' });
+      await db.collection('channels').insertOne({ name: 'Member', private: true, users: [member._id] });
+    }
     const channel = await db.collection('channels').findOne({ name: 'main' });
+    await db.collection('channels').updateOne({ name: 'main' }, { $set: { users: [admin._id, member._id] } });
     const testChannel = await db.collection('channels').findOne({ name: 'test' });
     if (!testChannel) await db.collection('channels').insertOne({ name: 'test', private: false });
     await db.collection('messages').deleteMany({});

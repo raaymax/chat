@@ -1,5 +1,5 @@
 import {
-  useRef, useState, useCallback, useEffect, useContext, createContext
+  useRef, useState, useCallback, useEffect, useContext, createContext,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useStream } from '../../contexts/stream';

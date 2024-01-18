@@ -121,6 +121,8 @@ module.exports = {
       },
       globals: {
         EMOJI: 'writable',
+        API_URL: 'readonly',
+        APP_URL: 'readonly',
       },
       rules: {
         'jest/no-deprecated-functions': 'off',

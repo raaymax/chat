@@ -56,7 +56,7 @@ export const Toolbar = () => {
       <i className="fa-solid fa-pen-to-square" onClick={() => dispatch.actions.messages.toggleEdit(id)} />
       {!pinned
         ? <i className="fa-solid fa-thumbtack" onClick={() => dispatch.methods.pins.pin(id, channelId)} />
-        : <i className="fa-solid fa-thumbtack" style={{color:"Tomato"}} onClick={() => dispatch.methods.pins.unpin(id, channelId)} />}
+        : <i className="fa-solid fa-thumbtack" style={{color: "Tomato"}} onClick={() => dispatch.methods.pins.unpin(id, channelId)} />}
       { isMe && <i className='fa-solid fa-trash-can' onClick={() => setView('delete')} /> }
       {
         !stream.parentId

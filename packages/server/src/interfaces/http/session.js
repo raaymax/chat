@@ -2,7 +2,7 @@ const express = require('express');
 const crypto = require('crypto');
 const rateLimit = require('express-rate-limit');
 const userService = require('../../app/user');
-const db = require('../../infra/repositories');
+const repo = require('../../infra/repo')();
 
 const router = new express.Router();
 if (process.env.NODE_ENV !== 'test') {
@@ -34,7 +34,7 @@ async function getSession(req, res) {
   } else {
     const token = req.headers?.authorization?.split(' ')[1];
     if (token) {
-      const record = await db.session.getByToken(token);
+      const record = await repo.session.getByToken(token);
       if (record?.session?.userId) {
         req.session.lastIp = req.ip;
         req.session.lastUserAgent = req.headers['user-agent'];
