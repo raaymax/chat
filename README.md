@@ -40,7 +40,8 @@ type ChatConfig = {
     directory: string // where to save files when type `fs`
     bucket: string // bucket name for `gcs`
   }
-  baseUrl?: string // default 'http://localhost:8080' base url for links creation
+  apiUrl?: string // default 'http://localhost:8080' url of api
+  appUrl?: string // default 'http://localhost:8081' url for frontend app
 };
 ```
 

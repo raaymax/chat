@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 
-const SESSION_URL = `${document.location.protocol}//${document.location.host}/session`;
+const SESSION_URL = `${API_URL}/session`;
 
 export const isProbablyLogged = () => !!localStorage.token;
 

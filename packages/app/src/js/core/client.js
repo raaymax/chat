@@ -7,11 +7,8 @@ const {
   notify, watch, once, exists,
 } = createEventListener();
 
-// eslint-disable-next-line no-nested-ternary
-const URI = `${document.location.protocol}//${document.location.host}`;
-
 // eslint-disable-next-line no-console
-const manager = new Manager(URI);
+const manager = new Manager(API_URL);
 
 const socket = manager.socket('/', {
   auth: (cb) => {

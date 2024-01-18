@@ -28,7 +28,7 @@ const PushService = {
         createdAt: new Date(msg.createdAt).toISOString(),
         title: `${user?.name || 'Guest'} on ${channel.name}`,
         body: msg.flat,
-        link: `${conf.baseUrl}/#/${channel.name}`, // FIXME: use above ids
+        link: `${conf.appUrl}/#/${channel.name}`, // FIXME: use above ids
       },
     };
 

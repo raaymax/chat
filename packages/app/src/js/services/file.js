@@ -4,7 +4,7 @@ import { createCounter } from '../utils';
 
 const tempId = createCounter(`file:${(Math.random() + 1).toString(36)}`);
 
-const FILES_URL = `${document.location.protocol}//${document.location.host}/files`;
+const FILES_URL = `${API_URL}/files`;
 
 export const uploadMany = (streamId, files) => async (dispatch) => {
   for (let i = 0, file; i < files.length; i++) {
