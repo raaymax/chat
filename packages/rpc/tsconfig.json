@@ -2,9 +2,11 @@
   "compilerOptions": {
     "outDir": "./dist",
     "allowJs": true,
-    "target": "es5",
     "lib": [ "es2015", "dom" ],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "target": "es6",
+    "esModuleInterop": true,
+    "moduleResolution": "node"
   },
   "include": ["./src/**/*"]
 }

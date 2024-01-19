@@ -5,7 +5,12 @@
   "main": "src/index.js",
   "workspaces": [
     "packages/app",
-    "packages/server"
+    "packages/app2",
+    "packages/server",
+    "packages/repo",
+    "packages/rpc",
+    "packages/storage",
+    "config"
   ],
   "engines": {
     "node": "20.x.x",
