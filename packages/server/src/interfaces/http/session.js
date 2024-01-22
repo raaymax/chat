@@ -29,9 +29,8 @@ async function createUser(req, res) {
 }
 
 async function getSession(req, res) {
-  console.log(req.session);
   if (req.session.userId) {
-    res.status(200).send({ status: 'ok', user: req.session.userId });
+    res.status(200).send({ status: 'ok', user: req.session.userId, token: req.session.token });
   } else {
     const token = req.headers?.authorization?.split(' ')[1];
     if (token) {
@@ -39,7 +38,7 @@ async function getSession(req, res) {
       if (record?.session?.userId) {
         req.session.lastIp = req.ip;
         req.session.lastUserAgent = req.headers['user-agent'];
-        return res.status(200).send({ status: 'ok', user: record.session.userId });
+        return res.status(200).send({ status: 'ok', user: record.session.userId, token: record.session.token });
       }
     }
     res.status(200).send({ status: 'no-session' });

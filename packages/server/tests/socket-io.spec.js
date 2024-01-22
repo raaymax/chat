@@ -39,6 +39,7 @@ describe('socket.io', () => {
       .expect(200)
       .then(async (res) => ({
         ws: await con({
+          auth: (cb) => cb({ token: res.body.token }),
           extraHeaders: {
             Cookie: res.headers['set-cookie'][0],
           },
