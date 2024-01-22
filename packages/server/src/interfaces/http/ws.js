@@ -1,6 +1,6 @@
 const { Server } = require('socket.io');
 const sessionParser = require('./sessionParser');
-const db = require('../../infra/repositories');
+const db = require('../../infra/repo')();
 const bus = require('../../infra/bus');
 const actions = require('../../app/actions');
 const corsConfig = require('./cors');
@@ -32,6 +32,7 @@ module.exports = (server) => {
           socket.request.session = record.session;
           return next();
         }
+        return next(new Error('unauthorized'));
       }
       next(new Error('unauthorized'));
     }

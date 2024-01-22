@@ -29,6 +29,7 @@ async function createUser(req, res) {
 }
 
 async function getSession(req, res) {
+  console.log(req.session);
   if (req.session.userId) {
     res.status(200).send({ status: 'ok', user: req.session.userId });
   } else {

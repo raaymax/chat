@@ -9,6 +9,7 @@ export const Login = ({ children }) => {
   const [msg, setMsg] = useState(null);
   const validate = useCallback(() => session.validate()
     .then(async ({ status, user }) => {
+      console.log('validate', status, user);
       setStatus(status);
       if (status === 'ok') {
         setUser(user);
