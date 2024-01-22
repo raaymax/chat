@@ -24,7 +24,6 @@ export class WebSocketTransport implements Transport {
   private manager: Manager;
 
   constructor(url: string) {
-    console.log('connecting to', url');
     this.manager = new Manager(url);
     this.socket = this.manager.socket('/', {
       auth: (cb) => {
@@ -51,7 +50,7 @@ export class WebSocketTransport implements Transport {
         }
       }
     });
-    this.socket.on('connect', () => { console.log('connected') || this.emit('con:open'); });
+    this.socket.on('connect', () => this.emit('con:open'));
     this.socket.on('error', (err) => { console.log(err); });
 
     this.socket.on('disconnect', () => { this.emit('con:close'); });

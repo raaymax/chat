@@ -5,7 +5,6 @@
   "main": "src/index.js",
   "workspaces": [
     "packages/app",
-    "packages/app2",
     "packages/server",
     "packages/repo",
     "packages/rpc",

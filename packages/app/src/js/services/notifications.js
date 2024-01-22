@@ -34,7 +34,7 @@ const register = async (config, retry = false) => navigator.serviceWorker.getReg
     console.log('Service Worker registration failed: ', err);
     if (retry) return;
     navigator.serviceWorker.getRegistration('/')
-      .then((registration) => registration.pushManager.getSubscription())
+      .then((registration) => registration?.pushManager?.getSubscription())
       .then((sub) => sub && sub.unsubscribe())
       .then(() => register(config, true));
   });

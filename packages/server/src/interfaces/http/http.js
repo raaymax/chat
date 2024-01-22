@@ -19,6 +19,6 @@ app.use('/session', session);
 app.use('/files', files);
 app.use('/plugins/:pluginName', (req, res, next) => express.static(`../../plugins/${req.params.pluginName}/dist/`)(req, res, next));
 
-app.use(express.static('../app2/dist'));
+app.use(express.static('../app/dist'));
 
 module.exports = app;

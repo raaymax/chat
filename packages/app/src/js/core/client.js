@@ -10,6 +10,8 @@ const {
 // eslint-disable-next-line no-console
 const manager = new Manager(API_URL);
 
+console.log('API_URL', API_URL);
+
 const socket = manager.socket('/', {
   auth: (cb) => {
     cb({ token: localStorage.token });
@@ -61,7 +63,7 @@ socket.on('message', (msg) => {
     client.emit(msg.type, msg);
   }
 });
-socket.on('connect', () => { client.emit('con:open'); });
+socket.on('connect', () => { console.log('connected') || client.emit('con:open'); });
 socket.on('disconnect', () => { client.emit('con:close'); });
 
 export default client;

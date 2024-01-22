@@ -24,4 +24,4 @@ if (PLUGIN_LIST) {
   });
 }
 
-module.exports = plugins;
+export default plugins;

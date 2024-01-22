@@ -11,31 +11,22 @@ module.exports = (server) => {
     cors: corsConfig,
   });
 
-  const wrap = (middleware) => (socket, next) => middleware(socket.request, {}, next);
-
-  io.use(wrap(sessionParser));
-
   // only allow authenticated users
   io.use(async (socket, next) => {
-    const { session } = socket.request;
-    if (session?.userId) {
-      next();
-    } else {
-      const token = socket.handshake?.auth?.token;
-      if (token) {
-        const record = await db.session.getByToken(token);
-        if (record?.session?.userId) {
-          record.session.save = async () => {
-            const { save, ...data } = record.session;
-            return db.session.update(record.id, { session: data });
-          };
-          socket.request.session = record.session;
-          return next();
-        }
-        return next(new Error('unauthorized'));
+    const token = socket.handshake?.auth?.token;
+    if (token) {
+      const record = await db.session.getByToken(token);
+      if (record?.session?.userId) {
+        record.session.save = async () => {
+          const { save, ...data } = record.session;
+          return db.session.update(record.id, { session: data });
+        };
+        socket.request.session = record.session;
+        return next();
       }
-      next(new Error('unauthorized'));
+      return next(new Error('unauthorized'));
     }
+    next(new Error('unauthorized'));
   });
 
   io.on('connection', (ws) => {
