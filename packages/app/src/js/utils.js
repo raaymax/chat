@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 export const formatDate = (raw) => {

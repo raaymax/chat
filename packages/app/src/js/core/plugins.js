@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable global-require */
-/* eslint-disable import/no-dynamic-require */
+
 const registry = {};
 const plugins = {
   register: (slot, data) => {
