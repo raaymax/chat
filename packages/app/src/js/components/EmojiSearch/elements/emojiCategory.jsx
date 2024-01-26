@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const Container = styled.div`
   display: flex;
@@ -13,3 +14,7 @@ export const EmojiCategory = ({ children }) => (
     {children}
   </Container>
 );
+
+EmojiCategory.propTypes = {
+  children: PropTypes.any,
+};

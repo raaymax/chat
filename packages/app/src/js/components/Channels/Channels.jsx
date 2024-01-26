@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { ChannelCreate } from '../ChannelCreate/ChannelCreate';
 import { Channel } from './Channel';
 import { useBadges, useChannels } from '../../hooks';
+import PropTypes from 'prop-types';
 
 const ChannelsContainer = styled.div`
   .header {
@@ -71,4 +72,8 @@ export const Channels = ({ icon }) => {
       ))}
     </ChannelsContainer>
   );
+};
+
+Channels.propTypes = {
+  icon: PropTypes.string,
 };

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const Scroll = styled.div`
   flex: 1 1 auto;
@@ -18,3 +19,7 @@ export const EmojiScroll = ({ children }) => (
     </div>
   </Scroll>
 );
+
+EmojiScroll.propTypes = {
+  children: PropTypes.any,
+};

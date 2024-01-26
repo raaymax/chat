@@ -9,6 +9,7 @@ import { EmojiScroll } from './elements/emojiScroll';
 import { EmojiCategory } from './elements/emojiCategory';
 import { EmojiSearchContainer } from './elements/emojiSearchContainer';
 import { useEmojiFuse } from '../../hooks';
+import PropTypes from 'prop-types';
 
 const CATEGORIES = {
   p: 'People',
@@ -74,4 +75,8 @@ export const EmojiSearch = ({ onSelect }) => {
       </EmojiScroll>
     </EmojiSearchContainer>
   );
+};
+
+EmojiSearch.propTypes = {
+  onSelect: PropTypes.func.isRequired,
 };

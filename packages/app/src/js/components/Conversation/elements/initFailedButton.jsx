@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const ReInit = styled.div`
   cursor: pointer;
@@ -20,3 +21,7 @@ export const InitFailedButton = ({ onClick }) => (
     Click to retry...
   </ReInit>
 );
+
+InitFailedButton.propTypes = {
+  onClick: PropTypes.func,
+};

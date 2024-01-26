@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { InlineChannel } from './elements/inlineChannel';
+import PropTypes from 'prop-types';
 
 const DirectChannel = ({ channel, badge, onClick }) => {
   const me = useSelector((state) => state.me);
@@ -19,6 +20,16 @@ const DirectChannel = ({ channel, badge, onClick }) => {
     id={channel.id} onClick={onClick} icon='fa-solid fa-user' badge={badge}>{user.name}</InlineChannel>);
 };
 
+DirectChannel.propTypes = {
+  channel: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string,
+    users: PropTypes.arrayOf(PropTypes.string),
+  }),
+  badge: PropTypes.number,
+  onClick: PropTypes.func,
+};
+
 export const Channel = ({
   channelId: id, onClick, icon, badge,
 }) => {
@@ -34,4 +45,11 @@ export const Channel = ({
   if (priv) ico = 'fa-solid fa-lock';
   if (direct) return ( <DirectChannel channel={channel || {}} onClick={onClick} badge={badge} /> );
   return ( <InlineChannel id={id} onClick={onClick} icon={ico} badge={badge}>{name}</InlineChannel> );
+};
+
+Channel.propTypes = {
+  channelId: PropTypes.string,
+  onClick: PropTypes.func,
+  icon: PropTypes.string,
+  badge: PropTypes.number,
 };

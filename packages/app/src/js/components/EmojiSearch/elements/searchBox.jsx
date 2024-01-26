@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const SearchBoxInput = styled.input`
   flex: 0 0 30px;
@@ -17,3 +18,8 @@ export const SearchBox = ({ onChange, value }) => (
     placeholder="Search here..."
   />
 );
+
+SearchBox.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  value: PropTypes.string,
+};

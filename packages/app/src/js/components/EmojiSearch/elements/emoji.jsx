@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { getUrl } from '../../../services/file';
+import PropTypes from 'prop-types';
 
 const EmojiContainer = styled.div`
   width: 30px;
@@ -41,3 +42,10 @@ export const Emoji = ({
       : <span>{String.fromCodePoint(parseInt(unicode, 16))}</span>}
   </EmojiContainer>
 );
+
+Emoji.propTypes = {
+  unicode: PropTypes.string,
+  fileId: PropTypes.string,
+  shortname: PropTypes.string,
+  onClick: PropTypes.func,
+};
