@@ -83,14 +83,14 @@ export const Files = ({ list }) => (
         .map((file) => (
           <Image
             raw={RAW_IMAGE_TYPES.includes(file.contentType)}
-            key={file.clientId}
+            key={file.id || file.clientId}
             data={file} />
         ))}
     </div>
     <div className='file-list'>
       {list
         .filter((file) => !IMAGE_TYPES.includes(file.contentType))
-        .map((file) => <File key={file.clientId} data={file} />)}
+        .map((file) => <File key={file.id || file.clientId} data={file} />)}
     </div>
   </Container>
 );
