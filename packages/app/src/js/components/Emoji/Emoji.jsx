@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { getUrl } from '../../services/file';
 import { Tooltip } from '../../elements/tooltip';
 import { useEmoji } from '../../hooks';
+import PropTypes from 'prop-types';
 
 const StyledEmoji = styled.span`
   img{
@@ -19,15 +20,20 @@ const StyledEmoji = styled.span`
 export const Emoji = ({ shortname, big }) => {
   const emoji = useEmoji(shortname);
 
-  if (!emoji || emoji.empty) return <span className='emoji' emoji={shortname}>{shortname}</span>;
+  if (!emoji || emoji.empty) return <span className='emoji'>{shortname}</span>;
 
   return (
     <Tooltip text={shortname}>
-      <StyledEmoji big={big} emoji={shortname}>
+      <StyledEmoji big={big} data-emoji={shortname}>
         {emoji.unicode
           ? <span>{String.fromCodePoint(parseInt(emoji.unicode, 16))}</span>
           : <img src={getUrl(emoji.fileId)} alt={shortname} />}
       </StyledEmoji>
     </Tooltip>
   );
+};
+
+Emoji.propTypes = {
+  shortname: PropTypes.string,
+  big: PropTypes.bool,
 };

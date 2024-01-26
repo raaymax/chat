@@ -2,7 +2,6 @@
 import { initNotifications } from './notifications';
 
 const initApp = () => async (dispatch, getState) => {
-  console.log('initApp');
   const {actions, methods} = dispatch;
   if (navigator?.userAgentData?.mobile) {
     document.body.setAttribute('class', 'mobile');

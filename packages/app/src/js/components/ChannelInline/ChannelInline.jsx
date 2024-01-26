@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const InlineChannelLink = styled.a`
   span {
@@ -25,4 +26,8 @@ export const ChannelInline = ({ channelId: id }) => {
       <span className='name'>{channel?.name || channel?.id || id}</span>
     </InlineChannelLink>
   );
+};
+
+ChannelInline.propTypes = {
+  channelId: PropTypes.string,
 };

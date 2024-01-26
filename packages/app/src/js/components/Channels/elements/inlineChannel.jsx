@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import {Badge} from './badge';
+import PropTypes from 'prop-types';
 
 const Container = styled.div`
  padding: 5px 5px 5px 20px; 
@@ -38,3 +39,12 @@ export const InlineChannel = ({
     {badge > 0 && <Badge>{badge}</Badge>}
   </Container>
 )
+
+InlineChannel.propTypes = {
+  id: PropTypes.string,
+  children: PropTypes.any,
+  badge: PropTypes.number,
+  className: PropTypes.string,
+  onClick: PropTypes.func,
+  icon: PropTypes.string,
+};

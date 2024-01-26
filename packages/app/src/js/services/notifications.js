@@ -21,10 +21,13 @@ export const initNotifications = async (config) => {
 };
 
 const register = async (config, retry = false) => navigator.serviceWorker.getRegistration('/')
-  .then((registration) => registration.pushManager.subscribe({
-    userVisibleOnly: true,
-    applicationServerKey: config.vapidPublicKey,
-  }))
+  .then((registration) => {
+    if (!registration) throw new Error('No service worker registered');
+    return registration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: config.vapidPublicKey,
+    })
+  })
   .then(async (subscription) => client.req({
     type: 'user:push:subscribe',
     ...subscription.toJSON(),
