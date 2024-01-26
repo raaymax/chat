@@ -1,7 +1,7 @@
 import { WebSocketTransport, Request, Notification } from '@quack/rpc';
 import './registerSw';
 
-const client = new WebSocketTransport();
+const client = new WebSocketTransport(API_URL);
 
 window.client = client;
 

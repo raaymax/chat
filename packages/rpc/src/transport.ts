@@ -50,9 +50,9 @@ export class WebSocketTransport implements Transport {
         }
       }
     });
-    this.socket.on('connect', () => this.emit('con:open'));
+    this.socket.on('connect', () => { this.emit('con:open'); });
+    // eslint-disable-next-line no-console
     this.socket.on('error', (err) => { console.log(err); });
-
     this.socket.on('disconnect', () => { this.emit('con:close'); });
   }
 
