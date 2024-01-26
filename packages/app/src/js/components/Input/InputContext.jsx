@@ -7,6 +7,7 @@ import * as messageService from '../../services/messages';
 import { uploadMany } from '../../services/file';
 import { fromDom } from './serializer';
 import { useMessage } from '../../hooks/useMessage';
+import PropTypes from 'prop-types';
 
 const Context = createContext({
   input: {},
@@ -249,6 +250,12 @@ export const InputContext = (args) => {
       {children}
     </Context.Provider>
   );
+};
+
+InputContext.propTypes = {
+  children: PropTypes.node,
+  mode: PropTypes.string,
+  messageId: PropTypes.string,
 };
 
 export const useInput = () => {

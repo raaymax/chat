@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useInput } from './InputContext';
 import { Menu } from './elements/menu';
+import PropTypes from 'prop-types';
 
 export const TextMenu = ({
   className, options, open = false, select, selected = 0, setSelected,
@@ -62,4 +63,19 @@ export const TextMenu = ({
       </ul>
     </Menu>
   );
+};
+
+TextMenu.propTypes = {
+  className: PropTypes.string,
+  options: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string,
+    name: PropTypes.string,
+    icon: PropTypes.string,
+    url: PropTypes.string,
+    action: PropTypes.func,
+  })),
+  open: PropTypes.bool,
+  select: PropTypes.func,
+  selected: PropTypes.number,
+  setSelected: PropTypes.func,
 };

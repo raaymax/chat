@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { getUrl, getThumbnail } from '../../services/file';
+import PropTypes from 'prop-types';
 
 const download = async (fileId) => {
   window.open(getUrl(fileId));
@@ -65,6 +66,14 @@ export const File = ({ data: { fileName, contentType, id } }) => (
   </div>
 );
 
+File.propTypes = {
+  data: {
+    fileName: PropTypes.string,
+    contentType: PropTypes.string,
+    id: PropTypes.string,
+  },
+};
+
 export const Image = ({ raw, data: { fileName, id } }) => (
   <div className='file image' data-id={id} onClick={() => download(id)}>
     {
@@ -74,6 +83,14 @@ export const Image = ({ raw, data: { fileName, id } }) => (
     }
   </div>
 );
+
+Image.propTypes = {
+  raw: PropTypes.bool,
+  data: PropTypes.shape({
+    fileName: PropTypes.string,
+    id: PropTypes.string,
+  }),
+};
 
 export const Files = ({ list }) => (
   <Container>
@@ -94,3 +111,11 @@ export const Files = ({ list }) => (
     </div>
   </Container>
 );
+
+Files.propTypes = {
+  list: PropTypes.arrayOf(PropTypes.shape({
+    fileName: PropTypes.string,
+    contentType: PropTypes.string,
+    id: PropTypes.string,
+  })),
+};

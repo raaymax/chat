@@ -11,6 +11,7 @@ import { EmojiSelector } from './selectors/EmojiSelector';
 import { ChannelSelector } from './selectors/ChannelSelector';
 import { UserSelector } from './selectors/UserSelector';
 import { InputContainer } from './elements/container';
+import PropTypes from 'prop-types';
 
 export const InputForm = ({children }) => {
   const [showEmojis, setShowEmojis] = useState(false);
@@ -94,8 +95,16 @@ export const InputForm = ({children }) => {
   );
 };
 
+InputForm.propTypes = {
+  children: PropTypes.any,
+};
+
 export const Input = ({ children, ...args }) => (
   <InputContext {...args} >
     <InputForm>{children}</InputForm>
   </InputContext>
 );
+
+Input.propTypes = {
+  children: PropTypes.any,
+};
