@@ -39,7 +39,9 @@ class Files implements Storage {
       throw new Error('File not found');
     }
     const t = sharp().resize(width, height);
-    await this.service.upload(file.getStream().pipe(t), {
+    await this.service.upload(file.getStream().pipe(t).on('error', (err) => {
+      throw err;
+    }), {
       id: targetId,
       originalname: file.metadata.filename,
       mimetype: file.contentType,

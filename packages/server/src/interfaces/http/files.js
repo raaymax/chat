@@ -61,7 +61,11 @@ async function downloadFile(req, res) {
       'Content-Type': file.contentType,
       'Content-Disposition': `inline; filename="${file.metadata.filename}"`,
     });
-    file.getStream().pipe(res);
+    file.getStream().pipe(res).on('error', (err) => {
+      // eslint-disable-next-line no-console
+      console.error(err);
+      res.status(500).send({ errorCode: 'INTERNAL_SERVER_ERROR' });
+    });
   } catch (err) {
     if (err.code === 'ENOTFOUND') {
       return res.status(404).send({ errorCode: 'RESOURCE_NOT_FOUND' });
