@@ -88,7 +88,6 @@ export const MessageList = (props) => {
     detectDate(e);
     if (list !== oldList) return;
 
-    console.log(element.current.scrollTop, element.current.scrollHeight - element.current.offsetHeight + element.current.scrollTop)
     if (Math.floor(Math.abs(element.current.scrollTop)) <= 1) {
       onScrollBottom();
     } else if (Math.floor(Math.abs(
