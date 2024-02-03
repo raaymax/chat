@@ -35,6 +35,7 @@ export const selectors = {
 };
 
 export const loadPrevious = (stream) => async (dispatch, getState) => {
+  if (getState().messages.loading) return;
   const loadingDone = loading(dispatch, getState);
   const date = selectors.getEarliestDate(stream, getState());
 
@@ -45,12 +46,13 @@ export const loadPrevious = (stream) => async (dispatch, getState) => {
   if (selectors.countMessagesInStream(stream, getState()) > 100) {
     setTimeout(() => {
       dispatch.actions.messages.takeOldest({ stream, count: 100 });
-    }, 1);
+    }, 10);
   }
   loadingDone();
 };
 
 export const loadNext = (stream) => async (dispatch, getState) => {
+  if (getState().messages.loading) return;
   const loadingDone = loading(dispatch, getState);
   const date = selectors.getLatestDate(stream, getState());
 
@@ -61,11 +63,10 @@ export const loadNext = (stream) => async (dispatch, getState) => {
   if (messages?.length > 0) {
     dispatch.methods.progress.update(messages[0].id);
   }
-
   if (selectors.countMessagesInStream(stream, getState()) > 100) {
     setTimeout(() => {
       dispatch.actions.messages.takeYoungest({ stream, count: 100 });
-    }, 1);
+    }, 10);
   }
   loadingDone();
   return messages.length

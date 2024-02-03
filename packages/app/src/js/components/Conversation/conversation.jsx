@@ -53,8 +53,8 @@ export function Conversation() {
           status={status}
           selected={stream.selected}
           onDateChange={(date) => setStream({ ...stream, date })}
-          onScrollTop={() => {
-            prev();
+          onScrollTop={async () => {
+            await prev();
             setStream({...stream, type: 'archive', selected: undefined});
             bumpProgress();
           }}

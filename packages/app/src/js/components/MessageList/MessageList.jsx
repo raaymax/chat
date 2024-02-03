@@ -43,7 +43,9 @@ export const MessageList = (props) => {
       });
     if (r) {
       const date = r.getAttribute('data-date');
-      if (setCurrent) setCurrent([date, r])
+      if (setCurrent) {
+        setCurrent([date, r.getBoundingClientRect()]);
+      }
       if (onDateChange) onDateChange(date);
     }
   }, [setCurrent, onDateChange]);
@@ -64,9 +66,8 @@ export const MessageList = (props) => {
       } else if (rect && current && current[1]?.y) {
         element.current.scrollTop += (rect.y - current[1].y);
       }
+      setCurrent([current[0], rect]);
     }
-    const rect = getRect();
-    setCurrent([current[0], rect]);
     setOldList(list);
   }, [list, stream, oldList, setOldList, current, setCurrent]);
 
