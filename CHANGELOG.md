@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.3.0](https://github.com/raaymax/chat/compare/quack-v2.2.0...quack-v2.3.0) (2024-02-03)
+
+
+### Features
+
+* ability to set api and app urls ([35c71cb](https://github.com/raaymax/chat/commit/35c71cb01910bb3260be00c2019ac78b74dd46e1))
+* added default avatar for new users ([55b162f](https://github.com/raaymax/chat/commit/55b162f9ac32e7052109175fd30cb993776cfc6f))
+
+
+### Bug Fixes
+
+* app startup on firefox ([565af3d](https://github.com/raaymax/chat/commit/565af3dcabf9d22a986eb569a89c13c703c37298))
+* dev vite FE connection problem ([f31ca05](https://github.com/raaymax/chat/commit/f31ca05a0b669b3d0a5c950d8d8e9963d93c8a50))
+* failed to restore session in webscket connection ([7d1e1d0](https://github.com/raaymax/chat/commit/7d1e1d00247e2a33df6741633baa25e99c4be0b3))
+* message list scrolling was jumping ([c582d2c](https://github.com/raaymax/chat/commit/c582d2c58ab16764a6452ae54426336cfddacf93))
+* new instalation setup ([0b63aa6](https://github.com/raaymax/chat/commit/0b63aa65a40b3c28a412899ac849894c4531c82d))
+* session restore by token ([15084c1](https://github.com/raaymax/chat/commit/15084c11a5475b3539728a2055530c2470a892c2))
+
 ## [2.2.0](https://github.com/raaymax/chat/compare/quack-v2.1.0...quack-v2.2.0) (2023-12-20)
 
 
