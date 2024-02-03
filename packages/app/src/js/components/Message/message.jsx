@@ -12,6 +12,7 @@ import { buildMessageBody } from './messageBuilder';
 import { isToday } from './utils';
 import { LinkPreviewList } from './elements/LinkPreview';
 import {Input} from '../Input/Input';
+import PropTypes from 'prop-types';
 
 const MessageBase = ({ onClick, sameUser, ...props } = {}) => {
   const msg = useMessageData();
@@ -65,8 +66,18 @@ const MessageBase = ({ onClick, sameUser, ...props } = {}) => {
   );
 };
 
+MessageBase.propTypes = {
+  onClick: PropTypes.func,
+  sameUser: PropTypes.bool,
+  className: PropTypes.arrayOf(PropTypes.string),
+};
+
 export const Message = (props) => (
   <MessageContext value={{ data: props.data }}>
     <MessageBase {...props} />
   </MessageContext>
 );
+
+Message.propTypes = {
+  data: PropTypes.object,
+};

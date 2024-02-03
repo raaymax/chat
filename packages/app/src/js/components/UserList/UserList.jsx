@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { gotoDirectChannel } from '../../services/channels';
 import { useUsers } from '../../hooks';
+import PropTypes from 'prop-types';
 
 const Header = styled.div`
  padding: 5px 10px;
@@ -54,6 +55,11 @@ export const User = ({ userId, onClick }) => {
       <span className='name'>{user.name}</span>
     </UserContainer>
   );
+};
+
+User.propTypes = {
+  userId: PropTypes.string,
+  onClick: PropTypes.func,
 };
 
 export const UserList = () => {

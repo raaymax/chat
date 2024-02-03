@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const StyledProgress = styled.div`
   position: relative;
@@ -34,4 +35,14 @@ export const Progress = ({ progress }) => {
       </div>
     </StyledProgress>
   );
+};
+
+Progress.propTypes = {
+  progress: PropTypes.arrayOf(PropTypes.shape({
+    userId: PropTypes.string,
+    user: PropTypes.shape({
+      avatarUrl: PropTypes.string,
+      name: PropTypes.string,
+    }),
+  })),
 };

@@ -60,7 +60,7 @@ const StyledHeader = styled.div`
   }
 `;
 
-export const Header = ({}) => {
+export const Header = () => {
   const input = useRef(null);
   const dispatch = useDispatch();
   const [stream] = useStream();

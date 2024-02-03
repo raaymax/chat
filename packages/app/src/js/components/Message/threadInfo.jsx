@@ -4,6 +4,7 @@ import { UserCircle } from '../UserCircle/UserCircle';
 import { formatTime, formatDateDetailed } from '../../utils';
 import { useMessageData } from '../../contexts/message';
 import { useStream } from '../../contexts/stream';
+import PropTypes from 'prop-types';
 
 const Container = styled.div`
   width: auto;
@@ -44,6 +45,12 @@ export const ThreadLink = ({ channelId, parentId, text }) => {
       {text || 'Thread'}
     </Link>
   );
+};
+
+ThreadLink.propTypes = {
+  channelId: PropTypes.string,
+  parentId: PropTypes.string,
+  text: PropTypes.string,
 };
 
 export const ThreadInfo = () => {

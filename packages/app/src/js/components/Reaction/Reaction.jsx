@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useMessageData } from '../../contexts/message';
+import PropTypes from 'prop-types';
 
 const StyledReactions = styled.div`
   i {
@@ -37,4 +38,9 @@ export const Reaction = ({ messageId, children }) => {
       {children}
     </i>
   );
+};
+
+Reaction.propTypes = {
+  messageId: PropTypes.string,
+  children: PropTypes.node,
 };

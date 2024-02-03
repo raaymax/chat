@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const StyledDateSeparator = styled.div`
   text-align: center;
@@ -15,3 +16,7 @@ const StyledDateSeparator = styled.div`
 export const DateSeparator = ({ children }) => (
   <StyledDateSeparator>{children}</StyledDateSeparator>
 );
+
+DateSeparator.propTypes = {
+  children: PropTypes.node,
+};

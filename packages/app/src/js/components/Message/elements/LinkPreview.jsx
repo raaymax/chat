@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const Container = styled.div`
   display: flex;
@@ -36,7 +37,7 @@ const Link = styled.div`
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-image: url(${(props) => props.image});
+    background-image: url(${(props) => props.$image});
   }
   
   img {
@@ -50,7 +51,7 @@ const Link = styled.div`
 
 export const LinkPreview = ({ link }) => (
   <Link className='link-preview' onClick={() => window.open(link.url, '_blank').focus()}
-    image={link.images[0]}>
+    $image={link.images[0]}>
     {link.images?.length && <div className='image' />}
     <div className='text'>
       <h3>{link.siteName} - {link.title}</h3>
@@ -59,6 +60,16 @@ export const LinkPreview = ({ link }) => (
   </Link>
 );
 
+LinkPreview.propTypes = {
+  link: PropTypes.shape({
+    url: PropTypes.string,
+    siteName: PropTypes.string,
+    title: PropTypes.string,
+    description: PropTypes.string,
+    images: PropTypes.array,
+  }),
+};
+
 export const LinkPreviewList = ({ links = [] }) => (
   <Container>
     {links.map((link, key) => (
@@ -66,3 +77,13 @@ export const LinkPreviewList = ({ links = [] }) => (
     ))}
   </Container>
 );
+
+LinkPreviewList.propTypes = {
+  links: PropTypes.arrayOf(PropTypes.shape({
+    url: PropTypes.string,
+    siteName: PropTypes.string,
+    title: PropTypes.string,
+    description: PropTypes.string,
+    images: PropTypes.array,
+  })),
+};

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 
 export const Delete = ({ accept }) => {
   const [show, setShow] = useState(false);
@@ -9,4 +10,8 @@ export const Delete = ({ accept }) => {
       <i className={`fa-solid ${show ? 'fa-circle-xmark' : 'fa-trash-can'}`} onClick={() => setShow(!show)} />
     </span>
   );
+};
+
+Delete.propTypes = {
+  accept: PropTypes.func,
 };

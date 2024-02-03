@@ -6,16 +6,20 @@ import PropTypes from 'prop-types';
 
 const StyledEmoji = styled.span`
   img{
-    height: ${(props) => (props.big ? 2 : 1.5)}em;
-    width: ${(props) => (props.big ? 2 : 1.5)}em;
+    height: ${(props) => (props.$big ? 2 : 1.5)}em;
+    width: ${(props) => (props.$big ? 2 : 1.5)}em;
     vertical-align: bottom;
     display: inline-block;
   }
   span {
-    font-size: ${(props) => (props.big ? 2 : 1)}em;
-    line-height: ${(props) => (props.big ? 40 : 24)}px;
+    font-size: ${(props) => (props.$big ? 2 : 1)}em;
+    line-height: ${(props) => (props.$big ? 40 : 24)}px;
   }
 `;
+
+StyledEmoji.propTypes = {
+  $big: PropTypes.bool,
+};
 
 export const Emoji = ({ shortname, big }) => {
   const emoji = useEmoji(shortname);
@@ -24,7 +28,7 @@ export const Emoji = ({ shortname, big }) => {
 
   return (
     <Tooltip text={shortname}>
-      <StyledEmoji big={big} data-emoji={shortname}>
+      <StyledEmoji $big={big} data-emoji={shortname}>
         {emoji.unicode
           ? <span>{String.fromCodePoint(parseInt(emoji.unicode, 16))}</span>
           : <img src={getUrl(emoji.fileId)} alt={shortname} />}

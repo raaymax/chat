@@ -67,11 +67,11 @@ export const File = ({ data: { fileName, contentType, id } }) => (
 );
 
 File.propTypes = {
-  data: {
+  data: PropTypes.shape({
     fileName: PropTypes.string,
     contentType: PropTypes.string,
     id: PropTypes.string,
-  },
+  }),
 };
 
 export const Image = ({ raw, data: { fileName, id } }) => (

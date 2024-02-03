@@ -4,6 +4,7 @@ import {
 } from 'react';
 import styled from 'styled-components';
 import { useStream } from '../../contexts/stream';
+import PropTypes from 'prop-types';
 
 const ListContainer = styled.div`
   display: flex;
@@ -87,11 +88,12 @@ export const MessageList = (props) => {
     detectDate(e);
     if (list !== oldList) return;
 
-    if (Math.floor(Math.abs(element.current.scrollTop)) === 0) {
+    console.log(element.current.scrollTop, element.current.scrollHeight - element.current.offsetHeight + element.current.scrollTop)
+    if (Math.floor(Math.abs(element.current.scrollTop)) <= 1) {
       onScrollBottom();
     } else if (Math.floor(Math.abs(
       element.current.scrollHeight - element.current.offsetHeight + element.current.scrollTop,
-    )) < 1) {
+    )) <= 1) {
       onScrollTop();
     }
   }, [detectDate, list, oldList, onScrollTop, onScrollBottom]);
@@ -102,6 +104,15 @@ export const MessageList = (props) => {
       {formatter ? formatter(props) : list}
     </ListContainer>
   );
+};
+
+MessageList.propTypes = {
+  formatter: PropTypes.func,
+  list: PropTypes.array,
+  onScrollTop: PropTypes.func,
+  onScrollBottom: PropTypes.func,
+  onDateChange: PropTypes.func,
+  date: PropTypes.string,
 };
 
 export default MessageList;

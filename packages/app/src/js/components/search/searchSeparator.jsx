@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const StyledSearchSeparator = styled.div`
   line-height: 30px;
@@ -15,3 +16,7 @@ const StyledSearchSeparator = styled.div`
 export const SearchSeparator = ({ children }) => (
   <StyledSearchSeparator>{children}</StyledSearchSeparator>
 );
+
+SearchSeparator.propTypes = {
+  children: PropTypes.node,
+};

@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const Image = styled.img`
   display: inline-block;
@@ -15,4 +16,9 @@ export const UserCircle = ({ userId, className }) => {
   return (
     <Image className={className} src={user.avatarUrl} alt={user.name} />
   );
+};
+
+UserCircle.propTypes = {
+  userId: PropTypes.string,
+  className: PropTypes.string,
 };

@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { gotoDirectChannel } from '../../services/channels';
+import PropTypes from 'prop-types';
 
 const InlineUserLink = styled.a`
   span {
@@ -18,4 +19,8 @@ export const UserInline = ({ userId: id }) => {
       <span className='name'>@{user?.name || id}</span>
     </InlineUserLink>
   );
+};
+
+UserInline.propTypes = {
+  userId: PropTypes.string,
 };
