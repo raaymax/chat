@@ -85,11 +85,9 @@ async function handleNotificationClick(event) {
 async function handleNotification(title, options, data) {
   await self.registration.showNotification(title, options);
   const clientList = await getClientList();
-  if (hasVisibleClients(clientList)) {
-    for (const client of clientList) {
-      client.postMessage({ type: 'notification', data });
-    }
-  }
+	for (const client of clientList) {
+		client.postMessage({ type: 'notification', data });
+	}
 }
 
 function getClientList() {
@@ -97,11 +95,6 @@ function getClientList() {
     type: 'window',
     includeUncontrolled: true,
   });
-}
-
-function hasVisibleClients(clientList) {
-  return clientList.some((client) => client.visibilityState === 'visible'
-    && !client.url.startsWith('chrome-extension://'));
 }
 
 async function getWindowClient(url) {
