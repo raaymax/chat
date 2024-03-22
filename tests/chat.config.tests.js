@@ -1,6 +1,6 @@
 module.exports = {
   storage: {
     type: 'memory',
-    vapidSubject: 'mailto:admin@localhost',
   },
+  vapidSubject: 'mailto:admin@localhost',
 };
