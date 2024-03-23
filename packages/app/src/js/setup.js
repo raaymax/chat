@@ -19,8 +19,8 @@ client
   .on('con:close', () => {
     actions.connection.disconnected();
     actions.info.show({
-      message: 'Disconnected - reconnect attempt in 1s',
-      type: 'error',
+      message: 'Connecting...',
+      type: 'info',
     });
   })
   .on('message', (msg) => actions.messages.add({ ...msg, pending: false }))
