@@ -23,11 +23,12 @@ export class WebSocketTransport implements Transport {
 
   private manager: Manager;
 
-  constructor(url: string) {
+  constructor(url: string, token: string) {
     this.manager = new Manager(url);
     this.socket = this.manager.socket('/', {
       auth: (cb) => {
-        cb({ token: localStorage.token });
+        console.log('auth', token);
+        cb({ token });
       },
     });
 

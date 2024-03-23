@@ -34,7 +34,7 @@ describe('socket.io', () => {
 
   async function connectWs(login = 'admin') {
     return supertest(server)
-      .post('/session')
+      .post('/access')
       .send({ login, password: '123' })
       .expect(200)
       .then(async (res) => ({

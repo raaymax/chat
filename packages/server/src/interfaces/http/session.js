@@ -1,71 +1,86 @@
-const express = require('express');
-const crypto = require('crypto');
-const rateLimit = require('express-rate-limit');
-const userService = require('../../app/user');
-const repo = require('../../infra/repo')();
+const cookie = require('cookie');
+const uid = require('uid-safe').sync;
+const repo = require('../../infra/repositories');
 
-const router = new express.Router();
-if (process.env.NODE_ENV !== 'test') {
-  router.use(rateLimit({
-    windowMs: 5 * 60 * 1000,
-    max: 100,
-    standardHeaders: true,
-    legacyHeaders: false,
+function parseSessionToken(req) {
+  if (req.headers.Authorization) {
+    return req.headers.Authorization.split(/:[\s]*/)[1];
+  }
+  if (req.auth?.token) {
+    return req.auth.token;
+  }
+  const cookies = cookie.parse(req.headers.cookie || '');
+  return cookies.tok;
+}
+
+function saveCookie(req, res) {
+  res.setHeader('Set-Cookie', cookie.serialize('tok', req.token, {
+    httpOnly: true,
+    maxAge: 60 * 60 * 24 * 365, // 1 year
+    sameSite: 'strict',
+    secure: true,
   }));
 }
 
-router.post('/register', createUser);
-router.post('/', createSession);
-router.delete('/', deleteSession);
-router.get('/', getSession);
-
-async function createUser(req, res) {
-  try {
-    const userId = await userService.create(req.body);
-    res.status(200).send({ status: 'ok', user: userId });
-  } catch (e) {
-    res.status(400).send({ status: 'error', message: e.message });
-  }
+function removeCookie(res) {
+  res.setHeader('Set-Cookie', cookie.serialize('tok', '', {
+    httpOnly: true,
+    maxAge: 0,
+    sameSite: 'strict',
+    secure: true,
+  }));
 }
 
-async function getSession(req, res) {
-  if (req.session.userId) {
-    res.status(200).send({ status: 'ok', user: req.session.userId, token: req.session.token });
-  } else {
-    const token = req.headers?.authorization?.split(' ')[1];
-    if (token) {
-      const record = await repo.session.getByToken(token);
-      if (record?.session?.userId) {
-        req.session.lastIp = req.ip;
-        req.session.lastUserAgent = req.headers['user-agent'];
-        return res.status(200).send({ status: 'ok', user: record.session.userId, token: record.session.token });
-      }
-    }
-    res.status(200).send({ status: 'no-session' });
-  }
+async function createSession(req, res, userId) {
+  req.token = uid(24);
+  req.userId = userId;
+  const session = {
+    userId,
+    token: req.token,
+    lastIp: req.ip,
+    lastUserAgent: req.headers['user-agent'],
+  };
+  saveCookie(req, res);
+  const id = await repo.session.create(session);
+  return repo.session.get({ id });
+}
+
+async function updateSession(req) {
+  return repo.session.update({ id: req.session.id }, req.session);
 }
 
 async function deleteSession(req, res) {
-  await req.session.destroy();
-  res.status(204).send();
+  removeCookie(res);
+  return repo.session.remove({ id: req.session.id });
 }
 
-async function createSession(req, res) {
-  try {
-    const user = await userService.login(req.body.login, req.body.password);
-    if (user) {
-      req.session.userId = user.id;
-      req.session.token = crypto.randomBytes(64).toString('hex');
-      req.session.ip = req.ip;
-      req.session.userAgent = req.headers['user-agent'];
-      return res.status(200).send({ status: 'ok', user, token: req.session.token });
-    }
-    res.status(401).send({ status: 'nok', message: 'Invalid credentials' });
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(err);
-    res.status(500).send({ errorCode: 'INTERNAL_SERVER_ERROR' });
+async function getSession(req) {
+  const token = parseSessionToken(req);
+  if (token) {
+    return repo.session.getByToken(token);
   }
+  return null;
 }
 
-module.exports = router;
+async function sessionMiddleware(req, res, next) {
+  res.header('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.header('Pragma', 'no-cache');
+  res.header('Expires', 0);
+  req.createSession = (userId) => createSession(req, res, userId);
+  const token = parseSessionToken(req);
+  if (token) {
+    const record = await repo.session.getByToken(token);
+    if (record?.userId) {
+      req.userId = record.userId;
+      req.session = record;
+      req.updateSession = () => updateSession(req);
+      req.deleteSession = () => deleteSession(req, res);
+    }
+  }
+  next();
+}
+
+module.exports = {
+  getSession,
+  sessionMiddleware,
+};

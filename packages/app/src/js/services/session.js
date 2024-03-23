@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 
-const SESSION_URL = `${API_URL}/session`;
+const SESSION_URL = `${API_URL}/access`;
 
 export const isProbablyLogged = () => !!localStorage.token;
 
@@ -17,6 +17,7 @@ export const validate = async () => {
   const user = await ret.json();
   if (user.status === 'ok') {
     localStorage.setItem('userId', user.user);
+    localStorage.setItem('token', user.token);
   }
   return user;
 };
@@ -30,11 +31,13 @@ export const login = async (value) => {
     },
     body: JSON.stringify(value),
   });
-  return ret.json();
+  const json = ret.json();
+  localStorage.setItem('token', json.token);
+  return json;
 };
 
 export const register = async (value) => {
-  const ret = await fetch(`${SESSION_URL}/register`, {
+  const ret = await fetch(`${API_URL}/users`, {
     method: 'POST',
     credentials: 'include',
     headers: {

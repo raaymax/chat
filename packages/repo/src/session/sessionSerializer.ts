@@ -10,11 +10,10 @@ export class SessionSerializer implements Serializer<SessionQuery, Session, Mong
     return removeUndefined({
       _id: makeObjectId(arg.id),
       expires: arg.expires,
-      session: {
-        cookie: arg.session.cookie,
-        userId: makeObjectId(arg.session.userId),
-        token: arg.session.token,
-      },
+      userId: makeObjectId(arg.userId),
+      token: arg.token,
+      lastIp: arg.lastIp,
+      lastUserAgent: arg.lastUserAgent,
     });
   }
 
@@ -29,11 +28,10 @@ export class SessionSerializer implements Serializer<SessionQuery, Session, Mong
     return removeUndefined({
       id: makeId(arg._id),
       expires: arg.expires,
-      session: {
-        cookie: arg.session.cookie,
-        userId: makeId(arg.session.userId),
-        token: arg.session.token,
-      },
+      userId: makeId(arg.userId),
+      token: arg.token,
+      lastIp: arg.lastIp,
+      lastUserAgent: arg.lastUserAgent,
     }) as Session;
   }
 
