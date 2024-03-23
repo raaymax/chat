@@ -11,7 +11,7 @@ module.exports = {
     const { channelId } = req.body.context;
 
     const channel = await repo.channel.get({ id: channelId });
-    if (!await channelHelper.haveAccess(req.userId, channel.id)) {
+    if (!await channelHelper.haveAccess(req.userId, channel?.id)) {
       throw AccessDenied();
     }
     if (!channel) throw ChannelNotExist();

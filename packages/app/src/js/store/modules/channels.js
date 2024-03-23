@@ -32,6 +32,7 @@ export default createModule({
     find: (id) => async ({actions}, getState, {client}) => {
       const res = await client.req({ type: 'channel:get', id });
       actions.channels.add(res.data);
+      return res.data;
     },
   },
 });

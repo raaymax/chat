@@ -29,7 +29,7 @@ module.exports = {
   handler: async (req, res) => {
     const msg = req.body;
     const channel = await repo.channel.get({ id: msg.channelId });
-    if (!await channelHelper.haveAccess(req.userId, channel.id)) {
+    if (!await channelHelper.haveAccess(req.userId, channel?.id)) {
       throw AccessDenied();
     }
 

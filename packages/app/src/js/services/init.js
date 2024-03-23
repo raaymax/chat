@@ -11,12 +11,18 @@ const initApp = () => async (dispatch, getState) => {
   const config = await methods.config.load();
   actions.stream.setMain(config.mainChannelId);
   await initNotifications(config);
-  methods.users.load();
-  methods.channels.load();
+  await methods.users.load();
+  await methods.channels.load();
   await methods.emojis.load();
   await methods.progress.loadBadges();
-  if (!getState().stream.main.channelId) {
+  const channelId = getState().stream.main.channelId;
+  if (!channelId) {
     actions.stream.open({id: 'main', value: {type: 'live'}});
+  }else if( !getState().channels[channelId] ){
+    const c = await methods.channels.find(channelId);
+    if(!c || c.length === 0) {
+      actions.stream.open({id: 'main', value: {type: 'live'}});
+    }
   }
 };
 

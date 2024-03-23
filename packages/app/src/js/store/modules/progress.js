@@ -27,13 +27,17 @@ export default createModule({
     },
 
     loadProgress: (stream) => async ({actions}, getState, {client}) => {
-      if (!stream.channelId) return;
-      const { data } = await client.req({
-        type: 'readReceipt:getChannel',
-        channelId: stream.channelId,
-        parentId: stream.parentId,
-      });
-      actions.progress.add(data);
+      try{
+        if (!stream.channelId) return;
+        const { data } = await client.req({
+          type: 'readReceipt:getChannel',
+          channelId: stream.channelId,
+          parentId: stream.parentId,
+        });
+        actions.progress.add(data);
+      }catch(err){
+        console.log(err)
+      }
     },
 
     update: (messageId) => async ({actions}, getState, {client}) => {
