@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.3.1](https://github.com/raaymax/chat/compare/quack-v2.3.0...quack-v2.3.1) (2024-03-23)
+
+
+### Bug Fixes
+
+* notifications sound even if tab is not visible ([ae3641c](https://github.com/raaymax/chat/commit/ae3641c6d58ef8fcb80686b20ccf484ea8600842))
+* storage and retrieval of user sessions ([904fd93](https://github.com/raaymax/chat/commit/904fd93272320f7521fbe517fb44f59aba8e195d))
+
 ## [2.3.0](https://github.com/raaymax/chat/compare/quack-v2.2.0...quack-v2.3.0) (2024-02-03)
 
 
