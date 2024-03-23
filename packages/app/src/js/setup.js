@@ -24,6 +24,7 @@ client
     });
   })
   .on('message', (msg) => actions.messages.add({ ...msg, pending: false }))
+  .on('notification', () => { try { play(); } catch (err) { /* ignore */ } })
   .on('notification', () => { try { navigator.vibrate([100, 30, 100]); } catch (err) { /* ignore */ } })
   .on('notification:click', (e) => {
     actions.stream.open({
@@ -36,8 +37,7 @@ client
         parentId: e.parentId,
       },
     });
-  })
-  .on('notification', () => { try { play(); } catch (err) { /* ignore */ } });
+  });
 
 /*
 setTimeout(() => {

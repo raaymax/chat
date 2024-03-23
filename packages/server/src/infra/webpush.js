@@ -3,7 +3,7 @@ const webpush = require('web-push');
 const conf = require('@quack/config');
 
 webpush.setVapidDetails(
-  'mailto:user@example.org',
+  conf.vapidSubject,
   conf.vapid.publicKey,
   conf.vapid.privateKey,
 );

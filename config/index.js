@@ -9,7 +9,7 @@ const defaults = {
   // https://expressjs.com/en/guide/behind-proxies.html
   trustProxy: 'uniquelocal',
   cors: [
-    'https?://localhost(:[0-9]{,4})',
+    /https?:\/\/localhost(:[0-9]{,4})?/,
   ],
   storage: {
     type: 'fs',

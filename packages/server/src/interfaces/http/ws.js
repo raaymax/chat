@@ -1,10 +1,9 @@
 const { Server } = require('socket.io');
-const sessionParser = require('./sessionParser');
-const db = require('../../infra/repo')();
 const bus = require('../../infra/bus');
 const actions = require('../../app/actions');
 const corsConfig = require('./cors');
 const { push } = require('../../infra/webpush');
+const sess = require('./session');
 
 module.exports = (server) => {
   const io = new Server(server, {
@@ -13,20 +12,12 @@ module.exports = (server) => {
 
   // only allow authenticated users
   io.use(async (socket, next) => {
-    const token = socket.handshake?.auth?.token;
-    if (token) {
-      const record = await db.session.getByToken(token);
-      if (record?.session?.userId) {
-        record.session.save = async () => {
-          const { save, ...data } = record.session;
-          return db.session.update(record.id, { session: data });
-        };
-        socket.request.session = record.session;
-        return next();
-      }
+    const session = await sess.getSession(socket.handshake);
+    if (!session) {
       return next(new Error('unauthorized'));
     }
-    next(new Error('unauthorized'));
+    socket.request.session = session;
+    return next();
   });
 
   io.on('connection', (ws) => {

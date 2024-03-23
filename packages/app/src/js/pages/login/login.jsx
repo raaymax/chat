@@ -42,7 +42,6 @@ export const Login = ({ children }) => {
     const fd = new FormData(e.target);
     const value = Object.fromEntries(fd.entries());
     const ret = await session.login(value);
-    localStorage.setItem('token', ret.token);
     if (ret.status === 'ok') {
       window.location.reload(true);
     } else {
