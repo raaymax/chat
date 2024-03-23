@@ -4,9 +4,13 @@ import { precacheAndRoute } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import * as navigationPreload from 'workbox-navigation-preload';
 
-precacheAndRoute(self.__WB_MANIFEST);
+const files = (self.__WB_MANIFEST) || [];
 
-navigationPreload.enable();
+if(files.length) {
+  precacheAndRoute(files);
+  navigationPreload.enable();
+}
+
 
 registerRoute(
   '/share',

@@ -4,7 +4,7 @@ module.exports = {
       {
         login: 'system',
         name: 'System',
-        avatarUrl: 'https://chat.codecat.io/assets/icon.png',
+        avatarUrl: '/icon.png',
       },
     ]);
   },

@@ -13,7 +13,7 @@ module.exports = {
           login: 'admin',
           password: genHash('123'),
           name: 'Admin',
-          avatarUrl: '/assets/avatar.png',
+          avatarUrl: '/avatar.png',
         },
       ]);
     }

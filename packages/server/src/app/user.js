@@ -23,7 +23,7 @@ module.exports = {
     const userId = await repo.user.create({
       name,
       login,
-      avatarUrl: '/assets/avatar.png',
+      avatarUrl: '/avatar.png',
       password: bcrypt.hashSync(password, 10),
     });
 
@@ -48,5 +48,11 @@ module.exports = {
 
     await repo.invitation.remove({ token });
     return userId;
+  },
+
+  firstLogin: async (userId) => {
+    const user = await repo.user.get({ id: userId });
+    if (!user) return null;
+    return user.password === bcrypt.hashSync('123', 10);
   },
 };

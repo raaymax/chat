@@ -8,3 +8,4 @@ chat.config.js
 secrets.json
 uploads
 todo.txt
+tsconfig.tsbuildinfo

@@ -16,7 +16,7 @@ module.exports = {
     });
     res.systemMessage([
       { line: { text: 'Invitation link: ' } },
-      { line: { code: `${config.appUrl}/#/invite/${token}` } },
+      { line: { code: `${config.baseUrl}/#/invite/${token}` } },
     ]);
     return res.ok();
   },

@@ -27,7 +27,6 @@ export class WebSocketTransport implements Transport {
     this.manager = new Manager(url);
     this.socket = this.manager.socket('/', {
       auth: (cb) => {
-        console.log('auth', token);
         cb({ token });
       },
     });

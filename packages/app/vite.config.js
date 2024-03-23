@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import config from '@quack/config'
 import pack from '../../package.json'
+import manifest from './src/manifest.json'
 
 export default defineConfig({
   define: {
@@ -15,5 +16,6 @@ export default defineConfig({
     strategies: 'injectManifest',
     srcDir: './src',
     filename: 'sw.js',
+    manifest
   })],
 })
