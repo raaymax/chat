@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { Icon } from '../../atomic/atoms/Icon';
 import PropTypes from 'prop-types';
 
 const InlineChannelLink = styled.a`
@@ -22,7 +23,7 @@ export const ChannelInline = ({ channelId: id }) => {
       dispatch.actions.stream.open({id: 'main', value: { type: 'live', channelId: channel?.id || id }});
       dispatch.actions.view.set(null);
     }} >
-      { channel?.private ? <i className='fa-solid fa-lock' /> : <i className='fa-solid fa-hashtag' /> }
+      { channel?.private ? <Icon className='fa-solid fa-lock' /> : <Icon className='fa-solid fa-hashtag' /> }
       <span className='name'>{channel?.name || channel?.id || id}</span>
     </InlineChannelLink>
   );

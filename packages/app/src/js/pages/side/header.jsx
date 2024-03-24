@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Channel } from '../../components/Channels/Channel';
 import { useStream } from '../../contexts/stream';
 import { useMessage } from '../../hooks';
+import { Toolbar } from '../../atomic/organisms/Toolbar';
 
 const StyledHeader = styled.div`
   display: flex;
@@ -28,11 +29,6 @@ const StyledHeader = styled.div`
 
   }
 
-  & .back {
-    text-align: right;
-    padding-right: 10px;
-  }
-
   & .channel{
     padding-left: 30px;
     vertical-align: middle;
@@ -46,19 +42,9 @@ const StyledHeader = styled.div`
     padding-left: 10px;
   }
   & .toolbar {
-    flex: 0 100px;
+    flex: 0;
     display:flex;
     flex-direction: row;
-    & .tool {
-      flex: 1;
-      height: 50px;
-      line-height: 50px;
-      text-align: center;
-      cursor: pointer;
-      &:hover {
-        background-color: var(--secondary_background);
-      }
-    }
   }
 `;
 
@@ -71,8 +57,9 @@ export const Header = ({ onClick }) => {
     <StyledHeader>
       <h1>Thread</h1>
       <Channel onClick={onClick} channelId={channelId} />
-      <div className='toolbar'>
-        <div className='tool' onClick={() => {
+
+      <Toolbar className="toolbar" size={50} opts = {[
+        {icon: 'fa-solid fa-arrow-left', handler: () => {
           setSideStream(null);
           dispatch.actions.stream.open({
             id: 'main',
@@ -80,13 +67,9 @@ export const Header = ({ onClick }) => {
               channelId, type: 'archive', selected: message.id, date: message.createdAt,
             },
           });
-        }}>
-          <i className="fa-solid fa-arrow-left" />
-        </div>
-        <div className='tool' onClick={() => dispatch.actions.stream.open({id: 'side', value: null})}>
-          <i className="fa-solid fa-xmark" />
-        </div>
-      </div>
+        }},
+        {icon: 'fa-solid fa-xmark', handler: () => dispatch.actions.stream.open({id: 'side', value: null})},
+      ].filter(i => Boolean(i))} />
     </StyledHeader>
   );
 };

@@ -6,6 +6,45 @@ import { useStream } from '../../contexts/stream';
 import { useMessageData, useMessageUser } from '../../contexts/message';
 import { Toolbar } from '../../atomic/organisms/Toolbar';
 
+import styled from 'styled-components';
+
+export const Container = styled.div`
+  position: absolute;
+  top: -15px;
+  height: 42px;
+  right: 10px;
+  z-index: 50;
+  background-color: var(--primary_background);
+  border: 1px solid #565856;
+  border-radius: 0.3em;
+  padding: 0px;
+  font-size: 0.9em;
+  box-sizing: border-box;
+
+  body.mobile & {
+    width: 100%;
+    top: -50px;
+    right: 0;
+    border-radius: 0;
+    border-top: 1px solid #565856;
+    border-bottom: 1px solid #565856;
+    border-left: 0;
+    border-right: 0;
+    margin: 0;
+    padding: 0;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    i {
+      flex: 0 50px;
+      line-height: 50px;
+      font-size: 25px;
+
+    }
+  }
+`;
+
 export const MessageToolbar = () => {
   const message = useMessageData();
   const user = useMessageUser();
@@ -71,26 +110,28 @@ export const MessageToolbar = () => {
   });
 
   return (
-    <Toolbar opts={[
-      ...(view == 'reactions' ? [
-          reaction(':heart:'),
-          reaction(':rofl:'),
-          reaction(':thumbsup:'),
-          reaction(':thumbsdown:'),
-          reaction(':tada:'),
-          reaction(':eyes:'),
-      ]: []),
-      ...(view == 'delete' ? [
-        confirmDelete(),
-        cancelButton(),
-      ] : []),
-      ...(view == null ? [
-          openReactions(),
-          isMe && editButton(),
-          pinned ? unpinButton() : pinButton(),
-          isMe && deleteButton(),
-          !stream.parentId && replyButton(),
-      ] : []),
-    ].filter(o => Boolean(o))} />
+    <Container>
+      <Toolbar opts={[
+        ...(view == 'reactions' ? [
+            reaction(':heart:'),
+            reaction(':rofl:'),
+            reaction(':thumbsup:'),
+            reaction(':thumbsdown:'),
+            reaction(':tada:'),
+            reaction(':eyes:'),
+        ]: []),
+        ...(view == 'delete' ? [
+          confirmDelete(),
+          cancelButton(),
+        ] : []),
+        ...(view == null ? [
+            openReactions(),
+            isMe && editButton(),
+            pinned ? unpinButton() : pinButton(),
+            isMe && deleteButton(),
+            !stream.parentId && replyButton(),
+        ] : []),
+      ].filter(o => Boolean(o))} />
+    </Container>
   );
 };

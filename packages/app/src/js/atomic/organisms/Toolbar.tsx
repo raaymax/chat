@@ -1,64 +1,60 @@
 import { ToolButton } from '../molecules/ToolButton';
 import styled from 'styled-components';
 
-export const Container = styled.div`
-  position: absolute;
-  top: -15px;
-  height: 42px;
-  right: 10px;
-  z-index: 50;
-  background-color: var(--primary_background);
-  border: 1px solid #565856;
-  border-radius: 0.3em;
-  padding: 0px;
-  font-size: 0.9em;
-  box-sizing: border-box;
-
+export const Container = styled.div<{$size: number}>`
+  display: flex;
+  flex-direction: row;
   .icon, .emoji {
-    height: 40px;
-    width: 40px;
-    line-height: 40px;
+    flex: 0;
   }
-
-  body.mobile & {
-    width: 100%;
-    top: -50px;
-    right: 0;
-    border-radius: 0;
-    border-top: 1px solid #565856;
-    border-bottom: 1px solid #565856;
-    border-left: 0;
-    border-right: 0;
-    margin: 0;
-    padding: 0;
-    height: 50px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    i {
-      flex: 0 50px;
-      line-height: 50px;
-      font-size: 25px;
-
-    }
+  .icon, .emoji, .separator {
+    height: ${(props) => props.$size}px;
+    width: ${(props) => props.$size}px;
+    line-height: ${(props) => props.$size}px;
+  }
+  .separator {
+    flex: 1;
+    padding-left: 10px;
+    display: inline-block;
   }
 `;
 
-interface ToolbarProps {
-  opts: {
-    emoji?: string;
-    icon?: string;
-    handler: () => void;
-  }[]
+interface Button {
+  emoji?: string;
+  icon?: string;
+  handler: () => void;
 }
 
-export const Toolbar = ({ opts }: ToolbarProps) => {
+interface Separator {
+  type: 'separator';
+}
+
+interface ToolElement {
+  element: React.FC;
+}
+
+interface ToolbarProps {
+  className?: string;
+  size?: number;
+  opts: (Button | Separator | Text)[];
+}
+
+const isButton = (item: any): item is Button => item.handler !== undefined;
+const isElement= (item: any): item is ToolElement=> item.element !== undefined;
+
+export const Toolbar = ({ opts, size = 40, className}: ToolbarProps) => {
   const stop = (e: any) => { e.stopPropagation(); e.preventDefault(); };
   return (
-    <Container onClick={stop}>
-      {opts.map(({ emoji, icon, handler }, idx) => (
-        <ToolButton key={idx} emoji={emoji} icon={icon} onClick={handler} size={40} />
-      ))}
+    <Container className={className} $size={size} onClick={stop}>
+      {opts.map((item, idx) => {
+        if(isButton(item))
+          return <ToolButton key={idx} emoji={item.emoji} icon={item.icon} onClick={item.handler} size={size} />;
+        if(isElement(item)){
+          const Tool = item.element;
+          return <span className="separator" key={idx}><Tool /></span>;
+        }
+        return <span className="separator" key={idx}></span>;
+      })}
     </Container>
   );
 }

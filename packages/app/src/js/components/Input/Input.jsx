@@ -11,6 +11,7 @@ import { EmojiSelector } from './selectors/EmojiSelector';
 import { ChannelSelector } from './selectors/ChannelSelector';
 import { UserSelector } from './selectors/UserSelector';
 import { InputContainer } from './elements/container';
+import { Toolbar } from '../../atomic/organisms/Toolbar';
 import PropTypes from 'prop-types';
 
 export const InputForm = ({children }) => {
@@ -55,29 +56,18 @@ export const InputForm = ({children }) => {
         onKeyDown={(e) => onKeyDown(e)}
       >{children}</div>
       <Attachments />
-      <div className='actionbar' onClick={focus} action='focus'>
-        <div className={showEmojis ? 'action active' : 'action'} onClick={() => setShowEmojis(!showEmojis)}>
-          <i className="fa-solid fa-face-smile-beam" />
-        </div>
-        <div className='action' onClick={addFile}>
-          <i className="fa-solid fa-plus" />
-        </div>
-        <StatusLine />
-        {mode === 'edit' && (
-          <ActionButton className={'action'} onClick={() => dispatch.actions.messages.editClose(messageId)} action='submit'>
-           cancel
-          </ActionButton>
-        )}
-        {mode === 'edit' ? (
-          <ActionButton className={'action green'} onClick={send} action='submit'>
-            save
-          </ActionButton>
-        ) : (
-          <ActionButton className={'action green'} onClick={send} action='submit'>
-            <i className="fa-solid fa-paper-plane" />
-          </ActionButton>
-        )}
-      </div>
+      <Toolbar className='controls' size={40} opts={[
+        {icon: "fa-solid fa-face-smile-beam", handler: () => setShowEmojis(!showEmojis)},
+        {icon: "fa-solid fa-plus", handler: addFile},
+        {element: StatusLine},
+        {type: 'separator'},
+        ...(mode === 'edit' ? [
+          {icon: "fa-solid fa-circle-xmark", handler: () => dispatch.actions.messages.editClose(messageId)},
+          {icon: "fa-solid fa-circle-check", handler: send},
+        ]: [
+          {icon: "fa-solid fa-paper-plane", handler: send},
+        ])
+      ].filter(o=>Boolean(o))}/>
       <ChannelSelector />
       <UserSelector />
       <EmojiSelector />

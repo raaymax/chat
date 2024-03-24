@@ -1,10 +1,9 @@
 import styled from 'styled-components';
 
 interface IconProps {
-  icon: string;
+  className: string;
   size: number;
 }
-
 
 const StyledIcon = styled.i<{ $size: number}>`
   margin: auto;
@@ -19,6 +18,6 @@ const StyledIcon = styled.i<{ $size: number}>`
 `;
 
 
-export const Icon = ({ size, icon }: IconProps) => (
-  <StyledIcon className={'icon ' + icon} $size={size} />
+export const Icon = ({ size, className}: IconProps) => (
+  <StyledIcon className={'icon ' + className} $size={size} />
 );

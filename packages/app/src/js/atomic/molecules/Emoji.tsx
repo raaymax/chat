@@ -1,7 +1,7 @@
+import { useEmoji } from '../../hooks';
 import styled from 'styled-components';
 import { getUrl } from '../../services/file';
 import { Tooltip } from '../atoms/Tooltip';
-import { useEmoji } from '../../hooks';
 
 const StyledEmoji = styled.span<{$size: number}>`
   padding: 0;
@@ -20,14 +20,17 @@ const StyledEmoji = styled.span<{$size: number}>`
   }
 `;
 
-interface EmojiProps {
+interface EmojiBaseProps {
   shortname: string;
+  emoji: {
+    unicode?: string;
+    fileId?: string;
+    empty?: boolean;
+  },
   size: number;
 }
 
-export const Emoji = ({ shortname, size}: EmojiProps) => {
-  const emoji = useEmoji(shortname);
-
+const EmojiBase = ({ shortname, emoji, size}: EmojiBaseProps) => {
   if (!emoji || emoji.empty) return <span className='emoji'>{shortname}</span>;
 
   return (
@@ -39,4 +42,14 @@ export const Emoji = ({ shortname, size}: EmojiProps) => {
       </StyledEmoji>
     </Tooltip>
   );
+};
+
+interface EmojiProps {
+  shortname: string;
+  size: number;
+}
+
+export const Emoji = ({ shortname, size}: EmojiProps) => {
+  const emoji = useEmoji(shortname);
+  return <EmojiBase shortname={shortname} emoji={emoji} size={size} />;
 };

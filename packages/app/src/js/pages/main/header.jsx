@@ -3,10 +3,9 @@ import styled from 'styled-components';
 import { Channel } from '../../components/Channels/Channel';
 import { init } from '../../services/init';
 import { useStream } from '../../contexts/stream';
-import { BackToMain } from '../../components/BackToMain/BackToMain';
 import { useMessage } from '../../hooks';
 import { loadMessages } from '../../services/messages';
-import { ToolButton } from '../../atomic/molecules/ToolButton';
+import { Toolbar } from '../../atomic/organisms/Toolbar';
 
 const StyledHeader = styled.div`
   display: flex;
@@ -33,11 +32,6 @@ const StyledHeader = styled.div`
 
   }
 
-  & .back {
-    text-align: right;
-    padding-right: 10px;
-  }
-
   & .channel{
     padding-left: 30px;
     vertical-align: middle;
@@ -51,19 +45,9 @@ const StyledHeader = styled.div`
     padding-left: 10px;
   }
   & .toolbar {
-    flex: 0 200px;
+    flex: 0;
+    flex-align: right;
     display:flex;
-    flex-direction: row-reverse;
-    & .tool {
-      flex: 0 50px;
-      height: 50px;
-      line-height: 50px;
-      text-align: center;
-      cursor: pointer;
-      &:hover {
-        background-color: var(--secondary_background);
-      }
-    }
   }
 `;
 
@@ -79,19 +63,10 @@ export const Header = ({ onClick }) => {
         {parentId && <h1>Thread</h1>}
         <Channel onClick={onClick} channelId={channelId} />
 
-        <div className='toolbar'>
-
-          {stream.id !== 'main' && <div className='tool' onClick={() => setStream(null)}>
-            <i className="fa-solid fa-xmark" />
-          </div>}
-          <div className='tool' onClick={() => (
-            setStream({
-              channelId, type: 'archive', selected: message.id, date: message.createdAt,
-            })
-          )}>
-            <i className="fa-solid fa-arrow-left" />
-          </div>
-        </div>
+        <Toolbar className="toolbar" size={50} opts = {[
+          {icon: 'fa-solid fa-arrow-left', handler: () => setStream({ channelId, type: 'archive', selected: message.id, date: message.createdAt })},
+          stream.id !== 'main' && {icon: 'fa-solid fa-xmark', handler: () => setStream(null)},
+        ].filter(i => Boolean(i))} />
       </StyledHeader>
     );
   }
@@ -99,36 +74,20 @@ export const Header = ({ onClick }) => {
   return (
     <StyledHeader>
       <Channel onClick={onClick} channelId={channelId} />
-      <BackToMain />
 
-      <div className='toolbar'>
-        <ToolButton icon='fa-solid fa-arrows-rotate' size={50} onClick={() => {
-          dispatch(init());
-        }} />
-        <div className='tool' onClick={() => {
-          dispatch(init());
-        }}>
-          <i className="fa-solid fa-arrows-rotate" />
-        </div>
-        <div className='tool' onClick={() => dispatch.actions.view.set('search')}>
-          <i className="fa-solid fa-magnifying-glass" />
-        </div>
-        <div className='tool' onClick={() => {
+      <Toolbar className="toolbar" size={50} opts = {[
+        stream.type === 'archive' && {icon: 'fa-solid fa-down-long', handler: () => {
+          dispatch.actions.messages.clear({ stream });
+          setStream({ ...stream, type: 'live' });
+          dispatch(loadMessages({ ...stream, type: 'live' }))
+        }},
+        {icon: 'fa-solid fa-thumbtack', handler: () => {
           dispatch.methods.pins.load(channelId);
           dispatch.actions.view.set('pins');
-        }}>
-          <i className="fa-solid fa-thumbtack" />
-        </div>
-        {stream.type === 'archive' && (
-          <div className='tool' onClick={() => {
-            dispatch.actions.messages.clear({ stream });
-            setStream({ ...stream, type: 'live' });
-            dispatch(loadMessages({ ...stream, type: 'live' }))
-          }}>
-            <i className="fa-solid fa-down-long" />
-          </div>
-        )}
-      </div>
+        }},
+        {icon: 'fa-solid fa-magnifying-glass', handler: () => dispatch.actions.view.set('search')},
+        {icon: 'fa-solid fa-arrows-rotate', handler: () => dispatch(init())},
+      ].filter(i => Boolean(i))} />
     </StyledHeader>
   );
 };
