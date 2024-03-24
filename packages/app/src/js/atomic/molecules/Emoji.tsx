@@ -4,15 +4,19 @@ import { Tooltip } from '../atoms/Tooltip';
 import { useEmoji } from '../../hooks';
 
 const StyledEmoji = styled.span<{$size: number}>`
+  padding: 0;
+  margin: 0;
+  ${(props) => props.$size ? `
+  font-size: ${props.$size}px;
+  line-height: ${props.$size}px;
+  ` : ''}
   img{
-    height: ${(props) => (props.$size)}px;
-    width: ${(props) => (props.$size)}px;
+    ${(props) => props.$size ? `
+    height: ${props.$size}px;
+    width: ${props.$size}px;
+    ` : ''}
     vertical-align: bottom;
     display: inline-block;
-  }
-  span {
-    font-size: ${(props) => (props.$size)}px;
-    line-height: ${(props) => (props.$size)}px;
   }
 `;
 
@@ -30,7 +34,7 @@ export const Emoji = ({ shortname, size}: EmojiProps) => {
     <Tooltip text={shortname}>
       <StyledEmoji className="emoji" $size={size} data-emoji={shortname}>
         {emoji.unicode
-          ? <span>{String.fromCodePoint(parseInt(emoji.unicode, 16))}</span>
+          ? String.fromCodePoint(parseInt(emoji.unicode, 16))
           : <img src={getUrl(emoji.fileId)} alt={shortname} />}
       </StyledEmoji>
     </Tooltip>

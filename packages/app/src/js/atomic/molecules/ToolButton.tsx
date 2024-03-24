@@ -12,8 +12,8 @@ interface ToolButtonProps {
 
 export const ToolButton = ({ onClick, size = 40, icon, emoji, children}: ToolButtonProps) => (
   <Button size={size} onClick={onClick}>
-    {icon && <Icon icon={icon} size={size} />}
-    {emoji && <Emoji shortname={emoji} size={size} />}
+    {icon && <Icon icon={icon} size={size/2.3} />}
+    {emoji && <Emoji shortname={emoji} size={size/2} />}
     {children}
   </Button>
 );

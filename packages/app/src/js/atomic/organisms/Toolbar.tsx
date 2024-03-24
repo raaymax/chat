@@ -57,7 +57,7 @@ export const Toolbar = ({ opts }: ToolbarProps) => {
   return (
     <Container onClick={stop}>
       {opts.map(({ emoji, icon, handler }, idx) => (
-        <ToolButton key={idx} emoji={emoji} icon={icon} onClick={handler} size={20} />
+        <ToolButton key={idx} emoji={emoji} icon={icon} onClick={handler} size={40} />
       ))}
     </Container>
   );
