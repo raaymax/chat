@@ -23,6 +23,10 @@ client
       type: 'info',
     });
   })
+  // FIXME: temporal fix for mesages not refreshing after some time
+  .on('win.visible', () => store.dispatch(async (dispatch, getState) => {
+    await methods.messages.load(getState().stream.main);
+  }))
   .on('message', (msg) => actions.messages.add({ ...msg, pending: false }))
   .on('notification', () => { try { play(); } catch (err) { /* ignore */ } })
   .on('notification', () => { try { navigator.vibrate([100, 30, 100]); } catch (err) { /* ignore */ } })
@@ -38,19 +42,3 @@ client
       },
     });
   });
-
-/*
-setTimeout(() => {
-  const data = {title: 'oko', text: 'dupa', url: 'https://google.com/'};
-  const formData  = new FormData();
-
-  for(const name in data) {
-    formData.append(name, data[name]);
-  }
-
-  fetch('http://localhost:8080/share/', {
-    method: 'POST',
-    body: formData,
-  });
-}, 2000);
-*/

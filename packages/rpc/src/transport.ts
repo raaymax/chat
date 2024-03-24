@@ -12,6 +12,7 @@ export interface Transport {
   on: (event: string, callback: (data: Message) => void) => void;
   once: (event: string, callback: (data: Message) => void) => void;
   off: (event: string, callback: (data: Message) => void) => void;
+  emit: (event: string, data?: Message) => void;
 }
 
 export class WebSocketTransport implements Transport {
@@ -88,7 +89,7 @@ export class WebSocketTransport implements Transport {
     return this;
   }
 
-  private emit(event: string, data?: Message) {
+  emit(event: string, data?: Message) {
     if (!this.bus.exists(event)) {
       return;
     }
