@@ -1,7 +1,7 @@
 /* eslint-disable no-await-in-loop */
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Logo } from '../../atoms/Logo';
+import { Logo } from '../../atomic/atoms/Logo';
 import { Channels } from '../../components/Channels/Channels';
 import { UserChannels } from '../../components/Channels/UserChannels';
 import { MainConversation } from '../main/mainConversaion';

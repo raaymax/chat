@@ -26,6 +26,9 @@ const theme = {
   actionButtonActiveBackgroundColor: '#3D2760',
   actionButtonFontColor: '#d9d9d9',
 
+  buttonHoverBackground: '#222529',
+  buttonActiveBackground: '#3D2760',
+
   borderColorHover: 'white',
 
   searchBoxBackgroundColor: '#2a2d31',

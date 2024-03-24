@@ -1,7 +1,7 @@
 import { formatTime, formatDateDetailed } from '../../utils';
 import { Files } from '../Files/Files';
 import { Reactions } from '../Reaction/Reaction';
-import { Toolbar } from '../Toolbar/Toolbar';
+import { MessageToolbar } from '../MessageToolbar/MessageToolbar';
 import { Progress } from './elements/Progress';
 import { Info } from './info';
 import { ThreadInfo } from './threadInfo';
@@ -60,7 +60,7 @@ const MessageBase = ({ onClick, sameUser, ...props } = {}) => {
         <Reactions />
         <ThreadInfo />
         <Progress progress={msg.progress} />
-        <Toolbar />
+        <MessageToolbar />
       </div>
     </div>
   );

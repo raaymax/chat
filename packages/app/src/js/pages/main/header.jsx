@@ -5,7 +5,8 @@ import { init } from '../../services/init';
 import { useStream } from '../../contexts/stream';
 import { BackToMain } from '../../components/BackToMain/BackToMain';
 import { useMessage } from '../../hooks';
-import { loadMessages } from '../../services/messages'
+import { loadMessages } from '../../services/messages';
+import { ToolButton } from '../../atomic/molecules/ToolButton';
 
 const StyledHeader = styled.div`
   display: flex;
@@ -50,7 +51,7 @@ const StyledHeader = styled.div`
     padding-left: 10px;
   }
   & .toolbar {
-    flex: 0 150px;
+    flex: 0 200px;
     display:flex;
     flex-direction: row-reverse;
     & .tool {
@@ -101,6 +102,9 @@ export const Header = ({ onClick }) => {
       <BackToMain />
 
       <div className='toolbar'>
+        <ToolButton icon='fa-solid fa-arrows-rotate' size={50} onClick={() => {
+          dispatch(init());
+        }} />
         <div className='tool' onClick={() => {
           dispatch(init());
         }}>

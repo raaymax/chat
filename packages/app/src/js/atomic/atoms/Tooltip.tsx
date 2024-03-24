@@ -1,11 +1,18 @@
+
 import { useState } from 'react';
 
-export const Tooltip = ({ children, text }) => {
+interface TooltipProps {
+  children: React.ReactNode;
+  className?: string;
+  text: string;
+}
+
+export const Tooltip = ({ children, text, className = '' }: TooltipProps) => {
   const [show, setShow] = useState(false);
 
   return (
     <div
-      className='tooltip-container'
+      className={'tooltip-container ' + className}
       style={{ position: 'relative', display: 'inline-block' }}
       onMouseEnter={() => setShow(true)}
       onMouseLeave={() => setShow(false)}

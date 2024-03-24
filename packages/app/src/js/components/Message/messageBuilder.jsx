@@ -1,4 +1,4 @@
-import { Emoji } from '../Emoji/Emoji';
+import { Emoji } from '../../atomic/molecules/Emoji';
 import { Link } from './elements/Link';
 import { ChannelInline } from '../ChannelInline/ChannelInline';
 import { UserInline } from '../UserInline/UserInline';
@@ -20,7 +20,7 @@ const TYPES = {
   strike: (props) => <s>{build(props.data)}</s>,
   img: (props) => <img src={props.data.src} alt={props.data.alt} />,
   link: (props) => <Link href={props.data.href}>{build(props.data.children)}</Link>,
-  emoji: (props) => <Emoji big={props.opts.emojiOnly} shortname={props.data} />,
+  emoji: (props) => <Emoji size={props.opts.emojiOnly ? 80 : undefined} shortname={props.data} />,
   channel: (props) => <ChannelInline channelId={props.data} />,
   user: (props) => <UserInline userId={props.data} />,
   thread: (props) => <ThreadLink

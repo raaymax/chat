@@ -1,30 +1,23 @@
+import { ToolButton } from '../molecules/ToolButton';
 import styled from 'styled-components';
 
 export const Container = styled.div`
   position: absolute;
   top: -15px;
-  height: 40px;
+  height: 42px;
   right: 10px;
   z-index: 50;
   background-color: var(--primary_background);
   border: 1px solid #565856;
   border-radius: 0.3em;
-  padding: 1px 5px;
+  padding: 0px;
   font-size: 0.9em;
+  box-sizing: border-box;
 
-  i {
-    padding: 2px 5px;
-    line-height: 33px;
-    width: 38px;
-    height: 38px;
-    text-align: center;
-    vertical-align: middle;
-    display: inline;
-    font-style: normal;
-    cursor: pointer;
-    font-size: 1.3em;
-    border-radius: 0.2em;
-    display: inline-block;
+  .icon, .emoji {
+    height: 40px;
+    width: 40px;
+    line-height: 40px;
   }
 
   body.mobile & {
@@ -49,12 +42,23 @@ export const Container = styled.div`
 
     }
   }
-
-  i:hover {
-    background-color: var(--primary_active_mask);
-  }
-
-  i:active {
-    background-color: var(--secondary_active_mask);
-  }
 `;
+
+interface ToolbarProps {
+  opts: {
+    emoji?: string;
+    icon?: string;
+    handler: () => void;
+  }[]
+}
+
+export const Toolbar = ({ opts }: ToolbarProps) => {
+  const stop = (e: any) => { e.stopPropagation(); e.preventDefault(); };
+  return (
+    <Container onClick={stop}>
+      {opts.map(({ emoji, icon, handler }, idx) => (
+        <ToolButton key={idx} emoji={emoji} icon={icon} onClick={handler} size={20} />
+      ))}
+    </Container>
+  );
+}

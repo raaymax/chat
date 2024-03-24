@@ -2,7 +2,7 @@ import { useState, useEffect} from 'react';
 import { useSelector } from 'react-redux';
 import { Emoji } from './elements/emoji';
 import { EmojiBlock } from './elements/emojiBlock';
-import { Tooltip } from '../../elements/tooltip';
+import { Tooltip } from '../../atomic/atoms/Tooltip';
 import { Label } from './elements/label';
 import { SearchBox } from './elements/searchBox';
 import { EmojiScroll } from './elements/emojiScroll';
