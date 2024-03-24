@@ -1,20 +1,26 @@
 import styled from 'styled-components';
 
-interface IconProps {
+type IconProps = {
   className: string;
-  size: number;
+  size?: number;
 }
 
-const StyledIcon = styled.i<{ $size: number}>`
+const StyledIcon = styled.i<{ $size?: number}>`
   margin: auto;
   padding: 0;
   vertical-align: middle;
   text-align: center;
   display: inline;
-  line-height: ${(props) => props.$size}px;
-  height: ${(props) => props.$size}px;
-  line-height: ${(props) => props.$size}px;
-  font-size: ${(props) => props.$size}px;
+  ${(props) => {
+    if (props.$size) {
+      return `
+        width: ${props.$size}px;
+        height: ${props.$size}px;
+        line-height: ${props.$size}px;
+        font-size: ${props.$size}px;
+      `;
+    }
+  }}
 `;
 
 

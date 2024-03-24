@@ -67,7 +67,7 @@ export const InputForm = ({children }) => {
         ]: [
           {icon: "fa-solid fa-paper-plane", handler: send},
         ])
-      ].filter(o=>Boolean(o))}/>
+      ]}/>
       <ChannelSelector />
       <UserSelector />
       <EmojiSelector />

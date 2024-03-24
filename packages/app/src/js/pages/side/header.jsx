@@ -69,7 +69,7 @@ export const Header = ({ onClick }) => {
           });
         }},
         {icon: 'fa-solid fa-xmark', handler: () => dispatch.actions.stream.open({id: 'side', value: null})},
-      ].filter(i => Boolean(i))} />
+      ]} />
     </StyledHeader>
   );
 };

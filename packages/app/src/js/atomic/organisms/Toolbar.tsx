@@ -46,7 +46,7 @@ export const Toolbar = ({ opts, size = 40, className}: ToolbarProps) => {
   const stop = (e: any) => { e.stopPropagation(); e.preventDefault(); };
   return (
     <Container className={className} $size={size} onClick={stop}>
-      {opts.map((item, idx) => {
+      {opts.filter(o => Boolean(o)).map((item, idx) => {
         if(isButton(item))
           return <ToolButton key={idx} emoji={item.emoji} icon={item.icon} onClick={item.handler} size={size} />;
         if(isElement(item)){

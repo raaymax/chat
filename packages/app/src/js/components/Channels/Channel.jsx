@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { InlineChannel } from './elements/inlineChannel';
+import { ChannelName as InlineChannel } from '../../atomic/molecules/ChannelName';
 import PropTypes from 'prop-types';
 
 const DirectChannel = ({ channel, badge, onClick }) => {

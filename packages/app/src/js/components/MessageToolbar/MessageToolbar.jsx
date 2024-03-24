@@ -131,7 +131,7 @@ export const MessageToolbar = () => {
             isMe && deleteButton(),
             !stream.parentId && replyButton(),
         ] : []),
-      ].filter(o => Boolean(o))} />
+      ]} />
     </Container>
   );
 };

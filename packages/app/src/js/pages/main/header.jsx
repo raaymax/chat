@@ -25,7 +25,7 @@ const StyledHeader = styled.div`
     font-weight: 400;
   }
 
-  & * {
+  & > * {
     flex: 1;
     height: 50px;
     line-height: 50px;
@@ -45,7 +45,7 @@ const StyledHeader = styled.div`
     padding-left: 10px;
   }
   & .toolbar {
-    flex: 0;
+    flex: 1;
     flex-align: right;
     display:flex;
   }
@@ -60,22 +60,22 @@ export const Header = ({ onClick }) => {
   if (parentId) {
     return (
       <StyledHeader>
-        {parentId && <h1>Thread</h1>}
+        <h1>Thread</h1>
         <Channel onClick={onClick} channelId={channelId} />
 
         <Toolbar className="toolbar" size={50} opts = {[
           {icon: 'fa-solid fa-arrow-left', handler: () => setStream({ channelId, type: 'archive', selected: message.id, date: message.createdAt })},
           stream.id !== 'main' && {icon: 'fa-solid fa-xmark', handler: () => setStream(null)},
-        ].filter(i => Boolean(i))} />
+        ]} />
       </StyledHeader>
     );
   }
 
   return (
     <StyledHeader>
-      <Channel onClick={onClick} channelId={channelId} />
-
       <Toolbar className="toolbar" size={50} opts = {[
+        {icon: 'fa-solid fa-hashtag', handler: onClick},
+        {element: () => <Channel onClick={onClick} channelId={channelId} />},
         stream.type === 'archive' && {icon: 'fa-solid fa-down-long', handler: () => {
           dispatch.actions.messages.clear({ stream });
           setStream({ ...stream, type: 'live' });
@@ -87,7 +87,7 @@ export const Header = ({ onClick }) => {
         }},
         {icon: 'fa-solid fa-magnifying-glass', handler: () => dispatch.actions.view.set('search')},
         {icon: 'fa-solid fa-arrows-rotate', handler: () => dispatch(init())},
-      ].filter(i => Boolean(i))} />
+      ]} />
     </StyledHeader>
   );
 };
