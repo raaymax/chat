@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.4.0](https://github.com/raaymax/chat/compare/quack-v2.3.1...quack-v2.4.0) (2024-03-24)
+
+
+### Features
+
+* redirect to main channel when channel can't be found ([eaf1b09](https://github.com/raaymax/chat/commit/eaf1b0911d560af27e4833616d94e2ecec7533ec))
+
+
+### Bug Fixes
+
+* message list not refreshing after some time of inactivity ([c66f499](https://github.com/raaymax/chat/commit/c66f499c97a48c53197001943d1d98b4e559133c))
+* static files, service worker and cache ([9d714dc](https://github.com/raaymax/chat/commit/9d714dc140add09b0f6f68e9b1512e7352563ed9))
+* user is typing indicator freezes ([27bce06](https://github.com/raaymax/chat/commit/27bce067dbfd63f1888ae56e57603d2a13deab84))
+
 ## [2.3.1](https://github.com/raaymax/chat/compare/quack-v2.3.0...quack-v2.3.1) (2024-03-23)
 
 
