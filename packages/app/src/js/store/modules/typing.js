@@ -12,16 +12,20 @@ export default createModule({
       });
       return newState;
     },
-    clear: (state) => Object.fromEntries(
-      Object.entries(state)
-        .map(([channelId, users]) => [
-          channelId,
-          Object.fromEntries(
-            Object.entries(users)
-              .filter(([, date]) => new Date(date) > new Date(Date.now() - 1000)),
-          ),
-        ]),
-    ),
+    clear: (state) => ({
+      ...Object.fromEntries(
+        Object.entries(state)
+          .map(([channelId, users]) => [
+            channelId,
+            Object.fromEntries(
+              Object.entries(users)
+                .filter(([, date]) => new Date(date) > new Date(Date.now() - 1000)),
+            ),
+          ]),
+      ),
+      cooldown: false,
+      queue: false,
+    }),
     set: (state, action) => ({...state, ...action.payload}),
   },
   methods: {
