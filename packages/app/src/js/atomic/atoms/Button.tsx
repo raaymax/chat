@@ -31,7 +31,7 @@ const StyledButton = styled.button<{ $size: number}>`
 
 
 export const Button = ({ onClick, size, children}: IconButtonProps) => {
-  const $size = size ?? useSize();
+  const $size = useSize(size);
   return (
     <StyledButton onClick={onClick} $size={$size ?? 40}>
       {children}

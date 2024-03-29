@@ -1,10 +1,10 @@
 import { useEffect, useCallback, useRef, useState } from 'react';
+import { SearchBox } from '../../atomic/atoms/SearchBox';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import {useStream} from '../../contexts/stream';
 import { Toolbar } from '../../atomic/atoms/Toolbar';
 import { ButtonWithIcon } from '../../atomic/molecules/ButtonWithIcon';
-import { Input } from '../../atomic/atoms/Input';
 
 const StyledHeader = styled.div`
   display: flex;
@@ -72,7 +72,7 @@ export const Header = () => {
   return (
     <StyledHeader>
       <i className='fa-solid fa-magnifying-glass' />
-      <Input className='search-input' placeholder='search...' onKeyDown={onKeyDown} value={value} onChange={(e)=>setValue(e.target.value)}/>
+      <SearchBox className='search-input' placeholder='search...' onKeyDown={onKeyDown} value={value} onChange={(e)=>setValue(e.target.value)}/>
 
       <Toolbar className="toolbar" size={50}>
         <ButtonWithIcon icon="send" onClick={() => submit()} />

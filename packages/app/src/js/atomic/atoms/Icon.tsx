@@ -51,9 +51,8 @@ const getIcon = (icon: string) => {
 }
 
 export const Icon = ({ size, className, icon}: IconProps) => {
-  const $size = size ?? useSize();
-  console.log(icon, size, $size);
+  const $size = useSize(size);
   return (
-    <StyledIcon className={'icon ' + getIcon(icon) + ' ' + className } data-size={$size} $size={$size} />
+    <StyledIcon className={'icon ' + getIcon(icon) + ' ' + className } $size={$size} />
   );
 }

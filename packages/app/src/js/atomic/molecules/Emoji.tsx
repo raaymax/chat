@@ -31,7 +31,7 @@ interface EmojiBaseProps {
   size: number;
 }
 
-const EmojiBase = ({ shortname, emoji, size}: EmojiBaseProps) => {
+export const EmojiBase = ({ shortname, emoji, size}: EmojiBaseProps) => {
   const $size = size ?? useSize();
   if (!emoji || emoji.empty) return <span className='emoji'>{shortname}</span>;
 

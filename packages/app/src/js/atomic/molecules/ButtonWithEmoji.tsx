@@ -10,7 +10,7 @@ interface ButtonWithEmojiProps {
 }
 
 export const ButtonWithEmoji = ({ onClick, size, emoji, children}: ButtonWithEmojiProps) => {
-  const $size = size ?? useSize();
+  const $size = useSize(size);
   return (
     <Button size={$size} onClick={onClick}>
       <Emoji shortname={emoji} size={$size/2} />

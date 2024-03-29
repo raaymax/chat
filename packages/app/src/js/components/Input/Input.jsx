@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { InputContext, useInput } from './InputContext';
 import { Attachments } from '../Attachments/Attachments';
 import { StatusLine } from '../StatusLine/StatusLine';
-import { EmojiSearch } from '../EmojiSearch/EmojiSearch';
+import { EmojiSearch } from '../../atomic/organisms/EmojiSearch';
 import { buildEmojiNode } from '../../utils';
 import { getUrl } from '../../services/file';
 import { EmojiSelector } from './selectors/EmojiSelector';

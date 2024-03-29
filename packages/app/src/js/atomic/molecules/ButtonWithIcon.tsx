@@ -10,7 +10,7 @@ interface ButtonWithIconProps {
 }
 
 export const ButtonWithIcon = ({ onClick, size, icon, children}: ButtonWithIconProps) => {
-  const $size = size ?? useSize();
+  const $size = useSize(size);
   return (
     <Button size={$size} onClick={onClick}>
       <Icon icon={icon} size={$size/2.3} />

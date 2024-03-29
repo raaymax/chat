@@ -32,6 +32,7 @@ export const Tooltip = ({ children, text, className = '' }: TooltipProps) => {
             padding: '5px 10px',
             borderRadius: '5px',
             fontSize: '12px',
+            pointerEvents: 'none',
           }}
         >
           {text}

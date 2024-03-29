@@ -1,18 +1,12 @@
 import styled from 'styled-components';
 import {Badge} from '../atoms/Badge';
-import {Icon} from '../atoms/Icon';
+import {TextWithIcon} from './TextWithIcon';
 
 const Container = styled.div`
- padding: 5px 5px 5px 20px; 
- cursor: pointer;
- .name {
-   padding: 0px 10px; 
-   cursor: pointer;
-  }
+  cursor: pointer;
   &.active {
     background-color: var(--primary_active_mask);
   }
-
   &:hover {
     background-color: var(--primary_active_mask);
   }
@@ -43,8 +37,7 @@ export const ChannelName = ({
   id, children, badge, className, onClick, icon = 'fa-solid fa-hashtag',
 }: ChannelNameProps) => (
   <Container className={`channel ${className || ''}`} data-id={id} onClick={onClick}>
-    <Icon icon={icon} />
-    <span className='name'>{children}</span>
+    <TextWithIcon icon={icon}>{children}</TextWithIcon> 
     {badge > 0 && <Badge>{badge}</Badge>}
   </Container>
 )
