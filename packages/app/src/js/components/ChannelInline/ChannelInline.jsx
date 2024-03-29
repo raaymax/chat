@@ -23,7 +23,7 @@ export const ChannelInline = ({ channelId: id }) => {
       dispatch.actions.stream.open({id: 'main', value: { type: 'live', channelId: channel?.id || id }});
       dispatch.actions.view.set(null);
     }} >
-      { channel?.private ? <Icon className='fa-solid fa-lock' /> : <Icon className='fa-solid fa-hashtag' /> }
+      { channel?.private ? <Icon icon='lock' /> : <Icon icon="hash" /> }
       <span className='name'>{channel?.name || channel?.id || id}</span>
     </InlineChannelLink>
   );

@@ -2,7 +2,8 @@ import { useEffect, useCallback, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import {useStream} from '../../contexts/stream';
-import { Toolbar } from '../../atomic/organisms/Toolbar';
+import { Toolbar } from '../../atomic/atoms/Toolbar';
+import { ButtonWithIcon } from '../../atomic/molecules/ButtonWithIcon';
 import { Input } from '../../atomic/atoms/Input';
 
 const StyledHeader = styled.div`
@@ -53,7 +54,6 @@ const StyledHeader = styled.div`
 `;
 
 export const Header = () => {
-  const input = useRef(null);
   const dispatch = useDispatch();
   const [stream] = useStream();
   const [value, setValue] = useState('');
@@ -74,10 +74,10 @@ export const Header = () => {
       <i className='fa-solid fa-magnifying-glass' />
       <Input className='search-input' placeholder='search...' onKeyDown={onKeyDown} value={value} onChange={(e)=>setValue(e.target.value)}/>
 
-      <Toolbar className="toolbar" size={50} opts = {[
-        {icon: 'fa-solid fa-paper-plane', handler: () => submit()},
-        {icon: 'fa-solid fa-xmark', handler: () => dispatch.actions.view.set('search')},
-      ]} />
+      <Toolbar className="toolbar" size={50}>
+        <ButtonWithIcon icon="send" onClick={() => submit()} />
+        <ButtonWithIcon icon="xmark" onClick={() => dispatch.actions.view.set('search')} />
+      </Toolbar>
     </StyledHeader>
   );
 };

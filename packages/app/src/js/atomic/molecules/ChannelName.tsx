@@ -16,13 +16,13 @@ const Container = styled.div`
   &:hover {
     background-color: var(--primary_active_mask);
   }
-  &.system{
+  &.system {
     color: ${(props) => props.theme.userSystem};
   }
-  &.connected{
+  &.connected {
     color: ${(props) => props.theme.userConnected};
   }
-  &.recent{
+  &.recent {
     color: ${(props) => props.theme.userActive};
   }
   &.offline {
@@ -43,7 +43,7 @@ export const ChannelName = ({
   id, children, badge, className, onClick, icon = 'fa-solid fa-hashtag',
 }: ChannelNameProps) => (
   <Container className={`channel ${className || ''}`} data-id={id} onClick={onClick}>
-    <Icon className={icon} />
+    <Icon icon={icon} />
     <span className='name'>{children}</span>
     {badge > 0 && <Badge>{badge}</Badge>}
   </Container>

@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import { Channel } from '../../components/Channels/Channel';
 import { useStream } from '../../contexts/stream';
 import { useMessage } from '../../hooks';
-import { Toolbar } from '../../atomic/organisms/Toolbar';
+import { Toolbar } from '../../atomic/atoms/Toolbar';
+import { ButtonWithIcon } from '../../atomic/molecules/ButtonWithIcon';
 
 const StyledHeader = styled.div`
   display: flex;
@@ -58,8 +59,8 @@ export const Header = ({ onClick }) => {
       <h1>Thread</h1>
       <Channel onClick={onClick} channelId={channelId} />
 
-      <Toolbar className="toolbar" size={50} opts = {[
-        {icon: 'fa-solid fa-arrow-left', handler: () => {
+      <Toolbar className="toolbar" size={50}>
+        <ButtonWithIcon icon='back' onClick={() => {
           setSideStream(null);
           dispatch.actions.stream.open({
             id: 'main',
@@ -67,9 +68,9 @@ export const Header = ({ onClick }) => {
               channelId, type: 'archive', selected: message.id, date: message.createdAt,
             },
           });
-        }},
-        {icon: 'fa-solid fa-xmark', handler: () => dispatch.actions.stream.open({id: 'side', value: null})},
-      ]} />
+        }} />
+        <ButtonWithIcon icon='xmark' onClick={() => dispatch.actions.stream.open({id: 'side', value: null})} />
+      </Toolbar>
     </StyledHeader>
   );
 };

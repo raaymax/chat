@@ -4,7 +4,9 @@ import { removeMessage } from '../../services/messages';
 import { useHovered } from '../../contexts/hover';
 import { useStream } from '../../contexts/stream';
 import { useMessageData, useMessageUser } from '../../contexts/message';
-import { Toolbar } from '../../atomic/organisms/Toolbar';
+import { Toolbar } from '../../atomic/atoms/Toolbar';
+import { ButtonWithEmoji } from '../../atomic/molecules/ButtonWithEmoji';
+import { ButtonWithIcon } from '../../atomic/molecules/ButtonWithIcon';
 
 import styled from 'styled-components';
 
@@ -64,74 +66,45 @@ export const MessageToolbar = () => {
 
   if (hovered !== id) return null;
 
-  const reaction = (emoji) => ({ 
-    emoji, 
-    handler: () => dispatch.methods.messages.addReaction(id, emoji)
-  });
-
-  const deleteButton = () => ({
-    icon: 'fa-solid fa-trash-can',
-    handler: () => setView('delete')
-  });
-
-  const confirmDelete = () => ({
-    icon: 'fa-solid fa-circle-check danger',
-    handler: onDelete,
-  });
-
-  const cancelButton = () => ({
-    icon: 'fa-solid fa-circle-xmark',
-    handler: () => setView(null)
-  });
-
-  const editButton = () => ({
-    icon: 'fa-solid fa-pen-to-square',
-    handler: () => dispatch.actions.messages.toggleEdit(id)
-  });
-
-  const openReactions = () => ({
-    icon: 'fa-solid fa-icons',
-    handler: () => setView('reactions')
-  });
-
-  const pinButton = () => ({
-    icon: 'fa-solid fa-thumbtack',
-    handler: () => dispatch.methods.pins.pin(id, channelId)
-  });
-
-  const unpinButton = () => ({
-    icon: 'fa-solid fa-thumbtack',
-    handler: () => dispatch.methods.pins.unpin(id, channelId)
-  });
-
-  const replyButton = () => ({
-    icon: 'fa-solid fa-reply',
-    handler: () => dispatch.actions.stream.open({ id: 'side', value: { type: 'live', channelId, parentId: id } })
-  });
+  const reaction = (emoji) => (
+    <ButtonWithEmoji 
+      key={emoji}
+      emoji={emoji}
+      onClick={() => dispatch.methods.messages.addReaction(id, emoji)} />
+  );
+  const deleteButton = () => <ButtonWithIcon key='del' icon="delete" onClick={() => setView('delete')} />;
+  const confirmDelete = () => <ButtonWithIcon key='confirm_del' icon="check:danger" onClick={onDelete} />;
+  const cancelButton = () => <ButtonWithIcon key='cancel' icon="circle-xmark" onClick={() => setView(null)} />;
+  const editButton = () => <ButtonWithIcon key='edit' icon="edit" onClick={() => dispatch.actions.messages.toggleEdit(id)} />;
+  const openReactions = () => <ButtonWithIcon key='reactions' icon="icons" onClick={() => setView('reactions')} />;
+  const pinButton = () => <ButtonWithIcon key='pin' icon="thumbtack" onClick={() => dispatch.methods.pins.pin(id, channelId)} />;
+  const unpinButton = () => <ButtonWithIcon key='unpin' icon="thumbtack" onClick={() => dispatch.methods.pins.unpin(id, channelId)} />;
+  const replyButton = () => <ButtonWithIcon key='reply' icon="reply" onClick={() => dispatch.actions.stream.open({ id: 'side', value: { type: 'live', channelId, parentId: id } })} />;
 
   return (
     <Container>
-      <Toolbar opts={[
-        ...(view == 'reactions' ? [
-            reaction(':heart:'),
-            reaction(':rofl:'),
-            reaction(':thumbsup:'),
-            reaction(':thumbsdown:'),
-            reaction(':tada:'),
-            reaction(':eyes:'),
-        ]: []),
-        ...(view == 'delete' ? [
+      <Toolbar size={40}>
+        {view == 'reactions' && [
+          ':heart:',
+          ':rofl:',
+          ':thumbsup:',
+          ':thumbsdown:',
+          ':tada:',
+          ':eyes:',
+        ].map(reaction)}
+        {view == 'delete' && [
           confirmDelete(),
           cancelButton(),
-        ] : []),
-        ...(view == null ? [
-            openReactions(),
-            isMe && editButton(),
-            pinned ? unpinButton() : pinButton(),
-            isMe && deleteButton(),
-            !stream.parentId && replyButton(),
-        ] : []),
-      ]} />
+        ]}
+        {view == null && [
+          openReactions(),
+          isMe && editButton(),
+          isMe && deleteButton(),
+          pinned ? unpinButton() : pinButton(),
+          !stream.parentId && replyButton(),
+        ]}
+        
+      </Toolbar>
     </Container>
   );
 };

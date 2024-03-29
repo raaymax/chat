@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import { InputContext, useInput } from './InputContext';
 import { Attachments } from '../Attachments/Attachments';
 import { StatusLine } from '../StatusLine/StatusLine';
-import { ActionButton } from './elements/actionButton';
 import { EmojiSearch } from '../EmojiSearch/EmojiSearch';
 import { buildEmojiNode } from '../../utils';
 import { getUrl } from '../../services/file';
@@ -11,7 +10,8 @@ import { EmojiSelector } from './selectors/EmojiSelector';
 import { ChannelSelector } from './selectors/ChannelSelector';
 import { UserSelector } from './selectors/UserSelector';
 import { InputContainer } from './elements/container';
-import { Toolbar } from '../../atomic/organisms/Toolbar';
+import { Toolbar } from '../../atomic/atoms/Toolbar';
+import { ButtonWithIcon } from '../../atomic/molecules/ButtonWithIcon';
 import PropTypes from 'prop-types';
 
 export const InputForm = ({children }) => {
@@ -56,18 +56,20 @@ export const InputForm = ({children }) => {
         onKeyDown={(e) => onKeyDown(e)}
       >{children}</div>
       <Attachments />
-      <Toolbar className='controls' size={40} opts={[
-        {icon: "fa-solid fa-face-smile-beam", handler: () => setShowEmojis(!showEmojis)},
-        {icon: "fa-solid fa-plus", handler: addFile},
-        {element: StatusLine},
-        {type: 'separator'},
-        ...(mode === 'edit' ? [
-          {icon: "fa-solid fa-circle-xmark", handler: () => dispatch.actions.messages.editClose(messageId)},
-          {icon: "fa-solid fa-circle-check", handler: send},
-        ]: [
-          {icon: "fa-solid fa-paper-plane", handler: send},
-        ])
-      ]}/>
+      <Toolbar className='controls' size={40}>
+        <ButtonWithIcon icon="emojis" onClick={() => setShowEmojis(!showEmojis)} />
+        <ButtonWithIcon icon="plus" onClick={addFile} />
+        <StatusLine />
+        <div className="separator" />
+        {mode === 'edit' ? (
+          <>
+            <ButtonWithIcon icon="xmark" onClick={() => dispatch.actions.messages.editClose(messageId)} />
+            <ButtonWithIcon icon="check" onClick={send} />
+          </>
+        ) : (
+          <ButtonWithIcon icon="send" onClick={send} />
+        )}
+      </Toolbar>
       <ChannelSelector />
       <UserSelector />
       <EmojiSelector />

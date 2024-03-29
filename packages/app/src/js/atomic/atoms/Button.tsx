@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import {AppTheme} from '../../types';
+import { useSize } from '../../contexts/size';
 
 interface IconButtonProps {
   onClick: () => void;
@@ -29,8 +30,11 @@ const StyledButton = styled.button<{ $size: number}>`
 `;
 
 
-export const Button = ({ onClick, size, children}: IconButtonProps) => (
-  <StyledButton onClick={onClick} $size={size ?? 40}>
-    {children}
-  </StyledButton>
-);
+export const Button = ({ onClick, size, children}: IconButtonProps) => {
+  const $size = size ?? useSize();
+  return (
+    <StyledButton onClick={onClick} $size={$size ?? 40}>
+      {children}
+    </StyledButton>
+  );
+}

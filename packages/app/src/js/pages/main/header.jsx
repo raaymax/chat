@@ -5,7 +5,8 @@ import { init } from '../../services/init';
 import { useStream } from '../../contexts/stream';
 import { useMessage } from '../../hooks';
 import { loadMessages } from '../../services/messages';
-import { Toolbar } from '../../atomic/organisms/Toolbar';
+import { Toolbar } from '../../atomic/atoms/Toolbar';
+import { ButtonWithIcon } from '../../atomic/molecules/ButtonWithIcon';
 
 const StyledHeader = styled.div`
   display: flex;
@@ -33,6 +34,7 @@ const StyledHeader = styled.div`
   }
 
   & .channel{
+    flex: 1;
     padding-left: 30px;
     vertical-align: middle;
     font-size: 20px;
@@ -63,31 +65,33 @@ export const Header = ({ onClick }) => {
         <h1>Thread</h1>
         <Channel onClick={onClick} channelId={channelId} />
 
-        <Toolbar className="toolbar" size={50} opts = {[
-          {icon: 'fa-solid fa-arrow-left', handler: () => setStream({ channelId, type: 'archive', selected: message.id, date: message.createdAt })},
-          stream.id !== 'main' && {icon: 'fa-solid fa-xmark', handler: () => setStream(null)},
-        ]} />
+        <Toolbar className="toolbar" size={50}>
+          <ButtonWithIcon icon="back" onClick={() => setStream({ channelId, type: 'archive', selected: message.id, date: message.createdAt })} />
+          {stream.id !== 'main' && <ButtonWithIcon icon="xmark" onClick={() => setStream(null)} />}
+        </Toolbar>
       </StyledHeader>
     );
   }
 
   return (
     <StyledHeader>
-      <Toolbar className="toolbar" size={50} opts = {[
-        {icon: 'fa-solid fa-hashtag', handler: onClick},
-        {element: () => <Channel onClick={onClick} channelId={channelId} />},
-        stream.type === 'archive' && {icon: 'fa-solid fa-down-long', handler: () => {
-          dispatch.actions.messages.clear({ stream });
-          setStream({ ...stream, type: 'live' });
-          dispatch(loadMessages({ ...stream, type: 'live' }))
-        }},
-        {icon: 'fa-solid fa-thumbtack', handler: () => {
+      <Toolbar className="toolbar" size={50}>
+        <ButtonWithIcon icon="hash" onClick={onClick} />
+        <Channel onClick={onClick} channelId={channelId} />
+        {stream.type === 'archive' && (
+          <ButtonWithIcon icon='down' onClick = {() => {
+            dispatch.actions.messages.clear({ stream });
+            setStream({ ...stream, type: 'live' });
+            dispatch(loadMessages({ ...stream, type: 'live' }))
+          }} />
+        )}
+        <ButtonWithIcon icon="thumbtack" onClick={() => {
           dispatch.methods.pins.load(channelId);
           dispatch.actions.view.set('pins');
-        }},
-        {icon: 'fa-solid fa-magnifying-glass', handler: () => dispatch.actions.view.set('search')},
-        {icon: 'fa-solid fa-arrows-rotate', handler: () => dispatch(init())},
-      ]} />
+        }} />
+        <ButtonWithIcon icon="search" onClick={() => dispatch.actions.view.set('search')} />
+        <ButtonWithIcon icon="refresh" onClick={() => dispatch(init())} />
+      </Toolbar>
     </StyledHeader>
   );
 };

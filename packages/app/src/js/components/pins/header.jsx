@@ -2,7 +2,8 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { Channel } from '../Channels/Channel';
 import { useStream } from '../../contexts/stream';
-import { Toolbar } from '../../atomic/organisms/Toolbar';
+import { Toolbar } from '../../atomic/atoms/Toolbar';
+import { ButtonWithIcon } from '../../atomic/molecules/ButtonWithIcon';
 
 const StyledHeader = styled.div`
   display: flex;
@@ -52,9 +53,9 @@ export const Header = () => {
   return (
     <StyledHeader>
       <Channel channelId={channelId} icon="fa-solid fa-thumbtack" />
-      <Toolbar className="toolbar" size={50} opts = {[
-        {icon: 'fa-solid fa-xmark', handler: () => dispatch.actions.view.set('pins')},
-      ]} />
+      <Toolbar className="toolbar" size={50}>
+        <ButtonWithIcon icon="xmark" onClick={() => dispatch.actions.view.set('pins')} />
+      </Toolbar>
     </StyledHeader>
   );
 };

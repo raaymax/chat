@@ -2,6 +2,7 @@ import { useEmoji } from '../../hooks';
 import styled from 'styled-components';
 import { getUrl } from '../../services/file';
 import { Tooltip } from '../atoms/Tooltip';
+import { useSize } from '../../contexts/size';
 
 const StyledEmoji = styled.span<{$size: number}>`
   padding: 0;
@@ -31,11 +32,12 @@ interface EmojiBaseProps {
 }
 
 const EmojiBase = ({ shortname, emoji, size}: EmojiBaseProps) => {
+  const $size = size ?? useSize();
   if (!emoji || emoji.empty) return <span className='emoji'>{shortname}</span>;
 
   return (
     <Tooltip text={shortname}>
-      <StyledEmoji className="emoji" $size={size} data-emoji={shortname}>
+      <StyledEmoji className="emoji" $size={$size} data-emoji={shortname}>
         {emoji.unicode
           ? String.fromCodePoint(parseInt(emoji.unicode, 16))
           : <img src={getUrl(emoji.fileId)} alt={shortname} />}
