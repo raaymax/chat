@@ -8,7 +8,7 @@ import { MainConversation } from '../main/mainConversaion';
 import { SideConversation } from '../side/sideConversation';
 import { Search } from '../../components/search/search';
 import { Pins } from '../../components/pins/pins';
-import { LogoutButton } from '../../components/Logout/LogoutButton';
+import { LogoutButton } from '../../atomic/molecules/LogoutButton';
 import { StreamContext } from '../../contexts/stream';
 import plugins from '../../core/plugins';
 import { useStream } from '../../hooks';
@@ -34,7 +34,7 @@ export const Workspace = () => {
           {plugins.get('sidebar').map((El, key) => <El key={key} />)}
         </div>
         <div className='bottom'>
-          <LogoutButton />
+          <LogoutButton size={50} />
         </div>
       </SideMenu>}
       <MainView className={view === 'sidebar' ? ['sidebar'] : []}>

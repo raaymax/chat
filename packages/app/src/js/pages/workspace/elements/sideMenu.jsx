@@ -10,20 +10,6 @@ export const SideMenu = styled.div`
   }
   .bottom {
     flex: 0 50px;
-    .logout {
-      i {
-        padding-right: 10px;
-      }
-      height: 50px;
-      line-height: 50px;
-      vertical-align: middle;
-      font-size: 16px;
-      padding-left: 20px;
-      cursor: pointer;
-      &:hover {
-        background-color: ${(props) => props.theme.highlightedBackgroundColor};
-      }
-    }
   }
   @media (max-width : 710px) {
     flex: none;

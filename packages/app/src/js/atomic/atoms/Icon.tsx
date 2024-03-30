@@ -1,28 +1,19 @@
 import styled from 'styled-components';
 import { useSize } from '../../contexts/size';
+import {cn, ClassNames} from '../../utils';
 
 type IconProps = {
   icon: string,
-  className?: string;
+  className?: ClassNames;
   size?: number;
 }
 
-const StyledIcon = styled.i<{ $size?: number}>`
+const StyledIcon = styled.i`
   margin: auto;
   padding: 0;
   vertical-align: middle;
   text-align: center;
   display: inline;
-  ${(props) => {
-    if (props.$size) {
-      return `
-        width: ${props.$size}px;
-        height: ${props.$size}px;
-        line-height: ${props.$size}px;
-        font-size: ${props.$size}px;
-      `;
-    }
-  }}
 `;
 
 const iconMap: Record<string, string> = {
@@ -43,6 +34,7 @@ const iconMap: Record<string, string> = {
   refresh: "fa-solid fa-arrows-rotate",
   back: 'fa-solid fa-arrow-left',
   lock: 'fa-solid fa-lock',
+  logout: 'fa-solid fa-right-from-bracket',
 };
 
 const getIcon = (icon: string) => {
@@ -53,6 +45,11 @@ const getIcon = (icon: string) => {
 export const Icon = ({ size, className, icon}: IconProps) => {
   const $size = useSize(size);
   return (
-    <StyledIcon className={'icon ' + getIcon(icon) + ' ' + className } $size={$size} />
+    <StyledIcon className={cn('icon', getIcon(icon), className)} style={$size ? {
+        width: `${$size}px`,
+        height: `${$size}px`,
+        lineHeight: `${$size}px`,
+        fontSize: `${$size}px`,
+      }: undefined} />
   );
 }

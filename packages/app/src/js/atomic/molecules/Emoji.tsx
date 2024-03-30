@@ -28,11 +28,11 @@ interface EmojiBaseProps {
     fileId?: string;
     empty?: boolean;
   },
-  size: number;
+  size?: number;
 }
 
 export const EmojiBase = ({ shortname, emoji, size}: EmojiBaseProps) => {
-  const $size = size ?? useSize();
+  const $size = useSize(size);
   if (!emoji || emoji.empty) return <span className='emoji'>{shortname}</span>;
 
   return (

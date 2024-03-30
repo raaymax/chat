@@ -13,7 +13,7 @@ export const ButtonWithEmoji = ({ onClick, size, emoji, children}: ButtonWithEmo
   const $size = useSize(size);
   return (
     <Button size={$size} onClick={onClick}>
-      <Emoji shortname={emoji} size={$size/2} />
+      <Emoji shortname={emoji} size={$size ? $size/2 : $size} />
       {children}
     </Button>
   );

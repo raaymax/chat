@@ -1,9 +1,9 @@
-
 import { useState } from 'react';
+import {cn, ClassNames} from '../../utils';
 
 interface TooltipProps {
   children: React.ReactNode;
-  className?: string;
+  className?: ClassNames;
   text: string;
 }
 
@@ -12,7 +12,7 @@ export const Tooltip = ({ children, text, className = '' }: TooltipProps) => {
 
   return (
     <div
-      className={'tooltip-container ' + className}
+      className={cn('tooltip-container', className)}
       style={{ position: 'relative', display: 'inline-block' }}
       onMouseEnter={() => setShow(true)}
       onMouseLeave={() => setShow(false)}

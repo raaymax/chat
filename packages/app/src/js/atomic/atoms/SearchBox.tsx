@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import {cn, ClassNames} from '../../utils';
 
 
 const SearchBoxInput = styled.input`
@@ -15,15 +16,16 @@ type SearchBoxProps = {
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   value?: string;
   defaultValue?: string;
-  className?: string;
+  className?: ClassNames;
   placeholder?: string;
 }
 
-export const SearchBox = ({ onChange, onKeyDown, placeholder = "Search here...", defaultValue, value }: SearchBoxProps) => (
+export const SearchBox = ({ onChange, onKeyDown, placeholder = "Search here...", defaultValue, value, className }: SearchBoxProps) => (
   <SearchBoxInput
     type="text"
     onChange={onChange}
     onKeyDown={onKeyDown}
+    className={cn(className)}
     value={value}
     defaultValue={defaultValue}
     placeholder={placeholder}

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import {Badge} from '../atoms/Badge';
 import {TextWithIcon} from './TextWithIcon';
+import {cn, ClassNames} from '../../utils';
 
 const Container = styled.div`
   cursor: pointer;
@@ -28,7 +29,7 @@ type ChannelNameProps = {
   id: string;
   children: any;
   badge: number;
-  className: string;
+  className: ClassNames;
   onClick: () => void;
   icon: string;
 };
@@ -36,7 +37,7 @@ type ChannelNameProps = {
 export const ChannelName = ({
   id, children, badge, className, onClick, icon = 'fa-solid fa-hashtag',
 }: ChannelNameProps) => (
-  <Container className={`channel ${className || ''}`} data-id={id} onClick={onClick}>
+  <Container className={cn('channel', className)} data-id={id} onClick={onClick}>
     <TextWithIcon icon={icon}>{children}</TextWithIcon> 
     {badge > 0 && <Badge>{badge}</Badge>}
   </Container>

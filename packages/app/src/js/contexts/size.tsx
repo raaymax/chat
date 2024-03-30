@@ -3,7 +3,7 @@ import { useContext, createContext } from 'react';
 const Context = createContext<number | undefined>();
 
 type SizeContextProps = {
-  value: number;
+  value?: number;
   children: React.ReactNode;
 };
 

@@ -1,16 +1,18 @@
 import styled from 'styled-components';
 import {AppTheme} from '../../types';
 import { useSize } from '../../contexts/size';
+import {cn, ClassNames} from '../../utils';
 
 interface IconButtonProps {
-  onClick: () => void;
-  size: number;
-  children: React.ReactNode;
+  onClick?: (e: React.MouseEvent) => void;
+  size?: number;
+  children?: React.ReactNode;
+  className?: ClassNames;
 }
 
 
 const StyledButton = styled.button<{ $size: number}>`
-  width: ${(props) => props.$size}px;
+  min-width: ${(props) => props.$size}px;
   height: ${(props) => props.$size}px;
   font-style: normal;
   cursor: pointer;
@@ -30,10 +32,10 @@ const StyledButton = styled.button<{ $size: number}>`
 `;
 
 
-export const Button = ({ onClick, size, children}: IconButtonProps) => {
+export const Button = ({ onClick, size, children, className}: IconButtonProps) => {
   const $size = useSize(size);
   return (
-    <StyledButton onClick={onClick} $size={$size ?? 40}>
+    <StyledButton onClick={onClick} $size={$size ?? 40} className={cn(className)}>
       {children}
     </StyledButton>
   );

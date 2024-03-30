@@ -1,4 +1,3 @@
-
 export type AppTheme = {
   borderColor: string;
   backgroundColor: string;
