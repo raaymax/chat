@@ -27,8 +27,9 @@ type LogoutButtonProps = {
 export const LogoutButton = ({size}: LogoutButtonProps) => {
   const dispatch = useDispatch();
   const $size = useSize(size) ?? 50;
+  // FIXME: logout() as any
   return (
-    <StyledButton className="logout" icon="logout" size={$size} onClick={() => dispatch(logout())}>
+    <StyledButton className="logout" icon="logout" size={$size} onClick={() => dispatch(logout() as any)}>
       <Text size={$size/2.5}>Logout</Text>
     </StyledButton>
   );

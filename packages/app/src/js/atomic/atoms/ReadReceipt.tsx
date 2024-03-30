@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 
-const StyledProgress = styled.div`
+const StyledReadReceipt = styled.div`
   position: relative;
   height: 0;
   width: 100%;
@@ -20,29 +19,29 @@ const StyledProgress = styled.div`
   }
 `;
 
-export const Progress = ({ progress }) => {
-  if (!progress) return null;
+type ReadReceiptProps = {
+  data: {
+    userId: string;
+    user: {
+      avatarUrl: string;
+      name: string;
+    }
+  }[];
+};
+
+export const ReadReceipt = ({ data }: ReadReceiptProps) => {
+  if (!data) return null;
 
   return (
-    <StyledProgress>
+    <StyledReadReceipt>
       <div>
         {
-          progress
+          data
             .map((p) => (
               <img key={p.userId} src={p.user?.avatarUrl} alt={p.user?.name} />
             ))
         }
       </div>
-    </StyledProgress>
+    </StyledReadReceipt>
   );
-};
-
-Progress.propTypes = {
-  progress: PropTypes.arrayOf(PropTypes.shape({
-    userId: PropTypes.string,
-    user: PropTypes.shape({
-      avatarUrl: PropTypes.string,
-      name: PropTypes.string,
-    }),
-  })),
 };

@@ -4,7 +4,7 @@ import { getUrl } from '../../services/file';
 import { Tooltip } from '../atoms/Tooltip';
 import { useSize } from '../../contexts/size';
 
-const StyledEmoji = styled.span<{$size: number}>`
+const StyledEmoji = styled.span<{$size?: number}>`
   padding: 0;
   margin: 0;
   ${(props) => props.$size ? `
@@ -48,7 +48,7 @@ export const EmojiBase = ({ shortname, emoji, size}: EmojiBaseProps) => {
 
 interface EmojiProps {
   shortname: string;
-  size: number;
+  size?: number;
 }
 
 export const Emoji = ({ shortname, size}: EmojiProps) => {

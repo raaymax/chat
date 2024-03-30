@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { SizeContext } from '../../contexts/size';
 import {cn, ClassNames} from '../../utils';
 
-export const Container = styled.div<{$size: number}>`
+export const Container = styled.div<{$size?: number}>`
   display: flex;
   flex-direction: row;
   .icon, .emoji {

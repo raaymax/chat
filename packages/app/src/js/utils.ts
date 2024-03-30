@@ -1,5 +1,3 @@
-import { ClassNames } from './types';
-
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 export type ClassNames = string | undefined | string[] | Record<string, boolean>;

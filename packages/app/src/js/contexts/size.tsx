@@ -1,6 +1,6 @@
 import { useContext, createContext } from 'react';
 
-const Context = createContext<number | undefined>();
+const Context = createContext<number | undefined>(undefined);
 
 type SizeContextProps = {
   value?: number;

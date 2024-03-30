@@ -2,15 +2,15 @@ import { formatTime, formatDateDetailed } from '../../utils';
 import { Files } from '../Files/Files';
 import { Reactions } from '../Reaction/Reaction';
 import { MessageToolbar } from '../MessageToolbar/MessageToolbar';
-import { Progress } from './elements/Progress';
+import { ReadReceipt } from '../../atomic/atoms/ReadReceipt';
 import { Info } from './info';
 import { ThreadInfo } from './threadInfo';
 import { MessageContext, useMessageData, useMessageUser } from '../../contexts/message';
 import { useHoverCtrl } from '../../contexts/hover';
 import { useStream } from '../../contexts/stream';
-import { buildMessageBody } from './messageBuilder';
+import { buildMessageBody } from '../../atomic/molecules/MessageBody';
 import { isToday } from './utils';
-import { LinkPreviewList } from './elements/LinkPreview';
+import { LinkPreviewList } from '../../atomic/atoms/LinkPreview';
 import {Input} from '../Input/Input';
 import PropTypes from 'prop-types';
 
@@ -59,7 +59,7 @@ const MessageBase = ({ onClick, sameUser, ...props } = {}) => {
         <Info />
         <Reactions />
         <ThreadInfo />
-        <Progress progress={msg.progress} />
+        <ReadReceipt data={msg.progress} />
         <MessageToolbar />
       </div>
     </div>

@@ -6,6 +6,7 @@ const Context = createContext({
 });
 
 export const MessageContext = ({ children, value }) => (
+  console.log(JSON.stringify(value)) || 
   <Context.Provider value={value}>
     {children}
   </Context.Provider>

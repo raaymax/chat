@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 
 const Container = styled.div`
   display: flex;
@@ -8,7 +7,7 @@ const Container = styled.div`
   flex-wrap: wrap;
 `;
 
-const Link = styled.div`
+const Link = styled.div<{$image: string}>`
   flex: 0 0 300px;
   display: block;
   max-width: 300px;
@@ -49,8 +48,21 @@ const Link = styled.div`
   }
 `;
 
-export const LinkPreview = ({ link }) => (
-  <Link className='link-preview' onClick={() => window.open(link.url, '_blank').focus()}
+type Link = {
+  url: string;
+  siteName: string;
+  title: string;
+  description: string;
+  images: string[];
+};
+
+
+type LinkPreviewProps = {
+  link: Link;
+};
+
+export const LinkPreview = ({ link }: LinkPreviewProps) => (
+  <Link className='link-preview' onClick={() => window.open(link.url, '_blank')?.focus()}
     $image={link.images[0]}>
     {link.images?.length && <div className='image' />}
     <div className='text'>
@@ -60,30 +72,14 @@ export const LinkPreview = ({ link }) => (
   </Link>
 );
 
-LinkPreview.propTypes = {
-  link: PropTypes.shape({
-    url: PropTypes.string,
-    siteName: PropTypes.string,
-    title: PropTypes.string,
-    description: PropTypes.string,
-    images: PropTypes.array,
-  }),
+type LinkPreviewListProps = {
+  links: Link[];
 };
 
-export const LinkPreviewList = ({ links = [] }) => (
+export const LinkPreviewList = ({ links = [] }: LinkPreviewListProps) => (
   <Container>
     {links.map((link, key) => (
       <LinkPreview link={link} key={key} />
     ))}
   </Container>
 );
-
-LinkPreviewList.propTypes = {
-  links: PropTypes.arrayOf(PropTypes.shape({
-    url: PropTypes.string,
-    siteName: PropTypes.string,
-    title: PropTypes.string,
-    description: PropTypes.string,
-    images: PropTypes.array,
-  })),
-};

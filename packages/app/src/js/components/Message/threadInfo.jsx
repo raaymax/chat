@@ -4,7 +4,6 @@ import { UserCircle } from '../UserCircle/UserCircle';
 import { formatTime, formatDateDetailed } from '../../utils';
 import { useMessageData } from '../../contexts/message';
 import { useStream } from '../../contexts/stream';
-import PropTypes from 'prop-types';
 
 const Container = styled.div`
   width: auto;
@@ -29,29 +28,6 @@ const Container = styled.div`
     background-color: ${(props) => props.theme.frontHoverColor};
   }
 `;
-
-const Link = styled.span`
-  color: ${(props) => props.theme.linkColor};
-  cursor: pointer;
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-export const ThreadLink = ({ channelId, parentId, text }) => {
-  const dispatch = useDispatch();
-  return (
-    <Link onClick={() => dispatch.actions.stream.open({id: 'side', value: { type: 'live', channelId, parentId }})}>
-      {text || 'Thread'}
-    </Link>
-  );
-};
-
-ThreadLink.propTypes = {
-  channelId: PropTypes.string,
-  parentId: PropTypes.string,
-  text: PropTypes.string,
-};
 
 export const ThreadInfo = () => {
   const {
