@@ -5,7 +5,7 @@ module.exports = {
   root: true,
   env: {
     commonjs: true,
-    es2021: true,
+    es2023: true,
     node: true,
   },
   parserOptions: {
@@ -27,7 +27,7 @@ module.exports = {
       env: {
         serviceworker: true,
         browser: true,
-        es2021: true,
+        es2023: true,
       },
       parserOptions: {
         ecmaVersion: 'latest',
@@ -50,7 +50,7 @@ module.exports = {
       env: {
         mocha: true,
         browser: true,
-        es2021: true,
+        es2023: true,
       },
       parserOptions: {
         ecmaVersion: 'latest',
@@ -72,62 +72,10 @@ module.exports = {
       env: {
         mocha: true,
         commonjs: true,
-        es2021: true,
+        es2023: true,
       },
       rules: {
         'global-require': ['off'],
-      },
-    },
-    {
-      files: [
-        'plugins/*/public/**/*.js',
-      ],
-      extends: 'preact',
-      env: {
-        browser: true,
-        es2021: true,
-      },
-      parserOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module',
-      },
-      globals: {
-        Chat: 'readonly',
-        Preact: 'readonly',
-        PreactHooks: 'readonly',
-        plugins: 'readonly',
-      },
-      rules: {
-        'jest/no-deprecated-functions': 'off',
-        'import/prefer-default-export': 'off',
-        'import/extensions': ['off'],
-      },
-    },
-    {
-      files: [
-        'packages/app/**/*.js',
-        'packages/app/**/*.ts',
-        'packages/app/**/*.tsx',
-        'packages/app/**/*.jsx',
-      ],
-      extends: 'preact',
-      env: {
-        browser: true,
-        es2021: true,
-      },
-      parserOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module',
-      },
-      globals: {
-        EMOJI: 'writable',
-        API_URL: 'readonly',
-        APP_URL: 'readonly',
-      },
-      rules: {
-        'jest/no-deprecated-functions': 'off',
-        'import/prefer-default-export': 'off',
-        'import/extensions': ['off'],
       },
     },
     {
