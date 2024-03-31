@@ -1,70 +1,111 @@
-import {
+import React, {
   useRef, useState, useCallback, useEffect, useContext, createContext,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useStream } from '../../contexts/stream';
-import * as messageService from '../../services/messages';
-import { uploadMany } from '../../services/file';
-import { fromDom } from './serializer';
-import { useMessage } from '../../hooks/useMessage';
-import PropTypes from 'prop-types';
+import { useStream } from './stream';
+import * as messageService from '../services/messages';
+import { uploadMany } from '../services/file';
+import { fromDom } from '../serializer';
+import { useMessage } from '../hooks/useMessage';
 
-const Context = createContext({
-  input: {},
-});
+type InputContextType = {
+  mode: string;
+  messageId: string | null;
+  input: {current?: HTMLElement};
+  fileInput: {current?: HTMLInputElement};
+  onPaste: (e: any) => void;
+  onKeyDown: (e: React.KeyboardEvent) => void;
+  onInput: () => void;
+  onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  currentText: string;
+  scope: string;
+  scopeContainer: HTMLElement | undefined;
+  replace: (regex: RegExp, text?: string) => void;
+  wrapMatching: (regex: RegExp, wrapperTagName: string) => void;
+  addFile: () => void;
+  send: (e: React.KeyboardEvent) => void;
+  getRange: () => Range;
+  insert: (domNode: HTMLElement) => void;
+  focus: (e: any) => void;
+};
 
-function findScope(element) {
+const Context = createContext<InputContextType | null>(null);
+
+function findScope(element: HTMLElement | null): { el: HTMLElement, scope: string } | null {
   let currentElement = element;
   while (currentElement !== null) {
-    if (currentElement.hasAttribute?.('scope')) {
-      return { el: currentElement, scope: currentElement.getAttribute('scope') };
+    const scope = currentElement.hasAttribute?.('scope')
+    if (typeof scope === 'string') {
+      return { el: currentElement, scope };
     }
     currentElement = currentElement.parentElement;
   }
   return null;
 }
 
-export const InputContext = (args) => {
+
+type InputContextProps = {
+  children: React.ReactNode;
+  mode?: string;
+  messageId?: string;
+};
+
+export const InputContext = (args: InputContextProps) => {
   const { children, mode = 'default', messageId = null } = args;
-  const dispatch = useDispatch();
+  const dispatch: any = useDispatch();
   const [stream] = useStream();
   const [currentText, setCurrentText] = useState('');
-  const [scope, setScope] = useState('');
-  const [scopeContainer, setScopeContainer] = useState(null);
-  const files = useSelector((state) => state.files);
-  const filesAreReady = !files || files.every((f) => f.status === 'ok');
+  const [scope, setScope] = useState<string>('');
+  const [scopeContainer, setScopeContainer] = useState<HTMLElement>();
+  //FIXME: files as any
+  const files = useSelector((state: any) => state.files);
+  const filesAreReady = !files || files.every((f: any) => f.status === 'ok');
   const message = useMessage(messageId);
 
-  const input = useRef();
-  const fileInput = useRef(null);
-  const [range, setRange] = useState(null);
+  const input = useRef<HTMLElement>();
+  const fileInput = useRef<HTMLInputElement>();
+  const [range, setRange] = useState<Range>(document.createRange());
 
-  const getRange = useCallback(() => {
-    const r = document.getSelection().getRangeAt(0);
+  const getDefaultRange = useCallback((): Range => {
+    if(!input.current) throw new Error('Input ref is not set');
+    const r = document.createRange();
+    r.setStart(input.current, 0);
+    r.setEnd(input.current, 0);
+    return r;
+  }, [input]);
+
+  const getRange = useCallback((): Range => {
+    if(!input.current) throw new Error('Input ref is not set');
+    const selection = document.getSelection();
+    if(!selection || selection.type === 'None') {
+      return getDefaultRange();
+    }
+    const r = selection.getRangeAt(0);
     if (input.current.contains(r.commonAncestorContainer)) {
       return r;
     }
-    return range;
-  }, [range]);
+    return range || getDefaultRange();
+  }, [range, getDefaultRange]);
 
   const updateRange = useCallback(() => {
     const r = getRange();
     if (!r) return;
     setRange(r);
     if (r.endContainer.nodeName === '#text') {
-      setCurrentText(r.endContainer.textContent.slice(0, r.endOffset));
+      setCurrentText(r.endContainer.textContent?.slice(0, r.endOffset) ?? '');
     } else {
       setCurrentText('');
     }
-    const { el, scope: s } = findScope(r.commonAncestorContainer);
-    if (s !== scope) {
+    const { el, scope: s } = findScope(r.commonAncestorContainer as HTMLElement) || {};
+    if (s && s !== scope) {
       setScope(s);
     }
-    setScopeContainer(el);
+    if(el) setScopeContainer(el);
   }, [getRange, setRange, scope, setScope, setCurrentText, setScopeContainer]);
 
-  const onPaste = useCallback((event) => {
-    const cbData = (event.clipboardData || window.clipboardData);
+  const onPaste = useCallback((event: ClipboardEvent) => {
+    // FIXME: window as any
+    const cbData = (event.clipboardData || (window as any).clipboardData);
     if (cbData.files?.length > 0) {
       event.preventDefault();
       dispatch(uploadMany(stream.id, cbData.files));
@@ -73,17 +114,17 @@ export const InputContext = (args) => {
     const range = getRange();
     range.deleteContents();
 
-    cbData.getData('text').split('\n').reverse().forEach((line, idx) => {
+    cbData.getData('text').split('\n').reverse().forEach((line: string, idx: number) => {
       if (idx) range.insertNode(document.createElement('br'));
       range.insertNode(document.createTextNode(line));
     });
-    document.getSelection().collapseToEnd();
+    document.getSelection()?.collapseToEnd();
     event.preventDefault();
     event.stopPropagation();
   }, [getRange, dispatch, stream]);
 
-  const onFileChange = useCallback((e) => {
-    if (e.target.files?.length > 0) {
+  const onFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    if ((e.target.files?.length ?? 0) > 0) {
       const { files } = e.target;
       dispatch(uploadMany(stream.id, files));
       e.target.value = '';
@@ -94,27 +135,31 @@ export const InputContext = (args) => {
     updateRange();
   }, [updateRange]);
 
-  const focus = useCallback((e) => {
+  const focus = useCallback((e: Event) => {
     if (!input.current) return;
     input.current.focus();
     if (!range) return;
-    getSelection().removeAllRanges();
-    getSelection().addRange(range);
+    window.getSelection()?.removeAllRanges();
+    window.getSelection()?.addRange(range);
     if (e) {
       e.preventDefault();
       e.stopPropagation();
     }
   }, [input, range]);
 
-  const send = useCallback((e) => {
+  //FIXME: e as any
+  const send = useCallback((e:any) => {
+    if (!input.current) return;
     if (!filesAreReady) return;
-    const payload = fromDom(input.current);
+    // FIXME: payload as any
+    const payload: any = fromDom(input.current);
     if (payload.type === 'message:create' && mode === 'edit') {
       payload.type = 'message:update';
       payload.id = messageId;
       payload.clientId = message.clientId;
     }
-    payload.attachments = [...files.filter((f) => f.streamId === stream.id)];
+    //FIXME: files as any
+    payload.attachments = [...files.filter((f: any) => f.streamId === stream.id)];
     if (payload.flat.length === 0 && payload.attachments.length === 0) return;
     payload.channelId = stream.channelId;
     payload.parentId = stream.parentId;
@@ -130,9 +175,9 @@ export const InputContext = (args) => {
   }, [input, stream, focus, dispatch,
     filesAreReady, files, messageId, mode]);
 
-  const wrapMatching = useCallback((regex, wrapperTagName) => {
+  const wrapMatching = useCallback((regex: RegExp, wrapperTagName: string) => {
     const selection = window.getSelection();
-    if (!selection.rangeCount) {
+    if (!selection?.rangeCount) {
       // eslint-disable-next-line no-console
       console.warn('No text selected.');
       return;
@@ -147,7 +192,7 @@ export const InputContext = (args) => {
     }
 
     const { parentNode } = endContainer;
-    let { textContent } = endContainer;
+    let textContent = endContainer.textContent || '';
     const afterText = textContent.slice(range.endOffset);
     textContent = textContent.slice(0, range.endOffset);
     const documentFragment = document.createDocumentFragment();
@@ -165,38 +210,43 @@ export const InputContext = (args) => {
     const here = document.createTextNode(textContent || '\u00A0');
     documentFragment.appendChild(here);
     documentFragment.appendChild(document.createTextNode(afterText));
-    parentNode.replaceChild(documentFragment, endContainer);
+    parentNode?.replaceChild(documentFragment, endContainer);
     const sel = document.getSelection();
     const r = document.createRange();
     r.setEnd(here, 0);
     r.setStart(here, 0);
-    sel.removeAllRanges();
-    sel.addRange(r);
+    sel?.removeAllRanges();
+    sel?.addRange(r);
     updateRange();
   }, [updateRange]);
 
-  const replace = useCallback((regex, text = '') => {
+  const replace = useCallback((regex: RegExp, text: string = '') => {
     const range = getRange();
     const node = range.endContainer;
-    const original = node.textContent;
+    const original = node.textContent ?? '';
     const replacement = original.slice(0, range.endOffset).replace(regex, text);
     node.textContent = replacement + original.slice(range.endOffset);
     const s = document.getSelection();
     const r = document.createRange();
     r.setStart(node, replacement.length);
     r.setEnd(node, replacement.length);
-    s.removeAllRanges();
-    s.addRange(r);
+    s?.removeAllRanges();
+    s?.addRange(r);
   }, [getRange]);
 
-  const insert = useCallback((domNode) => {
+  const insert = useCallback((domNode: HTMLElement) => {
     const range = getRange();
     range.deleteContents();
     range.insertNode(domNode);
     range.collapse();
   }, [getRange]);
 
-  const onKeyDown = useCallback((e) => {
+  interface KeyboardEvent {
+    key: string;
+    shiftKey: boolean;
+  }
+
+  const onKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey && scope === 'root') {
       return send(e);
     }
@@ -205,7 +255,7 @@ export const InputContext = (args) => {
   }, [dispatch, send, updateRange, scope, stream]);
 
   const addFile = useCallback(() => {
-    fileInput.current.click();
+    fileInput.current?.click();
   }, [fileInput]);
 
   useEffect(() => {
@@ -215,6 +265,7 @@ export const InputContext = (args) => {
 
   useEffect(() => {
     const { current } = input;
+    if(!current) return;
     current.addEventListener('keydown', onKeyDown);
     current.addEventListener('input', onInput);
     return () => {
@@ -252,13 +303,10 @@ export const InputContext = (args) => {
   );
 };
 
-InputContext.propTypes = {
-  children: PropTypes.node,
-  mode: PropTypes.string,
-  messageId: PropTypes.string,
-};
-
-export const useInput = () => {
+export const useInput = (): InputContextType => {
   const context = useContext(Context);
+  if (!context) {
+    throw new Error('useInput must be used within a InputContext');
+  }
   return context;
 };

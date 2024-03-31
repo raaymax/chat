@@ -30,7 +30,7 @@ export type MessageBodyCodeblock = { codeblock: string };
 export type MessageBodyBlockquote = { blockquote: MessageBody };
 export type MessageBodyCode = { code: string };
 export type MessageBodyLine = { line: MessageBody};
-export type MessageBodyBr = {br: {}};
+export type MessageBodyBr = {br: boolean};
 export type MessageBodyText = { text: string };
 export type MessageBodyBold = { bold: MessageBody };
 export type MessageBodyItalic = { italic: MessageBody };
@@ -54,13 +54,61 @@ export type MessageBody = MessageBodyPart[] | MessageBodyPart;
 
 export type Message = {
   id: string;
+  clientId: string;
   message: MessageBody;
+  flat: string;
+  channelId: string;
+  parentId: string;
+  userId: string;
   emojiOnly: boolean;
-  createdAt: number;
+  createdAt: string;
+  updatedAt: string;
+  links: string[];
   pinned: boolean;
   editing: boolean;
-  linkPreviews: any;
-  attachments: any;
-  progress: any;
+  linkPreviews: {
+    url: string;
+    title: string;
+    siteName: string;
+    description: string;
+    mediaType: string;
+    contentType: string;
+    images: string[];
+    videos: string[];
+    favicons: string[];
+    charset: string;
+  }[];
+  attachments: {
+    id: string;
+    fileName: string;
+    contentType: string;
+  }[];
+  reactions: {
+    reaction: string;
+    userId: string;
+  }[];
+  info?: {
+    type: string;
+    action: string;
+    msg: string;
+  };
+  thread?: {
+    childId: string;
+    userId: string;
+  }[];
+  //TODO: is it correct?
+  progress?: {
+    userId: string;
+    user: {
+      avatarUrl: string;
+      name: string;
+    }
+  }[];
 };
-// {"data":{"type":"message","id":"65ff51747475b7d830d03fbf","flat":"awd","message":[{"text":"awd"}],"channelId":"65ff019a77c79e93214b0214","userId":"6255a4156c28443c92c26d7e","channel":"6255a4156c28443c92c26d7e","clientId":"temp:1.aeafiq2dcm:3","emojiOnly":false,"links":[],"mentions":[],"attachments":[],"createdAt":"2024-03-23T22:02:28.567Z","seqId":"jhblkqfc9nh:3","_target":"direct"}}
+
+export type User = {
+  id: string;
+  name: string;
+  status: string;
+  avatar: string;
+};

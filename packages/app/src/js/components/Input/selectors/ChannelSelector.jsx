@@ -2,8 +2,8 @@ import {
   useCallback, useEffect, useState, useMemo,
 } from 'react';
 import Fuse from 'fuse.js';
-import { TextMenu } from '../TextMenu';
-import { useInput } from '../InputContext';
+import { TextMenu } from '../../../atomic/molecules/TextMenu';
+import { useInput } from '../../../contexts/input';
 import { useChannels } from '../../../hooks';
 
 const SCOPE = 'channel';

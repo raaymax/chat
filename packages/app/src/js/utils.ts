@@ -11,18 +11,18 @@ export const cn = (...classes: ClassNames[]) => {
   }).filter(Boolean).join(' ');
 }
 
-export const formatDate = (raw: string): string => {
-  const date = new Date(raw);
+export const formatDate = (raw?: string): string => {
+  const date = raw ? new Date(raw) : new Date();
   return date.toLocaleDateString('pl-PL');
 };
 
-export const formatDateDetailed = (raw: string): string => {
-  const date = new Date(raw);
+export const formatDateDetailed = (raw?: string): string => {
+  const date = raw ? new Date(raw) : new Date();
   return `${DAYS[date.getDay()]}, ${date.toLocaleDateString('pl-PL')}`;
 };
 
-export const formatTime = (raw: string): string=> {
-  const date = new Date(raw);
+export const formatTime = (raw?: string): string=> {
+  const date = raw ? new Date(raw) : new Date();
   let minutes = date.getMinutes().toString();
   if (minutes.length === 1) minutes = `0${minutes}`;
   return `${date.getHours()}:${minutes}`;

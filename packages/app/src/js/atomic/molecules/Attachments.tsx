@@ -58,32 +58,42 @@ const Container = styled.div`
   }
 `;
 
-export const Attachment = ({
+type AttachmentProps = {
   data: {
-    fileName, contentType, progress, status,
-  }, ondelete,
-}) => (
+    fileName: string;
+    contentType: string;
+    progress: number;
+    status: string;
+  };
+  onDelete: () => void;
+};
+
+export const Attachment = ({
+  data: { fileName, contentType, progress, status },
+  onDelete,
+}: AttachmentProps) => (
   <div className='attachment'>
     <div className='type'><i className='fa-solid fa-file' /></div>
     <div className='name'>{fileName} [{contentType}]</div>
-    <div className='remove' onClick={ondelete}><i className='fa-solid fa-xmark' /></div>
+    <div className='remove' onClick={onDelete}><i className='fa-solid fa-xmark' /></div>
     <div className={status === 'ok' ? 'progress done' : 'progress'} style={{width: `${progress}%`}} />
   </div>
 );
 
 export const Attachments = () => {
   const [stream] = useStream();
-  const files = useSelector((state) => state.files);
-  const list = useMemo(() => files.filter((file) => file.streamId === stream.id), [files, stream.id]);
-  const dispatch = useDispatch();
+  // FIXME: files as any
+  const files: any = useSelector((state: any) => state.files);
+  const list = useMemo(() => files.filter((file: any) => file.streamId === stream.id), [files, stream.id]);
+  const dispatch: any = useDispatch();
 
   return (
     <Container>
-      {(list || []).map((file) => (
+      {(list || []).map((file: any) => (
         <Attachment
           key={file.clientId}
           data={{ ...file }}
-          ondelete={() => {
+          onDelete={() => {
             dispatch(abort(file.clientId));
           }}
         />

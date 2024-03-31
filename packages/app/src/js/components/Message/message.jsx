@@ -1,18 +1,19 @@
 import { formatTime, formatDateDetailed } from '../../utils';
-import { Files } from '../Files/Files';
-import { Reactions } from '../Reaction/Reaction';
-import { MessageToolbar } from '../MessageToolbar/MessageToolbar';
-import { ReadReceipt } from '../../atomic/atoms/ReadReceipt';
 import { Info } from './info';
 import { ThreadInfo } from './threadInfo';
 import { MessageContext, useMessageData, useMessageUser } from '../../contexts/message';
 import { useHoverCtrl } from '../../contexts/hover';
 import { useStream } from '../../contexts/stream';
-import { buildMessageBody } from '../../atomic/molecules/MessageBody';
 import { isToday } from './utils';
-import { LinkPreviewList } from '../../atomic/atoms/LinkPreview';
 import {Input} from '../Input/Input';
 import PropTypes from 'prop-types';
+
+import { LinkPreviewList } from '../../atomic/atoms/LinkPreview';
+import { ReadReceipt } from '../../atomic/atoms/ReadReceipt';
+import { buildMessageBody } from '../../atomic/molecules/MessageBody';
+import { Files } from '../../atomic/molecules/Files';
+import { MessageToolbar } from '../../atomic/molecules/MessageToolbar';
+import { Reactions } from '../../atomic/molecules/Reactions';
 
 const MessageBase = ({ onClick, sameUser, ...props } = {}) => {
   const msg = useMessageData();
@@ -73,7 +74,7 @@ MessageBase.propTypes = {
 };
 
 export const Message = (props) => (
-  <MessageContext value={{ data: props.data }}>
+  <MessageContext value={props.data}>
     <MessageBase {...props} />
   </MessageContext>
 );

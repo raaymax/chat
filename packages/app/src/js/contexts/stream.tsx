@@ -3,17 +3,33 @@ import {
 } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { loadMessages, loadNext, loadPrevious } from '../services/messages';
+import { Message } from '../types';
 
-const Context = createContext([{}, () => ({})]);
+type Stream = {
+  id: string;
+  channelId: string;
+  parentId?: string;
+  selected?: string;
+};
 
-export const StreamContext = ({ children, value }) => (
+type SetStream = (stream: Stream) => void;
+
+const Context = createContext<[Stream | undefined, SetStream]>([undefined, () => ({})]);
+
+type StreamContextProps = {
+  children: React.ReactNode;
+  value: [Stream, SetStream];
+};
+
+export const StreamContext = ({ children, value }: StreamContextProps) => (
   <Context.Provider value={value}>
     {children}
   </Context.Provider>
 );
 
-export const useStream = () => {
+export const useStream = (): [Stream, SetStream] => {
   const [stream, setStream] = useContext(Context);
+  if (!stream) throw new Error('useStream must be used within a StreamContext');
 
   return [
     stream,
@@ -22,10 +38,10 @@ export const useStream = () => {
 };
 
 export const useMessages = () => {
-  const dispatch = useDispatch();
-  const [stream] = useContext(Context);
-  const messages = useSelector((state) => state.messages.data);
-  const [prevStream, setPrevStream] = useState({});
+  const dispatch: any = useDispatch();
+  const [stream] = useStream();
+  const messages = useSelector((state: any) => state.messages.data);
+  const [prevStream, setPrevStream] = useState<Partial<Stream>>({});
 
   useEffect(() => {
     if (prevStream.channelId === stream.channelId
@@ -40,7 +56,7 @@ export const useMessages = () => {
   return {
     messages: useMemo(
       () => messages
-        .filter((m) => m.channelId === stream.channelId
+        .filter((m: Message) => m.channelId === stream.channelId
     && (
       ((!stream.parentId && !m.parentId) || m.parentId === stream.parentId)
     || (!stream.parentId && m.parentId === m.id))),

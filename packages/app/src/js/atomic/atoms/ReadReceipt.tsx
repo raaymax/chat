@@ -20,7 +20,7 @@ const StyledReadReceipt = styled.div`
 `;
 
 type ReadReceiptProps = {
-  data: {
+  data?: {
     userId: string;
     user: {
       avatarUrl: string;

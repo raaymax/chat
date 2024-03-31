@@ -2,8 +2,8 @@ import { useSelector } from 'react-redux';
 import {
   useCallback, useEffect, useState, useMemo,
 } from 'react';
-import { TextMenu } from '../TextMenu';
-import { useInput } from '../InputContext';
+import { TextMenu } from '../../../atomic/molecules/TextMenu';
+import { useInput } from '../../../contexts/input';
 import { getUrl } from '../../../services/file';
 import { buildEmojiNode } from '../../../utils';
 import { useEmojiFuse } from '../../../hooks';

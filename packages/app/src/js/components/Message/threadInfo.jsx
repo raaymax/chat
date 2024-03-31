@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { UserCircle } from '../UserCircle/UserCircle';
+import { UserCircle } from '../../atomic/atoms/UserCircle';
 import { formatTime, formatDateDetailed } from '../../utils';
 import { useMessageData } from '../../contexts/message';
 import { useStream } from '../../contexts/stream';

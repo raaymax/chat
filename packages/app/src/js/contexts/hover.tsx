@@ -2,12 +2,14 @@ import {
   useState, useContext, useCallback, createContext,
 } from 'react';
 
-const Context = createContext({
-  hovered: [null, () => {}],
-});
+const Context = createContext<[string | null, (val: string | null) => void] | undefined>(undefined);
 
-export const HoverContext = ({ children }) => {
-  const hovered = useState(false);
+type HoverContextProps = {
+  children: React.ReactNode;
+};
+
+export const HoverContext = ({ children }: HoverContextProps) => {
+  const hovered = useState<string|null>(null);
   return (
     <Context.Provider value={hovered}>
       {children}
@@ -15,9 +17,13 @@ export const HoverContext = ({ children }) => {
   );
 };
 
-export const useHovered = () => useContext(Context);
+export const useHovered = () => {
+  const state = useContext(Context);
+  if (!state) throw new Error('useHovered must be used within a HoverContext');
+  return state;
+}
 
-export const useHoverCtrl = (id) => {
+export const useHoverCtrl = (id: string) => {
   const [hovered, setHovered] = useHovered();
 
   const onEnter = useCallback(() => {
@@ -25,7 +31,8 @@ export const useHoverCtrl = (id) => {
   }, [setHovered, id]);
 
   const toggleHovered = useCallback(() => {
-    if (!navigator.userAgentData.mobile) return;
+    // FIXME: useIsMobile() hook maybe?
+    if (!(navigator as any).userAgentData.mobile) return;
     if (hovered !== id) {
       setHovered(id);
     } else {

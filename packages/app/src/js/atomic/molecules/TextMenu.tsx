@@ -1,15 +1,89 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useInput } from './InputContext';
-import { Menu } from './elements/menu';
-import PropTypes from 'prop-types';
+import { useInput } from '../../contexts/input';
+import styled from 'styled-components';
+
+export const Menu = styled.div<{top:number, left: number, height: number}>`
+  position: absolute;
+  margin-top: ${(props) => -props.height * 30 - 40}px;
+  width: 300px;
+  height: ${(props) => props.height * 30 + 20}px;
+  background-color: var(--primary_background);
+  bottom: 70px;
+  left: 20px;
+  font-size: 1.2em;
+  padding: 10px 0;
+  border-radius: 10px;
+  border: 1px solid var(--primary_border_color);
+  top: ${(props) => props.top}px;
+  left: ${(props) => props.left}px;
+  
+  &.hidden {
+    display: none;
+  }
+
+  & ul{
+    padding: 0;
+    margin: 0;
+    display: flex;
+    list-style-type: none;
+    flex-direction: column-reverse;
+  }
+
+  & ul li {
+    height: 30px;
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+
+    img {
+      width: 1.5em;
+      height: 1.5em;
+      display: inline-block;
+      vertical-align: bottom;
+    }
+  }
+  & ul li:hover {
+    background-color: var(--primary_active_mask);
+  }
+
+  & ul li.selected{
+    background-color: var(--primary_active_mask);
+  }
+
+  & ul li span:first-child {
+    height: 30px;
+    width: 30px;
+  }
+  & ul li span {
+    line-height: 30px;
+    vertical-align: middle;
+    text-align: center;
+  }
+`;
+
+type TextMenuProps = {
+  className?: string;
+  options: {
+    label?: string;
+    name: string;
+    icon?: string;
+    url?: string;
+    action?: () => void;
+  }[];
+  open?: boolean;
+  select: (idx: number, e: any) => void;
+  selected: number;
+  setSelected: (idx: number) => void;
+};
 
 export const TextMenu = ({
   className, options, open = false, select, selected = 0, setSelected,
-}) => {
+}: TextMenuProps) => {
   const [coords, setCoords] = useState([0, 0]);
   const { input, getRange } = useInput();
 
   const getXPos = useCallback(() => {
+    if (!input.current) return 0;
     const width = parseInt(window.getComputedStyle(input.current).width.replace('px', ''), 10);
     if (coords[1] + 300 > width) {
       return width - 300;
@@ -28,7 +102,8 @@ export const TextMenu = ({
     setCoords([box.bottom - inBox.top, box.left - inBox.left]);
   }, [input, getRange]);
 
-  const ctrl = useCallback((e) => {
+  //FIXME: e as any
+  const ctrl = useCallback((e: any) => {
     if (e.key === 'ArrowUp') {
       setSelected(selected + 1 > options.length - 1 ? options.length - 1 : selected + 1);
       e.preventDefault();
@@ -43,6 +118,7 @@ export const TextMenu = ({
 
   useEffect(() => {
     const { current } = input;
+    if (!current) return;
     current.addEventListener('keydown', ctrl);
     return () => {
       current.removeEventListener('keydown', ctrl);
@@ -63,19 +139,4 @@ export const TextMenu = ({
       </ul>
     </Menu>
   );
-};
-
-TextMenu.propTypes = {
-  className: PropTypes.string,
-  options: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string,
-    name: PropTypes.string,
-    icon: PropTypes.string,
-    url: PropTypes.string,
-    action: PropTypes.func,
-  })),
-  open: PropTypes.bool,
-  select: PropTypes.func,
-  selected: PropTypes.number,
-  setSelected: PropTypes.func,
 };
