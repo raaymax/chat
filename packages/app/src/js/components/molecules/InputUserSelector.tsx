@@ -43,6 +43,7 @@ export const UserSelector = () => {
   }, [insert]);
 
   const submit = useCallback((event: Event, opts?: {selected: number}) => {
+    if(!scopeContainer) return;
     event.preventDefault();
     event.stopPropagation();
     scopeContainer.className = 'user';
@@ -62,6 +63,7 @@ export const UserSelector = () => {
   }, [options, selected, scopeContainer]);
 
   const remove = useCallback((event: Event) => {
+    if(!scopeContainer) return;
     if (scopeContainer.textContent?.length === 1) {
       scopeContainer.remove();
       event.preventDefault();

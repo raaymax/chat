@@ -48,6 +48,7 @@ export const EmojiSelector = () => {
   }, [insert]);
 
   const submit = useCallback((event: Event, { s, shortName, exact = true }: {s?: number, shortName?: string, exact?: boolean} = {}) => {
+    if(!scopeContainer) return;
     let container = scopeContainer;
     if (scope !== SCOPE) {
       container = create(event);
@@ -75,6 +76,7 @@ export const EmojiSelector = () => {
   }, [options, selected, scopeContainer, emojis, create, scope]);
 
   const remove = useCallback((event: Event) => {
+    if(!scopeContainer) return;
     if (scopeContainer.textContent?.length === 1) {
       scopeContainer.remove();
       event.preventDefault();
@@ -83,6 +85,7 @@ export const EmojiSelector = () => {
   }, [scopeContainer]);
 
   const close = useCallback((e: Event) => {
+    if(!scopeContainer) return;
     const text = scopeContainer.textContent ?? '';
     const node = document.createTextNode(text);
     scopeContainer.replaceWith(node);
