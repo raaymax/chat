@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { File } from '../../atomic/atoms/File';
-import { Image } from '../../atomic/atoms/Image';
+import { File } from '../atoms/File';
+import { Image } from '../atoms/Image';
 
 const IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/webp'];
 const RAW_IMAGE_TYPES = ['image/gif', 'image/webp'];

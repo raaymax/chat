@@ -36,7 +36,8 @@ export default createModule({
         });
         actions.progress.add(data);
       }catch(err){
-        console.log(err)
+        // eslint-disable-next-line no-console
+        console.error(err)
       }
     },
 

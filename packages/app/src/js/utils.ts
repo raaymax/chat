@@ -88,7 +88,7 @@ export const createEventListener = () => {
         }),
     );
   };
-  // eslint-disable-next-line no-return-assign
+   
   const watch = (ev: string, fn: EventListener) => {
     (handlers[ev] = handlers[ev] || []).push(fn);
   };

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { Icon } from '../../atomic/atoms/Icon';
+import { Icon } from '../atoms/Icon';
 
 const StyledChannelLink = styled.a`
   span {

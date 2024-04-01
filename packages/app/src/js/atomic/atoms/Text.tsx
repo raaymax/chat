@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useSize } from '../../contexts/size';
+import { useSize } from '../contexts/size';
 import {cn, ClassNames} from '../../utils';
 
 type TextProps = {

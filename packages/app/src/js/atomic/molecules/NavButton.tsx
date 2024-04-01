@@ -1,7 +1,7 @@
-import { ButtonWithIcon } from '../../atomic/molecules/ButtonWithIcon';
+import { ButtonWithIcon } from './ButtonWithIcon';
 import {Text} from '../atoms/Text';
 import styled from 'styled-components';
-import {useSize} from '../../contexts/size';
+import {useSize} from '../contexts/size';
 import {ClassNames} from '../../utils';
 
 const StyledButton = styled(ButtonWithIcon)`

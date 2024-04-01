@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useInput } from '../../contexts/input';
+import { useInput } from '../contexts/input';
 import styled from 'styled-components';
 
 export const Menu = styled.div<{top:number, left: number, height: number}>`
@@ -71,13 +71,13 @@ type TextMenuProps = {
     action?: () => void;
   }[];
   open?: boolean;
-  select: (idx: number, e: any) => void;
+  onSelect: (idx: number, e: any) => void;
   selected: number;
   setSelected: (idx: number) => void;
 };
 
 export const TextMenu = ({
-  className, options, open = false, select, selected = 0, setSelected,
+  className, options, open = false, onSelect, selected = 0, setSelected,
 }: TextMenuProps) => {
   const [coords, setCoords] = useState([0, 0]);
   const { input, getRange } = useInput();
@@ -129,7 +129,7 @@ export const TextMenu = ({
     <Menu className={className} top={getYPos()} left={getXPos()} height={options.length} >
       <ul>
         {options.map((e, idx) => (
-          <li key={idx} onClick={(e) => select(idx, e)} className={idx === selected ? 'selected' : ''}>
+          <li key={idx} onClick={(e) => onSelect(idx, e)} className={idx === selected ? 'selected' : ''}>
             {e.icon && <span><i className={e.icon} /></span>}
             {e.url && <span><img src={e.url} alt="img" /></span>}
             {!e.icon && !e.url && <span>{e.label || ''}</span>}

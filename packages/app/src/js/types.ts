@@ -104,6 +104,7 @@ export type Message = {
       name: string;
     }
   }[];
+  priv?: boolean;
 };
 
 export type User = {
@@ -112,3 +113,17 @@ export type User = {
   status: string;
   avatar: string;
 };
+
+export type EmojiDescriptor = { 
+  unicode?: string,
+  fileId?: string,
+  shortname: string
+}
+
+export type Notif = {
+  notifType: string;
+  notif: string;
+  createdAt: string;
+  priv?: boolean;
+}
+

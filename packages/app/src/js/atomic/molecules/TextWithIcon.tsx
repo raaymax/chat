@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import {Icon} from '../atoms/Icon';
 import {Text} from '../atoms/Text';
-import {useSize} from '../../contexts/size';
+import {useSize} from '../contexts/size';
 import {cn, ClassNames} from '../../utils';
 
 const Container = styled.div`

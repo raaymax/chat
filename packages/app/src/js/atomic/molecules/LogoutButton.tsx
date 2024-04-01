@@ -1,9 +1,9 @@
 import {useDispatch} from 'react-redux';
 import { logout } from '../../services/session';
-import { ButtonWithIcon } from '../../atomic/molecules/ButtonWithIcon';
+import { ButtonWithIcon } from './ButtonWithIcon';
 import {Text} from '../atoms/Text';
 import styled from 'styled-components';
-import {useSize} from '../../contexts/size';
+import {useSize} from '../contexts/size';
 
 const StyledButton = styled(ButtonWithIcon)`
   text-align: left;

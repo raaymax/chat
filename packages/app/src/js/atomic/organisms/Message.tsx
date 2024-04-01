@@ -10,21 +10,21 @@ import { UserCircle } from '../atoms/UserCircle';
 import { buildMessageBody } from '../molecules/MessageBody';
 import { Files } from '../molecules/Files';
 import { Reactions } from '../molecules/Reactions';
+import { MessageToolbar } from '../molecules/MessageToolbar';
+import { Input } from './Input';
 
-import { MessageContext, useMessageData, useMessageUser } from '../../contexts/message';
-import { useHoverCtrl } from '../../contexts/hover';
-import { useStream } from '../../contexts/stream';
+import { MessageContext, useMessageData, useMessageUser } from '../contexts/message';
+import { useHoverCtrl } from '../contexts/hover';
+import { useStream } from '../contexts/stream';
 
 import { cn, ClassNames, formatTime, formatDateDetailed } from '../../utils';
 
 import { Message as MessageType } from '../../types';
 
-import { Input } from '../../components/Input/Input';
-import { MessageToolbar } from '../molecules/MessageToolbar';
 
 export const Info = () => {
   const { clientId, info } = useMessageData();
-  const dispatch:any = useDispatch();
+  const dispatch: any = useDispatch();
 
   const onAction = useCallback(() => {
     if (info?.action === 'resend') {
@@ -99,7 +99,7 @@ export const ThreadInfo = () => {
 };
 
 type MessageBaseProps = {
-  onClick?: (e: React.MouseEvent) => void;
+  onClick?: (e?: React.MouseEvent) => void;
   sameUser?: boolean;
   className?: ClassNames;
   [key: string]: any;

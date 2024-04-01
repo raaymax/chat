@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
-import { useMessageData } from '../../contexts/message';
-import { Emoji } from '../../atomic/molecules/Emoji';
-import { Tag } from '../../atomic/atoms/Tag';
+import { useMessageData } from '../contexts/message';
+import { Emoji } from './Emoji';
+import { Tag } from '../atoms/Tag';
 
 export const Reactions = () => {
   const { id, reactions = [] } = useMessageData();

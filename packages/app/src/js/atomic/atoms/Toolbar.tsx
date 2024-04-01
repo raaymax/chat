@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { SizeContext } from '../../contexts/size';
+import { SizeContext } from '../contexts/size';
 import {cn, ClassNames} from '../../utils';
 
 export const Container = styled.div<{$size?: number}>`

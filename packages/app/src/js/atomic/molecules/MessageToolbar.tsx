@@ -1,12 +1,12 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeMessage } from '../../services/messages';
-import { useHovered } from '../../contexts/hover';
-import { useStream } from '../../contexts/stream';
-import { useMessageData, useMessageUser } from '../../contexts/message';
-import { Toolbar } from '../../atomic/atoms/Toolbar';
-import { ButtonWithEmoji } from '../../atomic/molecules/ButtonWithEmoji';
-import { ButtonWithIcon } from '../../atomic/molecules/ButtonWithIcon';
+import { useHovered } from '../contexts/hover';
+import { useStream } from '../contexts/stream';
+import { useMessageData, useMessageUser } from '../contexts/message';
+import { Toolbar } from '../atoms/Toolbar';
+import { ButtonWithEmoji } from './ButtonWithEmoji';
+import { ButtonWithIcon } from './ButtonWithIcon';
 
 import styled from 'styled-components';
 

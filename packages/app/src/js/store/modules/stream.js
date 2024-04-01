@@ -39,7 +39,7 @@ const saveStream = (stream) => {
     selected: stream.selected,
   }));
   const querystring = query.toString();
-  // eslint-disable-next-line prefer-template
+   
   window.location.hash = `/${stream.channelId}`
     + (stream.parentId ? `/${stream.parentId}` : '')
     + (querystring ? `?${querystring}` : '');

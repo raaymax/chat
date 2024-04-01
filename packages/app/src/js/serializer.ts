@@ -109,6 +109,7 @@ function flatten(tree: MessageBody): string {
     if(is<types.MessageBodyThread>(n, 'thread')) return n.thread.text;
     if(is<types.MessageBodyUnderline>(n, 'underline')) return flatten(n.underline);
     if(is<types.MessageBodyUser>(n, 'user')) return n.user;
+    // eslint-disable-next-line no-console
     console.log('unknown node', n);
     return '';
   }).flat().join('');
@@ -149,6 +150,7 @@ const mapNodes = (dom: HTMLElement, info: SerializeInfo): MessageBody => (!dom.c
 function processUser(n: HTMLElement, info: SerializeInfo): types.MessageBodyUser {
   const userId = n.getAttribute('userId');
   if (!userId) {
+    // eslint-disable-next-line no-console
     console.log('no userId', n);
     info.errors = info.errors || [];
     info.errors.push({

@@ -1,6 +1,6 @@
 import {Button} from '../atoms/Button';
 import {Icon} from '../atoms/Icon';
-import {useSize} from '../../contexts/size';
+import {useSize} from '../contexts/size';
 import {ClassNames} from '../../utils';
 
 interface ButtonWithIconProps {

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import {AppTheme} from '../../types';
-import { useSize } from '../../contexts/size';
+import { useSize } from '../contexts/size';
 import {cn, ClassNames} from '../../utils';
 
 interface IconButtonProps {
