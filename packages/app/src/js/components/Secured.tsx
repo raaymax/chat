@@ -5,7 +5,7 @@ import '../setup';
 import { client } from '../core';
 import { store } from '../store';
 import { Workspace } from './pages/Workspace';
-import { useUser } from '../atomic/contexts/user';
+import { useUser } from './contexts/user';
 
 const theme = {
   borderColor: '#565856',

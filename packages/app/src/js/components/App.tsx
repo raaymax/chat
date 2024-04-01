@@ -1,8 +1,8 @@
 import { createRoot } from 'react-dom/client';
 import { Suspense, lazy } from 'react';
 import '../core/registerSw';
-import { Register } from '../atomic/pages/Register';
-import { Login } from '../atomic/pages/Login';
+import { Register } from './pages/Register';
+import { Login } from './pages/Login';
 
 const Secured = lazy(() => import('./Secured'));
 

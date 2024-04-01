@@ -1,13 +1,13 @@
 import styled from 'styled-components';
-import { Conversation } from '../../atomic/organisms/Conversation';
+import { Conversation } from './Conversation';
 import { useDispatch } from 'react-redux';
-import { Channel } from '../../atomic/molecules/NavChannel';
+import { Channel } from '../molecules/NavChannel';
 import { init } from '../../services/init';
-import { useStream } from '../../atomic/contexts/stream';
+import { useStream } from '../contexts/stream';
 import { useMessage } from '../../hooks';
 import { loadMessages } from '../../services/messages';
-import { Toolbar } from '../../atomic/atoms/Toolbar';
-import { ButtonWithIcon } from '../../atomic/molecules/ButtonWithIcon';
+import { Toolbar } from '../atoms/Toolbar';
+import { ButtonWithIcon } from '../molecules/ButtonWithIcon';
 
 const StyledHeader = styled.div`
   display: flex;

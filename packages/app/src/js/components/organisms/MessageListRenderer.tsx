@@ -1,7 +1,7 @@
 import React from 'react';
-import { Message } from '../../atomic/organisms/Message';
-import { Notification } from '../../atomic/atoms/Notification';
-import { DateSeparator } from '../../atomic/atoms/DateSeparator';
+import { Message } from './Message';
+import { Notification } from '../atoms/Notification';
+import { DateSeparator } from '../atoms/DateSeparator';
 import { formatDate } from '../../utils';
 import * as types from '../../types';
 

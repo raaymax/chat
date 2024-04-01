@@ -4,7 +4,7 @@ import { useStream } from '../contexts/stream';
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { HoverContext } from '../contexts/hover';
-import { MessageList } from '../molecules/MessageListScroller'
+import { MessageList } from '../organisms/MessageListScroller'
 
 const StyledPins = styled.div`
   width: 100vw;

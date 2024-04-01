@@ -1,6 +1,6 @@
 import { useEffect, useCallback} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { MessageList } from '../molecules/MessageListScroller';
+import { MessageList } from './MessageListScroller';
 import { uploadMany } from '../../services/file';
 import { Input } from '../organisms/Input';
 import { reinit } from '../../services/init';

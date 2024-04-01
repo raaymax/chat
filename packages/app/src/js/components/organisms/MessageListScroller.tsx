@@ -2,7 +2,7 @@ import {
   useRef, useEffect, useState, useCallback,
 } from 'react';
 import styled from 'styled-components';
-import { useStream } from '../../atomic/contexts/stream';
+import { useStream } from '../contexts/stream';
 import { MessageListRenderer } from './MessageListRenderer';
 import PropTypes from 'prop-types';
 

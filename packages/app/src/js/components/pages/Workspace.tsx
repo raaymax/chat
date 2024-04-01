@@ -1,14 +1,14 @@
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Logo } from '../../atomic/atoms/Logo';
-import { Channels } from '../../atomic/molecules/NavChannels';
-import { UserChannels } from '../../atomic/molecules/NavUsers';
+import { Logo } from '../atoms/Logo';
+import { Channels } from '../molecules/NavChannels';
+import { UserChannels } from '../molecules/NavUsers';
 import { MainConversation } from '../organisms/MainConversaion';
 import { SideConversation } from '../organisms/SideConversation';
-import { Search } from '../../atomic/pages/Search';
-import { Pins } from '../../atomic/pages/Pins';
-import { LogoutButton } from '../../atomic/molecules/LogoutButton';
-import { StreamContext } from '../../atomic/contexts/stream';
+import { Search } from '../pages/Search';
+import { Pins } from '../pages/Pins';
+import { LogoutButton } from '../molecules/LogoutButton';
+import { StreamContext } from '../contexts/stream';
 import plugins from '../../core/plugins';
 import { useStream } from '../../hooks';
 import styled from 'styled-components';
