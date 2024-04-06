@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { ChannelCreate } from './ChannelCreate';
 import { Channel } from './NavChannel';
 import { useBadges, useChannels } from '../../hooks';
-import PropTypes from 'prop-types';
 
 const ChannelsContainer = styled.div`
   .header {
@@ -42,13 +41,17 @@ const ChannelsContainer = styled.div`
   }
 `;
 
-export const Channels = ({ icon }) => {
+type NavChannelsProps = {
+  icon: string;
+};
+
+export const NavChannels = ({ icon }: NavChannelsProps) => {
   const [show, setShow] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch: any = useDispatch();
   const channels = useChannels();
-  const userId = useSelector((state) => state.me);
+  const userId = useSelector((state: any) => state.me);
   const badges = useBadges(userId);
-  const id = useSelector((state) => state.stream.mainChannelId);
+  const id = useSelector((state: any) => state.stream.mainChannelId);
   return (
     <ChannelsContainer>
       <div className='header'>
@@ -72,8 +75,4 @@ export const Channels = ({ icon }) => {
       ))}
     </ChannelsContainer>
   );
-};
-
-Channels.propTypes = {
-  icon: PropTypes.string,
 };

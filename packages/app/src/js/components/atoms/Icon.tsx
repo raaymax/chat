@@ -35,6 +35,8 @@ const iconMap: Record<string, string> = {
   back: 'fa-solid fa-arrow-left',
   lock: 'fa-solid fa-lock',
   logout: 'fa-solid fa-right-from-bracket',
+  'system-user': 'fa-solid fa-user-gear',
+  user: 'fa-solid fa-user',
 };
 
 const getIcon = (icon: string) => {

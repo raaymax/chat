@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { Channel } from './NavChannel';
+import { NavUserButton } from './NavUser';
 import { useBadges, useUserChannels } from '../../hooks';
 
 const ChannelsContainer = styled.div`
@@ -39,21 +39,22 @@ const ChannelsContainer = styled.div`
   }
 `;
 
-export const UserChannels = () => {
-  const dispatch = useDispatch();
+export const NavUsers = () => {
+  const dispatch: any = useDispatch();
   const channels = useUserChannels();
-  const userId = useSelector((state) => state.me);
+  const userId = useSelector((state: any) => state.me);
   const badges = useBadges(userId);
-  const id = useSelector((state) => state.stream.mainChannelId);
+  const id = useSelector((state: any) => state.stream.mainChannelId);
   return (
     <ChannelsContainer>
       <div className='header'>
         <span className='title'>users</span>
       </div>
       { channels && channels.map((c) => (
-        <Channel
+        <NavUserButton
           channelId={c.id}
-          {...c}
+          size={30}
+          channel={c}
           className={id === c.id ? 'active' : ''}
           key={c.id}
           icon='fa-solid fa-user'

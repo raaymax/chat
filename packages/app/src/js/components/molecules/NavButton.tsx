@@ -3,8 +3,9 @@ import {Text} from '../atoms/Text';
 import styled from 'styled-components';
 import {useSize} from '../contexts/size';
 import {ClassNames} from '../../utils';
+import {Badge} from '../atoms/Badge';
 
-const StyledButton = styled(ButtonWithIcon)`
+const StyledButtonWithIcon = styled(ButtonWithIcon)`
   text-align: left;
   width: 100%;
   padding-left: 20px;
@@ -21,17 +22,19 @@ const StyledButton = styled(ButtonWithIcon)`
 
 type NavButtonProps = {
   size?: number;
+  badge?: number;
   icon: string;
   onClick?: (e: React.MouseEvent) => void;
-  className: ClassNames;
+  className?: ClassNames;
   children: React.ReactNode;
 } 
 
-export const NavButton = ({className, size, icon, onClick, children}: NavButtonProps) => {
+export const NavButton = ({className, size, icon, badge, onClick, children}: NavButtonProps) => {
   const $size = useSize(size) ?? 50;
   return (
-    <StyledButton className={className} icon={icon} size={$size} onClick={onClick}>
+    <StyledButtonWithIcon className={className} icon={icon} size={$size} onClick={onClick}>
       <Text size={$size/2.5}>{children}</Text>
-    </StyledButton>
+      {(badge && badge > 0) ? <Badge>{badge}</Badge> : null}
+    </StyledButtonWithIcon>
   );
 }
