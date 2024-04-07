@@ -9,7 +9,7 @@ import { useStream, useMessages } from '../contexts/stream';
 import { useProgress } from '../../hooks';
 import { LoadingIndicator } from '../molecules/LoadingIndicator';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
+import { Message as MessageType } from '../../types';
 
 const ReInit = styled.div`
   cursor: pointer;
@@ -25,16 +25,16 @@ const ReInit = styled.div`
   }
 `;
 
-export const InitFailedButton = ({ onClick }) => (
+type InitFailedButtonProps = {
+  onClick?: () => void;
+};
+
+export const InitFailedButton = ({ onClick }: InitFailedButtonProps) => (
   <ReInit onClick={onClick}>
     Failed to initialize<br />
     Click to retry...
   </ReInit>
 );
-
-InitFailedButton.propTypes = {
-  onClick: PropTypes.func,
-};
 
 export const Container = styled.div`
   flex: 1;
@@ -44,26 +44,26 @@ export const Container = styled.div`
   flex-direction: column;
 `;
 
-const drop = (dispatch, streamId) => async (e) => {
+const drop = (dispatch: any, streamId: string| undefined) => async (e: React.DragEvent) => {
   e.preventDefault();
   e.stopPropagation();
+  if(!streamId) return;
   const { files } = e.dataTransfer;
   dispatch(uploadMany(streamId, files));
 };
 
-function dragOverHandler(ev) {
+function dragOverHandler(ev: React.DragEvent) {
   ev.preventDefault();
   ev.stopPropagation();
 }
 
 export function Conversation() {
   const [stream, setStream] = useStream();
-  const dispatch = useDispatch();
+  const dispatch: any = useDispatch();
   const {messages, next, prev} = useMessages();
-  const initFailed = useSelector((state) => state.system.initFailed);
-  const status = stream.type;
+  const initFailed = useSelector((state: any) => state.system.initFailed);
   const progress = useProgress(stream);
-  const list = messages.map((m) => ({ ...m, progress: progress[m.id] }));
+  const list: MessageType[] = messages.map((m: MessageType) => ({ ...m, progress: progress[m.id] }));
 
   const bumpProgress = useCallback(() => {
     const latest = list.find(({ priv }) => !priv);
@@ -81,8 +81,6 @@ export function Conversation() {
       <HoverProvider>
         <MessageList
           list={list}
-          status={status}
-          selected={stream.selected}
           onDateChange={(date) => setStream({ ...stream, date })}
           onScrollTop={async () => {
             await prev();

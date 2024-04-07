@@ -44,11 +44,12 @@ const NewChannelContainer = styled.div`
     }
   }
 `;
+
 // FIXME: extract inputs into atoms? use atom button 
 export const ChannelCreate = () => {
   const [name, setName] = useState('');
-  const dispatch = useDispatch();
-  const submit = useCallback((e) => {
+  const dispatch: any = useDispatch();
+  const submit = useCallback((e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     e.stopPropagation();
     dispatch.methods.channels.create({name});

@@ -8,6 +8,7 @@ import { StreamContext } from '../contexts/stream';
 import { useStream } from '../../hooks';
 import styled from 'styled-components';
 import { Sidebar } from '../organisms/Sidebar';
+import { cn } from '../../utils';
 
 export const MainView = styled.div`
   max-width: 100vw;
@@ -43,14 +44,14 @@ export const SideView = styled.div`
 `;
 
 export const Workspace = () => {
-  const view = useSelector((state) => state.view?.current);
-  const dispatch = useDispatch();
+  const view = useSelector((state: any) => state.view?.current);
+  const dispatch: any = useDispatch();
   const stream = useStream('main');
   const sideStream = useStream('side');
   return (
-    <Container className={sideStream ? ['side-stream'] : ['main-stream']}>
+    <Container className={cn({'side-stream': sideStream, 'main-stream': !sideStream })}>
       {view === 'sidebar' && <Sidebar />}
-      <MainView className={view === 'sidebar' ? ['sidebar'] : []}>
+      <MainView className={cn({sidebar: view === 'sidebar'})}>
         <StreamContext value={[stream, (val) => dispatch.actions.stream.open({id: 'main', value: val})]}>
           {view === 'search' && <Search />}
           {view === 'pins' && <Pins />}

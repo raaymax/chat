@@ -6,7 +6,7 @@ import { loadMessages, loadNext, loadPrevious } from '../../services/messages';
 import { Message } from '../../types';
 
 type Stream = {
-  id: string;
+  id?: string;
   type: string;
   channelId: string;
   parentId?: string;
@@ -14,9 +14,9 @@ type Stream = {
   date?: string;
 };
 
-type SetStream = (stream: Stream) => void;
+type SetStream = (stream: Stream | null) => void;
 
-const Context = createContext<[Stream | undefined, SetStream]>([undefined, () => ({})]);
+const Context = createContext<[Stream | null, SetStream]>([null, () => ({})]);
 
 type StreamContextProps = {
   children: React.ReactNode;

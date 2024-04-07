@@ -166,7 +166,7 @@ export const InputForm = ({ children }: InputFormProps) => {
     input, onPaste, onInput, onKeyDown, onFileChange, fileInput,
     focus, addFile, insert, send, scope, currentText, wrapMatching,
   } = useInput();
-  const dispatch = useDispatch();
+  const dispatch: any = useDispatch();
 
   const onEmojiInsert = useCallback((emoji: EmojiDescriptor) => {
     insert(buildEmojiNode(emoji, getUrl));
@@ -236,7 +236,7 @@ export const InputForm = ({ children }: InputFormProps) => {
 type InputProps = {
   mode?: string;
   messageId?: string;
-  children: React.ReactNode,
+  children?: React.ReactNode,
 };
 
 export const Input = ({ children, ...args }: InputProps) => (

@@ -42,7 +42,7 @@ const ChannelsContainer = styled.div`
 `;
 
 type NavChannelsProps = {
-  icon: string;
+  icon?: string;
 };
 
 export const NavChannels = ({ icon }: NavChannelsProps) => {
@@ -65,7 +65,7 @@ export const NavChannels = ({ icon }: NavChannelsProps) => {
           {...c}
           className={id === c.id ? 'active' : ''}
           key={c.id}
-          icon={icon}
+          icon={icon ?? 'hash'}
           badge={badges[c.id]}
           onClick={() => {
             dispatch.actions.stream.open({id: 'main', value: { type: 'live', channelId: c.id }});

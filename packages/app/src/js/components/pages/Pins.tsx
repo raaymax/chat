@@ -5,6 +5,7 @@ import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { HoverProvider } from '../contexts/hover';
 import { MessageList } from '../organisms/MessageListScroller'
+import { Message as MessageType } from '../../types';
 
 const StyledPins = styled.div`
   width: 100vw;
@@ -101,7 +102,7 @@ export const Pins = () => {
   const [{ channelId }, setStream] = useStream();
   const dispatch:any = useDispatch();
   const messages = useSelector((state:any) => state.pins[channelId]);
-  const gotoMessage = useCallback((msg) => {
+  const gotoMessage = useCallback((msg: MessageType) => {
     dispatch.actions.view.set('pins');
     setStream({
       type: 'archive',
@@ -117,17 +118,8 @@ export const Pins = () => {
         <Header />
         <MessageList
           list={messages || []}
-          status='live'
-          onMessageClicked={(msg) => {
+          onMessageClicked={(msg: MessageType) => {
             gotoMessage(msg);
-          }}
-          onScrollTo={(dir) => {
-            if (dir === 'top') {
-              // dispatch(loadPrevious(channel))
-            }
-            if (dir === 'bottom') {
-              // dispatch(loadNext(channel))
-            }
           }}
         />
       </HoverProvider>

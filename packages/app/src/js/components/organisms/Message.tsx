@@ -161,12 +161,12 @@ const MessageBase = ({ onClick, sameUser, ...props }: MessageBaseProps = {}) => 
 };
 
 
-type MessageProps = {
+type MessageProps = MessageBaseProps & {
   data: MessageType;
 };
 
-export const Message = (props: MessageProps) => (
-  <MessageContext value={props.data}>
+export const Message = ({data, ...props}: MessageProps) => (
+  <MessageContext value={data}>
     <MessageBase {...props} />
   </MessageContext>
 );

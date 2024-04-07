@@ -3,8 +3,8 @@ import {
 } from 'react';
 import styled from 'styled-components';
 import { useStream } from '../contexts/stream';
-import { MessageListRenderer } from './MessageListRenderer';
-import PropTypes from 'prop-types';
+import { MessageListRenderer, MessageListRendererProps } from './MessageListRenderer';
+import { Message as MessageType } from '../../types';
 
 const ListContainer = styled.div`
   display: flex;
@@ -23,17 +23,25 @@ const ListContainer = styled.div`
 
 const getMax = (list) => list.reduce((acc, item) => new Date(Math.max(acc, new Date(item.createdAt))), new Date('1970-01-01'));
 
-export const MessageList = (props) => {
+type MessageListProps = MessageListRendererProps & {
+  list: any[];
+  onScrollTop?: () => void;
+  onScrollBottom?: () => void;
+  onDateChange?: (date: string) => void;
+  date?: string;
+};
+
+export const MessageList = (props: MessageListProps) => {
   const {
-    list, onScrollTop, onScrollBottom, onDateChange, date,
+    list, onScrollTop, onScrollBottom, onDateChange, date, ...rest
   } = props;
-  const element = useRef(null);
-  const [oldList, setOldList] = useState([]);
+  const element = useRef<HTMLDivElement>(null);
+  const [oldList, setOldList] = useState<MessageType[]>([]);
   const [current, setCurrent] = useState([date]);
   const [selected, setSelected] = useState(null);
   const [stream] = useStream();
 
-  const detectDate = useCallback((e) => {
+  const detectDate = useCallback((e: any) => {
     const c = e.target.getBoundingClientRect();
     const r = [...e.target.children]
       .filter((child) => child.className.includes('message'))
@@ -52,11 +60,14 @@ export const MessageList = (props) => {
 
   // fix scroll position when scrolling and new messages are added/removed from the list
   useEffect(() => {
-    if (!element.current) return;
+    if (!element?.current) return;
     if (list === oldList) return;
-    const getRect = () => [...element.current.children]
-      ?.find((child) => child.getAttribute('data-date') === current[0])
-      ?.getBoundingClientRect();
+    const getRect = () => {
+      if(!element.current) return;
+      return [...element.current.children]
+        ?.find((child) => child.getAttribute('data-date') === current[0])
+        ?.getBoundingClientRect();
+    }
     const max = getMax(list);
     const oldMax = getMax(oldList);
     if (max.toISOString() !== oldMax.toISOString()) {
@@ -73,6 +84,7 @@ export const MessageList = (props) => {
 
   // scroll selected item into view
   useEffect(() => {
+    if (!element.current) return;
     if (stream.selected === selected) return;
     const found = [...element.current.children]
       ?.find((child) => child.getAttribute('data-id') === stream.selected);
@@ -85,33 +97,26 @@ export const MessageList = (props) => {
     }
   }, [stream, list, selected, setSelected]);
 
-  const scroll = useCallback((e) => {
+  const scroll = useCallback((e: any) => {
     detectDate(e);
+    if (!element.current) return;
     if (list !== oldList) return;
 
     if (Math.floor(Math.abs(element.current.scrollTop)) <= 1) {
-      onScrollBottom();
+      onScrollBottom && onScrollBottom();
     } else if (Math.floor(Math.abs(
       element.current.scrollHeight - element.current.offsetHeight + element.current.scrollTop,
     )) <= 1) {
-      onScrollTop();
+      onScrollTop && onScrollTop();
     }
   }, [detectDate, list, oldList, onScrollTop, onScrollBottom]);
 
   return (
     <ListContainer ref={element} onScroll={scroll} >
       <div className='space'>&nbsp;</div>
-      <MessageListRenderer {...props} />
+      <MessageListRenderer list={list} {...rest} />
     </ListContainer>
   );
-};
-
-MessageList.propTypes = {
-  list: PropTypes.array,
-  onScrollTop: PropTypes.func,
-  onScrollBottom: PropTypes.func,
-  onDateChange: PropTypes.func,
-  date: PropTypes.string,
 };
 
 export default MessageList;

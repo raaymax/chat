@@ -11,7 +11,7 @@ import { useMessage } from '../../hooks/useMessage';
 type InputContextType = {
   mode: string;
   messageId: string | null;
-  input: MutableRefObject<HTMLDivElement | undefined>;
+  input: MutableRefObject<HTMLDivElement>;
   fileInput: {current?: HTMLInputElement};
   onPaste: (e: any) => void;
   onKeyDown: (e: React.KeyboardEvent) => void;
@@ -23,7 +23,7 @@ type InputContextType = {
   replace: (regex: RegExp, text?: string) => void;
   wrapMatching: (regex: RegExp, wrapperTagName: string) => void;
   addFile: () => void;
-  send: (e: React.KeyboardEvent) => void;
+  send: (e: any) => void;
   getRange: () => Range;
   insert: (domNode: HTMLElement) => void;
   focus: (e?: Event) => void;
@@ -148,7 +148,7 @@ export const InputContext = (args: InputContextProps) => {
   }, [input, range]);
 
   //FIXME: e as any
-  const send = useCallback((e:any) => {
+  const send = useCallback((e: any) => {
     if (!input.current) return;
     if (!filesAreReady) return;
     // FIXME: payload as any
@@ -248,7 +248,7 @@ export const InputContext = (args: InputContextProps) => {
 
   const onKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey && scope === 'root') {
-      return send(e);
+      return send(e as any);
     }
     dispatch.methods.typing.notify(stream);
     updateRange();

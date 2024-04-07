@@ -7,11 +7,11 @@ import { Login } from './pages/Login';
 const Secured = lazy(() => import('./Secured'));
 
 if ('virtualKeyboard' in navigator) {
-  navigator.virtualKeyboard.overlaysContent = true;
+  (navigator as any).virtualKeyboard.overlaysContent = true;
 }
 
 export const App = () => {
-  const url = new URL(window.location);
+  const url = new URL(window.location.toString());
   const {hash} = url;
   if (hash.startsWith('#/invite')) {
     return <Register />;
@@ -26,5 +26,5 @@ export const App = () => {
   );
 };
 
-const root = createRoot(document.getElementById('root'));
+const root = createRoot(document.getElementById('root') as HTMLElement);
 root.render(<App />);

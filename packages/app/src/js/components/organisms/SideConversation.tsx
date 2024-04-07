@@ -51,13 +51,13 @@ const StyledHeader = styled.div`
 `;
 
 type HeaderProps = {
-  onClick: () => void;
+  onClick?: () => void;
 };
 
 export const Header = ({ onClick }: HeaderProps) => {
   const [{ channelId, parentId }, setSideStream] = useStream();
   const message = useMessage(parentId);
-  const dispatch = useDispatch();
+  const dispatch: any = useDispatch();
 
   return (
     <StyledHeader>

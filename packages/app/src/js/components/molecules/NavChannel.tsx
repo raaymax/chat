@@ -1,10 +1,9 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import {Badge} from '../atoms/Badge';
-import {TextWithIcon} from './TextWithIcon';
-import {cn, ClassNames} from '../../utils';
+import { Badge } from '../atoms/Badge';
+import { TextWithIcon } from './TextWithIcon';
+import { cn, ClassNames } from '../../utils';
 
 const Container = styled.div`
   cursor: pointer;
@@ -31,10 +30,10 @@ const Container = styled.div`
 type InlineChannelProps = {
   id: string;
   children: any;
-  badge: number;
-  className: ClassNames;
-  onClick: () => void;
-  icon: string;
+  badge?: number;
+  className?: ClassNames;
+  onClick?: () => void;
+  icon?: string;
 };
 
 export const InlineChannel = ({
@@ -42,14 +41,25 @@ export const InlineChannel = ({
 }: InlineChannelProps) => (
   <Container className={cn('channel', className)} data-id={id} onClick={onClick}>
     <TextWithIcon icon={icon}>{children}</TextWithIcon> 
-    {badge > 0 && <Badge>{badge}</Badge>}
+    {(badge && badge > 0) ? <Badge>{badge}</Badge> : null}
   </Container>
 )
-const DirectChannel = ({ channel, badge, onClick }) => {
-  const me = useSelector((state) => state.me);
+
+type DirectChannelProps = {
+  channel: {
+    id: string;
+    name: string;
+    users: string[];
+  };
+  badge?: number;
+  onClick?: () => void;
+};
+
+const DirectChannel = ({ channel, badge, onClick }: DirectChannelProps) => {
+  const me = useSelector((state: any) => state.me);
   let other = channel.users.find((u) => u !== me);
   if (!other) [other] = channel.users;
-  const user = useSelector((state) => state.users[other]);
+  const user = useSelector((state: any) => state.users[other ?? '']);
   if (!user) {
     return ( <InlineChannel id={channel.id} onClick={onClick} badge={badge}>{channel.name}</InlineChannel> );
   }
@@ -62,21 +72,18 @@ const DirectChannel = ({ channel, badge, onClick }) => {
     id={channel.id} onClick={onClick} icon='fa-solid fa-user' badge={badge}>{user.name}</InlineChannel>);
 };
 
-DirectChannel.propTypes = {
-  channel: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string,
-    users: PropTypes.arrayOf(PropTypes.string),
-  }),
-  badge: PropTypes.number,
-  onClick: PropTypes.func,
+type ChannelProps = {
+  channelId: string;
+  onClick?: () => void;
+  icon?: string;
+  badge?: number;
 };
 
 export const Channel = ({
   channelId: id, onClick, icon, badge,
-}) => {
-  const dispatch = useDispatch();
-  const channel = useSelector((state) => state.channels[id]);
+}: ChannelProps) => {
+  const dispatch: any = useDispatch();
+  const channel = useSelector((state: any) => state.channels[id]);
   useEffect(() => {
     if (!channel) {
       dispatch.methods.channels.find(id);
@@ -89,9 +96,3 @@ export const Channel = ({
   return ( <InlineChannel id={id} onClick={onClick} icon={ico} badge={badge}>{name}</InlineChannel> );
 };
 
-Channel.propTypes = {
-  channelId: PropTypes.string,
-  onClick: PropTypes.func,
-  icon: PropTypes.string,
-  badge: PropTypes.number,
-};

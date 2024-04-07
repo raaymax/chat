@@ -121,6 +121,7 @@ export type EmojiDescriptor = {
 }
 
 export type Notif = {
+  clientId: string;
   notifType: string;
   notif: string;
   createdAt: string;

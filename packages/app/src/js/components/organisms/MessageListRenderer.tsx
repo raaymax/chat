@@ -5,10 +5,10 @@ import { DateSeparator } from '../atoms/DateSeparator';
 import { formatDate } from '../../utils';
 import * as types from '../../types';
 
-type MessageListRendererProps = {
+export type MessageListRendererProps = {
   list: (types.Message| types.Notif)[];
-  stream: any;
-  context: any;
+  stream?: any;
+  context?: any;
   onMessageClicked?: any;
 };
 

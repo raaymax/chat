@@ -3,15 +3,19 @@ import * as session from '../../services/session';
 import '../../../assets/styles/register.css';
 
 export const Register = () => {
-  const url = new URL(window.location);
+  const url = new URL(window.location.toString());
   const m = url.hash.match('/invite/(.*)');
   const token = m && m[1];
 
   const [msg, setMsg] = useState(null);
 
-  const submit = useCallback(async (e) => {
+  const submit = useCallback(async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    const { name, login, password } = e.target;
+    const { name, login, password } = e.target as typeof e.target & { 
+      name: {value: string},
+      login: {value: string},
+      password: {value: string},
+    };
 
     const ret = await session.register({
       name: name.value,
@@ -20,7 +24,7 @@ export const Register = () => {
       token,
     });
     if (ret.status === 'ok') {
-      localStorage.setItem('token', null);
+      localStorage.setItem('token', '');
       localStorage.setItem('loginMessage', 'Registration successful. You can login now.');
       window.location.href = '/';
     } else {
