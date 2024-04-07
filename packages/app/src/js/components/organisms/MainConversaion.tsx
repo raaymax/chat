@@ -54,7 +54,11 @@ const StyledHeader = styled.div`
   }
 `;
 
-export const Header = ({ onClick }) => {
+type HeaderProps = {
+  onClick: () => void;
+};
+
+export const Header = ({ onClick }: HeaderProps) => {
   const [stream, setStream] = useStream();
   const { channelId, parentId } = stream;
   const dispatch = useDispatch();
@@ -105,7 +109,13 @@ const Container = styled.div`
   flex-direction: column;
   border-right: 1px solid var(--primary_border_color);
 `;
-export const MainConversation = ({ className, onClick }) => (
+
+type MainConversationProps = {
+  className?: string;
+  onClick?: () => void;
+};
+
+export const MainConversation = ({ className, onClick }: MainConversationProps) => (
   <Container className={className}>
     <Header onClick={onClick} />
     <Conversation />

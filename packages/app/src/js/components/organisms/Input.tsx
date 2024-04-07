@@ -156,7 +156,7 @@ export const InputContainer = styled.div`
 `;
 
 type InputFormProps = {
-  children: React.ReactNode,
+  children?: React.ReactNode,
 }
 
 export const InputForm = ({ children }: InputFormProps) => {

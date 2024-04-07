@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useCallback, useState } from 'react';
 import { useStream } from '../contexts/stream';
-import { HoverContext } from '../contexts/hover';
+import { HoverProvider } from '../contexts/hover';
 import { useSelector, useDispatch } from 'react-redux';
 import { formatTime, formatDate } from '../../utils';
 
@@ -174,9 +174,9 @@ export function SearchResults() {
 
 export const Search = () => (
   <StyledSearch>
-    <HoverContext>
+    <HoverProvider>
       <Header />
       <SearchResults />
-    </HoverContext>
+    </HoverProvider>
   </StyledSearch>
 );

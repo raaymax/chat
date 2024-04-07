@@ -1,6 +1,6 @@
 import {Button} from '../atoms/Button';
 import {Emoji} from './Emoji';
-import {useSize} from '../contexts/size';
+import {useSize} from '../contexts/useSize';
 
 interface ButtonWithEmojiProps {
   onClick: () => void;

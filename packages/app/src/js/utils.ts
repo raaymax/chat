@@ -130,6 +130,6 @@ export const buildEmojiNode = (result: {unicode?: string, fileId?: string, short
   return node;
 };
 
-export const omitUndefined = (ob: Object) => Object.fromEntries(
+export const omitUndefined = (ob: any) => Object.fromEntries(
   Object.entries(ob).filter(([, v]) => v !== undefined),
 );

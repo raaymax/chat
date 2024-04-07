@@ -1,18 +1,15 @@
-import { useContext, createContext } from 'react';
+import { createContext } from 'react';
 
-const Context = createContext<number | undefined>(undefined);
+export const SizeContext = createContext<number | undefined>(undefined);
 
 type SizeContextProps = {
   value?: number;
   children: React.ReactNode;
 };
 
-export const SizeContext = ({ children, value }: SizeContextProps) => (
-  <Context.Provider value={value}>
+export const SizeProvider = ({ children, value }: SizeContextProps) => (
+  <SizeContext.Provider value={value}>
     {children}
-  </Context.Provider>
+  </SizeContext.Provider>
 );
 
-export const useSize = (size?: number) => { 
-  return size ?? useContext(Context);
-}

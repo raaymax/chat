@@ -2,7 +2,7 @@ import { useEmoji } from '../../hooks';
 import styled from 'styled-components';
 import { getUrl } from '../../services/file';
 import { Tooltip } from '../atoms/Tooltip';
-import { useSize } from '../contexts/size';
+import { useSize } from '../contexts/useSize';
 
 const StyledEmoji = styled.span<{$size?: number}>`
   padding: 0;

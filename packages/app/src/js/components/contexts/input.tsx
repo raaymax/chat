@@ -173,7 +173,7 @@ export const InputContext = (args: InputContextProps) => {
       dispatch.actions.messages.editClose(messageId);
     }
   }, [input, stream, focus, dispatch,
-    filesAreReady, files, messageId, mode]);
+    filesAreReady, files, messageId, mode, message]);
 
   const wrapMatching = useCallback((regex: RegExp, wrapperTagName: string) => {
     const selection = window.getSelection();

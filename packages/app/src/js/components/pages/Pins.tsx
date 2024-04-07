@@ -3,7 +3,7 @@ import { Channel } from '../molecules/NavChannel';
 import { useStream } from '../contexts/stream';
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { HoverContext } from '../contexts/hover';
+import { HoverProvider } from '../contexts/hover';
 import { MessageList } from '../organisms/MessageListScroller'
 
 const StyledPins = styled.div`
@@ -82,7 +82,7 @@ const StyledHeader = styled.div`
 `;
 
 export const Header = () => {
-  const dispatch = useDispatch();
+  const dispatch: any = useDispatch();
   const [{channelId}] = useStream();
 
   return (
@@ -99,8 +99,8 @@ export const Header = () => {
 
 export const Pins = () => {
   const [{ channelId }, setStream] = useStream();
-  const dispatch = useDispatch();
-  const messages = useSelector((state) => state.pins[channelId]);
+  const dispatch:any = useDispatch();
+  const messages = useSelector((state:any) => state.pins[channelId]);
   const gotoMessage = useCallback((msg) => {
     dispatch.actions.view.set('pins');
     setStream({
@@ -113,7 +113,7 @@ export const Pins = () => {
   }, [dispatch, setStream]);
   return (
     <StyledPins className='pins'>
-      <HoverContext>
+      <HoverProvider>
         <Header />
         <MessageList
           list={messages || []}
@@ -130,7 +130,7 @@ export const Pins = () => {
             }
           }}
         />
-      </HoverContext>
+      </HoverProvider>
     </StyledPins>
   );
 };

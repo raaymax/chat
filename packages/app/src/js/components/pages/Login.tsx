@@ -3,7 +3,11 @@ import * as session from '../../services/session';
 import { UserContext } from '../contexts/user';
 import '../../../assets/styles/login.css';
 
-export const Login = ({ children }) => {
+type LoginProps = {
+  children: React.ReactNode;
+};
+
+export const Login = ({ children }: LoginProps) => {
   const [status, setStatus] = useState('pending');
   const [user, setUser] = useState(null);
   const [msg, setMsg] = useState(null);

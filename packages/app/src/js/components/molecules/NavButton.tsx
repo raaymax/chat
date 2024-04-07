@@ -1,7 +1,7 @@
 import { ButtonWithIcon } from './ButtonWithIcon';
 import {Text} from '../atoms/Text';
 import styled from 'styled-components';
-import {useSize} from '../contexts/size';
+import {useSize} from '../contexts/useSize';
 import {ClassNames} from '../../utils';
 import {Badge} from '../atoms/Badge';
 

@@ -18,8 +18,7 @@ export const useMessageData = (): Message => {
 
 export const useMessageUser = () => {
   const context = useContext(Context);
-  if(context.data === undefined) return {};
-  const { userId } = context.data;
+  const { userId } = context.data || {};
   return useUser(userId);
 };
 

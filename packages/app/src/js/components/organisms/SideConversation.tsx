@@ -50,7 +50,11 @@ const StyledHeader = styled.div`
   }
 `;
 
-export const Header = ({ onClick }) => {
+type HeaderProps = {
+  onClick: () => void;
+};
+
+export const Header = ({ onClick }: HeaderProps) => {
   const [{ channelId, parentId }, setSideStream] = useStream();
   const message = useMessage(parentId);
   const dispatch = useDispatch();
@@ -85,7 +89,11 @@ const Container = styled.div`
   border-right: 1px solid var(--primary_border_color);
 `;
 
-export const SideConversation = ({ className }) => (
+type SideConversationProps = {
+  className?: string;
+};
+
+export const SideConversation = ({ className }: SideConversationProps) => (
   <Container className={className}>
     <Header />
     <Conversation />

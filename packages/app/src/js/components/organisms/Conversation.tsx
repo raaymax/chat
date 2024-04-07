@@ -4,7 +4,7 @@ import { MessageList } from './MessageListScroller';
 import { uploadMany } from '../../services/file';
 import { Input } from '../organisms/Input';
 import { reinit } from '../../services/init';
-import { HoverContext } from '../contexts/hover';
+import { HoverProvider } from '../contexts/hover';
 import { useStream, useMessages } from '../contexts/stream';
 import { useProgress } from '../../hooks';
 import { LoadingIndicator } from '../molecules/LoadingIndicator';
@@ -78,7 +78,7 @@ export function Conversation() {
   }, [bumpProgress]);
   return (
     <Container onDrop={drop(dispatch, stream.id)} onDragOver={dragOverHandler}>
-      <HoverContext>
+      <HoverProvider>
         <MessageList
           list={list}
           status={status}
@@ -100,7 +100,7 @@ export function Conversation() {
         <LoadingIndicator />
         <Input />
         {initFailed && <InitFailedButton onClick={() => dispatch(reinit())} />}
-      </HoverContext>
+      </HoverProvider>
     </Container>
   );
 }

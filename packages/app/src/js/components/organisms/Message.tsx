@@ -14,7 +14,7 @@ import { MessageToolbar } from '../molecules/MessageToolbar';
 import { Input } from './Input';
 
 import { MessageContext, useMessageData, useMessageUser } from '../contexts/message';
-import { useHoverCtrl } from '../contexts/hover';
+import { useHoverCtrl } from '../contexts/useHoverCtrl';
 import { useStream } from '../contexts/stream';
 
 import { cn, ClassNames, formatTime, formatDateDetailed } from '../../utils';

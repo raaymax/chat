@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { SizeContext } from '../contexts/size';
+import { SizeProvider } from '../contexts/size';
 import {cn, ClassNames} from '../../utils';
 
 export const Container = styled.div<{$size?: number}>`
@@ -30,9 +30,9 @@ export const Toolbar = ({ children, size, className}: ToolbarProps) => {
   const stop = (e: any) => { e.stopPropagation(); e.preventDefault(); };
   return (
     <Container className={cn(className)} $size={size} onClick={stop}>
-      <SizeContext value={size}>
+      <SizeProvider value={size}>
         {children}
-      </SizeContext>
+      </SizeProvider>
     </Container>
   );
 }

@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeMessage } from '../../services/messages';
-import { useHovered } from '../contexts/hover';
+import { useHovered } from '../contexts/useHovered';
 import { useStream } from '../contexts/stream';
 import { useMessageData, useMessageUser } from '../contexts/message';
 import { Toolbar } from '../atoms/Toolbar';
