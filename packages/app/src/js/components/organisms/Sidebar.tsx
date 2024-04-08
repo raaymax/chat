@@ -72,7 +72,7 @@ export const Sidebar = () => {
         <NavChannels />
         <NavUsers />
         {/* <UserList /> */}
-        {plugins.get('sidebar').map((El, key) => <El key={key} />)}
+        {plugins.get('sidebar').map((El: React.FC, key: string) => <El key={key} />)}
       </div>
       <div className='bottom'>
         <NavButton icon="logout" size={50} onClick={() => dispatch(logout())}>Logout</NavButton>

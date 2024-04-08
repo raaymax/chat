@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux';
 import { NavButton } from './NavButton';
+import { ClassNames, cn } from '../../utils';
 
 type NavUserButtonProps = {
   channel: {
@@ -9,23 +10,29 @@ type NavUserButtonProps = {
   };
   size?: number;
   badge: number;
+  className?: ClassNames;
   onClick: () => void;
 };
 
-export const NavUserButton = ({ channel, size, badge, onClick }: NavUserButtonProps) => {
+export const NavUserButton = ({ channel, size, badge, className, onClick }: NavUserButtonProps) => {
   const me = useSelector((state: any) => state.me);
   let other = channel.users.find((u) => u !== me) ?? '';
   if (!other) [other] = channel.users;
   const user = useSelector((state: any) => state.users[other]);
   if (!user) {
-    return ( <NavButton size={size} data-id={channel.id} onClick={onClick} icon='hash' badge={badge}>{channel.name}</NavButton> );
+    return ( <NavButton className={className} size={size} data-id={channel.id} onClick={onClick} icon='hash' badge={badge}>{channel.name}</NavButton> );
   }
   if (user.system) {
-    return ( <NavButton size={size} data-id={channel.id} onClick={onClick} icon='system-user' badge={badge}>{user.name}</NavButton> );
+    return ( <NavButton className={className} size={size} data-id={channel.id} onClick={onClick} icon='system-user' badge={badge}>{user.name}</NavButton> );
   }
   const active = user.lastSeen && new Date(user.lastSeen).getTime() > Date.now() - 1000 * 60 * 5;
   return ( <NavButton size={size}
-    className={`user ${user.connected ? 'connected ' : 'offline'}${active ? 'recent' : ''}${user.system ? 'system' : ''}`}
+    className={cn('user', {
+      connected: user.connected,
+      offline: !user.connected,
+      recent: active,
+      system: user.system
+    }, className)}
     data-id={channel.id} onClick={onClick} icon='user' badge={badge}>{user.name}</NavButton>);
 };
 

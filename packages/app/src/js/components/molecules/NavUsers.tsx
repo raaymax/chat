@@ -52,12 +52,10 @@ export const NavUsers = () => {
       </div>
       { channels && channels.map((c) => (
         <NavUserButton
-          channelId={c.id}
           size={30}
           channel={c}
-          className={id === c.id ? 'active' : ''}
+          className={{active: id === c.id}}
           key={c.id}
-          icon='fa-solid fa-user'
           badge={badges[c.id]}
           onClick={() => {
             dispatch.actions.stream.open({id: 'main', value: { type: 'live', channelId: c.id }});

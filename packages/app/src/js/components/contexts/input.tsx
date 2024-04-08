@@ -11,8 +11,8 @@ import { useMessage } from '../../hooks/useMessage';
 type InputContextType = {
   mode: string;
   messageId: string | null;
-  input: MutableRefObject<HTMLDivElement>;
-  fileInput: {current?: HTMLInputElement};
+  input: MutableRefObject<HTMLDivElement | null>;
+  fileInput: MutableRefObject<HTMLInputElement| null>;
   onPaste: (e: any) => void;
   onKeyDown: (e: React.KeyboardEvent) => void;
   onInput: () => void;
@@ -62,8 +62,8 @@ export const InputContext = (args: InputContextProps) => {
   const filesAreReady = !files || files.every((f: any) => f.status === 'ok');
   const message = useMessage(messageId);
 
-  const input = useRef<HTMLDivElement>();
-  const fileInput = useRef<HTMLInputElement>();
+  const input = useRef<HTMLDivElement | null>(null);
+  const fileInput = useRef<HTMLInputElement | null>(null);
   const [range, setRange] = useState<Range>(document.createRange());
 
   const getDefaultRange = useCallback((): Range => {

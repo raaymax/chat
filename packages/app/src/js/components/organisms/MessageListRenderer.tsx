@@ -27,7 +27,7 @@ export const MessageListRenderer = ({
       if (!msg.priv) {
         sameUser = prev
           && prev?.userId === msg?.userId
-          && (new Date(msg.createdAt) - new Date(prev.createdAt)) < 60000;
+          && (new Date(msg.createdAt).getTime() - new Date(prev.createdAt).getTime()) < 60000;
       }
       sameDate = prev
         && formatDate(prev?.createdAt) === formatDate(msg?.createdAt);

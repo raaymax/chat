@@ -53,7 +53,7 @@ export type MessageBodyPart = MessageBodyBullet | MessageBodyOrdered | MessageBo
 export type MessageBody = MessageBodyPart[] | MessageBodyPart;
 
 export type Message = {
-  id: string;
+  id?: string;
   clientId: string;
   message: MessageBody;
   flat: string;
@@ -121,7 +121,9 @@ export type EmojiDescriptor = {
 }
 
 export type Notif = {
+  id?: string;
   clientId: string;
+  userId: string;
   notifType: string;
   notif: string;
   createdAt: string;

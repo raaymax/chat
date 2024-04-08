@@ -62,8 +62,8 @@ export function Conversation() {
   const dispatch: any = useDispatch();
   const {messages, next, prev} = useMessages();
   const initFailed = useSelector((state: any) => state.system.initFailed);
-  const progress = useProgress(stream);
-  const list: MessageType[] = messages.map((m: MessageType) => ({ ...m, progress: progress[m.id] }));
+  const progress = useProgress({channelId: stream.channelId, parentId: stream.parentId});
+  const list: MessageType[] = messages.map((m: MessageType) => ({ ...m, progress: progress[m.id ?? ''] }));
 
   const bumpProgress = useCallback(() => {
     const latest = list.find(({ priv }) => !priv);
