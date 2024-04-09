@@ -1,14 +1,14 @@
 import React, {
-  useRef, useState, useCallback, useEffect, useContext, createContext, MutableRefObject,
+  useRef, useState, useCallback, useEffect, createContext, MutableRefObject,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useStream } from './stream';
+import { useStream } from './useStream';
 import * as messageService from '../../services/messages';
 import { uploadMany } from '../../services/file';
 import { fromDom } from '../../serializer';
 import { useMessage } from '../../hooks/useMessage';
 
-type InputContextType = {
+export type InputContextType = {
   mode: string;
   messageId: string | null;
   input: MutableRefObject<HTMLDivElement | null>;
@@ -29,7 +29,7 @@ type InputContextType = {
   focus: (e?: Event) => void;
 };
 
-const Context = createContext<InputContextType | null>(null);
+export const InputContext = createContext<InputContextType | null>(null);
 
 function findScope(element: HTMLElement | null): { el: HTMLElement, scope: string } | null {
   let currentElement = element;
@@ -50,7 +50,7 @@ type InputContextProps = {
   messageId?: string;
 };
 
-export const InputContext = (args: InputContextProps) => {
+export const InputProvider = (args: InputContextProps) => {
   const { children, mode = 'default', messageId = null } = args;
   const dispatch: any = useDispatch();
   const [stream] = useStream();
@@ -297,16 +297,9 @@ export const InputContext = (args: InputContextProps) => {
   };
 
   return (
-    <Context.Provider value={api}>
+    <InputContext.Provider value={api}>
       {children}
-    </Context.Provider>
+    </InputContext.Provider>
   );
 };
 
-export const useInput = (): InputContextType => {
-  const context = useContext(Context);
-  if (!context) {
-    throw new Error('useInput must be used within a InputContext');
-  }
-  return context;
-};

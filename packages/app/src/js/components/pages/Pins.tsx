@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Channel } from '../molecules/NavChannel';
-import { useStream } from '../contexts/stream';
+import { useStream } from '../contexts/useStream';
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { HoverProvider } from '../contexts/hover';

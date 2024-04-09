@@ -2,7 +2,7 @@ import {
   useRef, useEffect, useState, useCallback,
 } from 'react';
 import styled from 'styled-components';
-import { useStream } from '../contexts/stream';
+import { useStream } from '../contexts/useStream';
 import { MessageListRenderer, MessageListRendererProps } from './MessageListRenderer';
 import { Message as MessageType } from '../../types';
 

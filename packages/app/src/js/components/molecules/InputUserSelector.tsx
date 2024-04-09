@@ -3,7 +3,7 @@ import {
 } from 'react';
 import Fuse from 'fuse.js';
 import { TextMenu } from './TextMenu';
-import { useInput } from '../contexts/input';
+import { useInput } from '../contexts/useInput';
 import { useUsers } from '../../hooks';
 
 const SCOPE = 'user';

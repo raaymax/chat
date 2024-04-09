@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useInput } from '../contexts/input';
+import { useInput } from '../contexts/useInput';
 import styled from 'styled-components';
 
 export const Menu = styled.div<{top:number, left: number, height: number}>`

@@ -5,7 +5,8 @@ import styled from 'styled-components';
 import { EmojiDescriptor } from '../../types';
 import { buildEmojiNode } from '../../utils';
 import { getUrl } from '../../services/file';
-import { InputContext, useInput } from '../contexts/input';
+import { InputProvider } from '../contexts/input';
+import { useInput } from '../contexts/useInput';
 
 import { StatusLine } from '../atoms/StatusLine';
 import { Toolbar } from '../atoms/Toolbar';
@@ -240,7 +241,7 @@ type InputProps = {
 };
 
 export const Input = ({ children, ...args }: InputProps) => (
-  <InputContext {...args} >
+  <InputProvider {...args} >
     <InputForm>{children}</InputForm>
-  </InputContext>
+  </InputProvider>
 );

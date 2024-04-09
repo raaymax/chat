@@ -3,7 +3,7 @@ import {
   useCallback, useEffect, useState, useMemo,
 } from 'react';
 import { TextMenu } from './TextMenu';
-import { useInput } from '../contexts/input';
+import { useInput } from '../contexts/useInput';
 import { getUrl } from '../../services/file';
 import { buildEmojiNode } from '../../utils';
 import { useEmojiFuse } from '../../hooks';

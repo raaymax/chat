@@ -130,3 +130,11 @@ export type Notif = {
   priv?: boolean;
 }
 
+export type Stream = {
+  id?: string;
+  type: string;
+  channelId: string;
+  parentId?: string;
+  selected?: string;
+  date?: string;
+};

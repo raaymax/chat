@@ -13,14 +13,15 @@ import { Reactions } from '../molecules/Reactions';
 import { MessageToolbar } from '../molecules/MessageToolbar';
 import { Input } from './Input';
 
-import { MessageContext, useMessageData, useMessageUser } from '../contexts/message';
+import { MessageProvider } from '../contexts/message';
+import { useMessageData } from '../contexts/useMessageData';
+import { useMessageUser } from '../contexts/useMessageUser';
 import { useHoverCtrl } from '../contexts/useHoverCtrl';
-import { useStream } from '../contexts/stream';
+import { useStream } from '../contexts/useStream';
 
 import { cn, ClassNames, formatTime, formatDateDetailed } from '../../utils';
 
 import { Message as MessageType } from '../../types';
-
 
 export const Info = () => {
   const { clientId, info } = useMessageData();
@@ -39,9 +40,8 @@ export const Info = () => {
     </div>
   );
 };
-export const EMOJI_MATCHER = () => /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/g;
 
-export const isToday = (date: string): boolean => {
+const isToday = (date: string): boolean => {
   const someDate = new Date(date);
   const today = new Date();
   return someDate.getDate() === today.getDate()
@@ -166,7 +166,7 @@ type MessageProps = MessageBaseProps & {
 };
 
 export const Message = ({data, ...props}: MessageProps) => (
-  <MessageContext value={data}>
+  <MessageProvider value={data}>
     <MessageBase {...props} />
-  </MessageContext>
+  </MessageProvider>
 );

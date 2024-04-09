@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { useMessageData } from '../contexts/message';
+import { useMessageData } from '../contexts/useMessageData';
 import { Emoji } from './Emoji';
 import { Tag } from '../atoms/Tag';
 

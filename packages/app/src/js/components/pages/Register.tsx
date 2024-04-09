@@ -30,7 +30,7 @@ export const Register = () => {
     } else {
       setMsg(ret.message);
     }
-  }, []);
+  }, [token]);
 
   if (!token) {
     return (

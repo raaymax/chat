@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useCallback, useState } from 'react';
-import { useStream } from '../contexts/stream';
+import { useStream } from '../contexts/useStream';
 import { HoverProvider } from '../contexts/hover';
 import { useSelector, useDispatch } from 'react-redux';
 import { formatTime, formatDate } from '../../utils';

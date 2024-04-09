@@ -2,6 +2,12 @@ import { createCounter } from './utils';
 import { MessageBody, MessageBodyPart } from './types';
 import * as types from './types';
 
+type SerializeError = {
+  message: string;
+  nodeAttributes: Record<string, string | null>;
+  nodeName: string;
+}
+
 export type MessageToSend = {
   type: 'message:create';
   clientId: string;
@@ -9,7 +15,7 @@ export type MessageToSend = {
   info: null;
   message: MessageBody;
   flat: string;
-  parsingErrors?: any[];
+  parsingErrors?: SerializeError[];
   emojiOnly?: boolean;
 };
 
@@ -21,7 +27,7 @@ export type MessageToUpdate = {
   id: string;
   message: MessageBody;
   flat: string;
-  parsingErrors?: any[];
+  parsingErrors?: SerializeError[];
   emojiOnly?: boolean;
 };
 
@@ -38,7 +44,7 @@ export type CommandToSend = {
 type SerializeInfo = {
   links: string[];
   mentions: string[];
-  errors?: any[];
+  errors?: SerializeError[];
 };
 
 export const fromDom = (dom: HTMLElement): MessageToSend | CommandToSend => {
@@ -185,14 +191,17 @@ function processUrls(text: string, info: SerializeInfo): MessageBody {
 // eslint-disable-next-line no-useless-escape
 const matchUrl = (text: string) => text.match(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!,@:%_\+.~#?&\/\/=]*)/g);
 
+const isNotEmpty = (e: MessageBodyPart): boolean => {
+  if (is<types.MessageBodyText>(e, 'text'))
+    return !(e.text === '' || e.text === '\u200B' || e.text === '\u00A0' || e.text?.trim() === '');
+  if (is<types.MessageBodyBr>(e, 'br')) return false;
+  return true;
+}
+
 const trim = (arr: MessageBody): MessageBody => {
   const copy = [arr].flat();
-  const startIdx = copy.findIndex(
-    (e: any) => !(e.text === '' || e.text === '\u200B' || e.text === '\u00A0' || e.text?.trim() === '' || e.br === true),
-  );
-  const endIdx = copy.findLastIndex(
-    (e: any) => !(e.text === '' || e.text === '\u200B' || e.text === '\u00A0' || e.text?.trim() === '' || e.br === true),
-  );
+  const startIdx = copy.findIndex(isNotEmpty);
+  const endIdx = copy.findLastIndex(isNotEmpty);
   return copy.slice(startIdx, endIdx + 1);
 };
 

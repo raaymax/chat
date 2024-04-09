@@ -5,7 +5,7 @@ import '../setup';
 import { client } from '../core';
 import { store } from '../store';
 import { Workspace } from './pages/Workspace';
-import { useUser } from './contexts/user';
+import { useUser } from './contexts/useUser';
 
 const theme = {
   borderColor: '#565856',

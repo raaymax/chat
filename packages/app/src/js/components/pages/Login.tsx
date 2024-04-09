@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import * as session from '../../services/session';
-import { UserContext } from '../contexts/user';
+import { UserProvider } from '../contexts/user';
 import '../../../assets/styles/login.css';
 
 type LoginProps = {
@@ -56,9 +56,9 @@ export const Login = ({ children }: LoginProps) => {
 
   const loginMessage = localStorage.getItem('loginMessage');
   return user ? (
-    <UserContext value={user}>
+    <UserProvider value={user}>
       {children}
-    </UserContext>
+    </UserProvider>
   ) : (
     <div className='login' >
       {loginMessage && <div className='message'>
