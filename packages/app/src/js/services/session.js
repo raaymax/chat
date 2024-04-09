@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+ 
 
 const SESSION_URL = `${API_URL}/access`;
 

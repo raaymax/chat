@@ -1,4 +1,4 @@
-/* eslint-disable default-param-last */
+ 
 export const createModule = (def) => {
   def.reducers = { ...def.reducers, reset: () => def.initialState };
   return ({

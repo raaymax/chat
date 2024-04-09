@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+ 
 import { play } from './services/sound';
 import { sendShareMessage } from './services/messages';
 import { init } from './services/init';

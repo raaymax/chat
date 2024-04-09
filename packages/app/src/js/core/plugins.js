@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-/* eslint-disable global-require */
+ 
 
 const registry = {};
 const plugins = {

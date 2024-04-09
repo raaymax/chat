@@ -1,5 +1,5 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
+ 
+ 
 import { createCounter } from '../utils';
 
 const tempId = createCounter(`file:${(Math.random() + 1).toString(36)}`);

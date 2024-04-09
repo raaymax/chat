@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-/* eslint-disable no-restricted-syntax */
+ 
 import { precacheAndRoute } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import * as navigationPreload from 'workbox-navigation-preload';
@@ -23,7 +23,7 @@ async function shareTargetHandler({ event }) {
     if (client) {
       event.request.formData().then((formData) => {
         const data = {};
-        // eslint-disable-next-line no-restricted-syntax
+         
         for (const [key, val] of formData.entries()) {
           data[key] = val;
         }

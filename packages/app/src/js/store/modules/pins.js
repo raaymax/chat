@@ -8,7 +8,7 @@ export default createModule({
       const newState = { ...state };
       [action.payload].flat().forEach((msg) => {
         const { channelId } = msg;
-        // eslint-disable-next-line no-multi-assign
+         
         const list = newState[channelId] = newState[channelId] || [];
         if (msg.createdAt) {
           msg.createdAt = (new Date(msg.createdAt)).toISOString();
