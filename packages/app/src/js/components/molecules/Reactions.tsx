@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../../store';
 import { useMessageData } from '../contexts/useMessageData';
 import { Emoji } from './Emoji';
 import { Tag } from '../atoms/Tag';
@@ -12,7 +12,7 @@ export const Reactions = () => {
   return (
     <div>
       {Object.entries(reactionMap).map(([key, count]) => (
-          <Tag key={key} onClick={() => dispatch.methods.messages.addReaction(id, key)}> 
+          <Tag key={key} onClick={() => dispatch.methods.messages.addReaction({id, text: key})}> 
             {count > 1 ? `${count} ` : ''}
             <Emoji shortname={key} />
           </Tag>

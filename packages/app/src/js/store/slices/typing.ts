@@ -1,8 +1,18 @@
-import {createModule} from '../tools';
+import { createSlice } from "@reduxjs/toolkit";
+import { createMethods } from "../tools";
 
-export default createModule({
+type TypingState = {
+  [channelId: string]: {
+    [userId: string]: string;
+  };
+} & {
+  cooldown: boolean;
+  queue: boolean;
+};
+
+const slice = createSlice({
   name: 'typing',
-  initialState: { cooldown: false, queue: false },
+  initialState: { cooldown: false, queue: false } as TypingState,
   reducers: {
     add: (state, action) => {
       const newState = {...state};
@@ -12,7 +22,7 @@ export default createModule({
       });
       return newState;
     },
-    clear: (state) => ({
+    clear: (state, _action) => ({
       ...Object.fromEntries(
         Object.entries(state)
           .map(([channelId, users]) => [
@@ -28,14 +38,18 @@ export default createModule({
     }),
     set: (state, action) => ({...state, ...action.payload}),
   },
+});
+
+export const methods = createMethods({
+  module_name: 'typing',
   methods: {
-    ack: (msg) => (dispatch, getState) => {
+    ack: async (msg, {dispatch, getState}) => {
       const meId = getState().me;
       if (msg.userId === meId) return;
       dispatch.actions.typing.add(msg);
       setTimeout(() => dispatch.actions.typing.clear(), 1100);
     },
-    notify: ({channelId, parentId}) => ({ actions, methods }, getState, {client}) => {
+    notify: () => ({channelId, parentId}, {dispatch: { actions, methods }, getState}, {client}) => {
       const {cooldown} = getState().typing;
       if (cooldown) {
         actions.typing.set({ queue: true });
@@ -52,3 +66,5 @@ export default createModule({
     },
   },
 });
+
+export const { reducer, actions } = slice;

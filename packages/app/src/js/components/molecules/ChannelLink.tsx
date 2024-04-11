@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../store';
 import styled from 'styled-components';
 import { Icon } from '../atoms/Icon';
 

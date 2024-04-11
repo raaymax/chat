@@ -1,8 +1,15 @@
-import {createModule} from '../tools';
+import { createSlice } from '@reduxjs/toolkit';
+import { createMethods } from '../tools';
+import { EmojiDescriptor } from '../../types';
 
-export default createModule({
+type EmojiState = {
+  ready: boolean;
+  data: EmojiDescriptor[];
+};
+
+const slice = createSlice({
   name: 'emojis',
-  initialState: {ready: false, data: []},
+  initialState: {ready: false, data: []} as EmojiState,
   reducers: {
     ready: (state) => ({...state, ready: true}),
     add: (state, action) => {
@@ -18,18 +25,22 @@ export default createModule({
       return newState;
     },
   },
+});
+
+export const methods = createMethods({
+  module_name: 'emojis',
   methods: {
-    load: () => async ({actions}, getState, {client}) => {
+    load: async (_arg, {dispatch: {actions}}, {client}) => {
       const [baseEmojis, { data: emojis }] = await Promise.all([
         import('../../../assets/emoji_list.json'),
         client.req({ type: 'emoji:getAll' }),
       ]);
       actions.emojis.add(baseEmojis.default);
-      actions.emojis.add(emojis.map((e) => ({...e, category: 'c'})));
+      actions.emojis.add(emojis.map((e: any) => ({...e, category: 'c'})));
       actions.emojis.ready({});
     },
 
-    find: (shortname) => async ({actions}, getState, {client}) => {
+    find: async (shortname, {dispatch: {actions}}, {client}) => {
       try {
         const { data: [emoji] } = await client.req({ type: 'emoji:get', shortname });
         if (emoji) actions.emojis.add(emoji);
@@ -39,3 +50,6 @@ export default createModule({
     },
   },
 });
+
+
+export const { actions, reducer } = slice;

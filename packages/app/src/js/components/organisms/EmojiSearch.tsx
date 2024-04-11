@@ -1,5 +1,5 @@
 import { useState, useEffect} from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../store';
 import { Tooltip } from '../atoms/Tooltip';
 import { SearchBox } from '../atoms/SearchBox';
 import { useEmojiFuse } from '../../hooks';

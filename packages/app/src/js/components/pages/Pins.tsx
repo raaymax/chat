@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Channel } from '../molecules/NavChannel';
 import { useStream } from '../contexts/useStream';
 import { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../store';
 import { HoverProvider } from '../contexts/hover';
 import { MessageList } from '../organisms/MessageListScroller'
 import { Message as MessageType } from '../../types';

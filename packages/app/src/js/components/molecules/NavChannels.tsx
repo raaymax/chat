@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../store';
 import styled from 'styled-components';
 import { ChannelCreate } from './ChannelCreate';
 import { Channel } from './NavChannel';

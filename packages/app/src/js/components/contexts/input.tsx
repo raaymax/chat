@@ -1,7 +1,7 @@
 import React, {
   useRef, useState, useCallback, useEffect, createContext, MutableRefObject,
 } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../store';
 import { useStream } from './useStream';
 import * as messageService from '../../services/messages';
 import { uploadMany } from '../../services/file';
@@ -52,14 +52,14 @@ type InputContextProps = {
 
 export const InputProvider = (args: InputContextProps) => {
   const { children, mode = 'default', messageId = null } = args;
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch();
   const [stream] = useStream();
   const [currentText, setCurrentText] = useState('');
   const [scope, setScope] = useState<string>('');
   const [scopeContainer, setScopeContainer] = useState<HTMLElement>();
   //FIXME: files as any
-  const files = useSelector((state: any) => state.files);
-  const filesAreReady = !files || files.every((f: any) => f.status === 'ok');
+  const files = useSelector((state) => state.files);
+  const filesAreReady = !files || files.every((f) => f.status === 'ok');
   const message = useMessage(messageId);
 
   const input = useRef<HTMLDivElement | null>(null);

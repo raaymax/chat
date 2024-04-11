@@ -1,7 +1,6 @@
-import {createModule} from '../tools';
+import { createSlice } from '@reduxjs/toolkit';
 import { omitUndefined } from '../../utils';
 
-/*
 type Stream = {
   channelId: string,
   parentId: string,
@@ -10,7 +9,12 @@ type Stream = {
   selected: string,
   date: Date,
 };
-*/
+
+type StreamState = {
+  main: Stream,
+  side: Stream,
+  mainChannelId: string,
+};
 
 const loadStream = () => {
   const { hash } = document.location;
@@ -32,7 +36,7 @@ const loadStream = () => {
   };
 };
 
-const saveStream = (stream) => {
+const saveStream = (stream: Stream) => {
   const query = new URLSearchParams(omitUndefined({
     type: stream.type,
     date: stream.date,
@@ -45,9 +49,9 @@ const saveStream = (stream) => {
     + (querystring ? `?${querystring}` : '');
 };
 
-export default createModule({
+const slice = createSlice({
   name: 'stream',
-  initialState: { main: loadStream(), side: null, mainChannelId: null },
+  initialState: { main: loadStream(), side: null, mainChannelId: null } as StreamState,
   reducers: {
     open: (state, action) => {
       const { id, value } = action.payload;
@@ -64,3 +68,6 @@ export default createModule({
     },
   },
 });
+
+export const methods = {};
+export const { actions, reducer } = slice;

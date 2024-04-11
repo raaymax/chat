@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../store';
 import styled from 'styled-components';
 import { NavUserButton } from './NavUser';
 import { useBadges, useUserChannels } from '../../hooks';

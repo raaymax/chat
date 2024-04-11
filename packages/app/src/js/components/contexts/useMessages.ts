@@ -1,7 +1,7 @@
 import {
   useMemo, useEffect, useState
 } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../../store';
 import { loadMessages, loadNext, loadPrevious } from '../../services/messages';
 import { Message } from '../../types';
 import { useStream } from './useStream';

@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../../store';
 import styled from 'styled-components';
 
 import { resend } from '../../services/messages';

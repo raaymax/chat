@@ -1,16 +1,17 @@
 import { client } from '../core';
 import { createCounter } from '../utils';
+import { createAsyncAction } from '../store';
 
 const tempId = createCounter(`temp:${(Math.random() + 1).toString(36)}`);
 
-const loading = (dispatch) => {
-  dispatch.actions.messages.loading();
-  const timer = setTimeout(() => dispatch.actions.messages.loadingDone(), 1000);
+const loading = createAsyncAction(async (dispatch) => {
+  dispatch.actions.messages.loading({});
+  const timer = setTimeout(() => dispatch.actions.messages.loadingDone({}), 1000);
   return () => {
-    dispatch.actions.messages.loadingDone();
+    dispatch.actions.messages.loadingDone({});
     clearTimeout(timer);
   };
-};
+});
 
 const getStreamMessages = (stream, messages) => messages
   .filter((m) => m.channelId === stream.channelId
@@ -119,9 +120,9 @@ export const sendFromDom = (stream, dom) => async (dispatch, getState) => {
   }
 };
 
-export const send = (stream, msg) => (dispatch) => dispatch(msg.type === 'command:execute' ? sendCommand(stream, msg) : sendMessage(msg));
+export const send = (stream, msg) => createAsyncAction((dispatch) => dispatch(msg.type === 'command:execute' ? sendCommand(stream, msg) : sendMessage(msg)));
 
-export const sendShareMessage = (data) => async (dispatch, getState) => {
+export const sendShareMessage = (data) => createAsyncAction(async (dispatch, getState) => {
   const { channelId, parentId } = getState().stream.main;
   const info = { links: [] };
   const msg = build({
@@ -147,7 +148,7 @@ export const sendShareMessage = (data) => async (dispatch, getState) => {
       },
     });
   }
-};
+});
 
 const buildShareMessage = (data, info) => {
   const lines = [];

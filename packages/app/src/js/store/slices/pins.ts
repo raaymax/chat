@@ -1,8 +1,14 @@
-import {createModule} from '../tools';
+import { createSlice } from '@reduxjs/toolkit';
+import { Message } from '../../types';
+import { createMethods } from '../tools';
 
-export default createModule({
+type PinsState = {
+  [channelId: string]: Message[];
+};
+
+const slice = createSlice({
   name: 'pins',
-  initialState: {},
+  initialState: {} as PinsState,
   reducers: {
     add: (state, action) => {
       const newState = { ...state };
@@ -32,8 +38,12 @@ export default createModule({
       return newState;
     },
   },
+});
+
+export const methods = createMethods({
+  module_name: 'pins',
   methods: {
-    load: (channelId) => async ({actions}, getState, {client}) => {
+    load: async (channelId, {dispatch: {actions}}, {client}) => {
       actions.pins.clear(channelId);
       const req = await client.req({
         type: 'message:pins',
@@ -42,7 +52,7 @@ export default createModule({
       });
       actions.pins.add(req.data);
     },
-    pin: (id, channelId) => async ({actions, methods}, getState, {client}) => {
+    pin: async ({id, channelId}, {dispatch: {actions, methods}}, {client}) => {
       const req = await client.req({
         type: 'message:pin',
         channelId,
@@ -53,7 +63,7 @@ export default createModule({
       await methods.pins.load(channelId);
     },
 
-    unpin: (id, channelId) => async ({actions, methods}, getState, {client}) => {
+    unpin: async ({id, channelId}, {dispatch: {actions, methods}}, {client}) => {
       const req = await client.req({
         type: 'message:pin',
         channelId,
@@ -65,3 +75,6 @@ export default createModule({
     },
   },
 });
+
+export const { reducer, actions } = slice;
+

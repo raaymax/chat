@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../store';
 import { NavButton } from './NavButton';
 import { ClassNames, cn } from '../../utils';
 

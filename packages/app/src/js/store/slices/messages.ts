@@ -1,16 +1,26 @@
-import {createModule} from '../tools';
+import { Message as MessageType } from '../../types';
+import { PayloadAction } from '../types';
+import { createSlice } from '@reduxjs/toolkit';
+import { createMethods } from '../tools';
 
-export default createModule({
+type MessagesState = {
+  data: MessageType[];
+  loading: boolean;
+  status: 'live' | 'archived';
+  hovered: string | null;
+};
+
+const slice = createSlice({
   name: 'messages',
   initialState: {
     data: [],
     loading: false,
     status: 'live',
     hovered: null,
-  },
+  } as MessagesState,
   reducers: {
-    hover: (state, action) => ({...state, hovered: action.payload}),
-    setStatus: (state, action) => ({...state, status: action.payload}),
+    hover: (state, action: PayloadAction<string | null>) => ({...state, hovered: action.payload ?? null}),
+    setStatus: (state, action) => ({...state, status: action.payload as 'live' | 'archived'}),
     loadingFailed: (state, action) => ({...state, loadingFailed: action.payload}),
     loading: (state) => ({...state, loading: true}),
     loadingDone: (state) => ({...state, loading: false}),
@@ -95,9 +105,12 @@ export default createModule({
       return state;
     },
   },
+});
 
+export const methods = createMethods({
+  module_name: 'messages',
   methods: {
-    load: (query) => async ({actions}, getState, { client }) => {
+    load: async (query, {dispatch: {actions}}, { client }) => {
       const req = await client.req({
         limit: 50,
         ...query,
@@ -106,13 +119,15 @@ export default createModule({
       actions.messages.add(req.data);
       return req.data;
     },
-    addReaction: (id, text) => async ({actions}, getState, { client }) => {
+    addReaction: async (args, {dispatch: {actions}}, { client }) => {
       const req = await client.req({
         type: 'message:react',
-        id,
-        reaction: text.trim(),
+        id: args.id,
+        reaction: args.text.trim(),
       });
       actions.messages.add(req.data);
     },
-  },
+  }
 });
+
+export const { reducer, actions } = slice;

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../../store';
 
 const Link = styled.span`
   color: ${(props) => props.theme.linkColor};

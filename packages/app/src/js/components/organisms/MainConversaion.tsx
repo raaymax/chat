@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Conversation } from './Conversation';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../../store';
 import { Channel } from '../molecules/NavChannel';
 import { init } from '../../services/init';
 import { useStream } from '../contexts/useStream';

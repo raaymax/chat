@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useCallback, useState } from 'react';
 import { useStream } from '../contexts/useStream';
 import { HoverProvider } from '../contexts/hover';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../../store';
 import { formatTime, formatDate } from '../../utils';
 
 import { SearchBox } from '../atoms/SearchBox';
@@ -108,7 +108,7 @@ export const Header = () => {
   const [value, setValue] = useState('');
 
   const submit = useCallback(async () => {
-    dispatch.methods.search.find(stream.channelId, value);
+    dispatch.methods.search.find({channelId: stream.channelId, text: value});
   }, [dispatch, stream, value]);
 
   const onKeyDown= useCallback(async (e: React.KeyboardEvent) => {

@@ -1,8 +1,15 @@
-import {createModule} from '../tools';
+import { createSlice } from "@reduxjs/toolkit";
+import { createMethods } from "../tools";
 
-export default createModule({
+type ProgressState = {
+  channelId: string;
+  userId: string;
+  parentId: string;
+};
+
+const slice = createSlice({
   name: 'progress',
-  initialState: [],
+  initialState: [] as ProgressState[],
   reducers: {
     add: (state, action) => {
       const newState = [...state];
@@ -18,15 +25,19 @@ export default createModule({
       return newState;
     },
   },
+});
+
+export const methods = createMethods({
+  module_name: 'progress',
   methods: {
-    loadBadges: () => async ({actions}, getState, {client}) => {
+    loadBadges: async (_arg, {dispatch: {actions}}, {client}) => {
       const { data } = await client.req({
         type: 'readReceipt:getOwn',
       });
       actions.progress.add(data);
     },
 
-    loadProgress: (stream) => async ({actions}, getState, {client}) => {
+    loadProgress: async (stream, {dispatch: {actions}}, {client}) => {
       try{
         if (!stream.channelId) return;
         const { data } = await client.req({
@@ -41,7 +52,7 @@ export default createModule({
       }
     },
 
-    update: (messageId) => async ({actions}, getState, {client}) => {
+    update: async (messageId, {dispatch: {actions}}, {client}) => {
       const { data } = await client.req({
         type: 'readReceipt:update',
         messageId,
@@ -50,3 +61,5 @@ export default createModule({
     },
   },
 });
+
+export const { reducer, actions } = slice;

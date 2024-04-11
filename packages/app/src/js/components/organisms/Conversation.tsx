@@ -1,5 +1,5 @@
 import { useEffect, useCallback} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../store';
 import { MessageList } from './MessageListScroller';
 import { uploadMany } from '../../services/file';
 import { Input } from '../organisms/Input';

@@ -1,9 +1,8 @@
 import { useEffect } from 'react';
-import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
 import '../setup';
 import { client } from '../core';
-import { store } from '../store';
+import StoreProvider from '../store/components/provider';
 import { Workspace } from './pages/Workspace';
 import { useUser } from './contexts/useUser';
 
@@ -45,11 +44,11 @@ const Secured = () => {
   }, [user]);
 
   return (
-    <Provider store={store}>
+    <StoreProvider>
       <ThemeProvider theme={theme}>
         <Workspace />
       </ThemeProvider>
-    </Provider>
+    </StoreProvider>
   );
 };
 

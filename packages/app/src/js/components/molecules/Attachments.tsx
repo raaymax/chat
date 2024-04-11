@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../store';
 import styled from 'styled-components';
 import { abort } from '../../services/file';
 import { useStream } from '../contexts/useStream';

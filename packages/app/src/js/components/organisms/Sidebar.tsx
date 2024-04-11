@@ -5,7 +5,7 @@ import { NavUsers } from '../molecules/NavUsers';
 import { NavButton } from '../molecules/NavButton';
 import plugins from '../../core/plugins';
 import { logout } from '../../services/session';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../../store';
 
 
 export const SideMenu = styled.div`

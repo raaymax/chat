@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../../store';
 import styled from 'styled-components';
 
 import { EmojiDescriptor } from '../../types';

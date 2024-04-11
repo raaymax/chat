@@ -1,4 +1,4 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../../store';
 import styled from 'styled-components';
 import { gotoDirectChannel } from '../../services/channels';
 

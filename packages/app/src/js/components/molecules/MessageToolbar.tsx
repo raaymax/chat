@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../store';
 import { removeMessage } from '../../services/messages';
 import { useHovered } from '../contexts/useHovered';
 import { useStream } from '../contexts/useStream';
@@ -71,15 +71,15 @@ export const MessageToolbar = () => {
     <ButtonWithEmoji 
       key={emoji}
       emoji={emoji}
-      onClick={() => dispatch.methods.messages.addReaction(id, emoji)} />
+      onClick={() => dispatch.methods.messages.addReaction({id, text: emoji})} />
   );
   const deleteButton = () => <ButtonWithIcon key='del' icon="delete" onClick={() => setView('delete')} />;
   const confirmDelete = () => <ButtonWithIcon key='confirm_del' icon="check:danger" onClick={onDelete} />;
   const cancelButton = () => <ButtonWithIcon key='cancel' icon="circle-xmark" onClick={() => setView(null)} />;
   const editButton = () => <ButtonWithIcon key='edit' icon="edit" onClick={() => dispatch.actions.messages.toggleEdit(id)} />;
   const openReactions = () => <ButtonWithIcon key='reactions' icon="icons" onClick={() => setView('reactions')} />;
-  const pinButton = () => <ButtonWithIcon key='pin' icon="thumbtack" onClick={() => dispatch.methods.pins.pin(id, channelId)} />;
-  const unpinButton = () => <ButtonWithIcon key='unpin' icon="thumbtack" onClick={() => dispatch.methods.pins.unpin(id, channelId)} />;
+  const pinButton = () => <ButtonWithIcon key='pin' icon="thumbtack" onClick={() => dispatch.methods.pins.pin({id, channelId})} />;
+  const unpinButton = () => <ButtonWithIcon key='unpin' icon="thumbtack" onClick={() => dispatch.methods.pins.unpin({id, channelId})} />;
   const replyButton = () => <ButtonWithIcon key='reply' icon="reply" onClick={() => dispatch.actions.stream.open({ id: 'side', value: { type: 'live', channelId, parentId: id } })} />;
 
   return (
