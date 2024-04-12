@@ -5,7 +5,7 @@ type InfoState = {
   message: string;
 };
 
-const slice = createSlice({
+export default createSlice({
   name: 'info',
   initialState: { type: null, message: '' } as InfoState,
   reducers: {
@@ -13,5 +13,3 @@ const slice = createSlice({
   },
 });
 
-export const methods = {};
-export const { reducer, actions } = slice;

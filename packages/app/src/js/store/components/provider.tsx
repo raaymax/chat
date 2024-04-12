@@ -1,4 +1,5 @@
 import { Provider } from 'react-redux';
+import { ExtensionsProvider } from './extensions';
 import { store } from '../store';
 
 type ProviderProps = {
@@ -7,7 +8,9 @@ type ProviderProps = {
 
 const StoreProvider = ({children}: ProviderProps) => (
   <Provider store={store}>
-    {children}
+    <ExtensionsProvider>
+      {children}
+    </ExtensionsProvider>
   </Provider>
 );
 

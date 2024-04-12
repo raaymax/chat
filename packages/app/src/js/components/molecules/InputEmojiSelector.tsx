@@ -1,4 +1,4 @@
-import { useSelector } from '../../store';
+import { useSelector, useEmojiFuse } from '../../store';
 import {
   useCallback, useEffect, useState, useMemo,
 } from 'react';
@@ -6,7 +6,6 @@ import { TextMenu } from './TextMenu';
 import { useInput } from '../contexts/useInput';
 import { getUrl } from '../../services/file';
 import { buildEmojiNode } from '../../utils';
-import { useEmojiFuse } from '../../hooks';
 
 const SCOPE = 'emoji';
 

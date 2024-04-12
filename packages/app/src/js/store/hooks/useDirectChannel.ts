@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from './useSelector';
 
-export const useDirectChannel = (userId) => {
+export const useDirectChannel = (userId: string) => {
   const meId = useSelector((state) => state.me);
   const channels = useSelector((state) => state.channels);
   return useMemo(() => Object.values(channels).find((c) => (

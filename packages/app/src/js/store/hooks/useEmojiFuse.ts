@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from './useSelector';
 import Fuse from 'fuse.js';
 
 export const useEmojiFuse = () => {

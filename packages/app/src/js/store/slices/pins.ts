@@ -1,12 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Message } from '../../types';
-import { createMethods } from '../tools';
 
 type PinsState = {
   [channelId: string]: Message[];
 };
 
-const slice = createSlice({
+export default createSlice({
   name: 'pins',
   initialState: {} as PinsState,
   reducers: {
@@ -39,42 +38,4 @@ const slice = createSlice({
     },
   },
 });
-
-export const methods = createMethods({
-  module_name: 'pins',
-  methods: {
-    load: async (channelId, {dispatch: {actions}}, {client}) => {
-      actions.pins.clear(channelId);
-      const req = await client.req({
-        type: 'message:pins',
-        channelId,
-        limit: 50,
-      });
-      actions.pins.add(req.data);
-    },
-    pin: async ({id, channelId}, {dispatch: {actions, methods}}, {client}) => {
-      const req = await client.req({
-        type: 'message:pin',
-        channelId,
-        id,
-        pinned: true,
-      });
-      actions.messages.add(req.data);
-      await methods.pins.load(channelId);
-    },
-
-    unpin: async ({id, channelId}, {dispatch: {actions, methods}}, {client}) => {
-      const req = await client.req({
-        type: 'message:pin',
-        channelId,
-        id,
-        pinned: false,
-      });
-      actions.messages.add(req.data);
-      await methods.pins.load(channelId);
-    },
-  },
-});
-
-export const { reducer, actions } = slice;
 

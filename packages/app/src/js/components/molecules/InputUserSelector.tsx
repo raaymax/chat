@@ -4,7 +4,7 @@ import {
 import Fuse from 'fuse.js';
 import { TextMenu } from './TextMenu';
 import { useInput } from '../contexts/useInput';
-import { useUsers } from '../../hooks';
+import { useUsers } from '../../store';
 
 const SCOPE = 'user';
 

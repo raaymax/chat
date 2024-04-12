@@ -1,5 +1,5 @@
 import { useEffect, useCallback} from 'react';
-import { useDispatch, useSelector } from '../../store';
+import { useDispatch, useSelector, useProgress } from '../../store';
 import { MessageList } from './MessageListScroller';
 import { uploadMany } from '../../services/file';
 import { Input } from '../organisms/Input';
@@ -7,7 +7,6 @@ import { reinit } from '../../services/init';
 import { HoverProvider } from '../contexts/hover';
 import { useStream } from '../contexts/useStream';
 import { useMessages } from '../contexts/useMessages';
-import { useProgress } from '../../hooks';
 import { LoadingIndicator } from '../molecules/LoadingIndicator';
 import styled from 'styled-components';
 import { Message as MessageType } from '../../types';

@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from './useSelector';
+import { Stream } from '../../types';
 
-export const useStreamMessages = (stream) => {
+export const useStreamMessages = (stream: Stream) => {
   const messages = useSelector((state) => state.messages.data);
   return useMemo(
     () => messages

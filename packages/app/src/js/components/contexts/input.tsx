@@ -1,12 +1,11 @@
 import React, {
   useRef, useState, useCallback, useEffect, createContext, MutableRefObject,
 } from 'react';
-import { useDispatch, useSelector } from '../../store';
+import { useDispatch, useSelector, useMessage } from '../../store';
 import { useStream } from './useStream';
 import * as messageService from '../../services/messages';
 import { uploadMany } from '../../services/file';
 import { fromDom } from '../../serializer';
-import { useMessage } from '../../hooks/useMessage';
 
 export type InputContextType = {
   mode: string;

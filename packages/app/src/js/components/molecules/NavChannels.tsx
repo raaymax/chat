@@ -1,9 +1,8 @@
 import {useState} from 'react';
-import { useDispatch, useSelector } from '../../store';
+import { useDispatch, useSelector, useBadges, useChannels } from '../../store';
 import styled from 'styled-components';
 import { ChannelCreate } from './ChannelCreate';
 import { Channel } from './NavChannel';
-import { useBadges, useChannels } from '../../hooks';
 
 const ChannelsContainer = styled.div`
   .header {

@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createMethods } from '../tools';
 
 type User = {
   id: string;
@@ -8,7 +7,7 @@ type User = {
   avatarUrl: string;
 };
 
-const slice = createSlice({
+export default createSlice({
   name: 'users',
   initialState: {} as Record<string, User>,
   reducers: {
@@ -22,14 +21,3 @@ const slice = createSlice({
   },
 });
 
-export const methods = createMethods({
-  module_name: 'users',
-  methods: {
-    load: async (_arg, {dispatch: {actions}}, {client}) => {
-      const res = await client.req({ type: 'user:getAll' });
-      actions.users.add(res.data);
-    },
-  },
-});
-
-export const { reducer, actions } = slice;

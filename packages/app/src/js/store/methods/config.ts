@@ -1,0 +1,7 @@
+import {createMethod} from '../store';
+
+export const load = createMethod('config/load', async (_arg, { actions, client }) => {
+  const { data: [config] } = await client.req({ type: 'user:config' });
+  actions.config.setAppVersion(config.appVersion);
+  return config;
+});

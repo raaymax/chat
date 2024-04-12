@@ -1,5 +1,4 @@
-import { useTyping} from '../../hooks';
-import { useSelector } from '../../store';
+import { useSelector, useTyping } from '../../store';
 
 export const StatusLine = () => {
   const info = useSelector((state) => state.info);

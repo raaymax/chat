@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 type MeState = string | null;
 
-const slice = createSlice({
+export default createSlice({
   name: 'me',
   initialState: null as MeState,
   reducers: {
@@ -10,5 +10,3 @@ const slice = createSlice({
   },
 });
 
-export const methods = {};
-export const { reducer, actions } = slice;

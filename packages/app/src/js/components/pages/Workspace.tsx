@@ -1,11 +1,10 @@
-import { useDispatch, useSelector } from '../../store';
+import { useDispatch, useSelector, useStream } from '../../store';
 
 import { MainConversation } from '../organisms/MainConversaion';
 import { SideConversation } from '../organisms/SideConversation';
 import { Search } from '../pages/Search';
 import { Pins } from '../pages/Pins';
 import { StreamProvider } from '../contexts/stream';
-import { useStream } from '../../hooks';
 import styled from 'styled-components';
 import { Sidebar } from '../organisms/Sidebar';
 import { cn } from '../../utils';

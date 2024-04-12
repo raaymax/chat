@@ -1,7 +1,5 @@
 import { Message as MessageType } from '../../types';
-import { PayloadAction } from '../types';
-import { createSlice } from '@reduxjs/toolkit';
-import { createMethods } from '../tools';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 type MessagesState = {
   data: MessageType[];
@@ -10,7 +8,7 @@ type MessagesState = {
   hovered: string | null;
 };
 
-const slice = createSlice({
+export default createSlice({
   name: 'messages',
   initialState: {
     data: [],
@@ -107,27 +105,3 @@ const slice = createSlice({
   },
 });
 
-export const methods = createMethods({
-  module_name: 'messages',
-  methods: {
-    load: async (query, {dispatch: {actions}}, { client }) => {
-      const req = await client.req({
-        limit: 50,
-        ...query,
-        type: 'message:getAll',
-      });
-      actions.messages.add(req.data);
-      return req.data;
-    },
-    addReaction: async (args, {dispatch: {actions}}, { client }) => {
-      const req = await client.req({
-        type: 'message:react',
-        id: args.id,
-        reaction: args.text.trim(),
-      });
-      actions.messages.add(req.data);
-    },
-  }
-});
-
-export const { reducer, actions } = slice;

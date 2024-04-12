@@ -1,5 +1,6 @@
 import { useMemo, useEffect } from 'react';
-import { useDispatch, useSelector } from '../store';
+import { useSelector } from './useSelector';
+import { useMethod } from './useMethod';
 
 type Emoji = {
   shortname: string;
@@ -9,17 +10,17 @@ type Emoji = {
 };
 
 export const useEmoji = (shortname: string): Emoji => {
-  const dispatch = useDispatch();
   const emojis = useSelector((state) => state.emojis);
+  const { emojis: {find}} = useMethod();
   const emoji = useMemo(
     () => emojis.data.find((emoji: Emoji) => emoji.shortname === shortname),
     [emojis, shortname],
   );
   useEffect(() => {
     if (!emoji && emojis.ready) {
-      dispatch.methods.emojis.find(shortname);
+      find(shortname);
     }
-  }, [dispatch, emoji, shortname, emojis]);
+  }, [find, emoji, shortname, emojis]);
 
   return emoji ?? { shortname, empty: true};
 };

@@ -4,7 +4,7 @@ import {
 import Fuse from 'fuse.js';
 import { TextMenu } from './TextMenu';
 import { useInput } from '../contexts/useInput';
-import { useChannels } from '../../hooks';
+import { useChannels } from '../../store';
 
 const SCOPE = 'channel';
 

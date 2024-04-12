@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from './useSelector';
 import { useUsers } from './useUsers';
 
-export const useProgress = ({ channelId, parentId }) => {
+export const useProgress = ({ channelId, parentId }: {channelId: string, parentId?: string}) => {
   const channels = useSelector((state) => state.channels);
   const users = useUsers();
   const progress = useSelector((state) => state.progress);
@@ -16,7 +16,7 @@ export const useProgress = ({ channelId, parentId }) => {
       ...p,
       user: users.find((u) => u.id === p.userId),
     }))
-    .reduce((acc, p) => ({
+    .reduce((acc: any, p: any) => ({
       ...acc,
       [p.lastMessageId]: [...(acc[p.lastMessageId] || []), p],
     }), {}) : {}), [channel, progress, parentId, users]);

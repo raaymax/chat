@@ -1,10 +1,9 @@
 import styled from 'styled-components';
 import { Conversation } from './Conversation';
-import { useDispatch } from '../../store';
+import { useDispatch, useMessage } from '../../store';
 import { Channel } from '../molecules/NavChannel';
 import { init } from '../../services/init';
 import { useStream } from '../contexts/useStream';
-import { useMessage } from '../../hooks';
 import { loadMessages } from '../../services/messages';
 import { Toolbar } from '../atoms/Toolbar';
 import { ButtonWithIcon } from '../molecules/ButtonWithIcon';

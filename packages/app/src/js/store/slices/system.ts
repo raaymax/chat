@@ -4,7 +4,7 @@ type SystemState = {
   initFailed: boolean;
 };
 
-const slice = createSlice({
+export default createSlice({
   name: 'system',
   initialState: { initFailed: false } as SystemState,
   reducers: {
@@ -12,5 +12,3 @@ const slice = createSlice({
   },
 });
 
-export const methods = {};
-export const { actions, reducer } = slice;

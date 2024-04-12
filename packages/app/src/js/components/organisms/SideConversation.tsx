@@ -1,9 +1,8 @@
 import styled from 'styled-components';
 import { Conversation } from './Conversation';
-import { useDispatch } from '../../store';
+import { useDispatch, useMessage } from '../../store';
 import { Channel } from '../molecules/NavChannel';
 import { useStream } from '../contexts/useStream';
-import { useMessage } from '../../hooks';
 import { Toolbar } from '../atoms/Toolbar';
 import { ButtonWithIcon } from '../molecules/ButtonWithIcon';
 

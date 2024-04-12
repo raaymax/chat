@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 type ConnectionState = boolean;
 
-const slice = createSlice({
+export default createSlice({
   name: 'connection',
   initialState: false as ConnectionState,
   reducers: {
@@ -11,5 +11,3 @@ const slice = createSlice({
   },
 });
 
-export const methods = {};
-export const { reducer, actions } = slice;

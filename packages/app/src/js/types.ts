@@ -115,6 +115,7 @@ export type User = {
 };
 
 export type EmojiDescriptor = { 
+  empty?: boolean,
   unicode?: string,
   fileId?: string,
   shortname: string

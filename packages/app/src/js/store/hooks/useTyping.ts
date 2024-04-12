@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from './useSelector';
 
 export const useTyping = () => {
   const channelId = useSelector((state) => state.stream?.main?.channelId);

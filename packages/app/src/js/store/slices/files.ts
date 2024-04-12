@@ -15,7 +15,7 @@ type File = {
 export const findIdx = (list: File[], id: string) => list.findIndex((f) => (f.id && f.id === id)
     || (f.clientId && f.clientId === id));
 
-const slice = createSlice({
+export default createSlice({
   name: 'files',
   initialState: [] as File[],
   reducers: {
@@ -40,5 +40,3 @@ const slice = createSlice({
   },
 });
 
-export const methods = {};
-export const { reducer, actions } = slice;

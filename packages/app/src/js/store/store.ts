@@ -1,70 +1,82 @@
-import {
-  Middleware, Dispatch, Action,
-} from 'redux';
-import { configureStore } from '@reduxjs/toolkit'
+import { Action, configureStore, createAsyncThunk } from '@reduxjs/toolkit'
 import { client } from '../core';
 import * as slices from './slices';
-import { ActionCreator, AsyncAction, AsyncHandler, PayloadAction, Reducer } from './types';
-console.log(slices);
-
-
-const isAsyncAction = (action: unknown): action is AsyncAction => (action as Action)?.type === 'async';
-
-const middleware: Middleware = ({ dispatch, getState }) => (next) => async (action) => {
-  // FIXME: remove this after migrating
-  if (typeof action == 'function') {
-    (dispatch as any).actions = actions;
-    (dispatch as any).methods = methods;
-    try {
-      return await action(dispatch, getState, {client});
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error(err);
-      return;
-    }
-  }
-  if (isAsyncAction(action)) {
-    const { handler } = action;
-    (dispatch as any).actions = actions;
-    (dispatch as any).methods = methods;
-    try {
-      return await handler(dispatch, getState, {client});
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error(err);
-      return;
-    }
-  }
-
-  return next(action);
-};
 
 export const store = configureStore({
   reducer: slices.reducers,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(middleware),
 });
 
-function remap<T extends {[module: string]: {[key: string]: ActionCreator}}>(input: T): {[module: string]: {[key: string]: (data: unknown) => void}} {
-  return Object.keys(input)
-    .reduce<Partial<{[module: string]: {[key: string]: (data: unknown) => void}}>>((acc, module: string) => {
-      const mod = input[module];
-      acc[module] = Object.keys(mod)
-        .reduce<{[key: string]: (data: unknown) => void}>((acc2, action: string) => {
-          acc2[action] = async (data) => await store.dispatch(mod[action](data)).unwrap();
+export type StateType = ReturnType<typeof store.getState>;
+export type DispatchType = typeof store.dispatch;
+export type StoreType = typeof store & { dispatch: DispatchType };
+
+const createAction = <T extends (a: unknown) => Action>(_name: string, fn: T): ((arg: Parameters<T>[0]) => void) => {
+  return ((arg) => store.dispatch(fn(arg))) as ((arg: Parameters<T>[0]) => void);
+}
+
+
+type InputActions= {
+  [module: string]: {
+    [key: string]: (a: any) => Action
+  }
+}
+
+type RemapActions<T> = T extends (a: any) => Action
+  ? ((arg: unknown) => void)
+  : never
+
+type RemapActionsObject<T> = {
+  [K in keyof T]: {
+    [K2 in keyof T[K]]: RemapActions<T[K][K2]>
+  }
+}
+
+const remapActions = <
+  F extends InputActions,
+>(input: F): RemapActionsObject<F> => {
+  return Object.entries(input)
+    .reduce<Record<string, Record<string, any>>>((acc, [module, mod]) => {
+      acc[module] = Object.entries(mod)
+        .reduce((acc2: any, [action, fn]) => {
+          acc2[action] = createAction(`${mod}/${action}`, fn)
           return acc2;
         }, {});
       return acc;
-    }, {}) as {[module: string]: {[key: string]: (data: unknown) => void}};
+    }, {}) as RemapActionsObject<F>;
 }
 
-export const actions = remap(slices.actions);
-export const methods = remap(slices.methods);
-console.log(actions, methods);
+export const actions = remapActions(slices.actions);
+export const data = { methods: {}, run: async () => {}}; 
 
-export type StateType = typeof slices.reducer extends Reducer<infer S> ? S : never;
-export type DispatchType = Dispatch<PayloadAction | AsyncAction>
-  & { methods: typeof methods, actions: typeof actions };
-export type StoreType = typeof store & { dispatch: DispatchType };
+export type Api<M = any> = {
+  run: <R>(handler: MutationMethod<R, M>) => Promise<R>,
+  dispatch: DispatchType,
+  getState: () => StateType
+  actions: typeof actions,
+  methods: M,
+  client: typeof client,
+};
+export type AsyncMutation<T, R, M> = (arg: T, api: Api<M>) => Promise<R>;
+export type MutationMethod<R, M> = (api: Api<M>) => Promise<R>;
 
+export const createMethod = <T, R>(name: string, handler: AsyncMutation<T, R, any>): ((a: T) => Promise<R>) => {
+  return async (arg) => store.dispatch(createAsyncThunk(`mutation/${name}`, (a: T) => handler(a, {
+    run: data.run as any,
+    dispatch: Object.assign(store.dispatch, {actions, methods: data.methods}), 
+    getState: store.getState,
+    actions,
+    methods: data.methods,
+    client,
+  }))(arg)).unwrap() as R;
+}
 
-export const createAsyncAction = (handler: AsyncHandler<StateType, DispatchType, unknown>) => ({ type: 'async', handler });
+export const run = async <R>(handler: MutationMethod<R, any>): Promise<R> => {
+  return store.dispatch(createAsyncThunk(`mutation/${handler.name}`, (_a: any) => handler({
+    run,
+    dispatch: Object.assign(store.dispatch, {actions, methods: data.methods}), 
+    getState: store.getState,
+    actions,
+    methods: data.methods,
+    client,
+  }))({})).unwrap() as R;
+}

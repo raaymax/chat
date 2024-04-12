@@ -12,8 +12,8 @@ type Stream = {
 
 type StreamState = {
   main: Stream,
-  side: Stream,
-  mainChannelId: string,
+  side: Stream | null,
+  mainChannelId: string | null,
 };
 
 const loadStream = () => {
@@ -21,7 +21,7 @@ const loadStream = () => {
   const matcher = /(?<channelId>[0-9a-f]{24})(\/(?<parentId>[0-9a-f]{24}))?(\?(?<query>.*))?/;
   const m = hash.match(matcher);
   if (!m) return { type: 'live' };
-  const { channelId, parentId, query } = m.groups;
+  const { channelId, parentId, query } = m.groups ?? {};
   const params = new URLSearchParams(query);
   const date = params.get('date');
   const selected = params.get('selected');
@@ -39,7 +39,7 @@ const loadStream = () => {
 const saveStream = (stream: Stream) => {
   const query = new URLSearchParams(omitUndefined({
     type: stream.type,
-    date: stream.date,
+    date: stream.date.toISOString(),
     selected: stream.selected,
   }));
   const querystring = query.toString();
@@ -49,7 +49,7 @@ const saveStream = (stream: Stream) => {
     + (querystring ? `?${querystring}` : '');
 };
 
-const slice = createSlice({
+export default createSlice({
   name: 'stream',
   initialState: { main: loadStream(), side: null, mainChannelId: null } as StreamState,
   reducers: {
@@ -69,5 +69,3 @@ const slice = createSlice({
   },
 });
 
-export const methods = {};
-export const { actions, reducer } = slice;

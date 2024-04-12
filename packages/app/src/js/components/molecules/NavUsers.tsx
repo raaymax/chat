@@ -1,7 +1,6 @@
-import { useDispatch, useSelector } from '../../store';
+import { useDispatch, useSelector, useBadges, useUserChannels } from '../../store';
 import styled from 'styled-components';
 import { NavUserButton } from './NavUser';
-import { useBadges, useUserChannels } from '../../hooks';
 
 const ChannelsContainer = styled.div`
   .header {

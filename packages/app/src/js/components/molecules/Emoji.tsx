@@ -1,4 +1,4 @@
-import { useEmoji } from '../../hooks';
+import { useEmoji } from '../../store';
 import styled from 'styled-components';
 import { getUrl } from '../../services/file';
 import { Tooltip } from '../atoms/Tooltip';

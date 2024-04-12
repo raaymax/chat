@@ -4,7 +4,7 @@ type ViewState = {
   current: string | null;
 };
 
-const slice = createSlice({
+export default createSlice({
   name: 'view',
   initialState: {current: null} as ViewState,
   reducers: {
@@ -18,6 +18,3 @@ const slice = createSlice({
   },
 });
 
-
-export const methods = {};
-export const { actions, reducer } = slice;

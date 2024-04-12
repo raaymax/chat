@@ -27,6 +27,7 @@
     "test": "migrate-mongo up && pnpm run --filter @quack/server test",
     "lint": "FORCE_COLOR=true eslint --fix . && pnpm run --filter @quack/app lint",
     "lint:ci": "eslint .",
+    "types": "pnpm run --filter @quack/app types",
     "test:ci": "pnpm run --filter @quack/server test:ci"
   },
   "author": "",

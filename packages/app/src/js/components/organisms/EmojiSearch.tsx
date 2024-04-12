@@ -1,8 +1,7 @@
 import { useState, useEffect} from 'react';
-import { useSelector } from '../../store';
+import { useSelector, useEmojiFuse } from '../../store';
 import { Tooltip } from '../atoms/Tooltip';
 import { SearchBox } from '../atoms/SearchBox';
-import { useEmojiFuse } from '../../hooks';
 import styled from 'styled-components';
 import { getUrl } from '../../services/file';
 

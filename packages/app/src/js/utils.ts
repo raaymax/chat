@@ -130,6 +130,10 @@ export const buildEmojiNode = (result: {unicode?: string, fileId?: string, short
   return node;
 };
 
-export const omitUndefined = (ob: Record<string, unknown | undefined>) => Object.fromEntries(
+
+export type WithoutUndefined<T> = {
+  [K in keyof T as T[K] extends undefined ? never : K]: T[K]
+};
+export const omitUndefined = <T extends {[key: string]: unknown | undefined | null}>(ob: T): WithoutUndefined<T> => Object.fromEntries(
   Object.entries(ob).filter(([, v]) => v !== undefined),
-);
+) as WithoutUndefined<T>;
