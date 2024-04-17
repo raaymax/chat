@@ -1,5 +1,5 @@
 import { useEffect, useCallback} from 'react';
-import { useDispatch, useSelector, useProgress } from '../../store';
+import { useDispatch, useSelector, useProgress, useMethods } from '../../store';
 import { MessageList } from './MessageListScroller';
 import { uploadMany } from '../../services/file';
 import { Input } from '../organisms/Input';
@@ -44,31 +44,32 @@ export const Container = styled.div`
   flex-direction: column;
 `;
 
-const drop = (dispatch: any, streamId: string| undefined) => async (e: React.DragEvent) => {
-  e.preventDefault();
-  e.stopPropagation();
-  if(!streamId) return;
-  const { files } = e.dataTransfer;
-  dispatch(uploadMany(streamId, files));
-};
-
-function dragOverHandler(ev: React.DragEvent) {
-  ev.preventDefault();
-  ev.stopPropagation();
-}
-
 export function Conversation() {
   const [stream, setStream] = useStream();
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch();
+  const methods = useMethods();
   const {messages, next, prev} = useMessages();
-  const initFailed = useSelector((state: any) => state.system.initFailed);
+  const initFailed = useSelector((state) => state.system.initFailed);
   const progress = useProgress({channelId: stream.channelId, parentId: stream.parentId});
   const list: MessageType[] = messages.map((m: MessageType) => ({ ...m, progress: progress[m.id ?? ''] }));
 
+  const drop =  useCallback(async (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if(!stream.id) return;
+    const { files } = e.dataTransfer;
+    dispatch(uploadMany(stream.id, files));
+  }, [dispatch, stream]);
+
+  const dragOverHandler = useCallback((ev: React.DragEvent) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+  }, [])
+
   const bumpProgress = useCallback(() => {
     const latest = list.find(({ priv }) => !priv);
-    if (latest?.id) dispatch.methods.progress.update(latest.id);
-  }, [dispatch, list]);
+    if (latest?.id) methods.progress.update(latest.id);
+  }, [methods, list]);
 
   useEffect(() => {
     window.addEventListener('focus', bumpProgress);
@@ -77,7 +78,7 @@ export function Conversation() {
     };
   }, [bumpProgress]);
   return (
-    <Container onDrop={drop(dispatch, stream.id)} onDragOver={dragOverHandler}>
+    <Container onDrop={drop} onDragOver={dragOverHandler}>
       <HoverProvider>
         <MessageList
           list={list}

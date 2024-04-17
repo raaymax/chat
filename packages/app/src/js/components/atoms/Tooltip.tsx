@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {cn, ClassNames} from '../../utils';
+import { cn, ClassNames } from '../../utils';
 
 interface TooltipProps {
   children: React.ReactNode;

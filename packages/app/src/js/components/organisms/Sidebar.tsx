@@ -5,7 +5,7 @@ import { NavUsers } from '../molecules/NavUsers';
 import { NavButton } from '../molecules/NavButton';
 import plugins from '../../core/plugins';
 import { logout } from '../../services/session';
-import { useDispatch } from '../../store';
+import { useActions, useDispatch } from '../../store';
 
 
 export const SideMenu = styled.div`
@@ -64,10 +64,11 @@ export const SideMenu = styled.div`
 `;
 
 export const Sidebar = () => {
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch();
+  const actions = useActions();
   return (
     <SideMenu>
-      <Logo onClick={() => dispatch.actions.view.set('sidebar')} />
+      <Logo onClick={() => actions.view.set('sidebar')} />
       <div className='slider'>
         <NavChannels />
         <NavUsers />

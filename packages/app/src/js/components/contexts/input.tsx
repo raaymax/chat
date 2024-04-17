@@ -12,7 +12,7 @@ export type InputContextType = {
   messageId: string | null;
   input: MutableRefObject<HTMLDivElement | null>;
   fileInput: MutableRefObject<HTMLInputElement| null>;
-  onPaste: (e: any) => void;
+  onPaste: (e: React.SyntheticEvent) => void;
   onKeyDown: (e: React.KeyboardEvent) => void;
   onInput: () => void;
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -22,7 +22,7 @@ export type InputContextType = {
   replace: (regex: RegExp, text?: string) => void;
   wrapMatching: (regex: RegExp, wrapperTagName: string) => void;
   addFile: () => void;
-  send: (e: any) => void;
+  send: (e: React.SyntheticEvent) => void;
   getRange: () => Range;
   insert: (domNode: HTMLElement) => void;
   focus: (e?: Event) => void;
@@ -58,7 +58,6 @@ export const InputProvider = (args: InputContextProps) => {
   const [currentText, setCurrentText] = useState('');
   const [scope, setScope] = useState<string>('');
   const [scopeContainer, setScopeContainer] = useState<HTMLElement>();
-  //FIXME: files as any
   const files = useSelector((state) => state.files);
   const filesAreReady = !files || files.every((f) => f.status === 'ok');
   const message = useMessage(messageId);
@@ -105,8 +104,7 @@ export const InputProvider = (args: InputContextProps) => {
   }, [getRange, setRange, scope, setScope, setCurrentText, setScopeContainer]);
 
   const onPaste = useCallback((event: ClipboardEvent) => {
-    // FIXME: window as any
-    const cbData = (event.clipboardData || (window as any).clipboardData);
+    const cbData = (event.clipboardData || window.clipboardData);
     if (cbData.files?.length > 0) {
       event.preventDefault();
       dispatch(uploadMany(stream.id, cbData.files));
@@ -148,19 +146,16 @@ export const InputProvider = (args: InputContextProps) => {
     }
   }, [input, range]);
 
-  //FIXME: e as any
-  const send = useCallback((e: any) => {
+  const send = useCallback((e: React.SyntheticEvent) => {
     if (!input.current) return;
     if (!filesAreReady) return;
-    // FIXME: payload as any
-    const payload: any = fromDom(input.current);
+    const payload = fromDom(input.current);
     if (payload.type === 'message:create' && mode === 'edit') {
       payload.type = 'message:update';
       payload.id = messageId;
       payload.clientId = message?.clientId;
     }
-    //FIXME: files as any
-    payload.attachments = [...files.filter((f: any) => f.streamId === stream.id)];
+    payload.attachments = [...files.filter((f) => f.streamId === stream.id)];
     if (payload.flat.length === 0 && payload.attachments.length === 0) return;
     payload.channelId = stream.channelId;
     payload.parentId = stream.parentId;
@@ -249,7 +244,7 @@ export const InputProvider = (args: InputContextProps) => {
 
   const onKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey && scope === 'root') {
-      return send(e as any);
+      return send(e);
     }
     methods.typing.notify({channelId: stream.channelId, parentId: stream.parentId});
     updateRange();

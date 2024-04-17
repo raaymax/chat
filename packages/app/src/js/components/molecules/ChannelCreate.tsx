@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useDispatch } from '../../store';
+import { useMethods } from '../../store';
 import styled from 'styled-components';
 
 const NewChannelContainer = styled.div`
@@ -48,13 +48,13 @@ const NewChannelContainer = styled.div`
 // FIXME: extract inputs into atoms? use atom button 
 export const ChannelCreate = () => {
   const [name, setName] = useState('');
-  const dispatch: any = useDispatch();
+  const methods = useMethods();
   const submit = useCallback((e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    dispatch.methods.channels.create({name});
+    methods.channels.create({ name });
     setName('');
-  }, [dispatch, name, setName]);
+  }, [methods, name, setName]);
   return (
     <NewChannelContainer>
       <form action="#" onSubmit={submit}>

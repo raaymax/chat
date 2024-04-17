@@ -16,7 +16,6 @@ type UserCircleProps = {
 }
 
 export const UserCircle = ({ userId, className }: UserCircleProps) => {
-  // FIXME: state type
   const user = useSelector((state) => state.users[userId]);
   if (!user) return null;
   return (

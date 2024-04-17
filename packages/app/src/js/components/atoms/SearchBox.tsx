@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import {cn, ClassNames} from '../../utils';
 
-
 const SearchBoxInput = styled.input`
   flex: 0 0 30px;
   height: 30px;

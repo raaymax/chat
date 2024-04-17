@@ -11,7 +11,7 @@ data.methods = methods;
 
 export const createMethod = <T, R>(name: string, handler: AsyncMutation<T, R, typeof methods>): ((a: T) => Promise<R>) => {
   return async (arg) => store.dispatch(createAsyncThunk(`mutation/${name}`, (a: T) => handler(a, {
-    run: data.run as any,
+    run: data.run,
     dispatch: Object.assign(store.dispatch, {actions, methods: data.methods}), 
     getState: store.getState,
     actions,

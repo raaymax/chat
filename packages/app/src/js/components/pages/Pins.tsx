@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Channel } from '../molecules/NavChannel';
 import { useStream } from '../contexts/useStream';
 import { useCallback } from 'react';
-import { useDispatch, useSelector } from '../../store';
+import { useActions, useSelector } from '../../store';
 import { HoverProvider } from '../contexts/hover';
 import { MessageList } from '../organisms/MessageListScroller'
 import { Message as MessageType } from '../../types';
@@ -83,14 +83,14 @@ const StyledHeader = styled.div`
 `;
 
 export const Header = () => {
-  const dispatch: any = useDispatch();
+  const actions = useActions();
   const [{channelId}] = useStream();
 
   return (
     <StyledHeader>
       <Channel channelId={channelId} icon="fa-solid fa-thumbtack" />
       <div className='toolbar'>
-        <div className='tool' onClick={() => dispatch.actions.view.set('pins')}>
+        <div className='tool' onClick={() => actions.view.set('pins')}>
           <i className="fa-solid fa-xmark" />
         </div>
       </div>
@@ -100,10 +100,10 @@ export const Header = () => {
 
 export const Pins = () => {
   const [{ channelId }, setStream] = useStream();
-  const dispatch:any = useDispatch();
-  const messages = useSelector((state:any) => state.pins[channelId]);
+  const actions = useActions();
+  const messages = useSelector((state) => state.pins[channelId]);
   const gotoMessage = useCallback((msg: MessageType) => {
-    dispatch.actions.view.set('pins');
+    actions.view.set('pins');
     setStream({
       type: 'archive',
       channelId: msg.channelId,
@@ -111,7 +111,7 @@ export const Pins = () => {
       selected: msg.id,
       date: msg.createdAt,
     });
-  }, [dispatch, setStream]);
+  }, [actions, setStream]);
   return (
     <StyledPins className='pins'>
       <HoverProvider>

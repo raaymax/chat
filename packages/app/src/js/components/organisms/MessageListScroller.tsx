@@ -24,7 +24,7 @@ const ListContainer = styled.div`
 const getMax = (list: MessageType[]) => list.reduce((acc, item) => Math.max(acc, new Date(item.createdAt).getTime()), new Date('1970-01-01').getTime());
 
 type MessageListProps = MessageListRendererProps & {
-  list: any[];
+  list: MessageType[];
   onScrollTop?: () => void;
   onScrollBottom?: () => void;
   onDateChange?: (date: string) => void;
@@ -41,7 +41,7 @@ export const MessageList = (props: MessageListProps) => {
   const [selected, setSelected] = useState<string | undefined>();
   const [stream] = useStream();
 
-  const detectDate = useCallback((e: any) => {
+  const detectDate = useCallback((e: React.SyntheticEvent) => {
     const c = e.target.getBoundingClientRect();
     const r = [...e.target.children]
       .filter((child) => child.className.includes('message'))
@@ -98,7 +98,7 @@ export const MessageList = (props: MessageListProps) => {
     }
   }, [stream, list, selected, setSelected]);
 
-  const scroll = useCallback((e: any) => {
+  const scroll = useCallback((e: React.SyntheticEvent) => {
     detectDate(e);
     if (!element.current) return;
     if (list !== oldList) return;

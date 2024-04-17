@@ -10,7 +10,7 @@ export const useHoverCtrl = (id?: string) => {
 
   const toggleHovered = useCallback(() => {
     // FIXME: useIsMobile() hook maybe?
-    if (!(navigator as any).userAgentData.mobile) return;
+    if (!navigator.userAgentData.mobile) return;
     if (hovered !== id) {
       setHovered(id ?? null);
     } else {

@@ -82,14 +82,13 @@ export const Attachment = ({
 
 export const Attachments = () => {
   const [stream] = useStream();
-  // FIXME: files as any
-  const files: any = useSelector((state: any) => state.files);
-  const list = useMemo(() => files.filter((file: any) => file.streamId === stream.id), [files, stream.id]);
-  const dispatch: any = useDispatch();
+  const files = useSelector((state) => state.files);
+  const list = useMemo(() => files.filter((file) => file.streamId === stream.id), [files, stream.id]);
+  const dispatch = useDispatch();
 
   return (
     <Container>
-      {(list || []).map((file: any) => (
+      {(list || []).map((file) => (
         <Attachment
           key={file.clientId}
           data={{ ...file }}

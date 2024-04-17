@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from '../../store';
+import { useActions, useMethods, useSelector } from '../../store';
 import styled from 'styled-components';
 import { Icon } from '../atoms/Icon';
 
@@ -14,19 +14,18 @@ type ChannelInlineProps = {
 };
 
 export const ChannelLink = ({ channelId: id }: ChannelInlineProps) => {
-  //FIXME dispatch type
-  const dispatch: any = useDispatch();
-  //FIXME state types
-  const channel = useSelector((state: any) => state.channels[id]);
+  const methods = useMethods();
+  const actions = useActions();
+  const channel = useSelector((state) => state.channels[id]);
   useEffect(() => {
     if (!channel) {
-      dispatch.methods.channels.find(id);
+      methods.channels.find(id);
     }
-  }, [id, channel, dispatch]);
+  }, [id, channel, methods]);
   return (
     <StyledChannelLink className='channel' data-id={id} href={`#${channel?.id || id}`} onClick={() => {
-      dispatch.actions.stream.open({id: 'main', value: { type: 'live', channelId: channel?.id || id }});
-      dispatch.actions.view.set(null);
+      actions.stream.open({id: 'main', value: { type: 'live', channelId: channel?.id || id }});
+      actions.view.set(null);
     }} >
       { channel?.private ? <Icon icon='lock' /> : <Icon icon="hash" /> }
       <span className='name'>{channel?.name || channel?.id || id}</span>

@@ -15,8 +15,8 @@ type UserMentionProps = {
 
 export const UserMention = ({ userId: id }: UserMentionProps) => {
   //FIXME: dispatch and state type
-  const dispatch: any = useDispatch();
-  const user = useSelector((state: any) => state.users[id]);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.users[id]);
 
   return (
     <StyledLink className='channel' onClick={() => dispatch(gotoDirectChannel(id))} data-id={id} href={`#`} >

@@ -7,9 +7,9 @@ import * as types from '../../types';
 
 export type MessageListRendererProps = {
   list: (types.Message| types.Notif)[];
-  stream?: any;
-  context?: any;
-  onMessageClicked?: any;
+  stream?: unknown;
+  context?: unknown;
+  onMessageClicked?: unknown;
 };
 
 function isNotif(data: types.Message | types.Notif): data is types.Notif {

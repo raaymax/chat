@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect } from 'react';
-import { useDispatch } from '../../store';
+import { useActions } from '../../store';
 import styled from 'styled-components';
 
 import { EmojiDescriptor } from '../../types';
@@ -167,7 +167,7 @@ export const InputForm = ({ children }: InputFormProps) => {
     input, onPaste, onInput, onKeyDown, onFileChange, fileInput,
     focus, addFile, insert, send, scope, currentText, wrapMatching,
   } = useInput();
-  const dispatch: any = useDispatch();
+  const actions = useActions();
 
   const onEmojiInsert = useCallback((emoji: EmojiDescriptor) => {
     insert(buildEmojiNode(emoji, getUrl));
@@ -210,7 +210,7 @@ export const InputForm = ({ children }: InputFormProps) => {
         <div className="separator" />
         {mode === 'edit' ? (
           <>
-            <ButtonWithIcon icon="xmark" onClick={() => dispatch.actions.messages.editClose(messageId)} />
+            <ButtonWithIcon icon="xmark" onClick={() => actions.messages.editClose(messageId)} />
             <ButtonWithIcon icon="check" onClick={send} />
           </>
         ) : (

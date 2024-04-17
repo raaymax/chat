@@ -12,7 +12,7 @@ const Container = styled.div`
 `;
 
 type TextWithIconProps = {
-  children: any;
+  children: React.ReactNode;
   size?: number;
   className?: ClassNames;
   icon: string;

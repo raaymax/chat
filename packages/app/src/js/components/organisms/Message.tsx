@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useDispatch } from '../../store';
+import { useActions, useDispatch } from '../../store';
 import styled from 'styled-components';
 
 import { resend } from '../../services/messages';
@@ -25,7 +25,7 @@ import { Message as MessageType } from '../../types';
 
 export const Info = () => {
   const { clientId, info } = useMessageData();
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch();
 
   const onAction = useCallback(() => {
     if (info?.action === 'resend') {
@@ -75,15 +75,14 @@ const Container = styled.div`
 
 export const ThreadInfo = () => {
   const msg = useMessageData();
-  // FIXME: dispatch as any
-  const dispatch: any = useDispatch();
+  const actions = useActions();
   const [stream] = useStream();
   const {
     updatedAt, thread, channelId, id,
   } = msg;
   if (!thread || stream.parentId) return null;
   return (
-    <Container onClick={() => dispatch.actions.stream.open({id: 'side', value: { type: 'live', channelId, parentId: id }})}>
+    <Container onClick={() => actions.stream.open({id: 'side', value: { type: 'live', channelId, parentId: id }})}>
       {[...new Set(thread.map((t) => t.userId))]
         .map((userId) => (
           <UserCircle key={userId} userId={userId} />
@@ -102,7 +101,7 @@ type MessageBaseProps = {
   onClick?: (e?: React.MouseEvent) => void;
   sameUser?: boolean;
   className?: ClassNames;
-  [key: string]: any;
+  [key: string]: unknown;
 };
 
 const MessageBase = ({ onClick, sameUser, ...props }: MessageBaseProps = {}) => {

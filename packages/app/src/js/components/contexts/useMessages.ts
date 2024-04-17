@@ -1,7 +1,7 @@
 import {
   useMemo, useEffect, useState
 } from 'react';
-import { useSelector, useDispatch } from '../../store';
+import { useSelector, useDispatch, useMethods } from '../../store';
 import { loadMessages, loadNext, loadPrevious } from '../../services/messages';
 import { Message } from '../../types';
 import { useStream } from './useStream';
@@ -9,9 +9,10 @@ import { Stream } from '../../types';
 
 
 export const useMessages = () => {
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch();
+  const methods = useMethods();
   const [stream] = useStream();
-  const messages = useSelector((state: any) => state.messages.data);
+  const messages = useSelector((state) => state.messages.data);
   const [prevStream, setPrevStream] = useState<Partial<Stream>>({});
 
   useEffect(() => {
@@ -21,8 +22,8 @@ export const useMessages = () => {
     }
     setPrevStream(stream);
     dispatch(loadMessages(stream));
-    dispatch.methods.progress.loadProgress(stream);
-  }, [dispatch, stream, prevStream]);
+    methods.progress.loadProgress(stream);
+  }, [dispatch, methods, stream, prevStream]);
 
   return {
     messages: useMemo(

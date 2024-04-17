@@ -16,7 +16,7 @@ export const useProgress = ({ channelId, parentId }: {channelId: string, parentI
       ...p,
       user: users.find((u) => u.id === p.userId),
     }))
-    .reduce((acc: any, p: any) => ({
+    .reduce((acc, p) => ({
       ...acc,
       [p.lastMessageId]: [...(acc[p.lastMessageId] || []), p],
     }), {}) : {}), [channel, progress, parentId, users]);

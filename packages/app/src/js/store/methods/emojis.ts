@@ -6,7 +6,7 @@ export const load = createMethod('emojis/load', async (_arg, {actions, client}) 
     client.req({ type: 'emoji:getAll' }),
   ]);
   actions.emojis.add(baseEmojis.default);
-  actions.emojis.add(emojis.map((e: any) => ({...e, category: 'c'})));
+  actions.emojis.add(emojis.map((e) => ({...e, category: 'c'})));
   actions.emojis.ready({});
 });
 

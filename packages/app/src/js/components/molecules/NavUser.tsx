@@ -15,10 +15,10 @@ type NavUserButtonProps = {
 };
 
 export const NavUserButton = ({ channel, size, badge, className, onClick }: NavUserButtonProps) => {
-  const me = useSelector((state: any) => state.me);
+  const me = useSelector((state) => state.me);
   let other = channel.users.find((u) => u !== me) ?? '';
   if (!other) [other] = channel.users;
-  const user = useSelector((state: any) => state.users[other]);
+  const user = useSelector((state) => state.users[other]);
   if (!user) {
     return ( <NavButton className={className} size={size} data-id={channel.id} onClick={onClick} icon='hash' badge={badge}>{channel.name}</NavButton> );
   }
@@ -30,7 +30,7 @@ export const NavUserButton = ({ channel, size, badge, className, onClick }: NavU
     className={cn('user', {
       connected: user.connected,
       offline: !user.connected,
-      recent: active,
+      recent: Boolean(active),
       system: user.system
     }, className)}
     data-id={channel.id} onClick={onClick} icon='user' badge={badge}>{user.name}</NavButton>);

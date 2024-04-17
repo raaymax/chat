@@ -7,7 +7,7 @@ import { Login } from './pages/Login';
 const Secured = lazy(() => import('./Secured'));
 
 if ('virtualKeyboard' in navigator) {
-  (navigator as any).virtualKeyboard.overlaysContent = true;
+  navigator.virtualKeyboard.overlaysContent = true;
 }
 
 export const App = () => {

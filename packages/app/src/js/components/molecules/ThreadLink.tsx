@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useDispatch } from '../../store';
+import { useActions } from '../../store';
 
 const Link = styled.span`
   color: ${(props) => props.theme.linkColor};
@@ -16,10 +16,9 @@ type ThreadLinkProps = {
 };
 
 export const ThreadLink = ({ channelId, parentId, text }: ThreadLinkProps) => {
-  //FIXME: dispatch as any
-  const dispatch: any = useDispatch();
+  const actions = useActions();
   return (
-    <Link onClick={() => dispatch.actions.stream.open({id: 'side', value: { type: 'live', channelId, parentId }})}>
+    <Link onClick={() => actions.stream.open({id: 'side', value: { type: 'live', channelId, parentId }})}>
       {text || 'Thread'}
     </Link>
   );

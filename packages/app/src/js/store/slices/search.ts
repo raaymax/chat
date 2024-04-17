@@ -1,8 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Message } from "../../types";
 
+type Result = {
+  id: string;
+  text: string;
+  searchedAt: string;
+  data: Message[];
+};
+
 type SearchState = {
-  results: Message[];
+  results: Result[];
   text: string;
 };
 
