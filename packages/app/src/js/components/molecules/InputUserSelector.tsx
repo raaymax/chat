@@ -21,9 +21,9 @@ export const UserSelector = () => {
   }), [users]);
 
   const options = useMemo(() => {
-    let opts = fuse.search(currentText || '').slice(0, 5).map(({ item }) => item);
-    opts = opts.length ? opts : users.slice(0, 5);
-    opts = opts.map((user) => ({
+    let usr = fuse.search(currentText || '').slice(0, 5).map(({ item }) => item);
+    usr = usr.length ? usr : users.slice(0, 5);
+    const opts = usr.map((user) => ({
       name: user.name,
       id: user.id,
       icon: 'fa-solid fa-user',

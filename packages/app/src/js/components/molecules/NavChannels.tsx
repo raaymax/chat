@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import { useDispatch, useSelector, useBadges, useChannels } from '../../store';
+import { useSelector, useBadges, useChannels, useActions } from '../../store';
 import styled from 'styled-components';
 import { ChannelCreate } from './ChannelCreate';
 import { Channel } from './NavChannel';
@@ -46,11 +46,11 @@ type NavChannelsProps = {
 
 export const NavChannels = ({ icon }: NavChannelsProps) => {
   const [show, setShow] = useState(false);
-  const dispatch: any = useDispatch();
+  const actions = useActions();
   const channels = useChannels();
-  const userId = useSelector((state: any) => state.me);
+  const userId = useSelector((state) => state.me);
   const badges = useBadges(userId);
-  const id = useSelector((state: any) => state.stream.mainChannelId);
+  const id = useSelector((state) => state.stream.mainChannelId);
   return (
     <ChannelsContainer>
       <div className='header'>
@@ -62,13 +62,13 @@ export const NavChannels = ({ icon }: NavChannelsProps) => {
         <Channel
           channelId={c.id}
           {...c}
-          className={id === c.id ? 'active' : ''}
+          className={{active: id === c.id}}
           key={c.id}
           icon={icon ?? 'hash'}
           badge={badges[c.id]}
           onClick={() => {
-            dispatch.actions.stream.open({id: 'main', value: { type: 'live', channelId: c.id }});
-            dispatch.actions.view.set(null);
+            actions.stream.open({id: 'main', value: { type: 'live', channelId: c.id }});
+            actions.view.set(null);
           }}
         />
       ))}

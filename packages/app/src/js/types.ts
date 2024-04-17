@@ -112,6 +112,10 @@ export type User = {
   name: string;
   status: string;
   avatar: string;
+  avatarUrl: string;
+  connected: boolean;
+  lastSeen: string;
+  system: boolean;
 };
 
 export type EmojiDescriptor = { 
@@ -119,6 +123,7 @@ export type EmojiDescriptor = {
   unicode?: string,
   fileId?: string,
   shortname: string
+  category: string,
 }
 
 export type Notif = {
@@ -132,10 +137,20 @@ export type Notif = {
 }
 
 export type Stream = {
-  id?: string;
-  type: string;
-  channelId: string;
-  parentId?: string;
-  selected?: string;
-  date?: string;
+  id?: string,
+  type: 'live' | 'archive',
+  channelId: string,
+  parentId?: string,
+  selected?: string,
+  date?: string,
+};
+
+export type Channel = {
+  id: string;
+  name: string;
+  users: string[];
+  channelType: string;
+  priv?: boolean;
+  direct?: boolean;
+  private?: boolean;
 };

@@ -68,7 +68,6 @@ type TextMenuProps = {
     name: string;
     icon?: string;
     url?: string;
-    action?: () => void;
   }[];
   open?: boolean;
   onSelect: (idx: number, e: any) => void;

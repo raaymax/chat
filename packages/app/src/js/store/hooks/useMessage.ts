@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useSelector } from './useSelector';
 
-export const useMessage = (id: string) => {
+export const useMessage = (id: string | undefined | null) => {
   const messages = useSelector((state) => state.messages.data);
   return useMemo(
     () => {

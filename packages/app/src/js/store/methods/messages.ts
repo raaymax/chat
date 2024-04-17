@@ -1,6 +1,6 @@
 import {createMethod} from '../store';
 
-type Query = {};
+type Query = Record<string, any>;
 
 export const load = createMethod('messages/load', async (query: Query, {actions, client }) => {
   const req = await client.req({

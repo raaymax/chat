@@ -1,14 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { omitUndefined } from '../../utils';
-
-type Stream = {
-  channelId: string,
-  parentId: string,
-
-  type: 'live' | 'archive',
-  selected: string,
-  date: Date,
-};
+import { Stream } from '../../types';
 
 type StreamState = {
   main: Stream,
@@ -39,9 +31,9 @@ const loadStream = () => {
 const saveStream = (stream: Stream) => {
   const query = new URLSearchParams(omitUndefined({
     type: stream.type,
-    date: stream.date.toISOString(),
+    date: stream.date,
     selected: stream.selected,
-  }));
+  }) as Record<string, string>);
   const querystring = query.toString();
    
   window.location.hash = `/${stream.channelId}`

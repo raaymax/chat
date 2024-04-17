@@ -21,14 +21,14 @@ export const createMethod = <T, R>(name: string, handler: AsyncMutation<T, R, ty
 }
 
 export const run = async <R>(handler: MutationMethod<R, typeof methods>): Promise<R> => {
-  return store.dispatch(createAsyncThunk(`mutation/${handler.name}`, (_a: any) => handler({
+  return store.dispatch(createAsyncThunk(`mutation/${handler.name}`, () => handler({
     run,
     dispatch: Object.assign(store.dispatch, {actions, methods: data.methods}), 
     getState: store.getState,
     actions,
     methods,
     client,
-  }))({})).unwrap() as R;
+  }))()).unwrap() as R;
 }
 
 

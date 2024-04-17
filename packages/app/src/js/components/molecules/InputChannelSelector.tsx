@@ -21,9 +21,9 @@ export const ChannelSelector = () => {
   }), [channels]);
 
   const options = useMemo(() => {
-    let opts = fuse.search(currentText || '').slice(0, 5).map(({ item }) => item);
-    opts = opts.length ? opts : channels.slice(0, 5);
-    opts = opts.map((channel) => ({
+    let chan = fuse.search(currentText || '').slice(0, 5).map(({ item }) => item);
+    chan = chan.length ? chan : channels.slice(0, 5);
+    const opts = chan.map((channel) => ({
       name: channel.name,
       id: channel.id,
       icon: channel.private ? 'fa-solid fa-lock' : 'fa-solid fa-hashtag',

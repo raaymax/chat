@@ -1,7 +1,7 @@
 import React, {
   useRef, useState, useCallback, useEffect, createContext, MutableRefObject,
 } from 'react';
-import { useDispatch, useSelector, useMessage } from '../../store';
+import { useDispatch, useSelector, useMessage, useMethods, useActions } from '../../store';
 import { useStream } from './useStream';
 import * as messageService from '../../services/messages';
 import { uploadMany } from '../../services/file';
@@ -52,6 +52,8 @@ type InputContextProps = {
 export const InputProvider = (args: InputContextProps) => {
   const { children, mode = 'default', messageId = null } = args;
   const dispatch = useDispatch();
+  const methods = useMethods();
+  const actions = useActions();
   const [stream] = useStream();
   const [currentText, setCurrentText] = useState('');
   const [scope, setScope] = useState<string>('');
@@ -155,7 +157,7 @@ export const InputProvider = (args: InputContextProps) => {
     if (payload.type === 'message:create' && mode === 'edit') {
       payload.type = 'message:update';
       payload.id = messageId;
-      payload.clientId = message.clientId;
+      payload.clientId = message?.clientId;
     }
     //FIXME: files as any
     payload.attachments = [...files.filter((f: any) => f.streamId === stream.id)];
@@ -163,15 +165,15 @@ export const InputProvider = (args: InputContextProps) => {
     payload.channelId = stream.channelId;
     payload.parentId = stream.parentId;
 
-    dispatch.actions.files.clear(stream.id);
+    actions.files.clear(stream.id);
     dispatch(messageService.send(stream, payload));
     if (mode === 'default') {
       input.current.innerHTML = '';
       focus(e);
     } else {
-      dispatch.actions.messages.editClose(messageId);
+      actions.messages.editClose(messageId);
     }
-  }, [input, stream, focus, dispatch,
+  }, [actions, input, stream, focus, dispatch,
     filesAreReady, files, messageId, mode, message]);
 
   const wrapMatching = useCallback((regex: RegExp, wrapperTagName: string) => {
@@ -249,9 +251,9 @@ export const InputProvider = (args: InputContextProps) => {
     if (e.key === 'Enter' && !e.shiftKey && scope === 'root') {
       return send(e as any);
     }
-    dispatch.methods.typing.notify(stream);
+    methods.typing.notify({channelId: stream.channelId, parentId: stream.parentId});
     updateRange();
-  }, [dispatch, send, updateRange, scope, stream]);
+  }, [methods, send, updateRange, scope, stream]);
 
   const addFile = useCallback(() => {
     fileInput.current?.click();

@@ -3,8 +3,8 @@ export * from './hooks/useDispatch';
 export * from './hooks/useSelector';
 export * from './hooks/useStore';
 export * from './hooks/useRun';
-export * from './hooks/useAction';
-export * from './hooks/useMethod';
+export * from './hooks/useActions';
+export * from './hooks/useMethods';
 
 export * from './hooks/useEmojiFuse';
 export * from './hooks/useProgress';
@@ -19,3 +19,4 @@ export * from './hooks/useMessage';
 export * from './hooks/useStreamMessages';
 export * from './hooks/useEmoji';
 export * from './hooks/useChannels';
+export * from './hooks/useUserChannels';

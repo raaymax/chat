@@ -6,26 +6,35 @@ import { TextMenu } from './TextMenu';
 import { useInput } from '../contexts/useInput';
 import { getUrl } from '../../services/file';
 import { buildEmojiNode } from '../../utils';
+import { EmojiDescriptor } from '../../types';
 
 const SCOPE = 'emoji';
+
+type MenuOption = {
+  label?: string;
+  url?: string;
+  name: string;
+  action?: string;
+  item?: EmojiDescriptor;
+};
 
 export const EmojiSelector = () => {
   const [selected, setSelected] = useState(0);
   const {
     input, currentText, scope, insert, scopeContainer, replace,
   } = useInput();
-  const emojis = useSelector((state: any) => state.emojis.data);
+  const emojis = useSelector((state) => state.emojis.data);
   const fuse = useEmojiFuse();
 
   const options = useMemo(() => {
-    let opts = fuse.search(currentText || '').slice(0, 5).map(({ item }) => item);
-    opts = opts.length ? opts : emojis.slice(0, 5);
-    opts = [...opts, { action: 'close', shortname: 'no emoji' }].map((item) => ({
+    let em = fuse.search(currentText || '').slice(0, 5).map(({ item }) => item);
+    em = em.length ? em: emojis.slice(0, 5);
+    const opts: MenuOption[] = [...em.map((item) => ({
       label: item.unicode && String.fromCodePoint(parseInt(item.unicode, 16)),
       url: item.fileId && getUrl(item.fileId),
       name: item.shortname,
       item,
-    }));
+    })), { label: '❌', name: 'no emoji', action: 'close'}];
     return opts;
   }, [fuse, emojis, currentText]);
 
@@ -54,7 +63,7 @@ export const EmojiSelector = () => {
     }
     const name = shortName || `${container.textContent}:`;
     const emoji = exact
-      ? emojis.find((e: any) => e.shortname === name)
+      ? emojis.find((e) => e.shortname === name)
       : options[s ?? selected].item;
     const node = emoji
       ? buildEmojiNode(emoji, getUrl)
@@ -112,7 +121,7 @@ export const EmojiSelector = () => {
     }
     if (scope === SCOPE) {
       if (e.key === ' ' || e.key === 'Space' || e.keyCode === 32 || e.key === 'Enter') {
-        if (options[selected].item?.action === 'close') {
+        if (options[selected].action === 'close') {
           close(e);
         } else {
           submit(e, { exact: false });

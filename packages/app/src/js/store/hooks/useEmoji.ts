@@ -1,6 +1,6 @@
 import { useMemo, useEffect } from 'react';
 import { useSelector } from './useSelector';
-import { useMethod } from './useMethod';
+import { useMethods } from './useMethods';
 
 type Emoji = {
   shortname: string;
@@ -11,16 +11,16 @@ type Emoji = {
 
 export const useEmoji = (shortname: string): Emoji => {
   const emojis = useSelector((state) => state.emojis);
-  const { emojis: {find}} = useMethod();
+  const methods = useMethods();
   const emoji = useMemo(
     () => emojis.data.find((emoji: Emoji) => emoji.shortname === shortname),
     [emojis, shortname],
   );
   useEffect(() => {
     if (!emoji && emojis.ready) {
-      find(shortname);
+      methods.emojis.find(shortname);
     }
-  }, [find, emoji, shortname, emojis]);
+  }, [methods, emoji, shortname, emojis]);
 
   return emoji ?? { shortname, empty: true};
 };

@@ -4,6 +4,7 @@ import { Tooltip } from '../atoms/Tooltip';
 import { SearchBox } from '../atoms/SearchBox';
 import styled from 'styled-components';
 import { getUrl } from '../../services/file';
+import { EmojiDescriptor } from '../../types';
 
 export const Label = styled.div`
   width: 100%;
@@ -104,16 +105,9 @@ const EmojiContainer = styled.div`
   }
 `;
 
-type Emoji = {
-  unicode: string;
-  fileId: string;
-  shortname: string;
-  category: string;
-}
-
 type EmojiProps = {
-  unicode: string;
-  fileId: string;
+  unicode?: string;
+  fileId?: string;
   shortname: string;
   onClick: (e: React.MouseEvent) => void;
 };
@@ -124,7 +118,7 @@ export const Emoji = ({
   <EmojiContainer onClick={onClick}>
     {fileId
       ? <img src={getUrl(fileId)} alt={shortname} />
-      : <span>{String.fromCodePoint(parseInt(unicode, 16))}</span>}
+      : (unicode ? <span>{String.fromCodePoint(parseInt(unicode, 16))}</span> : null)}
   </EmojiContainer>
 );
 
@@ -143,17 +137,17 @@ const CATEGORIES: Record<string, string> = {
 };
 
 type EmojiSearchProps = {
-  onSelect: (e: Emoji) => void;
+  onSelect: (e: EmojiDescriptor) => void;
 }
 
 export const EmojiSearch = ({ onSelect }: EmojiSearchProps) => {
   const [name, setName] = useState('');
-  const [results, setResults] = useState<Record<string, Emoji[]>>({});
-  const emojis = useSelector((state) => (state as any).emojis.data);
+  const [results, setResults] = useState<Record<string, EmojiDescriptor[]>>({});
+  const emojis = useSelector((state) => state.emojis.data);
   const fuse = useEmojiFuse();
 
   useEffect(() => {
-    let all: Emoji[] = emojis || [];
+    let all: EmojiDescriptor[] = emojis || [];
     if (name && fuse) {
       const ret = fuse.search(name, { limit: 100 });
       all = ret.map((r) => r.item);
@@ -161,11 +155,11 @@ export const EmojiSearch = ({ onSelect }: EmojiSearchProps) => {
 
     setResults(
       (all || [])
-        .reduce((acc: Record<string, Emoji[]>, emoji) => {
+        .reduce<Record<string, EmojiDescriptor[]>>((acc, emoji) => {
           acc[emoji.category] = acc[emoji.category] || [];
           acc[emoji.category].push(emoji);
           return acc;
-        }, {}),
+        }, {})
     );
   }, [name, fuse, emojis]);
 

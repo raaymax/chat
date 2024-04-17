@@ -9,7 +9,7 @@ export const ack = createMethod('typing/ack', async (msg: {userId: string, chann
 
 type Notify = {
   channelId: string;
-  parentId: string;
+  parentId?: string;
 };
 
 export const notify = createMethod('typing/notify', async ({channelId, parentId}: Notify, { actions, methods, getState, client}) => {

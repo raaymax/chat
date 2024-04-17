@@ -1,13 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-
-type Channel = {
-  id: string;
-  name: string;
-  users: string[];
-  channelType: string;
-  priv?: boolean;
-  direct?: boolean;
-};
+import { Channel } from '../../types';
 
 export default createSlice({
   name: 'channels',

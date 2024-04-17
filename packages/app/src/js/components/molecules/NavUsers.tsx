@@ -1,4 +1,4 @@
-import { useDispatch, useSelector, useBadges, useUserChannels } from '../../store';
+import { useSelector, useBadges, useUserChannels, useActions } from '../../store';
 import styled from 'styled-components';
 import { NavUserButton } from './NavUser';
 
@@ -39,11 +39,11 @@ const ChannelsContainer = styled.div`
 `;
 
 export const NavUsers = () => {
-  const dispatch: any = useDispatch();
+  const actions = useActions();
   const channels = useUserChannels();
-  const userId = useSelector((state: any) => state.me);
+  const userId = useSelector((state) => state.me);
   const badges = useBadges(userId);
-  const id = useSelector((state: any) => state.stream.mainChannelId);
+  const id = useSelector((state) => state.stream.mainChannelId);
   return (
     <ChannelsContainer>
       <div className='header'>
@@ -57,8 +57,8 @@ export const NavUsers = () => {
           key={c.id}
           badge={badges[c.id]}
           onClick={() => {
-            dispatch.actions.stream.open({id: 'main', value: { type: 'live', channelId: c.id }});
-            dispatch.actions.view.set(null);
+            actions.stream.open({id: 'main', value: { type: 'live', channelId: c.id }});
+            actions.view.set(null);
           }}
         />
       ))}

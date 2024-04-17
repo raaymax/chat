@@ -1,11 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-
-type User = {
-  id: string;
-  name: string;
-  email: string;
-  avatarUrl: string;
-};
+import { User } from '../../types';
 
 export default createSlice({
   name: 'users',
