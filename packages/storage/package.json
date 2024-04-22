@@ -21,7 +21,7 @@
     "concat-stream": "2.0.0",
     "mongodb": "6.3.0",
     "sharp": "0.33.0",
-    "typescript": "5.3.3",
+    "typescript": "5.4.5",
     "uuid": "9.0.1",
     "zod": "3.22.4"
   },
