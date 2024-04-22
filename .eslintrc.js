@@ -15,7 +15,7 @@ module.exports = {
     'packages/app/dist',
     'packages/rpc/dist',
     'packages/repo/dist',
-    'plugins/todo/dist',
+    'plugins/',
     'chat.config.js',
     '**/dist/**/*',
   ],
