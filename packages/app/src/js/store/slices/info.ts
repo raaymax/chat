@@ -10,6 +10,7 @@ export default createSlice({
   initialState: { type: null, message: '' } as InfoState,
   reducers: {
     show: (_state, action: PayloadAction<InfoState>) => action.payload,
+    reset: () => ({ type: null, message: '' }),
   },
 });
 

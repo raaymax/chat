@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import { useSelector, useBadges, useChannels, useActions } from '../../store';
+import { useSelector, useBadges, useChannels, useActions, useDispatch } from '../../store';
 import styled from 'styled-components';
 import { ChannelCreate } from './ChannelCreate';
 import { Channel } from './NavChannel';
@@ -46,6 +46,7 @@ type NavChannelsProps = {
 
 export const NavChannels = ({ icon }: NavChannelsProps) => {
   const [show, setShow] = useState(false);
+  const dispatch = useDispatch();
   const actions = useActions();
   const channels = useChannels();
   const userId = useSelector((state) => state.me);
@@ -67,8 +68,8 @@ export const NavChannels = ({ icon }: NavChannelsProps) => {
           icon={icon ?? 'hash'}
           badge={badges[c.id]}
           onClick={() => {
-            actions.stream.open({id: 'main', value: { type: 'live', channelId: c.id }});
-            actions.view.set(null);
+            dispatch(actions.stream.open({id: 'main', value: { type: 'live', channelId: c.id }}));
+            dispatch(actions.view.set(null));
           }}
         />
       ))}

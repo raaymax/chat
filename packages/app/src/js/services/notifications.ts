@@ -1,7 +1,9 @@
 /* eslint-disable no-console */
+import { UserConfig } from '../types';
 import { client } from '../core';
+import { OutgoingUserPushSubscribe } from '../core/types';
 
-export const initNotifications = async (config) => {
+export const initNotifications = async (config: UserConfig) => {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.addEventListener('message', ({ data }) => {
       if (data.type) {
@@ -11,7 +13,7 @@ export const initNotifications = async (config) => {
 
     await register(config);
     if ('Notification' in window) {
-      document.querySelector('body').addEventListener('click', () => {
+      document.querySelector('body')?.addEventListener('click', () => {
         Notification.requestPermission((status) => {
           console.log('Notification permission status:', status);
         });
@@ -20,7 +22,7 @@ export const initNotifications = async (config) => {
   }
 };
 
-const register = async (config, retry = false) => navigator.serviceWorker.getRegistration('/')
+const register = async (config: UserConfig, retry = false) => navigator.serviceWorker.getRegistration('/')
   .then((registration) => {
     if (!registration) throw new Error('No service worker registered');
     return registration.pushManager.subscribe({
@@ -31,7 +33,7 @@ const register = async (config, retry = false) => navigator.serviceWorker.getReg
   .then(async (subscription) => client.req({
     type: 'user:push:subscribe',
     ...subscription.toJSON(),
-  }))
+  } as OutgoingUserPushSubscribe))
   .then(() => console.log('Notifications service worker registered successfully'))
   .catch((err) => {
     console.log('Service Worker registration failed: ', err);

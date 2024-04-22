@@ -22,7 +22,7 @@ export const useMessages = () => {
     }
     setPrevStream(stream);
     dispatch(loadMessages(stream));
-    methods.progress.loadProgress(stream);
+    dispatch(methods.progress.loadProgress(stream));
   }, [dispatch, methods, stream, prevStream]);
 
   return {
@@ -34,7 +34,7 @@ export const useMessages = () => {
     || (!stream.parentId && m.parentId === m.id))),
       [stream, messages],
     ),
-    next: () => dispatch(loadNext(stream)),
-    prev: () => dispatch(loadPrevious(stream)),
+    next: () => dispatch(loadNext(stream)).unwrap(),
+    prev: () => dispatch(loadPrevious(stream)).unwrap(),
   }
 };

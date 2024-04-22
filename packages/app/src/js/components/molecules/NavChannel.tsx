@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useMethods, useSelector } from '../../store';
+import { useDispatch, useMethods, useSelector } from '../../store';
 import styled from 'styled-components';
 import { Badge } from '../atoms/Badge';
 import { TextWithIcon } from './TextWithIcon';
@@ -89,13 +89,14 @@ type ChannelProps = {
 export const Channel = ({
   channelId: id, onClick, icon, badge, className,
 }: ChannelProps) => {
+  const dispatch = useDispatch();
   const methods = useMethods();
   const channel = useSelector((state) => state.channels[id]);
   useEffect(() => {
     if (!channel) {
-      methods.channels.find(id);
+      dispatch(methods.channels.find(id));
     }
-  }, [id, channel, methods]);
+  }, [id, channel, methods, dispatch]);
   const { name, private: priv, direct } = channel || {};
   let ico = icon;
   if (priv) ico = 'fa-solid fa-lock';

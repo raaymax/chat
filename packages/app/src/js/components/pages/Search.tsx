@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useCallback, useState } from 'react';
 import { useStream } from '../contexts/useStream';
 import { HoverProvider } from '../contexts/hover';
-import { useSelector, useMethods, useActions } from '../../store';
+import { useSelector, useMethods, useActions, useDispatch } from '../../store';
 import { formatTime, formatDate } from '../../utils';
 
 import { SearchBox } from '../atoms/SearchBox';
@@ -103,14 +103,15 @@ const StyledSearch = styled.div`
 `;
 
 export const Header = () => {
+  const dispatch = useDispatch();
   const methods = useMethods();
   const actions = useActions();
   const [stream] = useStream();
   const [value, setValue] = useState('');
 
   const submit = useCallback(async () => {
-    methods.search.find({channelId: stream.channelId, text: value});
-  }, [methods, stream, value]);
+    dispatch(methods.search.find({channelId: stream.channelId, text: value}));
+  }, [methods, stream, value, dispatch]);
 
   const onKeyDown= useCallback(async (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && e.shiftKey === false) {
@@ -126,7 +127,7 @@ export const Header = () => {
 
       <Toolbar className="toolbar" size={50}>
         <ButtonWithIcon icon="send" onClick={() => submit()} />
-        <ButtonWithIcon icon="xmark" onClick={() => actions.view.set('search')} />
+        <ButtonWithIcon icon="xmark" onClick={() => dispatch(actions.view.set('search'))} />
       </Toolbar>
     </StyledHeader>
   );
@@ -135,9 +136,10 @@ export const Header = () => {
 export function SearchResults() {
   const [, setStream] = useStream();
   const results = useSelector((state) => state.search.results);
+  const dispatch = useDispatch();
   const actions = useActions();
   const gotoMessage = useCallback((msg: MessageType) => {
-    actions.view.set('search');
+    dispatch(actions.view.set('search'));
     setStream({
       type: 'archive',
       channelId: msg.channelId,
@@ -145,7 +147,7 @@ export function SearchResults() {
       selected: msg.id,
       date: msg.createdAt,
     });
-  }, [actions, setStream]);
+  }, [actions, setStream, dispatch]);
   return (
     <StyledList>
       <div key='bottom' id='scroll-stop' />

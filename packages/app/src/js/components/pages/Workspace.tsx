@@ -1,4 +1,4 @@
-import { useActions, useSelector, useSideStream, useMainStream } from '../../store';
+import { useActions, useSelector, useSideStream, useMainStream, useDispatch } from '../../store';
 
 import { MainConversation } from '../organisms/MainConversaion';
 import { SideConversation } from '../organisms/SideConversation';
@@ -44,6 +44,7 @@ export const SideView = styled.div`
 
 export const Workspace = () => {
   const view = useSelector((state) => state.view?.current);
+  const dispatch = useDispatch();
   const actions = useActions();
   const stream = useMainStream();
   const sideStream = useSideStream();
@@ -51,17 +52,17 @@ export const Workspace = () => {
     <Container className={cn({'side-stream': Boolean(sideStream), 'main-stream': !sideStream })}>
       {view === 'sidebar' && <Sidebar />}
       <MainView className={cn({sidebar: view === 'sidebar'})}>
-        <StreamProvider value={[stream, (val) => actions.stream.open({id: 'main', value: val})]}>
+        <StreamProvider value={[stream, (val) => dispatch(actions.stream.open({id: 'main', value: val}))]}>
           {view === 'search' && <Search />}
           {view === 'pins' && <Pins />}
           {(view === null || view === 'sidebar' || view === 'thread')
             && <MainConversation
-              onClick={() => actions.view.set('sidebar')} />
+              onClick={() => dispatch(actions.view.set('sidebar'))} />
           }
         </StreamProvider>
       </MainView>
       {sideStream && <SideView>
-        <StreamProvider value={[sideStream, (val) => actions.stream.open({id: 'side', value: val})]}>
+        <StreamProvider value={[sideStream, (val) => dispatch(actions.stream.open({id: 'side', value: val}))]}>
           <SideConversation />
         </StreamProvider>
       </SideView>}

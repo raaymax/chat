@@ -75,6 +75,7 @@ const Container = styled.div`
 
 export const ThreadInfo = () => {
   const msg = useMessageData();
+  const dispatch = useDispatch();
   const actions = useActions();
   const [stream] = useStream();
   const {
@@ -82,7 +83,7 @@ export const ThreadInfo = () => {
   } = msg;
   if (!thread || stream.parentId) return null;
   return (
-    <Container onClick={() => actions.stream.open({id: 'side', value: { type: 'live', channelId, parentId: id }})}>
+    <Container onClick={() => dispatch(actions.stream.open({id: 'side', value: { type: 'live', channelId, parentId: id }}))}>
       {[...new Set(thread.map((t) => t.userId))]
         .map((userId) => (
           <UserCircle key={userId} userId={userId} />

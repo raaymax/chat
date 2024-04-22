@@ -89,7 +89,7 @@ export type Message = {
   }[];
   info?: {
     type: string;
-    action: string;
+    action?: string;
     msg: string;
   };
   thread?: {
@@ -106,6 +106,7 @@ export type Message = {
   }[];
   priv?: boolean;
 };
+
 
 export type User = {
   id: string;
@@ -154,3 +155,26 @@ export type Channel = {
   direct?: boolean;
   private?: boolean;
 };
+
+export type Progress = {
+  channelId: string;
+  userId: string;
+  parentId: string;
+  count: number;
+  lastMessageId: string;
+}
+
+export type Notification = {
+  id: string;
+  userId: string;
+  channelId: string;
+  parentId: string;
+  createdAt: string;
+  messageId: string;
+}
+
+export type UserConfig = {
+  appVersion: string, 
+  mainChannelId: string,
+  vapidPublicKey: string,
+}

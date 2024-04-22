@@ -9,7 +9,7 @@ export type MessageListRendererProps = {
   list: (types.Message| types.Notif)[];
   stream?: unknown;
   context?: unknown;
-  onMessageClicked?: unknown;
+  onMessageClicked?: (msg: types.Message) => void;
 };
 
 function isNotif(data: types.Message | types.Notif): data is types.Notif {

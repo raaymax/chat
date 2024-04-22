@@ -41,7 +41,7 @@ export type CommandToSend = {
   flat: string;
 };
 
-type SerializeInfo = {
+export type SerializeInfo = {
   links: string[];
   mentions: string[];
   errors?: SerializeError[];
@@ -94,7 +94,7 @@ function is<T extends MessageBodyPart>(data: MessageBodyPart, key: string): data
   return (data as T)[key as keyof T] !== undefined;
 }
 //FIXME: There is no way of searching messages using mentions or channel links 
-function flatten(tree: MessageBody): string {
+export function flatten(tree: MessageBody): string {
   return [tree].flat().map((n: MessageBodyPart) => {
     if(is<types.MessageBodyBlockquote>(n, 'blockquote')) return flatten(n.blockquote);
     if(is<types.MessageBodyBold>(n, 'bold')) return flatten(n.bold);
@@ -174,7 +174,7 @@ function processUser(n: HTMLElement, info: SerializeInfo): types.MessageBodyUser
   return { user: userId};
 }
 
-function processUrls(text: string, info: SerializeInfo): MessageBody {
+export function processUrls(text: string, info: SerializeInfo): MessageBody {
   const m = matchUrl(text);
   if (m) {
     const parts = text.split(m[0]);

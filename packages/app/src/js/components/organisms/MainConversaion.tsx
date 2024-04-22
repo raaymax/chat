@@ -86,17 +86,17 @@ export const Header = ({ onClick }: HeaderProps) => {
         <Channel onClick={onClick} channelId={channelId} />
         {stream.type === 'archive' && (
           <ButtonWithIcon icon='down' onClick = {() => {
-            actions.messages.clear({ stream });
+            dispatch(actions.messages.clear({ stream }));
             setStream({ ...stream, type: 'live' });
             dispatch(loadMessages({ ...stream, type: 'live' }))
           }} />
         )}
         <ButtonWithIcon icon="thumbtack" onClick={() => {
-          methods.pins.load(channelId);
-          actions.view.set('pins');
+          dispatch(methods.pins.load(channelId));
+          dispatch(actions.view.set('pins'));
         }} />
-        <ButtonWithIcon icon="search" onClick={() => actions.view.set('search')} />
-        <ButtonWithIcon icon="refresh" onClick={() => dispatch(init())} />
+        <ButtonWithIcon icon="search" onClick={() => dispatch(actions.view.set('search'))} />
+        <ButtonWithIcon icon="refresh" onClick={() => dispatch(init({}))} />
       </Toolbar>
     </StyledHeader>
   );

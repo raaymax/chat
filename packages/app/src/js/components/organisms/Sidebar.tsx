@@ -68,7 +68,7 @@ export const Sidebar = () => {
   const actions = useActions();
   return (
     <SideMenu>
-      <Logo onClick={() => actions.view.set('sidebar')} />
+      <Logo onClick={() => dispatch(actions.view.set('sidebar'))} />
       <div className='slider'>
         <NavChannels />
         <NavUsers />
@@ -76,7 +76,7 @@ export const Sidebar = () => {
         {plugins.get('sidebar').map((El: React.FC, key: string) => <El key={key} />)}
       </div>
       <div className='bottom'>
-        <NavButton icon="logout" size={50} onClick={() => dispatch(logout())}>Logout</NavButton>
+        <NavButton icon="logout" size={50} onClick={() => logout()}>Logout</NavButton>
       </div>
     </SideMenu>
   );

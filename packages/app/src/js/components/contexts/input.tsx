@@ -107,7 +107,7 @@ export const InputProvider = (args: InputContextProps) => {
     const cbData = (event.clipboardData || window.clipboardData);
     if (cbData.files?.length > 0) {
       event.preventDefault();
-      dispatch(uploadMany(stream.id, cbData.files));
+      dispatch(uploadMany({streamId: stream.id, files: cbData.files}));
     }
 
     const range = getRange();
@@ -125,7 +125,7 @@ export const InputProvider = (args: InputContextProps) => {
   const onFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if ((e.target.files?.length ?? 0) > 0) {
       const { files } = e.target;
-      dispatch(uploadMany(stream.id, files));
+      dispatch(uploadMany({streamId: stream.id, files}));
       e.target.value = '';
     }
   }, [dispatch, stream]);
@@ -160,13 +160,14 @@ export const InputProvider = (args: InputContextProps) => {
     payload.channelId = stream.channelId;
     payload.parentId = stream.parentId;
 
-    actions.files.clear(stream.id);
-    dispatch(messageService.send(stream, payload));
+    dispatch(actions.files.clear(stream.id));
+    dispatch(messageService.send({stream, payload}));
+
     if (mode === 'default') {
       input.current.innerHTML = '';
       focus(e);
     } else {
-      actions.messages.editClose(messageId);
+      dispatch(actions.messages.editClose(messageId));
     }
   }, [actions, input, stream, focus, dispatch,
     filesAreReady, files, messageId, mode, message]);
@@ -246,9 +247,9 @@ export const InputProvider = (args: InputContextProps) => {
     if (e.key === 'Enter' && !e.shiftKey && scope === 'root') {
       return send(e);
     }
-    methods.typing.notify({channelId: stream.channelId, parentId: stream.parentId});
+    dispatch(methods.typing.notify({channelId: stream.channelId, parentId: stream.parentId}));
     updateRange();
-  }, [methods, send, updateRange, scope, stream]);
+  }, [dispatch, methods, send, updateRange, scope, stream]);
 
   const addFile = useCallback(() => {
     fileInput.current?.click();

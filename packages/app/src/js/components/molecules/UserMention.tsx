@@ -19,7 +19,7 @@ export const UserMention = ({ userId: id }: UserMentionProps) => {
   const user = useSelector((state) => state.users[id]);
 
   return (
-    <StyledLink className='channel' onClick={() => dispatch(gotoDirectChannel(id))} data-id={id} href={`#`} >
+    <StyledLink className='channel' onClick={() => dispatch(gotoDirectChannel({userId: id}))} data-id={id} href={`#`} >
       <span className='name'>@{user?.name || id}</span>
     </StyledLink>
   );

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Conversation } from './Conversation';
-import { useActions, useMessage } from '../../store';
+import { useActions, useDispatch, useMessage } from '../../store';
 import { Channel } from '../molecules/NavChannel';
 import { useStream } from '../contexts/useStream';
 import { Toolbar } from '../atoms/Toolbar';
@@ -55,6 +55,7 @@ type HeaderProps = {
 
 export const Header = ({ onClick }: HeaderProps) => {
   const [{ channelId, parentId }, setSideStream] = useStream();
+  const dispatch = useDispatch();
   const actions = useActions();
   const message = useMessage(parentId);
 
@@ -66,14 +67,14 @@ export const Header = ({ onClick }: HeaderProps) => {
       <Toolbar className="toolbar" size={50}>
         <ButtonWithIcon icon='back' onClick={() => {
           setSideStream(null);
-          actions.stream.open({
+          dispatch(actions.stream.open({
             id: 'main',
             value: {
               channelId, type: 'archive', selected: message?.id, date: message?.createdAt,
             },
-          });
+          }));
         }} />
-        <ButtonWithIcon icon='xmark' onClick={() => actions.stream.open({id: 'side', value: null})} />
+        <ButtonWithIcon icon='xmark' onClick={() => dispatch(actions.stream.open({id: 'side', value: null}))} />
       </Toolbar>
     </StyledHeader>
   );

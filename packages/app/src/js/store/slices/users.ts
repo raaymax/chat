@@ -8,7 +8,7 @@ export default createSlice({
     add: (state, action) => {
       const newState = {...state};
       ([action.payload] as User[]).flat().forEach((user) => {
-        newState[user.id] = Object.assign(newState[user.id] || {}, user);
+        newState[user.id] = Object.assign({}, newState[user.id] || {}, user);
       });
       return newState;
     },

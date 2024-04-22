@@ -1,6 +1,5 @@
 import { createRoot } from 'react-dom/client';
 import { Suspense, lazy } from 'react';
-import '../core/registerSw';
 import { Register } from './pages/Register';
 import { Login } from './pages/Login';
 

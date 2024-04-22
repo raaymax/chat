@@ -16,7 +16,7 @@ export const Register = () => {
       login: {value: string},
       password: {value: string},
     };
-
+    if (!token) return;
     const ret = await session.register({
       name: name.value,
       login: login.value,

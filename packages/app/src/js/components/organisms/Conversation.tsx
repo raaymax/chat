@@ -58,7 +58,7 @@ export function Conversation() {
     e.stopPropagation();
     if(!stream.id) return;
     const { files } = e.dataTransfer;
-    dispatch(uploadMany(stream.id, files));
+    dispatch(uploadMany({streamId: stream.id, files}));
   }, [dispatch, stream]);
 
   const dragOverHandler = useCallback((ev: React.DragEvent) => {
@@ -68,8 +68,8 @@ export function Conversation() {
 
   const bumpProgress = useCallback(() => {
     const latest = list.find(({ priv }) => !priv);
-    if (latest?.id) methods.progress.update(latest.id);
-  }, [methods, list]);
+    if (latest?.id) dispatch(methods.progress.update(latest.id));
+  }, [methods, list, dispatch]);
 
   useEffect(() => {
     window.addEventListener('focus', bumpProgress);
@@ -98,7 +98,7 @@ export function Conversation() {
         />
         <LoadingIndicator />
         <Input />
-        {initFailed && <InitFailedButton onClick={() => dispatch(reinit())} />}
+        {initFailed && <InitFailedButton onClick={() => dispatch(reinit({}))} />}
       </HoverProvider>
     </Container>
   );

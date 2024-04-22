@@ -9,7 +9,7 @@ export default createSlice({
       const payload = action.payload;
       const newState = {...state};
       [payload as Channel | Channel[]].flat().forEach((channel) => {
-        newState[channel.id] = Object.assign(newState[channel.id] || {}, channel);
+        newState[channel.id] = Object.assign({}, newState[channel.id] || {}, channel);
       });
       return newState;
     },

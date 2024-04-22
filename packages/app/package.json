@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "lint": "eslint . --ext js,jsx,ts,tsx --report-unused-disable-directives",
     "preview": "vite preview",
     "types": "tsc --noEmit"
@@ -14,6 +14,7 @@
     "@quack/config": "workspace:*",
     "@quack/rpc": "workspace:*",
     "@reduxjs/toolkit": "2.2.3",
+    "@types/workbox-sw": "4.3.7",
     "fuse.js": "7.0.0",
     "prop-types": "15.8.1",
     "react": "18.2.0",
@@ -31,6 +32,7 @@
   "devDependencies": {
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
+    "@types/serviceworker": "0.0.85",
     "@vitejs/plugin-react": "^4.2.1",
     "eslint": "^8.55.0",
     "eslint-plugin-react": "^7.33.2",

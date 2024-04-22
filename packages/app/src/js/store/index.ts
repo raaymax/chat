@@ -2,7 +2,6 @@ export * from './storeExt';
 export * from './hooks/useDispatch';
 export * from './hooks/useSelector';
 export * from './hooks/useStore';
-export * from './hooks/useRun';
 export * from './hooks/useActions';
 export * from './hooks/useMethods';
 

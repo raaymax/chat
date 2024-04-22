@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useActions } from '../../store';
+import { useActions, useDispatch } from '../../store';
 
 const Link = styled.span`
   color: ${(props) => props.theme.linkColor};
@@ -16,9 +16,10 @@ type ThreadLinkProps = {
 };
 
 export const ThreadLink = ({ channelId, parentId, text }: ThreadLinkProps) => {
+  const dispatch = useDispatch();
   const actions = useActions();
   return (
-    <Link onClick={() => actions.stream.open({id: 'side', value: { type: 'live', channelId, parentId }})}>
+    <Link onClick={() => dispatch(actions.stream.open({id: 'side', value: { type: 'live', channelId, parentId }}))}>
       {text || 'Thread'}
     </Link>
   );

@@ -6,6 +6,7 @@ module.exports = {
   schema: {
     body: Joi.object({
       channelId: Joi.string().required(),
+      parentId: Joi.string().optional().allow(null),
     }),
   },
   handler: async (req, res) => {
@@ -13,6 +14,7 @@ module.exports = {
 
     const channel = await repo.channel.get({ id: channelId });
 
+    // TODO typing should know in which parent it is?
     res.group(channel.users, {
       type: 'typing',
       userId: req.userId,

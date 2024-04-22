@@ -1,8 +1,10 @@
 /* eslint-disable no-undef */
  
 import { precacheAndRoute } from 'workbox-precaching';
-import { registerRoute } from 'workbox-routing';
 import * as navigationPreload from 'workbox-navigation-preload';
+// import { registerRoute } from 'workbox-routing';
+
+declare const self: ServiceWorkerGlobalScope;
 
 const files = (self.__WB_MANIFEST) || [];
 
@@ -10,15 +12,9 @@ if(files.length) {
   precacheAndRoute(files);
   navigationPreload.enable();
 }
+/*
 
-
-registerRoute(
-  '/share',
-  shareTargetHandler,
-  'POST',
-);
-
-async function shareTargetHandler({ event }) {
+const shareTargetHandler = async ({ event }) => {
   getOpenClient().then((client) => {
     if (client) {
       event.request.formData().then((formData) => {
@@ -34,12 +30,20 @@ async function shareTargetHandler({ event }) {
   event.respondWith(Response.redirect('/'));
 }
 
-function getOpenClient() {
+registerRoute(
+  '/share',
+  shareTargetHandler,
+  'POST',
+);
+
+async function getOpenClient(): Promise<Client> {
   return clients.matchAll({
     includeUncontrolled: true,
     type: 'window',
   }).then((clientList) => clientList[0]);
 }
+
+*/
 
 self.addEventListener('push', (event) => {
   if (event.data) {
@@ -67,7 +71,7 @@ self.addEventListener('notificationclick', (event) => {
   event.waitUntil(handleNotificationClick(event));
 });
 
-async function handleNotificationClick(event) {
+async function handleNotificationClick(event: NotificationEvent) {
   const link = event.notification.data.url;
   if (!link) return;
   const url = new URL(link, self.location.href);
@@ -86,7 +90,25 @@ async function handleNotificationClick(event) {
   return client.postMessage({ type: 'notification:click', ...event.notification.data });
 }
 
-async function handleNotification(title, options, data) {
+type NotificationData = {
+  title: string;
+  body: string;
+  icon: string;
+  badge: string;
+  url: string;
+};
+
+type NotificationOptions = {
+  body: string;
+  icon: string;
+  badge: string;
+  silent: boolean;
+  vibrate: number[];
+  tag: string;
+  data: NotificationData;
+};
+
+async function handleNotification(title: string, options: NotificationOptions, data: NotificationData) {
   await self.registration.showNotification(title, options);
   const clientList = await getClientList();
 	for (const client of clientList) {
@@ -101,10 +123,10 @@ function getClientList() {
   });
 }
 
-async function getWindowClient(url) {
+async function getWindowClient(url: URL) {
   const clientList = await getClientList();
   for (const client of clientList) {
-    const clientUrl = new URL(client.url, self.location.href);
+   const clientUrl = new URL(client.url, self.location.href);
     if (url.host === clientUrl.host) {
       return client;
     }
@@ -112,7 +134,7 @@ async function getWindowClient(url) {
   return null;
 }
 
-function wait(ms) {
+function wait(ms: number) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });

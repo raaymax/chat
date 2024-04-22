@@ -43,7 +43,7 @@ export const Login = ({ children }: LoginProps) => {
     e.preventDefault();
     e.stopPropagation();
     const fd = new FormData(e.target as HTMLFormElement);
-    const value = Object.fromEntries(fd.entries());
+    const value = Object.fromEntries(fd.entries()) as { login: string, password: string };
     const ret = await session.login(value);
     if (ret.status === 'ok') {
       window.location.reload();

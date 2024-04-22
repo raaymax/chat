@@ -1,17 +1,24 @@
+import {client} from './client';
 /* eslint-disable no-undef */
- 
 
-const registry = {};
+declare global {
+  const PLUGIN_LIST: string[] | undefined;
+  interface Window {
+    Chat: any;
+  }
+}
+
+const registry: Record<string, Array<any>> = {};
 const plugins = {
-  register: (slot, data) => {
+  register: (slot: string, data: any) => {
     if (typeof data === 'function') {
-      data = data(window.client);
+      data = data(client);
     }
     registry[slot] = registry[slot] || [];
     [data].flat().forEach((d) => registry[slot].push(d));
   },
 
-  get: (slot) => registry[slot] || [],
+  get: (slot: string): any => registry[slot] || [],
 };
 
 window.Chat = plugins;

@@ -42,8 +42,9 @@ export const MessageList = (props: MessageListProps) => {
   const [stream] = useStream();
 
   const detectDate = useCallback((e: React.SyntheticEvent) => {
-    const c = e.target.getBoundingClientRect();
-    const r = [...e.target.children]
+    const target = e.target as HTMLElement;
+    const c = target.getBoundingClientRect();
+    const r = [...target.children]
       .filter((child) => child.className.includes('message'))
       .find((child) => {
         const e = child.getBoundingClientRect();
@@ -52,9 +53,9 @@ export const MessageList = (props: MessageListProps) => {
     if (r) {
       const date = r.getAttribute('data-date');
       if (setCurrent) {
-        setCurrent([date, r.getBoundingClientRect()]);
+        setCurrent([new Date(date ?? ''), r.getBoundingClientRect()]);
       }
-      if (onDateChange) onDateChange(date);
+      if (onDateChange) onDateChange(date?? '');
     }
   }, [setCurrent, onDateChange]);
 
