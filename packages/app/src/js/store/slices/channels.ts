@@ -6,19 +6,18 @@ export default createSlice({
   initialState: {} as {[id: string]: Channel},
   reducers: {
     add: (state, action: PayloadAction<Channel | Channel[]>) => {
-      const payload = action.payload;
-      const newState = {...state};
+      const { payload } = action;
+      const newState = { ...state };
       [payload as Channel | Channel[]].flat().forEach((channel) => {
-        newState[channel.id] = Object.assign({}, newState[channel.id] || {}, channel);
+        newState[channel.id] = { ...newState[channel.id] || {}, ...channel };
       });
       return newState;
     },
     remove: (state, action: PayloadAction<string>) => {
       const id = action.payload;
-      const newState = {...state};
+      const newState = { ...state };
       delete newState[id];
       return newState;
     },
   },
 });
-

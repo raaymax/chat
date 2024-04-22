@@ -1,12 +1,10 @@
 import {
-  useMemo, useEffect, useState
+  useMemo, useEffect, useState,
 } from 'react';
 import { useSelector, useDispatch, useMethods } from '../../store';
 import { loadMessages, loadNext, loadPrevious } from '../../services/messages';
-import { Message } from '../../types';
+import { Message, Stream } from '../../types';
 import { useStream } from './useStream';
-import { Stream } from '../../types';
-
 
 export const useMessages = () => {
   const dispatch = useDispatch();
@@ -36,5 +34,5 @@ export const useMessages = () => {
     ),
     next: () => dispatch(loadNext(stream)).unwrap(),
     prev: () => dispatch(loadPrevious(stream)).unwrap(),
-  }
+  };
 };

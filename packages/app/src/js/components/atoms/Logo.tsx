@@ -4,4 +4,3 @@ export const Logo = ({ onClick }: {onClick: () => void}) => (
     <span className='logo-name'>Quack</span>
   </div>
 );
-

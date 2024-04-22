@@ -13,7 +13,7 @@ export default createSlice({
       const newState = { ...state };
       [action.payload].flat().forEach((msg) => {
         const { channelId } = msg;
-         
+
         const list = newState[channelId] = newState[channelId] || [];
         if (msg.createdAt) {
           msg.createdAt = (new Date(msg.createdAt)).toISOString();
@@ -21,7 +21,7 @@ export default createSlice({
         const idx = list.findIndex((m) => (m.id && m.id === msg.id)
           || (m.clientId && m.clientId === msg.clientId));
         if (idx !== -1) {
-          list[idx] = { ...list[idx], ...msg};
+          list[idx] = { ...list[idx], ...msg };
           return;
         }
         let pos = list.findIndex((m) => m.createdAt < msg.createdAt);
@@ -38,4 +38,3 @@ export default createSlice({
     },
   },
 });
-

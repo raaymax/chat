@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 type TypingState = {
   [channelId: string]: {
@@ -14,8 +14,8 @@ export default createSlice({
   initialState: { cooldown: false, queue: false } as TypingState,
   reducers: {
     add: (state, action) => {
-      const newState = {...state};
-      [action.payload].flat().forEach(({userId, channelId}) => {
+      const newState = { ...state };
+      [action.payload].flat().forEach(({ userId, channelId }) => {
         newState[channelId] = newState[channelId] || {};
         newState[channelId][userId] = new Date().toISOString();
       });
@@ -35,7 +35,6 @@ export default createSlice({
       cooldown: false,
       queue: false,
     } as TypingState),
-    set: (state, action) => ({...state, ...action.payload}),
+    set: (state, action) => ({ ...state, ...action.payload }),
   },
 });
-

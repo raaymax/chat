@@ -28,7 +28,7 @@ export default createSlice({
       const idx = findIdx(state, payload.id);
       if (idx === -1) return state;
       const newState = [...state];
-      newState[idx] = { ...newState[idx], ...payload.file};
+      newState[idx] = { ...newState[idx], ...payload.file };
       return newState;
     },
     remove: (state, action) => {
@@ -42,4 +42,3 @@ export default createSlice({
     clear: (state, action) => state.filter((f) => f.streamId !== action.payload),
   },
 });
-

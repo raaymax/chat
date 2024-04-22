@@ -35,10 +35,10 @@ const saveStream = (stream: Stream) => {
     selected: stream.selected,
   }) as Record<string, string>);
   const querystring = query.toString();
-   
-  window.location.hash = `/${stream.channelId}`
-    + (stream.parentId ? `/${stream.parentId}` : '')
-    + (querystring ? `?${querystring}` : '');
+
+  window.location.hash = `/${stream.channelId}${
+    stream.parentId ? `/${stream.parentId}` : ''
+  }${querystring ? `?${querystring}` : ''}`;
 };
 
 export default createSlice({
@@ -47,17 +47,16 @@ export default createSlice({
   reducers: {
     open: (state, action) => {
       const { id, value } = action.payload;
-      if (id === 'main') saveStream({channelId: state.mainChannelId, ...value });
+      if (id === 'main') saveStream({ channelId: state.mainChannelId, ...value });
       if (value) {
-        return {...state, [id]: { id, channelId: state.mainChannelId, ...value }};
+        return { ...state, [id]: { id, channelId: state.mainChannelId, ...value } };
       }
-      return {...state, [id]: value };
+      return { ...state, [id]: value };
     },
 
     setMain: (state, action) => {
       const id = action.payload;
-      return {...state, mainChannelId: id };
+      return { ...state, mainChannelId: id };
     },
   },
 });
-

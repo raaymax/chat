@@ -1,16 +1,15 @@
-import {createMethod} from '../store';
-import {Stream} from '../../types';
+import { createMethod } from '../store';
+import { Stream } from '../../types';
 
-export const loadBadges = createMethod('progress/loadBadges', async (_arg, {actions, client, dispatch}) => {
+export const loadBadges = createMethod('progress/loadBadges', async (_arg, { actions, client, dispatch }) => {
   const { data } = await client.req({
     type: 'readReceipt:getOwn',
   });
   dispatch(actions.progress.add(data));
 });
 
-
-export const loadProgress = createMethod('progress/loadProgress', async (stream: Stream, {actions, client, dispatch}) => {
-  try{
+export const loadProgress = createMethod('progress/loadProgress', async (stream: Stream, { actions, client, dispatch }) => {
+  try {
     if (!stream.channelId) return;
     const { data } = await client.req({
       type: 'readReceipt:getChannel',
@@ -18,13 +17,13 @@ export const loadProgress = createMethod('progress/loadProgress', async (stream:
       parentId: stream.parentId,
     });
     dispatch(actions.progress.add(data));
-  }catch(err){
+  } catch (err) {
     // eslint-disable-next-line no-console
-    console.error(err)
+    console.error(err);
   }
 });
 
-export const update = createMethod('progress/update', async (messageId: string, {actions, client, dispatch}) => {
+export const update = createMethod('progress/update', async (messageId: string, { actions, client, dispatch }) => {
   const { data } = await client.req({
     type: 'readReceipt:update',
     messageId,

@@ -1,7 +1,7 @@
-import { useSelector, useEmojiFuse } from '../../store';
 import {
   useCallback, useEffect, useState, useMemo,
 } from 'react';
+import { useSelector, useEmojiFuse } from '../../store';
 import { TextMenu } from './TextMenu';
 import { useInput } from '../contexts/useInput';
 import { getUrl } from '../../services/file';
@@ -28,13 +28,13 @@ export const EmojiSelector = () => {
 
   const options = useMemo(() => {
     let em = fuse.search(currentText || '').slice(0, 5).map(({ item }) => item);
-    em = em.length ? em: emojis.slice(0, 5);
+    em = em.length ? em : emojis.slice(0, 5);
     const opts: MenuOption[] = [...em.map((item) => ({
       label: item.unicode && String.fromCodePoint(parseInt(item.unicode, 16)),
       url: item.fileId && getUrl(item.fileId),
       name: item.shortname,
       item,
-    })), { label: '❌', name: 'no emoji', action: 'close'}];
+    })), { label: '❌', name: 'no emoji', action: 'close' }];
     return opts;
   }, [fuse, emojis, currentText]);
 
@@ -56,7 +56,7 @@ export const EmojiSelector = () => {
   }, [insert]);
 
   const submit = useCallback((event: Event, { s, shortName, exact = true }: {s?: number, shortName?: string, exact?: boolean} = {}) => {
-    if(!scopeContainer) return;
+    if (!scopeContainer) return;
     let container = scopeContainer;
     if (scope !== SCOPE) {
       container = create(event);
@@ -84,7 +84,7 @@ export const EmojiSelector = () => {
   }, [options, selected, scopeContainer, emojis, create, scope]);
 
   const remove = useCallback((event: Event) => {
-    if(!scopeContainer) return;
+    if (!scopeContainer) return;
     if (scopeContainer.textContent?.length === 1) {
       scopeContainer.remove();
       event.preventDefault();
@@ -93,7 +93,7 @@ export const EmojiSelector = () => {
   }, [scopeContainer]);
 
   const close = useCallback((e: Event) => {
-    if(!scopeContainer) return;
+    if (!scopeContainer) return;
     const text = scopeContainer.textContent ?? '';
     const node = document.createTextNode(text);
     scopeContainer.replaceWith(node);
@@ -149,12 +149,12 @@ export const EmojiSelector = () => {
   }, [currentText, scope, create, remove, submit, replace, options, selected, close]);
 
   const onSelect = useCallback((idx: number, e: Event) => {
-    submit(e, {exact: false, s: idx});
-  },[submit]);
+    submit(e, { exact: false, s: idx });
+  }, [submit]);
 
   useEffect(() => {
     const { current } = input;
-    if(!current) return;
+    if (!current) return;
     current.addEventListener('keydown', ctrl);
     return () => {
       current.removeEventListener('keydown', ctrl);
@@ -162,7 +162,7 @@ export const EmojiSelector = () => {
   }, [input, ctrl]);
 
   if (scope !== SCOPE) return null;
-  
+
   return (
     <TextMenu open={true} options={options} onSelect={(...ar) => onSelect(...ar)} selected={selected} setSelected={setSelected} />
   );

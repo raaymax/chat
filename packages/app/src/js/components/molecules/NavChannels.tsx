@@ -1,6 +1,8 @@
-import {useState} from 'react';
-import { useSelector, useBadges, useChannels, useActions, useDispatch } from '../../store';
+import { useState } from 'react';
 import styled from 'styled-components';
+import {
+  useSelector, useBadges, useChannels, useActions, useDispatch,
+} from '../../store';
 import { ChannelCreate } from './ChannelCreate';
 import { Channel } from './NavChannel';
 
@@ -63,12 +65,12 @@ export const NavChannels = ({ icon }: NavChannelsProps) => {
         <Channel
           channelId={c.id}
           {...c}
-          className={{active: id === c.id}}
+          className={{ active: id === c.id }}
           key={c.id}
           icon={icon ?? 'hash'}
           badge={badges[c.id]}
           onClick={() => {
-            dispatch(actions.stream.open({id: 'main', value: { type: 'live', channelId: c.id }}));
+            dispatch(actions.stream.open({ id: 'main', value: { type: 'live', channelId: c.id } }));
             dispatch(actions.view.set(null));
           }}
         />

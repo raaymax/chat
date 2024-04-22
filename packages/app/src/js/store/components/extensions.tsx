@@ -1,7 +1,7 @@
 import {
   createContext,
 } from 'react';
-import { actions, methods} from '../storeExt';
+import { actions, methods } from '../storeExt';
 
 export const ExtensionsContext = createContext({
   actions,
@@ -12,10 +12,8 @@ type ExtensionsContextProps = {
   children: React.ReactNode;
 };
 
-export const ExtensionsProvider = ({ children }: ExtensionsContextProps) => {
-  return (
-    <ExtensionsContext.Provider value={{actions, methods}}>
-      {children}
-    </ExtensionsContext.Provider>
-  );
-};
+export const ExtensionsProvider = ({ children }: ExtensionsContextProps) => (
+  <ExtensionsContext.Provider value={{ actions, methods }}>
+    {children}
+  </ExtensionsContext.Provider>
+);

@@ -2,7 +2,9 @@ import styled from 'styled-components';
 import { useCallback, useState } from 'react';
 import { useStream } from '../contexts/useStream';
 import { HoverProvider } from '../contexts/hover';
-import { useSelector, useMethods, useActions, useDispatch } from '../../store';
+import {
+  useSelector, useMethods, useActions, useDispatch,
+} from '../../store';
 import { formatTime, formatDate } from '../../utils';
 
 import { SearchBox } from '../atoms/SearchBox';
@@ -110,10 +112,10 @@ export const Header = () => {
   const [value, setValue] = useState('');
 
   const submit = useCallback(async () => {
-    dispatch(methods.search.find({channelId: stream.channelId, text: value}));
+    dispatch(methods.search.find({ channelId: stream.channelId, text: value }));
   }, [methods, stream, value, dispatch]);
 
-  const onKeyDown= useCallback(async (e: React.KeyboardEvent) => {
+  const onKeyDown = useCallback(async (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && e.shiftKey === false) {
       await submit();
       e.preventDefault();
@@ -123,7 +125,7 @@ export const Header = () => {
   return (
     <StyledHeader>
       <i className='fa-solid fa-magnifying-glass' />
-      <SearchBox className='search-input' placeholder='search...' onKeyDown={onKeyDown} value={value} onChange={(e)=>setValue(e.target.value)}/>
+      <SearchBox className='search-input' placeholder='search...' onKeyDown={onKeyDown} value={value} onChange={(e) => setValue(e.target.value)}/>
 
       <Toolbar className="toolbar" size={50}>
         <ButtonWithIcon icon="send" onClick={() => submit()} />
@@ -173,7 +175,6 @@ export function SearchResults() {
     </StyledList>
   );
 }
-
 
 export const Search = () => (
   <StyledSearch>

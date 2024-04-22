@@ -43,7 +43,7 @@ export const ChannelSelector = () => {
   }, [insert]);
 
   const submit = useCallback((event: Event, opts?: {selected: number}) => {
-    if(!scopeContainer) return;
+    if (!scopeContainer) return;
     event.preventDefault();
     event.stopPropagation();
     scopeContainer.className = 'channel';
@@ -63,7 +63,7 @@ export const ChannelSelector = () => {
   }, [options, selected, scopeContainer]);
 
   const remove = useCallback((event: Event) => {
-    if(!scopeContainer) return;
+    if (!scopeContainer) return;
     if (scopeContainer.textContent?.length === 1) {
       scopeContainer.remove();
       event.preventDefault();
@@ -85,10 +85,9 @@ export const ChannelSelector = () => {
     }
   }, [currentText, scope, create, remove, submit]);
 
-
   const onSelect = useCallback((idx: number, e: Event) => {
-    submit(e, {selected: idx});
-  },[submit]);
+    submit(e, { selected: idx });
+  }, [submit]);
 
   useEffect(() => {
     if (!input.current) return;

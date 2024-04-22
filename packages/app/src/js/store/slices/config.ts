@@ -8,7 +8,6 @@ export default createSlice({
   name: 'config',
   initialState: {} as ConfigState,
   reducers: {
-    setAppVersion: (state, action) => ({...state, appVersion: action.payload }),
+    setAppVersion: (state, action) => ({ ...state, appVersion: action.payload }),
   },
 });
-

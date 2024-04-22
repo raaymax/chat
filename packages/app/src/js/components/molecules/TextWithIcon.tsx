@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import {Icon} from '../atoms/Icon';
-import {Text} from '../atoms/Text';
-import {useSize} from '../contexts/useSize';
-import {cn, ClassNames} from '../../utils';
+import { Icon } from '../atoms/Icon';
+import { Text } from '../atoms/Text';
+import { useSize } from '../contexts/useSize';
+import { cn, ClassNames } from '../../utils';
 
 const Container = styled.div`
   display: inline-block;
@@ -24,8 +24,8 @@ export const TextWithIcon = ({
   const $size = useSize(size);
   return (
     <Container className={cn(className)}>
-      <Icon icon={icon} size={$size ? $size/2.3 : $size} />
-      <Text size={$size ? $size/2.3 : $size}>{children}</Text>
+      <Icon icon={icon} size={$size ? $size / 2.3 : $size} />
+      <Text size={$size ? $size / 2.3 : $size}>{children}</Text>
     </Container>
   );
-}
+};

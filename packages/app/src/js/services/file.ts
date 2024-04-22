@@ -15,17 +15,17 @@ type FileUpload = {
   file: File;
 };
 
-export const uploadMany = createMethod('files/uploadMany', async ({streamId, files}: FilesUpload, {dispatch}) => {
+export const uploadMany = createMethod('files/uploadMany', async ({ streamId, files }: FilesUpload, { dispatch }) => {
   for (let i = 0, file; i < files.length; i++) {
     file = files.item(i);
     if (!file) continue;
-    dispatch(upload({streamId, file}));
+    dispatch(upload({ streamId, file }));
   }
 });
 
 const isError = (err: unknown): err is Error => err instanceof Error;
 
-export const upload = createMethod('files/upload', async ({streamId, file}: FileUpload, {dispatch, actions}) => {
+export const upload = createMethod('files/upload', async ({ streamId, file }: FileUpload, { dispatch, actions }) => {
   const local = {
     streamId,
     clientId: tempId(),
@@ -57,7 +57,7 @@ export const upload = createMethod('files/upload', async ({streamId, file}: File
       }));
     }
   } catch (err) {
-    if (isError(err)){
+    if (isError(err)) {
       dispatch(actions.files.update({
         id: local.clientId,
         file: {
@@ -75,7 +75,7 @@ export const getUrl = (id: string) => `${FILES_URL}/${id}`;
 export const getThumbnail = (id: string) => `${getUrl(id)}?h=256&w=256`;
 const aborts: Record<string, (() => void)> = {};
 
-export const abort = createMethod('files/abort', async (clientId: string, {dispatch, actions}) => {
+export const abort = createMethod('files/abort', async (clientId: string, { dispatch, actions }) => {
   try {
     aborts[clientId] && aborts[clientId]();
     dispatch(actions.files.remove(clientId));
@@ -91,7 +91,7 @@ type UploadArgs = {
   progress: (progress: number) => void;
 };
 
-function uploadFile(url: string, { file, progress, clientId }: UploadArgs): Promise<{ status: string, fileId: string }>{
+function uploadFile(url: string, { file, progress, clientId }: UploadArgs): Promise<{ status: string, fileId: string }> {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', () => {

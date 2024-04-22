@@ -6,12 +6,11 @@ export default createSlice({
   initialState: {} as Record<string, User>,
   reducers: {
     add: (state, action) => {
-      const newState = {...state};
+      const newState = { ...state };
       ([action.payload] as User[]).flat().forEach((user) => {
-        newState[user.id] = Object.assign({}, newState[user.id] || {}, user);
+        newState[user.id] = { ...newState[user.id] || {}, ...user };
       });
       return newState;
     },
   },
 });
-

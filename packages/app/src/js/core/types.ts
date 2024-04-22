@@ -1,16 +1,16 @@
 import { MessageBody } from '../types';
 
 export type OutgoingPayload = (
-  OutgoingChannelCreate 
-  | OutgoingChannelGet 
-  | OutgoingChannelGetAll 
-  | OutgoingCommandExecute 
-  | OutgoingEmojiGet 
-  | OutgoingEmojiGetAll 
-  | OutgoingMessageCreate 
-  | OutgoingMessageGetAll 
-  | OutgoingMessagePin 
-  | OutgoingMessagePins 
+  OutgoingChannelCreate
+  | OutgoingChannelGet
+  | OutgoingChannelGetAll
+  | OutgoingCommandExecute
+  | OutgoingEmojiGet
+  | OutgoingEmojiGetAll
+  | OutgoingMessageCreate
+  | OutgoingMessageGetAll
+  | OutgoingMessagePin
+  | OutgoingMessagePins
   | OutgoingMessageReact
   | OutgoingMessageRemove
   | OutgoingMessageSearch

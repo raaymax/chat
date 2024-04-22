@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 type ViewState = {
   current: string | null;
@@ -6,15 +6,14 @@ type ViewState = {
 
 export default createSlice({
   name: 'view',
-  initialState: {current: null} as ViewState,
+  initialState: { current: null } as ViewState,
   reducers: {
     set: (state, action) => {
       const view = action.payload;
       if (state.current === view) {
-        return {current: null};
+        return { current: null };
       }
-      return {current: view};
+      return { current: view };
     },
   },
 });
-

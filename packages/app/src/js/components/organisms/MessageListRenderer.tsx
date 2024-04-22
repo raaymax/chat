@@ -32,7 +32,7 @@ export const MessageListRenderer = ({
       sameDate = prev
         && formatDate(prev?.createdAt) === formatDate(msg?.createdAt);
       prev = msg;
-      return <React.Fragment key={msg.id +'-'+ msg.clientId}>
+      return <React.Fragment key={`${msg.id}-${msg.clientId}`}>
         {isNotif(msg)
           ? <Notification
             className={[msg.notifType]}>
@@ -50,7 +50,7 @@ export const MessageListRenderer = ({
             data={msg}
           />}
         {!sameDate ? <DateSeparator key={`date:${msg.createdAt}`} date={msg.createdAt} /> : null}
-      </React.Fragment>
+      </React.Fragment>;
     }).reverse()}
   </>);
 };

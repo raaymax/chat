@@ -12,4 +12,3 @@ export const SizeProvider = ({ children, value }: SizeContextProps) => (
     {children}
   </SizeContext.Provider>
 );
-

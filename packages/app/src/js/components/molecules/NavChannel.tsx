@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useDispatch, useMethods, useSelector } from '../../store';
 import styled from 'styled-components';
+import { useDispatch, useMethods, useSelector } from '../../store';
 import { Badge } from '../atoms/Badge';
 import { TextWithIcon } from './TextWithIcon';
 import { cn, ClassNames } from '../../utils';
@@ -40,10 +40,10 @@ export const InlineChannel = ({
   id, children, badge, className, onClick, icon = 'fa-solid fa-hashtag',
 }: InlineChannelProps) => (
   <Container className={cn('channel', className)} data-id={id} onClick={onClick}>
-    <TextWithIcon icon={icon}>{children}</TextWithIcon> 
+    <TextWithIcon icon={icon}>{children}</TextWithIcon>
     {(badge && badge > 0) ? <Badge>{badge}</Badge> : null}
   </Container>
-)
+);
 
 type DirectChannelProps = {
   channel: {
@@ -56,24 +56,26 @@ type DirectChannelProps = {
   className?: ClassNames;
 };
 
-const DirectChannel = ({ channel, badge, onClick, className }: DirectChannelProps) => {
+const DirectChannel = ({
+  channel, badge, onClick, className,
+}: DirectChannelProps) => {
   const me = useSelector((state) => state.me);
   let other = channel.users.find((u) => u !== me);
   if (!other) [other] = channel.users;
   const user = useSelector((state) => state.users[other ?? '']);
   if (!user) {
-    return ( <InlineChannel className={className} id={channel.id} onClick={onClick} badge={badge}>{channel.name}</InlineChannel> );
+    return (<InlineChannel className={className} id={channel.id} onClick={onClick} badge={badge}>{channel.name}</InlineChannel>);
   }
   if (user.system) {
-    return ( <InlineChannel className={className} id={channel.id} onClick={onClick} icon='fa-solid fa-user-gear' badge={badge}>{user.name}</InlineChannel> );
+    return (<InlineChannel className={className} id={channel.id} onClick={onClick} icon='fa-solid fa-user-gear' badge={badge}>{user.name}</InlineChannel>);
   }
   const active = user.lastSeen && new Date(user.lastSeen).getTime() > Date.now() - 1000 * 60 * 5;
-  return ( <InlineChannel
-    className={cn(className, `user`, {
+  return (<InlineChannel
+    className={cn(className, 'user', {
       connected: user.connected,
       offline: !user.connected,
       recent: Boolean(active),
-      system: user.system
+      system: user.system,
     })}
     id={channel.id} onClick={onClick} icon='fa-solid fa-user' badge={badge}>{user.name}</InlineChannel>);
 };
@@ -100,7 +102,6 @@ export const Channel = ({
   const { name, private: priv, direct } = channel || {};
   let ico = icon;
   if (priv) ico = 'fa-solid fa-lock';
-  if (direct) return ( <DirectChannel className={className} channel={channel || {}} onClick={onClick} badge={badge} /> );
-  return ( <InlineChannel className={className} id={id} onClick={onClick} icon={ico} badge={badge}>{name}</InlineChannel> );
+  if (direct) return (<DirectChannel className={className} channel={channel || {}} onClick={onClick} badge={badge} />);
+  return (<InlineChannel className={className} id={id} onClick={onClick} icon={ico} badge={badge}>{name}</InlineChannel>);
 };
-

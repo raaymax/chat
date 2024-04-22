@@ -3,7 +3,6 @@ import { useSelector } from './useSelector';
 import { useUsers } from './useUsers';
 import { Progress, User } from '../../types';
 
-
 type UserProgress = Progress & { user: User };
 
 export const useProgress = ({ channelId, parentId }: {channelId: string, parentId?: string}) => {

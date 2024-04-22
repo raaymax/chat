@@ -55,7 +55,7 @@ export const MessageList = (props: MessageListProps) => {
       if (setCurrent) {
         setCurrent([new Date(date ?? ''), r.getBoundingClientRect()]);
       }
-      if (onDateChange) onDateChange(date?? '');
+      if (onDateChange) onDateChange(date ?? '');
     }
   }, [setCurrent, onDateChange]);
 
@@ -64,16 +64,16 @@ export const MessageList = (props: MessageListProps) => {
     if (!element?.current) return;
     if (list === oldList) return;
     const getRect = (): DOMRect | undefined => {
-      if(!element.current) return;
+      if (!element.current) return;
       return [...element.current.children]
         ?.find((child) => child.getAttribute('data-date') === current[0]?.toISOString())
         ?.getBoundingClientRect();
-    }
+    };
     const max = getMax(list);
     const oldMax = getMax(oldList);
     if (new Date(max).toISOString() !== new Date(oldMax).toISOString()) {
       const rect = getRect();
-      if(!rect) return;
+      if (!rect) return;
       if (stream.type === 'live') {
         element.current.scrollTop = 0;
       } else if (rect && current && current[1]?.y) {

@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
-import { useActions, useDispatch, useMethods, useSelector } from '../../store';
 import styled from 'styled-components';
+import {
+  useActions, useDispatch, useMethods, useSelector,
+} from '../../store';
 import { Icon } from '../atoms/Icon';
 
 const StyledChannelLink = styled.a`
@@ -25,7 +27,7 @@ export const ChannelLink = ({ channelId: id }: ChannelInlineProps) => {
   }, [id, channel, methods, dispatch]);
   return (
     <StyledChannelLink className='channel' data-id={id} href={`#${channel?.id || id}`} onClick={() => {
-      dispatch(actions.stream.open({id: 'main', value: { type: 'live', channelId: channel?.id || id }}));
+      dispatch(actions.stream.open({ id: 'main', value: { type: 'live', channelId: channel?.id || id } }));
       dispatch(actions.view.set(null));
     }} >
       { channel?.private ? <Icon icon='lock' /> : <Icon icon="hash" /> }

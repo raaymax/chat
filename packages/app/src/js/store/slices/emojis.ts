@@ -8,11 +8,11 @@ type EmojiState = {
 
 export default createSlice({
   name: 'emojis',
-  initialState: {ready: false, data: []} as EmojiState,
+  initialState: { ready: false, data: [] } as EmojiState,
   reducers: {
-    ready: (state) => ({...state, ready: true}),
+    ready: (state) => ({ ...state, ready: true }),
     add: (state, action) => {
-      const newState = {...state, data: [...state.data]};
+      const newState = { ...state, data: [...state.data] };
       [action.payload].flat().forEach((emoji) => {
         const idx = state.data.findIndex((e) => e.shortname === emoji.shortname);
         if (idx !== -1) {
@@ -25,4 +25,3 @@ export default createSlice({
     },
   },
 });
-

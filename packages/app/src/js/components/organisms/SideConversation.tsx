@@ -74,7 +74,7 @@ export const Header = ({ onClick }: HeaderProps) => {
             },
           }));
         }} />
-        <ButtonWithIcon icon='xmark' onClick={() => dispatch(actions.stream.open({id: 'side', value: null}))} />
+        <ButtonWithIcon icon='xmark' onClick={() => dispatch(actions.stream.open({ id: 'side', value: null }))} />
       </Toolbar>
     </StyledHeader>
   );

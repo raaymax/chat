@@ -19,7 +19,7 @@ export const ThreadLink = ({ channelId, parentId, text }: ThreadLinkProps) => {
   const dispatch = useDispatch();
   const actions = useActions();
   return (
-    <Link onClick={() => dispatch(actions.stream.open({id: 'side', value: { type: 'live', channelId, parentId }}))}>
+    <Link onClick={() => dispatch(actions.stream.open({ id: 'side', value: { type: 'live', channelId, parentId } }))}>
       {text || 'Thread'}
     </Link>
   );

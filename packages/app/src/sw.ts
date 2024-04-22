@@ -6,7 +6,7 @@ declare const self: ServiceWorkerGlobalScope;
 
 const files = (self.__WB_MANIFEST) || [];
 
-if(files.length) {
+if (files.length) {
   precacheAndRoute(files);
   navigationPreload.enable();
 }
@@ -17,7 +17,7 @@ const shareTargetHandler = async ({ event }) => {
     if (client) {
       event.request.formData().then((formData) => {
         const data = {};
-         
+
         for (const [key, val] of formData.entries()) {
           data[key] = val;
         }
@@ -109,9 +109,9 @@ type NotificationOptions = {
 async function handleNotification(title: string, options: NotificationOptions, data: NotificationData) {
   await self.registration.showNotification(title, options);
   const clientList = await getClientList();
-	for (const client of clientList) {
-		client.postMessage({ type: 'notification', data });
-	}
+  for (const client of clientList) {
+    client.postMessage({ type: 'notification', data });
+  }
 }
 
 function getClientList() {
@@ -124,7 +124,7 @@ function getClientList() {
 async function getWindowClient(url: URL) {
   const clientList = await getClientList();
   for (const client of clientList) {
-   const clientUrl = new URL(client.url, self.location.href);
+    const clientUrl = new URL(client.url, self.location.href);
     if (url.host === clientUrl.host) {
       return client;
     }

@@ -6,7 +6,7 @@ export const useMessage = (id: string | undefined | null) => {
   return useMemo(
     () => {
       if (!id) return null;
-      return messages.find((m) => m.id === id || m.clientId === id) || null
+      return messages.find((m) => m.id === id || m.clientId === id) || null;
     },
     [messages, id],
   );

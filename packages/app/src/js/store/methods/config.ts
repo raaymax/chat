@@ -1,4 +1,4 @@
-import {createMethod} from '../store';
+import { createMethod } from '../store';
 
 export const load = createMethod('config/load', async (_arg, { actions, client, dispatch }) => {
   const { data: [config] } = await client.req({ type: 'user:config' });

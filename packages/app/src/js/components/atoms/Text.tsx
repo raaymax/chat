@@ -16,15 +16,15 @@ const StyledText = styled.span`
   display: inline;
 `;
 
-export const Text = ({ size, className, children}: TextProps) => {
+export const Text = ({ size, className, children }: TextProps) => {
   const $size = useSize(size);
   return (
     <StyledText className={cn('text', className)} style={$size ? {
-        height: `${$size}px`,
-        lineHeight: `${$size}px`,
-        fontSize: `${$size}px`,
-      }: undefined} >
+      height: `${$size}px`,
+      lineHeight: `${$size}px`,
+      fontSize: `${$size}px`,
+    } : undefined} >
       {children}
     </StyledText>
   );
-}
+};

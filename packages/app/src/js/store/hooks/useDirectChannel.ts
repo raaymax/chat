@@ -9,5 +9,5 @@ export const useDirectChannel = (userId: string) => {
       && c.users.includes(userId)
       && (userId === meId
         ? (c.users.length === 2 && c.users.every((u) => u === meId))
-        : true ))) || null, [channels, userId, meId]);
+        : true))) || null, [channels, userId, meId]);
 };

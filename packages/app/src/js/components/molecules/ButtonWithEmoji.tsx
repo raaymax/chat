@@ -1,6 +1,6 @@
-import {Button} from '../atoms/Button';
-import {Emoji} from './Emoji';
-import {useSize} from '../contexts/useSize';
+import { Button } from '../atoms/Button';
+import { Emoji } from './Emoji';
+import { useSize } from '../contexts/useSize';
 
 interface ButtonWithEmojiProps {
   onClick: () => void;
@@ -9,12 +9,14 @@ interface ButtonWithEmojiProps {
   children?: React.ReactNode;
 }
 
-export const ButtonWithEmoji = ({ onClick, size, emoji, children}: ButtonWithEmojiProps) => {
+export const ButtonWithEmoji = ({
+  onClick, size, emoji, children,
+}: ButtonWithEmojiProps) => {
   const $size = useSize(size);
   return (
     <Button size={$size} onClick={onClick}>
-      <Emoji shortname={emoji} size={$size ? $size/2 : $size} />
+      <Emoji shortname={emoji} size={$size ? $size / 2 : $size} />
       {children}
     </Button>
   );
-}
+};

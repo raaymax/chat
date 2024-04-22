@@ -22,5 +22,5 @@ export const useEmoji = (shortname: string): Emoji => {
     }
   }, [methods, emoji, shortname, emojis]);
 
-  return emoji ?? { shortname, empty: true};
+  return emoji ?? { shortname, empty: true };
 };

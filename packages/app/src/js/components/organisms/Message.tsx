@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import { useActions, useDispatch } from '../../store';
 import styled from 'styled-components';
+import { useActions, useDispatch } from '../../store';
 
 import { resend } from '../../services/messages';
 
@@ -19,7 +19,9 @@ import { useMessageUser } from '../contexts/useMessageUser';
 import { useHoverCtrl } from '../contexts/useHoverCtrl';
 import { useStream } from '../contexts/useStream';
 
-import { cn, ClassNames, formatTime, formatDateDetailed } from '../../utils';
+import {
+  cn, ClassNames, formatTime, formatDateDetailed,
+} from '../../utils';
 
 import { Message as MessageType } from '../../types';
 
@@ -83,7 +85,7 @@ export const ThreadInfo = () => {
   } = msg;
   if (!thread || stream.parentId) return null;
   return (
-    <Container onClick={() => dispatch(actions.stream.open({id: 'side', value: { type: 'live', channelId, parentId: id }}))}>
+    <Container onClick={() => dispatch(actions.stream.open({ id: 'side', value: { type: 'live', channelId, parentId: id } }))}>
       {[...new Set(thread.map((t) => t.userId))]
         .map((userId) => (
           <UserCircle key={userId} userId={userId} />
@@ -125,7 +127,7 @@ const MessageBase = ({ onClick, sameUser, ...props }: MessageBaseProps = {}) => 
       }}
       {...props}
       className={cn('message', {
-        pinned: pinned,
+        pinned,
         selected: selected === id,
       }, props.className)}
       onMouseEnter={onEnter}
@@ -160,12 +162,11 @@ const MessageBase = ({ onClick, sameUser, ...props }: MessageBaseProps = {}) => 
   );
 };
 
-
 type MessageProps = MessageBaseProps & {
   data: MessageType;
 };
 
-export const Message = ({data, ...props}: MessageProps) => (
+export const Message = ({ data, ...props }: MessageProps) => (
   <MessageProvider value={data}>
     <MessageBase {...props} />
   </MessageProvider>

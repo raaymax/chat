@@ -11,7 +11,7 @@ export const Register = () => {
 
   const submit = useCallback(async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    const { name, login, password } = e.target as typeof e.target & { 
+    const { name, login, password } = e.target as typeof e.target & {
       name: {value: string},
       login: {value: string},
       password: {value: string},

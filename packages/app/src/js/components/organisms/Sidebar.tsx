@@ -7,7 +7,6 @@ import plugins from '../../core/plugins';
 import { logout } from '../../services/session';
 import { useActions, useDispatch } from '../../store';
 
-
 export const SideMenu = styled.div`
   flex: 0 0 200px;
   display: flex;
@@ -80,4 +79,4 @@ export const Sidebar = () => {
       </div>
     </SideMenu>
   );
-}
+};

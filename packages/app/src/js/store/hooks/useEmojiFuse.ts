@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { useSelector } from './useSelector';
 import Fuse from 'fuse.js';
+import { useSelector } from './useSelector';
 
 export const useEmojiFuse = () => {
   const emojis = useSelector((state) => state.emojis);
@@ -12,4 +12,4 @@ export const useEmojiFuse = () => {
       'shortname',
     ],
   }), [emojis]);
-}
+};

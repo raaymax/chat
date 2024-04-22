@@ -28,7 +28,7 @@ const register = async (config: UserConfig, retry = false) => navigator.serviceW
     return registration.pushManager.subscribe({
       userVisibleOnly: true,
       applicationServerKey: config.vapidPublicKey,
-    })
+    });
   })
   .then(async (subscription) => client.req({
     type: 'user:push:subscribe',

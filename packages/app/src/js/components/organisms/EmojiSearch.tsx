@@ -1,8 +1,8 @@
-import { useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import { useSelector, useEmojiFuse } from '../../store';
 import { Tooltip } from '../atoms/Tooltip';
 import { SearchBox } from '../atoms/SearchBox';
-import styled from 'styled-components';
 import { getUrl } from '../../services/file';
 import { EmojiDescriptor } from '../../types';
 
@@ -54,7 +54,6 @@ export const EmojiScroll = ({ children }: {children: React.ReactNode}) => (
     </div>
   </Scroll>
 );
-
 
 const EmojiCategory = styled.div`
   display: flex;
@@ -122,7 +121,6 @@ export const Emoji = ({
   </EmojiContainer>
 );
 
-
 const CATEGORIES: Record<string, string> = {
   p: 'People',
   c: 'Custom',
@@ -159,7 +157,7 @@ export const EmojiSearch = ({ onSelect }: EmojiSearchProps) => {
           acc[emoji.category] = acc[emoji.category] || [];
           acc[emoji.category].push(emoji);
           return acc;
-        }, {})
+        }, {}),
     );
   }, [name, fuse, emojis]);
 
@@ -192,4 +190,3 @@ export const EmojiSearch = ({ onSelect }: EmojiSearchProps) => {
     </EmojiSearchContainer>
   );
 };
-

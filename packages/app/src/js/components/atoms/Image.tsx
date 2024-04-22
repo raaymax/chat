@@ -1,5 +1,5 @@
-import { getUrl, getThumbnail } from '../../services/file';
 import styled from 'styled-components';
+import { getUrl, getThumbnail } from '../../services/file';
 
 const ImageContainer = styled.div`
   cursor: pointer;
@@ -46,4 +46,3 @@ export const Image = ({ raw, data: { fileName, id } }: ImageProps) => (
     }
   </ImageContainer>
 );
-

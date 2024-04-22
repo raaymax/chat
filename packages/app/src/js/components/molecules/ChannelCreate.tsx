@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
-import { useMethods } from '../../store';
 import styled from 'styled-components';
+import { useMethods } from '../../store';
 
 const NewChannelContainer = styled.div`
   width: 100%;
@@ -45,7 +45,7 @@ const NewChannelContainer = styled.div`
   }
 `;
 
-// FIXME: extract inputs into atoms? use atom button 
+// FIXME: extract inputs into atoms? use atom button
 export const ChannelCreate = () => {
   const [name, setName] = useState('');
   const methods = useMethods();

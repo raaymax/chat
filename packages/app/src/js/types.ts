@@ -43,11 +43,11 @@ export type MessageBodyChannel = {channel: string};
 export type MessageBodyUser = {user: string};
 export type MessageBodyThread = {thread: { channelId: string, parentId: string, text: string }};
 
-export type MessageBodyPart = MessageBodyBullet | MessageBodyOrdered | MessageBodyItem 
-  | MessageBodyCodeblock | MessageBodyBlockquote | MessageBodyCode 
-  | MessageBodyLine | MessageBodyBr | MessageBodyText | MessageBodyBold 
-  | MessageBodyItalic | MessageBodyUnderline | MessageBodyStrike 
-  | MessageBodyImg | MessageBodyLink | MessageBodyEmoji | MessageBodyChannel 
+export type MessageBodyPart = MessageBodyBullet | MessageBodyOrdered | MessageBodyItem
+  | MessageBodyCodeblock | MessageBodyBlockquote | MessageBodyCode
+  | MessageBodyLine | MessageBodyBr | MessageBodyText | MessageBodyBold
+  | MessageBodyItalic | MessageBodyUnderline | MessageBodyStrike
+  | MessageBodyImg | MessageBodyLink | MessageBodyEmoji | MessageBodyChannel
   | MessageBodyUser | MessageBodyThread;
 
 export type MessageBody = MessageBodyPart[] | MessageBodyPart;
@@ -96,7 +96,7 @@ export type Message = {
     childId: string;
     userId: string;
   }[];
-  //TODO: is it correct?
+  // TODO: is it correct?
   progress?: {
     userId: string;
     user: {
@@ -106,7 +106,6 @@ export type Message = {
   }[];
   priv?: boolean;
 };
-
 
 export type User = {
   id: string;
@@ -119,7 +118,7 @@ export type User = {
   system: boolean;
 };
 
-export type EmojiDescriptor = { 
+export type EmojiDescriptor = {
   empty?: boolean,
   unicode?: string,
   fileId?: string,
@@ -174,7 +173,7 @@ export type Notification = {
 }
 
 export type UserConfig = {
-  appVersion: string, 
+  appVersion: string,
   mainChannelId: string,
   vapidPublicKey: string,
 }

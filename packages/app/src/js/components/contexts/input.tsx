@@ -1,7 +1,9 @@
 import React, {
   useRef, useState, useCallback, useEffect, createContext, MutableRefObject,
 } from 'react';
-import { useDispatch, useSelector, useMessage, useMethods, useActions } from '../../store';
+import {
+  useDispatch, useSelector, useMessage, useMethods, useActions,
+} from '../../store';
 import { useStream } from './useStream';
 import * as messageService from '../../services/messages';
 import { uploadMany } from '../../services/file';
@@ -39,7 +41,7 @@ export const InputContext = createContext<InputContextType | null>(null);
 function findScope(element: HTMLElement | null): { el: HTMLElement, scope: string } | null {
   let currentElement = element;
   while (currentElement !== null) {
-    const scope = currentElement.getAttribute?.('data-scope')
+    const scope = currentElement.getAttribute?.('data-scope');
     if (typeof scope === 'string') {
       return { el: currentElement, scope };
     }
@@ -47,7 +49,6 @@ function findScope(element: HTMLElement | null): { el: HTMLElement, scope: strin
   }
   return null;
 }
-
 
 type InputContextProps = {
   children: React.ReactNode;
@@ -73,7 +74,7 @@ export const InputProvider = (args: InputContextProps) => {
   const [range, setRange] = useState<Range>(document.createRange());
 
   const getDefaultRange = useCallback((): Range => {
-    if(!input.current) throw new Error('Input ref is not set');
+    if (!input.current) throw new Error('Input ref is not set');
     const r = document.createRange();
     r.setStart(input.current, 0);
     r.setEnd(input.current, 0);
@@ -81,9 +82,9 @@ export const InputProvider = (args: InputContextProps) => {
   }, [input]);
 
   const getRange = useCallback((): Range => {
-    if(!input.current) throw new Error('Input ref is not set');
+    if (!input.current) throw new Error('Input ref is not set');
     const selection = document.getSelection();
-    if(!selection || selection.type === 'None') {
+    if (!selection || selection.type === 'None') {
       return getDefaultRange();
     }
     const r = selection.getRangeAt(0);
@@ -106,14 +107,14 @@ export const InputProvider = (args: InputContextProps) => {
     if (s && s !== scope) {
       setScope(s);
     }
-    if(el) setScopeContainer(el);
+    if (el) setScopeContainer(el);
   }, [getRange, setRange, scope, setScope, setCurrentText, setScopeContainer]);
 
   const onPaste = useCallback((event: React.ClipboardEvent) => {
     const cbData = (event.clipboardData || window.clipboardData);
     if (cbData.files?.length > 0) {
       event.preventDefault();
-      dispatch(uploadMany({streamId: stream.id ?? '', files: cbData.files}));
+      dispatch(uploadMany({ streamId: stream.id ?? '', files: cbData.files }));
     }
 
     const range = getRange();
@@ -131,7 +132,7 @@ export const InputProvider = (args: InputContextProps) => {
   const onFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if ((e.target.files?.length ?? 0) > 0) {
       const { files } = e.target;
-      dispatch(uploadMany({streamId: stream.id, files}));
+      dispatch(uploadMany({ streamId: stream.id, files }));
       e.target.value = '';
     }
   }, [dispatch, stream]);
@@ -167,7 +168,7 @@ export const InputProvider = (args: InputContextProps) => {
     payload.parentId = stream.parentId;
 
     dispatch(actions.files.clear(stream.id));
-    dispatch(messageService.send({stream, payload}));
+    dispatch(messageService.send({ stream, payload }));
 
     if (mode === 'default') {
       input.current.innerHTML = '';
@@ -223,7 +224,7 @@ export const InputProvider = (args: InputContextProps) => {
     updateRange();
   }, [updateRange]);
 
-  const replace = useCallback((regex: RegExp, text: string = '') => {
+  const replace = useCallback((regex: RegExp, text = '') => {
     const range = getRange();
     const node = range.endContainer;
     const original = node.textContent ?? '';
@@ -248,7 +249,7 @@ export const InputProvider = (args: InputContextProps) => {
     if (e.key === 'Enter' && !e.shiftKey && scope === 'root') {
       return send(e);
     }
-    dispatch(methods.typing.notify({channelId: stream.channelId, parentId: stream.parentId}));
+    dispatch(methods.typing.notify({ channelId: stream.channelId, parentId: stream.parentId }));
     updateRange();
   }, [dispatch, methods, send, updateRange, scope, stream]);
 
@@ -289,4 +290,3 @@ export const InputProvider = (args: InputContextProps) => {
     </InputContext.Provider>
   );
 };
-

@@ -6,7 +6,7 @@ type ProviderProps = {
   children: React.ReactNode;
 };
 
-const StoreProvider = ({children}: ProviderProps) => (
+const StoreProvider = ({ children }: ProviderProps) => (
   <Provider store={store}>
     <ExtensionsProvider>
       {children}
@@ -15,4 +15,3 @@ const StoreProvider = ({children}: ProviderProps) => (
 );
 
 export default StoreProvider;
-      

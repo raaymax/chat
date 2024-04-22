@@ -1,6 +1,6 @@
-import {createMethod} from '../store';
+import { createMethod } from '../store';
 
-export const ack = createMethod('typing/ack', async (msg: {userId: string, channelId: string}, {actions, getState, dispatch}) => {
+export const ack = createMethod('typing/ack', async (msg: {userId: string, channelId: string}, { actions, getState, dispatch }) => {
   const meId = getState().me;
   if (msg.userId === meId) return;
   dispatch(actions.typing.add(msg));
@@ -12,8 +12,10 @@ type Notify = {
   parentId?: string;
 };
 
-export const notify = createMethod('typing/notify', async ({channelId, parentId}: Notify, { actions, methods, getState, client, dispatch}) => {
-  const {cooldown} = getState().typing;
+export const notify = createMethod('typing/notify', async ({ channelId, parentId }: Notify, {
+  actions, methods, getState, client, dispatch,
+}) => {
+  const { cooldown } = getState().typing;
   if (cooldown) {
     dispatch(actions.typing.set({ queue: true }));
     return;
@@ -23,7 +25,7 @@ export const notify = createMethod('typing/notify', async ({channelId, parentId}
   setTimeout(() => {
     dispatch(actions.typing.set({ cooldown: false }));
     if (getState().typing.queue) {
-      dispatch(methods.typing.notify({channelId, parentId}));
+      dispatch(methods.typing.notify({ channelId, parentId }));
     }
   }, 1000);
 });

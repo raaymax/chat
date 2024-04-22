@@ -13,10 +13,10 @@ export const Reactions = () => {
   return (
     <div>
       {Object.entries(reactionMap).map(([key, count]) => (
-          <Tag key={key} onClick={() => id && dispatch(methods.messages.addReaction({id, text: key}))}> 
-            {count > 1 ? `${count} ` : ''}
-            <Emoji shortname={key} />
-          </Tag>
+        <Tag key={key} onClick={() => id && dispatch(methods.messages.addReaction({ id, text: key }))}>
+          {count > 1 ? `${count} ` : ''}
+          <Emoji shortname={key} />
+        </Tag>
       ))}
     </div>
   );

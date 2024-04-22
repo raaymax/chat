@@ -1,5 +1,5 @@
-import { Message as MessageType } from '../../types';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { Message as MessageType } from '../../types';
 
 type MessagesState = {
   data: MessageType[];
@@ -17,11 +17,11 @@ export default createSlice({
     hovered: null,
   } as MessagesState,
   reducers: {
-    hover: (state, action: PayloadAction<string | null>) => ({...state, hovered: action.payload ?? null}),
-    setStatus: (state, action) => ({...state, status: action.payload as 'live' | 'archived'}),
-    loadingFailed: (state, action) => ({...state, loadingFailed: action.payload}),
-    loading: (state) => ({...state, loading: true}),
-    loadingDone: (state) => ({...state, loading: false}),
+    hover: (state, action: PayloadAction<string | null>) => ({ ...state, hovered: action.payload ?? null }),
+    setStatus: (state, action) => ({ ...state, status: action.payload as 'live' | 'archived' }),
+    loadingFailed: (state, action) => ({ ...state, loadingFailed: action.payload }),
+    loading: (state) => ({ ...state, loading: true }),
+    loadingDone: (state) => ({ ...state, loading: false }),
     clear: (state, action) => {
       const { data } = state;
       const { stream: { parentId, channelId } } = action.payload;
@@ -29,12 +29,12 @@ export default createSlice({
         .filter(((m) => m.channelId === channelId && (!parentId || m.parentId === parentId)))
         .map((m) => m.id);
 
-      return {...state, data: data.filter((m) => !ids.includes(m.id))};
+      return { ...state, data: data.filter((m) => !ids.includes(m.id)) };
     },
 
     add: (state, action) => {
       action.payload.info = action.payload.info || null;
-      const newState = {...state, data: [...state.data] };
+      const newState = { ...state, data: [...state.data] };
       [action.payload].flat().forEach((msg) => {
         if (msg.createdAt) {
           msg.createdAt = (new Date(msg.createdAt)).toISOString();
@@ -43,7 +43,7 @@ export default createSlice({
           || (m.clientId && m.clientId === msg.clientId));
 
         if (idx !== -1) {
-          newState.data[idx] = { ...newState.data[idx], ...msg};
+          newState.data[idx] = { ...newState.data[idx], ...msg };
           return;
         }
         let pos = newState.data.findIndex((m) => m.createdAt < msg.createdAt);
@@ -54,20 +54,20 @@ export default createSlice({
     },
 
     takeOldest: (state, action) => {
-      const newState = {...state, data: [...state.data] };
+      const newState = { ...state, data: [...state.data] };
       const { stream: { channelId, parentId }, count } = action.payload;
 
       const channel = newState.data
         .filter((m) => m.channelId === channelId && m.parentId === parentId && m.id !== parentId);
       const toRemove = new Set(channel
         .slice(0, Math.max(channel.length - count, 0))
-        .map((m) => m.id))
+        .map((m) => m.id));
       newState.data = newState.data.filter((m) => !toRemove.has(m.id));
       return newState;
     },
 
     takeYoungest: (state, action) => {
-      const newState = {...state, data: [...state.data] };
+      const newState = { ...state, data: [...state.data] };
       const { stream: { channelId, parentId }, count } = action.payload;
 
       const channel = newState.data
@@ -84,24 +84,23 @@ export default createSlice({
 
     toggleEdit: (state, action) => {
       const id = action.payload;
-      const newState = {...state, data: [...state.data] };
+      const newState = { ...state, data: [...state.data] };
       const idx = newState.data.findIndex((m) => (m.id && m.id === id));
       if (idx !== -1) {
-        newState.data[idx] = { ...newState.data[idx], editing: !newState.data[idx].editing};
+        newState.data[idx] = { ...newState.data[idx], editing: !newState.data[idx].editing };
         return newState;
       }
       return state;
     },
     editClose: (state, action) => {
       const id = action.payload;
-      const newState = {...state, data: [...state.data] };
+      const newState = { ...state, data: [...state.data] };
       const idx = newState.data.findIndex((m) => (m.id && m.id === id));
       if (idx !== -1) {
-        newState.data[idx] = { ...newState.data[idx], editing: false};
+        newState.data[idx] = { ...newState.data[idx], editing: false };
         return newState;
       }
       return state;
     },
   },
 });
-

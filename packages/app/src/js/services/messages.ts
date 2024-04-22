@@ -1,6 +1,8 @@
 import { client } from '../core';
 import { createCounter } from '../utils';
-import { createMethod, StateType, DispatchType, ActionsType } from '../store';
+import {
+  createMethod, StateType, DispatchType, ActionsType,
+} from '../store';
 import { Stream, Message } from '../types';
 import { SerializeInfo, processUrls } from '../serializer';
 import { IncommingError, OutgoingCommandExecute, OutgoingMessageCreate } from '../core/types';
@@ -42,7 +44,9 @@ export const selectors = {
     .find((m) => m.id === id || m.clientId === id) || null,
 };
 
-export const loadPrevious = createMethod('messages/loadPrevious', async (stream: Stream, {dispatch, getState, methods, actions}) => {
+export const loadPrevious = createMethod('messages/loadPrevious', async (stream: Stream, {
+  dispatch, getState, methods, actions,
+}) => {
   if (getState().messages.loading) return;
   const loadingDone = loading(dispatch, actions);
   const date = selectors.getEarliestDate(stream, getState());
@@ -59,7 +63,9 @@ export const loadPrevious = createMethod('messages/loadPrevious', async (stream:
   loadingDone();
 });
 
-export const loadNext = createMethod('messages/loadNext', async (stream: Stream, {dispatch, getState, methods, actions}): Promise<number | null> => {
+export const loadNext = createMethod('messages/loadNext', async (stream: Stream, {
+  dispatch, getState, methods, actions,
+}): Promise<number | null> => {
   if (getState().messages.loading) return null;
   const loadingDone = loading(dispatch, actions);
   const date = selectors.getLatestDate(stream, getState());
@@ -77,10 +83,10 @@ export const loadNext = createMethod('messages/loadNext', async (stream: Stream,
     }, 10);
   }
   loadingDone();
-  return messages.length
+  return messages.length;
 });
 
-export const loadMessagesArchive = createMethod('messages/loadMessagesArchive', async (stream: Stream, {dispatch, actions, methods}) => {
+export const loadMessagesArchive = createMethod('messages/loadMessagesArchive', async (stream: Stream, { dispatch, actions, methods }) => {
   if (!stream.channelId) return;
   const { date } = stream;
   const loadingDone = loading(dispatch, actions);
@@ -97,7 +103,7 @@ export const loadMessagesArchive = createMethod('messages/loadMessagesArchive', 
   loadingDone();
 });
 
-export const loadMessagesLive = createMethod('messages/loadMessagesLive', async (stream: Stream, {dispatch, actions, methods}) => {
+export const loadMessagesLive = createMethod('messages/loadMessagesLive', async (stream: Stream, { dispatch, actions, methods }) => {
   if (!stream.channelId) return;
   const loadingDone = loading(dispatch, actions);
   const messages = await dispatch(methods.messages.load(stream)).unwrap();
@@ -118,20 +124,18 @@ type SendArgs = {
   payload: OutgoingMessageCreate | OutgoingCommandExecute;
 };
 
-export const send = createMethod('messages/send', async ({stream, payload}: SendArgs, {dispatch}) => {
+export const send = createMethod('messages/send', async ({ stream, payload }: SendArgs, { dispatch }) => {
   if (payload.type === 'message:create') {
-    dispatch(sendMessage({payload, info: null}));
+    dispatch(sendMessage({ payload, info: null }));
   }
   if (payload.type === 'command:execute') {
-    dispatch(sendCommand({stream, payload}));
+    dispatch(sendCommand({ stream, payload }));
   }
 });
 
-const isError = (err: unknown): err is IncommingError => {
-  return (err as IncommingError).status === 'error';
-}
+const isError = (err: unknown): err is IncommingError => (err as IncommingError).status === 'error';
 
-export const sendCommand = createMethod('messages/sendCommand', async ({stream, payload: msg}: {payload: OutgoingCommandExecute, stream: Stream}, {dispatch, actions}) => {
+export const sendCommand = createMethod('messages/sendCommand', async ({ stream, payload: msg }: {payload: OutgoingCommandExecute, stream: Stream}, { dispatch, actions }) => {
   const notif = {
     type: 'notif',
     userId: 'notif',
@@ -159,7 +163,7 @@ type MessageInfo = null | {
   action?: string;
 }
 
-const sendMessage = createMethod('messages/sendMessage', async ({payload: msg, info}: {payload: OutgoingMessageCreate, info: MessageInfo}, {dispatch, actions}) => {
+const sendMessage = createMethod('messages/sendMessage', async ({ payload: msg, info }: {payload: OutgoingMessageCreate, info: MessageInfo}, { dispatch, actions }) => {
   dispatch(actions.messages.add({ ...msg, pending: true }));
   try {
     await client.notif(msg);
@@ -168,7 +172,7 @@ const sendMessage = createMethod('messages/sendMessage', async ({payload: msg, i
       clientId: msg.clientId,
       channelId: msg.channelId,
       parentId: msg.parentId,
-      info: info,
+      info,
     }));
   }
 });
@@ -184,11 +188,11 @@ export const resend = createMethod('messages/resend', async (id: string, { dispa
     info: {
       msg: 'Resending',
       type: 'warning',
-    }
+    },
   }));
 });
 
-export const removeMessage = createMethod('messages/removeMessage', async (msg: {id: string}, {dispatch, actions}) => {
+export const removeMessage = createMethod('messages/removeMessage', async (msg: {id: string}, { dispatch, actions }) => {
   try {
     await client.notif({ type: 'message:remove', id: msg.id });
   } catch (err) {
@@ -210,8 +214,7 @@ type ShareMessage = {
   url?: string;
 };
 
-
-export const sendShareMessage = createMethod('messages/sendShareMessage', async (data: ShareMessage, {dispatch, getState, actions}) => {
+export const sendShareMessage = createMethod('messages/sendShareMessage', async (data: ShareMessage, { dispatch, getState, actions }) => {
   const { channelId, parentId } = getState().stream.main;
   const info: SerializeInfo = { links: [], mentions: [] };
   const msg: OutgoingMessageCreate = {
@@ -241,7 +244,6 @@ export const sendShareMessage = createMethod('messages/sendShareMessage', async 
   }
 });
 
-
 const buildShareMessage = (data: ShareMessage, info: SerializeInfo) => {
   const lines = [];
   if (data.title) {
@@ -255,4 +257,3 @@ const buildShareMessage = (data: ShareMessage, info: SerializeInfo) => {
   }
   return lines;
 };
-

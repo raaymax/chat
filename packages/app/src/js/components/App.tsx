@@ -19,7 +19,7 @@ if ('virtualKeyboard' in navigator) {
 
 export const App = () => {
   const url = new URL(window.location.toString());
-  const {hash} = url;
+  const { hash } = url;
   if (hash.startsWith('#/invite')) {
     return <Register />;
   }

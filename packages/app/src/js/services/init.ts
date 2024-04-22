@@ -9,7 +9,9 @@ declare global {
   }
 }
 
-const initApp = createMethod('initApp', async (_arg, {dispatch, getState, methods, actions}) => {
+const initApp = createMethod('initApp', async (_arg, {
+  dispatch, getState, methods, actions,
+}) => {
   if (navigator?.userAgentData?.mobile) {
     document.body.setAttribute('class', 'mobile');
   }
@@ -22,19 +24,19 @@ const initApp = createMethod('initApp', async (_arg, {dispatch, getState, method
   await dispatch(methods.channels.load({}));
   await dispatch(methods.emojis.load({}));
   await dispatch(methods.progress.loadBadges({}));
-  const channelId = getState().stream.main.channelId;
+  const { channelId } = getState().stream.main;
   if (!channelId) {
-    dispatch(actions.stream.open({id: 'main', value: {type: 'live'}}));
-  }else if( !getState().channels[channelId] ){
+    dispatch(actions.stream.open({ id: 'main', value: { type: 'live' } }));
+  } else if (!getState().channels[channelId]) {
     const c = await dispatch(methods.channels.find(channelId)).unwrap();
-    if(!c || c.length === 0) {
-      dispatch(actions.stream.open({id: 'main', value: {type: 'live'}}));
+    if (!c || c.length === 0) {
+      dispatch(actions.stream.open({ id: 'main', value: { type: 'live' } }));
     }
   }
 });
 
 let tryCount = 1;
-export const init = createMethod('init', async (_arg, {dispatch, actions}) => {
+export const init = createMethod('init', async (_arg, { dispatch, actions }) => {
   try {
     await dispatch(initApp({}));
     tryCount = 1;
@@ -44,7 +46,7 @@ export const init = createMethod('init', async (_arg, {dispatch, actions}) => {
     if (tryCount < 4) {
       setTimeout(() => {
         dispatch(actions.system.initFailed(false));
-        dispatch(init({}))
+        dispatch(init({}));
       }, 1000 * tryCount ** 2);
       tryCount += 1;
       return;
@@ -53,7 +55,7 @@ export const init = createMethod('init', async (_arg, {dispatch, actions}) => {
   }
 });
 
-export const reinit = createMethod('reinit', async (_arg, {dispatch, actions}) => {
+export const reinit = createMethod('reinit', async (_arg, { dispatch, actions }) => {
   tryCount = 1;
   dispatch(actions.system.initFailed(false));
   await dispatch(init({}));

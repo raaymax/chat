@@ -1,4 +1,4 @@
-import {createMethod} from '../store';
+import { createMethod } from '../store';
 
 type Query = {
   channelId: string;
@@ -9,7 +9,7 @@ type Query = {
   limit?: number,
 }
 
-export const load = createMethod('messages/load', async (query: Query, {actions, client, dispatch }) => {
+export const load = createMethod('messages/load', async (query: Query, { actions, client, dispatch }) => {
   const req = await client.req({
     limit: 50,
     ...query,
@@ -23,7 +23,7 @@ type Reaction = {
   id: string;
   text: string;
 }
-export const addReaction = createMethod('messages/addReaction', async (args: Reaction, {actions, client, dispatch }) => {
+export const addReaction = createMethod('messages/addReaction', async (args: Reaction, { actions, client, dispatch }) => {
   const req = await client.req({
     type: 'message:react',
     id: args.id,

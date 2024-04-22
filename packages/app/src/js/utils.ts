@@ -2,14 +2,12 @@ const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 
 
 export type ClassNames = string | undefined | string[] | Record<string, boolean>;
 
-export const cn = (...classes: ClassNames[]) => {
-  return classes.flat().map(item => {
-    if(typeof item === 'object' && item !== null) {
-      return Object.entries(item).filter(([, value]) => value).map(([key]) => key);
-    }
-    return item;
-  }).filter(Boolean).join(' ');
-}
+export const cn = (...classes: ClassNames[]) => classes.flat().map((item) => {
+  if (typeof item === 'object' && item !== null) {
+    return Object.entries(item).filter(([, value]) => value).map(([key]) => key);
+  }
+  return item;
+}).filter(Boolean).join(' ');
 
 export const formatDate = (raw?: string): string => {
   const date = raw ? new Date(raw) : new Date();
@@ -21,7 +19,7 @@ export const formatDateDetailed = (raw?: string): string => {
   return `${DAYS[date.getDay()]}, ${date.toLocaleDateString('pl-PL')}`;
 };
 
-export const formatTime = (raw?: string): string=> {
+export const formatTime = (raw?: string): string => {
   const date = raw ? new Date(raw) : new Date();
   let minutes = date.getMinutes().toString();
   if (minutes.length === 1) minutes = `0${minutes}`;
@@ -88,7 +86,7 @@ export const createEventListener = () => {
         }),
     );
   };
-   
+
   const watch = (ev: string, fn: EventListener) => {
     (handlers[ev] = handlers[ev] || []).push(fn);
   };
@@ -129,7 +127,6 @@ export const buildEmojiNode = (result: {unicode?: string, fileId?: string, short
   node.appendChild(emoji);
   return node;
 };
-
 
 export type WithoutUndefined<T> = {
   [K in keyof T as T[K] extends undefined ? never : K]: T[K]

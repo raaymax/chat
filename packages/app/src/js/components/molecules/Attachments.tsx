@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { useDispatch, useSelector } from '../../store';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from '../../store';
 import { abort } from '../../services/file';
 import { useStream } from '../contexts/useStream';
 
@@ -69,14 +69,16 @@ type AttachmentProps = {
 };
 
 export const Attachment = ({
-  data: { fileName, contentType, progress, status },
+  data: {
+    fileName, contentType, progress, status,
+  },
   onDelete,
 }: AttachmentProps) => (
   <div className='attachment'>
     <div className='type'><i className='fa-solid fa-file' /></div>
     <div className='name'>{fileName} [{contentType}]</div>
     <div className='remove' onClick={onDelete}><i className='fa-solid fa-xmark' /></div>
-    <div className={status === 'ok' ? 'progress done' : 'progress'} style={{width: `${progress}%`}} />
+    <div className={status === 'ok' ? 'progress done' : 'progress'} style={{ width: `${progress}%` }} />
   </div>
 );
 

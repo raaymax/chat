@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 type SystemState = {
   initFailed: boolean;
@@ -11,4 +11,3 @@ export default createSlice({
     initFailed: (state, action) => ({ ...state, initFailed: action.payload }),
   },
 });
-

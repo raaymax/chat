@@ -1,7 +1,5 @@
 import { useContext } from 'react';
 import { methods } from '../storeExt';
-import {ExtensionsContext} from '../components/extensions';
+import { ExtensionsContext } from '../components/extensions';
 
-export const useMethods = (): typeof methods => {
-  return useContext(ExtensionsContext).methods;
-};
+export const useMethods = (): typeof methods => useContext(ExtensionsContext).methods;

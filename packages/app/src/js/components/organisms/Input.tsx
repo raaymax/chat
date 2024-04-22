@@ -1,6 +1,6 @@
 import { useCallback, useState, useEffect } from 'react';
-import { useActions, useDispatch } from '../../store';
 import styled from 'styled-components';
+import { useActions, useDispatch } from '../../store';
 
 import { EmojiDescriptor } from '../../types';
 import { buildEmojiNode } from '../../utils';
@@ -185,7 +185,7 @@ export const InputForm = ({ children }: InputFormProps) => {
 
   useEffect(() => {
     const { current } = input;
-    if(!current) return;
+    if (!current) return;
     current.addEventListener('keydown', ctrl);
     return () => {
       current.removeEventListener('keydown', ctrl);

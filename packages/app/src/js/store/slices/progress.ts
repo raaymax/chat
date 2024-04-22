@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 type ProgressState = {
   channelId: string;
@@ -27,4 +27,3 @@ export default createSlice({
     },
   },
 });
-

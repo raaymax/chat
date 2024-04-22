@@ -9,4 +9,3 @@ export default createSlice({
     set: (_state, action: PayloadAction<MeState>) => action.payload,
   },
 });
-

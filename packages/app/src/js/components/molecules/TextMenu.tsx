@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useInput } from '../contexts/useInput';
 import styled from 'styled-components';
+import { useInput } from '../contexts/useInput';
 
 export const Menu = styled.div<{top:number, left: number, height: number}>`
   position: absolute;

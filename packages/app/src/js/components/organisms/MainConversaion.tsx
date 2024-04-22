@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { Conversation } from './Conversation';
-import { useActions, useDispatch, useMessage, useMethods } from '../../store';
+import {
+  useActions, useDispatch, useMessage, useMethods,
+} from '../../store';
 import { Channel } from '../molecules/NavChannel';
 import { init } from '../../services/init';
 import { useStream } from '../contexts/useStream';
@@ -72,7 +74,9 @@ export const Header = ({ onClick }: HeaderProps) => {
         <Channel onClick={onClick} channelId={channelId} />
 
         <Toolbar className="toolbar" size={50}>
-          <ButtonWithIcon icon="back" onClick={() => setStream({ channelId, type: 'archive', selected: message?.id, date: message?.createdAt })} />
+          <ButtonWithIcon icon="back" onClick={() => setStream({
+            channelId, type: 'archive', selected: message?.id, date: message?.createdAt,
+          })} />
           {stream.id !== 'main' && <ButtonWithIcon icon="xmark" onClick={() => setStream(null)} />}
         </Toolbar>
       </StyledHeader>
@@ -88,7 +92,7 @@ export const Header = ({ onClick }: HeaderProps) => {
           <ButtonWithIcon icon='down' onClick = {() => {
             dispatch(actions.messages.clear({ stream }));
             setStream({ ...stream, type: 'live' });
-            dispatch(loadMessages({ ...stream, type: 'live' }))
+            dispatch(loadMessages({ ...stream, type: 'live' }));
           }} />
         )}
         <ButtonWithIcon icon="thumbtack" onClick={() => {

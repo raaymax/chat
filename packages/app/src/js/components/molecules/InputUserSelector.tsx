@@ -43,7 +43,7 @@ export const UserSelector = () => {
   }, [insert]);
 
   const submit = useCallback((event: React.SyntheticEvent, opts?: {selected: number}) => {
-    if(!scopeContainer) return;
+    if (!scopeContainer) return;
     event.preventDefault();
     event.stopPropagation();
     scopeContainer.className = 'user';
@@ -63,7 +63,7 @@ export const UserSelector = () => {
   }, [options, selected, scopeContainer]);
 
   const remove = useCallback((event: React.SyntheticEvent) => {
-    if(!scopeContainer) return;
+    if (!scopeContainer) return;
     if (scopeContainer.textContent?.length === 1) {
       scopeContainer.remove();
       event.preventDefault();
@@ -86,8 +86,8 @@ export const UserSelector = () => {
   }, [currentText, scope, create, remove, submit]);
 
   const onSelect = useCallback((idx: number, e: React.MouseEvent) => {
-    submit(e, {selected: idx});
-  },[submit]);
+    submit(e, { selected: idx });
+  }, [submit]);
 
   useEffect(() => {
     const { current } = input;
@@ -101,8 +101,8 @@ export const UserSelector = () => {
   if (scope !== SCOPE) return null;
 
   return (
-    <TextMenu 
-      open={true} 
+    <TextMenu
+      open={true}
       options={options}
       onSelect={onSelect}
       selected={selected}

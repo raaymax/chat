@@ -1,10 +1,10 @@
 import styled from 'styled-components';
+import { useCallback } from 'react';
 import { Channel } from '../molecules/NavChannel';
 import { useStream } from '../contexts/useStream';
-import { useCallback } from 'react';
 import { useActions, useDispatch, useSelector } from '../../store';
 import { HoverProvider } from '../contexts/hover';
-import { MessageList } from '../organisms/MessageListScroller'
+import { MessageList } from '../organisms/MessageListScroller';
 import { Message as MessageType } from '../../types';
 
 const StyledPins = styled.div`
@@ -85,7 +85,7 @@ const StyledHeader = styled.div`
 export const Header = () => {
   const dispatch = useDispatch();
   const actions = useActions();
-  const [{channelId}] = useStream();
+  const [{ channelId }] = useStream();
 
   return (
     <StyledHeader>

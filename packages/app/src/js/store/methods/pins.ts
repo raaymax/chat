@@ -1,6 +1,6 @@
-import {createMethod} from '../store';
+import { createMethod } from '../store';
 
-export const load = createMethod('pins/load', async (channelId: string, {actions, client, dispatch}) => {
+export const load = createMethod('pins/load', async (channelId: string, { actions, client, dispatch }) => {
   dispatch(actions.pins.clear(channelId));
   const req = await client.req({
     type: 'message:pins',
@@ -15,7 +15,9 @@ type Pin = {
   channelId: string;
 };
 
-export const pin = createMethod('pins/pin', async ({id, channelId}: Pin, {actions, methods, client, dispatch}) => {
+export const pin = createMethod('pins/pin', async ({ id, channelId }: Pin, {
+  actions, methods, client, dispatch,
+}) => {
   const req = await client.req({
     type: 'message:pin',
     id,
@@ -23,9 +25,11 @@ export const pin = createMethod('pins/pin', async ({id, channelId}: Pin, {action
   });
   dispatch(actions.messages.add(req.data));
   await dispatch(methods.pins.load(channelId));
-})
+});
 
-export const unpin = createMethod('pins/unpin', async ({id, channelId}: Pin, {actions, methods, client, dispatch}) => {
+export const unpin = createMethod('pins/unpin', async ({ id, channelId }: Pin, {
+  actions, methods, client, dispatch,
+}) => {
   const req = await client.req({
     type: 'message:pin',
     id,

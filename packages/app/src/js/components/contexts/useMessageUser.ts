@@ -1,4 +1,4 @@
-import { useContext} from 'react';
+import { useContext } from 'react';
 import { MessageContext } from './message';
 import { useUser } from '../../store';
 
