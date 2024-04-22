@@ -11,8 +11,8 @@
     "types": "tsc --noEmit"
   },
   "dependencies": {
-    "@quack/config": "workspace:*",
-    "@quack/rpc": "workspace:*",
+    "@quack/config": "*",
+    "@quack/rpc": "*",
     "@reduxjs/toolkit": "2.2.3",
     "@types/workbox-sw": "4.3.7",
     "fuse.js": "7.0.0",

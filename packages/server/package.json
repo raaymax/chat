@@ -16,9 +16,9 @@
   "dependencies": {
     "@google-cloud/pubsub": "4.1.0",
     "@google-cloud/storage": "7.7.0",
-    "@quack/config": "workspace:*",
-    "@quack/repo": "workspace:*",
-    "@quack/storage": "workspace:*",
+    "@quack/config": "*",
+    "@quack/repo": "*",
+    "@quack/storage": "*",
     "bcrypt": "5.1.1",
     "body-parser": "1.20.2",
     "compression": "1.7.4",

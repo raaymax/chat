@@ -16,7 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "@google-cloud/storage": "7.6.0",
-    "@quack/config": "workspace:*",
+    "@quack/config": "*",
     "@types/node": "20.10.4",
     "concat-stream": "2.0.0",
     "mongodb": "6.3.0",
