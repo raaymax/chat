@@ -1,5 +1,4 @@
 import { createMethod } from '../store';
-/* eslint-disable no-undef */
 import { initNotifications } from './notifications';
 
 declare global {

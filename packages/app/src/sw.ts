@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
- 
 import { precacheAndRoute } from 'workbox-precaching';
 import * as navigationPreload from 'workbox-navigation-preload';
 // import { registerRoute } from 'workbox-routing';

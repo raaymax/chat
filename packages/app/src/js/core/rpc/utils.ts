@@ -23,7 +23,6 @@ export const createEventListener = <ArgType>() => {
         }),
     );
   };
-  // eslint-disable-next-line no-return-assign
   const watch = (evid: string, fn: (arg: ArgType, ev?: Event) => void) => {
     (handlers[evid] = handlers[evid] || []).push(fn);
   };

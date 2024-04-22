@@ -141,7 +141,6 @@ export const sendCommand = createMethod('messages/sendCommand', async ({stream, 
     notif: `${msg.name} sent`,
     createdAt: (new Date()).toISOString(),
   };
-  // eslint-disable-next-line no-undef
   msg.context = { ...stream, appVersion: APP_VERSION };
   dispatch(actions.messages.add(notif));
   try {

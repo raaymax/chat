@@ -1,5 +1,4 @@
 import {client} from './client';
-/* eslint-disable no-undef */
 
 declare global {
   const PLUGIN_LIST: string[] | undefined;
