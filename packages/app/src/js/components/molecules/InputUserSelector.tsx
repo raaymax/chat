@@ -31,7 +31,7 @@ export const UserSelector = () => {
     return opts;
   }, [fuse, users, currentText]);
 
-  const create = useCallback((event: Event) => {
+  const create = useCallback((event: React.SyntheticEvent) => {
     event.preventDefault();
     event.stopPropagation();
     const span = document.createElement('span');
@@ -42,7 +42,7 @@ export const UserSelector = () => {
     insert(span);
   }, [insert]);
 
-  const submit = useCallback((event: Event, opts?: {selected: number}) => {
+  const submit = useCallback((event: React.SyntheticEvent, opts?: {selected: number}) => {
     if(!scopeContainer) return;
     event.preventDefault();
     event.stopPropagation();
@@ -62,7 +62,7 @@ export const UserSelector = () => {
     sel?.addRange(r);
   }, [options, selected, scopeContainer]);
 
-  const remove = useCallback((event: Event) => {
+  const remove = useCallback((event: React.SyntheticEvent) => {
     if(!scopeContainer) return;
     if (scopeContainer.textContent?.length === 1) {
       scopeContainer.remove();
@@ -71,7 +71,7 @@ export const UserSelector = () => {
     }
   }, [scopeContainer]);
 
-  const ctrl = useCallback((e: KeyboardEvent) => {
+  const ctrl = useCallback((e: React.KeyboardEvent) => {
     if (scope === 'root' && currentText.match(/(^|\s)$/) && e.key === '@') {
       create(e);
     }
@@ -85,7 +85,7 @@ export const UserSelector = () => {
     }
   }, [currentText, scope, create, remove, submit]);
 
-  const onSelect = useCallback((idx: number, e: Event) => {
+  const onSelect = useCallback((idx: number, e: React.MouseEvent) => {
     submit(e, {selected: idx});
   },[submit]);
 
@@ -101,6 +101,11 @@ export const UserSelector = () => {
   if (scope !== SCOPE) return null;
 
   return (
-    <TextMenu open={true} options={options} onSelect={onSelect} selected={selected} setSelected={setSelected} />
+    <TextMenu 
+      open={true} 
+      options={options}
+      onSelect={onSelect}
+      selected={selected}
+      setSelected={setSelected} />
   );
 };

@@ -7,6 +7,12 @@ import * as messageService from '../../services/messages';
 import { uploadMany } from '../../services/file';
 import { fromDom } from '../../serializer';
 
+declare global {
+  interface Window {
+    clipboardData: DataTransfer | null;
+  }
+}
+
 export type InputContextType = {
   mode: string;
   messageId: string | null;
@@ -103,11 +109,11 @@ export const InputProvider = (args: InputContextProps) => {
     if(el) setScopeContainer(el);
   }, [getRange, setRange, scope, setScope, setCurrentText, setScopeContainer]);
 
-  const onPaste = useCallback((event: ClipboardEvent) => {
+  const onPaste = useCallback((event: React.ClipboardEvent) => {
     const cbData = (event.clipboardData || window.clipboardData);
     if (cbData.files?.length > 0) {
       event.preventDefault();
-      dispatch(uploadMany({streamId: stream.id, files: cbData.files}));
+      dispatch(uploadMany({streamId: stream.id ?? '', files: cbData.files}));
     }
 
     const range = getRange();
@@ -238,12 +244,7 @@ export const InputProvider = (args: InputContextProps) => {
     range.collapse();
   }, [getRange]);
 
-  interface KeyboardEvent {
-    key: string;
-    shiftKey: boolean;
-  }
-
-  const onKeyDown = useCallback((e: KeyboardEvent) => {
+  const emitKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey && scope === 'root') {
       return send(e);
     }
@@ -260,24 +261,13 @@ export const InputProvider = (args: InputContextProps) => {
     return () => document.removeEventListener('selectionchange', updateRange);
   }, [updateRange]);
 
-  useEffect(() => {
-    const { current } = input;
-    if(!current) return;
-    current.addEventListener('keydown', onKeyDown);
-    current.addEventListener('input', onInput);
-    return () => {
-      current.removeEventListener('input', onInput);
-      current.removeEventListener('keydown', onKeyDown);
-    };
-  }, [input, onInput, onKeyDown]);
-
   const api = {
     mode,
     messageId,
     input,
     fileInput,
     onPaste,
-    onKeyDown,
+    emitKeyDown,
     onInput,
     onFileChange,
     currentText,

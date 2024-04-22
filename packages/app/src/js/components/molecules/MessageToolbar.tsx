@@ -58,7 +58,7 @@ export const MessageToolbar = () => {
   const actions = useActions();
   const [stream] = useStream();
   const onDelete = useCallback(() => {
-    dispatch(removeMessage({ id }));
+    id && dispatch(removeMessage({ id }));
   }, [dispatch, id]);
 
   const meId = useSelector((state) => state.me);

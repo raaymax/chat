@@ -1,4 +1,5 @@
 import {createMethod} from '../store';
+import {Stream} from '../../types';
 
 export const loadBadges = createMethod('progress/loadBadges', async (_arg, {actions, client, dispatch}) => {
   const { data } = await client.req({
@@ -7,10 +8,6 @@ export const loadBadges = createMethod('progress/loadBadges', async (_arg, {acti
   dispatch(actions.progress.add(data));
 });
 
-type Stream = {
-  channelId: string;
-  parentId: string;
-};
 
 export const loadProgress = createMethod('progress/loadProgress', async (stream: Stream, {actions, client, dispatch}) => {
   try{

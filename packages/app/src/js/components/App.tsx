@@ -3,6 +3,14 @@ import { Suspense, lazy } from 'react';
 import { Register } from './pages/Register';
 import { Login } from './pages/Login';
 
+declare global {
+  interface Navigator {
+    virtualKeyboard: {
+      overlaysContent: boolean;
+    };
+  }
+}
+
 const Secured = lazy(() => import('./Secured'));
 
 if ('virtualKeyboard' in navigator) {

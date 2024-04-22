@@ -5,7 +5,12 @@ export const load = createMethod('channels/load', async (_arg, {client, actions,
   dispatch(actions.channels.add(res.data));
 });
 
-export const create = createMethod('channels/create', async ({channelType, name, users}: {channelType: 'DIRECT' | 'PRIVATE' | 'PUBLIC', name: string, users: string[]}, {client, actions, dispatch}) => {
+type Channel = {
+  channelType?: 'DIRECT' | 'PRIVATE' | 'PUBLIC',
+  name: string,
+  users?: string[]
+};
+export const create = createMethod('channels/create', async ({channelType, name, users}: Channel, {client, actions, dispatch}) => {
   const res = await client.req({
     type: 'channel:create', channelType, name, users,
   });

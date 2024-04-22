@@ -5,6 +5,9 @@ type File = {
   clientId: string;
   streamId: string;
   status: string;
+  fileName: string;
+  contentType: string;
+  progress: number;
   file: {
     name: string;
     type: string;

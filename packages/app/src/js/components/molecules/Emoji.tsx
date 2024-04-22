@@ -40,7 +40,7 @@ export const EmojiBase = ({ shortname, emoji, size}: EmojiBaseProps) => {
       <StyledEmoji className="emoji" $size={$size} data-emoji={shortname}>
         {emoji.unicode
           ? String.fromCodePoint(parseInt(emoji.unicode, 16))
-          : <img src={getUrl(emoji.fileId)} alt={shortname} />}
+          : <img src={getUrl(emoji.fileId ?? '')} alt={shortname} />}
       </StyledEmoji>
     </Tooltip>
   );
