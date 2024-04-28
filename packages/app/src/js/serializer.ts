@@ -121,37 +121,38 @@ export function flatten(tree: MessageBody): string {
   }).flat().join('');
 }
 
-const mapNodes = (dom: HTMLElement, info: SerializeInfo): MessageBody => (!dom.childNodes ? [] : ([...dom.childNodes] as HTMLElement[]).map((n): MessageBody => {
-  if (n.nodeName === '#text') return processUrls(n.nodeValue ?? '', info);
-  if (n.nodeName === 'U') return { underline: mapNodes(n, info) };
-  if (n.nodeName === 'CODE') return { code: n.nodeValue ?? '' };
-  if (n.nodeName === 'A') return { link: { href: n.getAttribute('href') ?? '', children: mapNodes(n, info) } };
-  if (n.nodeName === 'B') return { bold: mapNodes(n, info) };
-  if (n.nodeName === 'I') return { italic: mapNodes(n, info) };
-  if (n.nodeName === 'S') return { strike: mapNodes(n, info) };
-  if (n.nodeName === 'DIV') return { line: mapNodes(n, info) };
-  if (n.nodeName === 'UL') return { bullet: mapNodes(n, info) };
-  if (n.nodeName === 'LI') return { item: mapNodes(n, info) };
-  if (n.nodeName === 'IMG') return { img: { src: n.getAttribute('src') ?? '', alt: n.getAttribute('alt') ?? '' } };
-  if (n.nodeName === 'SPAN' && n.className === 'emoji') return { emoji: n.getAttribute('emoji') ?? '' };
-  if (n.nodeName === 'SPAN' && n.className === 'channel') return { channel: n.getAttribute('channelId') ?? '' };
-  if (n.nodeName === 'SPAN' && n.className === 'user') return processUser(n, info);
-  if (n.nodeName === 'SPAN') return mapNodes(n, info);
-  if (n.nodeName === 'BR') return { br: true };
-  // eslint-disable-next-line no-console
-  console.log('unknown node', n, n.nodeName);
-  info.errors = info.errors || [];
-  info.errors.push({
-    message: 'unknown node',
-    nodeAttributes: Object.keys(n.attributes)
-      .reduce((acc, key) => ({
-        ...acc,
-        [key]: n.getAttribute(key),
-      }), {}),
-    nodeName: n.nodeName,
-  });
-  return { text: '' };
-}).flat());
+const mapNodes = (dom: HTMLElement, info: SerializeInfo): MessageBody => (
+  !dom.childNodes ? [] : ([...dom.childNodes] as HTMLElement[]).map((n): MessageBody => {
+    if (n.nodeName === '#text') return processUrls(n.nodeValue ?? '', info);
+    if (n.nodeName === 'U') return { underline: mapNodes(n, info) };
+    if (n.nodeName === 'CODE') return { code: n.nodeValue ?? '' };
+    if (n.nodeName === 'A') return { link: { href: n.getAttribute('href') ?? '', children: mapNodes(n, info) } };
+    if (n.nodeName === 'B') return { bold: mapNodes(n, info) };
+    if (n.nodeName === 'I') return { italic: mapNodes(n, info) };
+    if (n.nodeName === 'S') return { strike: mapNodes(n, info) };
+    if (n.nodeName === 'DIV') return { line: mapNodes(n, info) };
+    if (n.nodeName === 'UL') return { bullet: mapNodes(n, info) };
+    if (n.nodeName === 'LI') return { item: mapNodes(n, info) };
+    if (n.nodeName === 'IMG') return { img: { src: n.getAttribute('src') ?? '', alt: n.getAttribute('alt') ?? '' } };
+    if (n.nodeName === 'SPAN' && n.className === 'emoji') return { emoji: n.getAttribute('emoji') ?? '' };
+    if (n.nodeName === 'SPAN' && n.className === 'channel') return { channel: n.getAttribute('channelId') ?? '' };
+    if (n.nodeName === 'SPAN' && n.className === 'user') return processUser(n, info);
+    if (n.nodeName === 'SPAN') return mapNodes(n, info);
+    if (n.nodeName === 'BR') return { br: true };
+    // eslint-disable-next-line no-console
+    console.log('unknown node', n, n.nodeName);
+    info.errors = info.errors || [];
+    info.errors.push({
+      message: 'unknown node',
+      nodeAttributes: Object.keys(n.attributes)
+        .reduce((acc, key) => ({
+          ...acc,
+          [key]: n.getAttribute(key),
+        }), {}),
+      nodeName: n.nodeName,
+    });
+    return { text: '' };
+  }).flat());
 
 function processUser(n: HTMLElement, info: SerializeInfo): types.MessageBodyUser {
   const userId = n.getAttribute('userId');

@@ -17,7 +17,7 @@ function isNotif(data: types.Message | types.Notif): data is types.Notif {
 }
 
 export const MessageListRenderer = ({
-  list: messages, stream, context, onMessageClicked = () => {},
+  list: messages, stream, context, onMessageClicked = (() => undefined),
 }: MessageListRendererProps) => {
   let prev: types.Message | types.Notif;
   return (<>

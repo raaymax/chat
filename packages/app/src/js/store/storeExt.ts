@@ -6,7 +6,13 @@ import * as methods from './methods';
 import { client } from '../core';
 
 export * as methods from './methods';
-export * from './store';
+export {
+  store, actions,
+} from './store';
+
+export type {
+  Api, AsyncMutation, MutationMethod, StateType, DispatchType, StoreType, ActionsType,
+} from './store';
 
 data.methods = methods;
 

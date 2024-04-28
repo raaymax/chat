@@ -5,8 +5,8 @@ import {
 
 import { MainConversation } from '../organisms/MainConversaion';
 import { SideConversation } from '../organisms/SideConversation';
-import { Search } from '../pages/Search';
-import { Pins } from '../pages/Pins';
+import { Search } from './Search';
+import { Pins } from './Pins';
 import { StreamProvider } from '../contexts/stream';
 import { Sidebar } from '../organisms/Sidebar';
 import { cn } from '../../utils';

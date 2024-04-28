@@ -64,10 +64,27 @@ const DirectChannel = ({
   if (!other) [other] = channel.users;
   const user = useSelector((state) => state.users[other ?? '']);
   if (!user) {
-    return (<InlineChannel className={className} id={channel.id} onClick={onClick} badge={badge}>{channel.name}</InlineChannel>);
+    return (
+      <InlineChannel
+        className={className}
+        id={channel.id}
+        onClick={onClick}
+        badge={badge}>
+        {channel.name}
+      </InlineChannel>
+    );
   }
   if (user.system) {
-    return (<InlineChannel className={className} id={channel.id} onClick={onClick} icon='fa-solid fa-user-gear' badge={badge}>{user.name}</InlineChannel>);
+    return (
+      <InlineChannel
+        className={className}
+        id={channel.id}
+        onClick={onClick}
+        icon='fa-solid fa-user-gear'
+        badge={badge}>
+        {user.name}
+      </InlineChannel>
+    );
   }
   const active = user.lastSeen && new Date(user.lastSeen).getTime() > Date.now() - 1000 * 60 * 5;
   return (<InlineChannel
@@ -103,5 +120,15 @@ export const Channel = ({
   let ico = icon;
   if (priv) ico = 'fa-solid fa-lock';
   if (direct) return (<DirectChannel className={className} channel={channel || {}} onClick={onClick} badge={badge} />);
-  return (<InlineChannel className={className} id={id} onClick={onClick} icon={ico} badge={badge}>{name}</InlineChannel>);
+  return (
+    <InlineChannel
+      className={className}
+      id={id}
+      onClick={onClick}
+      icon={ico}
+      badge={badge}
+    >
+      {name}
+    </InlineChannel>
+  );
 };

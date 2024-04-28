@@ -127,7 +127,11 @@ export const TextMenu = ({
     <Menu className={className} top={getYPos()} left={getXPos()} height={options.length} >
       <ul>
         {options.map((e, idx) => (
-          <li key={idx} onClick={(e) => onSelect(idx, e)} className={idx === selected ? 'selected' : ''}>
+          <li
+            key={idx}
+            onClick={(ev) => onSelect(idx, ev)}
+            className={idx === selected ? 'selected' : ''}
+          >
             {e.icon && <span><i className={e.icon} /></span>}
             {e.url && <span><img src={e.url} alt="img" /></span>}
             {!e.icon && !e.url && <span>{e.label || ''}</span>}

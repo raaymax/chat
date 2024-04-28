@@ -117,13 +117,18 @@ export type User = {
   lastSeen: string;
   system: boolean;
 };
+export type EmptyEmoji= {
+  empty: true,
+  shortname: string
+  category?: string,
+}
 
-export type EmojiDescriptor = {
-  empty?: boolean,
+export type EmojiDescriptor = EmptyEmoji | {
+  empty?: false,
   unicode?: string,
   fileId?: string,
   shortname: string
-  category: string,
+  category?: string,
 }
 
 export type Notif = {

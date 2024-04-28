@@ -47,15 +47,15 @@ export const MessageList = (props: MessageListProps) => {
     const r = [...target.children]
       .filter((child) => child.className.includes('message'))
       .find((child) => {
-        const e = child.getBoundingClientRect();
-        return e.y < c.height / 2 + 50;
+        const rect = child.getBoundingClientRect();
+        return rect.y < c.height / 2 + 50;
       });
     if (r) {
-      const date = r.getAttribute('data-date');
+      const dataDate = r.getAttribute('data-date');
       if (setCurrent) {
-        setCurrent([new Date(date ?? ''), r.getBoundingClientRect()]);
+        setCurrent([new Date(dataDate ?? ''), r.getBoundingClientRect()]);
       }
-      if (onDateChange) onDateChange(date ?? '');
+      if (onDateChange) onDateChange(dataDate ?? '');
     }
   }, [setCurrent, onDateChange]);
 
@@ -105,11 +105,11 @@ export const MessageList = (props: MessageListProps) => {
     if (list !== oldList) return;
 
     if (Math.floor(Math.abs(element.current.scrollTop)) <= 1) {
-      onScrollBottom && onScrollBottom();
+      if (onScrollBottom) onScrollBottom();
     } else if (Math.floor(Math.abs(
       element.current.scrollHeight - element.current.offsetHeight + element.current.scrollTop,
     )) <= 1) {
-      onScrollTop && onScrollTop();
+      if (onScrollTop) onScrollTop();
     }
   }, [detectDate, list, oldList, onScrollTop, onScrollBottom]);
 

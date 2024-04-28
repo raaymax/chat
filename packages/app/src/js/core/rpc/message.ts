@@ -72,7 +72,9 @@ export class Message {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  processSequnce(_msg: SequenceMessage, _ev?: Event): void {}
+  processSequnce(_msg: SequenceMessage, _ev?: Event): void {
+    return undefined;
+  }
 
   handle = (msg: SequenceMessage, ev?: Event) => {
     if (this.closed) return;

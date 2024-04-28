@@ -13,7 +13,7 @@ export type DispatchType = typeof store.dispatch;
 export type StoreType = typeof store & { dispatch: DispatchType };
 export type ActionsType = typeof actions;
 
-export const data = { methods: {}, run: async () => {} };
+export const data = { methods: {} };
 
 export type Api<M = any> = {
   dispatch: DispatchType,

@@ -113,13 +113,20 @@ type EmojiProps = {
 
 export const Emoji = ({
   unicode, fileId, shortname, onClick,
-}: EmojiProps) => (
-  <EmojiContainer onClick={onClick}>
-    {fileId
-      ? <img src={getUrl(fileId)} alt={shortname} />
-      : (unicode ? <span>{String.fromCodePoint(parseInt(unicode, 16))}</span> : null)}
-  </EmojiContainer>
-);
+}: EmojiProps) => {
+  const Unicode = () => (
+    unicode
+      ? <span>{String.fromCodePoint(parseInt(unicode, 16))}</span>
+      : null
+  );
+  return (
+    <EmojiContainer onClick={onClick}>
+      {fileId
+        ? <img src={getUrl(fileId)} alt={shortname} />
+        : <Unicode />}
+    </EmojiContainer>
+  );
+};
 
 const CATEGORIES: Record<string, string> = {
   p: 'People',
@@ -169,8 +176,8 @@ export const EmojiSearch = ({ onSelect }: EmojiSearchProps) => {
           <EmojiCategory key={idx}>
             <Label>{CATEGORIES[category]}</Label>
             <EmojiBlock>
-              {(results[category] || []).map((result, idx) => (
-                <Tooltip text={result.shortname} key={idx}>
+              {(results[category] || []).map((result, idx2) => (
+                <Tooltip text={result.shortname} key={idx2}>
                   <Emoji
                     fileId={result.fileId}
                     unicode={result.unicode}

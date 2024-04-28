@@ -1,8 +1,10 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import config from '@quack/config';
-import pack from '@quack/quack/package.json';
+// eslint-disable-next-line import/no-relative-packages
+import pack from '../../package.json';
 
 export default defineConfig({
   define: {

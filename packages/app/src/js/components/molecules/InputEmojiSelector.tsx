@@ -55,7 +55,8 @@ export const EmojiSelector = () => {
     return span;
   }, [insert]);
 
-  const submit = useCallback((event: Event, { s, shortName, exact = true }: {s?: number, shortName?: string, exact?: boolean} = {}) => {
+  type SubmitProps = {s?: number, shortName?: string, exact?: boolean};
+  const submit = useCallback((event: Event, { s, shortName, exact = true }: SubmitProps = {}) => {
     if (!scopeContainer) return;
     let container = scopeContainer;
     if (scope !== SCOPE) {
@@ -164,6 +165,11 @@ export const EmojiSelector = () => {
   if (scope !== SCOPE) return null;
 
   return (
-    <TextMenu open={true} options={options} onSelect={(...ar) => onSelect(...ar)} selected={selected} setSelected={setSelected} />
+    <TextMenu
+      open={true}
+      options={options}
+      onSelect={(...ar) => onSelect(...ar)}
+      selected={selected}
+      setSelected={setSelected} />
   );
 };

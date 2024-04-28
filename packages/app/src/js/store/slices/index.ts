@@ -37,5 +37,11 @@ type Modules = typeof modules;
 type Reducers<T extends {[key: string]: {reducer: unknown}}> = { [K in keyof T]: T[K]['reducer'] };
 type Actions<T extends {[key: string]: {actions: unknown}}> = { [K in keyof T]: T[K]['actions'] };
 
-export const reducers = Object.fromEntries(Object.entries(modules).map(([name, { reducer }]) => [name, reducer])) as Reducers<Modules>;
-export const actions = Object.fromEntries(Object.entries(modules).map(([name, { actions }]) => [name, actions])) as Actions<Modules>;
+export const reducers = Object.fromEntries(
+  Object.entries(modules)
+    .map(([name, { reducer }]) => [name, reducer]),
+) as Reducers<Modules>;
+export const actions = Object.fromEntries(
+  Object.entries(modules)
+    .map(([name, { actions: acts }]) => [name, acts]),
+) as Actions<Modules>;

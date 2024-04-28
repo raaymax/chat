@@ -14,7 +14,8 @@ export default createSlice({
       [action.payload].flat().forEach((msg) => {
         const { channelId } = msg;
 
-        const list = newState[channelId] = newState[channelId] || [];
+        const list = newState[channelId] || [];
+        newState[channelId] = list;
         if (msg.createdAt) {
           msg.createdAt = (new Date(msg.createdAt)).toISOString();
         }

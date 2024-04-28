@@ -10,11 +10,15 @@ function is<T extends types.MessageBodyPart>(data: types.MessageBodyPart, key: s
   return (data as T)[key as keyof T] !== undefined;
 }
 
-const build = (data: types.MessageBody, opts: {emojiOnly?: boolean} = {}, key?: string | number): JSX.Element => {
+const build = (
+  data: types.MessageBody,
+  opts: {emojiOnly?: boolean} = {},
+  key: string | number | undefined = undefined,
+): JSX.Element => {
   // FIXME: sanity check
   if (!data || typeof data === 'string') return data;
   if (Array.isArray(data)) {
-    return <React.Fragment key={key}>{data.map((o, key) => build(o, opts, key))}</React.Fragment>;
+    return <React.Fragment key={key}>{data.map((o, idx) => build(o, opts, idx))}</React.Fragment>;
   }
   if (is<types.MessageBodyBullet>(data, 'bullet')) return <ul key={key}>{build(data.bullet)}</ul>;
   if (is<types.MessageBodyOrdered>(data, 'ordered')) return <ol key={key}>{build(data.ordered)}</ol>;

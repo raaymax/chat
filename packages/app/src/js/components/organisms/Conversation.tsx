@@ -5,7 +5,7 @@ import {
 } from '../../store';
 import { MessageList } from './MessageListScroller';
 import { uploadMany } from '../../services/file';
-import { Input } from '../organisms/Input';
+import { Input } from './Input';
 import { reinit } from '../../services/init';
 import { HoverProvider } from '../contexts/hover';
 import { useStream } from '../contexts/useStream';

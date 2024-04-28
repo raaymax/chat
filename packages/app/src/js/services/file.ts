@@ -18,6 +18,7 @@ type FileUpload = {
 export const uploadMany = createMethod('files/uploadMany', async ({ streamId, files }: FilesUpload, { dispatch }) => {
   for (let i = 0, file; i < files.length; i++) {
     file = files.item(i);
+    // eslint-disable-next-line no-continue
     if (!file) continue;
     dispatch(upload({ streamId, file }));
   }
@@ -77,7 +78,7 @@ const aborts: Record<string, (() => void)> = {};
 
 export const abort = createMethod('files/abort', async (clientId: string, { dispatch, actions }) => {
   try {
-    aborts[clientId] && aborts[clientId]();
+    if (aborts[clientId]) aborts[clientId]();
     dispatch(actions.files.remove(clientId));
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -91,7 +92,11 @@ type UploadArgs = {
   progress: (progress: number) => void;
 };
 
-function uploadFile(url: string, { file, progress, clientId }: UploadArgs): Promise<{ status: string, fileId: string }> {
+type UploadResponse = {
+  status: string;
+  fileId: string;
+};
+function uploadFile(url: string, { file, progress, clientId }: UploadArgs): Promise<UploadResponse> {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', () => {

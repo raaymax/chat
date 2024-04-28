@@ -1,5 +1,4 @@
-export default {
-  root: true,
+module.exports = {
   env: { browser: true, es2023: true },
   extends: [
     'eslint:recommended',
@@ -12,7 +11,20 @@ export default {
   plugins: ['@typescript-eslint', 'react-refresh'],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
-  settings: { react: { version: '18.2' } },
+  settings: {
+    react: { version: '18.2' },
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      },
+    },
+    'import/extensions': [
+      '.js',
+      '.jsx',
+      '.ts',
+      '.tsx',
+    ],
+  },
   globals: {
     EMOJI: 'writable',
     API_URL: 'readonly',

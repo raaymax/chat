@@ -59,7 +59,7 @@ export const MessageToolbar = () => {
   const actions = useActions();
   const [stream] = useStream();
   const onDelete = useCallback(() => {
-    id && dispatch(removeMessage({ id }));
+    if (id) dispatch(removeMessage({ id }));
   }, [dispatch, id]);
 
   const meId = useSelector((state) => state.me);
@@ -88,7 +88,7 @@ export const MessageToolbar = () => {
   return (
     <Container>
       <Toolbar size={40}>
-        {view == 'reactions' && [
+        {view === 'reactions' && [
           ':heart:',
           ':rofl:',
           ':thumbsup:',
@@ -96,11 +96,11 @@ export const MessageToolbar = () => {
           ':tada:',
           ':eyes:',
         ].map(reaction)}
-        {view == 'delete' && [
+        {view === 'delete' && [
           confirmDelete(),
           cancelButton(),
         ]}
-        {view == null && [
+        {view === null && [
           openReactions(),
           isMe && editButton(),
           isMe && deleteButton(),

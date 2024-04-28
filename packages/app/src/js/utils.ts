@@ -107,7 +107,10 @@ export const createEventListener = () => {
   };
 };
 
-export const buildEmojiNode = (result: {unicode?: string, fileId?: string, shortname: string}, getUrl: (fileId: string) => string) => {
+export const buildEmojiNode = (
+  result: {unicode?: string, fileId?: string, shortname: string},
+  getUrl: (fileId: string) => string,
+) => {
   const emoji = ((): Node => {
     if (result.unicode) {
       return document.createTextNode(String.fromCodePoint(parseInt(result.unicode, 16)));
@@ -131,6 +134,8 @@ export const buildEmojiNode = (result: {unicode?: string, fileId?: string, short
 export type WithoutUndefined<T> = {
   [K in keyof T as T[K] extends undefined ? never : K]: T[K]
 };
-export const omitUndefined = <T extends {[key: string]: unknown | undefined | null}>(ob: T): WithoutUndefined<T> => Object.fromEntries(
+export const omitUndefined = <T extends {[key: string]: unknown | undefined | null}>(
+  ob: T,
+): WithoutUndefined<T> => Object.fromEntries(
   Object.entries(ob).filter(([, v]) => v !== undefined),
 ) as WithoutUndefined<T>;

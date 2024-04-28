@@ -117,12 +117,12 @@ export const InputProvider = (args: InputContextProps) => {
       dispatch(uploadMany({ streamId: stream.id ?? '', files: cbData.files }));
     }
 
-    const range = getRange();
-    range.deleteContents();
+    const rang = getRange();
+    rang.deleteContents();
 
     cbData.getData('text').split('\n').reverse().forEach((line: string, idx: number) => {
-      if (idx) range.insertNode(document.createElement('br'));
-      range.insertNode(document.createTextNode(line));
+      if (idx) rang.insertNode(document.createElement('br'));
+      rang.insertNode(document.createTextNode(line));
     });
     document.getSelection()?.collapseToEnd();
     event.preventDefault();
@@ -131,8 +131,8 @@ export const InputProvider = (args: InputContextProps) => {
 
   const onFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if ((e.target.files?.length ?? 0) > 0) {
-      const { files } = e.target;
-      dispatch(uploadMany({ streamId: stream.id, files }));
+      const targetFiles = e.target.files as FileList;
+      dispatch(uploadMany({ streamId: stream.id ?? '', files: targetFiles }));
       e.target.value = '';
     }
   }, [dispatch, stream]);
@@ -186,8 +186,8 @@ export const InputProvider = (args: InputContextProps) => {
       console.warn('No text selected.');
       return;
     }
-    const range = selection.getRangeAt(0);
-    const { endContainer } = range;
+    const rang = selection.getRangeAt(0);
+    const { endContainer } = rang;
 
     if (endContainer.nodeType !== Node.TEXT_NODE) {
       // eslint-disable-next-line no-console
@@ -197,8 +197,8 @@ export const InputProvider = (args: InputContextProps) => {
 
     const { parentNode } = endContainer;
     let textContent = endContainer.textContent || '';
-    const afterText = textContent.slice(range.endOffset);
-    textContent = textContent.slice(0, range.endOffset);
+    const afterText = textContent.slice(rang.endOffset);
+    textContent = textContent.slice(0, rang.endOffset);
     const documentFragment = document.createDocumentFragment();
 
     const match = regex.exec(textContent);
@@ -225,11 +225,11 @@ export const InputProvider = (args: InputContextProps) => {
   }, [updateRange]);
 
   const replace = useCallback((regex: RegExp, text = '') => {
-    const range = getRange();
-    const node = range.endContainer;
+    const rang = getRange();
+    const node = rang.endContainer;
     const original = node.textContent ?? '';
-    const replacement = original.slice(0, range.endOffset).replace(regex, text);
-    node.textContent = replacement + original.slice(range.endOffset);
+    const replacement = original.slice(0, rang.endOffset).replace(regex, text);
+    node.textContent = replacement + original.slice(rang.endOffset);
     const s = document.getSelection();
     const r = document.createRange();
     r.setStart(node, replacement.length);
@@ -239,10 +239,10 @@ export const InputProvider = (args: InputContextProps) => {
   }, [getRange]);
 
   const insert = useCallback((domNode: HTMLElement) => {
-    const range = getRange();
-    range.deleteContents();
-    range.insertNode(domNode);
-    range.collapse();
+    const rang = getRange();
+    rang.deleteContents();
+    rang.insertNode(domNode);
+    rang.collapse();
   }, [getRange]);
 
   const emitKeyDown = useCallback((e: React.KeyboardEvent) => {
