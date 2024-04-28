@@ -4,7 +4,7 @@ import { useSelector, useEmojiFuse } from '../../store';
 import { Tooltip } from '../atoms/Tooltip';
 import { SearchBox } from '../atoms/SearchBox';
 import { getUrl } from '../../services/file';
-import { EmojiDescriptor } from '../../types';
+import { EmojiDescriptor, DefinedEmoji } from '../../types';
 
 export const Label = styled.div`
   width: 100%;
@@ -139,6 +139,7 @@ const CATEGORIES: Record<string, string> = {
   s: 'Symbols',
   k: 'Flags',
   f: 'Font',
+  x: 'Other',
 };
 
 type EmojiSearchProps = {
@@ -147,22 +148,23 @@ type EmojiSearchProps = {
 
 export const EmojiSearch = ({ onSelect }: EmojiSearchProps) => {
   const [name, setName] = useState('');
-  const [results, setResults] = useState<Record<string, EmojiDescriptor[]>>({});
-  const emojis = useSelector((state) => state.emojis.data);
+  const [results, setResults] = useState<Record<string, DefinedEmoji[]>>({});
+  const emojis = useSelector((state) => state.emojis.data.filter((e) => !e.empty)) as DefinedEmoji[];
   const fuse = useEmojiFuse();
 
   useEffect(() => {
-    let all: EmojiDescriptor[] = emojis || [];
+    let all: DefinedEmoji[] = emojis || [];
     if (name && fuse) {
       const ret = fuse.search(name, { limit: 100 });
-      all = ret.map((r) => r.item);
+      all = ret.map((r) => r.item).filter((e) => !e.empty) as DefinedEmoji[];
     }
 
     setResults(
       (all || [])
-        .reduce<Record<string, EmojiDescriptor[]>>((acc, emoji) => {
-          acc[emoji.category] = acc[emoji.category] || [];
-          acc[emoji.category].push(emoji);
+        .reduce<Record<string, DefinedEmoji[]>>((acc, emoji) => {
+          const category = emoji.category || 'x';
+          acc[category] = acc[category] || [];
+          acc[category].push(emoji);
           return acc;
         }, {}),
     );
