@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from '../../store';
 import { abort } from '../../services/file';
 import { useStream } from '../contexts/useStream';
 
@@ -69,27 +69,28 @@ type AttachmentProps = {
 };
 
 export const Attachment = ({
-  data: { fileName, contentType, progress, status },
+  data: {
+    fileName, contentType, progress, status,
+  },
   onDelete,
 }: AttachmentProps) => (
   <div className='attachment'>
     <div className='type'><i className='fa-solid fa-file' /></div>
     <div className='name'>{fileName} [{contentType}]</div>
     <div className='remove' onClick={onDelete}><i className='fa-solid fa-xmark' /></div>
-    <div className={status === 'ok' ? 'progress done' : 'progress'} style={{width: `${progress}%`}} />
+    <div className={status === 'ok' ? 'progress done' : 'progress'} style={{ width: `${progress}%` }} />
   </div>
 );
 
 export const Attachments = () => {
   const [stream] = useStream();
-  // FIXME: files as any
-  const files: any = useSelector((state: any) => state.files);
-  const list = useMemo(() => files.filter((file: any) => file.streamId === stream.id), [files, stream.id]);
-  const dispatch: any = useDispatch();
+  const files = useSelector((state) => state.files);
+  const list = useMemo(() => files.filter((file) => file.streamId === stream.id), [files, stream.id]);
+  const dispatch = useDispatch();
 
   return (
     <Container>
-      {(list || []).map((file: any) => (
+      {(list || []).map((file) => (
         <Attachment
           key={file.clientId}
           data={{ ...file }}

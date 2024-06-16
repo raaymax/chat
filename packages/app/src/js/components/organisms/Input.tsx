@@ -1,6 +1,6 @@
 import { useCallback, useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import { useActions, useDispatch } from '../../store';
 
 import { EmojiDescriptor } from '../../types';
 import { buildEmojiNode } from '../../utils';
@@ -167,7 +167,8 @@ export const InputForm = ({ children }: InputFormProps) => {
     input, onPaste, onInput, onKeyDown, onFileChange, fileInput,
     focus, addFile, insert, send, scope, currentText, wrapMatching,
   } = useInput();
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch();
+  const actions = useActions();
 
   const onEmojiInsert = useCallback((emoji: EmojiDescriptor) => {
     insert(buildEmojiNode(emoji, getUrl));
@@ -184,7 +185,7 @@ export const InputForm = ({ children }: InputFormProps) => {
 
   useEffect(() => {
     const { current } = input;
-    if(!current) return;
+    if (!current) return;
     current.addEventListener('keydown', ctrl);
     return () => {
       current.removeEventListener('keydown', ctrl);
@@ -210,7 +211,7 @@ export const InputForm = ({ children }: InputFormProps) => {
         <div className="separator" />
         {mode === 'edit' ? (
           <>
-            <ButtonWithIcon icon="xmark" onClick={() => dispatch.actions.messages.editClose(messageId)} />
+            <ButtonWithIcon icon="xmark" onClick={() => dispatch(actions.messages.editClose(messageId))} />
             <ButtonWithIcon icon="check" onClick={send} />
           </>
         ) : (

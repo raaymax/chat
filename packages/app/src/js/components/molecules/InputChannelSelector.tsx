@@ -4,7 +4,7 @@ import {
 import Fuse from 'fuse.js';
 import { TextMenu } from './TextMenu';
 import { useInput } from '../contexts/useInput';
-import { useChannels } from '../../hooks';
+import { useChannels } from '../../store';
 
 const SCOPE = 'channel';
 
@@ -21,9 +21,9 @@ export const ChannelSelector = () => {
   }), [channels]);
 
   const options = useMemo(() => {
-    let opts = fuse.search(currentText || '').slice(0, 5).map(({ item }) => item);
-    opts = opts.length ? opts : channels.slice(0, 5);
-    opts = opts.map((channel) => ({
+    let chan = fuse.search(currentText || '').slice(0, 5).map(({ item }) => item);
+    chan = chan.length ? chan : channels.slice(0, 5);
+    const opts = chan.map((channel) => ({
       name: channel.name,
       id: channel.id,
       icon: channel.private ? 'fa-solid fa-lock' : 'fa-solid fa-hashtag',
@@ -43,7 +43,7 @@ export const ChannelSelector = () => {
   }, [insert]);
 
   const submit = useCallback((event: Event, opts?: {selected: number}) => {
-    if(!scopeContainer) return;
+    if (!scopeContainer) return;
     event.preventDefault();
     event.stopPropagation();
     scopeContainer.className = 'channel';
@@ -63,7 +63,7 @@ export const ChannelSelector = () => {
   }, [options, selected, scopeContainer]);
 
   const remove = useCallback((event: Event) => {
-    if(!scopeContainer) return;
+    if (!scopeContainer) return;
     if (scopeContainer.textContent?.length === 1) {
       scopeContainer.remove();
       event.preventDefault();
@@ -85,10 +85,9 @@ export const ChannelSelector = () => {
     }
   }, [currentText, scope, create, remove, submit]);
 
-
   const onSelect = useCallback((idx: number, e: Event) => {
-    submit(e, {selected: idx});
-  },[submit]);
+    submit(e, { selected: idx });
+  }, [submit]);
 
   useEffect(() => {
     if (!input.current) return;

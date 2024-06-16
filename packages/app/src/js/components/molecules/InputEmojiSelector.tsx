@@ -1,32 +1,40 @@
-import { useSelector } from 'react-redux';
 import {
   useCallback, useEffect, useState, useMemo,
 } from 'react';
+import { useSelector, useEmojiFuse } from '../../store';
 import { TextMenu } from './TextMenu';
 import { useInput } from '../contexts/useInput';
 import { getUrl } from '../../services/file';
 import { buildEmojiNode } from '../../utils';
-import { useEmojiFuse } from '../../hooks';
+import { EmojiDescriptor } from '../../types';
 
 const SCOPE = 'emoji';
+
+type MenuOption = {
+  label?: string;
+  url?: string;
+  name: string;
+  action?: string;
+  item?: EmojiDescriptor;
+};
 
 export const EmojiSelector = () => {
   const [selected, setSelected] = useState(0);
   const {
     input, currentText, scope, insert, scopeContainer, replace,
   } = useInput();
-  const emojis = useSelector((state: any) => state.emojis.data);
+  const emojis = useSelector((state) => state.emojis.data);
   const fuse = useEmojiFuse();
 
   const options = useMemo(() => {
-    let opts = fuse.search(currentText || '').slice(0, 5).map(({ item }) => item);
-    opts = opts.length ? opts : emojis.slice(0, 5);
-    opts = [...opts, { action: 'close', shortname: 'no emoji' }].map((item) => ({
+    let em = fuse.search(currentText || '').slice(0, 5).map(({ item }) => item);
+    em = em.length ? em : emojis.slice(0, 5);
+    const opts: MenuOption[] = [...em.map((item) => ({
       label: item.unicode && String.fromCodePoint(parseInt(item.unicode, 16)),
       url: item.fileId && getUrl(item.fileId),
       name: item.shortname,
       item,
-    }));
+    })), { label: '❌', name: 'no emoji', action: 'close' }];
     return opts;
   }, [fuse, emojis, currentText]);
 
@@ -47,15 +55,16 @@ export const EmojiSelector = () => {
     return span;
   }, [insert]);
 
-  const submit = useCallback((event: Event, { s, shortName, exact = true }: {s?: number, shortName?: string, exact?: boolean} = {}) => {
-    if(!scopeContainer) return;
+  type SubmitProps = {s?: number, shortName?: string, exact?: boolean};
+  const submit = useCallback((event: Event, { s, shortName, exact = true }: SubmitProps = {}) => {
+    if (!scopeContainer) return;
     let container = scopeContainer;
     if (scope !== SCOPE) {
       container = create(event);
     }
     const name = shortName || `${container.textContent}:`;
     const emoji = exact
-      ? emojis.find((e: any) => e.shortname === name)
+      ? emojis.find((e) => e.shortname === name)
       : options[s ?? selected].item;
     const node = emoji
       ? buildEmojiNode(emoji, getUrl)
@@ -76,7 +85,7 @@ export const EmojiSelector = () => {
   }, [options, selected, scopeContainer, emojis, create, scope]);
 
   const remove = useCallback((event: Event) => {
-    if(!scopeContainer) return;
+    if (!scopeContainer) return;
     if (scopeContainer.textContent?.length === 1) {
       scopeContainer.remove();
       event.preventDefault();
@@ -85,7 +94,7 @@ export const EmojiSelector = () => {
   }, [scopeContainer]);
 
   const close = useCallback((e: Event) => {
-    if(!scopeContainer) return;
+    if (!scopeContainer) return;
     const text = scopeContainer.textContent ?? '';
     const node = document.createTextNode(text);
     scopeContainer.replaceWith(node);
@@ -113,7 +122,7 @@ export const EmojiSelector = () => {
     }
     if (scope === SCOPE) {
       if (e.key === ' ' || e.key === 'Space' || e.keyCode === 32 || e.key === 'Enter') {
-        if (options[selected].item?.action === 'close') {
+        if (options[selected].action === 'close') {
           close(e);
         } else {
           submit(e, { exact: false });
@@ -141,12 +150,12 @@ export const EmojiSelector = () => {
   }, [currentText, scope, create, remove, submit, replace, options, selected, close]);
 
   const onSelect = useCallback((idx: number, e: Event) => {
-    submit(e, {exact: false, s: idx});
-  },[submit]);
+    submit(e, { exact: false, s: idx });
+  }, [submit]);
 
   useEffect(() => {
     const { current } = input;
-    if(!current) return;
+    if (!current) return;
     current.addEventListener('keydown', ctrl);
     return () => {
       current.removeEventListener('keydown', ctrl);
@@ -154,8 +163,13 @@ export const EmojiSelector = () => {
   }, [input, ctrl]);
 
   if (scope !== SCOPE) return null;
-  
+
   return (
-    <TextMenu open={true} options={options} onSelect={(...ar) => onSelect(...ar)} selected={selected} setSelected={setSelected} />
+    <TextMenu
+      open={true}
+      options={options}
+      onSelect={(...ar) => onSelect(...ar)}
+      selected={selected}
+      setSelected={setSelected} />
   );
 };

@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 import { Conversation } from './Conversation';
-import { useDispatch } from 'react-redux';
+import {
+  useActions, useDispatch, useMessage, useMethods,
+} from '../../store';
 import { Channel } from '../molecules/NavChannel';
 import { init } from '../../services/init';
 import { useStream } from '../contexts/useStream';
-import { useMessage } from '../../hooks';
 import { loadMessages } from '../../services/messages';
 import { Toolbar } from '../atoms/Toolbar';
 import { ButtonWithIcon } from '../molecules/ButtonWithIcon';
@@ -61,7 +62,9 @@ type HeaderProps = {
 export const Header = ({ onClick }: HeaderProps) => {
   const [stream, setStream] = useStream();
   const { channelId, parentId } = stream;
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch();
+  const methods = useMethods();
+  const actions = useActions();
   const message = useMessage(parentId);
 
   if (parentId) {
@@ -71,7 +74,9 @@ export const Header = ({ onClick }: HeaderProps) => {
         <Channel onClick={onClick} channelId={channelId} />
 
         <Toolbar className="toolbar" size={50}>
-          <ButtonWithIcon icon="back" onClick={() => setStream({ channelId, type: 'archive', selected: message.id, date: message.createdAt })} />
+          <ButtonWithIcon icon="back" onClick={() => setStream({
+            channelId, type: 'archive', selected: message?.id, date: message?.createdAt,
+          })} />
           {stream.id !== 'main' && <ButtonWithIcon icon="xmark" onClick={() => setStream(null)} />}
         </Toolbar>
       </StyledHeader>
@@ -85,17 +90,17 @@ export const Header = ({ onClick }: HeaderProps) => {
         <Channel onClick={onClick} channelId={channelId} />
         {stream.type === 'archive' && (
           <ButtonWithIcon icon='down' onClick = {() => {
-            dispatch.actions.messages.clear({ stream });
+            dispatch(actions.messages.clear({ stream }));
             setStream({ ...stream, type: 'live' });
-            dispatch(loadMessages({ ...stream, type: 'live' }))
+            dispatch(loadMessages({ ...stream, type: 'live' }));
           }} />
         )}
         <ButtonWithIcon icon="thumbtack" onClick={() => {
-          dispatch.methods.pins.load(channelId);
-          dispatch.actions.view.set('pins');
+          dispatch(methods.pins.load(channelId));
+          dispatch(actions.view.set('pins'));
         }} />
-        <ButtonWithIcon icon="search" onClick={() => dispatch.actions.view.set('search')} />
-        <ButtonWithIcon icon="refresh" onClick={() => dispatch(init())} />
+        <ButtonWithIcon icon="search" onClick={() => dispatch(actions.view.set('search'))} />
+        <ButtonWithIcon icon="refresh" onClick={() => dispatch(init({}))} />
       </Toolbar>
     </StyledHeader>
   );

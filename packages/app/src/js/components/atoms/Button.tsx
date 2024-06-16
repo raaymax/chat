@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import {AppTheme} from '../../types';
+import { AppTheme } from '../../types';
 import { useSize } from '../contexts/useSize';
-import {cn, ClassNames} from '../../utils';
+import { cn, ClassNames } from '../../utils';
 
 interface IconButtonProps {
   onClick?: (e: React.MouseEvent) => void;
@@ -9,7 +9,6 @@ interface IconButtonProps {
   children?: React.ReactNode;
   className?: ClassNames;
 }
-
 
 const StyledButton = styled.button<{ $size: number}>`
   min-width: ${(props) => props.$size}px;
@@ -23,20 +22,21 @@ const StyledButton = styled.button<{ $size: number}>`
   box-sizing: border-box;
 
   &:hover {
-    background-color: ${({theme}): string => (theme as AppTheme).buttonHoverBackground};
+    background-color: ${({ theme }): string => (theme as AppTheme).buttonHoverBackground};
   }
 
   &:active {
-    background-color: ${({theme})=> (theme as AppTheme).buttonActiveBackground};
+    background-color: ${({ theme }) => (theme as AppTheme).buttonActiveBackground};
   }
 `;
 
-
-export const Button = ({ onClick, size, children, className}: IconButtonProps) => {
+export const Button = ({
+  onClick, size, children, className,
+}: IconButtonProps) => {
   const $size = useSize(size);
   return (
     <StyledButton onClick={onClick} $size={$size ?? 40} className={cn(className)}>
       {children}
     </StyledButton>
   );
-}
+};

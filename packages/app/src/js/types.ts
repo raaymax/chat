@@ -43,11 +43,11 @@ export type MessageBodyChannel = {channel: string};
 export type MessageBodyUser = {user: string};
 export type MessageBodyThread = {thread: { channelId: string, parentId: string, text: string }};
 
-export type MessageBodyPart = MessageBodyBullet | MessageBodyOrdered | MessageBodyItem 
-  | MessageBodyCodeblock | MessageBodyBlockquote | MessageBodyCode 
-  | MessageBodyLine | MessageBodyBr | MessageBodyText | MessageBodyBold 
-  | MessageBodyItalic | MessageBodyUnderline | MessageBodyStrike 
-  | MessageBodyImg | MessageBodyLink | MessageBodyEmoji | MessageBodyChannel 
+export type MessageBodyPart = MessageBodyBullet | MessageBodyOrdered | MessageBodyItem
+  | MessageBodyCodeblock | MessageBodyBlockquote | MessageBodyCode
+  | MessageBodyLine | MessageBodyBr | MessageBodyText | MessageBodyBold
+  | MessageBodyItalic | MessageBodyUnderline | MessageBodyStrike
+  | MessageBodyImg | MessageBodyLink | MessageBodyEmoji | MessageBodyChannel
   | MessageBodyUser | MessageBodyThread;
 
 export type MessageBody = MessageBodyPart[] | MessageBodyPart;
@@ -89,14 +89,14 @@ export type Message = {
   }[];
   info?: {
     type: string;
-    action: string;
+    action?: string;
     msg: string;
   };
   thread?: {
     childId: string;
     userId: string;
   }[];
-  //TODO: is it correct?
+  // TODO: is it correct?
   progress?: {
     userId: string;
     user: {
@@ -112,13 +112,27 @@ export type User = {
   name: string;
   status: string;
   avatar: string;
+  avatarUrl: string;
+  connected: boolean;
+  lastSeen: string;
+  system: boolean;
 };
 
-export type EmojiDescriptor = { 
+export type EmptyEmoji= {
+  empty: true,
+  shortname: string
+  category?: string,
+}
+
+export type DefinedEmoji = {
+  empty?: false,
   unicode?: string,
   fileId?: string,
   shortname: string
+  category?: string,
 }
+
+export type EmojiDescriptor = EmptyEmoji | DefinedEmoji;
 
 export type Notif = {
   id?: string;
@@ -131,10 +145,43 @@ export type Notif = {
 }
 
 export type Stream = {
-  id?: string;
-  type: string;
-  channelId: string;
-  parentId?: string;
-  selected?: string;
-  date?: string;
+  id?: string,
+  type: 'live' | 'archive',
+  channelId: string,
+  parentId?: string,
+  selected?: string,
+  date?: string,
 };
+
+export type Channel = {
+  id: string;
+  name: string;
+  users: string[];
+  channelType: string;
+  priv?: boolean;
+  direct?: boolean;
+  private?: boolean;
+};
+
+export type Progress = {
+  channelId: string;
+  userId: string;
+  parentId: string;
+  count: number;
+  lastMessageId: string;
+}
+
+export type Notification = {
+  id: string;
+  userId: string;
+  channelId: string;
+  parentId: string;
+  createdAt: string;
+  messageId: string;
+}
+
+export type UserConfig = {
+  appVersion: string,
+  mainChannelId: string,
+  vapidPublicKey: string,
+}

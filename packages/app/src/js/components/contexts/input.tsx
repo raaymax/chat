@@ -1,19 +1,26 @@
 import React, {
   useRef, useState, useCallback, useEffect, createContext, MutableRefObject,
 } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import {
+  useDispatch, useSelector, useMessage, useMethods, useActions,
+} from '../../store';
 import { useStream } from './useStream';
 import * as messageService from '../../services/messages';
 import { uploadMany } from '../../services/file';
 import { fromDom } from '../../serializer';
-import { useMessage } from '../../hooks/useMessage';
+
+declare global {
+  interface Window {
+    clipboardData: DataTransfer | null;
+  }
+}
 
 export type InputContextType = {
   mode: string;
   messageId: string | null;
   input: MutableRefObject<HTMLDivElement | null>;
   fileInput: MutableRefObject<HTMLInputElement| null>;
-  onPaste: (e: any) => void;
+  onPaste: (e: React.SyntheticEvent) => void;
   onKeyDown: (e: React.KeyboardEvent) => void;
   onInput: () => void;
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -23,7 +30,7 @@ export type InputContextType = {
   replace: (regex: RegExp, text?: string) => void;
   wrapMatching: (regex: RegExp, wrapperTagName: string) => void;
   addFile: () => void;
-  send: (e: any) => void;
+  send: (e: React.SyntheticEvent) => void;
   getRange: () => Range;
   insert: (domNode: HTMLElement) => void;
   focus: (e?: Event) => void;
@@ -34,7 +41,7 @@ export const InputContext = createContext<InputContextType | null>(null);
 function findScope(element: HTMLElement | null): { el: HTMLElement, scope: string } | null {
   let currentElement = element;
   while (currentElement !== null) {
-    const scope = currentElement.getAttribute?.('data-scope')
+    const scope = currentElement.getAttribute?.('data-scope');
     if (typeof scope === 'string') {
       return { el: currentElement, scope };
     }
@@ -42,7 +49,6 @@ function findScope(element: HTMLElement | null): { el: HTMLElement, scope: strin
   }
   return null;
 }
-
 
 type InputContextProps = {
   children: React.ReactNode;
@@ -52,14 +58,15 @@ type InputContextProps = {
 
 export const InputProvider = (args: InputContextProps) => {
   const { children, mode = 'default', messageId = null } = args;
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch();
+  const methods = useMethods();
+  const actions = useActions();
   const [stream] = useStream();
   const [currentText, setCurrentText] = useState('');
   const [scope, setScope] = useState<string>('');
   const [scopeContainer, setScopeContainer] = useState<HTMLElement>();
-  //FIXME: files as any
-  const files = useSelector((state: any) => state.files);
-  const filesAreReady = !files || files.every((f: any) => f.status === 'ok');
+  const files = useSelector((state) => state.files);
+  const filesAreReady = !files || files.every((f) => f.status === 'ok');
   const message = useMessage(messageId);
 
   const input = useRef<HTMLDivElement | null>(null);
@@ -67,7 +74,7 @@ export const InputProvider = (args: InputContextProps) => {
   const [range, setRange] = useState<Range>(document.createRange());
 
   const getDefaultRange = useCallback((): Range => {
-    if(!input.current) throw new Error('Input ref is not set');
+    if (!input.current) throw new Error('Input ref is not set');
     const r = document.createRange();
     r.setStart(input.current, 0);
     r.setEnd(input.current, 0);
@@ -75,9 +82,9 @@ export const InputProvider = (args: InputContextProps) => {
   }, [input]);
 
   const getRange = useCallback((): Range => {
-    if(!input.current) throw new Error('Input ref is not set');
+    if (!input.current) throw new Error('Input ref is not set');
     const selection = document.getSelection();
-    if(!selection || selection.type === 'None') {
+    if (!selection || selection.type === 'None') {
       return getDefaultRange();
     }
     const r = selection.getRangeAt(0);
@@ -100,23 +107,22 @@ export const InputProvider = (args: InputContextProps) => {
     if (s && s !== scope) {
       setScope(s);
     }
-    if(el) setScopeContainer(el);
+    if (el) setScopeContainer(el);
   }, [getRange, setRange, scope, setScope, setCurrentText, setScopeContainer]);
 
-  const onPaste = useCallback((event: ClipboardEvent) => {
-    // FIXME: window as any
-    const cbData = (event.clipboardData || (window as any).clipboardData);
+  const onPaste = useCallback((event: React.ClipboardEvent) => {
+    const cbData = (event.clipboardData || window.clipboardData);
     if (cbData.files?.length > 0) {
       event.preventDefault();
-      dispatch(uploadMany(stream.id, cbData.files));
+      dispatch(uploadMany({ streamId: stream.id ?? '', files: cbData.files }));
     }
 
-    const range = getRange();
-    range.deleteContents();
+    const rang = getRange();
+    rang.deleteContents();
 
     cbData.getData('text').split('\n').reverse().forEach((line: string, idx: number) => {
-      if (idx) range.insertNode(document.createElement('br'));
-      range.insertNode(document.createTextNode(line));
+      if (idx) rang.insertNode(document.createElement('br'));
+      rang.insertNode(document.createTextNode(line));
     });
     document.getSelection()?.collapseToEnd();
     event.preventDefault();
@@ -125,8 +131,8 @@ export const InputProvider = (args: InputContextProps) => {
 
   const onFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if ((e.target.files?.length ?? 0) > 0) {
-      const { files } = e.target;
-      dispatch(uploadMany(stream.id, files));
+      const targetFiles = e.target.files as FileList;
+      dispatch(uploadMany({ streamId: stream.id ?? '', files: targetFiles }));
       e.target.value = '';
     }
   }, [dispatch, stream]);
@@ -147,32 +153,30 @@ export const InputProvider = (args: InputContextProps) => {
     }
   }, [input, range]);
 
-  //FIXME: e as any
-  const send = useCallback((e: any) => {
+  const send = useCallback((e: React.SyntheticEvent) => {
     if (!input.current) return;
     if (!filesAreReady) return;
-    // FIXME: payload as any
-    const payload: any = fromDom(input.current);
+    const payload = fromDom(input.current);
     if (payload.type === 'message:create' && mode === 'edit') {
       payload.type = 'message:update';
       payload.id = messageId;
-      payload.clientId = message.clientId;
+      payload.clientId = message?.clientId;
     }
-    //FIXME: files as any
-    payload.attachments = [...files.filter((f: any) => f.streamId === stream.id)];
+    payload.attachments = [...files.filter((f) => f.streamId === stream.id)];
     if (payload.flat.length === 0 && payload.attachments.length === 0) return;
     payload.channelId = stream.channelId;
     payload.parentId = stream.parentId;
 
-    dispatch.actions.files.clear(stream.id);
-    dispatch(messageService.send(stream, payload));
+    dispatch(actions.files.clear(stream.id));
+    dispatch(messageService.send({ stream, payload }));
+
     if (mode === 'default') {
       input.current.innerHTML = '';
       focus(e);
     } else {
-      dispatch.actions.messages.editClose(messageId);
+      dispatch(actions.messages.editClose(messageId));
     }
-  }, [input, stream, focus, dispatch,
+  }, [actions, input, stream, focus, dispatch,
     filesAreReady, files, messageId, mode, message]);
 
   const wrapMatching = useCallback((regex: RegExp, wrapperTagName: string) => {
@@ -182,8 +186,8 @@ export const InputProvider = (args: InputContextProps) => {
       console.warn('No text selected.');
       return;
     }
-    const range = selection.getRangeAt(0);
-    const { endContainer } = range;
+    const rang = selection.getRangeAt(0);
+    const { endContainer } = rang;
 
     if (endContainer.nodeType !== Node.TEXT_NODE) {
       // eslint-disable-next-line no-console
@@ -193,8 +197,8 @@ export const InputProvider = (args: InputContextProps) => {
 
     const { parentNode } = endContainer;
     let textContent = endContainer.textContent || '';
-    const afterText = textContent.slice(range.endOffset);
-    textContent = textContent.slice(0, range.endOffset);
+    const afterText = textContent.slice(rang.endOffset);
+    textContent = textContent.slice(0, rang.endOffset);
     const documentFragment = document.createDocumentFragment();
 
     const match = regex.exec(textContent);
@@ -220,12 +224,12 @@ export const InputProvider = (args: InputContextProps) => {
     updateRange();
   }, [updateRange]);
 
-  const replace = useCallback((regex: RegExp, text: string = '') => {
-    const range = getRange();
-    const node = range.endContainer;
+  const replace = useCallback((regex: RegExp, text = '') => {
+    const rang = getRange();
+    const node = rang.endContainer;
     const original = node.textContent ?? '';
-    const replacement = original.slice(0, range.endOffset).replace(regex, text);
-    node.textContent = replacement + original.slice(range.endOffset);
+    const replacement = original.slice(0, rang.endOffset).replace(regex, text);
+    node.textContent = replacement + original.slice(rang.endOffset);
     const s = document.getSelection();
     const r = document.createRange();
     r.setStart(node, replacement.length);
@@ -235,24 +239,19 @@ export const InputProvider = (args: InputContextProps) => {
   }, [getRange]);
 
   const insert = useCallback((domNode: HTMLElement) => {
-    const range = getRange();
-    range.deleteContents();
-    range.insertNode(domNode);
-    range.collapse();
+    const rang = getRange();
+    rang.deleteContents();
+    rang.insertNode(domNode);
+    rang.collapse();
   }, [getRange]);
 
-  interface KeyboardEvent {
-    key: string;
-    shiftKey: boolean;
-  }
-
-  const onKeyDown = useCallback((e: KeyboardEvent) => {
+  const emitKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey && scope === 'root') {
-      return send(e as any);
+      return send(e);
     }
-    dispatch.methods.typing.notify(stream);
+    dispatch(methods.typing.notify({ channelId: stream.channelId, parentId: stream.parentId }));
     updateRange();
-  }, [dispatch, send, updateRange, scope, stream]);
+  }, [dispatch, methods, send, updateRange, scope, stream]);
 
   const addFile = useCallback(() => {
     fileInput.current?.click();
@@ -263,24 +262,13 @@ export const InputProvider = (args: InputContextProps) => {
     return () => document.removeEventListener('selectionchange', updateRange);
   }, [updateRange]);
 
-  useEffect(() => {
-    const { current } = input;
-    if(!current) return;
-    current.addEventListener('keydown', onKeyDown);
-    current.addEventListener('input', onInput);
-    return () => {
-      current.removeEventListener('input', onInput);
-      current.removeEventListener('keydown', onKeyDown);
-    };
-  }, [input, onInput, onKeyDown]);
-
   const api = {
     mode,
     messageId,
     input,
     fileInput,
     onPaste,
-    onKeyDown,
+    emitKeyDown,
     onInput,
     onFileChange,
     currentText,
@@ -302,4 +290,3 @@ export const InputProvider = (args: InputContextProps) => {
     </InputContext.Provider>
   );
 };
-

@@ -2,7 +2,9 @@ import {
   useState, createContext,
 } from 'react';
 
-export const HoverContext = createContext<[string | null, (val: string | null) => void] | undefined>(undefined);
+export const HoverContext = createContext<[(string | null),
+  ((val: string | null) => void)
+  ] | undefined>(undefined);
 
 type HoverContextProps = {
   children: React.ReactNode;

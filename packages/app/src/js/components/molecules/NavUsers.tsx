@@ -1,7 +1,8 @@
-import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import {
+  useSelector, useBadges, useUserChannels, useActions, useDispatch,
+} from '../../store';
 import { NavUserButton } from './NavUser';
-import { useBadges, useUserChannels } from '../../hooks';
 
 const ChannelsContainer = styled.div`
   .header {
@@ -40,11 +41,12 @@ const ChannelsContainer = styled.div`
 `;
 
 export const NavUsers = () => {
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch();
+  const actions = useActions();
   const channels = useUserChannels();
-  const userId = useSelector((state: any) => state.me);
+  const userId = useSelector((state) => state.me);
   const badges = useBadges(userId);
-  const id = useSelector((state: any) => state.stream.mainChannelId);
+  const id = useSelector((state) => state.stream.mainChannelId);
   return (
     <ChannelsContainer>
       <div className='header'>
@@ -54,12 +56,12 @@ export const NavUsers = () => {
         <NavUserButton
           size={30}
           channel={c}
-          className={{active: id === c.id}}
+          className={{ active: id === c.id }}
           key={c.id}
           badge={badges[c.id]}
           onClick={() => {
-            dispatch.actions.stream.open({id: 'main', value: { type: 'live', channelId: c.id }});
-            dispatch.actions.view.set(null);
+            dispatch(actions.stream.open({ id: 'main', value: { type: 'live', channelId: c.id } }));
+            dispatch(actions.view.set(null));
           }}
         />
       ))}

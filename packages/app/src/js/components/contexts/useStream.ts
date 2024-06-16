@@ -1,5 +1,5 @@
 import {
-  useContext
+  useContext,
 } from 'react';
 import { StreamContext } from './stream';
 import { Stream } from '../../types';
@@ -15,4 +15,3 @@ export const useStream = (): [Stream, SetStream] => {
     setStream,
   ];
 };
-

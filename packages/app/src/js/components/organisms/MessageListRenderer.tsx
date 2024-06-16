@@ -7,9 +7,9 @@ import * as types from '../../types';
 
 export type MessageListRendererProps = {
   list: (types.Message| types.Notif)[];
-  stream?: any;
-  context?: any;
-  onMessageClicked?: any;
+  stream?: unknown;
+  context?: unknown;
+  onMessageClicked?: (msg: types.Message) => void;
 };
 
 function isNotif(data: types.Message | types.Notif): data is types.Notif {
@@ -17,7 +17,7 @@ function isNotif(data: types.Message | types.Notif): data is types.Notif {
 }
 
 export const MessageListRenderer = ({
-  list: messages, stream, context, onMessageClicked = () => {},
+  list: messages, stream, context, onMessageClicked = (() => undefined),
 }: MessageListRendererProps) => {
   let prev: types.Message | types.Notif;
   return (<>
@@ -32,7 +32,7 @@ export const MessageListRenderer = ({
       sameDate = prev
         && formatDate(prev?.createdAt) === formatDate(msg?.createdAt);
       prev = msg;
-      return <React.Fragment key={msg.id +'-'+ msg.clientId}>
+      return <React.Fragment key={`${msg.id}-${msg.clientId}`}>
         {isNotif(msg)
           ? <Notification
             className={[msg.notifType]}>
@@ -50,7 +50,7 @@ export const MessageListRenderer = ({
             data={msg}
           />}
         {!sameDate ? <DateSeparator key={`date:${msg.createdAt}`} date={msg.createdAt} /> : null}
-      </React.Fragment>
+      </React.Fragment>;
     }).reverse()}
   </>);
 };

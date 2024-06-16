@@ -12,10 +12,10 @@ export const Login = ({ children }: LoginProps) => {
   const [user, setUser] = useState<string | null>(null);
   const [msg, setMsg] = useState(null);
   const validate = useCallback(() => session.validate()
-    .then(async ({ status, user }) => {
-      setStatus(status);
-      if (status === 'ok') {
-        setUser(user);
+    .then(async ({ status: validationStatus, user: validatedUser }) => {
+      setStatus(validationStatus);
+      if (validationStatus === 'ok') {
+        setUser(validatedUser);
       } else {
         setUser(null);
       }
@@ -26,10 +26,10 @@ export const Login = ({ children }: LoginProps) => {
     }), []);
 
   const fastAccess = useCallback(() => {
-    const user = session.me();
-    if (user) {
+    const myuser = session.me();
+    if (myuser) {
       setStatus('ok');
-      setUser(user);
+      setUser(myuser);
       setTimeout(validate, 100);
     }
   }, [validate]);
@@ -43,7 +43,7 @@ export const Login = ({ children }: LoginProps) => {
     e.preventDefault();
     e.stopPropagation();
     const fd = new FormData(e.target as HTMLFormElement);
-    const value = Object.fromEntries(fd.entries());
+    const value = Object.fromEntries(fd.entries()) as { login: string, password: string };
     const ret = await session.login(value);
     if (ret.status === 'ok') {
       window.location.reload();

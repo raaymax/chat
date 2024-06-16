@@ -1,10 +1,10 @@
 import styled from 'styled-components';
+import { useCallback } from 'react';
 import { Channel } from '../molecules/NavChannel';
 import { useStream } from '../contexts/useStream';
-import { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useActions, useDispatch, useSelector } from '../../store';
 import { HoverProvider } from '../contexts/hover';
-import { MessageList } from '../organisms/MessageListScroller'
+import { MessageList } from '../organisms/MessageListScroller';
 import { Message as MessageType } from '../../types';
 
 const StyledPins = styled.div`
@@ -83,14 +83,15 @@ const StyledHeader = styled.div`
 `;
 
 export const Header = () => {
-  const dispatch: any = useDispatch();
-  const [{channelId}] = useStream();
+  const dispatch = useDispatch();
+  const actions = useActions();
+  const [{ channelId }] = useStream();
 
   return (
     <StyledHeader>
       <Channel channelId={channelId} icon="fa-solid fa-thumbtack" />
       <div className='toolbar'>
-        <div className='tool' onClick={() => dispatch.actions.view.set('pins')}>
+        <div className='tool' onClick={() => dispatch(actions.view.set('pins'))}>
           <i className="fa-solid fa-xmark" />
         </div>
       </div>
@@ -100,10 +101,11 @@ export const Header = () => {
 
 export const Pins = () => {
   const [{ channelId }, setStream] = useStream();
-  const dispatch:any = useDispatch();
-  const messages = useSelector((state:any) => state.pins[channelId]);
+  const dispatch = useDispatch();
+  const actions = useActions();
+  const messages = useSelector((state) => state.pins[channelId]);
   const gotoMessage = useCallback((msg: MessageType) => {
-    dispatch.actions.view.set('pins');
+    dispatch(actions.view.set('pins'));
     setStream({
       type: 'archive',
       channelId: msg.channelId,
@@ -111,7 +113,7 @@ export const Pins = () => {
       selected: msg.id,
       date: msg.createdAt,
     });
-  }, [dispatch, setStream]);
+  }, [actions, setStream, dispatch]);
   return (
     <StyledPins className='pins'>
       <HoverProvider>

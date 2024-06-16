@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useInput } from '../contexts/useInput';
 import styled from 'styled-components';
+import { useInput } from '../contexts/useInput';
 
 export const Menu = styled.div<{top:number, left: number, height: number}>`
   position: absolute;
@@ -68,10 +68,9 @@ type TextMenuProps = {
     name: string;
     icon?: string;
     url?: string;
-    action?: () => void;
   }[];
   open?: boolean;
-  onSelect: (idx: number, e: any) => void;
+  onSelect: (idx: number, e: React.MouseEvent) => void;
   selected: number;
   setSelected: (idx: number) => void;
 };
@@ -102,8 +101,7 @@ export const TextMenu = ({
     setCoords([box.bottom - inBox.top, box.left - inBox.left]);
   }, [input, getRange]);
 
-  //FIXME: e as any
-  const ctrl = useCallback((e: any) => {
+  const ctrl = useCallback((e: KeyboardEvent) => {
     if (e.key === 'ArrowUp') {
       setSelected(selected + 1 > options.length - 1 ? options.length - 1 : selected + 1);
       e.preventDefault();
@@ -129,7 +127,11 @@ export const TextMenu = ({
     <Menu className={className} top={getYPos()} left={getXPos()} height={options.length} >
       <ul>
         {options.map((e, idx) => (
-          <li key={idx} onClick={(e) => onSelect(idx, e)} className={idx === selected ? 'selected' : ''}>
+          <li
+            key={idx}
+            onClick={(ev) => onSelect(idx, ev)}
+            className={idx === selected ? 'selected' : ''}
+          >
             {e.icon && <span><i className={e.icon} /></span>}
             {e.url && <span><img src={e.url} alt="img" /></span>}
             {!e.icon && !e.url && <span>{e.label || ''}</span>}

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
+import { useCallback } from 'react';
 import { SizeProvider } from '../contexts/size';
-import {cn, ClassNames} from '../../utils';
+import { cn, ClassNames } from '../../utils';
 
 export const Container = styled.div<{$size?: number}>`
   display: flex;
@@ -26,8 +27,11 @@ interface ToolbarProps {
   children: React.ReactNode;
 }
 
-export const Toolbar = ({ children, size, className}: ToolbarProps) => {
-  const stop = (e: any) => { e.stopPropagation(); e.preventDefault(); };
+export const Toolbar = ({ children, size, className }: ToolbarProps) => {
+  const stop = useCallback((e: React.SyntheticEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+  }, []);
   return (
     <Container className={cn(className)} $size={size} onClick={stop}>
       <SizeProvider value={size}>
@@ -35,4 +39,4 @@ export const Toolbar = ({ children, size, className}: ToolbarProps) => {
       </SizeProvider>
     </Container>
   );
-}
+};

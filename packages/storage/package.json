@@ -16,12 +16,12 @@
   "license": "ISC",
   "dependencies": {
     "@google-cloud/storage": "7.6.0",
-    "@quack/config": "workspace:*",
+    "@quack/config": "*",
     "@types/node": "20.10.4",
     "concat-stream": "2.0.0",
     "mongodb": "6.3.0",
     "sharp": "0.33.0",
-    "typescript": "5.3.3",
+    "typescript": "5.4.5",
     "uuid": "9.0.1",
     "zod": "3.22.4"
   },

@@ -56,7 +56,6 @@ type Link = {
   images: string[];
 };
 
-
 type LinkPreviewProps = {
   link: Link;
 };

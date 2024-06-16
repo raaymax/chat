@@ -1,5 +1,8 @@
 import { useState, useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
+import {
+  useActions, useDispatch, useMethods, useSelector,
+} from '../../store';
 import { removeMessage } from '../../services/messages';
 import { useHovered } from '../contexts/useHovered';
 import { useStream } from '../contexts/useStream';
@@ -8,8 +11,6 @@ import { useMessageData } from '../contexts/useMessageData';
 import { Toolbar } from '../atoms/Toolbar';
 import { ButtonWithEmoji } from './ButtonWithEmoji';
 import { ButtonWithIcon } from './ButtonWithIcon';
-
-import styled from 'styled-components';
 
 export const Container = styled.div`
   position: absolute;
@@ -53,13 +54,15 @@ export const MessageToolbar = () => {
   const user = useMessageUser();
   const { id, pinned, channelId } = message;
   const [view, setView] = useState<string | null>(null);
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch();
+  const methods = useMethods();
+  const actions = useActions();
   const [stream] = useStream();
   const onDelete = useCallback(() => {
-    dispatch(removeMessage({ id }));
+    if (id) dispatch(removeMessage({ id }));
   }, [dispatch, id]);
 
-  const meId = useSelector((state: any) => state.me);
+  const meId = useSelector((state) => state.me);
   const isMe = user?.id === meId;
   const [hovered] = useHovered();
 
@@ -68,24 +71,24 @@ export const MessageToolbar = () => {
   if (hovered !== id) return null;
 
   const reaction = (emoji: string) => (
-    <ButtonWithEmoji 
+    <ButtonWithEmoji
       key={emoji}
       emoji={emoji}
-      onClick={() => dispatch.methods.messages.addReaction(id, emoji)} />
+      onClick={() => dispatch(methods.messages.addReaction({ id, text: emoji }))} />
   );
   const deleteButton = () => <ButtonWithIcon key='del' icon="delete" onClick={() => setView('delete')} />;
   const confirmDelete = () => <ButtonWithIcon key='confirm_del' icon="check:danger" onClick={onDelete} />;
   const cancelButton = () => <ButtonWithIcon key='cancel' icon="circle-xmark" onClick={() => setView(null)} />;
-  const editButton = () => <ButtonWithIcon key='edit' icon="edit" onClick={() => dispatch.actions.messages.toggleEdit(id)} />;
+  const editButton = () => <ButtonWithIcon key='edit' icon="edit" onClick={() => dispatch(actions.messages.toggleEdit(id))} />;
   const openReactions = () => <ButtonWithIcon key='reactions' icon="icons" onClick={() => setView('reactions')} />;
-  const pinButton = () => <ButtonWithIcon key='pin' icon="thumbtack" onClick={() => dispatch.methods.pins.pin(id, channelId)} />;
-  const unpinButton = () => <ButtonWithIcon key='unpin' icon="thumbtack" onClick={() => dispatch.methods.pins.unpin(id, channelId)} />;
-  const replyButton = () => <ButtonWithIcon key='reply' icon="reply" onClick={() => dispatch.actions.stream.open({ id: 'side', value: { type: 'live', channelId, parentId: id } })} />;
+  const pinButton = () => <ButtonWithIcon key='pin' icon="thumbtack" onClick={() => methods.pins.pin({ id, channelId })} />;
+  const unpinButton = () => <ButtonWithIcon key='unpin' icon="thumbtack" onClick={() => methods.pins.unpin({ id, channelId })} />;
+  const replyButton = () => <ButtonWithIcon key='reply' icon="reply" onClick={() => dispatch(actions.stream.open({ id: 'side', value: { type: 'live', channelId, parentId: id } }))} />;
 
   return (
     <Container>
       <Toolbar size={40}>
-        {view == 'reactions' && [
+        {view === 'reactions' && [
           ':heart:',
           ':rofl:',
           ':thumbsup:',
@@ -93,18 +96,18 @@ export const MessageToolbar = () => {
           ':tada:',
           ':eyes:',
         ].map(reaction)}
-        {view == 'delete' && [
+        {view === 'delete' && [
           confirmDelete(),
           cancelButton(),
         ]}
-        {view == null && [
+        {view === null && [
           openReactions(),
           isMe && editButton(),
           isMe && deleteButton(),
           pinned ? unpinButton() : pinButton(),
           !stream.parentId && replyButton(),
         ]}
-        
+
       </Toolbar>
     </Container>
   );

@@ -1,9 +1,9 @@
-import { ButtonWithIcon } from './ButtonWithIcon';
-import {Text} from '../atoms/Text';
 import styled from 'styled-components';
-import {useSize} from '../contexts/useSize';
-import {ClassNames} from '../../utils';
-import {Badge} from '../atoms/Badge';
+import { ButtonWithIcon } from './ButtonWithIcon';
+import { Text } from '../atoms/Text';
+import { useSize } from '../contexts/useSize';
+import { ClassNames } from '../../utils';
+import { Badge } from '../atoms/Badge';
 
 const StyledButtonWithIcon = styled(ButtonWithIcon)`
   text-align: left;
@@ -18,7 +18,7 @@ const StyledButtonWithIcon = styled(ButtonWithIcon)`
     background-color: ${(props) => props.theme.highlightedBackgroundColor};
   }
    
-`
+`;
 
 type NavButtonProps = {
   size?: number;
@@ -27,14 +27,16 @@ type NavButtonProps = {
   onClick?: (e: React.MouseEvent) => void;
   className?: ClassNames;
   children: React.ReactNode;
-} 
+}
 
-export const NavButton = ({className, size, icon, badge, onClick, children}: NavButtonProps) => {
+export const NavButton = ({
+  className, size, icon, badge, onClick, children,
+}: NavButtonProps) => {
   const $size = useSize(size) ?? 50;
   return (
     <StyledButtonWithIcon className={className} icon={icon} size={$size} onClick={onClick}>
-      <Text size={$size/2.5}>{children}</Text>
+      <Text size={$size / 2.5}>{children}</Text>
       {(badge && badge > 0) ? <Badge>{badge}</Badge> : null}
     </StyledButtonWithIcon>
   );
-}
+};

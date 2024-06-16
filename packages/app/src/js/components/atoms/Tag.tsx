@@ -15,8 +15,8 @@ type TagProps = {
   children: React.ReactNode;
 };
 
-export const Tag = ({onClick, children}: TagProps) => (
-  <StyledTag className='tag' onClick={onClick}> 
+export const Tag = ({ onClick, children }: TagProps) => (
+  <StyledTag className='tag' onClick={onClick}>
     {children}
   </StyledTag>
 );
