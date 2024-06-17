@@ -1,34 +1,33 @@
+import { EntityId } from "./EntityId.ts";
 import { connect, ObjectId } from './db.ts';
-import { deserialize } from './helpers.ts';
+import { deserialize, serialize } from './helpers.ts';
 
 class SessionRepo {
   #generateToken() {
     return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
   }
 
-  async create(data: {userId: string}) {
+  async create(data: {userId: EntityId}) {
     const { db } = await connect();
 
-    const newSession = {
+    const newSession = serialize({
       userId: data.userId,
       token: this.#generateToken(),
-    };
+    });
     const ret = await db.collection('sessions').insertOne(newSession);
-    return ret.insertedId.toHexString();
+    return deserialize(ret.insertedId);
   }
 
-  async remove(data: { id?: string }) {
+  async remove(data: { id?: EntityId}) {
     const { db } = await connect();
     const { id } = data;
     if (!id) return;
-    await db.collection('sessions').deleteOne({ _id: new ObjectId(id) });
+    await db.collection('sessions').deleteOne(serialize(data));
   }
 
   async get(data: {id?: string, userId?: string, token?: string}) {
     const { db } = await connect();
-    const {id, ...query} = data;
-    const _id = id ? { _id: new ObjectId(id) } : {};
-    const session = await db.collection('sessions').findOne({..._id, ...query});
+    const session = await db.collection('sessions').findOne(serialize(data));
     return deserialize(session);
   }
 

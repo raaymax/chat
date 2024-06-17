@@ -1,5 +1,13 @@
 import {repo} from '../../infra/mod.ts';
+import * as v from 'valibot';
+import { createQuery } from "../helpers.ts";
+import { Id } from '../types.ts';
 
-export const getUser = async (query: any) => {
+export default createQuery({
+  type: 'user:get',
+  body: v.object({
+    id: Id,
+  }),
+},async (query: any) => {
   return await repo.user.get(query);
-}
+});

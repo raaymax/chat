@@ -17,11 +17,6 @@ Deno.test("POST /session - wrong params", async () => {
 });
 
 Deno.test("Login/logout", async (t) => {
-  const USER = {
-    id: 1,
-    login: "admin",
-    name: "Admin",
-  };
   let token: any = null;
   let userId: any = null;
 

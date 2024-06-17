@@ -1,8 +1,8 @@
 import * as v from 'valibot';
-import { createCommandHandler } from '../command.ts';
+import { createCommand } from "../helpers.ts";
 import {repo} from '../../infra/mod.ts';
 
-export default createCommandHandler({
+export default createCommand({
   type: 'session:create',
   body: v.object({
     login: v.string(),

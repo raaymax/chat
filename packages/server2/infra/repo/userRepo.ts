@@ -1,11 +1,11 @@
 import { connect, ObjectId} from './db.ts';
-import { deserialize } from './helpers.ts';
+import { deserialize, serialize } from './helpers.ts';
 
 
 class UserRepo {
   async get(q: any) {
     const { db } = await connect();
-    const user = await db.collection('users').findOne(q);
+    const user = await db.collection('users').findOne(serialize(q));
     if(!user) {
       await db.collection('users').insertOne({
         login: 'admin',
