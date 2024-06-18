@@ -4,11 +4,11 @@ import { createQuery } from "../helpers.ts";
 import * as v from 'valibot';
 
 export default createQuery({
-  type: 'session:get',
-  body: v.object({
+  type: 'channel:get',
+  body: v.required(v.object({
+    userId: Id,
     id: v.optional(Id),
-    token: v.optional(v.string()),
-  }),
+  })),
 }, async (query) => {
-  return await repo.session.get(query);
+  return await repo.channel.get(query);
 });

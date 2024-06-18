@@ -1,5 +1,5 @@
 import * as v from 'valibot';
-import { EntityId } from "../infra/mod.ts";
+import { EntityId } from '../types.ts';
 
 export type Command = {
   type: string;
@@ -17,14 +17,14 @@ export type InferCommandType<A extends Definition> = {
 }
 
 
-function serialize(obj: any): any {
+function serialize<A>(obj: A): any {
   if(obj instanceof EntityId) {
     return obj.toString();
-  }
+  } 
   if(Array.isArray(obj)) {
     return obj.map(serialize);
-  }
-  if(typeof obj === 'object') {
+  } 
+  if (typeof obj === 'object') {
     for(const key in obj) {
       obj[key] = serialize(obj[key]);
     }
@@ -39,7 +39,7 @@ export function createQuery<A extends Definition, B>(def: A, fn: (body: v.InferO
       const args = v.parse(def.body, body);
       const ret = await fn(args);
       const r = serialize(ret);
-      // console.log(`[QUERY: ${def.type}] Ret: `, r)
+      //console.log(`[QUERY: ${def.type}] Ret: `, r)
       return r;
     } catch(err) {
       console.log(`[QUERY: ${def.type}] Error:`)

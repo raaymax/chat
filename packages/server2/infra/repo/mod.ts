@@ -1,11 +1,9 @@
-import { disconnect, init } from './db.ts';
+import { init } from './db.ts';
 
 export {user} from './userRepo.ts';
 export {session} from './sessionRepo.ts';
-export {EntityId} from './EntityId.ts';
+export {channel} from './channelRepo.ts';
+export { disconnect, init, connect, ObjectId } from './db.ts';
 
 init('mongodb://chat:chat@localhost:27017/chat?authSource=admin');
 
-export const close = async () => {
-  await disconnect();
-}

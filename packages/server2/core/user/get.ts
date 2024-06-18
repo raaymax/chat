@@ -8,6 +8,6 @@ export default createQuery({
   body: v.object({
     id: Id,
   }),
-},async (query: any) => {
+},async (query) => {
   return await repo.user.get(query);
 });

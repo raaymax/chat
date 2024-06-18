@@ -20,6 +20,6 @@ export default createEndpoint(({core}) => ({
       });
     }
     req.cookies.delete('token');
-    res.send({ status: 'ok' });
+    return { status: 'ok' };
   }
 }));

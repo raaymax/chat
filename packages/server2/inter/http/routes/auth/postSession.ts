@@ -1,3 +1,4 @@
+import { AccessDenied } from "../../errors.ts";
 import { createEndpoint } from "../../utils.ts";
 import * as v from "valibot";
 
@@ -5,10 +6,10 @@ export default createEndpoint(({core}) => ({
   method: "POST",
   url: "/auth/session",
   schema: {
-    body: v.object({
+    body: v.required(v.object({
       login: v.string(),
       password: v.string(),
-    }),
+    })),
     response: {
       200: {
         contentType: "application/json",
@@ -25,16 +26,14 @@ export default createEndpoint(({core}) => ({
       }
     });
     if(!sessionId) {
-      res.send({ status: 'error', message: 'Invalid login or password' });
-      return;
+      throw new AccessDenied('Invalid login or password');
     }
     const session = await core.session.get({id: sessionId});
     if(!session) {
-      res.send({ status: 'error', message: 'Session not found' });
-      return;
+      throw new AccessDenied('Invalid login or password');
     }
 
     req.ctx.cookies.set('token', session.token, { httpOnly: true });
-    res.send({ status: 'ok', ...session});
+    return { status: 'ok', ...session};
   }
 }));

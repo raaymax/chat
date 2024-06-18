@@ -2,6 +2,8 @@ import { Router, Context } from '@oak/oak';
 import * as v from "valibot";
 import { EndpointDefinition, Request, Response } from "./types.ts";
 import type { Core } from '../../core/mod.ts'
+import { ApiError } from "./errors.ts";
+import { AccessDenied } from "./errors.ts";
 
 
 export function createEndpoint<
@@ -24,6 +26,10 @@ export function createEndpoint<
           get core() {
             return ctx.state.core;
           },
+          get userId() {
+            if(!ctx.state.user?.id) throw new AccessDenied('Unauthorized');
+            return ctx.state.user?.id;
+          },
           get state() {
             return ctx.state;
           },
@@ -37,8 +43,10 @@ export function createEndpoint<
           params: {},
           query: {},
         }
+        let responseSent = false;
         const res: Response = {
           send: (data: any) => {
+            responseSent = true;
             ctx.response.body = data;
           }
         }
@@ -59,8 +67,15 @@ export function createEndpoint<
           return sendValidationError('query', ctx, err);
         }
         try {
-          await def.handler(req, res);
+          const resp = await def.handler(req, res);
+          if(!responseSent && resp) {
+            res.send(resp);
+          }
         } catch (err) {
+          if(err instanceof ApiError) {
+            ctx.response.body = { errorCode: err.errorCode, message: err.message };
+            ctx.response.status = err.status;
+          }
           throw err;
         }
       });

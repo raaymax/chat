@@ -8,6 +8,7 @@ export type Request<B,P,Q> = {
   ctx: Context;
   core: Core;
   state: Context['state'];
+  userId: string;
   session: Record<string, any>;
   cookies: Context['cookies'];
   body?: B,
@@ -22,7 +23,7 @@ export type Response = {
 export type Middleware<B, P, Q> = (req: Request<B, P, Q>, res: Response, next: Next) => Promise<any>;
 
 export type EndpointDefinition<B extends v.BaseSchema<any, any, any>, P extends v.BaseSchema<any, any, any>, Q extends v.BaseSchema<any, any, any>> = {
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'OPTIONS' | 'HEAD',
   url: string,
   auth?: boolean,
   schema: {

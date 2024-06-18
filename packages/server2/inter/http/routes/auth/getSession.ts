@@ -12,9 +12,9 @@ export default createEndpoint(() => ({
   },
   handler: async (req, res) => {
     if (req.session) {
-      res.send(req.session);
+      return req.session;
     } else {
-      res.send({ status: 'no-session' });
+      return { status: 'no-session' };
     }
   }
 }));
