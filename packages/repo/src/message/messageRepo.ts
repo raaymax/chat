@@ -5,6 +5,12 @@ import { Message, MessageQuery, MongoMessage } from './messageTypes';
 import { MessageSerializer } from './messageSerializer';
 import { connect } from '../db';
 
+export type Pagination = {
+  limit?: number,
+  offset?: number,
+  order?: 1 | -1,
+}
+
 export class MessageRepo extends Repo<MessageQuery, Message, MongoMessage> {
   constructor() {
     super('messages', new MessageSerializer());

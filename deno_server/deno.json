@@ -1,0 +1,10 @@
+{
+  "imports": {
+    "@codecat/planigale": "jsr:@codecat/planigale@^0.1.0",
+    "@oak/oak": "jsr:@oak/oak@^16.1.0",
+    "asserts": "https://deno.land/std@0.224.0/testing/asserts.ts",
+    "mongodb": "npm:mongodb@^6.7.0",
+    "superoak": "https://deno.land/x/superoak@4.8.1/mod.ts",
+    "valibot": "npm:valibot@^0.31.1"
+  }
+}
