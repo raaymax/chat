@@ -1,6 +1,6 @@
 import * as concat from 'concat-stream';
 import { v4 as uuid } from 'uuid';
-import { Readable } from 'stream';
+import { Readable } from 'node:stream';
 import {
   Config, Storage, File, FileUploadOpts,
 } from '../types';

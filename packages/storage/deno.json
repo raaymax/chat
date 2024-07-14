@@ -1,0 +1,13 @@
+{
+  "name": "@quack/storage",
+  "version": "0.0.1",
+  "exports": "./src/index.ts",
+  "imports": {
+    "@google-cloud/storage": "npm:@google-cloud/storage@^7.11.3",
+    "@types/node": "npm:@types/node@^20.14.10",
+    "concat-stream": "npm:concat-stream@^2.0.0",
+    "mongodb": "npm:mongodb@^6.8.0",
+    "sharp": "npm:sharp@^0.33.4",
+    "uuid": "npm:uuid@^10.0.0"
+  }
+}

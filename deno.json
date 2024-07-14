@@ -1,0 +1,9 @@
+{
+  "workspace": [
+    "./packages/deno_server",
+    "./packages/storage"
+  ],
+  "tasks": {
+    "dev": "deno run --watch main.ts"
+  }
+}

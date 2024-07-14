@@ -1,7 +1,7 @@
 const webpush = require('web-push');
-const fs = require('fs');
-const path = require('path');
-const crypto = require('crypto');
+const fs = require('node:fs');
+const path = require('node:path');
+const crypto = require('node:crypto');
 
 const SECRETS_FILE = path.resolve(__dirname, '../secrets.json');
 

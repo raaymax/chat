@@ -2,7 +2,7 @@
 import { v4 as uuid } from 'uuid';
 import {
   existsSync, mkdirSync, createWriteStream, writeFile, unlink, readFileSync, createReadStream,
-} from 'fs';
+} from 'node:fs';
 import {
   Config, File, FileUploadOpts, Storage,
 } from '../types';

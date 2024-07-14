@@ -1,0 +1,7 @@
+{
+  "name": "@quack/config",
+  "version": "0.0.1",
+  "exports": "./index.js",
+  "imports": {
+  }
+}
