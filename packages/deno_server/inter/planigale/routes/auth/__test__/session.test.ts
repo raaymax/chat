@@ -1,3 +1,4 @@
+Deno.env.set('ENV_TYPE', 'test');
 import { assertEquals, assert } from "@std/assert";
 import app from "../../../mod.ts";
 import core from "../../../../../core/mod.ts";

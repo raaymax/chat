@@ -1,3 +1,4 @@
+Deno.env.set('ENV_TYPE', 'test');
 import { assertEquals } from "@std/assert";
 import { TestingQuick } from "@codecat/planigale";
 import app from "../../../mod.ts";

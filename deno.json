@@ -1,7 +1,8 @@
 {
   "workspace": [
     "./packages/deno_server",
-    "./packages/storage"
+    "./packages/storage",
+    "./config2"
   ],
   "tasks": {
     "dev": "deno run --watch main.ts"

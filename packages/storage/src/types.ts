@@ -1,7 +1,5 @@
-export { Config } from '@quack/config';
-
 export type FileOpts = { width: number, height: number };
-export type FileUploadOpts= { originalname: string, mimetype: string, id: string };
+export type FileUploadOpts= { originalname: string, mimetype: string, id?: string };
 
 export type File = {
   fileId: string,
@@ -12,6 +10,7 @@ export type File = {
     [key: string]: any,
   },
   getStream: () => NodeJS.ReadableStream,
+  [key: string]: any,
 }
 
 export interface Storage {

@@ -1,8 +1,9 @@
-import * as sharp from 'sharp';
-import files from './files';
+import sharp from 'sharp';
+import { Config } from '@quack/config';
+import files from './files/index.ts';
 import {
-  Config, Storage, File, FileOpts, FileUploadOpts,
-} from './types';
+  Storage, File, FileOpts, FileUploadOpts,
+} from './types.ts';
 
 class Files implements Storage {
   static getFileId = (id: string, width: number, height:number) => `${id}-${width}x${height}`;
@@ -39,7 +40,7 @@ class Files implements Storage {
       throw new Error('File not found');
     }
     const t = sharp().resize(width, height);
-    await this.service.upload(file.getStream().pipe(t).on('error', (err) => {
+    await this.service.upload(file.getStream().pipe(t).on('error', (err: Error) => {
       throw err;
     }), {
       id: targetId,

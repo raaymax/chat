@@ -1,14 +1,18 @@
 /* eslint-disable class-methods-use-this */
 import { Storage, Bucket } from '@google-cloud/storage';
 import { v4 as uuid } from 'uuid';
+import { Config } from '@quack/config';
 import {
-  Config, File, FileOpts, FileUploadOpts, Storage as StorageInterface,
-} from '../types';
+  File, FileOpts, FileUploadOpts, Storage as StorageInterface,
+} from '../types.ts';
 
 class GcsStorage implements StorageInterface {
   bucket: Bucket;
 
   constructor(private config: Config) {
+    if(config.storage.type !== 'gcs' ) {
+      throw new Error('Invalid storage type');
+    }
     const storage = new Storage();
     this.bucket = storage.bucket(config.storage.bucket);
   }
@@ -18,7 +22,9 @@ class GcsStorage implements StorageInterface {
     return ret;
   }
 
-  async upload(stream: NodeJS.ReadableStream, file?: FileUploadOpts): Promise<File> {
+  async upload(stream: NodeJS.ReadableStream, fileOpts?: FileUploadOpts): Promise<File> {
+    const file = fileOpts ?? { mimetype: 'application/octet-stream', originalname: 'file' };
+
     return new Promise((resolve, reject) => {
       const fileId = file?.id ?? uuid();
       stream.pipe(this.bucket.file(fileId).createWriteStream({
@@ -58,8 +64,8 @@ class GcsStorage implements StorageInterface {
     const [metadata] = await file.getMetadata();
     return {
       fileId,
-      contentType: metadata.contentType,
-      contentDisposition: metadata.contentDisposition,
+      contentType: metadata.contentType || 'application/octet-stream',
+      contentDisposition: metadata.contentDisposition || 'attachment; filename="file"',
       metadata: metadata.metadata as {
         filename: string,
         [key: string]: any,

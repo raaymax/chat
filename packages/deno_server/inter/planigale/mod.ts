@@ -9,9 +9,9 @@ const schemaValidator = new SchemaValidator();
 app.use(authMiddleware(core))
 app.use(schemaValidator.middleware);
 
-Object.values(routes).forEach((route) => {
-  app.use(route(core));
-});
+for (const route of Object.values(routes)) {
+  app.use(await route(core));
+}
 
 app.onClose(() => core.close());
 export default app;
