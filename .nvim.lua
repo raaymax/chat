@@ -12,12 +12,12 @@ require("lspconfig").denols.setup {
   capabilities = capabilities
 }
 
-nvim_lsp.tsserver.setup {
-  capabilities = capabilities
-}
+--nvim_lsp.tsserver.setup {
+--  capabilities = capabilities
+--}
 
 
 --require("lspconfig").volar.setup {
 --  capabilities = capabilities,
 --	filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue', 'json' }
---}
+--

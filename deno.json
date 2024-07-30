@@ -1,9 +1,26 @@
 {
   "workspace": [
-    "./packages/deno_server",
-    "./packages/storage",
-    "./config2"
+    "./deno/server",
+    "./deno/storage",
+    "./deno/config"
   ],
+  "imports": {
+    "@planigale/body-parser": "../../Planigale/packages/body-parser/mod.ts",
+    "@planigale/planigale": "../../Planigale/packages/planigale/mod.ts",
+    "@planigale/schema": "../../Planigale/packages/schema/mod.ts",
+    "@planigale/sse": "../../Planigale/packages/sse/mod.ts",
+    "@planigale/testing": "../../Planigale/packages/testing/mod.ts",
+    "valibot": "npm:valibot@^0.36.0"
+  },
+  "scopes": {
+    "@planigale/": {
+      "@planigale/planigale": "../../Planigale/packages/planigale/mod.ts",
+      "@planigale/sse": "../../Planigale/packages/sse/mod.ts",
+      "@planigale/schema": "../../Planigale/packages/schema/mod.ts",
+      "@planigale/testing": "../../Planigale/packages/testing/mod.ts",
+      "@planigale/body-parser": "../../Planigale/packages/body-parser/mod.ts"
+    }
+  },
   "tasks": {
     "dev": "deno run --watch main.ts"
   }

@@ -1,0 +1,5 @@
+export * from './routes/auth/mod.ts'
+export * from './routes/system/mod.ts'
+export * from './routes/channel/mod.ts'
+export * from './routes/files/mod.ts'
+export * from './routes/messages/mod.ts'
