@@ -1,8 +1,7 @@
-import { Config } from '@quack/config';
-import { Storage } from '../types.ts';
-import createFsStorage from './FsStorage.ts';
-import createGcsStorage from './GcsStorage.ts';
-import createMemoryStorage from './MemoryStorage.ts';
+import { Storage, Config } from '../types';
+import createFsStorage from './FsStorage';
+import createGcsStorage from './GcsStorage';
+import createMemoryStorage from './MemoryStorage';
 
 const getStrategy = (config: Config): ((cfg: Config) => Storage) => {
   switch (config.storage?.type) {

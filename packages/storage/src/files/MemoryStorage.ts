@@ -1,15 +1,12 @@
 import * as concat from 'concat-stream';
 import { v4 as uuid } from 'uuid';
-import { Readable } from 'node:stream';
-import { type Buffer } from "node:buffer";
-import { Config } from '@quack/config';
-
+import { Readable } from 'stream';
 import {
-  Storage, File, FileUploadOpts,
-} from '../types.ts';
+  Config, Storage, File, FileUploadOpts,
+} from '../types';
 
 class MemoryStorage implements Storage {
-  files: Record<string, File> = {};
+  files = {};
 
   constructor(private config: Config) {}
 
