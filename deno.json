@@ -21,6 +21,11 @@
       "@planigale/body-parser": "../../Planigale/packages/body-parser/mod.ts"
     }
   },
+  "fmt": {
+    "include": [
+      "deno/**"
+    ]
+  },
   "tasks": {
     "dev": "deno run --watch main.ts"
   }
