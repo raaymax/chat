@@ -1,34 +1,38 @@
-import { Planigale } from '@planigale/planigale';
-import { SchemaValidator } from '@planigale/schema';
-import { bodyParser } from '@planigale/body-parser';
-import * as routes from "./routes.ts";
+import { Planigale } from "@planigale/planigale";
+import { SchemaValidator } from "@planigale/schema";
+import { bodyParser } from "@planigale/body-parser";
 import { authMiddleware } from "./middleware/auth.ts";
 import core from "../../core/mod.ts";
+
+import { auth } from "./routes/auth/mod.ts";
+import { system } from "./routes/system/mod.ts";
+import { channels } from "./routes/channel/mod.ts";
+import { files } from "./routes/files/mod.ts";
+import { messages } from "./routes/messages/mod.ts";
+
 const app = new Planigale();
-try{ 
+try {
   const schema = new SchemaValidator();
-/*
-  schemaValidator.addSchema('message', {
-    type: 'object',
-    required: ['text'],
+  schema.addSchema({
+    $id: "message",
+    type: "object",
+    required: ["text"],
     properties: {
-      text: { type: 'string' },
+      text: { type: "string" },
     },
   });
-  */  
 
   app.use(bodyParser);
-  app.use(authMiddleware(core))
+  app.use(authMiddleware(core));
   app.use(schema.middleware);
 
-
-  for (const route of Object.values(routes)) {
-    app.use(await route(core));
-  }
+  app.use("/api", await system(core));
+  app.use("/api/auth", await auth(core));
+  app.use("/api/channels", await channels(core));
+  app.use("/api/files", await files(core));
 
   app.onClose(() => core.close());
-
-}catch(e){
+} catch (e) {
   console.error(e);
 }
 export default app;

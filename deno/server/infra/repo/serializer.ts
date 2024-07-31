@@ -1,4 +1,4 @@
-import { EntityId } from '../../types.ts';
+import { EntityId } from "../../types.ts";
 import { ObjectId } from "./db.ts";
 
 function recursiveDeserialize(obj: any): any {
@@ -8,7 +8,7 @@ function recursiveDeserialize(obj: any): any {
     return EntityId.from(obj.toHexString());
   } else if (Array.isArray(obj)) {
     return obj.map(recursiveDeserialize);
-  } else if (typeof obj === 'object') {
+  } else if (typeof obj === "object") {
     for (const key in obj) {
       obj[key] = recursiveDeserialize(obj[key]);
     }
@@ -16,7 +16,6 @@ function recursiveDeserialize(obj: any): any {
       obj.id = obj._id;
       delete obj._id;
     }
-
   }
   return obj;
 }
@@ -30,7 +29,7 @@ function recursiveSerialize(obj: any): any {
     return new ObjectId(obj.value);
   } else if (Array.isArray(obj)) {
     return obj.map(recursiveSerialize);
-  } else if (typeof obj === 'object') {
+  } else if (typeof obj === "object") {
     for (const key in obj) {
       obj[key] = recursiveSerialize(obj[key]);
     }

@@ -1,10 +1,9 @@
 /* eslint-disable class-methods-use-this */
-import { v4 as uuid } from 'npm:uuid';
-import { Config } from '@quack/config';
-import { FileOpts, FileData } from '../types.ts';
-import { GoogleAuth } from 'npm:google-auth-library';
+import { v4 as uuid } from "npm:uuid";
+import { Config } from "@quack/config";
+import { FileData, FileOpts } from "../types.ts";
+import { GoogleAuth } from "npm:google-auth-library";
 import { ResourceNotFound } from "@planigale/planigale";
-
 
 class Gcs {
   bucketName: string;
@@ -17,69 +16,74 @@ class Gcs {
     return `https://storage.googleapis.com/upload/storage/v1/b/${this.bucketName}/o?uploadType=media&name=${fileId}`;
   }
 
-  constructor(config: Config['storage']) {
-    if(config.type !== 'gcs' ) {
-      throw new Error('Invalid storage type');
+  constructor(config: Config["storage"]) {
+    if (config.type !== "gcs") {
+      throw new Error("Invalid storage type");
     }
     this.bucketName = config.bucket;
   }
 
   getAccessToken() {
     const auth = new GoogleAuth({
-       scopes: 'https://www.googleapis.com/auth/cloud-platform'
+      scopes: "https://www.googleapis.com/auth/cloud-platform",
     });
-    return auth.getAccessToken()
+    return auth.getAccessToken();
   }
 
   async exists(fileId: string): Promise<boolean> {
     const token = await this.getAccessToken();
     const meta = await fetch(
-      this.getUrl(fileId), {
+      this.getUrl(fileId),
+      {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
-    )
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
     meta.body?.cancel?.();
-    if(meta.status !== 200){
+    if (meta.status !== 200) {
       return false;
     }
     return true;
   }
 
-  async upload(webStream: ReadableStream<Uint8Array>, fileOpts: FileOpts): Promise<string> {
-    const file = fileOpts ?? { contentType: 'application/octet-stream', filename: 'file' };
+  async upload(
+    webStream: ReadableStream<Uint8Array>,
+    fileOpts: FileOpts,
+  ): Promise<string> {
+    const file = fileOpts ??
+      { contentType: "application/octet-stream", filename: "file" };
     const fileId = file?.id ?? uuid();
     const token = await this.getAccessToken();
 
     const res = await fetch(this.getUploadUrl(fileId), {
-        headers: {
-            'Content-Type': file.contentType,
-            Authorization: `Bearer ${token}`
-        },
-        method: 'POST',
-        body: webStream 
-    })
+      headers: {
+        "Content-Type": file.contentType,
+        Authorization: `Bearer ${token}`,
+      },
+      method: "POST",
+      body: webStream,
+    });
     res.body?.cancel?.();
-    if(res.status !== 200){
-      throw new Error('Upload failed');
+    if (res.status !== 200) {
+      throw new Error("Upload failed");
     }
 
     const meta = await fetch(this.getUrl(fileId), {
-      method: 'PATCH',
+      method: "PATCH",
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         metadata: {
           filename: file.filename,
-        }
-      })
-    })
+        },
+      }),
+    });
     meta.body?.cancel?.();
-    if(meta.status !== 200){
-      throw new Error('Upload failed');
+    if (meta.status !== 200) {
+      throw new Error("Upload failed");
     }
 
     return fileId;
@@ -88,54 +92,56 @@ class Gcs {
   async remove(fileId: string): Promise<void> {
     const token = await this.getAccessToken();
     const meta = await fetch(this.getUrl(fileId), {
-      method: 'DELETE',
+      method: "DELETE",
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({})
-    })
+      body: JSON.stringify({}),
+    });
     meta.body?.cancel?.();
-    if(meta.status !== 200 && meta.status !== 204){
-      throw new Error('Delete failed');
+    if (meta.status !== 200 && meta.status !== 204) {
+      throw new Error("Delete failed");
     }
   }
 
   get = async (fileId: string): Promise<FileData> => {
     const token = await this.getAccessToken();
     const meta = await fetch(
-      this.getUrl(fileId), {
+      this.getUrl(fileId),
+      {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
-    )
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
     const metadata = await meta.json();
-    if(meta.status !== 200){
-      throw new ResourceNotFound('File not found');
+    if (meta.status !== 200) {
+      throw new ResourceNotFound("File not found");
     }
     const res = await fetch(
-      metadata.mediaLink, {
+      metadata.mediaLink,
+      {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
-    )
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
     if (res.status !== 200 || res.body === null) {
       await res.body?.cancel?.();
-      throw new ResourceNotFound('File not found');
+      throw new ResourceNotFound("File not found");
     }
 
-    const filename = metadata.metadata?.filename || 'file';
+    const filename = metadata.metadata?.filename || "file";
     return {
       id: fileId,
-      contentType: metadata.contentType || 'application/octet-stream',
-      filename: typeof filename == 'string' ? filename : 'file',
+      contentType: metadata.contentType || "application/octet-stream",
+      filename: typeof filename == "string" ? filename : "file",
       size: parseInt(metadata.size, 10) || 0,
-      stream: res.body
+      stream: res.body,
     };
   };
 }
 
-export const files = (config: Config['storage']) => {
-  return new Gcs(config); 
-}
+export const files = (config: Config["storage"]) => {
+  return new Gcs(config);
+};

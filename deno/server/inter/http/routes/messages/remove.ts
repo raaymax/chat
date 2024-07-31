@@ -1,13 +1,14 @@
-import { Route } from '@planigale/planigale';
+import { Route } from "@planigale/planigale";
 import { Core } from "../../../../core/mod.ts";
 
-export default (_core: Core) => new Route({
-  method: "DELETE",
-  url: "/:messageId",
-  handler: () => {
-    return Response.json({ status: 'ok' });
-  }
-});
+export default (_core: Core) =>
+  new Route({
+    method: "DELETE",
+    url: "/:messageId",
+    handler: () => {
+      return Response.json({ status: "ok" });
+    },
+  });
 /*
 
 const Joi = require('joi');

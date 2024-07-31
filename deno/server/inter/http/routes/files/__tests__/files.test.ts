@@ -1,70 +1,74 @@
-Deno.env.set('ENV_TYPE', 'test');
+Deno.env.set("ENV_TYPE", "test");
 import { Agent } from "@planigale/testing";
 import app from "../../../mod.ts";
-import { assertEquals, assert } from "@std/assert";
+import { assert, assertEquals } from "@std/assert";
 import { login } from "../../__tests__/helpers.ts";
 
-const testTextFilePath = new URL('../../../../../tests/test.txt', import.meta.url).pathname;
+const testTextFilePath =
+  new URL("../../../../../tests/test.txt", import.meta.url).pathname;
 
-Deno.test("/files - Authorization failed", async (t) => {
-  await t.step("POST /files - should be authenticated", async () => {
+Deno.test("/api/files - Authorization failed", async (t) => {
+  await t.step("POST /api/files - should be authenticated", async () => {
     const res = await Agent.request(app)
-      .post('/files/')
+      .post("/api/files")
       .file(testTextFilePath)
       .expect(401);
     const body = await res.json();
-    assertEquals(body.errorCode, 'ACCESS_DENIED');
-  })
+    assertEquals(body.errorCode, "ACCESS_DENIED");
+  });
 
-  await t.step("GET /files/:fileId - should be authenticated", async () => {
+  await t.step("GET /api/files/:fileId - should be authenticated", async () => {
     const res = await Agent.request(app)
-      .get('/files/testId')
+      .get("/api/files/testId")
       .expect(401);
     const body = await res.json();
-    assertEquals(body.errorCode, 'ACCESS_DENIED');
-  })
+    assertEquals(body.errorCode, "ACCESS_DENIED");
+  });
 
-  await t.step("DELETE /files/:fileId - should be authenticated", async () => {
-    const res = await Agent.request(app)
-      .delete('/files/testId')
-      .emptyBody()
-      .expect(401);
-    const body = await res.json();
-    assertEquals(body.errorCode, 'ACCESS_DENIED');
-  })
-})
+  await t.step(
+    "DELETE /api/files/:fileId - should be authenticated",
+    async () => {
+      const res = await Agent.request(app)
+        .delete("/api/files/testId")
+        .emptyBody()
+        .expect(401);
+      const body = await res.json();
+      assertEquals(body.errorCode, "ACCESS_DENIED");
+    },
+  );
+});
 
-Deno.test("/files - Auth successful", async (t) => {
+Deno.test("/api/files - Auth successful", async (t) => {
   const agent = await Agent.from(app);
-  const {token} = await login(agent);
+  const { token } = await login(agent);
   let fileId: string | null = null;
-  await t.step("POST /files - upload", async () => {
+  await t.step("POST /api/files - upload", async () => {
     const res = await agent.request()
-      .post('/files/')
+      .post("/api/files/")
       .file(testTextFilePath)
-      .header('Authorization', `Bearer ${token}`)
+      .header("Authorization", `Bearer ${token}`)
       .expect(200);
     const body = await res.json();
-    assert(typeof body.id === 'string');
+    assert(typeof body.id === "string");
     fileId = body.id;
-  })
+  });
 
-  await t.step("GET /files/:fileId - get", async () => {
+  await t.step("GET /api/files/:fileId - get", async () => {
     const res = await agent.request()
-      .get(`/files/${fileId}`)
-      .header('Authorization', `Bearer ${token}`)
+      .get(`/api/files/${fileId}`)
+      .header("Authorization", `Bearer ${token}`)
       .expect(200);
     res.body?.cancel?.();
-  })
+  });
 
-  await t.step("DELETE /files/:fileId - delete", async () => {
+  await t.step("DELETE /api/files/:fileId - delete", async () => {
     const res = await agent.request()
-      .delete(`/files/${fileId}`)
+      .delete(`/api/files/${fileId}`)
       .emptyBody()
-      .header('Authorization', `Bearer ${token}`)
+      .header("Authorization", `Bearer ${token}`)
       .expect(204);
     res.body?.cancel();
-  })
+  });
 
   await agent.close();
-})
+});

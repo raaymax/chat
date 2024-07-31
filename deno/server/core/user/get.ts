@@ -1,13 +1,13 @@
-import {repo} from '../../infra/mod.ts';
-import * as v from 'valibot';
+import { repo } from "../../infra/mod.ts";
+import * as v from "valibot";
 import { createQuery } from "../query.ts";
-import { Id } from '../types.ts';
+import { Id } from "../types.ts";
 
 export default createQuery({
-  type: 'user:get',
+  type: "user:get",
   body: v.object({
     id: Id,
   }),
-},async (query) => {
+}, async (query) => {
   return await repo.user.get(query);
 });

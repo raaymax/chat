@@ -1,16 +1,16 @@
-import * as v from 'valibot';
+import * as v from "valibot";
 
 export class EntityId {
-  constructor(public value: string ) {}
+  constructor(public value: string) {}
 
   static from(id: string | EntityId) {
     if (id instanceof EntityId) {
       return new EntityId(id.toString());
-    } else if (typeof id === 'string') {
+    } else if (typeof id === "string") {
       return new EntityId(id);
     } else {
       console.log(id);
-      throw new Error('Invalid id type');
+      throw new Error("Invalid id type");
     }
   }
 
@@ -18,61 +18,60 @@ export class EntityId {
     return this.value;
   }
 }
-  
 
 export type Session = {
-  id: EntityId,
-  expires: Date,
-  userId: EntityId,
-  token: string,
-  lastIp: string,
-  lastUserAgent: string,
+  id: EntityId;
+  expires: Date;
+  userId: EntityId;
+  token: string;
+  lastIp: string;
+  lastUserAgent: string;
 };
 
 export type User = {
-  id: EntityId,
-  login: string,
-  password: string,
-  name: string,
+  id: EntityId;
+  login: string;
+  password: string;
+  name: string;
 };
 
 export enum ChannelType {
-  PUBLIC = 'PUBLIC',
-  PRIVATE = 'PRIVATE',
-  DIRECT = 'DIRECT',
+  PUBLIC = "PUBLIC",
+  PRIVATE = "PRIVATE",
+  DIRECT = "DIRECT",
 }
 
 export type Channel = {
-  id: EntityId,
-  channelType: ChannelType,
-  name: string,
-  cid: string,
-  private: boolean,
-  direct: boolean,
-  users: EntityId[],
-}
+  id: EntityId;
+  channelType: ChannelType;
+  name: string;
+  cid: string;
+  private: boolean;
+  direct: boolean;
+  users: EntityId[];
+};
 
 export type Emoji = {
-  id: EntityId,
-  shortname: string,
-  fileId: string,
-}
+  id: EntityId;
+  shortname: string;
+  fileId: string;
+};
 
 export type Badge = {
-  id: EntityId,
-  count: number,
-  channelId: EntityId,
-  parentId: EntityId | null,
-  userId: EntityId,
-  lastRead: Date,
-  lastMessageId: EntityId,
-}
+  id: EntityId;
+  count: number;
+  channelId: EntityId;
+  parentId: EntityId | null;
+  userId: EntityId;
+  lastRead: Date;
+  lastMessageId: EntityId;
+};
 
 export type Invitation = {
-  id: EntityId,
-  token: string,
-  userId: EntityId,
-  createdAt: Date,
+  id: EntityId;
+  token: string;
+  userId: EntityId;
+  createdAt: Date;
 };
 
 export type MessageBodyBullet = { bullet: MessageBody };
@@ -81,50 +80,66 @@ export type MessageBodyItem = { item: MessageBody };
 export type MessageBodyCodeblock = { codeblock: string };
 export type MessageBodyBlockquote = { blockquote: MessageBody };
 export type MessageBodyCode = { code: string };
-export type MessageBodyLine = { line: MessageBody};
-export type MessageBodyBr = {br: boolean};
+export type MessageBodyLine = { line: MessageBody };
+export type MessageBodyBr = { br: boolean };
 export type MessageBodyText = { text: string };
 export type MessageBodyBold = { bold: MessageBody };
 export type MessageBodyItalic = { italic: MessageBody };
 export type MessageBodyUnderline = { underline: MessageBody };
 export type MessageBodyStrike = { strike: MessageBody };
-export type MessageBodyImg = {img: { src: string, alt: string }};
-export type MessageBodyLink = {link: { href: string, children: MessageBody }};
-export type MessageBodyEmoji = {emoji:string};
-export type MessageBodyChannel = {channel: string};
-export type MessageBodyUser = {user: string};
-export type MessageBodyThread = {thread: { channelId: string, parentId: string, text: string }};
+export type MessageBodyImg = { img: { src: string; alt: string } };
+export type MessageBodyLink = { link: { href: string; children: MessageBody } };
+export type MessageBodyEmoji = { emoji: string };
+export type MessageBodyChannel = { channel: string };
+export type MessageBodyUser = { user: string };
+export type MessageBodyThread = {
+  thread: { channelId: string; parentId: string; text: string };
+};
 
-export type MessageBodyPart = MessageBodyBullet | MessageBodyOrdered | MessageBodyItem
-  | MessageBodyCodeblock | MessageBodyBlockquote | MessageBodyCode
-  | MessageBodyLine | MessageBodyBr | MessageBodyText | MessageBodyBold
-  | MessageBodyItalic | MessageBodyUnderline | MessageBodyStrike
-  | MessageBodyImg | MessageBodyLink | MessageBodyEmoji | MessageBodyChannel
-  | MessageBodyUser | MessageBodyThread;
+export type MessageBodyPart =
+  | MessageBodyBullet
+  | MessageBodyOrdered
+  | MessageBodyItem
+  | MessageBodyCodeblock
+  | MessageBodyBlockquote
+  | MessageBodyCode
+  | MessageBodyLine
+  | MessageBodyBr
+  | MessageBodyText
+  | MessageBodyBold
+  | MessageBodyItalic
+  | MessageBodyUnderline
+  | MessageBodyStrike
+  | MessageBodyImg
+  | MessageBodyLink
+  | MessageBodyEmoji
+  | MessageBodyChannel
+  | MessageBodyUser
+  | MessageBodyThread;
 
 export type MessageBody = MessageBodyPart[] | MessageBodyPart;
 
 export type Message = {
-  id: EntityId,
-  flat: string,
-  message: MessageBody,
-  channelId: EntityId,
-  userId: EntityId,
-  parentId: EntityId,
-  channel: string,
-  clientId: string,
-  emojiOnly: boolean,
-  pinned: boolean,
+  id: EntityId;
+  flat: string;
+  message: MessageBody;
+  channelId: EntityId;
+  userId: EntityId;
+  parentId: EntityId;
+  channel: string;
+  clientId: string;
+  emojiOnly: boolean;
+  pinned: boolean;
   thread: Array<{
-    userId: EntityId,
-    childId: EntityId,
-  }>,
+    userId: EntityId;
+    childId: EntityId;
+  }>;
   reactions: Array<{
-    userId: EntityId,
-    reaction: string,
-  }>,
-  links: string[]
-  mentions: string[],
+    userId: EntityId;
+    reaction: string;
+  }>;
+  links: string[];
+  mentions: string[];
   linkPreviews: {
     url: string;
     title: string;
@@ -136,40 +151,51 @@ export type Message = {
     videos: string[];
     favicons: string[];
     charset: string;
-  }[],
-  parsingErrors: any[],
+  }[];
+  parsingErrors: any[];
   attachments: Array<{ // TODO make this a separate entity
-    id: string,
-    fileName: string,
-    contentType: string,
-  }>,
-  updatedAt: Date,
-  createdAt: Date,
-}
+    id: string;
+    fileName: string;
+    contentType: string;
+  }>;
+  updatedAt: Date;
+  createdAt: Date;
+};
 
 export const vMessageBody: any = v.array(v.union([
-  v.object({ bullet: v.lazy(() => vMessageBody ) }),
-  v.object({ ordered: v.lazy(() => vMessageBody ) }),
-  v.object({ item: v.lazy(() => vMessageBody ) }),
+  v.object({ bullet: v.lazy(() => vMessageBody) }),
+  v.object({ ordered: v.lazy(() => vMessageBody) }),
+  v.object({ item: v.lazy(() => vMessageBody) }),
   v.object({ codeblock: v.string() }),
-  v.object({ blockquote: v.lazy(() => vMessageBody ) }),
+  v.object({ blockquote: v.lazy(() => vMessageBody) }),
   v.object({ code: v.string() }),
-  v.object({ line: v.lazy(() => vMessageBody ) }),
+  v.object({ line: v.lazy(() => vMessageBody) }),
   v.object({ br: v.boolean() }),
   v.object({ text: v.string() }),
-  v.object({ bold: v.lazy(() => vMessageBody ) }),
-  v.object({ italic: v.lazy(() => vMessageBody ) }),
-  v.object({ underline: v.lazy(() => vMessageBody ) }),
-  v.object({ strike: v.lazy(() => vMessageBody ) }),
+  v.object({ bold: v.lazy(() => vMessageBody) }),
+  v.object({ italic: v.lazy(() => vMessageBody) }),
+  v.object({ underline: v.lazy(() => vMessageBody) }),
+  v.object({ strike: v.lazy(() => vMessageBody) }),
   v.object({ img: v.object({ src: v.string(), alt: v.string() }) }),
-  v.object({ link: v.object({ href: v.string(), children: v.lazy(() => vMessageBody ) }) }),
+  v.object({
+    link: v.object({ href: v.string(), children: v.lazy(() => vMessageBody) }),
+  }),
   v.object({ emoji: v.string() }),
   v.object({ channel: v.string() }),
   v.object({ user: v.string() }),
-  v.object({ thread: v.object({ channelId: v.string(), parentId: v.string(), text: v.string() }) }),
+  v.object({
+    thread: v.object({
+      channelId: v.string(),
+      parentId: v.string(),
+      text: v.string(),
+    }),
+  }),
 ]));
 
-export const Id = v.pipe(v.string(), v.transform((i: string) => EntityId.from(i)));
+export const Id = v.pipe(
+  v.string(),
+  v.transform((i: string) => EntityId.from(i)),
+);
 
 export const vMessage = v.object({
   flat: v.string(),
@@ -185,6 +211,6 @@ export const vMessage = v.object({
   attachments: v.array(v.object({
     id: v.string(),
     fileName: v.string(),
-    contentType: v.optional(v.string(), 'application/octet-stream'),
+    contentType: v.optional(v.string(), "application/octet-stream"),
   })),
-})
+});

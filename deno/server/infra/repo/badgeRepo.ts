@@ -1,16 +1,16 @@
-import { Badge } from '../../types.ts';
-import { Repo } from './repo.ts';
+import { Badge } from "../../types.ts";
+import { Repo } from "./repo.ts";
 
 type BadgeQuery = Partial<Badge>;
-class BadgeRepo extends Repo<BadgeQuery, Badge>{
-  COLLECTION = 'badges';
+class BadgeRepo extends Repo<BadgeQuery, Badge> {
+  COLLECTION = "badges";
 
   increment(where: BadgeQuery): void {
-    this.updateMany(where, { count: 1 }, 'inc');
+    this.updateMany(where, { count: 1 }, "inc");
   }
 
   reset(where: BadgeQuery): void {
-    this.updateMany(where, { count: 0 }, 'set');
+    this.updateMany(where, { count: 0 }, "set");
   }
 }
 

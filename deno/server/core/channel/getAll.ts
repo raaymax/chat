@@ -1,10 +1,10 @@
-import {repo} from '../../infra/mod.ts';
-import { Id } from '../types.ts';
+import { repo } from "../../infra/mod.ts";
+import { Id } from "../types.ts";
 import { createQuery } from "../query.ts";
-import * as v from 'valibot';
+import * as v from "valibot";
 
 export default createQuery({
-  type: 'channel:getAll',
+  type: "channel:getAll",
   body: v.required(v.object({
     userId: Id,
   })),
