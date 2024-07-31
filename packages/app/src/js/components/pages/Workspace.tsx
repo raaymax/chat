@@ -1,12 +1,13 @@
-import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
+import {
+  useActions, useSelector, useSideStream, useMainStream, useDispatch,
+} from '../../store';
 
 import { MainConversation } from '../organisms/MainConversaion';
 import { SideConversation } from '../organisms/SideConversation';
-import { Search } from '../pages/Search';
-import { Pins } from '../pages/Pins';
+import { Search } from './Search';
+import { Pins } from './Pins';
 import { StreamProvider } from '../contexts/stream';
-import { useStream } from '../../hooks';
-import styled from 'styled-components';
 import { Sidebar } from '../organisms/Sidebar';
 import { cn } from '../../utils';
 
@@ -44,25 +45,26 @@ export const SideView = styled.div`
 `;
 
 export const Workspace = () => {
-  const view = useSelector((state: any) => state.view?.current);
-  const dispatch: any = useDispatch();
-  const stream = useStream('main');
-  const sideStream = useStream('side');
+  const view = useSelector((state) => state.view?.current);
+  const dispatch = useDispatch();
+  const actions = useActions();
+  const stream = useMainStream();
+  const sideStream = useSideStream();
   return (
-    <Container className={cn({'side-stream': sideStream, 'main-stream': !sideStream })}>
+    <Container className={cn({ 'side-stream': Boolean(sideStream), 'main-stream': !sideStream })}>
       {view === 'sidebar' && <Sidebar />}
-      <MainView className={cn({sidebar: view === 'sidebar'})}>
-        <StreamProvider value={[stream, (val) => dispatch.actions.stream.open({id: 'main', value: val})]}>
+      <MainView className={cn({ sidebar: view === 'sidebar' })}>
+        <StreamProvider value={[stream, (val) => dispatch(actions.stream.open({ id: 'main', value: val }))]}>
           {view === 'search' && <Search />}
           {view === 'pins' && <Pins />}
           {(view === null || view === 'sidebar' || view === 'thread')
             && <MainConversation
-              onClick={() => dispatch.actions.view.set('sidebar')} />
+              onClick={() => dispatch(actions.view.set('sidebar'))} />
           }
         </StreamProvider>
       </MainView>
       {sideStream && <SideView>
-        <StreamProvider value={[sideStream, (val) => dispatch.actions.stream.open({id: 'side', value: val})]}>
+        <StreamProvider value={[sideStream, (val) => dispatch(actions.stream.open({ id: 'side', value: val }))]}>
           <SideConversation />
         </StreamProvider>
       </SideView>}

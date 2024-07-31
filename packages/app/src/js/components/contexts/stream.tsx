@@ -15,4 +15,3 @@ export const StreamProvider = ({ children, value }: StreamProviderProps) => (
     {children}
   </StreamContext.Provider>
 );
-

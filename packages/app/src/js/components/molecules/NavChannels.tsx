@@ -1,9 +1,10 @@
-import {useState} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
 import styled from 'styled-components';
+import {
+  useSelector, useBadges, useChannels, useActions, useDispatch,
+} from '../../store';
 import { ChannelCreate } from './ChannelCreate';
 import { Channel } from './NavChannel';
-import { useBadges, useChannels } from '../../hooks';
 
 const ChannelsContainer = styled.div`
   .header {
@@ -47,11 +48,12 @@ type NavChannelsProps = {
 
 export const NavChannels = ({ icon }: NavChannelsProps) => {
   const [show, setShow] = useState(false);
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch();
+  const actions = useActions();
   const channels = useChannels();
-  const userId = useSelector((state: any) => state.me);
+  const userId = useSelector((state) => state.me);
   const badges = useBadges(userId);
-  const id = useSelector((state: any) => state.stream.mainChannelId);
+  const id = useSelector((state) => state.stream.mainChannelId);
   return (
     <ChannelsContainer>
       <div className='header'>
@@ -63,13 +65,13 @@ export const NavChannels = ({ icon }: NavChannelsProps) => {
         <Channel
           channelId={c.id}
           {...c}
-          className={id === c.id ? 'active' : ''}
+          className={{ active: id === c.id }}
           key={c.id}
           icon={icon ?? 'hash'}
           badge={badges[c.id]}
           onClick={() => {
-            dispatch.actions.stream.open({id: 'main', value: { type: 'live', channelId: c.id }});
-            dispatch.actions.view.set(null);
+            dispatch(actions.stream.open({ id: 'main', value: { type: 'live', channelId: c.id } }));
+            dispatch(actions.view.set(null));
           }}
         />
       ))}

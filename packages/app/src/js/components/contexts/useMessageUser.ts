@@ -1,6 +1,6 @@
-import { useContext} from 'react';
+import { useContext } from 'react';
 import { MessageContext } from './message';
-import { useUser } from '../../hooks';
+import { useUser } from '../../store';
 
 export const useMessageUser = () => {
   const context = useContext(MessageContext);

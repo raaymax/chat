@@ -1,17 +1,16 @@
 import {
-  useMemo, useEffect, useState
+  useMemo, useEffect, useState,
 } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, useMethods } from '../../store';
 import { loadMessages, loadNext, loadPrevious } from '../../services/messages';
-import { Message } from '../../types';
+import { Message, Stream } from '../../types';
 import { useStream } from './useStream';
-import { Stream } from '../../types';
-
 
 export const useMessages = () => {
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch();
+  const methods = useMethods();
   const [stream] = useStream();
-  const messages = useSelector((state: any) => state.messages.data);
+  const messages = useSelector((state) => state.messages.data);
   const [prevStream, setPrevStream] = useState<Partial<Stream>>({});
 
   useEffect(() => {
@@ -21,8 +20,8 @@ export const useMessages = () => {
     }
     setPrevStream(stream);
     dispatch(loadMessages(stream));
-    dispatch.methods.progress.loadProgress(stream);
-  }, [dispatch, stream, prevStream]);
+    dispatch(methods.progress.loadProgress(stream));
+  }, [dispatch, methods, stream, prevStream]);
 
   return {
     messages: useMemo(
@@ -33,7 +32,7 @@ export const useMessages = () => {
     || (!stream.parentId && m.parentId === m.id))),
       [stream, messages],
     ),
-    next: () => dispatch(loadNext(stream)),
-    prev: () => dispatch(loadPrevious(stream)),
-  }
+    next: () => dispatch(loadNext(stream)).unwrap(),
+    prev: () => dispatch(loadPrevious(stream)).unwrap(),
+  };
 };

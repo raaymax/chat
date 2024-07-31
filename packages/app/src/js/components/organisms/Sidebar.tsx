@@ -5,8 +5,7 @@ import { NavUsers } from '../molecules/NavUsers';
 import { NavButton } from '../molecules/NavButton';
 import plugins from '../../core/plugins';
 import { logout } from '../../services/session';
-import { useDispatch } from 'react-redux';
-
+import { useActions, useDispatch } from '../../store';
 
 export const SideMenu = styled.div`
   flex: 0 0 200px;
@@ -64,10 +63,11 @@ export const SideMenu = styled.div`
 `;
 
 export const Sidebar = () => {
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch();
+  const actions = useActions();
   return (
     <SideMenu>
-      <Logo onClick={() => dispatch.actions.view.set('sidebar')} />
+      <Logo onClick={() => dispatch(actions.view.set('sidebar'))} />
       <div className='slider'>
         <NavChannels />
         <NavUsers />
@@ -75,8 +75,8 @@ export const Sidebar = () => {
         {plugins.get('sidebar').map((El: React.FC, key: string) => <El key={key} />)}
       </div>
       <div className='bottom'>
-        <NavButton icon="logout" size={50} onClick={() => dispatch(logout())}>Logout</NavButton>
+        <NavButton icon="logout" size={50} onClick={() => logout()}>Logout</NavButton>
       </div>
     </SideMenu>
   );
-}
+};

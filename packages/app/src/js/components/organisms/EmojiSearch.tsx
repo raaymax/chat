@@ -1,10 +1,10 @@
-import { useState, useEffect} from 'react';
-import { useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { useSelector, useEmojiFuse } from '../../store';
 import { Tooltip } from '../atoms/Tooltip';
 import { SearchBox } from '../atoms/SearchBox';
-import { useEmojiFuse } from '../../hooks';
-import styled from 'styled-components';
 import { getUrl } from '../../services/file';
+import { EmojiDescriptor, DefinedEmoji } from '../../types';
 
 export const Label = styled.div`
   width: 100%;
@@ -55,7 +55,6 @@ export const EmojiScroll = ({ children }: {children: React.ReactNode}) => (
   </Scroll>
 );
 
-
 const EmojiCategory = styled.div`
   display: flex;
   flex-direction: column;
@@ -105,30 +104,29 @@ const EmojiContainer = styled.div`
   }
 `;
 
-type Emoji = {
-  unicode: string;
-  fileId: string;
-  shortname: string;
-  category: string;
-}
-
 type EmojiProps = {
-  unicode: string;
-  fileId: string;
+  unicode?: string;
+  fileId?: string;
   shortname: string;
   onClick: (e: React.MouseEvent) => void;
 };
 
 export const Emoji = ({
   unicode, fileId, shortname, onClick,
-}: EmojiProps) => (
-  <EmojiContainer onClick={onClick}>
-    {fileId
-      ? <img src={getUrl(fileId)} alt={shortname} />
-      : <span>{String.fromCodePoint(parseInt(unicode, 16))}</span>}
-  </EmojiContainer>
-);
-
+}: EmojiProps) => {
+  const Unicode = () => (
+    unicode
+      ? <span>{String.fromCodePoint(parseInt(unicode, 16))}</span>
+      : null
+  );
+  return (
+    <EmojiContainer onClick={onClick}>
+      {fileId
+        ? <img src={getUrl(fileId)} alt={shortname} />
+        : <Unicode />}
+    </EmojiContainer>
+  );
+};
 
 const CATEGORIES: Record<string, string> = {
   p: 'People',
@@ -141,30 +139,32 @@ const CATEGORIES: Record<string, string> = {
   s: 'Symbols',
   k: 'Flags',
   f: 'Font',
+  x: 'Other',
 };
 
 type EmojiSearchProps = {
-  onSelect: (e: Emoji) => void;
+  onSelect: (e: EmojiDescriptor) => void;
 }
 
 export const EmojiSearch = ({ onSelect }: EmojiSearchProps) => {
   const [name, setName] = useState('');
-  const [results, setResults] = useState<Record<string, Emoji[]>>({});
-  const emojis = useSelector((state) => (state as any).emojis.data);
+  const [results, setResults] = useState<Record<string, DefinedEmoji[]>>({});
+  const emojis = useSelector((state) => state.emojis.data.filter((e) => !e.empty)) as DefinedEmoji[];
   const fuse = useEmojiFuse();
 
   useEffect(() => {
-    let all: Emoji[] = emojis || [];
+    let all: DefinedEmoji[] = emojis || [];
     if (name && fuse) {
       const ret = fuse.search(name, { limit: 100 });
-      all = ret.map((r) => r.item);
+      all = ret.map((r) => r.item).filter((e) => !e.empty) as DefinedEmoji[];
     }
 
     setResults(
       (all || [])
-        .reduce((acc: Record<string, Emoji[]>, emoji) => {
-          acc[emoji.category] = acc[emoji.category] || [];
-          acc[emoji.category].push(emoji);
+        .reduce<Record<string, DefinedEmoji[]>>((acc, emoji) => {
+          const category = emoji.category || 'x';
+          acc[category] = acc[category] || [];
+          acc[category].push(emoji);
           return acc;
         }, {}),
     );
@@ -178,8 +178,8 @@ export const EmojiSearch = ({ onSelect }: EmojiSearchProps) => {
           <EmojiCategory key={idx}>
             <Label>{CATEGORIES[category]}</Label>
             <EmojiBlock>
-              {(results[category] || []).map((result, idx) => (
-                <Tooltip text={result.shortname} key={idx}>
+              {(results[category] || []).map((result, idx2) => (
+                <Tooltip text={result.shortname} key={idx2}>
                   <Emoji
                     fileId={result.fileId}
                     unicode={result.unicode}
@@ -199,4 +199,3 @@ export const EmojiSearch = ({ onSelect }: EmojiSearchProps) => {
     </EmojiSearchContainer>
   );
 };
-

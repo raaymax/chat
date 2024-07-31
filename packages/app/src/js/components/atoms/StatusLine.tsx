@@ -1,8 +1,7 @@
-import { useSelector } from 'react-redux';
-import { useTyping } from '../../hooks';
+import { useSelector, useTyping } from '../../store';
 
 export const StatusLine = () => {
-  const info = useSelector((state: any) => state.info);
+  const info = useSelector((state) => state.info);
   const typing = useTyping(); // FIXME: status line should work in context
 
   const names = (typing || []).map((u) => u.name).join(', ');

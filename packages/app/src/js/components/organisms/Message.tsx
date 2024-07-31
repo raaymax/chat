@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import { useActions, useDispatch } from '../../store';
 
 import { resend } from '../../services/messages';
 
@@ -19,13 +19,15 @@ import { useMessageUser } from '../contexts/useMessageUser';
 import { useHoverCtrl } from '../contexts/useHoverCtrl';
 import { useStream } from '../contexts/useStream';
 
-import { cn, ClassNames, formatTime, formatDateDetailed } from '../../utils';
+import {
+  cn, ClassNames, formatTime, formatDateDetailed,
+} from '../../utils';
 
 import { Message as MessageType } from '../../types';
 
 export const Info = () => {
   const { clientId, info } = useMessageData();
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch();
 
   const onAction = useCallback(() => {
     if (info?.action === 'resend') {
@@ -75,15 +77,15 @@ const Container = styled.div`
 
 export const ThreadInfo = () => {
   const msg = useMessageData();
-  // FIXME: dispatch as any
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch();
+  const actions = useActions();
   const [stream] = useStream();
   const {
     updatedAt, thread, channelId, id,
   } = msg;
   if (!thread || stream.parentId) return null;
   return (
-    <Container onClick={() => dispatch.actions.stream.open({id: 'side', value: { type: 'live', channelId, parentId: id }})}>
+    <Container onClick={() => dispatch(actions.stream.open({ id: 'side', value: { type: 'live', channelId, parentId: id } }))}>
       {[...new Set(thread.map((t) => t.userId))]
         .map((userId) => (
           <UserCircle key={userId} userId={userId} />
@@ -102,7 +104,7 @@ type MessageBaseProps = {
   onClick?: (e?: React.MouseEvent) => void;
   sameUser?: boolean;
   className?: ClassNames;
-  [key: string]: any;
+  [key: string]: unknown;
 };
 
 const MessageBase = ({ onClick, sameUser, ...props }: MessageBaseProps = {}) => {
@@ -125,7 +127,7 @@ const MessageBase = ({ onClick, sameUser, ...props }: MessageBaseProps = {}) => 
       }}
       {...props}
       className={cn('message', {
-        pinned: pinned,
+        pinned,
         selected: selected === id,
       }, props.className)}
       onMouseEnter={onEnter}
@@ -160,12 +162,11 @@ const MessageBase = ({ onClick, sameUser, ...props }: MessageBaseProps = {}) => 
   );
 };
 
-
 type MessageProps = MessageBaseProps & {
   data: MessageType;
 };
 
-export const Message = ({data, ...props}: MessageProps) => (
+export const Message = ({ data, ...props }: MessageProps) => (
   <MessageProvider value={data}>
     <MessageBase {...props} />
   </MessageProvider>

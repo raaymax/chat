@@ -4,7 +4,7 @@ import {
 import Fuse from 'fuse.js';
 import { TextMenu } from './TextMenu';
 import { useInput } from '../contexts/useInput';
-import { useUsers } from '../../hooks';
+import { useUsers } from '../../store';
 
 const SCOPE = 'user';
 
@@ -21,9 +21,9 @@ export const UserSelector = () => {
   }), [users]);
 
   const options = useMemo(() => {
-    let opts = fuse.search(currentText || '').slice(0, 5).map(({ item }) => item);
-    opts = opts.length ? opts : users.slice(0, 5);
-    opts = opts.map((user) => ({
+    let usr = fuse.search(currentText || '').slice(0, 5).map(({ item }) => item);
+    usr = usr.length ? usr : users.slice(0, 5);
+    const opts = usr.map((user) => ({
       name: user.name,
       id: user.id,
       icon: 'fa-solid fa-user',
@@ -31,7 +31,7 @@ export const UserSelector = () => {
     return opts;
   }, [fuse, users, currentText]);
 
-  const create = useCallback((event: Event) => {
+  const create = useCallback((event: React.SyntheticEvent) => {
     event.preventDefault();
     event.stopPropagation();
     const span = document.createElement('span');
@@ -42,8 +42,8 @@ export const UserSelector = () => {
     insert(span);
   }, [insert]);
 
-  const submit = useCallback((event: Event, opts?: {selected: number}) => {
-    if(!scopeContainer) return;
+  const submit = useCallback((event: React.SyntheticEvent, opts?: {selected: number}) => {
+    if (!scopeContainer) return;
     event.preventDefault();
     event.stopPropagation();
     scopeContainer.className = 'user';
@@ -62,8 +62,8 @@ export const UserSelector = () => {
     sel?.addRange(r);
   }, [options, selected, scopeContainer]);
 
-  const remove = useCallback((event: Event) => {
-    if(!scopeContainer) return;
+  const remove = useCallback((event: React.SyntheticEvent) => {
+    if (!scopeContainer) return;
     if (scopeContainer.textContent?.length === 1) {
       scopeContainer.remove();
       event.preventDefault();
@@ -71,7 +71,7 @@ export const UserSelector = () => {
     }
   }, [scopeContainer]);
 
-  const ctrl = useCallback((e: KeyboardEvent) => {
+  const ctrl = useCallback((e: React.KeyboardEvent) => {
     if (scope === 'root' && currentText.match(/(^|\s)$/) && e.key === '@') {
       create(e);
     }
@@ -85,9 +85,9 @@ export const UserSelector = () => {
     }
   }, [currentText, scope, create, remove, submit]);
 
-  const onSelect = useCallback((idx: number, e: Event) => {
-    submit(e, {selected: idx});
-  },[submit]);
+  const onSelect = useCallback((idx: number, e: React.MouseEvent) => {
+    submit(e, { selected: idx });
+  }, [submit]);
 
   useEffect(() => {
     const { current } = input;
@@ -101,6 +101,11 @@ export const UserSelector = () => {
   if (scope !== SCOPE) return null;
 
   return (
-    <TextMenu open={true} options={options} onSelect={onSelect} selected={selected} setSelected={setSelected} />
+    <TextMenu
+      open={true}
+      options={options}
+      onSelect={onSelect}
+      selected={selected}
+      setSelected={setSelected} />
   );
 };

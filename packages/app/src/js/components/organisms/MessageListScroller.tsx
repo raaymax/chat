@@ -24,7 +24,7 @@ const ListContainer = styled.div`
 const getMax = (list: MessageType[]) => list.reduce((acc, item) => Math.max(acc, new Date(item.createdAt).getTime()), new Date('1970-01-01').getTime());
 
 type MessageListProps = MessageListRendererProps & {
-  list: any[];
+  list: MessageType[];
   onScrollTop?: () => void;
   onScrollBottom?: () => void;
   onDateChange?: (date: string) => void;
@@ -41,20 +41,21 @@ export const MessageList = (props: MessageListProps) => {
   const [selected, setSelected] = useState<string | undefined>();
   const [stream] = useStream();
 
-  const detectDate = useCallback((e: any) => {
-    const c = e.target.getBoundingClientRect();
-    const r = [...e.target.children]
+  const detectDate = useCallback((e: React.SyntheticEvent) => {
+    const target = e.target as HTMLElement;
+    const c = target.getBoundingClientRect();
+    const r = [...target.children]
       .filter((child) => child.className.includes('message'))
       .find((child) => {
-        const e = child.getBoundingClientRect();
-        return e.y < c.height / 2 + 50;
+        const rect = child.getBoundingClientRect();
+        return rect.y < c.height / 2 + 50;
       });
     if (r) {
-      const date = r.getAttribute('data-date');
+      const dataDate = r.getAttribute('data-date');
       if (setCurrent) {
-        setCurrent([date, r.getBoundingClientRect()]);
+        setCurrent([new Date(dataDate ?? ''), r.getBoundingClientRect()]);
       }
-      if (onDateChange) onDateChange(date);
+      if (onDateChange) onDateChange(dataDate ?? '');
     }
   }, [setCurrent, onDateChange]);
 
@@ -63,16 +64,16 @@ export const MessageList = (props: MessageListProps) => {
     if (!element?.current) return;
     if (list === oldList) return;
     const getRect = (): DOMRect | undefined => {
-      if(!element.current) return;
+      if (!element.current) return;
       return [...element.current.children]
         ?.find((child) => child.getAttribute('data-date') === current[0]?.toISOString())
         ?.getBoundingClientRect();
-    }
+    };
     const max = getMax(list);
     const oldMax = getMax(oldList);
     if (new Date(max).toISOString() !== new Date(oldMax).toISOString()) {
       const rect = getRect();
-      if(!rect) return;
+      if (!rect) return;
       if (stream.type === 'live') {
         element.current.scrollTop = 0;
       } else if (rect && current && current[1]?.y) {
@@ -98,17 +99,17 @@ export const MessageList = (props: MessageListProps) => {
     }
   }, [stream, list, selected, setSelected]);
 
-  const scroll = useCallback((e: any) => {
+  const scroll = useCallback((e: React.SyntheticEvent) => {
     detectDate(e);
     if (!element.current) return;
     if (list !== oldList) return;
 
     if (Math.floor(Math.abs(element.current.scrollTop)) <= 1) {
-      onScrollBottom && onScrollBottom();
+      if (onScrollBottom) onScrollBottom();
     } else if (Math.floor(Math.abs(
       element.current.scrollHeight - element.current.offsetHeight + element.current.scrollTop,
     )) <= 1) {
-      onScrollTop && onScrollTop();
+      if (onScrollTop) onScrollTop();
     }
   }, [detectDate, list, oldList, onScrollTop, onScrollBottom]);
 

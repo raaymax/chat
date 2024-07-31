@@ -1,5 +1,5 @@
-import { getUrl, getThumbnail } from '../../services/file';
 import styled from 'styled-components';
+import { getUrl, getThumbnail } from '../../services/file';
 
 const ImageContainer = styled.div`
   cursor: pointer;
@@ -41,9 +41,8 @@ export const Image = ({ raw, data: { fileName, id } }: ImageProps) => (
   <ImageContainer className='file image' data-id={id} onClick={() => id && download(id)}>
     {
       raw
-        ? <img className='raw-image' src={getUrl(id)} alt={fileName} />
-        : <img src={getThumbnail(id)} alt={fileName} />
+        ? <img className='raw-image' src={getUrl(id ?? '')} alt={fileName} />
+        : <img src={getThumbnail(id ?? '')} alt={fileName} />
     }
   </ImageContainer>
 );
-

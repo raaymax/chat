@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import {cn, ClassNames} from '../../utils';
-
+import { cn, ClassNames } from '../../utils';
 
 const SearchBoxInput = styled.input`
   flex: 0 0 30px;
@@ -20,7 +19,9 @@ type SearchBoxProps = {
   placeholder?: string;
 }
 
-export const SearchBox = ({ onChange, onKeyDown, placeholder = "Search here...", defaultValue, value, className }: SearchBoxProps) => (
+export const SearchBox = ({
+  onChange, onKeyDown, placeholder = 'Search here...', defaultValue, value, className,
+}: SearchBoxProps) => (
   <SearchBoxInput
     type="text"
     onChange={onChange}

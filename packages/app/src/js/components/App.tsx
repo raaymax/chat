@@ -1,18 +1,25 @@
 import { createRoot } from 'react-dom/client';
 import { Suspense, lazy } from 'react';
-import '../core/registerSw';
 import { Register } from './pages/Register';
 import { Login } from './pages/Login';
+
+declare global {
+  interface Navigator {
+    virtualKeyboard: {
+      overlaysContent: boolean;
+    };
+  }
+}
 
 const Secured = lazy(() => import('./Secured'));
 
 if ('virtualKeyboard' in navigator) {
-  (navigator as any).virtualKeyboard.overlaysContent = true;
+  navigator.virtualKeyboard.overlaysContent = true;
 }
 
 export const App = () => {
   const url = new URL(window.location.toString());
-  const {hash} = url;
+  const { hash } = url;
   if (hash.startsWith('#/invite')) {
     return <Register />;
   }
