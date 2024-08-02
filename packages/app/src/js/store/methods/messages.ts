@@ -15,6 +15,7 @@ export const load = createMethod('messages/load', async (query: Query, { actions
     ...query,
     type: 'message:getAll',
   });
+  console.log('load', req.data);
   dispatch(actions.messages.add(req.data));
   return req.data;
 });

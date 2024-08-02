@@ -245,6 +245,14 @@ export const InputProvider = (args: InputContextProps) => {
     rang.collapse();
   }, [getRange]);
 
+  const onKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey && scope === 'root') {
+      return send(e as any);
+    }
+    dispatch.methods.typing.notify(stream);
+    updateRange();
+  }, [dispatch, send, updateRange, scope, stream]);
+
   const emitKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey && scope === 'root') {
       return send(e);
@@ -268,6 +276,7 @@ export const InputProvider = (args: InputContextProps) => {
     input,
     fileInput,
     onPaste,
+    onKeyDown,
     emitKeyDown,
     onInput,
     onFileChange,

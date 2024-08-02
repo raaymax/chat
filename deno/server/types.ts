@@ -19,6 +19,12 @@ export class EntityId {
   }
 }
 
+export type Config = {
+  appVersion: string;
+  mainChannelId: EntityId;
+  vapidPublicKey: string;
+};
+
 export type Session = {
   id: EntityId;
   expires: Date;

@@ -7,3 +7,4 @@ export class AccessDenied extends ApiError {
     super(401, "ACCESS_DENIED", message);
   }
 }
+

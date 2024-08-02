@@ -14,10 +14,15 @@ export const init = (url: string) => {
 export const connect = async () => {
   if (!databaseUrl) throw new Error("Database not initialized");
   if (db && client) return { db, client };
+  try{ 
   client = new MongoClient(databaseUrl);
   await client.connect();
   db = client.db();
   return { db, client };
+  }catch(e){
+    console.error('tu', e);
+    throw e;
+  }
 };
 
 export const disconnect = async () => {

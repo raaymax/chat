@@ -22,6 +22,6 @@ export default (core: Core) =>
           userId: req.state.user.id,
         },
       });
-      return Res.json({ status: "ok" });
+      return Res.empty();
     },
   });

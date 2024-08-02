@@ -8,6 +8,8 @@ import GetUser from "./user/get.ts";
 import GetChannel from "./channel/get.ts";
 import GetAllChannels from "./channel/getAll.ts";
 import CreateMessage from "./message/create.ts";
+import GetUserConfig from "./user/getConfig.ts";
+import GetAllUsers from "./user/getAll.ts";
 import { repo, storage } from "../infra/mod.ts";
 import { buildCommandCollection, EventFrom } from "./command.ts";
 import { bus } from "./bus.ts";
@@ -34,6 +36,8 @@ export class Core {
 
   user = {
     get: GetUser,
+    getAll: GetAllUsers,
+    getConfig: GetUserConfig,
   };
 
   constructor(public repository: typeof repo = repo) {}

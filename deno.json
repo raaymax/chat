@@ -10,6 +10,7 @@
     "@planigale/schema": "../../Planigale/packages/schema/mod.ts",
     "@planigale/sse": "../../Planigale/packages/sse/mod.ts",
     "@planigale/testing": "../../Planigale/packages/testing/mod.ts",
+    "@std/assert": "jsr:@std/assert@^1.0.1",
     "valibot": "npm:valibot@^0.36.0"
   },
   "scopes": {
@@ -27,6 +28,7 @@
     ]
   },
   "tasks": {
+    "test": "DATABASE_URL='mongodb://chat:chat@localhost:27017/tests?authSource=admin' deno test -A",
     "dev": "deno run --watch main.ts"
   }
 }

@@ -8,7 +8,11 @@ export default (_core: Core) =>
     url: "/session",
     handler: async (req) => {
       if (req.state.session) {
-        return Res.json(req.state.session);
+        return Res.json({
+          ...req.state.session,
+          user: req.state.user.id, // FIXME: remove
+          status: "ok", // FIXME: remove
+        });
       } else {
         return Res.json({ status: "no-session" });
       }

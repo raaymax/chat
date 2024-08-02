@@ -5,7 +5,7 @@ import { login } from "../../__tests__/helpers.ts";
 import { repo } from "../../../../../infra/mod.ts";
 import { ChannelType } from "../../../../../types.ts";
 
-Deno.test("POST /api/channels - unauthorized", async () => {
+Deno.test("/api/channels/* - unauthorized", async () => {
   const agent = await Agent.from(app);
   try {
     await agent.request().post("/api/channels").emptyBody().expect(401);
@@ -69,7 +69,7 @@ Deno.test("/api/channels - create/get/getAll/delete channel", async () => {
       .delete(`/api/channels/${channelId}`)
       .emptyBody()
       .header("Authorization", `Bearer ${token}`)
-      .expect(200);
+      .expect(204);
   } finally {
     await agent.close();
   }
@@ -100,9 +100,15 @@ Deno.test("/api/channels - server sent events", async () => {
       .header("Authorization", `Bearer ${token}`)
       .expect(200);
 
-    res.body?.cancel();
+    const body = await res.json();
 
     const { event } = await events.next();
+    await agent.request()
+      .delete(`/api/channels/${body.id}`)
+      .emptyBody()
+      .header("Authorization", `Bearer ${token}`)
+      .expect(204);
+
     const data = JSON.parse(event?.data ?? "");
     assertEquals(data.type, "channel");
     assertEquals(data.payload.name, "test");

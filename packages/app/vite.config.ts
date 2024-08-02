@@ -11,7 +11,8 @@ export default defineConfig({
     APP_VERSION: JSON.stringify(pack.version),
     APP_NAME: JSON.stringify(pack.name),
     PLUGIN_LIST: JSON.stringify((config as any).plugins),
-    API_URL: JSON.stringify((config as any).apiUrl),
+    //API_URL: JSON.stringify((config as any).apiUrl),
+    API_URL: JSON.stringify('http://localhost:8008'),
   },
   plugins: [react(), VitePWA({
     injectRegister: 'auto',

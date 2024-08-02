@@ -10,7 +10,7 @@ export default (core: Core) =>
         type: "object",
         required: ["channelId"],
         properties: {
-          channelId: { type: "string" },
+          channelId: { type: "string", minLength: 24, maxLength: 24, pattern: "^[0-9a-fA-F]{24}$"},
         },
       },
     },

@@ -5,6 +5,8 @@ node_modules
 .DS_Store
 .idea
 chat.config.js
+chat.config.ts
+chat.config.json
 secrets.json
 uploads
 todo.txt

@@ -17,7 +17,7 @@ export default (core: Core) =>
         type: "object",
         required: ["message", "clientId", "flat"],
         properties: {
-          message: { $ref: "message#" },
+          message: { $ref: "message#/definitions/body" },
           parentId: { type: "string" },
           flat: { type: "string" },
           clientId: { type: "string" },

@@ -96,3 +96,140 @@ export class WebSocketTransport implements Transport {
     return this.bus.notify(event, data);
   }
 }
+
+export class HttpTransport implements Transport {
+  private bus = createEventListener<Message>();
+
+  private seqHandlers = createEventListener<SequenceMessage>();
+
+  private baseUrl: string;
+
+  private token: string;
+
+  constructor(url: string, token: string) {
+    this.baseUrl = url;
+    this.token = token;
+    setTimeout(() => this.emit('con:open'), 5);
+  }
+
+  async fetch(url: string, opts: {seqId?: string, mapFn?: (i:any) => any} & RequestInit): Promise<any> {
+    const res = await fetch(`${this.baseUrl}${url}`, {
+      ...opts,
+      headers: {
+        ...opts.headers,
+        Authorization: `Bearer ${this.token}`,
+      },
+    });
+    if(res.status == 200) {
+      const data = await res.json();
+      return {
+        type: 'response',
+        status: 'ok',
+        seqId: opts.seqId,
+        data: [data].flat().map(opts.mapFn ?? ((a) => a)),
+      };
+    }else{
+      return {
+        type: 'response',
+        status: 'error',
+        seqId: opts.seqId,
+        error: await res.json()
+      };
+    }
+  }
+
+
+  send(msg: Message): HttpTransport {
+    // eslint-disable-next-line no-console
+    console.log('send', msg);
+    return this;
+  }
+
+  request = async (msg: any): Promise<any> => {
+    switch (msg.type) {
+      case 'user:config': {
+        return this.fetch('/api/profile/config', {seqId: msg.seqId});
+      }
+      case 'channel:get': {
+        return this.fetch(`/api/channels/${msg.id}`, {seqId: msg.seqId});
+      }
+      case 'channels:load': {
+        return this.fetch('/api/channels', {seqId: msg.seqId, mapFn: (i: any) => ({type: 'channel', ...i})});
+      }
+      case 'user:getAll': {
+        return this.fetch('/api/users', {seqId: msg.seqId, mapFn: (i: any) => ({type: 'user', ...i})});
+      }
+      case 'channel:create': {
+        return await this.fetch(`/api/channels`, {
+          method: 'POST',
+          body: JSON.stringify({name: msg.name, users: msg.users, channelType: msg.channelType}),
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        });
+      }
+      case 'message:create': {
+        return await this.fetch(`/api/channels/${msg.channelId}/messages`, {
+          method: 'POST',
+          body: JSON.stringify(msg),
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        });
+      }
+      case 'message:getAll': {
+        return this.fetch(`/api/channels/${msg.channelId}/messages`, {seqId: msg.seqId, mapFn: (i: any) => ({type: 'message', ...i})});
+      }
+      default:
+        return {
+          type: 'response',
+          status: 'ok',
+          seqId: msg.seqId,
+          data: [],
+          warning: "No handler for this message type",
+        };
+    }
+  }
+
+
+  req = async (msg: any): any => {
+    console.log('req < ', msg);
+    const ret = await this.request(msg);
+    console.log('req > ', msg, ret);
+    return ret; 
+  }
+
+  notif = (msg: any): any => this.send(msg);
+
+  onSeq(seqId: string, callback: (data: SequenceMessage, ev?: Event) => void): HttpTransport {
+    this.seqHandlers.watch(seqId, callback);
+    return this;
+  }
+
+  offSeq(seqId: string): HttpTransport {
+    this.seqHandlers.offAll(seqId);
+    return this;
+  }
+
+  on(event: string, callback: (data: any) => void): HttpTransport {
+    this.bus.watch(event, callback);
+    return this;
+  }
+
+  once(event: string, callback: (data: any) => void): HttpTransport {
+    this.bus.once(event, callback);
+    return this;
+  }
+
+  off(event: string, callback: (data: any) => void): HttpTransport {
+    this.bus.off(event, callback);
+    return this;
+  }
+
+  emit(event: string, data?: any) {
+    if (!this.bus.exists(event)) {
+      return;
+    }
+    return this.bus.notify(event, data);
+  }
+}

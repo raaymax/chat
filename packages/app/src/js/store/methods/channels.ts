@@ -1,7 +1,7 @@
 import { createMethod } from '../store';
 
 export const load = createMethod('channels/load', async (_arg, { client, actions, dispatch }): Promise<void> => {
-  const res = await client.req({ type: 'channel:getAll' });
+  const res = await client.req({type: 'channels:load'});
   dispatch(actions.channels.add(res.data));
 });
 

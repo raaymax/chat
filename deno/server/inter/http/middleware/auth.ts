@@ -12,7 +12,7 @@ export const authMiddleware = (core: Core): Middleware => async (req, next) => {
     req.state.token = token;
     req.state.session = await core.session.get({ token });
     if (!req.state.session) {
-      req.cookies.delete("token");
+      //req.cookies.delete("token");
       return await auth(req, next);
     }
     req.state.user = await core.user.get({ id: req.state.session.userId });

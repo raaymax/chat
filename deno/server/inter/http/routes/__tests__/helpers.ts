@@ -8,18 +8,21 @@ export async function login(agent: Agent, login = "admin") {
     .post("/api/auth/session")
     .json({
       login,
-      password: "pass123",
+      password: "123",
     })
     .expect(200);
   return await res.json();
 }
 
-const ensureUser = async (login: string) => {
+export const ensureUser = async (login: string, data: {} = {}) => {
   const user = await repo.user.get({ login });
   if (!user) {
     await repo.user.create({
       login,
-      password: hash("pass123"),
+      password: hash("123"),
+      ...data,
     });
+  } else {
+    await repo.user.update({id: user.id}, data);
   }
 };

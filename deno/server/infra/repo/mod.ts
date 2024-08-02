@@ -9,4 +9,5 @@ export { emoji } from "./emojiRepo.ts";
 export { badge } from "./badgeRepo.ts";
 export { connect, disconnect, init, ObjectId } from "./db.ts";
 
-init("mongodb://chat:chat@localhost:27017/chat?authSource=admin");
+const databaseUrl = Deno.env.get("DATABASE_URL") ?? "mongodb://chat:chat@localhost:27017/tests?authSource=admin";
+init(databaseUrl);

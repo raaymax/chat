@@ -34,7 +34,7 @@ Deno.test("Login/logout", async (t) => {
       .post("/api/auth/session")
       .json({
         login: "admin",
-        password: "pass123",
+        password: "123",
       })
       .expect(200);
     const body = await res.json();
@@ -93,7 +93,7 @@ Deno.test("Login/logout - cookies", async (t) => {
       .post("/api/auth/session")
       .json({
         login: "admin",
-        password: "pass123",
+        password: "123",
       })
       .expect(200);
     const body = await res.json();

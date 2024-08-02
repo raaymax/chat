@@ -138,7 +138,7 @@ const isError = (err: unknown): err is IncommingError => (err as IncommingError)
 export const sendCommand = createMethod('messages/sendCommand', async ({ stream, payload: msg }: {payload: OutgoingCommandExecute, stream: Stream}, { dispatch, actions }) => {
   const notif = {
     type: 'notif',
-    userId: 'notif',
+    userId: getState().me,
     channelId: stream.channelId,
     parentId: stream.parentId,
     notifType: 'info',
@@ -163,10 +163,10 @@ type MessageInfo = null | {
   action?: string;
 }
 
-const sendMessage = createMethod('messages/sendMessage', async ({ payload: msg, info }: {payload: OutgoingMessageCreate, info: MessageInfo}, { dispatch, actions }) => {
-  dispatch(actions.messages.add({ ...msg, pending: true }));
+const sendMessage = createMethod('messages/sendMessage', async ({ payload: msg, info }: {payload: OutgoingMessageCreate, info: MessageInfo}, { dispatch, actions, getState }) => {
+  dispatch(actions.messages.add({ ...msg, userId: getState().me, pending: true }));
   try {
-    await client.notif(msg);
+    await client.req(msg);
   } catch (err) {
     dispatch(actions.messages.add({
       clientId: msg.clientId,
