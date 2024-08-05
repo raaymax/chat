@@ -14,6 +14,14 @@ export class EntityId {
     }
   }
 
+  eq(id: EntityId) {
+    return this.value === id.value;
+  }
+
+  neq(id: EntityId) {
+    return this.value !== id.value;
+  }
+
   toString() {
     return this.value;
   }

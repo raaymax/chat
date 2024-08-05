@@ -12,3 +12,15 @@ export class ResourceNotFound extends AppError {
     super("RESOURCE_NOT_FOUND", message);
   }
 }
+
+export class AccessDenied extends AppError {
+  constructor() {
+    super("ACCESS_DENIED", "Access denied");
+  }
+}
+
+export class NotOwner extends AppError {
+  constructor() {
+    super("NOT_OWNER", "Not owner");
+  }
+}

@@ -1,7 +1,7 @@
 import { assert, assertEquals } from "@std/assert";
 import { Agent } from "@planigale/testing";
 import app from "../../../mod.ts";
-import { login, ensureUser } from "../../__tests__/helpers.ts";
+import { login, ensureUser } from "../../__tests__/mod.ts";
 import { User } from "../../../../../types.ts";
 
 Deno.test("GET /api/channels - unauthorized", async () => {

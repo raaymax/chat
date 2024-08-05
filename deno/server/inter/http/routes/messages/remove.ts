@@ -1,12 +1,22 @@
-import { Route } from "@planigale/planigale";
+import { Route, Res } from "@planigale/planigale";
 import { Core } from "../../../../core/mod.ts";
 
-export default (_core: Core) =>
+export default (core: Core) =>
   new Route({
     method: "DELETE",
     url: "/:messageId",
-    handler: () => {
-      return Response.json({ status: "ok" });
+    schema: {
+      params: {
+        type: "object",
+        required: ["messageId"],
+        properties: {
+          messageId: { type: "string" },
+        },
+      },
+    },
+    handler: async (req) => {
+      await core.message.remove({ userId: req.state.user.id, messageId: req.params.messageId });
+      return Res.empty();
     },
   });
 /*

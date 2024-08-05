@@ -1,7 +1,8 @@
 import { assert, assertEquals } from "@std/assert";
 import { Agent } from "@planigale/testing";
 import app from "../../../mod.ts";
-import { login, ensureUser } from "../../__tests__/helpers.ts";
+import { login , ensureUser} from "../../__tests__/mod.ts";
+
 import { User } from "../../../../../types.ts";
 import config from '@quack/config';
 import pack from "../../../../../../../package.json" with { type: "json" };

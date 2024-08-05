@@ -1,5 +1,5 @@
-import { Channel, EntityId } from "../../../../../types.ts";
-import { repo } from "../../../../../infra/mod.ts";
+import { Channel, EntityId } from "../../../../types.ts";
+import { repo } from "../../../../infra/mod.ts";
 
 export const usingChannel = async (
   channel: Partial<Channel>,
@@ -17,6 +17,7 @@ export const usingChannel = async (
     await fn(channelId.toString());
   } finally {
     if(channelId) {
+      await repo.message.removeMany({ channelId: EntityId.from(channelId) });
       await repo.channel.remove({ id: EntityId.from(channelId) });
     }
   }

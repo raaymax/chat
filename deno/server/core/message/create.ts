@@ -3,6 +3,7 @@ import { createCommand } from "../command.ts";
 import { repo } from "../../infra/mod.ts";
 import { Id, IdArr } from "../types.ts";
 import { bus } from "../bus.ts";
+import { ResourceNotFound } from "../errors.ts";
 
 export default createCommand({
   type: "message:create",
@@ -35,7 +36,7 @@ export default createCommand({
     userId: msg.userId,
   });
   if (!channel) {
-    throw new Error("Channel not found");
+    throw new ResourceNotFound("Channel not found");
   }
 
   async function createMessage(msg: any) {

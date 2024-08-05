@@ -194,7 +194,7 @@ export const resend = createMethod('messages/resend', async (id: string, { dispa
 
 export const removeMessage = createMethod('messages/removeMessage', async (msg: {id: string}, { dispatch, actions }) => {
   try {
-    await client.notif({ type: 'message:remove', id: msg.id });
+    await client.req({ type: 'message:remove', id: msg.id });
   } catch (err) {
     dispatch(actions.messages.add({
       id: msg.id,

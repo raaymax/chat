@@ -1,6 +1,7 @@
 import * as v from "valibot";
 import { EntityId } from "../types.ts";
 import type { Core } from "./core.ts";
+import { AppError } from "./errors.ts";
 
 function serialize<A>(obj: A): any {
   if (obj instanceof EntityId) {
@@ -54,6 +55,9 @@ export function createCommand<
         //console.log(`[COMMAND: ${def.type}] Ret: `, r)
         return r;
       } catch (err) {
+        if (err instanceof AppError) {
+          throw err;
+        }
         console.log(`[COMMAND: ${def.type}] Error:`);
         console.log(err);
         throw err;

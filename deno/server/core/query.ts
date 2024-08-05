@@ -1,5 +1,7 @@
 import * as v from "valibot";
 import { EntityId } from "../types.ts";
+import { AppError } from "./errors.ts";
+import { serialize } from "./serializer.ts";
 
 export type Event = {
   type: string;
@@ -9,21 +11,6 @@ export type Definition = {
   type: string;
   body: v.BaseSchema<any, any, any>;
 };
-
-function serialize<A>(obj: A): any {
-  if (obj instanceof EntityId) {
-    return obj.toString();
-  }
-  if (Array.isArray(obj)) {
-    return obj.map(serialize);
-  }
-  if (typeof obj === "object") {
-    for (const key in obj) {
-      obj[key] = serialize(obj[key]);
-    }
-  }
-  return obj;
-}
 
 export function createQuery<A extends Definition, B>(
   def: A,
@@ -37,6 +24,9 @@ export function createQuery<A extends Definition, B>(
       //console.log(`[QUERY: ${def.type}] Ret: `, r)
       return r;
     } catch (err) {
+      if (err instanceof AppError) {
+        throw err;
+      }
       console.log(`[QUERY: ${def.type}] Error:`);
       console.log(err);
       throw err;

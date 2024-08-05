@@ -2,7 +2,7 @@ Deno.env.set("ENV_TYPE", "test");
 import { Agent } from "@planigale/testing";
 import app from "../../../mod.ts";
 import { assert, assertEquals } from "@std/assert";
-import { login } from "../../__tests__/helpers.ts";
+import { login } from "../../__tests__/mod.ts";
 
 const testTextFilePath =
   new URL("../../../../../tests/test.txt", import.meta.url).pathname;

@@ -42,7 +42,7 @@ export class Repo<Query, Model> {
   async remove(data: Query): Promise<void> {
     const { db } = await connect();
     const query = this.makeQuery(data);
-    if (!query.id) return;
+    if (!query._id) return;
     await db.collection(this.COLLECTION).deleteOne(query);
   }
 

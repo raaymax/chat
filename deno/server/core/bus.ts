@@ -1,4 +1,5 @@
 import { EntityId } from "../types.ts";
+import { serialize } from "./serializer.ts";
 type Listeners = { [key: string]: Function[] };
 
 class Emitter {
@@ -13,7 +14,7 @@ class Emitter {
   };
 
   emit = (ev: string, ...args: any[]) => {
-    (this.listeners[ev] ?? []).forEach((cb) => cb(...args));
+    (this.listeners[ev] ?? []).forEach((cb) => cb(...serialize(args)));
   };
 
   eventNames = () => Object.keys(this.listeners);

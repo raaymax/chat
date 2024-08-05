@@ -18,7 +18,7 @@ type MessageQuery = Partial<
 >;
 
 class MessageRepo extends Repo<MessageQuery, Message> {
-  COLLECTION = "channels";
+  COLLECTION = "messages";
 
   makeQuery(data: MessageQuery) {
     const { search, before, after, ...rest } = serialize(data);

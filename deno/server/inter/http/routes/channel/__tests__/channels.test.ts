@@ -1,7 +1,7 @@
 import { assert, assertEquals } from "@std/assert";
 import { Agent } from "@planigale/testing";
 import app from "../../../mod.ts";
-import { login } from "../../__tests__/helpers.ts";
+import { login } from "../../__tests__/mod.ts";
 import { repo } from "../../../../../infra/mod.ts";
 import { ChannelType } from "../../../../../types.ts";
 

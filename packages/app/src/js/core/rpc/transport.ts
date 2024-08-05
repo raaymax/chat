@@ -180,6 +180,11 @@ export class HttpTransport implements Transport {
       case 'message:getAll': {
         return this.fetch(`/api/channels/${msg.channelId}/messages`, {seqId: msg.seqId, mapFn: (i: any) => ({type: 'message', ...i})});
       }
+      case 'message:remove': {
+        return await this.fetch(`/api/messages/${msg.id}`, {
+          method: 'DELETE',
+        });
+      }
       default:
         return {
           type: 'response',

@@ -10,6 +10,9 @@ import GetAllChannels from "./channel/getAll.ts";
 import CreateMessage from "./message/create.ts";
 import GetUserConfig from "./user/getConfig.ts";
 import GetAllUsers from "./user/getAll.ts";
+import GetAllMessages from "./message/getAll.ts";
+import GetMessage from "./message/get.ts";
+import RemoveMessage from "./message/remove.ts";
 import { repo, storage } from "../infra/mod.ts";
 import { buildCommandCollection, EventFrom } from "./command.ts";
 import { bus } from "./bus.ts";
@@ -39,6 +42,12 @@ export class Core {
     getAll: GetAllUsers,
     getConfig: GetUserConfig,
   };
+
+  message = {
+    getAll: GetAllMessages,
+    get: GetMessage,
+    remove: RemoveMessage,
+  }
 
   constructor(public repository: typeof repo = repo) {}
   dispatch = async (evt: EventFrom<typeof commands[keyof typeof commands]>) => {
