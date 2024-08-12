@@ -1,6 +1,5 @@
 import * as v from "valibot";
 import { createCommand } from "../command.ts";
-import { repo } from "../../infra/mod.ts";
 import { Id, IdArr } from "../types.ts";
 import { bus } from "../bus.ts";
 import { ResourceNotFound } from "../errors.ts";
@@ -14,6 +13,7 @@ export default createCommand({
       channelId: Id,
       parentId: v.optional(Id),
       flat: v.string(),
+      pinned: v.optional(v.boolean()),
       clientId: v.string(),
       emojiOnly: v.optional(v.boolean(), false),
       debug: v.optional(v.string()),
@@ -21,7 +21,7 @@ export default createCommand({
       mentions: v.optional(v.array(v.string()), []),
       attachments: v.optional(
         v.array(v.object({
-          id: Id,
+          id: v.string(),
           fileName: v.string(),
           contentType: v.optional(v.string(), "application/octet-stream"),
         })),
@@ -30,7 +30,7 @@ export default createCommand({
     }),
     ["userId", "message", "channelId", "clientId", "flat"],
   ),
-}, async (msg) => {
+}, async (msg, {repo}) => {
   const channel = await repo.channel.get({
     id: msg.channelId,
     userId: msg.userId,
@@ -59,6 +59,7 @@ export default createCommand({
   const { id, dup } = await createMessage({
     message: msg.message,
     flat: msg.flat,
+    pinned: msg.pinned,
     channelId: channel.id,
     parentId: msg.parentId,
     channel: channel.cid,

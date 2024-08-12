@@ -81,8 +81,8 @@ export const MessageToolbar = () => {
   const cancelButton = () => <ButtonWithIcon key='cancel' icon="circle-xmark" onClick={() => setView(null)} />;
   const editButton = () => <ButtonWithIcon key='edit' icon="edit" onClick={() => dispatch(actions.messages.toggleEdit(id))} />;
   const openReactions = () => <ButtonWithIcon key='reactions' icon="icons" onClick={() => setView('reactions')} />;
-  const pinButton = () => <ButtonWithIcon key='pin' icon="thumbtack" onClick={() => methods.pins.pin({ id, channelId })} />;
-  const unpinButton = () => <ButtonWithIcon key='unpin' icon="thumbtack" onClick={() => methods.pins.unpin({ id, channelId })} />;
+  const pinButton = () => <ButtonWithIcon key='pin' icon="thumbtack" onClick={() => dispatch(methods.pins.pin({ id, channelId }))} />;
+  const unpinButton = () => <ButtonWithIcon key='unpin' icon="thumbtack" onClick={() => dispatch(methods.pins.unpin({ id, channelId }))} />;
   const replyButton = () => <ButtonWithIcon key='reply' icon="reply" onClick={() => dispatch(actions.stream.open({ id: 'side', value: { type: 'live', channelId, parentId: id } }))} />;
 
   return (

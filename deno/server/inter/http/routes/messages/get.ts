@@ -10,7 +10,7 @@ export default (core: Core) =>
         type: "object",
         required: ["messageId"],
         properties: {
-          messageId: { type: "string" },
+          messageId: { type: "string", format: "entity-id" },
         },
       },
     },

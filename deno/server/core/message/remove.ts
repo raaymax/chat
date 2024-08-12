@@ -1,4 +1,3 @@
-import { repo } from "../../infra/mod.ts";
 import { Id } from "../types.ts";
 import { createQuery } from "../query.ts";
 import * as v from "valibot";
@@ -11,7 +10,7 @@ export default createQuery({
     userId: Id,
     messageId: Id,
   })),
-}, async ({userId, messageId}) => {
+}, async ({userId, messageId}, {repo}) => {
     const message = await repo.message.get({ id: messageId });
     if (!message) throw new ResourceNotFound("Message not found");
 

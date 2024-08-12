@@ -1,4 +1,5 @@
 import { Socket, Manager } from 'socket.io-client';
+import { SSESource } from '@planigale/sse';
 import { createEventListener } from './utils';
 import {
   Message, SequenceMessage, isMessage, isSequenceMessage,
@@ -106,10 +107,18 @@ export class HttpTransport implements Transport {
 
   private token: string;
 
+  private source: SSESource;
+
   constructor(url: string, token: string) {
     this.baseUrl = url;
     this.token = token;
     setTimeout(() => this.emit('con:open'), 5);
+    this.source = new SSESource(`${this.baseUrl}/api/sse`, {
+      headers: {
+        authorization: `bearer ${this.token}`,
+      }
+    });
+    //TODO use this
   }
 
   async fetch(url: string, opts: {seqId?: string, mapFn?: (i:any) => any} & RequestInit): Promise<any> {
@@ -120,8 +129,8 @@ export class HttpTransport implements Transport {
         Authorization: `Bearer ${this.token}`,
       },
     });
-    if(res.status == 200) {
-      const data = await res.json();
+    if(res.status == 200 || res.status == 204) {
+      const data = res.status === 200 ? await res.json() : {};
       return {
         type: 'response',
         status: 'ok',
@@ -169,13 +178,15 @@ export class HttpTransport implements Transport {
         });
       }
       case 'message:create': {
-        return await this.fetch(`/api/channels/${msg.channelId}/messages`, {
+        const createRes = await this.fetch(`/api/channels/${msg.channelId}/messages`, {
           method: 'POST',
           body: JSON.stringify(msg),
           headers: {
             'Content-Type': 'application/json'
           },
         });
+
+        return await this.fetch(`/api/messages/${createRes.data[0].id}`, {method: 'GET'});
       }
       case 'message:getAll': {
         return this.fetch(`/api/channels/${msg.channelId}/messages`, {seqId: msg.seqId, mapFn: (i: any) => ({type: 'message', ...i})});
@@ -184,6 +195,16 @@ export class HttpTransport implements Transport {
         return await this.fetch(`/api/messages/${msg.id}`, {
           method: 'DELETE',
         });
+      }
+      case 'message:pin': {
+        await this.fetch(`/api/messages/${msg.id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({pinned: msg.pinned}),
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        });
+        return await this.fetch(`/api/messages/${msg.id}`, {method: 'GET'});
       }
       default:
         return {

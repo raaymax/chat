@@ -1,8 +1,9 @@
 Deno.env.set("ENV_TYPE", "test");
 import { Agent } from "@planigale/testing";
-import app from "../../../mod.ts";
 import { assert, assertEquals } from "@std/assert";
 import { login } from "../../__tests__/mod.ts";
+import { createApp } from "../../__tests__/app.ts";
+const { app, repo, core } = createApp();
 
 const testTextFilePath =
   new URL("../../../../../tests/test.txt", import.meta.url).pathname;
@@ -40,7 +41,7 @@ Deno.test("/api/files - Authorization failed", async (t) => {
 
 Deno.test("/api/files - Auth successful", async (t) => {
   const agent = await Agent.from(app);
-  const { token } = await login(agent);
+  const { token } = await login(repo, agent);
   let fileId: string | null = null;
   await t.step("POST /api/files - upload", async () => {
     const res = await agent.request()

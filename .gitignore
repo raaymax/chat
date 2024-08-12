@@ -11,3 +11,4 @@ secrets.json
 uploads
 todo.txt
 tsconfig.tsbuildinfo
+/ssl

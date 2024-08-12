@@ -1,11 +1,11 @@
 import { assert, assertEquals } from "@std/assert";
 import { Agent } from "@planigale/testing";
-import app from "../../../mod.ts";
 import { login , ensureUser} from "../../__tests__/mod.ts";
 
-import { User } from "../../../../../types.ts";
 import config from '@quack/config';
 import pack from "../../../../../../../package.json" with { type: "json" };
+import { createApp } from "../../__tests__/app.ts";
+const { app, repo, core } = createApp();
 
 Deno.test("GET /api/profile/config - unauthorized", async () => {
   const agent = await Agent.from(app);
@@ -18,8 +18,8 @@ Deno.test("GET /api/profile/config - unauthorized", async () => {
 
 Deno.test("GET /api/profile/config - getConfig", async () => {
   await Agent.test(app, {type: 'handler'}, async (agent) => {
-    await ensureUser("admin", {name: "Admin", mainChannelId: "Test"});
-    const {token} = await login(agent, "admin");
+    await ensureUser(repo, "admin", {name: "Admin", mainChannelId: "Test"});
+    const {token} = await login(repo, agent, "admin");
     const res = await agent.request()
       .get("/api/profile/config")
       .header("Authorization", `Bearer ${token}`)

@@ -1,5 +1,4 @@
 import * as v from "valibot";
-import { repo } from "../../infra/mod.ts";
 import { createCommand } from "../command.ts";
 import { Id } from "../types.ts";
 
@@ -8,6 +7,6 @@ export default createCommand({
   body: v.object({
     sessionId: Id,
   }),
-}, async ({ sessionId }) => {
+}, async ({ sessionId }, {repo}) => {
   await repo.session.remove({ id: sessionId });
 });

@@ -1,7 +1,7 @@
 import { hash } from "@ts-rex/bcrypt";
-import { repo } from "../../../../infra/mod.ts";
+import { Repository } from "../../../../infra/mod.ts";
 
-export const ensureUser = async (login: string, data: {} = {}) => {
+export const ensureUser = async (repo: Repository, login: string, data: {} = {}) => {
   const user = await repo.user.get({ login });
   if (!user) {
     await repo.user.create({

@@ -1,15 +1,11 @@
-import app from "./inter/http/mod.ts";
-import core from "./core/mod.ts";
+import { HttpInterface } from "./inter/http/mod.ts";
+import { Core } from "./core/mod.ts";
 
-const srv = await app.serve({
-  port: 8008,
-  onListen: (addr: Deno.NetAddr) => {
-    console.log(
-      `[QUACK API] Listening on http://${addr.hostname}:${addr.port}/`,
-    );
-  },
-});
+const core = new Core();
+const http = new HttpInterface(core);
 
-app.onClose(async () => {
+http.onClose(async () => {
   await core.close();
 });
+
+export default http;

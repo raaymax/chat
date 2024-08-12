@@ -1,8 +1,9 @@
 import { assert, assertEquals } from "@std/assert";
 import { Agent } from "@planigale/testing";
-import app from "../../../mod.ts";
 import { login, ensureUser } from "../../__tests__/mod.ts";
 import { User } from "../../../../../types.ts";
+import { createApp } from "../../__tests__/app.ts";
+const { app, repo, core } = createApp();
 
 Deno.test("GET /api/channels - unauthorized", async () => {
   const agent = await Agent.from(app);
@@ -16,17 +17,16 @@ Deno.test("GET /api/channels - unauthorized", async () => {
 
 
 Deno.test("GET /api/users - getAllUsers", async () => {
-  await ensureUser("admin", {name: "Admin"});
-  await ensureUser("member", {name: "Member"});
+  await ensureUser(repo, "admin", {name: "Admin"});
+  await ensureUser(repo, "member", {name: "Member"});
   await Agent.test(app, {type: 'handler'}, async (agent) => {
-    const {token} = await login(agent, "admin");
+    const {token} = await login(repo, agent, "admin");
     const res = await agent.request()
       .get("/api/users")
       .header("Authorization", `Bearer ${token}`)
       .expect(200);
     const body = await res.json();
-    assertEquals(body.length, 2);
-    assertEquals(body.map((u: User) => u.name).sort(), ["Admin", "Member"].sort());
+    assertEquals(body.map((u: User) => u.name).sort(), ["Admin", "Member", "System"].sort());
     assert(body[0].password === undefined);
     assert(body[1].password === undefined);
   }) 

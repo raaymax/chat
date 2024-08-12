@@ -1,16 +1,17 @@
 Deno.env.set("ENV_TYPE", "test");
 import { Agent } from "@planigale/testing";
-import app from "../../../mod.ts";
 import { login, usingChannel } from "../../__tests__/mod.ts";
 import { ObjectId } from "mongodb";
 import { EntityId } from "../../../../../types.ts";
+import { createApp } from "../../__tests__/app.ts";
+const { app, repo, core } = createApp();
 
 const validId = new ObjectId().toHexString();
 
 Deno.test("Check all validations for message field", async (t) => {
   const agent = await Agent.from(app);
-  const { token, userId } = await login(agent);
-  await usingChannel({
+  const { token, userId } = await login(repo, agent);
+  await usingChannel(repo, {
     name: "messages-formating-check",
     users: [EntityId.from(userId)],
   }, async (channelId) => {

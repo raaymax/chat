@@ -20,6 +20,7 @@ const loadStream = () => {
   const type = params.get('type') || 'archive';
 
   return {
+    id: 'main',
     type,
     channelId,
     ...(selected ? { selected } : {}),
@@ -51,7 +52,7 @@ export default createSlice({
       if (value) {
         return { ...state, [id]: { id, channelId: state.mainChannelId, ...value } };
       }
-      return { ...state, [id]: value };
+      return { ...state, [id]: {id, ...value} };
     },
 
     setMain: (state, action) => {

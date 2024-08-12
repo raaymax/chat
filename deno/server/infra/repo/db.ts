@@ -1,34 +1,75 @@
-import { Db, MongoClient } from "mongodb";
+import { Db, MongoClient, ReadPreference, WriteConcern, W, ReadConcern } from "mongodb";
 export { ObjectId } from "mongodb";
 
-let db: Db | undefined = undefined;
-let client: MongoClient | undefined = undefined;
-let databaseUrl: string;
+export class Database {
+  db: Db | undefined = undefined;
+  client: MongoClient | undefined = undefined;
+  databaseUrl: string;
+  promises: Promise<any>[] = [];
+  connected: boolean = false;
 
-export const init = (url: string) => {
-  databaseUrl = url;
-  client = new MongoClient(databaseUrl);
-  return client;
-};
-
-export const connect = async () => {
-  if (!databaseUrl) throw new Error("Database not initialized");
-  if (db && client) return { db, client };
-  try{ 
-  client = new MongoClient(databaseUrl);
-  await client.connect();
-  db = client.db();
-  return { db, client };
-  }catch(e){
-    console.error('tu', e);
-    throw e;
+  constructor(url: string) {
+    this.databaseUrl = url;
   }
-};
 
-export const disconnect = async () => {
-  if (client) {
-    await client.close();
-    db = undefined;
-    client = undefined;
+  init = (url: string) => {
+    this.databaseUrl = url;
+    this.client = new MongoClient(this.databaseUrl);
+    return this.client;
   }
-};
+
+  connect = async () => {
+    if (!this.databaseUrl) throw new Error("Database not initialized");
+    if (this.db && this.client) return {db: this.db, client: this.client};
+    try{ 
+      this.client = new MongoClient(this.databaseUrl);
+      await this.client.connect();
+      this.connected = true;
+      this.db = this.client.db();
+      return {db: this.db, client: this.client};
+    }catch(e){
+      console.error('tu', e);
+      throw e;
+    }
+  }
+
+  disconnect = async () => {
+    if (this.client) {
+      await Promise.all(this.promises);
+      if(this.connected) {
+        await this.client.close();
+        this.connected = false;
+      }
+      this.db = undefined;
+      this.client = undefined;
+    }
+  }
+
+  withTransaction = async <T>(fn: () => Promise<T>): Promise<T> => {
+    const {promise, resolve, reject } = Promise.withResolvers<T>();
+    promise.catch(()=>{}).then(() => {
+      const index = this.promises.indexOf(promise);
+      if (index !== -1) this.promises.splice(index, 1);
+    });
+    const {client} = await this.connect();
+    this.promises.push(promise);
+    const session = client.startSession();
+    const transactionOptions = {
+      readPreference: ReadPreference.PRIMARY,
+      readConcern: ReadConcern.SNAPSHOT,
+      writeConcern: { w: 'majority' as W },
+    };
+
+    try {
+      await session.withTransaction(async () => {
+        return resolve(await fn());
+      }, transactionOptions);
+      return promise;
+    } catch (error) {
+      reject(error);
+      return promise;
+    } finally {
+      session.endSession();
+    }
+  }
+}

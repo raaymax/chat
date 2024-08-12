@@ -1,4 +1,3 @@
-import { repo } from "../../infra/mod.ts";
 import { Id } from "../types.ts";
 import { createQuery } from "../query.ts";
 import * as v from "valibot";
@@ -9,6 +8,6 @@ export default createQuery({
     id: v.optional(Id),
     token: v.optional(v.string()),
   }),
-}, async (query) => {
+}, async (query, {repo}) => {
   return await repo.session.get(query);
 });

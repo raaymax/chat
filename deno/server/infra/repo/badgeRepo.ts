@@ -2,7 +2,7 @@ import { Badge } from "../../types.ts";
 import { Repo } from "./repo.ts";
 
 type BadgeQuery = Partial<Badge>;
-class BadgeRepo extends Repo<BadgeQuery, Badge> {
+export class BadgeRepo extends Repo<BadgeQuery, Badge> {
   COLLECTION = "badges";
 
   increment(where: BadgeQuery): void {
@@ -14,4 +14,3 @@ class BadgeRepo extends Repo<BadgeQuery, Badge> {
   }
 }
 
-export const badge = new BadgeRepo();

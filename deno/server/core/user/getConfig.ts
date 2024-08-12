@@ -1,4 +1,3 @@
-import { repo } from "../../infra/mod.ts";
 import * as v from "valibot";
 import { createQuery } from "../query.ts";
 import { Id } from "../types.ts";
@@ -11,7 +10,7 @@ export default createQuery({
   body: v.object({
     id: Id,
   }),
-}, async (query) => {
+}, async (query, {repo}) => {
   const user = await repo.user.get(query);
   if (!user) {
     throw new ResourceNotFound("User not found");

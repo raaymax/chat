@@ -110,8 +110,8 @@ export type MessageBodyThread = {
   thread: { channelId: string; parentId: string; text: string };
 };
 
-export type MessageBodyPart =
-  | MessageBodyBullet
+export type MessageBodyPart = 
+  MessageBodyBullet
   | MessageBodyOrdered
   | MessageBodyItem
   | MessageBodyCodeblock
@@ -176,7 +176,7 @@ export type Message = {
   createdAt: Date;
 };
 
-export const vMessageBody: any = v.array(v.union([
+export const vMessageBodyPart: v.GenericSchema<MessageBodyPart> = v.union([
   v.object({ bullet: v.lazy(() => vMessageBody) }),
   v.object({ ordered: v.lazy(() => vMessageBody) }),
   v.object({ item: v.lazy(() => vMessageBody) }),
@@ -204,14 +204,30 @@ export const vMessageBody: any = v.array(v.union([
       text: v.string(),
     }),
   }),
-]));
+]);
+
+export const vMessageBody: v.GenericSchema<MessageBody> = v.union([
+  v.array(vMessageBodyPart),
+  vMessageBodyPart,
+]);
+
+
+export type ReplaceType<T, R, W> = T extends R ? W : (
+  T extends object ? {
+    [K in keyof T]: ReplaceType<T[K], R, W>;
+  } : (
+    T extends any[] ? ReplaceType<T[number], R, W>[] : T
+  )
+); 
 
 export const Id = v.pipe(
   v.string(),
   v.transform((i: string) => EntityId.from(i)),
 );
 
-export const vMessage = v.object({
+
+/*
+export const vMessage: v.GenericSchema<Message, ReplaceType<Partial<Message>, EntityId, string>> = v.object({
   flat: v.string(),
   message: vMessageBody,
   channelId: Id,
@@ -228,3 +244,4 @@ export const vMessage = v.object({
     contentType: v.optional(v.string(), "application/octet-stream"),
   })),
 });
+*/

@@ -5,7 +5,7 @@ import { Repo } from "./repo.ts";
 type DbUser = User & { mainChannelId: EntityId };
 
 type UserQuery = Partial<DbUser & { userId: EntityId }>;
-class UserRepo extends Repo<UserQuery, DbUser> {
+export class UserRepo extends Repo<UserQuery, DbUser> {
   COLLECTION = "users";
 
   makeQuery(data: UserQuery) {
@@ -17,4 +17,3 @@ class UserRepo extends Repo<UserQuery, DbUser> {
   }
 }
 
-export const user = new UserRepo();

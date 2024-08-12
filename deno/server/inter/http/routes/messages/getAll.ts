@@ -10,17 +10,19 @@ export default (core: Core) =>
         type: "object",
         required: ["channelId"],
         properties: {
-          channelId: { type: "string" },
-          parentId: { type: "string" },
+          channelId: { type: "string", format: "entity-id" },
+          parentId: { type: "string", format: "entity-id"},
         },
       },
       query: {
         type: "object",
         properties: {
-          pinned: { type: "string" },
+          pinned: { type: "boolean" },
           before: { type: "string" },
           after: { type: "string" },
           limit: { type: "number" },
+          offset: { type: "number" },
+          order: { type: "string", enum: ["asc", "desc"] },
         },
       }
     },
@@ -34,6 +36,10 @@ export default (core: Core) =>
           before: req.query.before,
           after: req.query.after,
           limit: req.query.limit,
+          offset: req.query.offset,
+          order: req.query.order ? (
+            req.query.order === "asc" ? 1 : -1
+          ) : undefined,
         }
       });
       return Res.json(messages);

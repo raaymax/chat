@@ -50,7 +50,7 @@ export function createCommand<
     handler: async (rawbody: v.InferInput<U>, core: Core) => {
       try {
         const body = v.parse(def.body, rawbody);
-        const ret = await fn(body, core);
+        const ret = await core.repo.db.withTransaction(() => fn(body, core));
         const r = serialize(ret);
         //console.log(`[COMMAND: ${def.type}] Ret: `, r)
         return r;
@@ -83,23 +83,4 @@ export type EventFrom<T> = T extends Command<infer T, infer U>
   ? { type: T; body: v.InferInput<U> }
   : never;
 
-const Ev1 = createCommand({
-  type: "ev1",
-  body: v.string(),
-}, async (_a: string): Promise<void> => {
-});
 
-const Ev2 = createCommand({
-  type: "ev2",
-  body: v.number(),
-}, async (_a: number): Promise<void> => {
-});
-const collection = buildCommandCollection([Ev1, Ev2]);
-
-type Event = EventFrom<typeof collection[keyof typeof collection]>;
-
-const dispatch = (event: Event) => {
-  return (collection[event.type] as any).handler(event.body);
-};
-
-dispatch({ type: "ev1", body: "asd" });

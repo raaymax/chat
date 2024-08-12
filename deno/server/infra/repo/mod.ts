@@ -1,13 +1,47 @@
-import { init } from "./db.ts";
+import { Config } from "@quack/config";
+import { Database } from "./db.ts";
+import { UserRepo } from "./userRepo.ts";
+import { SessionRepo } from "./sessionRepo.ts";
+import { ChannelRepo } from "./channelRepo.ts";
+import { MessageRepo } from "./messageRepo.ts";
+import { InvitationRepo } from "./invitationRepo.ts";
+import { EmojiRepo } from "./emojiRepo.ts";
+import { BadgeRepo } from "./badgeRepo.ts";
 
-export { user } from "./userRepo.ts";
-export { session } from "./sessionRepo.ts";
-export { channel } from "./channelRepo.ts";
-export { message } from "./messageRepo.ts";
-export { invitation } from "./invitationRepo.ts";
-export { emoji } from "./emojiRepo.ts";
-export { badge } from "./badgeRepo.ts";
-export { connect, disconnect, init, ObjectId } from "./db.ts";
+export { UserRepo} from "./userRepo.ts";
+export { SessionRepo} from "./sessionRepo.ts";
+export { ChannelRepo} from "./channelRepo.ts";
+export { MessageRepo} from "./messageRepo.ts";
+export { InvitationRepo} from "./invitationRepo.ts";
+export { EmojiRepo} from "./emojiRepo.ts";
+export { BadgeRepo} from "./badgeRepo.ts";
+export { ObjectId, Database } from "./db.ts";
 
-const databaseUrl = Deno.env.get("DATABASE_URL") ?? "mongodb://chat:chat@localhost:27017/tests?authSource=admin";
-init(databaseUrl);
+export class Repository {
+  db: Database;
+  user: UserRepo;
+  session: SessionRepo;
+  channel: ChannelRepo;
+  message: MessageRepo;
+  invitation: InvitationRepo;
+  emoji: EmojiRepo;
+  badge: BadgeRepo;
+
+  constructor(config: Config) {
+    const databaseUrl = config.databaseUrl ?? Deno.env.get("DATABASE_URL") ?? "mongodb://chat:chat@localhost:27017/tests?authSource=admin";
+    const db = new Database(databaseUrl);
+    this.user= new UserRepo(db);
+    this.session= new SessionRepo(db);
+    this.channel= new ChannelRepo(db);
+    this.message= new MessageRepo(db);
+    this.invitation= new InvitationRepo(db);
+    this.emoji= new EmojiRepo(db);
+    this.badge= new BadgeRepo(db);
+    this.db = db;
+  }
+
+  async close() {
+    await this.db.disconnect();
+  }
+}
+

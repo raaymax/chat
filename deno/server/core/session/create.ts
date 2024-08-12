@@ -1,6 +1,5 @@
 import * as v from "valibot";
 import { createCommand } from "../command.ts";
-import { repo } from "../../infra/mod.ts";
 import { hash, verify } from "@ts-rex/bcrypt";
 
 export default createCommand({
@@ -9,7 +8,7 @@ export default createCommand({
     login: v.string(),
     password: v.string(),
   }),
-}, async ({ login, password }, core) => {
+}, async ({ login, password }, {repo}) => {
   const user = await repo.user.get({ login });
   if (!user) return null;
   if (!verify(password, user.password)) return null;

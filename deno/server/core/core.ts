@@ -13,9 +13,11 @@ import GetAllUsers from "./user/getAll.ts";
 import GetAllMessages from "./message/getAll.ts";
 import GetMessage from "./message/get.ts";
 import RemoveMessage from "./message/remove.ts";
-import { repo, storage } from "../infra/mod.ts";
+import UpdateMessage from "./message/update.ts";
+import { storage, Repository } from "../infra/mod.ts";
 import { buildCommandCollection, EventFrom } from "./command.ts";
 import { bus } from "./bus.ts";
+import * as v from 'valibot';
 
 const commands = buildCommandCollection([
   CreateMessage,
@@ -23,39 +25,44 @@ const commands = buildCommandCollection([
   CreateSession,
   CreateChannel,
   RemoveChannel,
+  UpdateMessage,
 ]);
+
 
 export class Core {
   storage = storage.initStorage(config);
+  repo: Repository;
 
   channel = {
-    get: GetChannel,
-    getAll: GetAllChannels,
-  };
-
-  session = {
-    get: GetSession,
-  };
-
-  user = {
-    get: GetUser,
-    getAll: GetAllUsers,
-    getConfig: GetUserConfig,
-  };
-
-  message = {
-    getAll: GetAllMessages,
-    get: GetMessage,
-    remove: RemoveMessage,
+    get: GetChannel(this),
+    getAll: GetAllChannels(this),
   }
 
-  constructor(public repository: typeof repo = repo) {}
+  session = {
+    get: GetSession(this),
+  }
+
+  user = {
+    get: GetUser(this),
+    getAll: GetAllUsers(this),
+    getConfig: GetUserConfig(this),
+  }
+
+  message = {
+    getAll: GetAllMessages(this),
+    get: GetMessage(this),
+    remove: RemoveMessage(this),
+  }
+
+  constructor(repo: Repository = new Repository(config)) {
+    this.repo = repo;
+  }
   dispatch = async (evt: EventFrom<typeof commands[keyof typeof commands]>) => {
     // deno-lint-ignore no-explicit-any
-    return await (commands[evt.type] as any).handler(evt.body);
+    return await (commands[evt.type] as any).handler(evt.body, this);
   };
 
   bus = bus;
 
-  close = async () => this.repository.disconnect();
+  close = async () => await this.repo.close();
 }

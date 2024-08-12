@@ -10,7 +10,7 @@ export default (core: Core) =>
         type: "object",
         required: ["channelId"],
         properties: {
-          channelId: { type: "string" },
+          channelId: { type: "string", format: "entity-id"},
         },
       },
       body: {
@@ -18,7 +18,7 @@ export default (core: Core) =>
         required: ["message", "clientId", "flat"],
         properties: {
           message: { $ref: "message#/definitions/body" },
-          parentId: { type: "string" },
+          parentId: { type: "string", format: "entity-id"},
           flat: { type: "string" },
           clientId: { type: "string" },
           emojiOnly: { type: "boolean" },

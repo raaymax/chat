@@ -1,4 +1,4 @@
-import { connect, ObjectId } from "./db.ts";
+import { ObjectId } from "./db.ts";
 import { deserialize, serialize } from "./serializer.ts";
 import { EntityId, Message } from "../../types.ts";
 import { Repo } from "./repo.ts";
@@ -17,7 +17,7 @@ type MessageQuery = Partial<
   }
 >;
 
-class MessageRepo extends Repo<MessageQuery, Message> {
+export class MessageRepo extends Repo<MessageQuery, Message> {
   COLLECTION = "messages";
 
   makeQuery(data: MessageQuery) {
@@ -34,7 +34,7 @@ class MessageRepo extends Repo<MessageQuery, Message> {
     arg: MessageQuery,
     { limit = 50, offset = 0, order = 1 }: Pagination = {},
   ) {
-    const { db } = await connect();
+    const { db } = await this.connect();
     const query = this.makeQuery(arg);
 
     const raw = await db
@@ -51,7 +51,7 @@ class MessageRepo extends Repo<MessageQuery, Message> {
   async updateThread(
     arg: { parentId: EntityId; userId: EntityId; id: EntityId },
   ) {
-    const { db } = await connect();
+    const { db } = await this.connect();
     const data = serialize(arg);
     return db
       .collection<{ thread: { userId: ObjectId; childId: ObjectId }[] }>(
@@ -73,4 +73,3 @@ class MessageRepo extends Repo<MessageQuery, Message> {
   }
 }
 
-export const message = new MessageRepo();

@@ -1,8 +1,9 @@
 Deno.env.set("ENV_TYPE", "test");
 import { assert, assertEquals } from "@std/assert";
 import { Agent } from "@planigale/testing";
-import app from "../../../mod.ts";
-import core from "../../../../../core/mod.ts";
+import { createApp } from "../../__tests__/app.ts";
+
+const { app, core } = createApp();
 
 Deno.test("GET /auth/session - No session", async () => {
   const request = new Request("http://localhost/api/auth/session");

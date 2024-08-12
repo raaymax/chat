@@ -2301,6 +2301,7 @@
   "workspace": {
     "dependencies": [
       "jsr:@std/assert@^1.0.1",
+      "npm:mongodb@^6.8.0",
       "npm:valibot@^0.36.0"
     ],
     "packageJson": {
@@ -2364,6 +2365,7 @@
       "packages/app": {
         "packageJson": {
           "dependencies": [
+            "npm:@jsr/planigale__sse@0.2.1",
             "npm:@quack/config",
             "npm:@quack/rpc",
             "npm:@reduxjs/toolkit@2.2.3",
@@ -2371,6 +2373,7 @@
             "npm:@types/react@^18.2.48",
             "npm:@types/serviceworker@0.0.85",
             "npm:@types/workbox-sw@4.3.7",
+            "npm:@vitejs/plugin-basic-ssl@1.1.0",
             "npm:@vitejs/plugin-react@^4.2.1",
             "npm:eslint-plugin-react-hooks@^4.6.0",
             "npm:eslint-plugin-react-refresh@^0.4.5",
@@ -2384,6 +2387,7 @@
             "npm:socket.io-client@4.7.2",
             "npm:styled-components@6.1.1",
             "npm:typescript@5.4.5",
+            "npm:vite-plugin-http2-proxy@0.4.3",
             "npm:vite-plugin-pwa@0.17.4",
             "npm:vite@^5.0.12",
             "npm:workbox-navigation-preload@7.0.0",

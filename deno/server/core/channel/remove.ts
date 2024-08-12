@@ -1,5 +1,4 @@
 import * as v from "valibot";
-import { repo } from "../../infra/mod.ts";
 import { createCommand } from "../command.ts";
 import { Id } from "../types.ts";
 
@@ -9,6 +8,6 @@ export default createCommand({
     channelId: Id,
     userId: Id,
   }),
-}, async ({ channelId, userId }) => {
+}, async ({ channelId, userId }, {repo}) => {
   await repo.channel.remove({ id: channelId, userId });
 });

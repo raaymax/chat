@@ -1,10 +1,10 @@
 import { Agent } from "@planigale/testing";
 import { ensureUser } from "./users.ts";
-import { repo } from "../../../../infra/mod.ts";
+import { Repository } from "../../../../infra/mod.ts";
 
-export async function login(agent: Agent, login = "admin") {
+export async function login(repo: Repository, agent: Agent, login = "admin") {
   //console.log(await repo.user.removeMany({}));
-  await ensureUser(login);
+  await ensureUser(repo, login);
   const res = await agent.request()
     .post("/api/auth/session")
     .json({

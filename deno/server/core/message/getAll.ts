@@ -1,5 +1,3 @@
-
-import { repo } from "../../infra/mod.ts";
 import { Id } from "../types.ts";
 import { createQuery } from "../query.ts";
 import * as v from "valibot";
@@ -16,9 +14,11 @@ export default createQuery({
       before: v.optional(v.pipe(v.string(), v.transform((v) => new Date(v)))),
       after: v.optional(v.pipe(v.string(), v.transform((v) => new Date(v)))),
       limit: v.optional(v.number()),
+      offset: v.optional(v.number()),
+      order: v.optional(v.union([v.literal(1), v.literal(-1)])),
     })
   })),
-}, async ({userId, query: msg}) => {
+}, async ({userId, query: msg}, {repo}) => {
     const { channelId, parentId } = msg;
 
     if (!channelId) throw new ResourceNotFound("Channel not found");
@@ -33,7 +33,7 @@ export default createQuery({
       before: msg.before,
       after: msg.after,
       ...(msg.pinned ? { pinned: msg.pinned } : {}),
-    }, { limit: msg.limit, order: msg.after ? 1 : -1 });
+    }, {offset: msg.offset, limit: msg.limit, order: msg.order ?? (msg.after ? 1 : -1) });
 
     if (msg.after) msgs.reverse();
     

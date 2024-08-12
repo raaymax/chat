@@ -18,17 +18,17 @@ export const download = async (storage: Storage) =>
       query: {
         type: "object",
         properties: {
-          width: {
+          w: {
             type: "number",
           },
-          height: {
+          h: {
             type: "number",
           },
         },
       },
     },
     handler: async (req) => {
-      const file = await storage.get(req.params.fileId, req.query);
+      const file = await storage.get(req.params.fileId, {width: req.query.w, height: req.query.h});
       const res = new Res();
       res.body = file.stream;
       res.headers.set("Content-Type", file.contentType);

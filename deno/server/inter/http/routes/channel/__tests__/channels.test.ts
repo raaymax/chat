@@ -1,11 +1,13 @@
 import { assert, assertEquals } from "@std/assert";
 import { Agent } from "@planigale/testing";
-import app from "../../../mod.ts";
 import { login } from "../../__tests__/mod.ts";
-import { repo } from "../../../../../infra/mod.ts";
-import { ChannelType } from "../../../../../types.ts";
+import { ObjectId } from "../../../../../infra/mod.ts";
+import { ChannelType, EntityId } from "../../../../../types.ts";
+import { createApp } from "../../__tests__/app.ts";
+
 
 Deno.test("/api/channels/* - unauthorized", async () => {
+  const { app, repo, core } = createApp();
   const agent = await Agent.from(app);
   try {
     await agent.request().post("/api/channels").emptyBody().expect(401);
@@ -18,8 +20,9 @@ Deno.test("/api/channels/* - unauthorized", async () => {
 });
 
 Deno.test("/api/channels - create/get/getAll/delete channel", async () => {
+  const { app, repo, core } = createApp();
   const agent = await Agent.from(app);
-  const { token, userId } = await login(agent);
+  const { token, userId } = await login(repo, agent);
   try {
     const res = await agent.request()
       .post("/api/channels")
@@ -30,17 +33,17 @@ Deno.test("/api/channels - create/get/getAll/delete channel", async () => {
       .expect(200);
 
     const body = await res.json();
-    const channelId = body.id;
+    const channelId: string = body.id;
 
-    const { db } = await repo.connect();
+    const { db } = await repo.db.connect();
     const channel = await db.collection("channels").findOne({
-      _id: new repo.ObjectId(channelId),
+      _id: new ObjectId(channelId),
     });
     assert(channel);
     assertEquals(channel.name, "test");
     assertEquals(channel.private, false);
     assertEquals(channel.direct, false);
-    assertEquals(channel.users.map((u: repo.ObjectId) => u.toHexString()), [
+    assertEquals(channel.users.map((u: ObjectId) => u.toHexString()), [
       userId,
     ]);
     assertEquals(channel.channelType, "PUBLIC");
@@ -76,9 +79,10 @@ Deno.test("/api/channels - create/get/getAll/delete channel", async () => {
 });
 
 Deno.test("/api/channels - server sent events", async () => {
+  const { app, repo, core } = createApp();
   const agent = await Agent.from(app);
-  const { token } = await login(agent);
-  const { token: memberToken, userId } = await login(agent, "member");
+  const { token } = await login(repo, agent);
+  const { token: memberToken, userId } = await login(repo, agent, "member");
   await repo.channel.removeMany({
     name: "test",
     channelType: ChannelType.PUBLIC,

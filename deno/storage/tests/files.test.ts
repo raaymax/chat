@@ -119,7 +119,7 @@ for (const config of configs) {
     await t.step("GET /:id - get image scaled", async () => {
       const agent = await Agent.from(app);
       const res = await agent.request()
-        .get(`/${fileId}?width=10&height=10`)
+        .get(`/${fileId}?w=10&h=10`)
         .expect(200);
       const file = await Deno.readFile(testImagePath);
       const body = await res.arrayBuffer();

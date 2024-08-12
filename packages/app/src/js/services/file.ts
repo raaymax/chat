@@ -3,7 +3,7 @@ import { createMethod } from '../store';
 
 const tempId = createCounter(`file:${(Math.random() + 1).toString(36)}`);
 
-const FILES_URL = `${API_URL}/files`;
+const FILES_URL = `${API_URL}/api/files`;
 
 type FilesUpload = {
   streamId: string;
@@ -16,6 +16,7 @@ type FileUpload = {
 };
 
 export const uploadMany = createMethod('files/uploadMany', async ({ streamId, files }: FilesUpload, { dispatch }) => {
+  console.log('uploading many files', streamId, files);
   for (let i = 0, file; i < files.length; i++) {
     file = files.item(i);
     // eslint-disable-next-line no-continue
@@ -27,6 +28,7 @@ export const uploadMany = createMethod('files/uploadMany', async ({ streamId, fi
 const isError = (err: unknown): err is Error => err instanceof Error;
 
 export const upload = createMethod('files/upload', async ({ streamId, file }: FileUpload, { dispatch, actions }) => {
+  console.log('uploading file', file.name, file.size, file.type)
   const local = {
     streamId,
     clientId: tempId(),
@@ -39,13 +41,16 @@ export const upload = createMethod('files/upload', async ({ streamId, file }: Fi
   dispatch(actions.files.add(local));
 
   try {
-    const { status, fileId } = await uploadFile(FILES_URL, {
-      file,
-      clientId: local.clientId,
-      progress: (progress) => {
+    const { status, id: fileId } = await uploadFile({
+      stream: file.stream(),
+      fileSize: file.size,
+      fileName: file.name,
+      contentType: file.type,
+      onProgress: (progress) => {
         dispatch(actions.files.update({ id: local.clientId, file: { progress } }));
       },
     });
+
     if (status === 'ok') {
       dispatch(actions.files.update({ id: local.clientId, file: { id: fileId, progress: 100, status: 'ok' } }));
     } else {
@@ -87,33 +92,44 @@ export const abort = createMethod('files/abort', async (clientId: string, { disp
 });
 
 type UploadArgs = {
-  file: File;
-  clientId: string;
-  progress: (progress: number) => void;
+  stream: ReadableStream,
+  fileSize: number,
+  fileName: string,
+  contentType: string,
+  onProgress: (percentage: number) => void,
 };
 
 type UploadResponse = {
   status: string;
-  fileId: string;
+  id: string;
 };
-function uploadFile(url: string, { file, progress, clientId }: UploadArgs): Promise<UploadResponse> {
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.addEventListener('load', () => {
-      const data = JSON.parse(xhr.responseText);
-      resolve(data);
-    }, { once: true });
-    xhr.upload.addEventListener('progress', (e) => {
-      if (e.lengthComputable) {
-        progress((e.loaded / e.total) * 100);
-      }
-    });
-    xhr.addEventListener('error', (e) => reject(e), { once: true });
-    xhr.open('POST', url, true);
 
-    const formData = new FormData();
-    formData.append('file', file);
-    aborts[clientId] = () => xhr.abort();
-    xhr.send(formData);
+async function uploadFile(args: UploadArgs): Promise<UploadResponse> {
+  let uploadedSize = 0;
+  const blobStream = args.stream.pipeThrough(
+    new TransformStream({
+      async transform(chunk, controller) {
+        uploadedSize += chunk.length;
+        console.log('uploadedSize', uploadedSize)
+        args.onProgress?.(uploadedSize / args.fileSize * 100);
+        controller.enqueue(chunk);
+      },
+    }),
+  );
+  const res = await fetch(FILES_URL, {
+    method: "POST",
+    get duplex() {
+      console.log('duplex')
+      return 'half';
+    },
+    headers: {
+      "Authorization": `Bearer ${localStorage.token}`,
+      "Content-Type": args.contentType || "application/octet-stream",
+      "Content-Length": args.fileSize.toString(),
+      "Content-Disposition": `attachment; filename="${args.fileName}"`,
+    },
+    body: blobStream,
   });
+
+  return await res.json();
 }

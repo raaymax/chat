@@ -1,7 +1,8 @@
 import { Channel, EntityId } from "../../../../types.ts";
-import { repo } from "../../../../infra/mod.ts";
+import { Repository } from "../../../../infra/mod.ts";
 
 export const usingChannel = async (
+  repo: Repository,
   channel: Partial<Channel>,
   fn: (channelId: string) => Promise<void>,
 ) => {

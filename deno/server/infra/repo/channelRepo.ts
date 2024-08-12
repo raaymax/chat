@@ -3,7 +3,7 @@ import { Channel, EntityId } from "../../types.ts";
 import { Repo } from "./repo.ts";
 
 type ChannelQuery = Partial<Channel & { userId: EntityId }>;
-class ChannelRepo extends Repo<ChannelQuery, Channel> {
+export class ChannelRepo extends Repo<ChannelQuery, Channel> {
   COLLECTION = "channels";
 
   makeQuery(data: ChannelQuery) {
@@ -15,4 +15,3 @@ class ChannelRepo extends Repo<ChannelQuery, Channel> {
   }
 }
 
-export const channel = new ChannelRepo();

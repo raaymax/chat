@@ -1,6 +1,5 @@
 import * as v from "valibot";
 import { createCommand } from "../command.ts";
-import { repo } from "../../infra/mod.ts";
 import { Id, IdArr } from "../types.ts";
 import { bus } from "../bus.ts";
 
@@ -21,7 +20,7 @@ export default createCommand({
     }),
     ["userId", "name"],
   ),
-}, async (channel) => {
+}, async (channel, {repo}) => {
   const { channelType, userId, users, name } = channel;
   if (channelType === "PUBLIC" || channelType === "PRIVATE") {
     const existing = await repo.channel.get({ channelType, name, userId });

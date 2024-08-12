@@ -11,9 +11,11 @@
     "types": "tsc --noEmit"
   },
   "dependencies": {
+    "@planigale/sse": "npm:@jsr/planigale__sse@0.2.1",
     "@quack/config": "*",
     "@quack/rpc": "*",
     "@reduxjs/toolkit": "2.2.3",
+    "@vitejs/plugin-basic-ssl": "1.1.0",
     "fuse.js": "7.0.0",
     "prop-types": "15.8.1",
     "react": "18.2.0",
@@ -22,6 +24,7 @@
     "socket.io-client": "4.7.2",
     "styled-components": "6.1.1",
     "typescript": "5.4.5",
+    "vite-plugin-http2-proxy": "0.4.3",
     "workbox-navigation-preload": "7.0.0",
     "workbox-precaching": "7.0.0",
     "workbox-routing": "7.0.0",
