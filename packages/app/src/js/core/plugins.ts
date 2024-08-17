@@ -1,7 +1,6 @@
 import { client } from './client';
 
 declare global {
-  const PLUGIN_LIST: string[] | undefined;
   interface Window {
     Chat: any;
   }
@@ -22,12 +21,5 @@ const plugins = {
 
 window.Chat = plugins;
 
-if (PLUGIN_LIST) {
-  PLUGIN_LIST.forEach((plugin) => {
-    document.head.appendChild(Object.assign(document.createElement('script'), {
-      src: `/plugins/${plugin}/plugin.js`,
-    }));
-  });
-}
 
 export default plugins;

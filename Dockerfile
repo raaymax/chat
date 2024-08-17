@@ -1,50 +1,34 @@
-FROM node:20-alpine3.18 AS appbuild
-RUN npm i -g pnpm
-RUN npm i -g turbo 
+FROM node:20-alpine3.20 as build
+RUN mkdir -p /app
+WORKDIR /app
+COPY ./package.json ./package.json
+COPY ./package-lock.json ./package-lock.json
+COPY ./packages/app/package.json ./packages/app/package.json
+RUN npm install
+COPY ./packages/app ./packages/app
+
+ENV APP_VERSION=1.0.0
+ENV APP_NAME=quack
+
+RUN npm run build
+
+
+
+FROM denoland/deno:alpine-1.45.4
 RUN apk -U upgrade
 run apk add vips-cpp build-base vips vips-dev
 ENV ENVIRONMENT=production
-WORKDIR /usr/src/app
-COPY package*.json ./
-COPY pnpm-*.yaml ./
-COPY packages/server/package*.json ./packages/server/
-COPY packages/app/package*.json ./packages/app/
-COPY packages/rpc/package*.json ./packages/rpc/
-COPY packages/storage/package*.json ./packages/storage/
-COPY ./config ./config
-COPY ./packages/app ./packages/app
-COPY ./packages/rpc ./packages/rpc
-COPY ./packages/repo ./packages/repo
-COPY ./packages/storage ./packages/storage
-RUN pnpm i
-COPY chat.config.js ./
-COPY turbo.json ./
-RUN turbo build
+run mkdir -p /app
+WORKDIR /app
+COPY ./deno ./deno
+COPY ./deno.* ./
+COPY ./entrypoint.sh ./entrypoint.sh
+COPY --from=build /app/packages/app/dist /app/public
 
-FROM node:20-alpine3.18
-RUN npm i -g pnpm
-RUN apk -U upgrade
-run apk add vips-cpp build-base vips vips-dev
-ENV NODE_ENV=production
-WORKDIR /usr/src/app
-COPY package*.json ./
-COPY pnpm-*.yaml ./
-COPY packages/server/package*.json ./packages/server/
-COPY packages/app/package*.json ./packages/app/
-COPY ./config ./config
-COPY ./packages/rpc ./packages/rpc
-COPY ./packages/repo ./packages/repo
-COPY ./packages/storage ./packages/storage
-RUN pnpm i --prod
-COPY --from=appbuild /usr/src/app/packages/app/dist ./packages/app/dist
-COPY --from=appbuild /usr/src/app/packages/rpc/dist ./packages/rpc/dist
-COPY --from=appbuild /usr/src/app/packages/repo/dist ./packages/repo/dist
-COPY --from=appbuild /usr/src/app/packages/storage/dist ./packages/storage/dist
-COPY ./packages/server/src ./packages/server/src
-COPY ./migrations ./migrations
-COPY ./entrypoint.sh ./
-COPY migrate-mongo-config.js ./
-COPY chat.config.js ./
+ENV APP_VERSION=1.0.0
+ENV PUBLIC_DIR=/app/public
+ENV PORT=8080
 
+RUN chmod +x ./entrypoint.sh
 EXPOSE 8080
 CMD sh ./entrypoint.sh

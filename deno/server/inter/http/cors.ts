@@ -5,11 +5,12 @@ export const allowCors = (app: Planigale) => {
     try {
       const a = await next();
       const res = await Res.makeResponse(a);
-      res.headers.set("Access-Control-Allow-Origin", req.headers["origin"] || "*");
-      res.headers.set("Access-Control-Allow-Headers", req.headers["access-control-request-headers"] || "*");
-      res.headers.set("Access-Control-Allow-Methods", req.headers["access-control-request-method"] || "*");
-      res.headers.set("Access-Control-Allow-Credentials", "true");
-      return res;
+      const headers = new Headers(res.headers);
+      headers.set("Access-Control-Allow-Origin", req.headers["origin"] || "*");
+      headers.set("Access-Control-Allow-Headers", req.headers["access-control-request-headers"] || "*");
+      headers.set("Access-Control-Allow-Methods", req.headers["access-control-request-method"] || "*");
+      headers.set("Access-Control-Allow-Credentials", "true");
+      return new Response(res.body, { headers });
     } catch (e) {
       if (e instanceof ApiError) {
         e.headers["Access-Control-Allow-Origin"] = req.headers["origin"] || "*";

@@ -1,0 +1,39 @@
+{
+  "workspace": [
+    "./deno/server",
+    "./deno/storage",
+    "./deno/config"
+  ],
+  "imports": {
+    "@planigale/body-parser": "jsr:@planigale/body-parser",
+    "@planigale/planigale": "jsr:@planigale/planigale",
+    "@planigale/schema": "jsr:@planigale/schema",
+    "@planigale/sse": "jsr:@planigale/sse",
+    "@planigale/testing": "jsr:@planigale/testing",
+    "@std/assert": "jsr:@std/assert@^1.0.1",
+    "@std/path": "jsr:@std/path@^1.0.2",
+    "mongodb": "npm:mongodb@^6.8.0",
+    "valibot": "npm:valibot@^0.36.0"
+  },
+  //"scopes": {
+  //  "@planigale/": {
+  //    "@planigale/planigale": "../../Planigale/packages/planigale/mod.ts",
+  //    "@planigale/sse": "../../Planigale/packages/sse/mod.ts",
+  //    "@planigale/schema": "../../Planigale/packages/schema/mod.ts",
+  //    "@planigale/testing": "../../Planigale/packages/testing/mod.ts",
+  //    "@planigale/body-parser": "../../Planigale/packages/body-parser/mod.ts"
+  //  }
+  //},
+  "fmt": {
+    "include": [
+      "deno/**"
+    ]
+  },
+  "tasks": {
+    "start": "deno task -c ./deno/server/deno.jsonc start",
+    "build": "deno task -c ./packages/app/deno.jsonc build",
+    "test": "DATABASE_URL='mongodb://chat:chat@localhost:27017/tests?authSource=admin' deno test -A",
+    "ssl": "mkdir -p ssl && openssl req -x509 -newkey rsa:4096 -keyout ssl/key.pem -out ssl/cert.pem -days 365 -nodes -subj '/CN=localhost'",
+    "dev": "deno run --watch main.ts"
+  }
+}

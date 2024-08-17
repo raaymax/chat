@@ -100,6 +100,20 @@ async function loadConfig(): Promise<Config> {
   };
 }
 
+export const Config = {
+  from: async (path: string): Promise<Config> => {
+    const config = await importConfig(path);
+    if (config === null) {
+      throw new Error("No config file found");
+    }
+    return {
+      ...defaults,
+      ...secrets,
+      ...config,
+    };
+  }
+}
+
 async function importTestConfig(): Promise<Config> {
   let config;
   const configFiles = [
@@ -140,7 +154,10 @@ async function importConfig(file: string): Promise<Config | null> {
 
 async function importScript(file: string): Promise<Config | null> {
   try {
-    const { default: config } = await import(path.join("..", "..", file));
+    const absPath = path.isAbsolute(file)
+      ? file
+      : path.join("..", "..", file);
+    const { default: config } = await import(absPath);
     return config as Config;
   } catch {
     return null;

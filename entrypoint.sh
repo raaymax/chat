@@ -1,4 +1,4 @@
 #!/bin/sh
 . .envrc
-npx migrate-mongo up
-npm start
+deno task migrate
+deno task start

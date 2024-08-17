@@ -189,7 +189,54 @@ export class HttpTransport implements Transport {
         return await this.fetch(`/api/messages/${createRes.data[0].id}`, {method: 'GET'});
       }
       case 'message:getAll': {
-        return this.fetch(`/api/channels/${msg.channelId}/messages`, {seqId: msg.seqId, mapFn: (i: any) => ({type: 'message', ...i})});
+        const query: any = {};
+        if (msg.before) {
+          query.before = msg.before;
+        }
+        if (msg.after) {
+          query.after = msg.after;
+        }
+        if (msg.limit) {
+          query.limit = msg.limit;
+        }
+        if (msg.offset) {
+          query.offset = msg.offset;
+        }
+        if (msg.order) {
+          query.order = msg.order;
+        }
+        if (msg.search) {
+          query.search = msg.search;
+        }
+
+
+        const params = new URLSearchParams(query);
+        return this.fetch(`/api/channels/${msg.channelId}/messages?${params.toString()}`, {seqId: msg.seqId, mapFn: (i: any) => ({type: 'message', ...i})});
+      }
+      case 'message:pins': {
+        const query: any = {pinned: true};
+        if (msg.before) {
+          query.before = msg.before;
+        }
+        if (msg.after) {
+          query.after = msg.after;
+        }
+        if (msg.limit) {
+          query.limit = msg.limit;
+        }
+        if (msg.offset) {
+          query.offset = msg.offset;
+        }
+        if (msg.order) {
+          query.order = msg.order;
+        }
+        if (msg.search) {
+          query.search = msg.search;
+        }
+
+
+        const params = new URLSearchParams(query);
+        return this.fetch(`/api/channels/${msg.channelId}/messages?${params.toString()}`, {seqId: msg.seqId, mapFn: (i: any) => ({type: 'message', ...i})});
       }
       case 'message:remove': {
         return await this.fetch(`/api/messages/${msg.id}`, {

@@ -1,33 +1,24 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import { VitePWA } from 'vite-plugin-pwa';
-// eslint-disable-next-line import/no-relative-packages
-import basicSsl from '@vitejs/plugin-basic-ssl'
-import proxy from "vite-plugin-http2-proxy";
-import path from 'node:path';
+import { defineConfig } from 'npm:vite';
+import react from 'npm:@vitejs/plugin-react';
+import { VitePWA } from 'npm:vite-plugin-pwa';
+import { fileURLToPath } from 'node:url'
+import { build } from 'npm:vite'
+import { pluginDeno } from 'jsr:@deno-plc/vite-plugin-deno';
 
-const __dirname = new URL('.', import.meta.url).pathname;
-const sslPath = path.join(__dirname, '../../ssl/');
+const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
-export default defineConfig({
+const config = defineConfig({
+  root: __dirname,
+  configFile: false,
   define: {
-    APP_VERSION: JSON.stringify(process.env.APP_VERSION),
-    APP_NAME: JSON.stringify(process.env.APP_NAME),
-    API_URL: JSON.stringify('https://localhost:8008'),
+    APP_VERSION: JSON.stringify(Deno.env.get('APP_VERSION')),
+    APP_NAME: JSON.stringify(Deno.env.get('APP_NAME')),
+    API_URL: JSON.stringify('http://localhost:8008'),
   },
   plugins: [
     react(),
-    basicSsl({
-      name: 'test',
-      domains: ['localhost'],
-      certDir: sslPath,
-    }),
-    proxy({
-      "^/api/": {
-        target: "http://localhost:8008",
-      },
-    }),
+    await pluginDeno({}),
     VitePWA({
       injectRegister: 'auto',
       strategies: 'injectManifest',
@@ -74,3 +65,5 @@ export default defineConfig({
     })
   ],
 });
+
+await build(config)

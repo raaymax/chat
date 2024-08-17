@@ -4,12 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "workspaces": [
-    "packages/app",
-    "packages/server",
-    "packages/repo",
-    "packages/rpc",
-    "packages/storage",
-    "config"
+    "packages/app"
   ],
   "engines": {
     "node": "20.x.x",
@@ -19,7 +14,7 @@
     "migrate": "migrate-mongo up",
     "migrate:tests": "DATABASE_URL='mongodb://chat:chat@localhost:27017/tests?authSource=admin' npm run migrate",
     "start": "migrate-mongo up && npm run -w=@quack/server start ",
-    "build": "npm run -w=@quack/rpc -w=@quack/app -w=@quack/repo build",
+    "build": "npm run -w=@quack/app build",
     "dev:web": "npm run -w=@quack/app dev",
     "dev:srv": "npm run -w=@quack/server dev",
     "dev": "run-p dev:srv dev:web",

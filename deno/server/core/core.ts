@@ -1,4 +1,3 @@
-import config from "@quack/config";
 import RemoveSession from "./session/remove.ts";
 import CreateSession from "./session/create.ts";
 import CreateChannel from "./channel/create.ts";
@@ -17,7 +16,7 @@ import UpdateMessage from "./message/update.ts";
 import { storage, Repository } from "../infra/mod.ts";
 import { buildCommandCollection, EventFrom } from "./command.ts";
 import { bus } from "./bus.ts";
-import * as v from 'valibot';
+import { Config } from '@quack/config';
 
 const commands = buildCommandCollection([
   CreateMessage,
@@ -30,7 +29,7 @@ const commands = buildCommandCollection([
 
 
 export class Core {
-  storage = storage.initStorage(config);
+  storage: storage.Storage;
   repo: Repository;
 
   channel = {
@@ -54,8 +53,13 @@ export class Core {
     remove: RemoveMessage(this),
   }
 
-  constructor(repo: Repository = new Repository(config)) {
-    this.repo = repo;
+  constructor(arg: {
+    config: Config,
+    repo?: Repository,
+    fileStorage?: storage.Storage,
+  }) {
+    this.repo = arg.repo ?? new Repository(arg.config);
+    this.storage = arg.fileStorage ?? storage.initStorage(arg.config);
   }
   dispatch = async (evt: EventFrom<typeof commands[keyof typeof commands]>) => {
     // deno-lint-ignore no-explicit-any

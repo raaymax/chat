@@ -5,8 +5,6 @@ declare global {
   const API_URL: string;
 }
 
-
-
 export class ClientOld extends WebSocketTransport {
   get token(): string {
     return localStorage.token
