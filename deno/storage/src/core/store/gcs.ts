@@ -139,7 +139,12 @@ class Gcs {
       contentType: metadata.contentType || "application/octet-stream",
       filename: typeof filename == "string" ? filename : "file",
       size: parseInt(metadata.size, 10) || 0,
-      stream: res.body,
+      stream: res.body.pipeThrough(new TransformStream({
+        transform(chunk, controller) {
+          console.log('chunk', chunk.length);
+          controller.enqueue(chunk);
+        },
+      })),
     };
   };
 }
