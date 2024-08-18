@@ -25,11 +25,6 @@ export class HttpInterface extends Planigale {
       const schema = new SchemaValidator();
       schema.addFormat("entity-id", /^[a-fA-F0-9]{24}$/)
       schema.addSchema(messageSchema);
-
-      this.use(async (req, next) => {
-        console.log(req.url, req.route?.definition);
-        return await next();
-      })
       //allowCors(this);
       this.use(errorHandler);
       this.use(bodyParser);
