@@ -4,9 +4,8 @@ import { bodyParser } from "@planigale/body-parser";
 import { authMiddleware } from "./middleware/auth.ts";
 import { Core } from "../../core/mod.ts";
 import {messageSchema} from "./schema/message.ts";
-import { allowCors } from "./cors.ts";
 import { errorHandler } from "./errors.ts";
-import * as path from "@std/path";
+import { join }from "@std/path";
 
 import { auth } from "./routes/auth/mod.ts";
 import { system } from "./routes/system/mod.ts";
@@ -25,7 +24,6 @@ export class HttpInterface extends Planigale {
       const schema = new SchemaValidator();
       schema.addFormat("entity-id", /^[a-fA-F0-9]{24}$/)
       schema.addSchema(messageSchema);
-      //allowCors(this);
       this.use(errorHandler);
       this.use(bodyParser);
       this.use(authMiddleware(core));
@@ -43,11 +41,11 @@ export class HttpInterface extends Planigale {
         public: true,
         handler: async (req) => {
           const path = req.params.path || "index.html";
+          console.log(path);
           if (PUBLIC_DIR.startsWith("http")) {
             return await fetch(`${PUBLIC_DIR}/${path}`, {method: 'GET'});
           }
-          console.log(path.join(PUBLIC_DIR, path))
-          return Res.file(path.join(PUBLIC_DIR, path)).toResponse();
+          return Res.file(join(PUBLIC_DIR, path)).toResponse();
         }
       });
     } catch (e) {
