@@ -79,7 +79,7 @@ export const upload = createMethod('files/upload', async ({ streamId, file }: Fi
 
 export const getUrl = (id: string) => `${FILES_URL}/${id}`;
 export const getThumbnail = (id: string) => `${getUrl(id)}?h=256&w=256`;
-export const getDownloadUrl= (id: string) => `${getUrl(id)}?download=true`;
+export const getDownloadUrl = (id: string) => `${getUrl(id)}?download=true`;
 const aborts: Record<string, (() => void)> = {};
 
 export const abort = createMethod('files/abort', async (clientId: string, { dispatch, actions }) => {

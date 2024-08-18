@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { getUrl } from '../../services/file';
+import { getDownloadUrl } from '../../services/file';
 
 const FileContainer = styled.div`
   cursor: pointer;
@@ -43,7 +43,7 @@ const FileContainer = styled.div`
 `;
 
 const download = async (fileId: string) => {
-  window.open(getUrl(fileId));
+  window.open(getDownloadUrl(fileId));
 };
 
 type FileProps = {
