@@ -5,17 +5,24 @@ import { FileData, FileOpts } from "../types.ts";
 import { GoogleAuth } from "npm:google-auth-library";
 import { ResourceNotFound } from "@planigale/planigale";
 
+//const API_URL = "http://localhost:8888";
+const API_URL = 'https://storage.googleapis.com';
+
 class Gcs {
   bucketName: string;
   accessToken: Promise<string | null | undefined> | null = null;
   accessTokenExpires: number = 0;
+  client = Deno.createHttpClient({
+    http2: false,
+    http1: true,
+  });
 
   getUrl(fileId: string): string {
-    return `https://storage.googleapis.com/storage/v1/b/${this.bucketName}/o/${fileId}`;
+    return `${API_URL}/storage/v1/b/${this.bucketName}/o/${fileId}`;
   }
 
   getUploadUrl(fileId: string): string {
-    return `https://storage.googleapis.com/upload/storage/v1/b/${this.bucketName}/o?uploadType=media&name=${fileId}`;
+    return `${API_URL}/upload/storage/v1/b/${this.bucketName}/o?uploadType=media&name=${fileId}`;
   }
 
   constructor(config: Config["storage"]) {
@@ -31,7 +38,7 @@ class Gcs {
         scopes: "https://www.googleapis.com/auth/cloud-platform",
       });
       this.accessToken = auth.getAccessToken();
-      this.accessTokenExpires = Date.now() + 3600 * 1000;
+      this.accessTokenExpires = Date.now() + 2 * 1000;
     }
     return this.accessToken;
   }
@@ -41,6 +48,7 @@ class Gcs {
     const meta = await fetch(
       this.getUrl(fileId),
       {
+        client: this.client,
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -63,6 +71,7 @@ class Gcs {
     const token = await this.getAccessToken();
 
     const res = await fetch(this.getUploadUrl(fileId), {
+      client: this.client,
       headers: {
         "Content-Type": file.contentType,
         Authorization: `Bearer ${token}`,
@@ -77,6 +86,7 @@ class Gcs {
 
     const meta = await fetch(this.getUrl(fileId), {
       method: "PATCH",
+      client: this.client,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -99,6 +109,7 @@ class Gcs {
     const token = await this.getAccessToken();
     const meta = await fetch(this.getUrl(fileId), {
       method: "DELETE",
+      client: this.client,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -115,6 +126,7 @@ class Gcs {
     const meta = await fetch(
       this.getUrl(fileId),
       {
+        client: this.client,
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -127,13 +139,15 @@ class Gcs {
     const res = await fetch(
       metadata.mediaLink,
       {
+
+        client: this.client,
         headers: {
           Authorization: `Bearer ${token}`,
         },
       },
     );
     if (res.status !== 200 || res.body === null) {
-      await res.body?.cancel?.();
+      await res.body?.cancel();
       throw new ResourceNotFound("File not found");
     }
     const filename = metadata.metadata?.filename || "file";

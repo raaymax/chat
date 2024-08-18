@@ -25,7 +25,7 @@
     ]
   },
   "tasks": {
-    "start": "deno run --allow-ffi --allow-env --allow-read --allow-net --allow-write --allow-sys --watch main.ts",
+    "start": "deno run --allow-ffi --allow-env --allow-read --allow-net --allow-write --allow-sys --unstable-http --watch main.ts",
     "server": "deno run -A --watch main.ts"
   }
 }

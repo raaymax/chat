@@ -42,7 +42,6 @@ export const download = (storage: Storage) =>
           `attachment; filename="${file.filename}"`,
         );
       }
-      
       return res;
     },
   });

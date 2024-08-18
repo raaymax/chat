@@ -40,6 +40,9 @@ class Files {
 
   async get(id: string, opts?: ScalingOpts): Promise<FileData> {
     const file = await this.service.get(id);
+    if (!file) {
+      throw new Error("File not found");
+    }
     if (
       !opts ||
       (file.contentType !== "image/jpeg" && file.contentType !== "image/png")
@@ -53,9 +56,6 @@ class Files {
     const targetId = Files.getFileId(id, width, height);
     if (await this.service.exists(targetId)) {
       return this.service.get(targetId);
-    }
-    if (!await this.service.exists(id)) {
-      throw new Error("File not found");
     }
 
     await this.service.upload(
