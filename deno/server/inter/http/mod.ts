@@ -42,11 +42,12 @@ export class HttpInterface extends Planigale {
         url: "/:path*",
         public: true,
         handler: async (req) => {
+          const path = req.params.path || "index.html";
           if (PUBLIC_DIR.startsWith("http")) {
-            return await fetch(`${PUBLIC_DIR}/${req.params.path}`, {method: 'GET'});
+            return await fetch(`${PUBLIC_DIR}/${path}`, {method: 'GET'});
           }
-          console.log(path.join(PUBLIC_DIR, req.params.path))
-          return Res.file(path.join(PUBLIC_DIR, req.params.path)).toResponse();
+          console.log(path.join(PUBLIC_DIR, path))
+          return Res.file(path.join(PUBLIC_DIR, path)).toResponse();
         }
       });
     } catch (e) {
