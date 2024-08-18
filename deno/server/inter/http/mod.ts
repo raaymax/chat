@@ -15,7 +15,7 @@ import { profile } from "./routes/profile/mod.ts";
 import { users } from "./routes/users/mod.ts";
 import { messages } from "./routes/messages/mod.ts";
 
-const PUBLIC_DIR = Deno.env.get("PUBLIC_DIR") || path.join(Deno.cwd(), '..','..', "packages", "app", "dist");
+const PUBLIC_DIR = Deno.env.get("PUBLIC_DIR") || join(Deno.cwd(), '..','..', "packages", "app", "dist");
 
 export class HttpInterface extends Planigale {
   constructor(private core: Core) {
