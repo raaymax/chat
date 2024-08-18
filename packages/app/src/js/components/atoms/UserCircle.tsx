@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { cn, ClassNames } from '../../utils';
 import { useSelector } from '../../store';
+import { getUrl } from '../../services/file';
 
 const Image = styled.img`
   display: inline-block;
