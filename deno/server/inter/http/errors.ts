@@ -5,7 +5,6 @@ export const errorHandler: Middleware = async (req, next) => {
   try {
     return await next();
   } catch(e) {
-    console.log(e);
     if (e instanceof ApiError) {
       throw e;
     }

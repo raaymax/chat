@@ -31,9 +31,7 @@ export const download = (storage: Storage) =>
       },
     },
     handler: async (req) => {
-      console.log('>', req.method, req.url);
       const file = await storage.get(req.params.fileId, {width: req.query.w, height: req.query.h});
-      console.log('file found', req.method, req.url, file.filename, file.contentType);
       const res = new Res();
       res.body = file.stream;
       res.headers.set("Content-Type", file.contentType);
@@ -45,7 +43,6 @@ export const download = (storage: Storage) =>
         );
       }
       
-      console.log('<', req.method, req.url);
       return res;
     },
   });

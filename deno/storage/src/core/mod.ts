@@ -40,7 +40,6 @@ class Files {
 
   async get(id: string, opts?: ScalingOpts): Promise<FileData> {
     const file = await this.service.get(id);
-    console.log('file found - transforming', id, file.filename, file.contentType, opts)
     if (
       !opts ||
       (file.contentType !== "image/jpeg" && file.contentType !== "image/png")

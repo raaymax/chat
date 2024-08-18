@@ -7,6 +7,8 @@ import { ResourceNotFound } from "@planigale/planigale";
 
 class Gcs {
   bucketName: string;
+  accessToken: Promise<string | null | undefined> | null = null;
+  accessTokenExpires: number = 0;
 
   getUrl(fileId: string): string {
     return `https://storage.googleapis.com/storage/v1/b/${this.bucketName}/o/${fileId}`;
@@ -24,10 +26,14 @@ class Gcs {
   }
 
   getAccessToken() {
-    const auth = new GoogleAuth({
-      scopes: "https://www.googleapis.com/auth/cloud-platform",
-    });
-    return auth.getAccessToken();
+    if (!this.accessToken || Date.now() > this.accessTokenExpires) {
+      const auth = new GoogleAuth({
+        scopes: "https://www.googleapis.com/auth/cloud-platform",
+      });
+      this.accessToken = auth.getAccessToken();
+      this.accessTokenExpires = Date.now() + 3600 * 1000;
+    }
+    return this.accessToken;
   }
 
   async exists(fileId: string): Promise<boolean> {
@@ -40,7 +46,7 @@ class Gcs {
         },
       },
     );
-    meta.body?.cancel?.();
+    await meta.json();
     if (meta.status !== 200) {
       return false;
     }
@@ -105,7 +111,6 @@ class Gcs {
   }
 
   get = async (fileId: string): Promise<FileData> => {
-    console.log('get', fileId)
     const token = await this.getAccessToken();
     const meta = await fetch(
       this.getUrl(fileId),
@@ -116,11 +121,9 @@ class Gcs {
       },
     );
     const metadata = await meta.json();
-    console.log('metadata', metadata)
     if (meta.status !== 200) {
       throw new ResourceNotFound("File not found");
     }
-    console.log(metadata.mediaLink)
     const res = await fetch(
       metadata.mediaLink,
       {
@@ -129,24 +132,17 @@ class Gcs {
         },
       },
     );
-    console.log(res.url, res.status);
     if (res.status !== 200 || res.body === null) {
       await res.body?.cancel?.();
       throw new ResourceNotFound("File not found");
     }
-    console.log('streaming')
     const filename = metadata.metadata?.filename || "file";
     return {
       id: fileId,
       contentType: metadata.contentType || "application/octet-stream",
       filename: typeof filename == "string" ? filename : "file",
       size: parseInt(metadata.size, 10) || 0,
-      stream: res.body.pipeThrough(new TransformStream({
-        transform(chunk, controller) {
-          console.log('chunk', chunk.length);
-          controller.enqueue(chunk);
-        },
-      })),
+      stream: res.body,
     };
   };
 }

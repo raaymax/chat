@@ -3,4 +3,8 @@ export default {
   baseUrl: 'http://localhost:8000',
   appUrl: 'http://localhost:8080',
   apiUrl: 'http://localhost:8000',
+  storage: {
+    type: 'gcs',
+    bucket: 'codecat-quack-test',
+  }
 };
