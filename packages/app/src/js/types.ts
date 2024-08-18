@@ -113,6 +113,7 @@ export type User = {
   status: string;
   avatar: string;
   avatarUrl: string;
+  avatarFileId: string;
   connected: boolean;
   lastSeen: string;
   system: boolean;

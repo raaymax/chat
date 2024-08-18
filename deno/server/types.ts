@@ -47,6 +47,7 @@ export type User = {
   login: string;
   password: string;
   name: string;
+  avatarFileId: string;
 };
 
 export enum ChannelType {

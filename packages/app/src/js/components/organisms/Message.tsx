@@ -18,6 +18,7 @@ import { useMessageData } from '../contexts/useMessageData';
 import { useMessageUser } from '../contexts/useMessageUser';
 import { useHoverCtrl } from '../contexts/useHoverCtrl';
 import { useStream } from '../contexts/useStream';
+import { getUrl } from '../../services/file';
 
 import {
   cn, ClassNames, formatTime, formatDateDetailed,
@@ -134,7 +135,12 @@ const MessageBase = ({ onClick, sameUser, ...props }: MessageBaseProps = {}) => 
       onMouseLeave={onLeave}
     >
       {!sameUser
-        ? <div className='avatar'>{user?.avatarUrl && <img src={user?.avatarUrl} alt='avatar' />}</div>
+        ? <div className='avatar'>{(() => {
+          if(user?.avatarFileId) {
+            return <img src={getUrl(user?.avatarFileId)} alt='avatar' />
+          }
+          return <img src="/avatar.png" alt='avatar' />
+        })()}</div>
         : <div className='spacy side-time'>{formatTime(createdAt)}</div>
       }
       <div className='body'>

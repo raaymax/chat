@@ -14,7 +14,7 @@ const config = defineConfig({
   define: {
     APP_VERSION: JSON.stringify(Deno.env.get('APP_VERSION')),
     APP_NAME: JSON.stringify(Deno.env.get('APP_NAME')),
-    API_URL: JSON.stringify('https://localhost:8008'),
+    API_URL: JSON.stringify(''),
   },
   server: {
     hmr: {
