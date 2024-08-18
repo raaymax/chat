@@ -26,6 +26,10 @@ export class HttpInterface extends Planigale {
       schema.addFormat("entity-id", /^[a-fA-F0-9]{24}$/)
       schema.addSchema(messageSchema);
 
+      this.use(async (req, next) => {
+        console.log(req.url, req.route?.definition);
+        return await next();
+      })
       //allowCors(this);
       this.use(errorHandler);
       this.use(bodyParser);
@@ -36,8 +40,8 @@ export class HttpInterface extends Planigale {
       this.use("/api/channels", channels(core));
       this.use("/api/profile", profile(core));
       this.use("/api/users", users(core));
+      this.use("/api/files", files(core));
       this.use("/api", messages(core));
-      files(core).then((router: Router) => this.use("/api/files", router));
       this.route({
         method: 'GET',
         url: "/:path*",

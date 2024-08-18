@@ -3,18 +3,18 @@ import { SchemaValidator } from "@planigale/schema";
 import * as routes from "./routes/mod.ts";
 import type { Storage } from "../../core/mod.ts";
 
-export const buildRouter = async (storage: Storage, prefix = "") => {
+export const buildRouter = (storage: Storage, prefix = "") => {
   const router = new Router();
   for (const route of Object.values(routes)) {
-    router.use(prefix, await route(storage));
+    router.use(prefix, route(storage));
   }
   return router;
 };
 
-export const buildApp = async (storage: Storage) => {
+export const buildApp = (storage: Storage) => {
   const app = new Planigale();
   const schemaValidator = new SchemaValidator();
   app.use(schemaValidator.middleware);
-  app.use(await buildRouter(storage));
+  app.use(buildRouter(storage));
   return app;
 };

@@ -1,7 +1,7 @@
 import { Res, Route } from "@planigale/planigale";
 import type { Storage } from "../../../core/mod.ts";
 
-export const remove = async (storage: Storage) =>
+export const remove = (storage: Storage) =>
   new Route({
     method: "DELETE",
     url: "/:fileId",

@@ -1,7 +1,7 @@
 import { Route } from "@planigale/planigale";
 import type { Storage } from "../../../core/mod.ts";
 
-export const upload = async (storage: Storage) =>
+export const upload = (storage: Storage) =>
   new Route({
     method: "POST",
     url: "/",

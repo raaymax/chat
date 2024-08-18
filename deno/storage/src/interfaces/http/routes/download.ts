@@ -1,7 +1,7 @@
 import { Res, Route } from "@planigale/planigale";
 import type { Storage } from "../../../core/mod.ts";
 
-export const download = async (storage: Storage) =>
+export const download = (storage: Storage) =>
   new Route({
     method: "GET",
     url: "/:fileId",
@@ -29,6 +29,7 @@ export const download = async (storage: Storage) =>
     },
     handler: async (req) => {
       const file = await storage.get(req.params.fileId, {width: req.query.w, height: req.query.h});
+      console.log(file);
       const res = new Res();
       res.body = file.stream;
       res.headers.set("Content-Type", file.contentType);
