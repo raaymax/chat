@@ -26,7 +26,7 @@ export class HttpInterface extends Planigale {
       schema.addFormat("entity-id", /^[a-fA-F0-9]{24}$/)
       schema.addSchema(messageSchema);
 
-      allowCors(this);
+      //allowCors(this);
       this.use(errorHandler);
       this.use(bodyParser);
       this.use(authMiddleware(core));
