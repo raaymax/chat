@@ -4,14 +4,13 @@ import { files as gcs } from "./gcs.ts";
 import { files as memory } from "./memory.ts";
 
 export const files = (config: Config["storage"]) => {
-  switch (config.type) {
-    case "fs":
-      return fs(config);
-    case "gcs":
-      return gcs(config);
-    case "memory":
-      return memory(config);
-    default:
-      throw new Error("Invalid storage");
+  if(config.type === "fs") {
+    return fs(config);
+  } else if(config.type === "gcs") {
+    return gcs(config);
+  } else if(config.type === "memory") {
+    return memory(config);
+  } else {
+    throw new Error("Unknown storage type");
   }
 };

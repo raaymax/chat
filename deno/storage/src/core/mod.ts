@@ -10,7 +10,7 @@ type ScalingOpts = {
 };
 
 class Files {
-  static getFileId = (id: string, width: number, height: number) =>
+  static getFileId = (id: string, width: number = 0, height: number = 0) =>
     `${id}-${width}x${height}`;
 
   private service: any;
@@ -39,23 +39,20 @@ class Files {
   }
 
   async get(id: string, opts?: ScalingOpts): Promise<FileData> {
-    const file = await this.service.get(id);
-    if (!file) {
+    const { width, height } = opts ?? {};
+    const targetId = Files.getFileId(id, width, height);
+    if (await this.service.exists(targetId)) {
+      return this.service.get(targetId);
+    }
+    if(!await this.service.exists(id)){
       throw new Error("File not found");
     }
+    const file = await this.service.get(id);
     if (
       !opts ||
       (file.contentType !== "image/jpeg" && file.contentType !== "image/png")
     ) {
       return file;
-    }
-    const { width, height } = opts ?? {};
-    if (!width || !height) {
-      return file;
-    }
-    const targetId = Files.getFileId(id, width, height);
-    if (await this.service.exists(targetId)) {
-      return this.service.get(targetId);
     }
 
     await this.service.upload(

@@ -12,9 +12,9 @@ class Gcs {
   bucketName: string;
   accessToken: Promise<string | null | undefined> | null = null;
   accessTokenExpires: number = 0;
-  client = Deno.createHttpClient({
-    http2: false,
-    http1: true,
+
+  auth = new GoogleAuth({
+    scopes: "https://www.googleapis.com/auth/cloud-platform",
   });
 
   getUrl(fileId: string): string {
@@ -25,19 +25,13 @@ class Gcs {
     return `${API_URL}/upload/storage/v1/b/${this.bucketName}/o?uploadType=media&name=${fileId}`;
   }
 
-  constructor(config: Config["storage"]) {
-    if (config.type !== "gcs") {
-      throw new Error("Invalid storage type");
-    }
+  constructor(config: {bucket: string}) {
     this.bucketName = config.bucket;
   }
 
   getAccessToken() {
     if (!this.accessToken || Date.now() > this.accessTokenExpires) {
-      const auth = new GoogleAuth({
-        scopes: "https://www.googleapis.com/auth/cloud-platform",
-      });
-      this.accessToken = auth.getAccessToken();
+      this.accessToken = this.auth.getAccessToken();
       this.accessTokenExpires = Date.now() + 2 * 1000;
     }
     return this.accessToken;
@@ -48,7 +42,6 @@ class Gcs {
     const meta = await fetch(
       this.getUrl(fileId),
       {
-        client: this.client,
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -71,7 +64,7 @@ class Gcs {
     const token = await this.getAccessToken();
 
     const res = await fetch(this.getUploadUrl(fileId), {
-      client: this.client,
+      //client: this.client,
       headers: {
         "Content-Type": file.contentType,
         Authorization: `Bearer ${token}`,
@@ -79,14 +72,13 @@ class Gcs {
       method: "POST",
       body: webStream,
     });
-    res.body?.cancel?.();
+    await res.body?.cancel?.();
     if (res.status !== 200) {
       throw new Error("Upload failed");
     }
 
     const meta = await fetch(this.getUrl(fileId), {
       method: "PATCH",
-      client: this.client,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -97,7 +89,7 @@ class Gcs {
         },
       }),
     });
-    meta.body?.cancel?.();
+    await meta.body?.cancel?.();
     if (meta.status !== 200) {
       throw new Error("Upload failed");
     }
@@ -109,13 +101,12 @@ class Gcs {
     const token = await this.getAccessToken();
     const meta = await fetch(this.getUrl(fileId), {
       method: "DELETE",
-      client: this.client,
       headers: {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({}),
     });
-    meta.body?.cancel?.();
+    await meta.body?.cancel?.();
     if (meta.status !== 200 && meta.status !== 204) {
       throw new Error("Delete failed");
     }
@@ -126,7 +117,6 @@ class Gcs {
     const meta = await fetch(
       this.getUrl(fileId),
       {
-        client: this.client,
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -139,8 +129,6 @@ class Gcs {
     const res = await fetch(
       metadata.mediaLink,
       {
-
-        client: this.client,
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -161,6 +149,6 @@ class Gcs {
   };
 }
 
-export const files = (config: Config["storage"]) => {
+export const files = (config: {bucket: string}) => {
   return new Gcs(config);
 };
