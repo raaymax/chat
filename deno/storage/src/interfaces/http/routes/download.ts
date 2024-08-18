@@ -31,6 +31,7 @@ export const download = (storage: Storage) =>
       },
     },
     handler: async (req) => {
+      console.log('>', req.method, req.url);
       const file = await storage.get(req.params.fileId, {width: req.query.w, height: req.query.h});
       const res = new Res();
       res.body = file.stream;
@@ -42,6 +43,8 @@ export const download = (storage: Storage) =>
           `attachment; filename="${file.filename}"`,
         );
       }
+      
+      console.log('<', req.method, req.url);
       return res;
     },
   });
