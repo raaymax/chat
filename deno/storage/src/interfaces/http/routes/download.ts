@@ -18,6 +18,9 @@ export const download = (storage: Storage) =>
       query: {
         type: "object",
         properties: {
+          download: {
+            type: "boolean",
+          },
           w: {
             type: "number",
           },
@@ -29,15 +32,16 @@ export const download = (storage: Storage) =>
     },
     handler: async (req) => {
       const file = await storage.get(req.params.fileId, {width: req.query.w, height: req.query.h});
-      console.log(file);
       const res = new Res();
       res.body = file.stream;
       res.headers.set("Content-Type", file.contentType);
       res.headers.set("Content-Length", file.size.toString());
-      res.headers.set(
-        "Content-Disposition",
-        `attachment; filename="${file.filename}"`,
-      );
+      if (req.query.download){
+        res.headers.set(
+          "Content-Disposition",
+          `attachment; filename="${file.filename}"`,
+        );
+      }
       return res;
     },
   });

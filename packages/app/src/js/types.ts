@@ -112,7 +112,6 @@ export type User = {
   name: string;
   status: string;
   avatar: string;
-  avatarUrl: string;
   avatarFileId: string;
   connected: boolean;
   lastSeen: string;

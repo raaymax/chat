@@ -46,7 +46,7 @@ export class HttpInterface extends Planigale {
             return await fetch(`${PUBLIC_DIR}/${req.params.path}`, {method: 'GET'});
           }
           console.log(path.join(PUBLIC_DIR, req.params.path))
-          return Res.file(path.join(PUBLIC_DIR, req.params.path));
+          return Res.file(path.join(PUBLIC_DIR, req.params.path)).toResponse();
         }
       });
     } catch (e) {

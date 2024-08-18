@@ -46,14 +46,14 @@ for (const config of configs) {
       fileId = body.id;
     });
 
-    await t.step("GET /:id - get file", async () => {
+    await t.step("GET /:id - download file", async () => {
       const agent = await Agent.from(app);
       const res = await agent.request()
-        .get(`/${fileId}`)
+        .get(`/${fileId}?download=true`)
         .expect(200);
       const file = await Deno.readFile(testTextFilePath);
       const body = await res.arrayBuffer();
-      //assertEquals(new Uint8Array(body), file, 'file should be the same');
+      assertEquals(new Uint8Array(body), file, 'file should be the same');
       assertEquals(
         res.headers.get("content-type"),
         "text/plain; charset=UTF-8",
@@ -67,6 +67,29 @@ for (const config of configs) {
         `attachment; filename="test.txt"`,
       );
     });
+
+    await t.step("GET /:id - get file", async () => {
+      const agent = await Agent.from(app);
+      const res = await agent.request()
+        .get(`/${fileId}`)
+        .expect(200);
+      const file = await Deno.readFile(testTextFilePath);
+      const body = await res.arrayBuffer();
+      assertEquals(new Uint8Array(body), file, 'file should be the same');
+      assertEquals(
+        res.headers.get("content-type"),
+        "text/plain; charset=UTF-8",
+      );
+      assertEquals(
+        res.headers.get("content-length"),
+        file.byteLength.toString(),
+      );
+      assertEquals(
+        res.headers.has("content-disposition"),
+        false,
+      );
+    });
+
     await t.step("DELETE /:id", async () => {
       const agent = await Agent.from(app);
       await agent.request()
@@ -97,14 +120,14 @@ for (const config of configs) {
       fileId = body.id;
     });
 
-    await t.step("GET /:id - get file", async () => {
+    await t.step("GET /:id - download file", async () => {
       const agent = await Agent.from(app);
       const res = await agent.request()
-        .get(`/${fileId}`)
+        .get(`/${fileId}?download=true`)
         .expect(200);
       const file = await Deno.readFile(testImagePath);
       const body = await res.arrayBuffer();
-      //assertEquals(new Uint8Array(body), file, 'file should be the same');
+      assertEquals(new Uint8Array(body), file, 'file should be the same');
       assertEquals(res.headers.get("content-type"), "image/png");
       assertEquals(
         res.headers.get("content-length"),
@@ -113,6 +136,25 @@ for (const config of configs) {
       assertEquals(
         res.headers.get("content-disposition"),
         `attachment; filename="quack.png"`,
+      );
+    });
+
+    await t.step("GET /:id - get file", async () => {
+      const agent = await Agent.from(app);
+      const res = await agent.request()
+        .get(`/${fileId}`)
+        .expect(200);
+      const file = await Deno.readFile(testImagePath);
+      const body = await res.arrayBuffer();
+      assertEquals(new Uint8Array(body), file, 'file should be the same');
+      assertEquals(res.headers.get("content-type"), "image/png");
+      assertEquals(
+        res.headers.get("content-length"),
+        file.byteLength.toString(),
+      );
+      assertEquals(
+        res.headers.has("content-disposition"),
+        false,
       );
     });
 
@@ -132,10 +174,6 @@ for (const config of configs) {
         res.headers.get("content-length"),
         body.byteLength.toString(),
       );
-      assertEquals(
-        res.headers.get("content-disposition"),
-        `attachment; filename="quack.png"`,
-      );
     });
 
     await t.step("GET /:id - miniature image should exist", async () => {
@@ -153,10 +191,6 @@ for (const config of configs) {
       assertEquals(
         res.headers.get("content-length"),
         body.byteLength.toString(),
-      );
-      assertEquals(
-        res.headers.get("content-disposition"),
-        `attachment; filename="quack.png"`,
       );
     });
 
