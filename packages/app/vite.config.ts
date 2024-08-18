@@ -14,7 +14,7 @@ export default defineConfig({
   define: {
     APP_VERSION: JSON.stringify(process.env.APP_VERSION),
     APP_NAME: JSON.stringify(process.env.APP_NAME),
-    API_URL: JSON.stringify('https://localhost:8008'),
+    API_URL: JSON.stringify(''),
   },
   plugins: [
     react(),

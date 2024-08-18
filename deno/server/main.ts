@@ -1,5 +1,6 @@
 import app from "./app.ts";
 import * as path from "@std/path";
+import config from "@quack/config";
 
 const ssl = {};
 
@@ -12,7 +13,7 @@ if (Deno.env.get("SSL")) {
 }
 
 await app.serve({
-  port: 8008,
+  port: config.port,
   ...ssl,
   onListen: (addr: Deno.NetAddr) => {
     console.log(
