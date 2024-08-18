@@ -118,6 +118,7 @@ class Gcs {
     if (meta.status !== 200) {
       throw new ResourceNotFound("File not found");
     }
+    console.log(metadata.mediaLink)
     const res = await fetch(
       metadata.mediaLink,
       {
@@ -126,11 +127,12 @@ class Gcs {
         },
       },
     );
+    console.log(res.url, res.status);
     if (res.status !== 200 || res.body === null) {
       await res.body?.cancel?.();
       throw new ResourceNotFound("File not found");
     }
-
+    console.log('streaming')
     const filename = metadata.metadata?.filename || "file";
     return {
       id: fileId,
