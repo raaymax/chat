@@ -105,6 +105,7 @@ class Gcs {
   }
 
   get = async (fileId: string): Promise<FileData> => {
+    console.log('get', fileId)
     const token = await this.getAccessToken();
     const meta = await fetch(
       this.getUrl(fileId),
@@ -115,6 +116,7 @@ class Gcs {
       },
     );
     const metadata = await meta.json();
+    console.log('metadata', metadata)
     if (meta.status !== 200) {
       throw new ResourceNotFound("File not found");
     }
