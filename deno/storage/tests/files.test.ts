@@ -14,14 +14,13 @@ const testTextFilePath = path.join(__dirname, "test.txt");
 const testImagePath = path.join(__dirname, "quack.png");
 
 const configs: Config["storage"][] = [
-  /*
   {
     type: "fs",
     directory: "tests/uploads",
   },
   {
     type: "memory",
-  },*/
+  },
   {
     type: "gcs",
     bucket: "codecat-quack-integration-test",

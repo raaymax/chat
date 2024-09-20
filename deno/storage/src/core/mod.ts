@@ -45,11 +45,12 @@ class Files {
       return this.service.get(targetId);
     }
     if(!await this.service.exists(id)){
-      throw new Error("File not found");
+      throw new Error("FILE_NOT_FOUND");
     }
+
     const file = await this.service.get(id);
     if (
-      !opts ||
+      !opts || !opts.width || !opts.height ||
       (file.contentType !== "image/jpeg" && file.contentType !== "image/png")
     ) {
       return file;
