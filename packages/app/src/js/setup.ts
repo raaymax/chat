@@ -8,7 +8,7 @@ import { Notification } from './types';
 client
   .on('share', ({ data }) => store.dispatch(sendShareMessage(data)))
   .on('user', (msg) => store.dispatch(actions.users.add(msg)))
-  .on('emoji', (msg) => store.dispatch(actions.emojis.add(msg)))
+  .on('emoji', (msg) => store.dispatch(actions.emojis.add({...msg, category: 'c'})))
   .on('badge', (msg) => store.dispatch(actions.progress.add(msg)))
   .on('channel', (msg) => store.dispatch(actions.channels.add(msg)))
   .on('removeChannel', (msg) => store.dispatch(actions.channels.remove(msg.channelId)))

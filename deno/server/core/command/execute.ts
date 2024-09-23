@@ -37,12 +37,14 @@ export default createCommand({
       channelId: msg.context.channelId,
       flat: msg.text,
       message: { text: msg.text },
+      createdAt: new Date().toISOString(),
     }
 
     bus.direct(msg.userId, {
       type: "message",
       ...response,
     })
+    return;
   }
 
   throw new ResourceNotFound(`command not found`);

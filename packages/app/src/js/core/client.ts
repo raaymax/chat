@@ -1,26 +1,34 @@
-import { WebSocketTransport, Request, Notification, HttpTransport } from './rpc';
-import { OutgoingPayload } from './types';
+import Api from './api';
 
 declare global {
   const API_URL: string;
 }
 
-export class ClientOld extends WebSocketTransport {
-  get token(): string {
-    return localStorage.token
+class Client {
+  _api: Api;
+  get api() {
+    if (!this._api) {
+      this._api = new Api(API_URL, localStorage.token);
+      setTimeout(() => this.emit('con:open', {}), 10);
+    }
+    return this._api;
   }
 
-  req = (msg: OutgoingPayload): any => Request.send(msg, this);
-
-  notif = (msg: OutgoingPayload): any => Notification.send(msg, this);
-
-  send = (msg: OutgoingPayload): any => super.send(msg);
-}
-
-export class Client extends HttpTransport {
-  get token(): string {
-    return localStorage.token
+  req(...args: any[]) {
+    return this.api.req(...args);
   }
+
+  on(name: string, cb: (e: any) => void) {
+    this.api.on(name, (ev: CustomEvent) => cb(ev.detail));
+    return this;
+  }
+
+  emit(type: string, data: any) {
+    return this.api.emit(new CustomEvent(type, {detail: data}));
+  }
+
 }
 
-export const client = new Client(API_URL, localStorage.token);
+
+export const client = new Client();
+

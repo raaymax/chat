@@ -35,7 +35,7 @@ const build = (
   if (is<types.MessageBodyStrike>(data, 'strike')) return <s key={key}>{build(data.strike)}</s>;
   if (is<types.MessageBodyImg>(data, 'img')) return <img key={key} src={data.img.src} alt={data.img.alt} />;
   if (is<types.MessageBodyLink>(data, 'link')) return <Link key={key} href={data.link.href}>{build(data.link.children)}</Link>;
-  if (is<types.MessageBodyEmoji>(data, 'emoji')) return <Emoji key={key} size={opts?.emojiOnly ? 40 : undefined} shortname={data.emoji} />;
+  if (is<types.MessageBodyEmoji>(data, 'emoji')) return <Emoji key={key} size={opts?.emojiOnly ? 40 : 32} shortname={data.emoji} />;
   if (is<types.MessageBodyChannel>(data, 'channel')) return <ChannelLink key={key} channelId={data.channel} />;
   if (is<types.MessageBodyUser>(data, 'user')) return <UserMention key={key} userId={data.user} />;
   if (is<types.MessageBodyThread>(data, 'thread')) return <ThreadLink key={key} channelId={data.thread.channelId} parentId={data.thread.parentId} text={data.thread.text} />;
