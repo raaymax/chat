@@ -11,6 +11,7 @@ export default (core: Core) =>
       const users = await core.user.getAll({});
       return Response.json(users.map((u: Partial<User>) => {
         delete u.password;
+        delete u.mainChannelId;
         return u;
       }));
     },

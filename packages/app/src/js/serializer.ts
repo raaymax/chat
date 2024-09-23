@@ -57,7 +57,7 @@ export const fromDom = (dom: HTMLElement): MessageToSend | CommandToSend => {
       createdAt: new Date().toISOString(),
       info: null,
       name: m[0],
-      args: m.splice(1),
+      text: m.splice(1).join(' '),
       flat: dom.textContent ?? '',
     };
   }

@@ -121,31 +121,6 @@ export class HttpTransport implements Transport {
     //TODO use this
   }
 
-  async fetch(url: string, opts: {seqId?: string, mapFn?: (i:any) => any} & RequestInit): Promise<any> {
-    const res = await fetch(`${this.baseUrl}${url}`, {
-      ...opts,
-      headers: {
-        ...opts.headers,
-        Authorization: `Bearer ${this.token}`,
-      },
-    });
-    if(res.status == 200 || res.status == 204) {
-      const data = res.status === 200 ? await res.json() : {};
-      return {
-        type: 'response',
-        status: 'ok',
-        seqId: opts.seqId,
-        data: [data].flat().map(opts.mapFn ?? ((a) => a)),
-      };
-    }else{
-      return {
-        type: 'response',
-        status: 'error',
-        seqId: opts.seqId,
-        error: await res.json()
-      };
-    }
-  }
 
 
   send(msg: Message): HttpTransport {
@@ -167,6 +142,9 @@ export class HttpTransport implements Transport {
       }
       case 'user:getAll': {
         return this.fetch('/api/users', {seqId: msg.seqId, mapFn: (i: any) => ({type: 'user', ...i})});
+      }
+      case 'emoji:getAll': {
+        return this.fetch('/api/emojis', {seqId: msg.seqId, mapFn: (i: any) => ({type: 'emoji', ...i})});
       }
       case 'channel:create': {
         return await this.fetch(`/api/channels`, {
@@ -252,6 +230,15 @@ export class HttpTransport implements Transport {
           },
         });
         return await this.fetch(`/api/messages/${msg.id}`, {method: 'GET'});
+      }
+      case 'command:execute': {
+        return this.fetch(`/api/commands/execute`, {
+          method: 'POST',
+          body: JSON.stringify(msg),
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        });
       }
       default:
         return {

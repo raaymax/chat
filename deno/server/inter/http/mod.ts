@@ -14,6 +14,8 @@ import { files } from "./routes/files/mod.ts";
 import { profile } from "./routes/profile/mod.ts";
 import { users } from "./routes/users/mod.ts";
 import { messages } from "./routes/messages/mod.ts";
+import { emojis } from "./routes/emojis/mod.ts";
+import { commands } from "./routes/commands/mod.ts";
 
 const PUBLIC_DIR = Deno.env.get("PUBLIC_DIR") || join(Deno.cwd(), '..','..', "packages", "app", "dist");
 
@@ -34,7 +36,11 @@ export class HttpInterface extends Planigale {
       this.use("/api/profile", profile(core));
       this.use("/api/users", users(core));
       this.use("/api/files", files(core));
+      this.use("/api/emojis", emojis(core));
+      this.use("/api/commands", commands(core));
       this.use("/api", messages(core));
+
+      //todo: move this to routes
       this.route({
         method: 'GET',
         url: "/:path*",

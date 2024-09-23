@@ -48,6 +48,7 @@ export type User = {
   password: string;
   name: string;
   avatarFileId: string;
+  mainChannelId: EntityId;
 };
 
 export enum ChannelType {
@@ -65,6 +66,15 @@ export type Channel = {
   direct: boolean;
   users: EntityId[];
 };
+
+// Replaces all EntityId with string recursively
+export type ReplaceEntityId<T> = T extends EntityId ? string : (
+  T extends object ? {
+    [K in keyof T]: ReplaceEntityId<T[K]>;
+  } : (
+    T extends any[] ? ReplaceEntityId<T[number]>[] : T
+  )
+);
 
 export type Emoji = {
   id: EntityId;

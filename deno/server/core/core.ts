@@ -13,6 +13,8 @@ import GetAllMessages from "./message/getAll.ts";
 import GetMessage from "./message/get.ts";
 import RemoveMessage from "./message/remove.ts";
 import UpdateMessage from "./message/update.ts";
+import GetAllEmojis from "./emoji/getAll.ts";
+import CommandExecute from "./command/execute.ts";
 import { storage, Repository } from "../infra/mod.ts";
 import { buildCommandCollection, EventFrom } from "./command.ts";
 import { bus } from "./bus.ts";
@@ -25,6 +27,7 @@ const commands = buildCommandCollection([
   CreateChannel,
   RemoveChannel,
   UpdateMessage,
+  CommandExecute,
 ]);
 
 
@@ -51,6 +54,10 @@ export class Core {
     getAll: GetAllMessages(this),
     get: GetMessage(this),
     remove: RemoveMessage(this),
+  }
+
+  emoji = {
+    getAll: GetAllEmojis(this),
   }
 
   constructor(arg: {

@@ -43,11 +43,12 @@ export default createCommand({
     channelType,
     private: (channelType === "PRIVATE" || channelType === "DIRECT"),
     direct: (channelType === "DIRECT"),
-    users: (channelType === "DIRECT" ? [userId, ...users] : [userId]),
+    users: [userId, ...users],
   });
 
   const created = await repo.channel.get({ id: channelId });
-  bus.group(channel.users, {
+
+  bus.group(created?.users ?? [], {
     type: "channel",
     payload: created,
   });

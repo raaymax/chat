@@ -31,10 +31,11 @@ class Bus {
       (acc, ev) => ({ ...acc, [ev]: internalBus.listenerCount(ev) }),
       {},
     );
-  group = (userIds: (EntityId | string)[], msg: any) =>
+  group = (userIds: (EntityId | string)[], msg: any) => {
     (userIds ?? []).forEach((userId) =>
       internalBus.emit(userId.toString(), { ...msg, _target: "group" })
     );
+  }
   direct = (userId: EntityId | string, msg: any) =>
     internalBus.emit(userId.toString(), { ...msg, _target: "direct" });
   broadcast = (msg: any) =>

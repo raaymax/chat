@@ -3,6 +3,7 @@ import { Agent } from "@planigale/testing";
 import { login, ensureUser } from "../../__tests__/mod.ts";
 import { User } from "../../../../../types.ts";
 import { createApp } from "../../__tests__/app.ts";
+import { Chat } from "../../__tests__/chat.ts";
 const { app, repo, core } = createApp();
 
 Deno.test("GET /api/channels - unauthorized", async () => {
@@ -18,16 +19,15 @@ Deno.test("GET /api/users - getAllUsers", async () => {
   await ensureUser(repo, "admin", {name: "Admin"});
   await ensureUser(repo, "member", {name: "Member"});
   await Agent.test(app, {type: 'handler'}, async (agent) => {
-    const {token} = await login(repo, agent, "admin");
-    const res = await agent.request()
-      .get("/api/users")
-      .header("Authorization", `Bearer ${token}`)
-      .expect(200);
-    const body = await res.json();
-    const userNames = body.map((u: User) => u.name);
-    assert(userNames.includes("Admin"));
-    assert(userNames.includes("Member"));
-    assert(body[0].password === undefined);
-    assert(body[1].password === undefined);
+    await Chat.init(repo, agent)
+      .login("admin")
+      .getUsers(async (users: User[]) => {
+        const userNames = users.map((u: User) => u.name);
+        assert(userNames.includes("Admin"));
+        assert(userNames.includes("Member"));
+        assert(users[0].password === undefined);
+        assert(users[1].password === undefined);
+      })
+      .end();
   }) 
 })

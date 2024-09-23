@@ -135,8 +135,9 @@ export const send = createMethod('messages/send', async ({ stream, payload }: Se
 
 const isError = (err: unknown): err is IncommingError => (err as IncommingError).status === 'error';
 
-export const sendCommand = createMethod('messages/sendCommand', async ({ stream, payload: msg }: {payload: OutgoingCommandExecute, stream: Stream}, { dispatch, actions }) => {
+export const sendCommand = createMethod('messages/sendCommand', async ({ stream, payload: msg }: {payload: OutgoingCommandExecute, stream: Stream}, { dispatch, actions, getState }) => {
   const notif = {
+    clientId: tempId(),
     type: 'notif',
     userId: getState().me,
     channelId: stream.channelId,
@@ -148,12 +149,17 @@ export const sendCommand = createMethod('messages/sendCommand', async ({ stream,
   msg.context = { ...stream, appVersion: APP_VERSION };
   dispatch(actions.messages.add(notif));
   try {
-    await client.notif(msg);
+    const res = await client.req(msg);
+    if (res.status === 'error') throw res;
     dispatch(actions.messages.add({ ...notif, notifType: 'success', notif: `${msg.name} executed successfully` }));
   } catch (err) {
+    try{
+    dispatch(actions.messages.add({ ...notif, notifType: 'error', notif: `command "${msg.name}" error: ${err.res?.message ?? err.error?.message ?? err.message}` }));
     // eslint-disable-next-line no-console
     if (!isError(err)) return console.error(err);
-    dispatch(actions.messages.add({ ...notif, notifType: 'error', notif: `${msg.name} error ${err.res.message || err.message}` }));
+    }catch(e){
+      console.log(e);
+    }
   }
 });
 

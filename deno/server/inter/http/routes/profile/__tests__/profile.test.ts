@@ -4,6 +4,7 @@ import { login , ensureUser} from "../../__tests__/mod.ts";
 
 import config from '@quack/config';
 import { createApp } from "../../__tests__/app.ts";
+import { Chat } from "../../__tests__/chat.ts";
 const { app, repo, core } = createApp();
 
 Deno.env.set('APP_VERSION', '1.2.3');
@@ -19,15 +20,13 @@ Deno.test("GET /api/profile/config - unauthorized", async () => {
 
 Deno.test("GET /api/profile/config - getConfig", async () => {
   await Agent.test(app, {type: 'handler'}, async (agent) => {
-    await ensureUser(repo, "admin", {name: "Admin", mainChannelId: "Test"});
-    const {token} = await login(repo, agent, "admin");
-    const res = await agent.request()
-      .get("/api/profile/config")
-      .header("Authorization", `Bearer ${token}`)
-      .expect(200);
-    const body = await res.json();
-    assertEquals(body.appVersion, '1.2.3');
-    assertEquals(body.mainChannelId, 'Test');
-    assertEquals(body.vapidPublicKey, config.vapid.publicKey);
+    await Chat.init(repo, agent)
+      .login("admin")
+      .getConfig(async (body: any) => {
+        assertEquals(body.appVersion, '1.2.3');
+        assertEquals(body.mainChannelId, 'Test');
+        assertEquals(body.vapidPublicKey, config.vapid.publicKey);
+      })
+      .end();
   }) 
 })
