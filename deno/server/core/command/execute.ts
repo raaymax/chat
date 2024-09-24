@@ -6,6 +6,7 @@ import { ResourceNotFound } from "../errors.ts";
 import { Message } from "../../types.ts";
 
 import { EmojiCommand } from "./commands/emoji.ts";
+import { VersionCommand } from "./commands/version.ts";
 
 export default createCommand({
   type: "command:execute",
@@ -31,6 +32,9 @@ export default createCommand({
 }, async (msg, core) => {
   if(msg.name === "emoji") {
     return await EmojiCommand.execute(msg, core);
+  }
+  if(msg.name === "version") {
+    return await VersionCommand.execute(msg, core);
   }
   if(msg.name === "echo") {
     const response = {

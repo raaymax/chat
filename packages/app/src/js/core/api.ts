@@ -18,14 +18,37 @@ class API extends EventTarget {
     this.listen();
   }
 
+  async reconnect() {
+    try {
+      console.log('events reconnecting');
+      await this.source.close();
+      console.log('events reconnecting SSE');
+      this.source = new SSESource(`${this.baseUrl}/api/sse`, {
+        fetch: (...args) => fetch(...args),
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+        },
+      });
+      console.log('events reconnecting listen');
+      this.listen();
+    } catch(e) {
+      console.error('events tutaj', e);
+      setTimeout(() => this.reconnect(), 1000);
+    }
+  }
+
   async listen() {
     try {
+      console.log('events listening');
       for await (const event of this.source) {
         if (event.data === '') continue;
+        console.log('event raw', event);
         const data = JSON.parse(event.data);
         console.log('event', data);
         this.dispatchEvent(new CustomEvent(data.type, {detail: data}));
       }
+      console.log('event disconnected');
+      setTimeout(() => this.reconnect(), 1);
     }catch(e) {
       console.error(e);
     }
@@ -74,6 +97,9 @@ class API extends EventTarget {
       }
       case 'user:getAll': {
         return this.fetch('/api/users', {seqId: msg.seqId, mapFn: (i: any) => ({type: 'user', ...i})});
+      }
+      case 'user:get': {
+        return this.fetch(`/api/users/${msg.id}`, {seqId: msg.seqId});
       }
       case 'emoji:getAll': {
         return this.fetch('/api/emojis', {seqId: msg.seqId, mapFn: (i: any) => ({type: 'emoji', ...i})});
@@ -172,6 +198,11 @@ class API extends EventTarget {
           },
         });
       }
+      case 'message:search': 
+        return this.fetch(`/api/channels/${msg.channelId}/messages?q=${msg.text}`, {
+        seqId: msg.seqId,
+        mapFn: (i: any) => ({type: 'search', ...i})
+      });
       default:
         return {
           type: 'response',

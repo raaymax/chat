@@ -16,6 +16,7 @@ export default createQuery({
       limit: v.optional(v.number()),
       offset: v.optional(v.number()),
       order: v.optional(v.union([v.literal(1), v.literal(-1)])),
+      search: v.optional(v.string()),
     })
   })),
 }, async ({userId, query: msg}, {repo}) => {
@@ -32,6 +33,7 @@ export default createQuery({
       parentId,
       before: msg.before,
       after: msg.after,
+      search: msg.search,
       ...(msg.pinned ? { pinned: msg.pinned } : {}),
     }, {offset: msg.offset, limit: msg.limit, order: msg.order ?? (msg.after ? 1 : -1) });
 

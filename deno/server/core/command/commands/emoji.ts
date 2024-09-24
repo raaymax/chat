@@ -30,8 +30,10 @@ export class EmojiCommand {
 
     core.bus.direct(data.userId, {
       type: "message",
+      userId: "system",
+      priv: true,
       channelId: data.context.channelId,
-      flat: `Emoji ${data.shortname} created`,
+      flat: `Emoji ${shortname} created`,
       message: { line: [
         { text: 'Emoji '}, { emoji: shortname }, { text: "created" },
       ]},

@@ -17,6 +17,7 @@ export class Chat {
   eventSource: SSESource | null;
   ended = false;
   currentStep = 0;
+  state: any = {};
 
   steps: any[] = [];
   cleanup: any[] = [];
@@ -176,10 +177,23 @@ export class Chat {
     return this;
   }
 
-  getUsers(fn: (users: any[]) => Promise<any>) {
+  getUsers(fn: (users: any[], chat: Chat) => Promise<any>) {
     this.steps.push(async () => {
       const res = await this.agent.request()
         .get("/api/users")
+        .header("Authorization", `Bearer ${this.token}`)
+        .expect(200);
+      const body = await res.json();
+      await fn(body, this);
+    });
+    return this;
+  }
+
+  getUser(userId: string | ((chat: Chat) => string), fn: (user: any) => Promise<any>) {
+    this.steps.push(async () => {
+      const id = typeof userId === "function" ? userId(this) : userId;
+      const res = await this.agent.request()
+        .get(`/api/users/${id}`)
         .header("Authorization", `Bearer ${this.token}`)
         .expect(200);
       const body = await res.json();
@@ -207,34 +221,25 @@ export class Chat {
     return this;
   }
 
-  executeCommand(command: string, attachments: any[], test: (...args:any) => any) {
+  executeCommand(command: string, attachments: any[], test?: (...args:any) => any) {
     this.steps.push(async () => {
       const [name, ...args] = command.split(" ");
       const text = args.join(" ");
-      const events = this.agent.events("/api/sse", {
-        headers: { Authorization: `Bearer ${this.token}` },
-      });
-      try {
-        const { event } = await events.next();
-        assertEquals(JSON.parse(event?.data ?? ""), { "status": "connected" });
-        const res = await this.agent.request()
-          .post("/api/commands/execute")
-          .json({
-            name,
-            text,
-            attachments,
-            context: {
-              channelId: this.channelId,
-              appVersion: "1.0.0",
-            },
-          })
-          .header("Authorization", `Bearer ${this.token}`)
-          .expect(204);
-        res.body?.cancel?.();
-        await test({events, channelId: this.channelId});
-      } finally {
-        await events.close();
-      }
+      const res = await this.agent.request()
+        .post("/api/commands/execute")
+        .json({
+          name,
+          text,
+          attachments,
+          context: {
+            channelId: this.channelId,
+            appVersion: "1.0.0",
+          },
+        })
+        .header("Authorization", `Bearer ${this.token}`)
+        .expect(204);
+      res.body?.cancel?.();
+      await test?.({channelId: this.channelId, events: this.eventSource});
     })
     return this;
   }

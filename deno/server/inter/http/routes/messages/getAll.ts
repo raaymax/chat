@@ -23,6 +23,7 @@ export default (core: Core) =>
           limit: { type: "number" },
           offset: { type: "number" },
           order: { type: "string", enum: ["asc", "desc"] },
+          q: { type: "string" },
         },
       }
     },
@@ -37,6 +38,7 @@ export default (core: Core) =>
           after: req.query.after,
           limit: req.query.limit,
           offset: req.query.offset,
+          search: req.query.q,
           order: req.query.order ? (
             req.query.order === "asc" ? 1 : -1
           ) : undefined,

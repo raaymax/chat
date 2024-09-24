@@ -42,7 +42,7 @@ export default (core: Core) =>
         type: "command:execute",
         body: {
           userId: req.state.user.id,
-          name: body.name,
+          name: body.name.replace(/^\//, ''),
           text: body.text,
           attachments: body.attachments,
           context: body.context,

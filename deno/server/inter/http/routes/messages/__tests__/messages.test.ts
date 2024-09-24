@@ -445,6 +445,16 @@ Deno.test("Messages history", async (t) => {
       assertEquals(body.length, 1);
       assertEquals(body.map((m: any) => m.flat), ["t2"]);
     })
+    await t.step("GET /api/channels/:channelId/messages - search", async () => {
+      const res = await agent.request()
+        .get(`/api/channels/${channelId}/messages?q=t1`)
+        .header("Authorization", `Bearer ${token}`)
+        .expect(200);
+
+      const body = await res.json();
+      assertEquals(body.length, 1);
+      assertEquals(body.map((m: any) => m.flat), ["t1"]);
+    })
   });
   await agent.close();
 });

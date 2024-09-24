@@ -44,6 +44,7 @@ export type Session = {
 
 export type User = {
   id: EntityId;
+  alias: string | null;
   login: string;
   password: string;
   name: string;
