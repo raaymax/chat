@@ -44,7 +44,7 @@ class Files {
     if (await this.service.exists(targetId)) {
       return this.service.get(targetId);
     }
-    if(!await this.service.exists(id)){
+    if (!await this.service.exists(id)) {
       throw new Error("FILE_NOT_FOUND");
     }
 

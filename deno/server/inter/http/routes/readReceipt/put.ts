@@ -16,10 +16,10 @@ export default (core: Core) =>
         },
       },
       body: {
-        type: 'object',
-        required: ['messageId'],
+        type: "object",
+        required: ["messageId"],
         properties: {
-          messageId: { type: 'string' },
+          messageId: { type: "string" },
         },
       },
     },
@@ -32,6 +32,6 @@ export default (core: Core) =>
         type: "readReceipt:put",
         body: { userId, channelId, parentId, messageId },
       });
-      return Response.json({id: receiptId});
+      return Response.json({ id: receiptId });
     },
   });

@@ -10,7 +10,11 @@ export default (core: Core) =>
       const userId = req.state.user.id;
       const channelId = req.params.channelId;
       const parentId = req.params?.parentId;
-      const results = await core.readReceipt.getChannel({ channelId, userId, parentId });
+      const results = await core.readReceipt.getChannel({
+        channelId,
+        userId,
+        parentId,
+      });
       return Response.json(results);
     },
   });

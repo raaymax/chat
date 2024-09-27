@@ -1,4 +1,3 @@
-
 export class AppError extends Error {
   errorCode: string;
   constructor(public code: string, public message: string) {

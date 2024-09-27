@@ -30,7 +30,7 @@ export default createCommand({
     }),
     ["userId", "message", "channelId", "clientId", "flat"],
   ),
-}, async (msg, {repo, services}) => {
+}, async (msg, { repo, services }) => {
   const channel = await repo.channel.get({
     id: msg.channelId,
     userId: msg.userId,
@@ -56,7 +56,7 @@ export default createCommand({
         clientId: msg.clientId,
       });
       if (message) {
-        id = message.id
+        id = message.id;
       }
     }
     return { id, dup };

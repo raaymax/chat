@@ -13,7 +13,10 @@ export default (_core: Core) =>
           user: req.state.user.id, // FIXME: remove
           status: "ok", // FIXME: remove
         });
-        res.cookies.set("token", req.state.session.token, { httpOnly: true, path: '/api'});
+        res.cookies.set("token", req.state.session.token, {
+          httpOnly: true,
+          path: "/api",
+        });
         return res;
       } else {
         return Res.json({ status: "no-session" });

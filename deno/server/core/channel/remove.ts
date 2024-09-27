@@ -8,6 +8,6 @@ export default createCommand({
     channelId: Id,
     userId: Id,
   }),
-}, async ({ channelId, userId }, {repo}) => {
+}, async ({ channelId, userId }, { repo }) => {
   await repo.channel.remove({ id: channelId, userId });
 });

@@ -1,5 +1,4 @@
-
-import { Route, Res } from "@planigale/planigale";
+import { Res, Route } from "@planigale/planigale";
 import { Core } from "../../../../core/mod.ts";
 
 export default (core: Core) =>
@@ -49,7 +48,7 @@ export default (core: Core) =>
 
       const ret = await core.dispatch({
         type: "message:update",
-        body: { 
+        body: {
           id: req.params.messageId,
           userId,
           data: req.body,

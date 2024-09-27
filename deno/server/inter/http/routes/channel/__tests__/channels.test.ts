@@ -7,7 +7,6 @@ import { createApp } from "../../__tests__/app.ts";
 import { Chat } from "../../__tests__/chat.ts";
 const { app, repo, core } = createApp();
 
-
 Deno.test("/api/channels/* - unauthorized", async () => {
   const { app, repo, core } = createApp();
   const agent = await Agent.from(app);
@@ -22,11 +21,11 @@ Deno.test("/api/channels/* - unauthorized", async () => {
 });
 
 Deno.test("/api/channels", async () => {
-  return await Agent.test(app, {type: 'handler'}, async (agent) => {
+  return await Agent.test(app, { type: "handler" }, async (agent) => {
     return await Chat.init(repo, agent)
       .login("admin")
       .connectSSE()
-      .createChannel({name: "test"})
+      .createChannel({ name: "test" })
       .nextEvent((event: any) => {
         assertEquals(event.type, "channel");
         assertEquals(event.payload.name, "test");
@@ -49,12 +48,12 @@ Deno.test("/api/channels", async () => {
 });
 
 Deno.test("/api/channels - other user receives notification about channel", async () => {
-  return await Agent.test(app, {type: 'handler'}, async (agent) => {
-    const member= Chat.init(repo, agent).login("member");
-    const admin= Chat.init(repo, agent).login("admin")
+  return await Agent.test(app, { type: "handler" }, async (agent) => {
+    const member = Chat.init(repo, agent).login("member");
+    const admin = Chat.init(repo, agent).login("admin");
     await member.connectSSE();
     if (member.userId === null) throw new Error("Couldn't login as member");
-    await admin.createChannel({name: "test", users: [member.userId]});
+    await admin.createChannel({ name: "test", users: [member.userId] });
     await member
       .nextEvent((event: any) => {
         assertEquals(event.type, "channel");
@@ -66,4 +65,3 @@ Deno.test("/api/channels - other user receives notification about channel", asyn
     await admin.end();
   });
 });
-

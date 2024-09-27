@@ -5,8 +5,8 @@ import { Id } from "../types.ts";
 export default createQuery({
   type: "user:get",
   body: v.object({
-    id: Id
+    id: Id,
   }),
-}, async (query, {repo}) => {
+}, async (query, { repo }) => {
   return await repo.user.get({ id: query.id });
 });

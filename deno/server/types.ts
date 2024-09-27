@@ -71,10 +71,11 @@ export type Channel = {
 // Replaces all EntityId with string recursively
 export type ReplaceEntityId<T> = T extends EntityId ? string : (
   T extends object ? {
-    [K in keyof T]: ReplaceEntityId<T[K]>;
-  } : (
-    T extends any[] ? ReplaceEntityId<T[number]>[] : T
-  )
+      [K in keyof T]: ReplaceEntityId<T[K]>;
+    }
+    : (
+      T extends any[] ? ReplaceEntityId<T[number]>[] : T
+    )
 );
 
 export type Emoji = {
@@ -122,8 +123,8 @@ export type MessageBodyThread = {
   thread: { channelId: string; parentId: string; text: string };
 };
 
-export type MessageBodyPart = 
-  MessageBodyBullet
+export type MessageBodyPart =
+  | MessageBodyBullet
   | MessageBodyOrdered
   | MessageBodyItem
   | MessageBodyCodeblock
@@ -223,20 +224,19 @@ export const vMessageBody: v.GenericSchema<MessageBody> = v.union([
   vMessageBodyPart,
 ]);
 
-
 export type ReplaceType<T, R, W> = T extends R ? W : (
   T extends object ? {
-    [K in keyof T]: ReplaceType<T[K], R, W>;
-  } : (
-    T extends any[] ? ReplaceType<T[number], R, W>[] : T
-  )
-); 
+      [K in keyof T]: ReplaceType<T[K], R, W>;
+    }
+    : (
+      T extends any[] ? ReplaceType<T[number], R, W>[] : T
+    )
+);
 
 export const Id = v.pipe(
   v.string(),
   v.transform((i: string) => EntityId.from(i)),
 );
-
 
 /*
 export const vMessage: v.GenericSchema<Message, ReplaceType<Partial<Message>, EntityId, string>> = v.object({

@@ -8,7 +8,7 @@ export default createCommand({
     login: v.string(),
     password: v.string(),
   }),
-}, async ({ login, password }, {repo}) => {
+}, async ({ login, password }, { repo }) => {
   const user = await repo.user.get({ login });
   if (!user) return null;
   if (!verify(password, user.password)) return null;

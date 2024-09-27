@@ -2,14 +2,18 @@ import { assert, assertEquals } from "@std/assert";
 import { Agent } from "@planigale/testing";
 import { Repository } from "../../../../infra/mod.ts";
 import { ensureUser } from "./users.ts";
-import { Channel, EntityId, Message, ReplaceEntityId } from "../../../../types.ts";
+import {
+  Channel,
+  EntityId,
+  Message,
+  ReplaceEntityId,
+} from "../../../../types.ts";
 import { SSESource } from "@planigale/sse";
-
 
 export class Chat {
   repo: Repository;
   agent: Agent;
-  token: string; 
+  token: string;
   parent: Chat | null;
   userId: string | null;
   channelId: string | null;
@@ -25,7 +29,7 @@ export class Chat {
   static init(repo: Repository, agent: Agent) {
     return new Chat(repo, agent);
   }
-  
+
   constructor(repo: Repository, agent: Agent, parent: Chat | null = null) {
     this.repo = repo;
     this.agent = agent;
@@ -75,16 +79,16 @@ export class Chat {
     });
     return this;
   }
-  
-  createChannel (
+
+  createChannel(
     channel: Partial<ReplaceEntityId<Channel>>,
-    test?: (channel: Channel, chat: Chat) => Promise<any> | any
+    test?: (channel: Channel, chat: Chat) => Promise<any> | any,
   ) {
     this.steps.push(async () => {
       const res = await this.agent.request()
         .post("/api/channels")
         .json({
-          ...channel
+          ...channel,
         })
         .header("Authorization", `Bearer ${this.token}`)
         .expect(200);
@@ -94,8 +98,12 @@ export class Chat {
       this.channelId = channelId;
       await test?.(body, this);
       this.cleanup.push(async () => {
-        await this.repo.badge.removeMany({ channelId: EntityId.from(channelId) });
-        await this.repo.message.removeMany({ channelId: EntityId.from(channelId) });
+        await this.repo.badge.removeMany({
+          channelId: EntityId.from(channelId),
+        });
+        await this.repo.message.removeMany({
+          channelId: EntityId.from(channelId),
+        });
         await this.repo.channel.remove({ id: EntityId.from(channelId) });
       });
     });
@@ -109,7 +117,9 @@ export class Chat {
         .header("Authorization", `Bearer ${this.token}`)
         .expect(200);
       const body = await res.json();
-      const channelId = body.find(({ name }: { name: string }) => name === channelName).id;
+      const channelId = body.find(({ name }: { name: string }) =>
+        name === channelName
+      ).id;
       assert(channelId);
       this.channelId = channelId;
     });
@@ -192,7 +202,10 @@ export class Chat {
     return this;
   }
 
-  getUser(userId: string | ((chat: Chat) => string), fn: (user: any) => Promise<any>) {
+  getUser(
+    userId: string | ((chat: Chat) => string),
+    fn: (user: any) => Promise<any>,
+  ) {
     this.steps.push(async () => {
       const id = typeof userId === "function" ? userId(this) : userId;
       const res = await this.agent.request()
@@ -205,7 +218,10 @@ export class Chat {
     return this;
   }
 
-  getMessages(query: any = {}, fn: (messages: any[], chat: Chat) => Promise<any> | any) {
+  getMessages(
+    query: any = {},
+    fn: (messages: any[], chat: Chat) => Promise<any> | any,
+  ) {
     this.steps.push(async () => {
       const res = await this.agent.request()
         .get(`/api/channels/${this.channelId}/messages`)
@@ -217,7 +233,10 @@ export class Chat {
     return this;
   }
 
-  sendMessage(message: Partial<Message>, test?: (message: Message, chat: Chat) => Promise<any> | any) {
+  sendMessage(
+    message: Partial<Message>,
+    test?: (message: Message, chat: Chat) => Promise<any> | any,
+  ) {
     this.steps.push(async () => {
       const res = await this.agent.request()
         .post(`/api/channels/${this.channelId}/messages`)
@@ -233,7 +252,9 @@ export class Chat {
     return this;
   }
 
-  getChannelReadReceipts(fn: (receipts: any[], chat: Chat) => Promise<any> | any) {
+  getChannelReadReceipts(
+    fn: (receipts: any[], chat: Chat) => Promise<any> | any,
+  ) {
     this.steps.push(async () => {
       const res = await this.agent.request()
         .get(`/api/channels/${this.channelId}/read-receipts`)
@@ -257,12 +278,17 @@ export class Chat {
     return this;
   }
 
-  updateReadReceipts(messageId: string | ((chat: Chat) => string), test?: (receipt: any, chat: Chat) => Promise<any> | any) {
+  updateReadReceipts(
+    messageId: string | ((chat: Chat) => string),
+    test?: (receipt: any, chat: Chat) => Promise<any> | any,
+  ) {
     this.steps.push(async () => {
       const res = await this.agent.request()
         .put(`/api/channels/${this.channelId}/read-receipts`)
         .json({
-          messageId: typeof messageId === "function" ? messageId(this) : messageId,
+          messageId: typeof messageId === "function"
+            ? messageId(this)
+            : messageId,
         })
         .header("Authorization", `Bearer ${this.token}`)
         .expect(200);
@@ -270,12 +296,16 @@ export class Chat {
       await test?.(body, this);
       this.cleanup.push(async () => {
         await this.repo.badge.remove({ id: EntityId.from(body.id) });
-      })
+      });
     });
     return this;
   }
 
-  executeCommand(command: string, attachments: any[], test?: (...args:any) => any) {
+  executeCommand(
+    command: string,
+    attachments: any[],
+    test?: (...args: any) => any,
+  ) {
     this.steps.push(async () => {
       const [name, ...args] = command.split(" ");
       const text = args.join(" ");
@@ -293,8 +323,8 @@ export class Chat {
         .header("Authorization", `Bearer ${this.token}`)
         .expect(204);
       res.body?.cancel?.();
-      await test?.({channelId: this.channelId, events: this.eventSource});
-    })
+      await test?.({ channelId: this.channelId, events: this.eventSource });
+    });
     return this;
   }
 
@@ -306,7 +336,7 @@ export class Chat {
   async then(resolve: (self?: any) => any, reject: (e: Error) => any) {
     let cleanupStart = false;
     try {
-      while(this.steps[this.currentStep]) {
+      while (this.steps[this.currentStep]) {
         try {
           await this.steps[this.currentStep]();
         } catch (e) {
@@ -316,7 +346,7 @@ export class Chat {
         }
       }
       if (!this.ended) {
-        return resolve()
+        return resolve();
       }
       cleanupStart = true;
       for (const cleanup of this.cleanup) {
@@ -337,4 +367,3 @@ export class Chat {
     }
   }
 }
-

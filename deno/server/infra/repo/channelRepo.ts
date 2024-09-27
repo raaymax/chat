@@ -14,4 +14,3 @@ export class ChannelRepo extends Repo<ChannelQuery, Channel> {
     };
   }
 }
-

@@ -1,10 +1,15 @@
-import { ApiError, ResourceNotFound, InternalServerError, Middleware } from "@planigale/planigale";
-import { AppError } from "../../core/errors.ts"
+import {
+  ApiError,
+  InternalServerError,
+  Middleware,
+  ResourceNotFound,
+} from "@planigale/planigale";
+import { AppError } from "../../core/errors.ts";
 
 export const errorHandler: Middleware = async (req, next) => {
   try {
     return await next();
-  } catch(e) {
+  } catch (e) {
     if (e instanceof ApiError) {
       throw e;
     }
@@ -13,7 +18,7 @@ export const errorHandler: Middleware = async (req, next) => {
     }
     throw new InternalServerError(e);
   }
-}
+};
 
 function mapAppError(error: AppError): ApiError {
   switch (error.errorCode) {
@@ -41,4 +46,3 @@ export class NotOwner extends ApiError {
     super(403, "NOT_OWNER", message);
   }
 }
-

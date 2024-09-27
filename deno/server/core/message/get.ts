@@ -1,4 +1,3 @@
-
 import { Id } from "../types.ts";
 import { createQuery } from "../query.ts";
 import * as v from "valibot";
@@ -10,18 +9,16 @@ export default createQuery({
     userId: Id,
     messageId: Id,
   })),
-}, async ({userId, messageId}, {repo}) => {
+}, async ({ userId, messageId }, { repo }) => {
+  //if (!channelId) throw new ResourceNotFound("Channel not found");
 
-    //if (!channelId) throw new ResourceNotFound("Channel not found");
+  //if (!await ChannelHelper.haveAccess(userId, channelId)) {
+  //  throw new AccessDenied();
+  //}
 
-    //if (!await ChannelHelper.haveAccess(userId, channelId)) {
-    //  throw new AccessDenied();
-    //}
+  const msg = await repo.message.get({
+    id: messageId,
+  });
 
-    const msg = await repo.message.get({
-      id: messageId,
-    });
-
-    return msg;
+  return msg;
 });
-

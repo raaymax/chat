@@ -13,4 +13,3 @@ export class BadgeRepo extends Repo<BadgeQuery, Badge> {
     await this.updateMany(where, { count: 0 }, "set");
   }
 }
-

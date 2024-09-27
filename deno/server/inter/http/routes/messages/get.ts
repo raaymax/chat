@@ -1,4 +1,4 @@
-import { Route, Res } from "@planigale/planigale";
+import { Res, Route } from "@planigale/planigale";
 import { Core } from "../../../../core/mod.ts";
 
 export default (core: Core) =>

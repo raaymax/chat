@@ -111,7 +111,9 @@ Deno.test("/api/channels/:channelId/messages - Auth successful", async (t) => {
         assertEquals(body.length, 1);
         assertEquals(body[0].message.text, "test");
         messageId = body[0].id;
-        const dbMeessage = await repo.message.get({ id: EntityId.from(messageId) });
+        const dbMeessage = await repo.message.get({
+          id: EntityId.from(messageId),
+        });
         assertEquals(dbMeessage?.id, EntityId.from(messageId));
       },
     );
@@ -133,10 +135,10 @@ Deno.test("/api/channels/:channelId/messages - Auth successful", async (t) => {
         assert(body);
         assert(body.message);
         assert(!Array.isArray(body.message));
-        assert('text' in body.message);
+        assert("text" in body.message);
         assertEquals(body?.message?.text, "updated");
         assertEquals(body?.pinned, true);
-      }
+      },
     );
 
     await t.step(
@@ -169,7 +171,11 @@ Deno.test("/api/channels/:channelId/messages - Auth successful", async (t) => {
 Deno.test("/api/channels/:channelId/messages - Access constraints", async (t) => {
   const agent = await Agent.from(app);
   const { token, userId } = await login(repo, agent);
-  const { token: memberToken, userId: memberUserId } = await login(repo, agent, 'member');
+  const { token: memberToken, userId: memberUserId } = await login(
+    repo,
+    agent,
+    "member",
+  );
   await usingChannel(repo, {
     name: "test-messages-access",
     users: [EntityId.from(userId), EntityId.from(memberUserId)],
@@ -208,7 +214,9 @@ Deno.test("/api/channels/:channelId/messages - Access constraints", async (t) =>
         assertEquals(body.length, 1);
         assertEquals(body[0].message.text, "test");
         messageId = body[0].id;
-        const dbMeessage = await repo.message.get({ id: EntityId.from(messageId) });
+        const dbMeessage = await repo.message.get({
+          id: EntityId.from(messageId),
+        });
         assertEquals(dbMeessage?.id, EntityId.from(messageId));
       },
     );
@@ -242,7 +250,11 @@ Deno.test("/api/channels/:channelId/messages - Access constraints", async (t) =>
 Deno.test("/api/channels/:channelId/messages - Sending to private channel", async (t) => {
   const agent = await Agent.from(app);
   const { token, userId } = await login(repo, agent);
-  const { token: memberToken, userId: memberUserId } = await login(repo, agent, 'member');
+  const { token: memberToken, userId: memberUserId } = await login(
+    repo,
+    agent,
+    "member",
+  );
   await usingChannel(repo, {
     name: "test-messages-access",
     users: [EntityId.from(userId)],
@@ -293,13 +305,21 @@ Deno.test("/api/channels/:channelId/messages - Sending to private channel", asyn
         await Chat.init(repo, agent)
           .login("admin")
           .createChannel({ name: "test-messages-duplicate" })
-          .sendMessage({flat: "Hello", message: {text: 'Hello'}, clientId: "duplicate"}, (msg, {state}) => {
+          .sendMessage({
+            flat: "Hello",
+            message: { text: "Hello" },
+            clientId: "duplicate",
+          }, (msg, { state }) => {
             state.messageId = msg.id;
           })
-          .sendMessage({flat: "Hello", message: {text: 'Hello'}, clientId: "duplicate"}, (msg, {state}) => {
+          .sendMessage({
+            flat: "Hello",
+            message: { text: "Hello" },
+            clientId: "duplicate",
+          }, (msg, { state }) => {
             assertEquals(msg.id, state.messageId);
           })
-          .end()
+          .end();
       },
     );
   });
@@ -309,7 +329,11 @@ Deno.test("/api/channels/:channelId/messages - Sending to private channel", asyn
 Deno.test("Messages server sent events", async () => {
   const agent = await Agent.from(app);
   const { token, userId } = await login(repo, agent);
-  const { token: memberToken, userId: memberUserId } = await login(repo, agent, "member");
+  const { token: memberToken, userId: memberUserId } = await login(
+    repo,
+    agent,
+    "member",
+  );
   await usingChannel(repo, {
     name: "test-messages-access",
     users: [EntityId.from(userId), EntityId.from(memberUserId)],
@@ -347,7 +371,11 @@ Deno.test("Messages server sent events", async () => {
 Deno.test("Messages history", async (t) => {
   const agent = await Agent.from(app);
   const { token, userId } = await login(repo, agent);
-  const { token: memberToken, userId: memberUserId } = await login(repo, agent, "member");
+  const { token: memberToken, userId: memberUserId } = await login(
+    repo,
+    agent,
+    "member",
+  );
   await usingChannel(repo, {
     name: "test-messages-history",
     users: [EntityId.from(userId), EntityId.from(memberUserId)],
@@ -362,7 +390,7 @@ Deno.test("Messages history", async (t) => {
         text: "test",
       },
       flat: "t0",
-      clientId: '0',
+      clientId: "0",
       userId: EntityId.from(userId),
       channelId: EntityId.from(channelId),
       createdAt: new Date(now - 1000),
@@ -371,7 +399,7 @@ Deno.test("Messages history", async (t) => {
       message: {
         text: "test",
       },
-      clientId: '1',
+      clientId: "1",
       flat: "t1",
       pinned: true,
       userId: EntityId.from(userId),
@@ -382,7 +410,7 @@ Deno.test("Messages history", async (t) => {
       message: {
         text: "test",
       },
-      clientId: '2',
+      clientId: "2",
       flat: "t2",
       userId: EntityId.from(userId),
       channelId: EntityId.from(channelId),
@@ -411,36 +439,51 @@ Deno.test("Messages history", async (t) => {
       assertEquals(body.map((m: any) => m.flat), ["t2", "t1"]);
     });
 
-    await t.step("GET /api/channels/:channelId/messages - before (<=)", async () => {
-      const res = await agent.request()
-        .get(`/api/channels/${channelId}/messages?before=${new Date(now - 500).toISOString()}`)
-        .header("Authorization", `Bearer ${token}`)
-        .expect(200);
+    await t.step(
+      "GET /api/channels/:channelId/messages - before (<=)",
+      async () => {
+        const res = await agent.request()
+          .get(
+            `/api/channels/${channelId}/messages?before=${
+              new Date(now - 500).toISOString()
+            }`,
+          )
+          .header("Authorization", `Bearer ${token}`)
+          .expect(200);
 
-      const body = await res.json();
-      assertEquals(body.length, 2);
-      assertEquals(body.map((m: any) => m.flat), ["t1", "t0"]);
-    })
+        const body = await res.json();
+        assertEquals(body.length, 2);
+        assertEquals(body.map((m: any) => m.flat), ["t1", "t0"]);
+      },
+    );
     await t.step("GET /api/channels/:channelId/messages - before", async () => {
       const res = await agent.request()
-        .get(`/api/channels/${channelId}/messages?before=${new Date(now - 501).toISOString()}`)
+        .get(
+          `/api/channels/${channelId}/messages?before=${
+            new Date(now - 501).toISOString()
+          }`,
+        )
         .header("Authorization", `Bearer ${token}`)
         .expect(200);
 
       const body = await res.json();
       assertEquals(body.length, 1);
       assertEquals(body.map((m: any) => m.flat), ["t0"]);
-    })
+    });
     await t.step("GET /api/channels/:channelId/messages - after", async () => {
       const res = await agent.request()
-        .get(`/api/channels/${channelId}/messages?after=${new Date(now - 500).toISOString()}`)
+        .get(
+          `/api/channels/${channelId}/messages?after=${
+            new Date(now - 500).toISOString()
+          }`,
+        )
         .header("Authorization", `Bearer ${token}`)
         .expect(200);
 
       const body = await res.json();
       assertEquals(body.length, 2);
-      assertEquals(body.map((m: any) => m.flat), ['t2', "t1"]);
-    })
+      assertEquals(body.map((m: any) => m.flat), ["t2", "t1"]);
+    });
     await t.step("GET /api/channels/:channelId/messages - pinend", async () => {
       const res = await agent.request()
         .get(`/api/channels/${channelId}/messages?pinned=true`)
@@ -450,7 +493,7 @@ Deno.test("Messages history", async (t) => {
       const body = await res.json();
       assertEquals(body.length, 1);
       assertEquals(body.map((m: any) => m.flat), ["t1"]);
-    })
+    });
     await t.step("GET /api/channels/:channelId/messages - offset", async () => {
       const res = await agent.request()
         .get(`/api/channels/${channelId}/messages?offset=2&order=asc`)
@@ -460,7 +503,7 @@ Deno.test("Messages history", async (t) => {
       const body = await res.json();
       assertEquals(body.length, 1);
       assertEquals(body.map((m: any) => m.flat), ["t2"]);
-    })
+    });
     await t.step("GET /api/channels/:channelId/messages - search", async () => {
       const res = await agent.request()
         .get(`/api/channels/${channelId}/messages?q=t1`)
@@ -470,7 +513,7 @@ Deno.test("Messages history", async (t) => {
       const body = await res.json();
       assertEquals(body.length, 1);
       assertEquals(body.map((m: any) => m.flat), ["t1"]);
-    })
+    });
   });
   await agent.close();
 });

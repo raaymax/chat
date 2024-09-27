@@ -35,7 +35,7 @@ export class Bus {
     (userIds ?? []).forEach((userId) =>
       internalBus.emit(userId.toString(), { ...msg, _target: "group" })
     );
-  }
+  };
   direct = (userId: EntityId | string, msg: any) =>
     internalBus.emit(userId.toString(), { ...msg, _target: "direct" });
   broadcast = (msg: any) =>

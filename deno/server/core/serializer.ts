@@ -14,5 +14,3 @@ export function serialize<A>(obj: A): any {
   }
   return obj;
 }
-
-

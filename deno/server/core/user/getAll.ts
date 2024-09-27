@@ -4,7 +4,7 @@ import { Id } from "../types.ts";
 
 export default createQuery({
   type: "users:getAll",
-  body: v.optional(v.any())
-}, async (_body, {repo}) => {
+  body: v.optional(v.any()),
+}, async (_body, { repo }) => {
   return await repo.user.getAll({});
 });

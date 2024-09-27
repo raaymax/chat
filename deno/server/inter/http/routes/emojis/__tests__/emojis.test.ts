@@ -15,24 +15,28 @@ Deno.test("GET /api/emojis - unauthorized", async () => {
 });
 
 Deno.test("GET /api/emojis - getAllEmojis empty list", async () => {
-  await Agent.test(app, {type: 'handler'}, async (agent) => {
+  await Agent.test(app, { type: "handler" }, async (agent) => {
     await Chat.init(repo, agent)
       .login("member")
       .getEmojis(async (emojis: Emoji[]) => {
         assertEquals(emojis, []);
       })
       .end();
-  })
-})
+  });
+});
 
 Deno.test("Adding emojis and listing them", async () => {
-  await Agent.test(app, {type: 'handler'}, async (agent) => {
+  await Agent.test(app, { type: "handler" }, async (agent) => {
     const fileId = crypto.randomUUID();
-    try{
+    try {
       await Chat.init(repo, agent)
         .login("member")
         .connectSSE()
-        .executeCommand("/emoji :smile:", [{id: fileId, fileName: "smile.png", contentType: "image/png"}])
+        .executeCommand("/emoji :smile:", [{
+          id: fileId,
+          fileName: "smile.png",
+          contentType: "image/png",
+        }])
         .nextEvent((event: any) => {
           assertEquals(event.type, "emoji");
           assertEquals(event.shortname, ":smile:");
@@ -44,7 +48,7 @@ Deno.test("Adding emojis and listing them", async () => {
         })
         .end();
     } finally {
-      await repo.emoji.removeMany({shortname: ":smile:"});
+      await repo.emoji.removeMany({ shortname: ":smile:" });
     }
-  })
+  });
 });

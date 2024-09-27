@@ -7,6 +7,6 @@ export default createQuery({
   body: v.required(v.object({
     userId: Id,
   })),
-}, async (query, {repo}) => {
+}, async (query, { repo }) => {
   return await repo.channel.getAll(query);
 });

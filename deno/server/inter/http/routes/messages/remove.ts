@@ -1,4 +1,4 @@
-import { Route, Res } from "@planigale/planigale";
+import { Res, Route } from "@planigale/planigale";
 import { Core } from "../../../../core/mod.ts";
 
 export default (core: Core) =>
@@ -15,7 +15,10 @@ export default (core: Core) =>
       },
     },
     handler: async (req) => {
-      await core.message.remove({ userId: req.state.user.id, messageId: req.params.messageId });
+      await core.message.remove({
+        userId: req.state.user.id,
+        messageId: req.params.messageId,
+      });
       return Res.empty();
     },
   });

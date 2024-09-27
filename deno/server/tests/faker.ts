@@ -1,12 +1,12 @@
-import { faker } from 'npm:@faker-js/faker';
-import { Repository } from './infra/mod.ts';
-import config from '@quack/config';
+import { faker } from "npm:@faker-js/faker";
+import { Repository } from "./infra/mod.ts";
+import config from "@quack/config";
 
 const repo = new Repository(config);
 
-const user = await repo.user.get({login: 'admin'});
-const user2 = await repo.user.get({login: 'member'});
-const channel = await repo.channel.get({name: 'main'});
+const user = await repo.user.get({ login: "admin" });
+const user2 = await repo.user.get({ login: "member" });
+const channel = await repo.channel.get({ name: "main" });
 
 //await repo.message.removeMany({channelId: channel.id});
 for (let i = 0; i < 1000; i++) {
@@ -23,4 +23,4 @@ for (let i = 0; i < 1000; i++) {
     createdAt: new Date(),
   });
 }
-await repo.close()
+await repo.close();

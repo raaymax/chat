@@ -18,10 +18,10 @@ import CommandExecute from "./command/execute.ts";
 import GetAllReadReceipts from "./readReceipt/getAll.ts";
 import GetChannelReadReceipts from "./readReceipt/getChannel.ts";
 import PutReadReceipt from "./readReceipt/putReadReceipt.ts";
-import { storage, Repository } from "../infra/mod.ts";
+import { Repository, storage } from "../infra/mod.ts";
 import { buildCommandCollection, EventFrom } from "./command.ts";
 import { bus } from "./bus.ts";
-import { Config } from '@quack/config';
+import { Config } from "@quack/config";
 import BadgesService from "./badgesService.ts";
 
 const commands = buildCommandCollection([
@@ -35,7 +35,6 @@ const commands = buildCommandCollection([
   PutReadReceipt,
 ]);
 
-
 export class Core {
   storage: storage.Storage;
   repo: Repository;
@@ -43,41 +42,41 @@ export class Core {
   channel = {
     get: GetChannel(this),
     getAll: GetAllChannels(this),
-  }
+  };
 
   session = {
     get: GetSession(this),
-  }
+  };
 
   user = {
     get: GetUser(this),
     getAll: GetAllUsers(this),
     getConfig: GetUserConfig(this),
-  }
+  };
 
   message = {
     getAll: GetAllMessages(this),
     get: GetMessage(this),
     remove: RemoveMessage(this),
-  }
+  };
 
   emoji = {
     getAll: GetAllEmojis(this),
-  }
+  };
 
   readReceipt = {
     getAll: GetAllReadReceipts(this),
     getChannel: GetChannelReadReceipts(this),
-  }
+  };
 
   services = {
     badge: new BadgesService(this),
-  }
+  };
 
   constructor(arg: {
-    config: Config,
-    repo?: Repository,
-    fileStorage?: storage.Storage,
+    config: Config;
+    repo?: Repository;
+    fileStorage?: storage.Storage;
   }) {
     this.repo = arg.repo ?? new Repository(arg.config);
     this.storage = arg.fileStorage ?? storage.initStorage(arg.config);

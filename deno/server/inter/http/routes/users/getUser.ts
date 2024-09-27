@@ -6,7 +6,7 @@ export default (core: Core) =>
     method: "GET",
     url: "/:userId",
     handler: async (req) => {
-      const user = await core.user.get({id: req.params.userId});
+      const user = await core.user.get({ id: req.params.userId });
       if (!user) {
         throw new ResourceNotFound("User not found");
       }

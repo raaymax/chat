@@ -14,31 +14,34 @@ Deno.test("POST /api/commands/execute - unauthorized", async () => {
 });
 
 Deno.test("command /echo <text>", async () => {
-  return await Agent.test(app, {type: 'handler'}, async (agent) => {
+  return await Agent.test(app, { type: "handler" }, async (agent) => {
     return await Chat.init(repo, agent)
       .login("admin")
-      .createChannel({name: "test-commands"})
+      .createChannel({ name: "test-commands" })
       .connectSSE()
-      .executeCommand("/echo Hello World!!", [], async ({events, channelId}) => {
-        const { event: msg } = await events.next();
-        const msgJson = JSON.parse(msg?.data ?? "");
-        assertEquals(msgJson.type, "message");
-        assertEquals(msgJson.flat, "Hello World!!");
-        assertEquals(msgJson.message.text, "Hello World!!");
-        assertEquals(msgJson.channelId, channelId);
-      })
+      .executeCommand(
+        "/echo Hello World!!",
+        [],
+        async ({ events, channelId }) => {
+          const { event: msg } = await events.next();
+          const msgJson = JSON.parse(msg?.data ?? "");
+          assertEquals(msgJson.type, "message");
+          assertEquals(msgJson.flat, "Hello World!!");
+          assertEquals(msgJson.message.text, "Hello World!!");
+          assertEquals(msgJson.channelId, channelId);
+        },
+      )
       .end();
   });
 });
 
-
 Deno.test("command /emoji <name>", async () => {
-  return await Agent.test(app, {type: 'handler'}, async (agent) => {
-    const state: any = {}
+  return await Agent.test(app, { type: "handler" }, async (agent) => {
+    const state: any = {};
     try {
       await Chat.init(repo, agent)
         .login("admin")
-        .createChannel({name: "test-commands"})
+        .createChannel({ name: "test-commands" })
         .connectSSE()
         .executeCommand("/emoji party-parrot", [
           {
@@ -46,7 +49,7 @@ Deno.test("command /emoji <name>", async () => {
             fileName: "party-parrot.gif",
             contentType: "image/gif",
           },
-        ], async ({channelId}) => {
+        ], async ({ channelId }) => {
           state.channelId = channelId;
         })
         .nextEvent((event: any) => {
@@ -56,12 +59,16 @@ Deno.test("command /emoji <name>", async () => {
         .nextEvent((event: any) => {
           assertEquals(event.type, "message");
           assertEquals(event.flat, "Emoji :party-parrot: created");
-          assertEquals(event.message, {line: [{text: "Emoji "}, {emoji: ":party-parrot:"}, {text: "created"}]});
+          assertEquals(event.message, {
+            line: [{ text: "Emoji " }, { emoji: ":party-parrot:" }, {
+              text: "created",
+            }],
+          });
           assertEquals(event.channelId, state.channelId);
         })
         .end();
     } finally {
-      await repo.emoji.removeMany({shortname: ":party-parrot:"});
+      await repo.emoji.removeMany({ shortname: ":party-parrot:" });
     }
   });
-})
+});

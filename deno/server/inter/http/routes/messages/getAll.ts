@@ -1,4 +1,4 @@
-import { Route, Res } from "@planigale/planigale";
+import { Res, Route } from "@planigale/planigale";
 import { Core } from "../../../../core/mod.ts";
 
 export default (core: Core) =>
@@ -11,7 +11,7 @@ export default (core: Core) =>
         required: ["channelId"],
         properties: {
           channelId: { type: "string", format: "entity-id" },
-          parentId: { type: "string", format: "entity-id"},
+          parentId: { type: "string", format: "entity-id" },
         },
       },
       query: {
@@ -25,7 +25,7 @@ export default (core: Core) =>
           order: { type: "string", enum: ["asc", "desc"] },
           q: { type: "string" },
         },
-      }
+      },
     },
     handler: async (req) => {
       const messages = await core.message.getAll({
@@ -39,10 +39,12 @@ export default (core: Core) =>
           limit: req.query.limit,
           offset: req.query.offset,
           search: req.query.q,
-          order: req.query.order ? (
-            req.query.order === "asc" ? 1 : -1
-          ) : undefined,
-        }
+          order: req.query.order
+            ? (
+              req.query.order === "asc" ? 1 : -1
+            )
+            : undefined,
+        },
       });
       return Res.json(messages);
     },

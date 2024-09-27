@@ -5,4 +5,3 @@ type InvitationQuery = Partial<Invitation>;
 export class InvitationRepo extends Repo<InvitationQuery, Invitation> {
   COLLECTION = "invitations";
 }
-

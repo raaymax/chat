@@ -20,7 +20,7 @@ export default createCommand({
     }),
     ["userId", "name"],
   ),
-}, async (channel, {repo}) => {
+}, async (channel, { repo }) => {
   const { channelType, userId, users, name } = channel;
   if (channelType === "PUBLIC" || channelType === "PRIVATE") {
     const existing = await repo.channel.get({ channelType, name, userId });

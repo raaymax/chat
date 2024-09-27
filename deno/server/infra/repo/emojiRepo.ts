@@ -5,4 +5,3 @@ type EmojiQuery = Partial<Emoji>;
 export class EmojiRepo extends Repo<EmojiQuery, Emoji> {
   COLLECTION = "emojis";
 }
-

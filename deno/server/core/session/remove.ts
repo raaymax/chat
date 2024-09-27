@@ -7,6 +7,6 @@ export default createCommand({
   body: v.object({
     sessionId: Id,
   }),
-}, async ({ sessionId }, {repo}) => {
+}, async ({ sessionId }, { repo }) => {
   await repo.session.remove({ id: sessionId });
 });

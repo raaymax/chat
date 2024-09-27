@@ -82,5 +82,3 @@ export function buildCommandCollection<T extends { type: string }[]>(
 export type EventFrom<T> = T extends Command<infer T, infer U>
   ? { type: T; body: v.InferInput<U> }
   : never;
-
-

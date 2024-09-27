@@ -8,6 +8,6 @@ export default createQuery({
     userId: Id,
     id: v.optional(Id),
   })),
-}, async (query, {repo}) => {
+}, async (query, { repo }) => {
   return await repo.channel.get(query);
 });

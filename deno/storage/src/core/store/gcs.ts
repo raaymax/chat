@@ -6,7 +6,7 @@ import { GoogleAuth } from "npm:google-auth-library";
 import { ResourceNotFound } from "@planigale/planigale";
 
 //const API_URL = "http://localhost:8888";
-const API_URL = 'https://storage.googleapis.com';
+const API_URL = "https://storage.googleapis.com";
 
 class Gcs {
   bucketName: string;
@@ -25,7 +25,7 @@ class Gcs {
     return `${API_URL}/upload/storage/v1/b/${this.bucketName}/o?uploadType=media&name=${fileId}`;
   }
 
-  constructor(config: {bucket: string}) {
+  constructor(config: { bucket: string }) {
     this.bucketName = config.bucket;
   }
 
@@ -149,6 +149,6 @@ class Gcs {
   };
 }
 
-export const files = (config: {bucket: string}) => {
+export const files = (config: { bucket: string }) => {
   return new Gcs(config);
 };

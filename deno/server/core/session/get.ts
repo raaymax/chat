@@ -8,6 +8,6 @@ export default createQuery({
     id: v.optional(Id),
     token: v.optional(v.string()),
   }),
-}, async (query, {repo}) => {
+}, async (query, { repo }) => {
   return await repo.session.get(query);
 });

@@ -1,4 +1,3 @@
-
 import { Route } from "@planigale/planigale";
 import { Core } from "../../../../core/mod.ts";
 import { User } from "../../../../types.ts";

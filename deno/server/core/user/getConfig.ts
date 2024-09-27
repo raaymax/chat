@@ -9,7 +9,7 @@ export default createQuery({
   body: v.object({
     id: Id,
   }),
-}, async (query, {repo}) => {
+}, async (query, { repo }) => {
   const user = await repo.user.get(query);
   if (!user) {
     throw new ResourceNotFound("User not found");
@@ -21,4 +21,3 @@ export default createQuery({
     vapidPublicKey: config.vapid.publicKey,
   };
 });
-

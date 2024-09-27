@@ -30,24 +30,24 @@ export default createCommand({
     ["name", "text", "context"],
   ),
 }, async (msg, core) => {
-  if(msg.name === "emoji") {
+  if (msg.name === "emoji") {
     return await EmojiCommand.execute(msg, core);
   }
-  if(msg.name === "version") {
+  if (msg.name === "version") {
     return await VersionCommand.execute(msg, core);
   }
-  if(msg.name === "echo") {
+  if (msg.name === "echo") {
     const response = {
       channelId: msg.context.channelId,
       flat: msg.text,
       message: { text: msg.text },
       createdAt: new Date().toISOString(),
-    }
+    };
 
     bus.direct(msg.userId, {
       type: "message",
       ...response,
-    })
+    });
     return;
   }
 

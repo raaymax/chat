@@ -111,8 +111,8 @@ export const Config = {
       ...secrets,
       ...config,
     };
-  }
-}
+  },
+};
 
 async function importTestConfig(): Promise<Config> {
   let config;
@@ -154,9 +154,7 @@ async function importConfig(file: string): Promise<Config | null> {
 
 async function importScript(file: string): Promise<Config | null> {
   try {
-    const absPath = path.isAbsolute(file)
-      ? file
-      : path.join("..", "..", file);
+    const absPath = path.isAbsolute(file) ? file : path.join("..", "..", file);
     const { default: config } = await import(absPath);
     return config as Config;
   } catch {

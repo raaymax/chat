@@ -7,7 +7,7 @@ import { NotOwner, ResourceNotFound } from "../errors.ts";
 export default createCommand({
   type: "message:update",
   body: v.object({
-    id: Id, 
+    id: Id,
     userId: Id,
     data: v.object({
       flat: v.optional(v.string()),
@@ -21,11 +21,11 @@ export default createCommand({
           id: v.string(),
           fileName: v.string(),
           contentType: v.optional(v.string(), "application/octet-stream"),
-        }))
+        })),
       ),
     }),
   }),
-}, async (msg, {repo}) => {
+}, async (msg, { repo }) => {
   const message = await repo.message.get({ id: msg.id });
   if (!message) {
     throw new ResourceNotFound("Message not found");
@@ -33,5 +33,5 @@ export default createCommand({
   if (message.userId.neq(msg.userId)) {
     throw new NotOwner();
   }
-  await repo.message.update({id: msg.id}, msg.data);
+  await repo.message.update({ id: msg.id }, msg.data);
 });

@@ -1,4 +1,3 @@
-
 export class EmojiCommand {
   static name = "emoji";
 
@@ -16,7 +15,8 @@ export class EmojiCommand {
 
   static async execute(data: any, core: any) {
     EmojiCommand.validate(data);
-    const shortname = ':'+data.text.trim().replace(/^:/, '').replace(/:$/, '')+':';
+    const shortname = ":" +
+      data.text.trim().replace(/^:/, "").replace(/:$/, "") + ":";
 
     const id = await core.repo.emoji.create({
       shortname,
@@ -26,7 +26,7 @@ export class EmojiCommand {
     core.bus.broadcast({
       type: "emoji",
       ...(await core.repo.emoji.get(id)),
-    })
+    });
 
     core.bus.direct(data.userId, {
       type: "message",
@@ -34,12 +34,14 @@ export class EmojiCommand {
       priv: true,
       channelId: data.context.channelId,
       flat: `Emoji ${shortname} created`,
-      message: { line: [
-        { text: 'Emoji '}, { emoji: shortname }, { text: "created" },
-      ]},
+      message: {
+        line: [
+          { text: "Emoji " },
+          { emoji: shortname },
+          { text: "created" },
+        ],
+      },
       createdAt: new Date().toISOString(),
     });
   }
-
 }
-

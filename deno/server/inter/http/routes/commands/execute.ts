@@ -7,30 +7,34 @@ export default (core: Core) =>
     url: "/execute",
     schema: {
       body: {
-        type: 'object',
-        required: ['name', 'text', 'context'],
+        type: "object",
+        required: ["name", "text", "context"],
         properties: {
-          name: { type: 'string' },
-          text: { type: 'string', description: 'Everything that comes after the command name `/command <text>`' },
+          name: { type: "string" },
+          text: {
+            type: "string",
+            description:
+              "Everything that comes after the command name `/command <text>`",
+          },
           attachments: {
-            type: 'array',
+            type: "array",
             items: {
-              type: 'object',
-              required: ['id', 'fileName'],
+              type: "object",
+              required: ["id", "fileName"],
               properties: {
-                id: { type: 'string' },
-                fileName: { type: 'string' },
-                contentType: { type: 'string' },
+                id: { type: "string" },
+                fileName: { type: "string" },
+                contentType: { type: "string" },
               },
             },
           },
           context: {
-            type: 'object',
-            required: ['channelId'],
+            type: "object",
+            required: ["channelId"],
             properties: {
-              channelId: { type: 'string' },
-              parentId: { type: 'string' },
-              appVersion: { type: 'string' },
+              channelId: { type: "string" },
+              parentId: { type: "string" },
+              appVersion: { type: "string" },
             },
           },
         },
@@ -42,12 +46,12 @@ export default (core: Core) =>
         type: "command:execute",
         body: {
           userId: req.state.user.id,
-          name: body.name.replace(/^\//, ''),
+          name: body.name.replace(/^\//, ""),
           text: body.text,
           attachments: body.attachments,
           context: body.context,
-        }
-      })
+        },
+      });
       return Res.empty();
     },
   });

@@ -8,7 +8,9 @@ export const usingChannel = async (
 ) => {
   let channelId = channel.id;
   try {
-    const c = channel.id ? await repo.channel.get({ id: EntityId.from(channel.id) }) : null;
+    const c = channel.id
+      ? await repo.channel.get({ id: EntityId.from(channel.id) })
+      : null;
     if (!c) {
       channelId = await repo.channel.create(channel);
     }
@@ -17,7 +19,7 @@ export const usingChannel = async (
     }
     await fn(channelId.toString());
   } finally {
-    if(channelId) {
+    if (channelId) {
       await repo.message.removeMany({ channelId: EntityId.from(channelId) });
       await repo.channel.remove({ id: EntityId.from(channelId) });
     }

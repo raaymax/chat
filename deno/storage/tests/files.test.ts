@@ -186,7 +186,7 @@ for (const config of configs) {
         body.byteLength.toString(),
       );*/
     });
-    
+
     await t.step("GET /:id - miniature image should exist ", async () => {
       const agent = await Agent.from(app);
       const res = await agent.request()
