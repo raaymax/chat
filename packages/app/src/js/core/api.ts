@@ -180,8 +180,8 @@ class API extends EventTarget {
         });
       }
       case 'message:pin': {
-        await this.fetch(`/api/messages/${msg.id}`, {
-          method: 'PATCH',
+        await this.fetch(`/api/messages/${msg.id}/pin`, {
+          method: 'PUT',
           body: JSON.stringify({pinned: msg.pinned}),
           headers: {
             'Content-Type': 'application/json'

@@ -13,6 +13,7 @@ import GetAllMessages from "./message/getAll.ts";
 import GetMessage from "./message/get.ts";
 import RemoveMessage from "./message/remove.ts";
 import UpdateMessage from "./message/update.ts";
+import PinMessage from "./message/pin.ts";
 import GetAllEmojis from "./emoji/getAll.ts";
 import CommandExecute from "./command/execute.ts";
 import GetAllReadReceipts from "./readReceipt/getAll.ts";
@@ -33,6 +34,7 @@ const commands = buildCommandCollection([
   UpdateMessage,
   CommandExecute,
   UpdateReadReceipt,
+  PinMessage,
 ]);
 
 export class Core {

@@ -86,7 +86,7 @@ export const Header = ({ onClick }: HeaderProps) => {
   return (
     <StyledHeader>
       <Toolbar className="toolbar" size={50}>
-        <ButtonWithIcon icon="hash" onClick={onClick} />
+        <ButtonWithIcon icon="bars" onClick={onClick} />
         <Channel onClick={onClick} channelId={channelId} />
         {stream.type === 'archive' && (
           <ButtonWithIcon icon='down' onClick = {() => {

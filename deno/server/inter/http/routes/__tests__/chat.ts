@@ -328,6 +328,29 @@ export class Chat {
     return this;
   }
 
+  pinMessage(messageId: string) {
+    this.steps.push(async () => {
+      await this.agent.request()
+        .patch(`/api/messages/${messageId}`)
+        .json({ pinned: true })
+        .header("Authorization", `Bearer ${this.token}`)
+        .expect(204);
+    });
+    return this;
+  }
+
+  getPinnedMessages(fn: (messages: any[], chat: Chat) => Promise<any> | any) {
+    this.steps.push(async () => {
+      const res = await this.agent.request()
+        .get(`/api/channels/${this.channelId}/pinned-messages`)
+        .header("Authorization", `Bearer ${this.token}`)
+        .expect(200);
+      const body = await res.json();
+      await fn(body, this);
+    });
+    return this;
+  }
+
   end() {
     this.ended = true;
     return this;
