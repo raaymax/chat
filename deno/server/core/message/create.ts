@@ -30,7 +30,7 @@ export default createCommand({
     }),
     ["userId", "message", "channelId", "clientId", "flat"],
   ),
-}, async (msg, {repo}) => {
+}, async (msg, {repo, services}) => {
   const channel = await repo.channel.get({
     id: msg.channelId,
     userId: msg.userId,
@@ -52,6 +52,12 @@ export default createCommand({
         throw err;
       }
       dup = true;
+      const message = await repo.message.get({
+        clientId: msg.clientId,
+      });
+      if (message) {
+        id = message.id
+      }
     }
     return { id, dup };
   }
@@ -101,7 +107,14 @@ export default createCommand({
     bus.group(channel.users, { type: "message", ...created });
     //await services.notifications.send(created, res);
   }
-  //await services.badge.messageSent(channel.id, msg.parentId, id, req.userId);
+  if (id) {
+    await services.badge.messageSent({
+      channelId: channel.id,
+      parentId: msg.parentId,
+      messageId: id,
+      userId: msg.userId,
+    });
+  }
   return id; //{ id, duplicate: dup };
   /*
     if (msg.links?.length) {

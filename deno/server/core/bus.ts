@@ -23,7 +23,7 @@ class Emitter {
 
 const internalBus = new Emitter();
 
-class Bus {
+export class Bus {
   hasKey = (userId: EntityId | string) =>
     internalBus.eventNames().includes(userId.toString());
   getListeners = () =>

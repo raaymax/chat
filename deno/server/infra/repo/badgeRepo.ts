@@ -5,12 +5,12 @@ type BadgeQuery = Partial<Badge>;
 export class BadgeRepo extends Repo<BadgeQuery, Badge> {
   COLLECTION = "badges";
 
-  increment(where: BadgeQuery): void {
-    this.updateMany(where, { count: 1 }, "inc");
+  async increment(where: BadgeQuery) {
+    await this.updateMany(where, { count: 1 }, "inc");
   }
 
-  reset(where: BadgeQuery): void {
-    this.updateMany(where, { count: 0 }, "set");
+  async reset(where: BadgeQuery) {
+    await this.updateMany(where, { count: 0 }, "set");
   }
 }
 

@@ -28,7 +28,7 @@ export class Database {
       this.db = this.client.db();
       return {db: this.db, client: this.client};
     }catch(e){
-      console.error('tu', e);
+      console.error('db connect', e);
       throw e;
     }
   }

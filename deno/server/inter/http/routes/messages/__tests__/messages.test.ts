@@ -5,6 +5,7 @@ import { login, usingChannel } from "../../__tests__/mod.ts";
 import { ObjectId } from "mongodb";
 import { ChannelType, EntityId } from "../../../../../types.ts";
 import { createApp } from "../../__tests__/app.ts";
+import { Chat } from "../../__tests__/chat.ts";
 const { app, repo, core } = createApp();
 
 const randomChannelId = "66a35e599c8d540997b97808";
@@ -284,6 +285,21 @@ Deno.test("/api/channels/:channelId/messages - Sending to private channel", asyn
           .expect(404);
         const body = await res.json();
         assertEquals(body.errorCode, "RESOURCE_NOT_FOUND");
+      },
+    );
+    await t.step(
+      "POST /api/channels/:channelId/messages - createMessage duplicate information",
+      async () => {
+        await Chat.init(repo, agent)
+          .login("admin")
+          .createChannel({ name: "test-messages-duplicate" })
+          .sendMessage({flat: "Hello", message: {text: 'Hello'}, clientId: "duplicate"}, (msg, {state}) => {
+            state.messageId = msg.id;
+          })
+          .sendMessage({flat: "Hello", message: {text: 'Hello'}, clientId: "duplicate"}, (msg, {state}) => {
+            assertEquals(msg.id, state.messageId);
+          })
+          .end()
       },
     );
   });

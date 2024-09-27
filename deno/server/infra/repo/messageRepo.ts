@@ -22,12 +22,12 @@ export class MessageRepo extends Repo<MessageQuery, Message> {
 
   makeQuery(data: MessageQuery) {
     const { search, before, after, ...rest } = serialize(data);
-    return {
+    return Object.fromEntries(Object.entries({
       ...rest,
       ...(search ? { $text: { $search: search } } : {}),
       ...(before ? { createdAt: { $lte: before } } : {}),
       ...(after ? { createdAt: { $gte: after } } : {}),
-    };
+    }).filter(([, v]) => v !== undefined))
   }
 
   async getAll(

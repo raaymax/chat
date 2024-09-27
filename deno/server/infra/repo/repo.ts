@@ -76,4 +76,10 @@ export class Repo<Query, Model> {
     const items = await db.collection(this.COLLECTION).find(query).toArray();
     return deserialize(items);
   }
+  async count(data: Query) {
+    const { db } = await this.connect();
+    const query = this.makeQuery(data);
+    return db.collection(this.COLLECTION)
+      .countDocuments(query);
+  }
 }

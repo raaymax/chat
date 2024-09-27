@@ -15,10 +15,14 @@ import RemoveMessage from "./message/remove.ts";
 import UpdateMessage from "./message/update.ts";
 import GetAllEmojis from "./emoji/getAll.ts";
 import CommandExecute from "./command/execute.ts";
+import GetAllReadReceipts from "./readReceipt/getAll.ts";
+import GetChannelReadReceipts from "./readReceipt/getChannel.ts";
+import PutReadReceipt from "./readReceipt/putReadReceipt.ts";
 import { storage, Repository } from "../infra/mod.ts";
 import { buildCommandCollection, EventFrom } from "./command.ts";
 import { bus } from "./bus.ts";
 import { Config } from '@quack/config';
+import BadgesService from "./badgesService.ts";
 
 const commands = buildCommandCollection([
   CreateMessage,
@@ -28,6 +32,7 @@ const commands = buildCommandCollection([
   RemoveChannel,
   UpdateMessage,
   CommandExecute,
+  PutReadReceipt,
 ]);
 
 
@@ -58,6 +63,15 @@ export class Core {
 
   emoji = {
     getAll: GetAllEmojis(this),
+  }
+
+  readReceipt = {
+    getAll: GetAllReadReceipts(this),
+    getChannel: GetChannelReadReceipts(this),
+  }
+
+  services = {
+    badge: new BadgesService(this),
   }
 
   constructor(arg: {
