@@ -3,15 +3,13 @@ import { Core } from "../../../../core/mod.ts";
 
 export default (core: Core) =>
   new Route({
-    method: "PUT",
-    url: "/channels/:channelId/read-receipts",
+    method: "POST",
+    url: "/read-receipts",
     public: false,
     schema: {
       params: {
         type: "object",
-        required: ["channelId"],
         properties: {
-          channelId: { type: "string" },
           parentId: { type: "string" },
         },
       },
@@ -25,12 +23,16 @@ export default (core: Core) =>
     },
     handler: async (req) => {
       const userId = req.state.user.id;
-      const channelId = req.params.channelId;
       const parentId = req.params?.parentId;
       const messageId = req.body.messageId;
+      console.log({
+        userId,
+        parentId,
+        messageId,
+      });
       const receiptId = await core.dispatch({
-        type: "readReceipt:put",
-        body: { userId, channelId, parentId, messageId },
+        type: "readReceipt:update",
+        body: { userId, parentId, messageId },
       });
       return Response.json({ id: receiptId });
     },

@@ -203,6 +203,27 @@ class API extends EventTarget {
         seqId: msg.seqId,
         mapFn: (i: any) => ({type: 'search', ...i})
       });
+      case 'readReceipt:getOwn': {
+        return this.fetch(`/api/read-receipts`, {
+          seqId: msg.seqId, 
+          mapFn: (i: any) => ({type: 'badge', ...i})
+        });
+      }
+      case 'readReceipt:getChannel': {
+        return this.fetch(`/api/channels/${msg.channelId}/read-receipts`, {
+          seqId: msg.seqId, 
+          mapFn: (i: any) => ({type: 'badge', ...i})
+        });
+      }
+      case 'readReceipt:update': {
+        return this.fetch(`/api/read-receipts`, {
+          method: 'POST',
+          body: JSON.stringify({messageId: msg.messageId}),
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        });
+      }
       default:
         return {
           type: 'response',

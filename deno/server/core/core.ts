@@ -17,7 +17,7 @@ import GetAllEmojis from "./emoji/getAll.ts";
 import CommandExecute from "./command/execute.ts";
 import GetAllReadReceipts from "./readReceipt/getAll.ts";
 import GetChannelReadReceipts from "./readReceipt/getChannel.ts";
-import PutReadReceipt from "./readReceipt/putReadReceipt.ts";
+import UpdateReadReceipt from "./readReceipt/updateReadReceipt.ts";
 import { Repository, storage } from "../infra/mod.ts";
 import { buildCommandCollection, EventFrom } from "./command.ts";
 import { bus } from "./bus.ts";
@@ -32,7 +32,7 @@ const commands = buildCommandCollection([
   RemoveChannel,
   UpdateMessage,
   CommandExecute,
-  PutReadReceipt,
+  UpdateReadReceipt,
 ]);
 
 export class Core {

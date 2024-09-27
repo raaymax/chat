@@ -5,7 +5,7 @@ import { useActions, useDispatch } from '../../store';
 import { resend } from '../../services/messages';
 
 import { LinkPreviewList } from '../atoms/LinkPreview';
-import { ReadReceipt } from '../atoms/ReadReceipt';
+import { ReadReceipt } from '../molecules/ReadReceipt';
 import { UserCircle } from '../atoms/UserCircle';
 import { buildMessageBody } from '../molecules/MessageBody';
 import { Files } from '../molecules/Files';

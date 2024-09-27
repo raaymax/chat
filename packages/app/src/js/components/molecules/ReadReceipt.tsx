@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { UserCircle } from '../atoms/UserCircle';
 
 const StyledReadReceipt = styled.div`
   position: relative;
@@ -38,7 +39,7 @@ export const ReadReceipt = ({ data }: ReadReceiptProps) => {
         {
           data
             .map((p) => (
-              <img key={p.userId} src={p.user?.avatarUrl} alt={p.user?.name} />
+              <UserCircle key={p.userId} userId={p.userId} />
             ))
         }
       </div>
