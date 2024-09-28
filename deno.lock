@@ -2,6 +2,10 @@
   "version": "3",
   "packages": {
     "specifiers": {
+      "jsr:@cliffy/command@1.0.0-rc.5": "jsr:@cliffy/command@1.0.0-rc.5",
+      "jsr:@cliffy/flags@1.0.0-rc.5": "jsr:@cliffy/flags@1.0.0-rc.5",
+      "jsr:@cliffy/internal@1.0.0-rc.5": "jsr:@cliffy/internal@1.0.0-rc.5",
+      "jsr:@cliffy/table@1.0.0-rc.5": "jsr:@cliffy/table@1.0.0-rc.5",
       "jsr:@db/sqlite@^0.11.1": "jsr:@db/sqlite@0.11.1",
       "jsr:@deno-plc/vite-plugin-deno": "jsr:@deno-plc/vite-plugin-deno@0.1.2",
       "jsr:@denosaurs/plug@1": "jsr:@denosaurs/plug@1.0.6",
@@ -10,7 +14,7 @@
       "jsr:@planigale/planigale": "jsr:@planigale/planigale@0.6.2",
       "jsr:@planigale/planigale@^0.6.1": "jsr:@planigale/planigale@0.6.2",
       "jsr:@planigale/planigale@^0.6.2": "jsr:@planigale/planigale@0.6.2",
-      "jsr:@planigale/schema": "jsr:@planigale/schema@0.1.2",
+      "jsr:@planigale/schema": "jsr:@planigale/schema@0.1.3",
       "jsr:@planigale/sse": "jsr:@planigale/sse@0.2.1",
       "jsr:@planigale/sse@^0.2.1": "jsr:@planigale/sse@0.2.1",
       "jsr:@planigale/testing": "jsr:@planigale/testing@0.3.1",
@@ -25,6 +29,7 @@
       "jsr:@std/bytes@^1.0.0-rc.3": "jsr:@std/bytes@1.0.2",
       "jsr:@std/bytes@^1.0.2": "jsr:@std/bytes@1.0.2",
       "jsr:@std/bytes@^1.0.2-rc.3": "jsr:@std/bytes@1.0.2",
+      "jsr:@std/cli@1.0.0-rc.2": "jsr:@std/cli@1.0.0-rc.2",
       "jsr:@std/cli@^0.224.7": "jsr:@std/cli@0.224.7",
       "jsr:@std/crypto@^1.0.3": "jsr:@std/crypto@1.0.3",
       "jsr:@std/encoding@1.0.0-rc.2": "jsr:@std/encoding@1.0.0-rc.2",
@@ -33,6 +38,7 @@
       "jsr:@std/fmt@^0.221.0": "jsr:@std/fmt@0.221.0",
       "jsr:@std/fmt@^0.223.0": "jsr:@std/fmt@0.223.0",
       "jsr:@std/fmt@^0.225.4": "jsr:@std/fmt@0.225.6",
+      "jsr:@std/fmt@~0.225.4": "jsr:@std/fmt@0.225.6",
       "jsr:@std/fs": "jsr:@std/fs@1.0.3",
       "jsr:@std/fs@^0.221.0": "jsr:@std/fs@0.221.0",
       "jsr:@std/fs@^0.223.0": "jsr:@std/fs@0.223.0",
@@ -56,6 +62,7 @@
       "jsr:@std/path@^1.0.2": "jsr:@std/path@1.0.2",
       "jsr:@std/path@^1.0.4": "jsr:@std/path@1.0.6",
       "jsr:@std/streams@^0.224.5": "jsr:@std/streams@0.224.5",
+      "jsr:@std/text@1.0.0-rc.1": "jsr:@std/text@1.0.0-rc.1",
       "jsr:@std/uuid@^1.0.4": "jsr:@std/uuid@1.0.4",
       "jsr:@ts-rex/bcrypt@^1.0.3": "jsr:@ts-rex/bcrypt@1.0.3",
       "npm:@types/json-schema@^7.0.15": "npm:@types/json-schema@7.0.15",
@@ -81,6 +88,32 @@
       "npm:zod@^3.22.5": "npm:zod@3.23.8"
     },
     "jsr": {
+      "@cliffy/command@1.0.0-rc.5": {
+        "integrity": "55e00a1d0ae38152fb275a89494a81ffb9b144eb9060107c0be5af46e1ba736c",
+        "dependencies": [
+          "jsr:@cliffy/flags@1.0.0-rc.5",
+          "jsr:@cliffy/internal@1.0.0-rc.5",
+          "jsr:@cliffy/table@1.0.0-rc.5",
+          "jsr:@std/fmt@~0.225.4",
+          "jsr:@std/text@1.0.0-rc.1"
+        ]
+      },
+      "@cliffy/flags@1.0.0-rc.5": {
+        "integrity": "bd33b7b399e0af353f5516d87a2d552d46ee7e7f4a6f0c0bc65fcce750710217",
+        "dependencies": [
+          "jsr:@std/text@1.0.0-rc.1"
+        ]
+      },
+      "@cliffy/internal@1.0.0-rc.5": {
+        "integrity": "1e8dca4fcfba1815bf1a899bb880e09f8b45284c352465ef8fb015887c1fc126"
+      },
+      "@cliffy/table@1.0.0-rc.5": {
+        "integrity": "2b3e1b4764bbb56b0c39aeba95bc0bb551d9bd4475fbb6d1ce368c08b7ef9eb3",
+        "dependencies": [
+          "jsr:@std/cli@1.0.0-rc.2",
+          "jsr:@std/fmt@~0.225.4"
+        ]
+      },
       "@db/sqlite@0.11.1": {
         "integrity": "546434e7ed762db07e6ade0f963540dd5e06723b802937bf260ff855b21ef9c5",
         "dependencies": [
@@ -142,6 +175,13 @@
           "npm:ajv@^8.17.1"
         ]
       },
+      "@planigale/schema@0.1.3": {
+        "integrity": "1807b6b8a5184c1ffa918b0f04c79179c39128ecaa9d68df8eed1b99e758dd7d",
+        "dependencies": [
+          "jsr:@planigale/planigale@^0.6.2",
+          "npm:ajv@^8.17.1"
+        ]
+      },
       "@planigale/sse@0.2.1": {
         "integrity": "42a420850c9afe4cc79dc75d7a69acba8c6bfb23162f93feda747c109e9aed02",
         "dependencies": [
@@ -197,6 +237,9 @@
       },
       "@std/cli@0.224.7": {
         "integrity": "654ca6477518e5e3a0d3fabafb2789e92b8c0febf1a1d24ba4b567aba94b5977"
+      },
+      "@std/cli@1.0.0-rc.2": {
+        "integrity": "97dfae82b9f0e189768ebfa7a5da53375955b94bad0a1804f8e3b73563b03787"
       },
       "@std/crypto@1.0.3": {
         "integrity": "a2a32f51ddef632d299e3879cd027c630dcd4d1d9a5285d6e6788072f4e51e7f"
@@ -327,6 +370,9 @@
           "jsr:@std/bytes@^1.0.0-rc.3",
           "jsr:@std/io@^0.224.1"
         ]
+      },
+      "@std/text@1.0.0-rc.1": {
+        "integrity": "34c722203e87ee12792c8d4a0cd2ee0e001341cbce75b860fc21be19d62232b0"
       },
       "@std/uuid@1.0.4": {
         "integrity": "f4233149cc8b4753cc3763fd83a7c4101699491f55c7be78dc7b30281946d7a0",

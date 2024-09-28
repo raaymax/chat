@@ -2,19 +2,20 @@ import * as v from "valibot";
 import { createCommand } from "../command.ts";
 import { Id, IdArr } from "../types.ts";
 import { bus } from "../bus.ts";
-import { ResourceNotFound } from "../errors.ts";
+import { ResourceNotFound, InvalidMessage } from "../errors.ts";
+import { flatten } from "./flatten.ts";
 
 export default createCommand({
   type: "message:create",
   body: v.required(
     v.object({
       userId: Id,
-      message: v.any(),
+      message: v.optional(v.any()),
       channelId: Id,
       parentId: v.optional(Id),
-      flat: v.string(),
+      flat: v.optional(v.string()),
       pinned: v.optional(v.boolean()),
-      clientId: v.string(),
+      clientId: v.optional(v.string()),
       emojiOnly: v.optional(v.boolean(), false),
       debug: v.optional(v.string()),
       links: v.optional(v.array(v.string()), []),
@@ -28,7 +29,7 @@ export default createCommand({
         [],
       ),
     }),
-    ["userId", "message", "channelId", "clientId", "flat"],
+    ["userId", "channelId"],
   ),
 }, async (msg, { repo, services }) => {
   const channel = await repo.channel.get({
@@ -37,6 +38,21 @@ export default createCommand({
   });
   if (!channel) {
     throw new ResourceNotFound("Channel not found");
+  }
+
+  if(!msg.message && !msg.flat) {
+    throw new InvalidMessage("Message or flat must be provided");
+  }
+
+  if(!msg.message && msg.flat) {
+    msg.message = {text: msg.flat};
+  }
+  if(msg.message && !msg.flat) {
+    msg.flat = flatten(msg.message);
+  }
+
+  if (!msg.clientId) {
+    msg.clientId = crypto.randomUUID();
   }
 
   async function createMessage(msg: any) {

@@ -220,7 +220,7 @@ export class Chat {
 
   getMessages(
     query: any = {},
-    fn: (messages: any[], chat: Chat) => Promise<any> | any,
+    test?: (messages: any[], chat: Chat) => Promise<any> | any,
   ) {
     this.steps.push(async () => {
       const res = await this.agent.request()
@@ -228,7 +228,7 @@ export class Chat {
         .header("Authorization", `Bearer ${this.token}`)
         .expect(200);
       const body = await res.json();
-      await fn(body, this);
+      await test?.(body, this);
     });
     return this;
   }
@@ -284,7 +284,7 @@ export class Chat {
   ) {
     this.steps.push(async () => {
       const res = await this.agent.request()
-        .put(`/api/channels/${this.channelId}/read-receipts`)
+        .post(`/api/read-receipts`)
         .json({
           messageId: typeof messageId === "function"
             ? messageId(this)
@@ -331,7 +331,7 @@ export class Chat {
   pinMessage(messageId: string) {
     this.steps.push(async () => {
       await this.agent.request()
-        .patch(`/api/messages/${messageId}`)
+        .put(`/api/messages/${messageId}/pin`)
         .json({ pinned: true })
         .header("Authorization", `Bearer ${this.token}`)
         .expect(204);
@@ -342,7 +342,7 @@ export class Chat {
   getPinnedMessages(fn: (messages: any[], chat: Chat) => Promise<any> | any) {
     this.steps.push(async () => {
       const res = await this.agent.request()
-        .get(`/api/channels/${this.channelId}/pinned-messages`)
+        .get(`/api/channels/${this.channelId}/messages?pinned=true`)
         .header("Authorization", `Bearer ${this.token}`)
         .expect(200);
       const body = await res.json();

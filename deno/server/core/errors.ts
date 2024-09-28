@@ -23,3 +23,9 @@ export class NotOwner extends AppError {
     super("NOT_OWNER", "Not owner");
   }
 }
+
+export class InvalidMessage extends AppError {
+  constructor(msg = "Invalid message") {
+    super("INVALID_MESSAGE", msg);
+  }
+}

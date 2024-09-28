@@ -27,6 +27,16 @@ export class HttpInterface extends Planigale {
     try {
       const schema = new SchemaValidator();
       schema.addFormat("entity-id", /^[a-fA-F0-9]{24}$/);
+      schema.addKeyword({
+        keyword: "requireAny",
+        type: "object",
+        validate: (keys:string[], data:any) => { 
+          if (keys.some((key) => key in data)) {
+            return true;
+          }
+          return false;
+        }
+      });
       schema.addSchema(messageSchema);
       this.use(errorHandler);
       this.use(bodyParser);

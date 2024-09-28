@@ -15,7 +15,7 @@ export default (core: Core) =>
       },
       body: {
         type: "object",
-        required: ["message", "clientId", "flat"],
+        requireAny: ["message", "flat"],
         properties: {
           message: { $ref: "message#/definitions/body" },
           parentId: { type: "string", format: "entity-id" },
@@ -47,11 +47,13 @@ export default (core: Core) =>
       const userId = req.state.user.id;
       const channelId = req.params.channelId;
 
-      const ret = await core.dispatch({
+      const id = await core.dispatch({
         type: "message:create",
         body: { ...req.body, userId, channelId },
       });
-      return Response.json({ id: ret });
+
+      const msg = await core.message.get({ userId, messageId: id });
+      return Response.json(msg);
     },
   });
 

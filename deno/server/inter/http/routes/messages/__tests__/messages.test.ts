@@ -518,3 +518,24 @@ Deno.test("Messages history", async (t) => {
   await agent.close();
 });
 
+Deno.test("auto generate message or flat fields if missing", async (t) => {
+  await Agent.test(app, {type: 'handler'}, async (agent) => {
+    await Chat.init(repo, agent)
+      .login("admin")
+      .createChannel({ name: "test-messages-partials" })
+      .sendMessage({ flat: "Hello", clientId: "hello0" }, (msg) => {
+        assert('text' in msg.message)
+        assertEquals(msg.message?.text, "Hello");
+      })
+      .sendMessage({ message: {text: "Hello"}, clientId: "hello1" }, (msg) => {
+        assertEquals(msg.flat, "Hello");
+      })
+      .sendMessage({ flat: 'test' }, (msg) => {
+        assertEquals(msg.flat, "test");
+        assert(msg.clientId);
+      })
+      .end();
+  });
+});
+
+
