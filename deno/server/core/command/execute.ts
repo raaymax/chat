@@ -1,7 +1,6 @@
 import * as v from "valibot";
 import { createCommand } from "../command.ts";
 import { Id, IdArr } from "../types.ts";
-import { bus } from "../bus.ts";
 import { ResourceNotFound } from "../errors.ts";
 import { Message } from "../../types.ts";
 
@@ -44,7 +43,7 @@ export default createCommand({
       createdAt: new Date().toISOString(),
     };
 
-    bus.direct(msg.userId, {
+    core.bus.direct(msg.userId, {
       type: "message",
       ...response,
     });

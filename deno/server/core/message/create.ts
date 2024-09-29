@@ -1,7 +1,6 @@
 import * as v from "valibot";
 import { createCommand } from "../command.ts";
 import { Id, IdArr } from "../types.ts";
-import { bus } from "../bus.ts";
 import { ResourceNotFound, InvalidMessage } from "../errors.ts";
 import { flatten } from "./flatten.ts";
 
@@ -31,7 +30,7 @@ export default createCommand({
     }),
     ["userId", "channelId"],
   ),
-}, async (msg, { repo, services }) => {
+}, async (msg, { repo, services, bus }) => {
   const channel = await repo.channel.get({
     id: msg.channelId,
     userId: msg.userId,

@@ -1,7 +1,6 @@
 import { Id } from "../types.ts";
 import { createQuery } from "../query.ts";
 import * as v from "valibot";
-import { bus } from "../bus.ts";
 import { NotOwner, ResourceNotFound } from "../errors.ts";
 
 export default createQuery({
@@ -10,7 +9,7 @@ export default createQuery({
     userId: Id,
     messageId: Id,
   })),
-}, async ({ userId, messageId }, { repo }) => {
+}, async ({ userId, messageId }, { repo, bus }) => {
   const message = await repo.message.get({ id: messageId });
   if (!message) throw new ResourceNotFound("Message not found");
 

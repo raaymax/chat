@@ -1,7 +1,6 @@
 import * as v from "valibot";
 import { createCommand } from "../command.ts";
 import { Id, IdArr, vMessageBody } from "../types.ts";
-import { bus } from "../bus.ts";
 import { NotOwner, ResourceNotFound } from "../errors.ts";
 
 export default createCommand({
@@ -25,7 +24,7 @@ export default createCommand({
       ),
     }),
   }),
-}, async (msg, { repo }) => {
+}, async (msg, { repo, bus }) => {
   const message = await repo.message.get({ id: msg.id });
   if (!message) {
     throw new ResourceNotFound("Message not found");

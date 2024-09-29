@@ -21,33 +21,42 @@ class Emitter {
   listenerCount = (ev: string) => this.listeners[ev]?.length ?? 0;
 }
 
-const internalBus = new Emitter();
 
 export class Bus {
+  internalBus: Emitter;
+  constructor() {
+    this.internalBus = new Emitter();
+  }
   hasKey = (userId: EntityId | string) =>
-    internalBus.eventNames().includes(userId.toString());
+    this.internalBus.eventNames().includes(userId.toString());
   getListeners = () =>
-    internalBus.eventNames().reduce(
-      (acc, ev) => ({ ...acc, [ev]: internalBus.listenerCount(ev) }),
+    this.internalBus.eventNames().reduce(
+      (acc, ev) => ({ ...acc, [ev]: this.internalBus.listenerCount(ev) }),
       {},
     );
   group = (userIds: (EntityId | string)[], msg: any) => {
+    this.internalBus.emit('notif', { ...msg, _target: "group", _userIds: userIds.map((u) => u.toString()) });
     (userIds ?? []).forEach((userId) =>
-      internalBus.emit(userId.toString(), { ...msg, _target: "group" })
+      this.internalBus.emit(userId.toString(), { ...msg, _target: "group" })
     );
   };
-  direct = (userId: EntityId | string, msg: any) =>
-    internalBus.emit(userId.toString(), { ...msg, _target: "direct" });
-  broadcast = (msg: any) =>
-    internalBus.emit("all", { ...msg, _target: "broadcast" });
+  direct = (userId: EntityId | string, msg: any) => {
+    this.internalBus.emit(userId.toString(), { ...msg, _target: "direct" });
+    this.internalBus.emit('notif', { ...msg, _target: "direct", _userId: userId.toString() });
+  }
+  broadcast = (msg: any) => {
+    this.internalBus.emit("all", { ...msg, _target: "broadcast" });
+    this.internalBus.emit("notif", { ...msg, _target: "broadcast" });
+  }
   on = (userId: EntityId | string, cb: (...args: any[]) => void) => {
-    const a = internalBus.on(userId.toString(), cb);
-    const b = internalBus.on("all", cb);
+    const a = this.internalBus.on(userId.toString(), cb);
+    const b = this.internalBus.on("all", cb);
     return () => {
       a();
       b();
     };
   };
+  notif = (msg: any) => this.internalBus.emit('notif', { ...msg, _target: "notif" });
+  onNotif= (cb: (...args: any[]) => void) => this.internalBus.on('notif', cb);
 }
 
-export const bus = new Bus();

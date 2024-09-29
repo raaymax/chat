@@ -1,7 +1,6 @@
 import * as v from "valibot";
 import { createCommand } from "../command.ts";
 import { Id, IdArr } from "../types.ts";
-import { bus } from "../bus.ts";
 
 enum ChannelType {
   PUBLIC = "PUBLIC",
@@ -20,7 +19,7 @@ export default createCommand({
     }),
     ["userId", "name"],
   ),
-}, async (channel, { repo }) => {
+}, async (channel, { repo, bus }) => {
   const { channelType, userId, users, name } = channel;
   if (channelType === "PUBLIC" || channelType === "PRIVATE") {
     const existing = await repo.channel.get({ channelType, name, userId });

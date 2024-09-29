@@ -21,9 +21,10 @@ import GetChannelReadReceipts from "./readReceipt/getChannel.ts";
 import UpdateReadReceipt from "./readReceipt/updateReadReceipt.ts";
 import { Repository, storage } from "../infra/mod.ts";
 import { buildCommandCollection, EventFrom } from "./command.ts";
-import { bus } from "./bus.ts";
+import { Bus } from "./bus.ts";
 import { Config } from "@quack/config";
 import BadgesService from "./badgesService.ts";
+import { Webhooks } from "./webhooks.ts";
 
 const commands = buildCommandCollection([
   CreateMessage,
@@ -38,8 +39,10 @@ const commands = buildCommandCollection([
 ]);
 
 export class Core {
+  bus: Bus;
   storage: storage.Storage;
   repo: Repository;
+  webhooks?: Webhooks;
 
   channel = {
     get: GetChannel(this),
@@ -80,15 +83,19 @@ export class Core {
     repo?: Repository;
     fileStorage?: storage.Storage;
   }) {
+    this.bus = new Bus();
     this.repo = arg.repo ?? new Repository(arg.config);
     this.storage = arg.fileStorage ?? storage.initStorage(arg.config);
+
+    if (arg.config.webhooks){
+      this.webhooks = new Webhooks(this, arg.config);
+    }
   }
+
   dispatch = async (evt: EventFrom<typeof commands[keyof typeof commands]>) => {
     // deno-lint-ignore no-explicit-any
     return await (commands[evt.type] as any).handler(evt.body, this);
   };
-
-  bus = bus;
 
   close = async () => await this.repo.close();
 }

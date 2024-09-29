@@ -33,6 +33,11 @@ export type Config = {
   vapidPublicKey: string;
 };
 
+export type Webhook = {
+  url: string;
+  events?: string[];
+}
+
 export type Session = {
   id: EntityId;
   expires: Date;

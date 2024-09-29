@@ -30,5 +30,6 @@ ENV PUBLIC_DIR=/app/public
 ENV PORT=8080
 
 RUN chmod +x ./entrypoint.sh
+RUN deno cache ./deno/server/main.ts
 EXPOSE 8080
 CMD sh ./entrypoint.sh

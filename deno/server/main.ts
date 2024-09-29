@@ -2,7 +2,10 @@ import app from "./app.ts";
 import * as path from "@std/path";
 import config from "@quack/config";
 
-const ssl = {};
+const ssl: {
+  key?: string;
+  cert?: string;
+} = {};
 
 const __dirname = new URL(".", import.meta.url).pathname;
 const sslPath = path.join(__dirname, "../../ssl/");
