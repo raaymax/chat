@@ -4,7 +4,7 @@ import { Core } from "../../../../core/mod.ts";
 export default (core: Core) =>
   new Route({
     method: "GET",
-    url: "/sse",
+    url: "/",
     handler: (req) => {
       const res = new Res();
       const target = res.sendEvents();

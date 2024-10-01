@@ -1,8 +1,7 @@
 import { Agent } from "@planigale/testing";
 import { assert, assertEquals } from "@std/assert";
-import { createApp, config } from "../../__tests__/app.ts";
+import { config, createApp } from "../../__tests__/app.ts";
 import { Chat } from "../../__tests__/chat.ts";
-
 
 Deno.test("webhook should be sent", async (t) => {
   const { app, repo } = createApp({
@@ -15,11 +14,15 @@ Deno.test("webhook should be sent", async (t) => {
     ],
   });
   const { promise, resolve } = Promise.withResolvers<any>();
-  const srv = Deno.serve({ port: 8123, handler: async (req) => {
-    const event = await req.json();
-    resolve(event);
-    return Response.json({ ok: true });
-  }, onListen: () => {}});
+  const srv = Deno.serve({
+    port: 8123,
+    handler: async (req) => {
+      const event = await req.json();
+      resolve(event);
+      return Response.json({ ok: true });
+    },
+    onListen: () => {},
+  });
 
   await Agent.test(app, { type: "handler" }, async (agent) => {
     await Chat.init(repo, agent).login("admin")
@@ -32,10 +35,10 @@ Deno.test("webhook should be sent", async (t) => {
 
   assertEquals(event.type, "message");
   assertEquals(event.event.flat, "test");
-  
+
   await srv.shutdown();
   await app.close();
-})
+});
 
 Deno.test("should not break if webhook is not responding", async (t) => {
   const { app, repo } = createApp({
@@ -56,7 +59,7 @@ Deno.test("should not break if webhook is not responding", async (t) => {
   });
 
   await app.close();
-})
+});
 
 Deno.test("webhook should be called once", async (t) => {
   let calls = 0;
@@ -70,12 +73,16 @@ Deno.test("webhook should be called once", async (t) => {
     ],
   });
   const { promise, resolve } = Promise.withResolvers<any>();
-  const srv = Deno.serve({ port: 8123, handler: async (req) => {
-    const event = await req.json();
-    calls++;
-    resolve(event);
-    return Response.json({ ok: true });
-  }, onListen: () => {}});
+  const srv = Deno.serve({
+    port: 8123,
+    handler: async (req) => {
+      const event = await req.json();
+      calls++;
+      resolve(event);
+      return Response.json({ ok: true });
+    },
+    onListen: () => {},
+  });
 
   await Agent.test(app, { type: "handler" }, async (agent) => {
     await Chat.init(repo, agent).login("admin")
@@ -90,7 +97,7 @@ Deno.test("webhook should be called once", async (t) => {
   assertEquals(calls, 1);
   assertEquals(event.type, "message");
   assertEquals(event.event.flat, "test");
-  
+
   await srv.shutdown();
   await app.close();
-})
+});

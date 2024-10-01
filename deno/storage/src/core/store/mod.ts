@@ -1,4 +1,4 @@
-import { Config } from "@quack/config";
+import type { Config } from "@quack/config";
 import { files as fs } from "./fs.ts";
 import { files as gcs } from "./gcs.ts";
 import { files as memory } from "./memory.ts";

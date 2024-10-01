@@ -6,7 +6,7 @@ export default (_core: Core) =>
     public: true,
     method: "GET",
     url: "/session",
-    handler: async (req) => {
+    handler: (req) => {
       if (req.state.session) {
         const res = Res.json({
           ...req.state.session,

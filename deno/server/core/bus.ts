@@ -1,6 +1,6 @@
 import { EntityId } from "../types.ts";
 import { serialize } from "./serializer.ts";
-type Listeners = { [key: string]: Function[] };
+type Listeners = { [key: string]: ((...args: any[]) => void)[] };
 
 class Emitter {
   listeners: Listeners = {};
@@ -21,7 +21,6 @@ class Emitter {
   listenerCount = (ev: string) => this.listeners[ev]?.length ?? 0;
 }
 
-
 export class Bus {
   internalBus: Emitter;
   constructor() {
@@ -35,19 +34,27 @@ export class Bus {
       {},
     );
   group = (userIds: (EntityId | string)[], msg: any) => {
-    this.internalBus.emit('notif', { ...msg, _target: "group", _userIds: userIds.map((u) => u.toString()) });
+    this.internalBus.emit("notif", {
+      ...msg,
+      _target: "group",
+      _userIds: userIds.map((u) => u.toString()),
+    });
     (userIds ?? []).forEach((userId) =>
       this.internalBus.emit(userId.toString(), { ...msg, _target: "group" })
     );
   };
   direct = (userId: EntityId | string, msg: any) => {
     this.internalBus.emit(userId.toString(), { ...msg, _target: "direct" });
-    this.internalBus.emit('notif', { ...msg, _target: "direct", _userId: userId.toString() });
-  }
+    this.internalBus.emit("notif", {
+      ...msg,
+      _target: "direct",
+      _userId: userId.toString(),
+    });
+  };
   broadcast = (msg: any) => {
     this.internalBus.emit("all", { ...msg, _target: "broadcast" });
     this.internalBus.emit("notif", { ...msg, _target: "broadcast" });
-  }
+  };
   on = (userId: EntityId | string, cb: (...args: any[]) => void) => {
     const a = this.internalBus.on(userId.toString(), cb);
     const b = this.internalBus.on("all", cb);
@@ -56,7 +63,7 @@ export class Bus {
       b();
     };
   };
-  notif = (msg: any) => this.internalBus.emit('notif', { ...msg, _target: "notif" });
-  onNotif= (cb: (...args: any[]) => void) => this.internalBus.on('notif', cb);
+  notif = (msg: any) =>
+    this.internalBus.emit("notif", { ...msg, _target: "notif" });
+  onNotif = (cb: (...args: any[]) => void) => this.internalBus.on("notif", cb);
 }
-

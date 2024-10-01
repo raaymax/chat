@@ -87,7 +87,7 @@ export class Core {
     this.repo = arg.repo ?? new Repository(arg.config);
     this.storage = arg.fileStorage ?? storage.initStorage(arg.config);
 
-    if (arg.config.webhooks){
+    if (arg.config.webhooks) {
       this.webhooks = new Webhooks(this, arg.config);
     }
   }

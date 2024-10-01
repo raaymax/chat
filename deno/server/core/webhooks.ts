@@ -27,12 +27,12 @@ export class Webhooks {
       });
       res.body?.cancel();
       if (!res.ok) {
-        console.error(`Failed to send webhook ${webhook.url}: ${res.statusText}`);
+        console.error(
+          `Failed to send webhook ${webhook.url}: ${res.statusText}`,
+        );
       }
     } catch (e) {
       console.error(`Failed to send webhook ${webhook.url}: ${e}`);
     }
   }
 }
-
-

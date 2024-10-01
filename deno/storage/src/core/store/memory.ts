@@ -1,6 +1,6 @@
-import { Config } from "@quack/config";
+import type { Config } from "@quack/config";
 import { ResourceNotFound } from "@planigale/planigale";
-import { FileData, FileOpts } from "../types.ts";
+import type { FileData, FileOpts } from "../types.ts";
 
 function* idGenerator(): Generator<string> {
   let id = 0;

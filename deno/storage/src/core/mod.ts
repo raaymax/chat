@@ -1,7 +1,7 @@
 import sharp from "sharp";
-import { Config } from "@quack/config";
+import type { Config } from "@quack/config";
 import { toNodeStream, toWebStream } from "./streams.ts";
-import { FileData, FileOpts } from "./types.ts";
+import type { FileData, FileOpts } from "./types.ts";
 import { files } from "./store/mod.ts";
 
 type ScalingOpts = {

@@ -24,7 +24,7 @@ export class Repo<Query, Model> {
   }
 
   async createMany(data: Model[]): Promise<EntityId[]> {
-    return Promise.all(data.map((d) => this.create(d)));
+    return await Promise.all(data.map((d) => this.create(d)));
   }
 
   async update(query: Query, data: Partial<Model>, type = "set") {

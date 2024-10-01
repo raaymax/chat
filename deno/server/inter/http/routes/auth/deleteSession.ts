@@ -14,8 +14,7 @@ export default (core: Core) =>
           },
         });
       }
-      const res = Res.json({ status: "ok" });
       req.cookies.delete("token");
-      return res;
+      return Res.empty();
     },
   });

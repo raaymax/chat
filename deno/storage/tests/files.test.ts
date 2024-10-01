@@ -4,7 +4,7 @@ import * as path from "@std/path";
 
 import { buildApp } from "../src/interfaces/http/mod.ts";
 import { initStorage } from "../src/core/mod.ts";
-import config, { Config } from "@quack/config";
+import config, { type Config } from "@quack/config";
 
 const storage = initStorage(config);
 const app = await buildApp(storage);

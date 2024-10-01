@@ -21,6 +21,14 @@
       "deno/**"
     ]
   },
+  "lint": {
+    "include": ["deno/"],
+    "exclude": ["packages/", "deno/**/__tests__/*"],
+    "rules": {
+      "tags": ["recommended"],
+      "exclude": ["no-unused-vars", "no-explicit-any"]
+    }
+  },
   "tasks": {
     "start": "deno task -c ./deno/server/deno.jsonc start",
     "build": "deno task -c ./packages/app/deno.jsonc build",

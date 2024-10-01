@@ -63,14 +63,11 @@ Deno.test("Login/logout", async (t) => {
   });
 
   await t.step("DELETE /auth/session", async () => {
-    const res = await Agent.request(app)
+    await Agent.request(app)
       .delete("/api/auth/session")
       .json({})
       .header("Authorization", `Bearer ${token}`)
-      .expect(200);
-    assertEquals(res.status, 200);
-    const body = await res.json();
-    assertEquals(body.status, "ok");
+      .expect(204);
   });
 
   await t.step("GET /auth/session - no session after delete", async () => {
@@ -122,14 +119,11 @@ Deno.test("Login/logout - cookies", async (t) => {
   });
 
   await t.step("DELETE /auth/session", async () => {
-    const res = await Agent.request(app)
+    await Agent.request(app)
       .delete("/api/auth/session")
       .json({})
       .header("Cookie", `token=${token}`)
-      .expect(200);
-    assertEquals(res.status, 200);
-    const body = await res.json();
-    assertEquals(body.status, "ok");
+      .expect(204);
   });
 
   await t.step("GET /auth/session - no session after delete", async () => {

@@ -159,7 +159,7 @@ async function importConfig(file: string): Promise<Config | null> {
 async function importScript(file: string): Promise<Config | null> {
   try {
     const absPath = path.isAbsolute(file) ? file : path.join("..", "..", file);
-    if(Deno.env.get("DEBUG")){
+    if (Deno.env.get("DEBUG")) {
       console.log("Trying config file path", absPath);
     }
     const { default: config } = await import(absPath);

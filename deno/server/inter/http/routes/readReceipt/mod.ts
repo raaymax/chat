@@ -7,8 +7,13 @@ import post from "./post.ts";
 
 export const readReceipt = (core: Core) => {
   const router = new Router();
-  router.use(getChannel(core));
   router.use(getAll(core));
   router.use(post(core));
+  return router;
+};
+
+export const channelReadReceipt = (core: Core) => {
+  const router = new Router();
+  router.use(getChannel(core));
   return router;
 };

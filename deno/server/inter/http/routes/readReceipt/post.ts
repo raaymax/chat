@@ -4,7 +4,7 @@ import { Core } from "../../../../core/mod.ts";
 export default (core: Core) =>
   new Route({
     method: "POST",
-    url: "/read-receipts",
+    url: "/",
     public: false,
     schema: {
       body: {

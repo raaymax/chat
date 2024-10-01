@@ -7,7 +7,6 @@ const run = new Command()
     console.log("clone command called");
   });
 
-
 await new Command()
   .name("chat")
   .version("0.1.0")

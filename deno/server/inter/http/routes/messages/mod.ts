@@ -10,11 +10,16 @@ import pin from "./pin.ts";
 
 export const messages = (core: Core) => {
   const router = new Router();
-  router.use("/channels/:channelId/messages", getAll(core));
-  router.use("/channels/:channelId/messages", create(core));
-  router.use("/messages", get(core));
-  router.use("/messages", remove(core));
-  router.use("/messages", update(core));
-  router.use("/messages", pin(core));
+  router.use(get(core));
+  router.use(remove(core));
+  router.use(update(core));
+  router.use(pin(core));
+  return router;
+};
+
+export const channelMessages = (core: Core) => {
+  const router = new Router();
+  router.use(getAll(core));
+  router.use(create(core));
   return router;
 };

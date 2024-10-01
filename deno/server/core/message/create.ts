@@ -1,7 +1,7 @@
 import * as v from "valibot";
 import { createCommand } from "../command.ts";
 import { Id, IdArr } from "../types.ts";
-import { ResourceNotFound, InvalidMessage } from "../errors.ts";
+import { InvalidMessage, ResourceNotFound } from "../errors.ts";
 import { flatten } from "./flatten.ts";
 
 export default createCommand({
@@ -39,14 +39,14 @@ export default createCommand({
     throw new ResourceNotFound("Channel not found");
   }
 
-  if(!msg.message && !msg.flat) {
+  if (!msg.message && !msg.flat) {
     throw new InvalidMessage("Message or flat must be provided");
   }
 
-  if(!msg.message && msg.flat) {
-    msg.message = {text: msg.flat};
+  if (!msg.message && msg.flat) {
+    msg.message = { text: msg.flat };
   }
-  if(msg.message && !msg.flat) {
+  if (msg.message && !msg.flat) {
     msg.flat = flatten(msg.message);
   }
 

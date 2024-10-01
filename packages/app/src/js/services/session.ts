@@ -50,12 +50,13 @@ export const register = async (value: { name: string, login: string, password: s
 export const logout = async () => {
   localStorage.removeItem('token');
   localStorage.removeItem('userId');
-  await fetch(SESSION_URL, {
+  const ret = await fetch(SESSION_URL, {
     method: 'DELETE',
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
     },
   });
+  await ret.body?.cancel();
   window.location.reload();
 };

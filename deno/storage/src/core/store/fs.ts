@@ -1,8 +1,8 @@
-import { Config } from "@quack/config";
+import type { Config } from "@quack/config";
 import { ResourceNotFound } from "@planigale/planigale";
 import { existsSync } from "jsr:@std/fs";
 import * as path from "jsr:@std/path";
-import { FileData, FileOpts } from "../types.ts";
+import type { FileData, FileOpts } from "../types.ts";
 import { v4 as uuid } from "npm:uuid";
 
 export const files = (config: Config["storage"]) => {

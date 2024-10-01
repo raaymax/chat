@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import { v4 as uuid } from "npm:uuid";
-import { Config } from "@quack/config";
-import { FileData, FileOpts } from "../types.ts";
+import type { Config } from "@quack/config";
+import type { FileData, FileOpts } from "../types.ts";
 import { GoogleAuth } from "npm:google-auth-library";
 import { ResourceNotFound } from "@planigale/planigale";
 

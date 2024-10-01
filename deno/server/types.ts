@@ -36,7 +36,7 @@ export type Config = {
 export type Webhook = {
   url: string;
   events?: string[];
-}
+};
 
 export type Session = {
   id: EntityId;

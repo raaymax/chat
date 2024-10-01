@@ -4,7 +4,7 @@ import { Core } from "../../../../core/mod.ts";
 export default (core: Core) =>
   new Route({
     method: "GET",
-    url: "/channels/:channelId/read-receipts",
+    url: "/",
     public: false,
     handler: async (req) => {
       const userId = req.state.user.id;
