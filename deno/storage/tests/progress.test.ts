@@ -27,7 +27,7 @@ Deno.test("POST /files - with progress", async () => {
     const blobStream = file.readable.pipeThrough(
       new TransformStream({
         start() {},
-        async transform(chunk, controller) {
+        transform(chunk, controller) {
           const size = chunk.length;
           let i = 0;
           for (i = 0; i < size; i += 10) {

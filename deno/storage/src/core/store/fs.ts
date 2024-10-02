@@ -59,8 +59,8 @@ export const files = (config: Config["storage"]) => {
         await Deno.remove(path.join(dir, `${id}.json`));
       }
     },
-    exists: async (id: string): Promise<boolean> => {
-      return exists(id) && exists(`${id}.json`);
+    exists: (id: string): Promise<boolean> => {
+      return Promise.resolve(exists(id) && exists(`${id}.json`));
     },
   };
 };

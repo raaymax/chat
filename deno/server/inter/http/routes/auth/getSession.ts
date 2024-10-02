@@ -15,11 +15,15 @@ export default (_core: Core) =>
         });
         res.cookies.set("token", req.state.session.token, {
           httpOnly: true,
-          path: "/api",
+          path: "/",
         });
         return res;
       } else {
-        return Res.json({ status: "no-session" });
+        const res = Res.json({ status: "no-session" });
+        if (req.cookies.get("token")) {
+          res.cookies.delete("token", { path: "/" });
+        }
+        return res;
       }
     },
   });

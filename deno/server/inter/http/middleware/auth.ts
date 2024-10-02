@@ -3,10 +3,9 @@ import { Middleware } from "@planigale/planigale";
 import { AccessDenied } from "../errors.ts";
 
 export const authMiddleware = (core: Core): Middleware => async (req, next) => {
-  let token = await req.cookies.get("token");
+  let token = getBearer(req.headers);
   if (!token) {
-    const bearer = req.headers.authorization || "";
-    token = bearer.split(/[\s]+/)[1];
+    token = req.cookies.get("token");
   }
   if (token) {
     req.state.token = token;
@@ -20,6 +19,11 @@ export const authMiddleware = (core: Core): Middleware => async (req, next) => {
   }
   return await auth(req, next);
 };
+
+function getBearer(headers: Record<string, string>): string | undefined {
+  const bearer = headers.authorization || "";
+  return bearer.split(/[\s]+/)[1];
+}
 
 export const auth: Middleware = async (req, next) => {
   const isPublic = req.route?.definition.public ?? false;

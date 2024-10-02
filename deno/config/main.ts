@@ -73,9 +73,9 @@ const secrets = generateSecrets();
 
 async function load(): Promise<Config> {
   if (ENV === "test") {
-    return importTestConfig();
+    return await importTestConfig();
   } else {
-    return loadConfig();
+    return await loadConfig();
   }
 }
 async function loadConfig(): Promise<Config> {
@@ -94,7 +94,11 @@ async function loadConfig(): Promise<Config> {
     }
   }
   if (config === null) {
-    throw new Error("No config file found");
+    console.warn("No config file found - using defaults");
+    return {
+      ...defaults,
+      ...secrets,
+    };
   }
 
   return {
@@ -108,7 +112,11 @@ export const Config = {
   from: async (path: string): Promise<Config> => {
     const config = await importConfig(path);
     if (config === null) {
-      throw new Error("No config file found");
+      console.warn("No config file found - using defaults");
+      return {
+        ...defaults,
+        ...secrets,
+      };
     }
     return {
       ...defaults,
@@ -134,7 +142,9 @@ async function importTestConfig(): Promise<Config> {
     }
   }
   if (config === null) {
-    console.log("No test config found, trying to load default config");
+    if (Deno.env.get("DEBUG")) {
+      console.log("No test config found, trying to load default config");
+    }
     return await loadConfig();
   }
 
@@ -169,7 +179,7 @@ async function importScript(file: string): Promise<Config | null> {
   }
 }
 
-async function loadJSON(file: string): Promise<Config | null> {
+function loadJSON(file: string): Config | null {
   try {
     return JSON.parse(Deno.readTextFileSync(file));
   } catch {

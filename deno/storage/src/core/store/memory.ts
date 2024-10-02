@@ -48,22 +48,23 @@ export const files = (config: Config["storage"]) => {
       });
       return id;
     },
-    get: async (id: string): Promise<FileData> => {
+    get: (id: string): Promise<FileData> => {
       const file = memory.get(id);
       if (!file) {
         throw new ResourceNotFound("File not found");
       }
 
-      return {
+      return Promise.resolve({
         ...file,
         get stream() {
           return file.file.stream();
         },
-      };
+      });
     },
-    remove: async (id: string): Promise<void> => {
+    remove: (id: string): Promise<void> => {
       memory.delete(id);
+      return Promise.resolve();
     },
-    exists: async (id: string): Promise<boolean> => memory.has(id),
+    exists: (id: string): Promise<boolean> => Promise.resolve(memory.has(id)),
   };
 };

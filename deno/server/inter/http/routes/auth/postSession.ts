@@ -38,7 +38,7 @@ export default (core: Core) =>
         throw new AccessDenied("Invalid login or password");
       }
       const res = Res.json({ status: "ok", ...session });
-      res.cookies.set("token", session.token, { httpOnly: true });
+      res.cookies.set("token", session.token, { httpOnly: true, path: "/" });
       return res;
     },
   });

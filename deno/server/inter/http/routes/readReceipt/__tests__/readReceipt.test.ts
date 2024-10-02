@@ -65,6 +65,7 @@ Deno.test("/api/channels/:channelId/read-receipts - SSE", async () => {
 });
 
 Deno.test("/api/read-receipts", async () => {
+  await repo.badge.removeMany({});
   return await Agent.test(app, { type: "handler" }, async (agent) => {
     const member = Chat.init(repo, agent);
     const admin = Chat.init(repo, agent);

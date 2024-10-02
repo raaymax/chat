@@ -6,10 +6,10 @@
   ],
   "imports": {
     "@planigale/body-parser": "jsr:@planigale/body-parser",
-    "@planigale/planigale": "jsr:@planigale/planigale",
+    "@planigale/planigale": "jsr:@planigale/planigale@0.6.3",
+    "@planigale/testing": "jsr:@planigale/testing@0.3.3",
     "@planigale/schema": "jsr:@planigale/schema",
     "@planigale/sse": "jsr:@planigale/sse",
-    "@planigale/testing": "jsr:@planigale/testing",
     "@std/assert": "jsr:@std/assert@^1.0.1",
     "@std/path": "jsr:@std/path@^1.0.2",
     "@std/uuid": "jsr:@std/uuid@^1.0.4",
@@ -32,6 +32,7 @@
   "tasks": {
     "start": "deno task -c ./deno/server/deno.jsonc start",
     "build": "deno task -c ./packages/app/deno.jsonc build",
+    "migrate": "deno run -A npm:migrate-mongo -- up",
     "test": "DATABASE_URL='mongodb://chat:chat@localhost:27017/tests?authSource=admin' deno test -A",
     "ssl": "mkdir -p ssl && openssl req -x509 -newkey rsa:4096 -keyout ssl/key.pem -out ssl/cert.pem -days 365 -nodes -subj '/CN=localhost'",
     "dev": "deno run --watch main.ts"

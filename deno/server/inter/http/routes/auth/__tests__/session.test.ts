@@ -44,8 +44,9 @@ Deno.test("Login/logout", async (t) => {
     assert(body.id);
     token = body.token;
     userId = body.userId;
+    const cookie = res.headers.get("Set-Cookie");
     assert(
-      /^token=.+; HttpOnly$/.test(
+      /^token=.+; HttpOnly; Path=\/$/.test(
         res.headers.get("Set-Cookie")?.toString() ?? "",
       ),
       "Set-Cookie header is not correct",
@@ -101,7 +102,7 @@ Deno.test("Login/logout - cookies", async (t) => {
     token = body.token;
     userId = body.userId;
     assert(
-      /^token=.+; HttpOnly$/.test(
+      /^token=.+; HttpOnly; Path=\/$/.test(
         res.headers.get("Set-Cookie")?.toString() ?? "",
       ),
       "Set-Cookie header is not correct",

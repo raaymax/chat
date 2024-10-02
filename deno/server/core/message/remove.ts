@@ -1,9 +1,9 @@
-import { Id } from "../types.ts";
-import { createQuery } from "../query.ts";
 import * as v from "valibot";
+import { createCommand } from "../command.ts";
+import { Id } from "../types.ts";
 import { NotOwner, ResourceNotFound } from "../errors.ts";
 
-export default createQuery({
+export default createCommand({
   type: "message:remove",
   body: v.required(v.object({
     userId: Id,

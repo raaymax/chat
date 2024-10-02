@@ -1,4 +1,6 @@
 #!/bin/sh
-. .envrc
+if [ -f ".envrc" ]; then
+  . .envrc
+fi
 deno task migrate
 deno task start

@@ -33,7 +33,7 @@ export function toWebStream(nodeStream: Readable) {
       if (destroyed) return;
       destroyed = true;
 
-      for (let name in listeners) {
+      for (const name in listeners) {
         nodeStream.removeListener(
           name,
           listeners[name as keyof ListenerInterface],
@@ -72,7 +72,7 @@ class NodeReadable extends Readable {
   public bytesRead: number = 0;
   public released = false;
   private reader: ReadableStreamDefaultReader<Uint8Array>;
-  private pendingRead!: Promise<any>;
+  private pendingRead?: Promise<any>;
 
   constructor(stream: ReadableStream) {
     super();
@@ -86,7 +86,6 @@ class NodeReadable extends Readable {
     }
     this.pendingRead = this.reader.read();
     const data = await this.pendingRead;
-    // @ts-ignore
     delete this.pendingRead;
     if (data.done || this.released) {
       this.push(null);
@@ -109,7 +108,7 @@ class NodeReadable extends Readable {
   private async syncAndRelease() {
     this.released = true;
     await this.waitForReadToComplete();
-    await this.reader.releaseLock();
+    this.reader.releaseLock();
   }
 }
 

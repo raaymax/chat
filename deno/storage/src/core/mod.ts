@@ -27,15 +27,15 @@ class Files {
     stream: ReadableStream<Uint8Array>,
     options: FileOpts,
   ): Promise<string> {
-    return this.service.upload(stream, options);
+    return await this.service.upload(stream, options);
   }
 
   async exists(fileId: string): Promise<boolean> {
-    return this.service.exists(fileId);
+    return await this.service.exists(fileId);
   }
 
   async remove(fileId: string): Promise<void> {
-    return this.service.remove(fileId);
+    return await this.service.remove(fileId);
   }
 
   async get(id: string, opts?: ScalingOpts): Promise<FileData> {

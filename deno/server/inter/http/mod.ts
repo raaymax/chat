@@ -67,7 +67,6 @@ export class HttpInterface extends Planigale {
         public: true,
         handler: async (req) => {
           const path = req.params.path || "index.html";
-          console.log(path);
           if (PUBLIC_DIR.startsWith("http")) {
             return await fetch(`${PUBLIC_DIR}/${path}`, { method: "GET" });
           }

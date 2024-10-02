@@ -36,6 +36,7 @@ const commands = buildCommandCollection([
   CommandExecute,
   UpdateReadReceipt,
   PinMessage,
+  RemoveMessage,
 ]);
 
 export class Core {
@@ -62,7 +63,6 @@ export class Core {
   message = {
     getAll: GetAllMessages(this),
     get: GetMessage(this),
-    remove: RemoveMessage(this),
   };
 
   emoji = {
