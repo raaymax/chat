@@ -12,9 +12,13 @@ require("lspconfig").denols.setup {
   capabilities = capabilities
 }
 
---nvim_lsp.tsserver.setup {
---  capabilities = capabilities
---}
+-- require("lspconfig").ts_ls.setup {
+--   on_init = function(client)
+--     print(client)
+--     return false
+--   end,
+--   capabilities = capabilities
+-- }
 
 
 --require("lspconfig").volar.setup {

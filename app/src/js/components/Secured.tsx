@@ -6,6 +6,11 @@ import StoreProvider from '../store/components/provider';
 import { Workspace } from './pages/Workspace';
 import { useUser } from './contexts/useUser';
 
+import {
+  createHashRouter,
+  RouterProvider,
+} from "react-router-dom";
+
 const theme = {
   borderColor: '#565856',
   backgroundColor: '#1a1d21',
@@ -43,10 +48,16 @@ const Secured = () => {
     client.emit('auth:user', user);
   }, [user]);
 
+const router = createHashRouter([
+  {
+    path: "/*",
+    element: <Workspace />,
+  },
+]);
   return (
     <StoreProvider>
       <ThemeProvider theme={theme}>
-        <Workspace />
+        <RouterProvider router={router} />
       </ThemeProvider>
     </StoreProvider>
   );
