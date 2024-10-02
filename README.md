@@ -39,7 +39,7 @@ Inspired by Slack but more affordable for private use, Quack combines the best f
 
 The fastest way to get started is to use the Docker compose. Using following command will start the application with default settings in no time.
 ```
-docker-compose up
+docker compose up -d
 ```
 navigate to [http://localhost:8080](http://localhost:8080) and use default credentials to login `admin / 123`.
 
