@@ -1,4 +1,4 @@
-import { assertEquals } from "@std/assert";
+import { assertEquals, assert } from "@std/assert";
 import { Agent } from "@planigale/testing";
 import { createApp } from "../../__tests__/app.ts";
 import { Chat } from "../../__tests__/chat.ts";
@@ -72,3 +72,24 @@ Deno.test("command /emoji <name>", async () => {
     }
   });
 });
+
+Deno.test("command /invite", async () => {
+  await repo.invitation.removeMany({});
+  return await Agent.test(app, { type: "handler" }, async (agent) => {
+    let url: string | null = null;
+    await Chat.init(repo, agent)
+      .login("admin")
+      .createChannel({ name: "test-commands-invite" })
+      .connectSSE()
+      .executeCommand("/invite", [], ({json}) => {
+        url = json;
+      })
+      .nextEvent((event: any) => {
+        assertEquals(event.type, "message");
+        const m = event.flat.match("Invitation link:\n(https?://.*/invite/[0-9a-f]{64})")
+        assert(m);
+        assertEquals(m[1], url);
+      })
+      .end();
+  });
+})

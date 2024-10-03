@@ -29,7 +29,7 @@ export type Definition<
 export type Handler<U extends v.BaseSchema<any, any, any>> = (
   body: v.InferOutput<U>,
   core: Core,
-) => Promise<void | EntityId | null>;
+) => Promise<void | EntityId | string | null>;
 
 export type Command<T extends string, U extends v.BaseSchema<any, any, any>> = {
   type: T;
@@ -37,7 +37,7 @@ export type Command<T extends string, U extends v.BaseSchema<any, any, any>> = {
   handler: (
     evt: v.InferInput<U>,
     core: Core,
-  ) => Promise<void | EntityId | null>;
+  ) => Promise<void | EntityId | string | null>;
 };
 
 export function createCommand<

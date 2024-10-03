@@ -11,15 +11,15 @@ export const Register = () => {
 
   const submit = useCallback(async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    const { name, login, password } = e.target as typeof e.target & {
+    const { name, email, password } = e.target as typeof e.target & {
       name: {value: string},
-      login: {value: string},
+      email: {value: string},
       password: {value: string},
     };
     if (!token) return;
     const ret = await session.register({
       name: name.value,
-      login: login.value,
+      email: email.value,
       password: password.value,
       token,
     });
@@ -45,7 +45,7 @@ export const Register = () => {
     <div className='register' >
       <form onSubmit={submit}>
         <input type='text' name='name' placeholder='Your name' />
-        <input type='text' name='login' placeholder='user@example.com' />
+        <input type='text' name='email' placeholder='user@example.com' />
         <input type='password' name='password' placeholder='password' />
         <input type='submit' value='Register' />
       </form>

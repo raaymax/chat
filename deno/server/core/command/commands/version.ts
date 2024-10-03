@@ -1,5 +1,5 @@
 export class VersionCommand {
-  static name = "version";
+  static commandName = "version";
 
   static async execute(data: any, core: any) {
     core.bus.direct(data.userId, {

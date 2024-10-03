@@ -103,6 +103,7 @@ export type Invitation = {
   id: EntityId;
   token: string;
   userId: EntityId;
+  channelId: EntityId;
   createdAt: Date;
 };
 

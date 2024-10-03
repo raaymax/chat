@@ -1,5 +1,5 @@
 export class EmojiCommand {
-  static name = "emoji";
+  static commandName = "emoji";
 
   static validate(data: any) {
     if (!data.attachments || data.attachments.length === 0) {

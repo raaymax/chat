@@ -19,6 +19,7 @@ import CommandExecute from "./command/execute.ts";
 import GetAllReadReceipts from "./readReceipt/getAll.ts";
 import GetChannelReadReceipts from "./readReceipt/getChannel.ts";
 import UpdateReadReceipt from "./readReceipt/updateReadReceipt.ts";
+import CreateUser from './user/create.ts';
 import { Repository, storage } from "../infra/mod.ts";
 import { buildCommandCollection, EventFrom } from "./command.ts";
 import { Bus } from "./bus.ts";
@@ -37,12 +38,14 @@ const commands = buildCommandCollection([
   UpdateReadReceipt,
   PinMessage,
   RemoveMessage,
+  CreateUser,
 ]);
 
 export class Core {
   bus: Bus;
   storage: storage.Storage;
   repo: Repository;
+  config: Config
   webhooks?: Webhooks;
 
   channel = {
@@ -83,6 +86,7 @@ export class Core {
     repo?: Repository;
     fileStorage?: storage.Storage;
   }) {
+    this.config = arg.config;
     this.bus = new Bus();
     this.repo = arg.repo ?? new Repository(arg.config);
     this.storage = arg.fileStorage ?? storage.initStorage(arg.config);

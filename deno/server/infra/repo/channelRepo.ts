@@ -13,4 +13,13 @@ export class ChannelRepo extends Repo<ChannelQuery, Channel> {
       ...(userId ? { users: { $elemMatch: { $eq: userId } } } : {}),
     };
   }
+
+  async join(query: ChannelQuery, userId: EntityId) {
+    const { db } = await this.connect();
+    return db.collection(this.COLLECTION)
+      .updateOne(
+        this.makeQuery(query),
+        { $push: {users: serialize(userId)} },
+      );
+  }
 }

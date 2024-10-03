@@ -42,7 +42,7 @@ export default (core: Core) =>
     },
     handler: async (req) => {
       const body = req.body;
-      await core.dispatch({
+      const data = await core.dispatch({
         type: "command:execute",
         body: {
           userId: req.state.user.id,
@@ -52,6 +52,9 @@ export default (core: Core) =>
           context: body.context,
         },
       });
+      if(data){
+        return Res.json(data);
+      }
       return Res.empty();
     },
   });

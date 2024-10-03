@@ -35,8 +35,8 @@ export const login = async (value: {login: string, password: string}) => {
   return json;
 };
 
-export const register = async (value: { name: string, login: string, password: string, token: string }) => {
-  const ret = await fetch(`${API_URL}/users`, {
+export const register = async (value: { name: string, email: string, password: string, token: string }) => {
+  const ret = await fetch(`${API_URL}/api/users/${value.token}`, {
     method: 'POST',
     credentials: 'include',
     headers: {

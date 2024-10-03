@@ -10,6 +10,13 @@ import {
 } from "../../../../types.ts";
 import { SSESource } from "@planigale/sse";
 
+export type RegistrationRequest = {
+  token: string;
+  name: string;
+  password: string;
+  email: string;
+};
+
 export class Chat {
   repo: Repository;
   agent: Agent;
@@ -63,19 +70,38 @@ export class Chat {
     return this;
   }
 
-  login(login = "admin") {
+  login(login = "admin", password = '123') {
     this.steps.push(async () => {
       await ensureUser(this.repo, login);
       const res = await this.agent.request()
         .post("/api/auth/session")
         .json({
           login,
-          password: "123",
+          password,
         })
         .expect(200);
       const body = await res.json();
       this.userId = body.userId;
       this.token = body.token;
+    });
+    return this;
+  }
+
+  register({token, ...data}: RegistrationRequest, test?: (body: any) => Promise<any> | any) {
+    this.steps.push(async () => {
+      const res = await this.agent.request()
+        .post(`/api/users/${token}`)
+        .json(data)
+        .expect(200);
+      const body = await res.json();
+      await test?.(body);
+      if(body.id) {
+        this.cleanup.push(async () => {
+          const user = await this.repo.user.get({id: EntityId.from(body.id)});
+          await this.repo.channel.update({id: user?.mainChannelId}, {});
+          await this.repo.user.remove({id: EntityId.from(body.id)});
+        });
+      }
     });
     return this;
   }
@@ -321,9 +347,9 @@ export class Chat {
           },
         })
         .header("Authorization", `Bearer ${this.token}`)
-        .expect(204);
-      res.body?.cancel?.();
-      await test?.({ channelId: this.channelId, events: this.eventSource });
+        .expect([204, 200]);
+      const json = res.status === 204 ? {} : await res.json();
+      await test?.({status: res.status, json, channelId: this.channelId, events: this.eventSource });
     });
     return this;
   }
