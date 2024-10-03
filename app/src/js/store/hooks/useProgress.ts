@@ -13,6 +13,7 @@ export const useProgress = ({ channelId, parentId }: {channelId: string, parentI
   const channel = useMemo(() => Object.values(channels).find((c) => c.id === channelId), [channels, channelId]);
 
   return useMemo(() => (channel ? progress
+    .filter((p) => Boolean(p))
     .filter((p) => p.channelId === channel.id)
     .filter((p) => (!p.parentId && !parentId) || p.parentId === parentId)
     .map((p) => ({
