@@ -30,8 +30,12 @@ jobs:
       with:
         node-version: 20.x
         cache: 'npm'
+    - uses: denoland/setup-deno@v1
     - run: npm i -g npm
     - run: npm i
     - run: npm run lint:ci
     - run: npm exec migrate-mongo up
-    - run: npm run test:ci
+    - run: deno fmt
+    - run: deno lint
+    - run: npm run types
+    - run: deno test -A

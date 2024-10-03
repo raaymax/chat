@@ -18,11 +18,9 @@
     "dev:web": "npm run -w=@quack/app dev",
     "dev:srv": "npm run -w=@quack/server dev",
     "dev": "run-p dev:srv dev:web",
-    "test": "migrate-mongo up && npm run -w=@quack/server test",
     "lint": "FORCE_COLOR=true eslint --fix .",
     "lint:ci": "eslint .",
-    "types": "npm run -w=@quack/app types",
-    "test:ci": "npm run -w=@quack/server test:ci"
+    "types": "npm run -w=@quack/app types"
   },
   "author": "",
   "license": "ISC",

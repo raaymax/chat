@@ -37,6 +37,7 @@
     "build": "deno task -c ./packages/app/deno.jsonc build",
     "migrate": "deno run -A npm:migrate-mongo -- up",
     "test": "DATABASE_URL='mongodb://chat:chat@localhost:27017/tests?authSource=admin' deno test -A",
-    "ssl": "mkdir -p ssl && openssl req -x509 -newkey rsa:4096 -keyout ssl/key.pem -out ssl/cert.pem -days 365 -nodes -subj '/CN=localhost'"
+    "ssl": "mkdir -p ssl && openssl req -x509 -newkey rsa:4096 -keyout ssl/key.pem -out ssl/cert.pem -days 365 -nodes -subj '/CN=localhost'",
+    "check": "npm run lint:ci && deno fmt && deno lint && npm run types && deno test -A"
   }
 }

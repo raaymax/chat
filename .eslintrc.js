@@ -12,9 +12,7 @@ module.exports = {
     ecmaVersion: 'latest',
   },
   ignorePatterns: [
-    'packages/app/dist',
-    'packages/rpc/dist',
-    'packages/repo/dist',
+    'app/dist',
     'plugins/',
     'chat.config.js',
     '**/dist/**/*',
@@ -22,7 +20,7 @@ module.exports = {
   overrides: [
     {
       files: [
-        'packages/app/src/sw.js',
+        'app/src/sw.js',
       ],
       env: {
         serviceworker: true,
@@ -44,8 +42,8 @@ module.exports = {
     },
     {
       files: [
-        'packages/app/tests/**/*.js',
-        'packages/app/**/*.spec.js',
+        'app/tests/**/*.js',
+        'app/**/*.spec.js',
       ],
       env: {
         mocha: true,
@@ -62,20 +60,6 @@ module.exports = {
       rules: {
         'import/extensions': ['off'],
         'no-unused-expressions': 'off',
-      },
-    },
-    {
-      files: [
-        'packages/server/tests/**/*.js',
-        'packages/server/**/*.spec.js',
-      ],
-      env: {
-        mocha: true,
-        commonjs: true,
-        es2023: true,
-      },
-      rules: {
-        'global-require': ['off'],
       },
     },
     {
