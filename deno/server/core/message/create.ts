@@ -3,6 +3,7 @@ import { createCommand } from "../command.ts";
 import { Id, IdArr } from "../types.ts";
 import { InvalidMessage, ResourceNotFound } from "../errors.ts";
 import { flatten } from "./flatten.ts";
+import { EntityId } from "../../types.ts";
 
 export default createCommand({
   type: "message:create",
@@ -97,14 +98,29 @@ export default createCommand({
     createdAt: new Date(),
   });
 
+  console.log(msg);
   const usersToAdd = msg.mentions.filter((m: any) =>
     !channel.users.includes(m)
   );
   if (usersToAdd.length) {
-    const group = [...new Set([...channel.users, ...usersToAdd])];
-    //await repo.channel.update({ id: channel.id }, { users: group });
+    const group = [...new Set([...channel.users, ...EntityId.fromArray(usersToAdd)])];
+    await repo.channel.update({ id: channel.id }, { users: group });
     const c = await repo.channel.get({ id: msg.channelId });
     bus.group(group, { type: "channel", ...c });
+    bus.direct(msg.userId, {
+      type: "message",
+      userId: "system",
+      priv: true,
+      channelId: msg.channelId,
+      flat: `User/s added to channel`,
+      message: {
+        line: [
+          {text: 'Added to channel: '},
+          usersToAdd.map(user => ({user: user.toString()})),
+        ]
+      },
+      createdAt: new Date().toISOString(),
+    });
   }
 
   if (id && msg.parentId) {
@@ -115,6 +131,7 @@ export default createCommand({
     });
     const parent = await repo.message.get({ id: msg.parentId });
     bus.group(channel.users, { type: "message", ...parent });
+
   }
 
   const created = await repo.message.get({ id });

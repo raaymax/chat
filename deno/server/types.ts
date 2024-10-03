@@ -3,7 +3,10 @@ import * as v from "valibot";
 export class EntityId {
   constructor(public value: string) {}
 
-  static from(id: string | EntityId) {
+  static fromArray(id: string | EntityId | string[] | EntityId[]): EntityId[] {
+    return [id].flat().map(EntityId.from);
+  }
+  static from(id: string | EntityId): EntityId {
     if (id instanceof EntityId) {
       return new EntityId(id.toString());
     } else if (typeof id === "string") {
