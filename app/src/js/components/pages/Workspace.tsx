@@ -3,8 +3,8 @@ import {
   useActions, useSelector, useSideStream, useMainStream, useDispatch,
 } from '../../store';
 
-import { MainConversation } from '../organisms/MainConversaion';
-import { SideConversation } from '../organisms/SideConversation';
+import { MainConversation } from './MainConversaion';
+import { SideConversation } from './SideConversation';
 import { Search } from './Search';
 import { Pins } from './Pins';
 import { StreamProvider } from '../contexts/stream';

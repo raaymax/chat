@@ -7,19 +7,13 @@ local nvim_lsp = require('lspconfig')
 --  capabilities = capabilities
 --}
 
-require("lspconfig").denols.setup {
-	root_dir = nvim_lsp.util.root_pattern("deno.json", "deno.jsonc"),
+require("lspconfig").ts_ls.setup {
+  on_init = function(client)
+    print(client)
+    return false
+  end,
   capabilities = capabilities
 }
-
--- require("lspconfig").ts_ls.setup {
---   on_init = function(client)
---     print(client)
---     return false
---   end,
---   capabilities = capabilities
--- }
-
 
 --require("lspconfig").volar.setup {
 --  capabilities = capabilities,

@@ -20,16 +20,16 @@ class API extends EventTarget {
 
   async reconnect() {
     try {
-      console.log('events reconnecting');
+      console.debug('events reconnecting');
       await this.source.close();
-      console.log('events reconnecting SSE');
+      console.debug('events reconnecting SSE');
       this.source = new SSESource(`${this.baseUrl}/api/sse`, {
         fetch: (...args) => fetch(...args),
         headers: {
           Authorization: `Bearer ${this.token}`,
         },
       });
-      console.log('events reconnecting listen');
+      console.debug('events reconnecting listen');
       this.listen();
     } catch(e) {
       console.error('events tutaj', e);
@@ -237,9 +237,9 @@ class API extends EventTarget {
 
 
   req = async (msg: any): Promise<any> => {
-    console.log('req < ', msg);
+    console.debug('req < ', msg);
     const ret = await this.request(msg);
-    console.log('req > ', msg, ret);
+    console.debug('req > ', msg, ret);
     return ret; 
   }
 }

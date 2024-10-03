@@ -3,13 +3,8 @@ import { ThemeProvider } from 'styled-components';
 import '../setup';
 import { client } from '../core';
 import StoreProvider from '../store/components/provider';
-import { Workspace } from './pages/Workspace';
 import { useUser } from './contexts/useUser';
-
-import {
-  createHashRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { Router } from './Router';
 
 const theme = {
   borderColor: '#565856',
@@ -48,16 +43,10 @@ const Secured = () => {
     client.emit('auth:user', user);
   }, [user]);
 
-const router = createHashRouter([
-  {
-    path: "/*",
-    element: <Workspace />,
-  },
-]);
   return (
     <StoreProvider>
       <ThemeProvider theme={theme}>
-        <RouterProvider router={router} />
+        <Router />
       </ThemeProvider>
     </StoreProvider>
   );

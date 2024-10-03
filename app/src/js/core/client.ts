@@ -1,10 +1,10 @@
-import Api from './api';
+import Api from './api.ts';
 
 declare global {
   const API_URL: string;
 }
 
-class Client {
+export class Client {
   _api: Api;
   get api() {
     if (!this._api) {

@@ -6,6 +6,7 @@ import { NavButton } from '../molecules/NavButton';
 import plugins from '../../core/plugins';
 import { logout } from '../../services/session';
 import { useActions, useDispatch } from '../../store';
+import { useSidebar } from '../contexts/useSidebar';
 
 export const SideMenu = styled.div`
   flex: 0 0 200px;
@@ -65,6 +66,8 @@ export const SideMenu = styled.div`
 export const Sidebar = () => {
   const dispatch = useDispatch();
   const actions = useActions();
+  const { sidebar } = useSidebar();
+  if(!sidebar) return null;
   return (
     <SideMenu>
       <Logo onClick={() => dispatch(actions.view.set('sidebar'))} />
