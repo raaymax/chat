@@ -104,6 +104,7 @@ export type Invitation = {
   token: string;
   userId: EntityId;
   channelId: EntityId;
+  expireAt: Date;
   createdAt: Date;
 };
 

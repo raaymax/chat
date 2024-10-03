@@ -10,10 +10,12 @@ export class InviteCommand {
     const { repo, bus, config } = core;
     const token = randomBytes(32).toString('hex');
 
+    await repo.invitation.removeOutdated();
     await repo.invitation.create({
       token,
       userId: data.userId,
       channelId: data.context.channelId,
+      expireAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 5),
       createdAt: new Date(),
     });
     const link = `${config.baseUrl}/#/invite/${token}`
@@ -22,7 +24,7 @@ export class InviteCommand {
       userId: "system",
       priv: true,
       channelId: data.context.channelId,
-      flat: `Invitation link:\n${config.baseUrl}/#/invite/${token}`,
+      flat: `Invitation link (valid 5 days from now):\n${config.baseUrl}/#/invite/${token}`,
       message: [
         { line: { text: 'Invitation link: ' } },
         { line: { code: link } },

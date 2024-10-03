@@ -82,12 +82,12 @@ Deno.test("command /invite", async () => {
       .createChannel({ name: "test-commands-invite" })
       .connectSSE()
       .executeCommand("/invite", [], ({json}) => {
-        url = json;
+        url = json.data;
       })
       .nextEvent((event: any) => {
         assertEquals(event.type, "message");
-        const m = event.flat.match("Invitation link:\n(https?://.*/invite/[0-9a-f]{64})")
-        assert(m);
+        const m = event.flat.match("(https?://.*/invite/[0-9a-f]{64})")
+        assert(m, "Result should contain invitation link");
         assertEquals(m[1], url);
       })
       .end();

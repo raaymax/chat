@@ -60,11 +60,11 @@ Deno.test("POST /api/users - user creation flow", async () => {
     await admin.login("admin")
       .createChannel({name: 'user-invite-test'})
       .sendMessage({flat: 'secret'})
-      .executeCommand('/invite', [], ({json}: any) => {url = json;});
+      .executeCommand('/invite', [], ({json}: any) => {url = json.data;});
     const m = url.match(/https?:\/\/.*\/invite\/(.*)$/);
     assert(m)
     const token = m[1];
-    const guest = await Chat.init(repo, agent)
+    await Chat.init(repo, agent)
       .register({
         token,
         name: "Jack",

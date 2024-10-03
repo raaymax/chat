@@ -347,7 +347,7 @@ export class Chat {
           },
         })
         .header("Authorization", `Bearer ${this.token}`)
-        .expect([204, 200]);
+        .expect(200);
       const json = res.status === 204 ? {} : await res.json();
       await test?.({status: res.status, json, channelId: this.channelId, events: this.eventSource });
     });

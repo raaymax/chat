@@ -52,9 +52,6 @@ export default (core: Core) =>
           context: body.context,
         },
       });
-      if(data){
-        return Res.json(data);
-      }
-      return Res.empty();
+      return Res.json({status: 'ok', data});
     },
   });
