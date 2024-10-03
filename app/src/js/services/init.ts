@@ -19,7 +19,8 @@ const initApp = createMethod('initApp', async (_arg, {
   dispatch(actions.connection.connected());
   dispatch(actions.info.reset());
   const config = await dispatch(methods.config.load({})).unwrap();
-  actions.stream.setMain(config.mainChannelId);
+  console.log('config', config);
+  dispatch(actions.stream.setMain(config.mainChannelId));
   await initNotifications(config);
   await dispatch(methods.users.load({}));
   await dispatch(methods.channels.load({}));
