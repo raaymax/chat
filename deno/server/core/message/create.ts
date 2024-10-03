@@ -98,7 +98,6 @@ export default createCommand({
     createdAt: new Date(),
   });
 
-  console.log(msg);
   const usersToAdd = msg.mentions.filter((m: any) =>
     !channel.users.includes(m)
   );
