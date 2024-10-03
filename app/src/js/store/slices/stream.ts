@@ -52,7 +52,7 @@ export default createSlice({
       if (value) {
         return { ...state, [id]: { id, channelId: state.mainChannelId, ...value } };
       }
-      return { ...state, [id]: {id, ...value} };
+      return { ...state, [id]: null };
     },
 
     setMain: (state, action) => {
