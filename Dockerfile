@@ -24,10 +24,11 @@ COPY ./deno ./deno
 COPY ./migrations ./migrations
 COPY ./deno.* ./
 COPY ./migrate-mongo-config.js ./migrate-mongo-config.js
-RUN deno cache npm:migrate-mongo
-RUN deno cache ./deno/server/main.ts
+RUN deno cache --allow-scripts npm:migrate-mongo
+RUN deno cache --allow-scripts ./deno/server/main.ts
 COPY ./entrypoint.sh ./entrypoint.sh
 COPY --from=build /app/app/dist /app/public
+COPY --from=build /app/node_modules /app/node_modules
 
 ENV APP_VERSION=1.0.0
 ENV PUBLIC_DIR=/app/public

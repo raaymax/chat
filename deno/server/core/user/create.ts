@@ -1,6 +1,6 @@
 import * as v from "valibot";
 import { createCommand } from "../command.ts";
-import bcrypt from "npm:bcrypt";
+import { hash } from "@ts-rex/bcrypt";
 
 export default createCommand({
   type: "user:create",
@@ -22,7 +22,7 @@ export default createCommand({
     const userId = await repo.user.create({
       name,
       login,
-      password: bcrypt.hashSync(password, 10),
+      password: hash(password),
       mainChannelId: invitation.channelId,
     });
   
