@@ -41,7 +41,7 @@ export default (core: Core) =>
       },
     },
     handler: async (req) => {
-      const body = req.body;
+      const { body } = req;
       const data = await core.dispatch({
         type: "command:execute",
         body: {
@@ -52,6 +52,6 @@ export default (core: Core) =>
           context: body.context,
         },
       });
-      return Res.json({status: 'ok', data});
+      return Res.json({ status: "ok", data });
     },
   });

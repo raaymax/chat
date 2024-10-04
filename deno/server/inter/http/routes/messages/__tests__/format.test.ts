@@ -1,9 +1,10 @@
-Deno.env.set("ENV_TYPE", "test");
 import { Agent } from "@planigale/testing";
-import { login, usingChannel } from "../../__tests__/mod.ts";
 import { ObjectId } from "mongodb";
+import { login, usingChannel } from "../../__tests__/mod.ts";
 import { EntityId } from "../../../../../types.ts";
 import { createApp } from "../../__tests__/app.ts";
+
+Deno.env.set("ENV_TYPE", "test");
 const { app, repo, core } = createApp();
 
 const validId = new ObjectId().toHexString();

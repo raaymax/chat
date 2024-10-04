@@ -21,5 +21,4 @@ const plugins = {
 
 window.Chat = plugins;
 
-
 export default plugins;

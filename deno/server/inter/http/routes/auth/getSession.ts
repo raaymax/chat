@@ -18,12 +18,11 @@ export default (_core: Core) =>
           path: "/",
         });
         return res;
-      } else {
-        const res = Res.json({ status: "no-session" });
-        if (req.cookies.get("token")) {
-          res.cookies.delete("token", { path: "/" });
-        }
-        return res;
       }
+      const res = Res.json({ status: "no-session" });
+      if (req.cookies.get("token")) {
+        res.cookies.delete("token", { path: "/" });
+      }
+      return res;
     },
   });

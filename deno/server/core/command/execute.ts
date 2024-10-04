@@ -34,5 +34,5 @@ export default createCommand({
     return;
   }
 
-  throw new ResourceNotFound(`command not found`);
+  throw new ResourceNotFound("command not found");
 });

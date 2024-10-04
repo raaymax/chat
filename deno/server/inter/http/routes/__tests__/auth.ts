@@ -3,7 +3,7 @@ import { ensureUser } from "./users.ts";
 import { Repository } from "../../../../infra/mod.ts";
 
 export async function login(repo: Repository, agent: Agent, login = "admin") {
-  //console.log(await repo.user.removeMany({}));
+  // console.log(await repo.user.removeMany({}));
   await ensureUser(repo, login);
   const res = await agent.request()
     .post("/api/auth/session")

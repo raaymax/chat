@@ -6,5 +6,5 @@ export default {
   storage: {
     type: 'gcs',
     bucket: 'codecat-quack-test',
-  }
+  },
 };

@@ -15,9 +15,7 @@
     "migrate:tests": "DATABASE_URL='mongodb://chat:chat@localhost:27017/tests?authSource=admin' npm run migrate",
     "start": "migrate-mongo up && npm run -w=@quack/server start ",
     "build": "npm run -w=@quack/app build",
-    "dev:web": "npm run -w=@quack/app dev",
-    "dev:srv": "npm run -w=@quack/server dev",
-    "dev": "run-p dev:srv dev:web",
+    "dev": "npm run -w=@quack/app dev",
     "lint": "FORCE_COLOR=true eslint --fix .",
     "lint:ci": "eslint .",
     "types": "npm run -w=@quack/app types"

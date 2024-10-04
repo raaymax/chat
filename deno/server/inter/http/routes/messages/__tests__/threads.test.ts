@@ -1,7 +1,7 @@
 import { Agent } from "@planigale/testing";
+import { assertEquals } from "@std/assert";
 import { createApp } from "../../__tests__/app.ts";
 import { Chat } from "../../__tests__/chat.ts";
-import { assertEquals } from "@std/assert";
 
 const { app, repo } = createApp();
 
@@ -12,23 +12,29 @@ Deno.test("sending messages to threads", async (t) => {
       .createChannel({ name: "test-messages-threads" })
       .sendMessage({
         flat: "Hello",
-        message: { text: "Hello" },
-        clientId: "hello0",
       })
       .sendMessage({
         flat: "Hello",
-        message: { text: "Hello" },
-        clientId: "hello1",
       }, (msg: any, { state }) => {
         state.parentId = msg.id;
       })
       .sendMessage({
         flat: "Hello",
-        message: { text: "Hello" },
-        clientId: "hello2",
       })
-      //.sendMessage(({state}) => ({ flat: "msg1", message: { text: "thread" }, clientId: "hello3", parentId: state.parentId }))
-      //.sendMessage(({state}) => ({ flat: "msg2", message: { text: "thread" }, clientId: "hello4", parentId: state.parentId }))
+      .sendMessage(({ state }) => ({ flat: "msg1", parentId: state.parentId }))
+      .sendMessage(({ state }) => ({ flat: "msg2", parentId: state.parentId }))
+      .getMessages({}, (messages: any) => {
+        assertEquals(messages.length, 3);
+        assertEquals(messages[1].thread.length, 2);
+      })
+      .getMessages(
+        ({ state }) => ({ parentId: state.parentId }),
+        (messages: any, { state }) => {
+          assertEquals(messages.length, 3);
+          assertEquals(messages[0].thread.length, 2);
+          assertEquals(messages[0].id, state.parentId);
+        },
+      )
       .end();
   });
 });

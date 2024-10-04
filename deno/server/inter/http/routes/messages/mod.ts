@@ -7,6 +7,7 @@ import create from "./create.ts";
 import remove from "./remove.ts";
 import update from "./update.ts";
 import pin from "./pin.ts";
+import react from "./react.ts";
 
 export const messages = (core: Core) => {
   const router = new Router();
@@ -14,6 +15,9 @@ export const messages = (core: Core) => {
   router.use(remove(core));
   router.use(update(core));
   router.use(pin(core));
+  router.use(react(core));
+  router.use("/:messageId", getAll(core));
+  router.use("/:messageId", create(core));
   return router;
 };
 

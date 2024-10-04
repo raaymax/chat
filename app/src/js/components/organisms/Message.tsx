@@ -136,10 +136,10 @@ const MessageBase = ({ onClick, sameUser, ...props }: MessageBaseProps = {}) => 
     >
       {!sameUser
         ? <div className='avatar'>{(() => {
-          if(user?.avatarFileId) {
-            return <img src={getUrl(user?.avatarFileId)} alt='avatar' />
+          if (user?.avatarFileId) {
+            return <img src={getUrl(user?.avatarFileId)} alt='avatar' />;
           }
-          return <img src="/avatar.png" alt='avatar' />
+          return <img src="/avatar.png" alt='avatar' />;
         })()}</div>
         : <div className='spacy side-time'>{formatTime(createdAt)}</div>
       }

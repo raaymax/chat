@@ -21,7 +21,12 @@ export class MessageRepo extends Repo<MessageQuery, Message> {
   COLLECTION = "messages";
 
   makeQuery(data: MessageQuery) {
-    const { search, before, after, ...rest } = serialize(data);
+    const {
+      search,
+      before,
+      after,
+      ...rest
+    } = serialize(data);
     return Object.fromEntries(
       Object.entries({
         ...rest,
@@ -37,7 +42,7 @@ export class MessageRepo extends Repo<MessageQuery, Message> {
     { limit = 50, offset = 0, order = 1 }: Pagination = {},
   ) {
     const { db } = await this.connect();
-    const query = this.makeQuery(arg);
+    const query = { parentId: { $exists: false }, ...this.makeQuery(arg) };
 
     const raw = await db
       .collection(this.COLLECTION)

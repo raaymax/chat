@@ -17,7 +17,7 @@ export default (core: Core) =>
     },
     handler: async (req) => {
       const userId = req.state.user.id;
-      const messageId = req.body.messageId;
+      const { messageId } = req.body;
       const receiptId = await core.dispatch({
         type: "readReceipt:update",
         body: { userId, messageId },

@@ -10,7 +10,7 @@ type ScalingOpts = {
 };
 
 class Files {
-  static getFileId = (id: string, width: number = 0, height: number = 0) =>
+  static getFileId = (id: string, width = 0, height = 0) =>
     `${id}-${width}x${height}`;
 
   private service: any;

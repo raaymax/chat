@@ -1,7 +1,8 @@
 import { assert, assertEquals } from "@std/assert";
-import { login } from "../../__tests__/mod.ts";
 import { Agent } from "@planigale/testing";
+import { login } from "../../__tests__/mod.ts";
 import { createApp } from "../../__tests__/app.ts";
+
 const { app, repo, core } = createApp();
 
 Deno.test("GET /api/sse - unauthorized", async () => {
@@ -17,7 +18,7 @@ Deno.test("/api/sse - auth", async () => {
     const { token } = await login(repo, agent);
     const source = agent.events("/api/sse", {
       headers: {
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
     try {

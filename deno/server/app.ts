@@ -1,6 +1,6 @@
+import config from "@quack/config";
 import { HttpInterface } from "./inter/http/mod.ts";
 import { Core } from "./core/mod.ts";
-import config from "@quack/config";
 
 const core = new Core({
   config,

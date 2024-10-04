@@ -2,8 +2,8 @@ import type { Config } from "@quack/config";
 import { ResourceNotFound } from "@planigale/planigale";
 import { existsSync } from "jsr:@std/fs";
 import * as path from "jsr:@std/path";
-import type { FileData, FileOpts } from "../types.ts";
 import { v4 as uuid } from "npm:uuid";
+import type { FileData, FileOpts } from "../types.ts";
 
 export const files = (config: Config["storage"]) => {
   const dir = (config.type === "fs" && config.directory) || Deno.cwd();
@@ -59,8 +59,7 @@ export const files = (config: Config["storage"]) => {
         await Deno.remove(path.join(dir, `${id}.json`));
       }
     },
-    exists: (id: string): Promise<boolean> => {
-      return Promise.resolve(exists(id) && exists(`${id}.json`));
-    },
+    exists: (id: string): Promise<boolean> =>
+      Promise.resolve(exists(id) && exists(`${id}.json`)),
   };
 };

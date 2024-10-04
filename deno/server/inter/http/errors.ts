@@ -35,6 +35,7 @@ function mapAppError(error: AppError): ApiError {
 
 export class AccessDenied extends ApiError {
   log = false;
+
   constructor(message: string) {
     super(401, "ACCESS_DENIED", message);
   }
@@ -42,6 +43,7 @@ export class AccessDenied extends ApiError {
 
 export class NotOwner extends ApiError {
   log = false;
+
   constructor(message: string) {
     super(403, "NOT_OWNER", message);
   }

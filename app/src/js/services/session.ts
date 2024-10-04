@@ -1,4 +1,4 @@
-//const SESSION_URL = `${API_URL}/access`;
+// const SESSION_URL = `${API_URL}/access`;
 const SESSION_URL = `${API_URL}/api/auth/session`;
 
 export const isProbablyLogged = () => !!localStorage.token;

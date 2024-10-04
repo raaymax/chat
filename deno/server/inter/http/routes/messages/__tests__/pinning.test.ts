@@ -1,13 +1,13 @@
 import { Agent } from "@planigale/testing";
+import { assertEquals } from "@std/assert";
 import { createApp } from "../../__tests__/app.ts";
 import { Chat } from "../../__tests__/chat.ts";
-import { assertEquals } from "@std/assert";
 
 const { app, repo } = createApp();
 
 Deno.test("Pinning other user messsage", async (t) => {
   await Agent.test(app, { type: "handler" }, async (agent) => {
-    let pinMessageId: string = "";
+    let pinMessageId = "";
     const admin = Chat.init(repo, agent);
     const member = Chat.init(repo, agent);
     await admin.login("admin");

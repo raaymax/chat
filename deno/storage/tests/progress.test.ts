@@ -1,12 +1,13 @@
-Deno.env.set("ENV_TYPE", "test");
 import { Agent } from "@planigale/testing";
 import * as mime from "@std/media-types";
 import { assert, assertEquals } from "@std/assert";
 import * as path from "@std/path";
 
+import config from "@quack/config";
 import { buildApp } from "../src/interfaces/http/mod.ts";
 import { initStorage } from "../src/core/mod.ts";
-import config from "@quack/config";
+
+Deno.env.set("ENV_TYPE", "test");
 
 const storage = initStorage(config);
 const app = await buildApp(storage);

@@ -2,33 +2,36 @@ import { assertEquals } from "@std/assert";
 import { Agent } from "@planigale/testing";
 import { Chat } from "../../__tests__/chat.ts";
 import { createApp } from "../../__tests__/app.ts";
+
 const { app, repo, core } = createApp();
 
-Deno.test("/api/channels/:channelId/read-receipts", async () => {
-  return await Agent.test(app, { type: "handler" }, async (agent) => {
-    return await Chat.init(repo, agent)
-      .login("admin")
-      .createChannel({ name: "test-read-receipts1" })
-      .sendMessage({
-        flat: "Hello",
-        message: { text: "Hello" },
-        clientId: "test0",
-      }, (msg, { state }) => {
-        state.messageId = msg.id;
-      })
-      .getChannelReadReceipts((receipts: any, self) => {
-        const receipt = receipts.find((r: any) =>
-          r.channelId === self.channelId
-        );
-        assertEquals(receipt.count, 0);
-        assertEquals(receipt.lastMessageId, self.state.messageId);
-      })
-      .end();
-  });
-});
+Deno.test("/api/channels/:channelId/read-receipts", async () =>
+  await Agent.test(
+    app,
+    { type: "handler" },
+    async (agent) =>
+      await Chat.init(repo, agent)
+        .login("admin")
+        .createChannel({ name: "test-read-receipts1" })
+        .sendMessage({
+          flat: "Hello",
+          message: { text: "Hello" },
+          clientId: "test0",
+        }, (msg, { state }) => {
+          state.messageId = msg.id;
+        })
+        .getChannelReadReceipts((receipts: any, self) => {
+          const receipt = receipts.find((r: any) =>
+            r.channelId === self.channelId
+          );
+          assertEquals(receipt.count, 0);
+          assertEquals(receipt.lastMessageId, self.state.messageId);
+        })
+        .end(),
+  ));
 
-Deno.test("/api/channels/:channelId/read-receipts - SSE", async () => {
-  return await Agent.test(app, { type: "handler" }, async (agent) => {
+Deno.test("/api/channels/:channelId/read-receipts - SSE", async () =>
+  await Agent.test(app, { type: "handler" }, async (agent) => {
     const member = Chat.init(repo, agent);
     const admin = Chat.init(repo, agent);
     await member.login("member");
@@ -61,8 +64,7 @@ Deno.test("/api/channels/:channelId/read-receipts - SSE", async () => {
 
     await member.end();
     await admin.end();
-  });
-});
+  }));
 
 Deno.test("/api/read-receipts", async () => {
   await repo.badge.removeMany({});

@@ -1,5 +1,6 @@
 import { assert, assertEquals } from "@std/assert";
 import { Agent } from "@planigale/testing";
+import { SSESource } from "@planigale/sse";
 import { Repository } from "../../../../infra/mod.ts";
 import { ensureUser } from "./users.ts";
 import {
@@ -8,7 +9,6 @@ import {
   Message,
   ReplaceEntityId,
 } from "../../../../types.ts";
-import { SSESource } from "@planigale/sse";
 
 export type RegistrationRequest = {
   token: string;
@@ -17,24 +17,42 @@ export type RegistrationRequest = {
   email: string;
 };
 
+type Arg<T extends Object> = T | ((chat: Chat) => T);
+
 export class Chat {
   repo: Repository;
+
   agent: Agent;
+
   token: string;
+
   parent: Chat | null;
+
   userId: string | null;
+
   channelId: string | null;
+
   parentId: string | null;
+
   eventSource: SSESource | null;
+
   ended = false;
+
   currentStep = 0;
+
   state: any = {};
 
   steps: any[] = [];
+
   cleanup: any[] = [];
 
   static init(repo: Repository, agent: Agent) {
     return new Chat(repo, agent);
+  }
+
+  get userIdR() {
+    assert(this.userId);
+    return this.userId;
   }
 
   constructor(repo: Repository, agent: Agent, parent: Chat | null = null) {
@@ -48,13 +66,20 @@ export class Chat {
     this.eventSource = null;
   }
 
+  arg<I extends Object>(arg: Arg<I>): I {
+    if (typeof arg === "function") {
+      return arg(this);
+    }
+    return arg;
+  }
+
   connectSSE() {
     this.steps.push(async () => {
       this.eventSource = this.agent.events("/api/sse", {
         headers: { Authorization: `Bearer ${this.token}` },
       });
       const { event } = await this.eventSource.next();
-      assertEquals(JSON.parse(event?.data ?? ""), { "status": "connected" });
+      assertEquals(JSON.parse(event?.data ?? ""), { status: "connected" });
       this.cleanup.push(async () => {
         await this.eventSource?.close();
       });
@@ -70,7 +95,7 @@ export class Chat {
     return this;
   }
 
-  login(login = "admin", password = '123') {
+  login(login = "admin", password = "123") {
     this.steps.push(async () => {
       await ensureUser(this.repo, login);
       const res = await this.agent.request()
@@ -87,7 +112,10 @@ export class Chat {
     return this;
   }
 
-  register({token, ...data}: RegistrationRequest, test?: (body: any) => Promise<any> | any) {
+  register(
+    { token, ...data }: RegistrationRequest,
+    test?: (body: any) => Promise<any> | any,
+  ) {
     this.steps.push(async () => {
       const res = await this.agent.request()
         .post(`/api/users/${token}`)
@@ -95,11 +123,11 @@ export class Chat {
         .expect(200);
       const body = await res.json();
       await test?.(body);
-      if(body.id) {
+      if (body.id) {
         this.cleanup.push(async () => {
-          const user = await this.repo.user.get({id: EntityId.from(body.id)});
-          await this.repo.channel.update({id: user?.mainChannelId}, {});
-          await this.repo.user.remove({id: EntityId.from(body.id)});
+          const user = await this.repo.user.get({ id: EntityId.from(body.id) });
+          await this.repo.channel.update({ id: user?.mainChannelId }, {});
+          await this.repo.user.remove({ id: EntityId.from(body.id) });
         });
       }
     });
@@ -107,10 +135,12 @@ export class Chat {
   }
 
   createChannel(
-    channel: Partial<ReplaceEntityId<Channel>>,
+    channelData: Arg<Partial<ReplaceEntityId<Channel>>>,
     test?: (channel: Channel, chat: Chat) => Promise<any> | any,
   ) {
+    let channelId: string;
     this.steps.push(async () => {
+      const channel = this.arg(channelData);
       const res = await this.agent.request()
         .post("/api/channels")
         .json({
@@ -120,10 +150,10 @@ export class Chat {
         .expect(200);
 
       const body = await res.json();
-      const channelId = body.id;
+      channelId = body.id;
       this.channelId = channelId;
-      await test?.(body, this);
       this.cleanup.push(async () => {
+        if (!channelId) return;
         await this.repo.badge.removeMany({
           channelId: EntityId.from(channelId),
         });
@@ -132,6 +162,7 @@ export class Chat {
         });
         await this.repo.channel.remove({ id: EntityId.from(channelId) });
       });
+      await test?.(body, this);
     });
     return this;
   }
@@ -245,12 +276,18 @@ export class Chat {
   }
 
   getMessages(
-    query: any = {},
+    queryData: Arg<{ parentId?: string }> = {},
     test?: (messages: any[], chat: Chat) => Promise<any> | any,
   ) {
     this.steps.push(async () => {
+      const { parentId } = this.arg(queryData);
+      let query = "";
+      if (parentId) {
+        query = `?parentId=${parentId}`;
+      }
+
       const res = await this.agent.request()
-        .get(`/api/channels/${this.channelId}/messages`)
+        .get(`/api/channels/${this.channelId}/messages${query}`)
         .header("Authorization", `Bearer ${this.token}`)
         .expect(200);
       const body = await res.json();
@@ -260,20 +297,37 @@ export class Chat {
   }
 
   sendMessage(
-    message: Partial<Message>,
-    test?: (message: Message, chat: Chat) => Promise<any> | any,
+    messageData: Arg<Partial<ReplaceEntityId<Message>>>,
+    test?: (
+      message: ReplaceEntityId<Message>,
+      chat: Chat,
+    ) => Promise<any> | any,
   ) {
     this.steps.push(async () => {
+      const message = this.arg(messageData);
       const res = await this.agent.request()
         .post(`/api/channels/${this.channelId}/messages`)
         .json(message)
         .header("Authorization", `Bearer ${this.token}`)
         .expect(200);
       const body = await res.json();
-      await test?.(body, this);
       this.cleanup.push(async () => {
+        if (!body?.id) return;
         await this.repo.message.remove({ id: EntityId.from(body.id) });
       });
+      await test?.(body, this);
+    });
+    return this;
+  }
+
+  reactToMessage(data: Arg<{ messageId: string; reaction: string }>) {
+    this.steps.push(async () => {
+      const { messageId, reaction } = this.arg(data);
+      await this.agent.request()
+        .put(`/api/messages/${messageId}/react`)
+        .json({ reaction })
+        .header("Authorization", `Bearer ${this.token}`)
+        .expect(204);
     });
     return this;
   }
@@ -310,7 +364,7 @@ export class Chat {
   ) {
     this.steps.push(async () => {
       const res = await this.agent.request()
-        .post(`/api/read-receipts`)
+        .post("/api/read-receipts")
         .json({
           messageId: typeof messageId === "function"
             ? messageId(this)
@@ -349,7 +403,12 @@ export class Chat {
         .header("Authorization", `Bearer ${this.token}`)
         .expect(200);
       const json = res.status === 204 ? {} : await res.json();
-      await test?.({status: res.status, json, channelId: this.channelId, events: this.eventSource });
+      await test?.({
+        status: res.status,
+        json,
+        channelId: this.channelId,
+        events: this.eventSource,
+      });
     });
     return this;
   }
@@ -373,6 +432,13 @@ export class Chat {
         .expect(200);
       const body = await res.json();
       await fn(body, this);
+    });
+    return this;
+  }
+
+  debug(test: (chat: Chat) => any) {
+    this.steps.push(async () => {
+      await test(this);
     });
     return this;
   }

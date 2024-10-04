@@ -19,12 +19,19 @@ export { Database, ObjectId } from "./db.ts";
 
 export class Repository {
   db: Database;
+
   user: UserRepo;
+
   session: SessionRepo;
+
   channel: ChannelRepo;
+
   message: MessageRepo;
+
   invitation: InvitationRepo;
+
   emoji: EmojiRepo;
+
   badge: BadgeRepo;
 
   constructor(config: Config) {

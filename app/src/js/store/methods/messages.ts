@@ -10,6 +10,7 @@ type Query = {
 }
 
 export const load = createMethod('messages/load', async (query: Query, { actions, client, dispatch }) => {
+  console.log('messages/load', query);
   const req = await client.req({
     limit: 50,
     ...query,

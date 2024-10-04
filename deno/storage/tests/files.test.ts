@@ -2,9 +2,9 @@ import { Agent } from "@planigale/testing";
 import { assert, assertEquals } from "@std/assert";
 import * as path from "@std/path";
 
+import config, { type Config } from "@quack/config";
 import { buildApp } from "../src/interfaces/http/mod.ts";
 import { initStorage } from "../src/core/mod.ts";
-import config, { type Config } from "@quack/config";
 
 const storage = initStorage(config);
 const app = await buildApp(storage);
@@ -52,9 +52,9 @@ for (const config of configs) {
         .get(`/${fileId}?download=true`)
         .expect(200);
       const file = await Deno.readFile(testTextFilePath);
-      //const body = await res.arrayBuffer();
+      // const body = await res.arrayBuffer();
       await res.body?.cancel?.();
-      //assertEquals(new Uint8Array(body), file, 'file should be the same');
+      // assertEquals(new Uint8Array(body), file, 'file should be the same');
       assertEquals(
         res.headers.get("content-type"),
         "text/plain; charset=UTF-8",
@@ -65,7 +65,7 @@ for (const config of configs) {
       );
       assertEquals(
         res.headers.get("content-disposition"),
-        `attachment; filename="test.txt"`,
+        'attachment; filename="test.txt"',
       );
     });
 
@@ -75,9 +75,9 @@ for (const config of configs) {
         .get(`/${fileId}`)
         .expect(200);
       const file = await Deno.readFile(testTextFilePath);
-      //const body = await res.arrayBuffer();
+      // const body = await res.arrayBuffer();
       await res.body?.cancel?.();
-      //assertEquals(new Uint8Array(body), file, 'file should be the same');
+      // assertEquals(new Uint8Array(body), file, 'file should be the same');
       assertEquals(
         res.headers.get("content-type"),
         "text/plain; charset=UTF-8",
@@ -128,9 +128,9 @@ for (const config of configs) {
         .get(`/${fileId}?download=true`)
         .expect(200);
       const file = await Deno.readFile(testImagePath);
-      //const body = await res.arrayBuffer();
+      // const body = await res.arrayBuffer();
       await res.body?.cancel?.();
-      //assertEquals(new Uint8Array(body), file, 'file should be the same');
+      // assertEquals(new Uint8Array(body), file, 'file should be the same');
       assertEquals(res.headers.get("content-type"), "image/png");
       assertEquals(
         res.headers.get("content-length"),
@@ -138,7 +138,7 @@ for (const config of configs) {
       );
       assertEquals(
         res.headers.get("content-disposition"),
-        `attachment; filename="quack.png"`,
+        'attachment; filename="quack.png"',
       );
     });
 
@@ -150,13 +150,13 @@ for (const config of configs) {
         .expect(200);
       const body = await res.arrayBuffer();
 
-      //const reader = await res.body?.getReader()
-      //const data = await reader?.read();
-      //await reader?.cancel();
-      //reader?.releaseLock();
+      // const reader = await res.body?.getReader()
+      // const data = await reader?.read();
+      // await reader?.cancel();
+      // reader?.releaseLock();
 
-      //await res.body?.cancel?.();
-      //assertEquals(new Uint8Array(body), file, 'file should be the same');
+      // await res.body?.cancel?.();
+      // assertEquals(new Uint8Array(body), file, 'file should be the same');
       assertEquals(res.headers.get("content-type"), "image/png");
       assertEquals(
         res.headers.get("content-length"),
@@ -174,17 +174,17 @@ for (const config of configs) {
       const res = await agent.request()
         .get(`/${fileId}?w=10&h=10`)
         .expect(200);
-      //const body = await res.arrayBuffer();
+      // const body = await res.arrayBuffer();
       await res.body?.cancel?.();
-      /*assert(
+      /* assert(
         body.byteLength < file.byteLength,
         "scaled image should be smaller",
-      );*/
+      ); */
       assertEquals(res.headers.get("content-type"), "image/png");
-      /*assertEquals(
+      /* assertEquals(
         res.headers.get("content-length"),
         body.byteLength.toString(),
-      );*/
+      ); */
     });
 
     await t.step("GET /:id - miniature image should exist ", async () => {
@@ -193,23 +193,23 @@ for (const config of configs) {
         .get(`/${fileId}-10x10`)
         .expect(200);
       const file = await Deno.readFile(testImagePath);
-      //const body = await res.arrayBuffer();
+      // const body = await res.arrayBuffer();
       await res.body?.cancel?.();
-      /*assert(
+      /* assert(
         body.byteLength < file.byteLength,
         "scaled image should be smaller",
-      );*/
+      ); */
       assertEquals(res.headers.get("content-type"), "image/png");
-      /*assertEquals(
+      /* assertEquals(
         res.headers.get("content-length"),
         body.byteLength.toString(),
-      );*/
+      ); */
     });
 
     await t.step("GET /:id - 404 when not exists", async () => {
       const agent = await Agent.from(app);
       const res = await agent.request()
-        .get(`/none-10x10`)
+        .get("/none-10x10")
         .expect(404);
       await res.body?.cancel?.();
     });

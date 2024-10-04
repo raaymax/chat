@@ -12,7 +12,7 @@ declare global {
 const initApp = createMethod('initApp', async (_arg, {
   dispatch, getState, methods, actions,
 }) => {
-  console.log('app init')
+  console.log('app init');
   if (navigator?.userAgentData?.mobile) {
     document.body.setAttribute('class', 'mobile');
   }

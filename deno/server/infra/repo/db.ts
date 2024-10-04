@@ -6,14 +6,19 @@ import {
   W,
   WriteConcern,
 } from "mongodb";
+
 export { ObjectId } from "mongodb";
 
 export class Database {
   db: Db | undefined = undefined;
+
   client: MongoClient | undefined = undefined;
+
   databaseUrl: string;
+
   promises: Promise<any>[] = [];
-  connected: boolean = false;
+
+  connected = false;
 
   constructor(url: string) {
     this.databaseUrl = url;
@@ -68,9 +73,10 @@ export class Database {
     };
 
     try {
-      await session.withTransaction(async () => {
-        return resolve(await fn());
-      }, transactionOptions);
+      await session.withTransaction(
+        async () => resolve(await fn()),
+        transactionOptions,
+      );
       return promise;
     } catch (error) {
       reject(error);

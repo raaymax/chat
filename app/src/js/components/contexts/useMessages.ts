@@ -28,7 +28,7 @@ export const useMessages = () => {
       () => messages
         .filter((m: Message) => m.channelId === stream.channelId
     && (
-      ((!stream.parentId && !m.parentId) || m.parentId === stream.parentId)
+      ((!stream.parentId && !m.parentId) || (m.parentId === stream.parentId || m.id === stream.parentId))
     || (!stream.parentId && m.parentId === m.id))),
       [stream, messages],
     ),

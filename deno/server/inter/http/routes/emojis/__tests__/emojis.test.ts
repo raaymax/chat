@@ -3,6 +3,7 @@ import { Agent } from "@planigale/testing";
 import { Emoji } from "../../../../../types.ts";
 import { createApp } from "../../__tests__/app.ts";
 import { Chat } from "../../__tests__/chat.ts";
+
 const { app, repo } = createApp();
 
 Deno.test("GET /api/emojis - unauthorized", async () => {

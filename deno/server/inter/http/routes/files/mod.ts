@@ -1,6 +1,4 @@
-import { Core } from "../../../../core/mod.ts";
 import { buildRouter } from "@quack/storage";
+import { Core } from "../../../../core/mod.ts";
 
-export const files = (core: Core) => {
-  return buildRouter(core.storage);
-};
+export const files = (core: Core) => buildRouter(core.storage);

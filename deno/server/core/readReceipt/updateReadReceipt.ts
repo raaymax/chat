@@ -1,6 +1,6 @@
 import * as v from "valibot";
-import { createCommand } from "../command.ts";
 import { hash, verify } from "@ts-rex/bcrypt";
+import { createCommand } from "../command.ts";
 import { ResourceNotFound } from "../errors.ts";
 import { Id } from "../types.ts";
 
@@ -15,8 +15,8 @@ export default createCommand({
   if (!message) {
     throw new ResourceNotFound("Message not found");
   }
-  const parentId = message.parentId;
-  const channelId = message.channelId;
+  const { parentId } = message;
+  const { channelId } = message;
   const channel = await repo.channel.get({ id: message.channelId });
   if (!channel) {
     throw new ResourceNotFound("Channel not found");

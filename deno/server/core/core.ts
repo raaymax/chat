@@ -1,3 +1,4 @@
+import { Config } from "@quack/config";
 import RemoveSession from "./session/remove.ts";
 import CreateSession from "./session/create.ts";
 import CreateChannel from "./channel/create.ts";
@@ -19,11 +20,11 @@ import CommandExecute from "./command/execute.ts";
 import GetAllReadReceipts from "./readReceipt/getAll.ts";
 import GetChannelReadReceipts from "./readReceipt/getChannel.ts";
 import UpdateReadReceipt from "./readReceipt/updateReadReceipt.ts";
-import CreateUser from './user/create.ts';
+import ReactToMessage from "./message/react.ts";
+import CreateUser from "./user/create.ts";
 import { Repository, storage } from "../infra/mod.ts";
 import { buildCommandCollection, EventFrom } from "./command.ts";
 import { Bus } from "./bus.ts";
-import { Config } from "@quack/config";
 import BadgesService from "./badgesService.ts";
 import { Webhooks } from "./webhooks.ts";
 
@@ -39,13 +40,18 @@ const commands = buildCommandCollection([
   PinMessage,
   RemoveMessage,
   CreateUser,
+  ReactToMessage,
 ]);
 
 export class Core {
   bus: Bus;
+
   storage: storage.Storage;
+
   repo: Repository;
-  config: Config
+
+  config: Config;
+
   webhooks?: Webhooks;
 
   channel = {
@@ -96,10 +102,9 @@ export class Core {
     }
   }
 
-  dispatch = async (evt: EventFrom<typeof commands[keyof typeof commands]>) => {
+  dispatch = async (evt: EventFrom<typeof commands[keyof typeof commands]>) =>
     // deno-lint-ignore no-explicit-any
-    return await (commands[evt.type] as any).handler(evt.body, this);
-  };
+    await (commands[evt.type] as any).handler(evt.body, this);
 
   close = async () => await this.repo.close();
 }

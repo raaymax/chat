@@ -45,7 +45,7 @@ export default (core: Core) =>
     },
     handler: async (req) => {
       const userId = req.state.user.id;
-      const channelId = req.params.channelId;
+      const { channelId } = req.params;
 
       const id = await core.dispatch({
         type: "message:create",
@@ -162,6 +162,5 @@ async function createMessage(msg) {
   }
   return { id, dup };
 }
-
 
 */

@@ -3,7 +3,7 @@ import { deserialize, serialize } from "./serializer.ts";
 import { EntityId } from "../../types.ts";
 
 export class Repo<Query, Model> {
-  COLLECTION: string = "";
+  COLLECTION = "";
 
   constructor(private db: Database) {}
 
@@ -76,6 +76,7 @@ export class Repo<Query, Model> {
     const items = await db.collection(this.COLLECTION).find(query).toArray();
     return deserialize(items);
   }
+
   async count(data: Query) {
     const { db } = await this.connect();
     const query = this.makeQuery(data);

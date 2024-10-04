@@ -1,6 +1,6 @@
+import { Config } from "@quack/config";
 import { Webhook } from "../types.ts";
 import type { Core } from "./core.ts";
-import { Config } from "@quack/config";
 
 export class Webhooks {
   constructor(private core: Core, private config: Config) {

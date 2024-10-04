@@ -7,6 +7,4 @@ export default createQuery({
   body: v.object({
     id: Id,
   }),
-}, async (query, { repo }) => {
-  return await repo.user.get({ id: query.id });
-});
+}, async (query, { repo }) => await repo.user.get({ id: query.id }));

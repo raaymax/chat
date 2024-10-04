@@ -8,20 +8,20 @@ export default (core: Core) =>
     public: true,
     schema: {
       params: {
-        type: 'object',
+        type: "object",
         properties: {
-          token: { type: 'string', minLength: 64 }
-        }
+          token: { type: "string", minLength: 64 },
+        },
       },
       body: {
-        type: 'object',
-        required: [ 'name', 'email', 'password' ],
+        type: "object",
+        required: ["name", "email", "password"],
         properties: {
-          name: { type: 'string', minLength: 1 },
-          email: { type: 'string', minLength: 3 },
-          password: { type: 'string', minLength: 3 },
-        }
-      }
+          name: { type: "string", minLength: 1 },
+          email: { type: "string", minLength: 3 },
+          password: { type: "string", minLength: 3 },
+        },
+      },
     },
     handler: async (req) => {
       const createdId = await core.dispatch({
@@ -30,7 +30,7 @@ export default (core: Core) =>
           name: req.body.name,
           login: req.body.email,
           password: req.body.password,
-          token: req.params.token
+          token: req.params.token,
         },
       });
       const user = await core.user.get({ id: createdId });

@@ -1,4 +1,5 @@
 import * as path from "jsr:@std/path";
+
 const __dirname = new URL(".", import.meta.url).pathname;
 
 export class FileService {
@@ -13,8 +14,10 @@ export class FileService {
     ],
     stdout: "piped",
   });
+
   child: Deno.ChildProcess | null = null;
-  running: boolean = false;
+
+  running = false;
 
   async start() {
     this.running = true;

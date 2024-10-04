@@ -52,7 +52,7 @@ export function createCommand<
         const body = v.parse(def.body, rawbody);
         const ret = await core.repo.db.withTransaction(() => fn(body, core));
         const r = serialize(ret);
-        //console.log(`[COMMAND: ${def.type}] Ret: `, r)
+        // console.log(`[COMMAND: ${def.type}] Ret: `, r)
         return r;
       } catch (err) {
         if (err instanceof AppError) {

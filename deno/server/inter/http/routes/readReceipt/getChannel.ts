@@ -8,7 +8,7 @@ export default (core: Core) =>
     public: false,
     handler: async (req) => {
       const userId = req.state.user.id;
-      const channelId = req.params.channelId;
+      const { channelId } = req.params;
       const parentId = req.params?.parentId;
       const results = await core.readReceipt.getChannel({
         channelId,

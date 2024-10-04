@@ -22,7 +22,7 @@ export function createQuery<A extends Definition, B>(
       const args = v.parse(def.body, body);
       const ret = await fn(args, core);
       const r = serialize(ret);
-      //console.log(`[QUERY: ${def.type}] Ret: `, r)
+      // console.log(`[QUERY: ${def.type}] Ret: `, r)
       return r;
     } catch (err) {
       if (err instanceof AppError) {
@@ -34,8 +34,6 @@ export function createQuery<A extends Definition, B>(
     }
   };
   handler.def = def;
-  handler.accepts = (evt: Event) => {
-    return evt.type === def.type;
-  };
+  handler.accepts = (evt: Event) => evt.type === def.type;
   return handler;
 }

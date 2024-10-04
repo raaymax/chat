@@ -6,11 +6,12 @@ import { files as memory } from "./memory.ts";
 export const files = (config: Config["storage"]) => {
   if (config.type === "fs") {
     return fs(config);
-  } else if (config.type === "gcs") {
-    return gcs(config);
-  } else if (config.type === "memory") {
-    return memory(config);
-  } else {
-    throw new Error("Unknown storage type");
   }
+  if (config.type === "gcs") {
+    return gcs(config);
+  }
+  if (config.type === "memory") {
+    return memory(config);
+  }
+  throw new Error("Unknown storage type");
 };

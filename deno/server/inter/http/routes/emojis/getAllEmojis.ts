@@ -5,7 +5,5 @@ export default (core: Core) =>
   new Route({
     method: "GET",
     url: "/",
-    handler: async () => {
-      return Response.json(await core.emoji.getAll({}));
-    },
+    handler: async () => Response.json(await core.emoji.getAll({})),
   });

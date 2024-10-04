@@ -1,6 +1,6 @@
+import config from "@quack/config";
 import { buildApp } from "./interfaces/http/mod.ts";
 import { initStorage } from "../../core/mod.ts";
-import config from "@quack/config";
 
 export const startServer = async () => {
   const app = await buildApp(initStorage(config));

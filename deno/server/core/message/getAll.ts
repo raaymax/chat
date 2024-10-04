@@ -1,7 +1,8 @@
+import * as v from "valibot";
 import { Id } from "../types.ts";
 import { createQuery } from "../query.ts";
-import * as v from "valibot";
 import { AccessDenied, ResourceNotFound } from "../errors.ts";
+import { ChannelType } from "../../types.ts";
 
 export default createQuery({
   type: "message:getAll",
@@ -23,10 +24,18 @@ export default createQuery({
   const { channelId, parentId } = msg;
 
   if (!channelId) throw new ResourceNotFound("Channel not found");
+  const channel = await repo.channel.get({ id: channelId });
+  if (!channel) throw new ResourceNotFound("Channel not found");
+  if (
+    channel.channelType !== ChannelType.PUBLIC &&
+    !channel.users.some((u) => u.eq(userId))
+  ) {
+    throw new AccessDenied();
+  }
 
-  //if (!await ChannelHelper.haveAccess(userId, channelId)) {
+  // if (!await ChannelHelper.haveAccess(userId, channelId)) {
   //  throw new AccessDenied();
-  //}
+  // }
 
   const msgs = await repo.message.getAll({
     channelId,

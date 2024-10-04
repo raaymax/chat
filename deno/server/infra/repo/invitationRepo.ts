@@ -9,14 +9,14 @@ export class InvitationRepo extends Repo<InvitationQuery, Invitation> {
   async removeOutdated() {
     const { db } = await this.connect();
     return db.collection(this.COLLECTION)
-      .deleteMany({expireAt:{ '$lt': new Date()}});
+      .deleteMany({ expireAt: { $lt: new Date() } });
   }
 
   makeQuery(data: InvitationQuery) {
     const query = serialize(data);
     return {
       ...query,
-      expireAt: { '$gt': new Date() },
+      expireAt: { $gt: new Date() },
     };
   }
 }

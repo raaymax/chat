@@ -4,6 +4,7 @@ import { Bus } from "./bus.ts";
 
 class BadgesService {
   core: any;
+
   constructor(core: { repo: Repository; bus: Bus }) {
     this.core = core;
   }
@@ -51,7 +52,12 @@ class BadgesService {
   }
 
   async messageSent(
-    { channelId, parentId, messageId, userId }: {
+    {
+      channelId,
+      parentId,
+      messageId,
+      userId,
+    }: {
       channelId: EntityId;
       parentId?: EntityId;
       messageId: EntityId;

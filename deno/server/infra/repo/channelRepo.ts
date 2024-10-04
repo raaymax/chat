@@ -19,7 +19,7 @@ export class ChannelRepo extends Repo<ChannelQuery, Channel> {
     return db.collection(this.COLLECTION)
       .updateOne(
         this.makeQuery(query),
-        { $push: {users: serialize(userId)} },
+        { $push: { users: serialize(userId) } },
       );
   }
 }

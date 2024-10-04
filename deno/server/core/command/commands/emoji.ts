@@ -15,8 +15,9 @@ export class EmojiCommand {
 
   static async execute(data: any, core: any) {
     EmojiCommand.validate(data);
-    const shortname = ":" +
-      data.text.trim().replace(/^:/, "").replace(/:$/, "") + ":";
+    const shortname = `:${
+      data.text.trim().replace(/^:/, "").replace(/:$/, "")
+    }:`;
 
     const id = await core.repo.emoji.create({
       shortname,

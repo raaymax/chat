@@ -6,15 +6,16 @@ export class EntityId {
   static fromArray(id: string | EntityId | string[] | EntityId[]): EntityId[] {
     return [id].flat().map(EntityId.from);
   }
+
   static from(id: string | EntityId): EntityId {
     if (id instanceof EntityId) {
       return new EntityId(id.toString());
-    } else if (typeof id === "string") {
-      return new EntityId(id);
-    } else {
-      console.log(id);
-      throw new Error("Invalid id type");
     }
+    if (typeof id === "string") {
+      return new EntityId(id);
+    }
+    console.log(id);
+    throw new Error("Invalid id type");
   }
 
   eq(id: EntityId) {

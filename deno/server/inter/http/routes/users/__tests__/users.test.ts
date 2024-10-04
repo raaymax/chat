@@ -4,6 +4,7 @@ import { ensureUser, login } from "../../__tests__/mod.ts";
 import { User } from "../../../../../types.ts";
 import { createApp } from "../../__tests__/app.ts";
 import { Chat } from "../../__tests__/chat.ts";
+
 const { app, repo, core } = createApp();
 
 Deno.test("GET /api/channels - unauthorized", async () => {
@@ -58,23 +59,25 @@ Deno.test("POST /api/users - user creation flow", async () => {
     const admin = Chat.init(repo, agent);
 
     await admin.login("admin")
-      .createChannel({name: 'user-invite-test'})
-      .sendMessage({flat: 'secret'})
-      .executeCommand('/invite', [], ({json}: any) => {url = json.data;});
+      .createChannel({ name: "user-invite-test" })
+      .sendMessage({ flat: "secret" })
+      .executeCommand("/invite", [], ({ json }: any) => {
+        url = json.data;
+      });
     const m = url.match(/https?:\/\/.*\/invite\/(.*)$/);
-    assert(m)
+    assert(m);
     const token = m[1];
     await Chat.init(repo, agent)
       .register({
         token,
         name: "Jack",
-        email: 'jack',
-        password: 'test123'
+        email: "jack",
+        password: "test123",
       })
-      .login('jack', 'test123')
-      .gotoChannel('user-invite-test')
-      .getMessages((msgs: any[]) => {
-        assertEquals(msgs[0].flat, 'secret');
+      .login("jack", "test123")
+      .gotoChannel("user-invite-test")
+      .getMessages({}, (msgs: any[]) => {
+        assertEquals(msgs[0].flat, "secret");
       })
       .end();
 

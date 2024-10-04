@@ -1,11 +1,11 @@
 import { Planigale, Res, Router } from "@planigale/planigale";
 import { SchemaValidator } from "@planigale/schema";
 import { bodyParser } from "@planigale/body-parser";
+import { join } from "@std/path";
 import { authMiddleware } from "./middleware/auth.ts";
 import { Core } from "../../core/mod.ts";
 import { messageSchema } from "./schema/message.ts";
 import { errorHandler } from "./errors.ts";
-import { join } from "@std/path";
 
 import { auth } from "./routes/auth/mod.ts";
 import { ping, sse } from "./routes/system/mod.ts";
@@ -27,6 +27,7 @@ export class HttpInterface extends Planigale {
     try {
       const schema = new SchemaValidator();
       schema.addFormat("entity-id", /^[a-fA-F0-9]{24}$/);
+      schema.addFormat("emoji-shortname", /^:[a-zA-Z0-9\-_]+:$/);
       schema.addKeyword({
         keyword: "requireAny",
         type: "object",
@@ -60,7 +61,7 @@ export class HttpInterface extends Planigale {
         channelReadReceipt(core),
       );
 
-      //todo: move this to routes
+      // todo: move this to routes
       this.route({
         method: "GET",
         url: "/:path*",

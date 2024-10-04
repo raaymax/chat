@@ -102,7 +102,9 @@ export default createCommand({
     !channel.users.includes(m)
   );
   if (usersToAdd.length) {
-    const group = [...new Set([...channel.users, ...EntityId.fromArray(usersToAdd)])];
+    const group = [
+      ...new Set([...channel.users, ...EntityId.fromArray(usersToAdd)]),
+    ];
     await repo.channel.update({ id: channel.id }, { users: group });
     const c = await repo.channel.get({ id: msg.channelId });
     bus.group(group, { type: "channel", ...c });
@@ -111,12 +113,12 @@ export default createCommand({
       userId: "system",
       priv: true,
       channelId: msg.channelId,
-      flat: `User/s added to channel`,
+      flat: "User/s added to channel",
       message: {
         line: [
-          {text: 'Added to channel: '},
-          usersToAdd.map(user => ({user: user.toString()})),
-        ]
+          { text: "Added to channel: " },
+          usersToAdd.map((user) => ({ user: user.toString() })),
+        ],
       },
       createdAt: new Date().toISOString(),
     });
@@ -130,13 +132,12 @@ export default createCommand({
     });
     const parent = await repo.message.get({ id: msg.parentId });
     bus.group(channel.users, { type: "message", ...parent });
-
   }
 
   const created = await repo.message.get({ id });
   if (!dup) {
     bus.group(channel.users, { type: "message", ...created });
-    //await services.notifications.send(created, res);
+    // await services.notifications.send(created, res);
   }
   if (id) {
     await services.badge.messageSent({
@@ -146,7 +147,7 @@ export default createCommand({
       userId: msg.userId,
     });
   }
-  return id; //{ id, duplicate: dup };
+  return id; // { id, duplicate: dup };
   /*
     if (msg.links?.length) {
       services.link.addPreview(
