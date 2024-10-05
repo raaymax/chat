@@ -19,7 +19,7 @@ export default createCommand({
       emojiOnly: v.optional(v.boolean(), false),
       debug: v.optional(v.string()),
       links: v.optional(v.array(v.string()), []),
-      mentions: v.optional(v.array(v.string()), []),
+      mentions: v.optional(IdArr, []),
       attachments: v.optional(
         v.array(v.object({
           id: v.string(),
@@ -98,13 +98,14 @@ export default createCommand({
     createdAt: new Date(),
   });
 
+  console.log(msg.mentions, channel.users);
   const usersToAdd = msg.mentions.filter((m: any) =>
-    !channel.users.includes(m)
+    !channel.users.some(u=>u.eq(m))
   );
   if (usersToAdd.length) {
-    const group = [
-      ...new Set([...channel.users, ...EntityId.fromArray(usersToAdd)]),
-    ];
+    const group = EntityId.fromArray([
+      ...new Set([...channel.users, ...usersToAdd].map(u=>u.toString())),
+    ]);
     await repo.channel.update({ id: channel.id }, { users: group });
     const c = await repo.channel.get({ id: msg.channelId });
     bus.group(group, { type: "channel", ...c });

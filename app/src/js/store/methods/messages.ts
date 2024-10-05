@@ -25,6 +25,7 @@ type Reaction = {
   id: string;
   text: string;
 }
+
 export const addReaction = createMethod('messages/addReaction', async (args: Reaction, { actions, client, dispatch }) => {
   const req = await client.req({
     type: 'message:react',
