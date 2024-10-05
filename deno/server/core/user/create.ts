@@ -1,6 +1,7 @@
 import * as v from "valibot";
 import { hash } from "@ts-rex/bcrypt";
 import { createCommand } from "../command.ts";
+import { InvalidInvitation } from "../errors.ts";
 
 export default createCommand({
   type: "user:create",
@@ -15,10 +16,10 @@ export default createCommand({
   name,
   login,
   password,
-}, { repo, dispatch }) => {
+}, { repo }) => {
   const invitation = await repo.invitation.get({ token });
   if (!invitation) {
-    throw new Error("Invalid invitation token");
+    throw new InvalidInvitation();
   }
 
   const existing = await repo.user.get({ login });
@@ -32,6 +33,7 @@ export default createCommand({
   });
 
   await repo.channel.join({ id: invitation.channelId }, userId);
+  await repo.invitation.remove({ id: invitation.id });
 
   return userId;
 });

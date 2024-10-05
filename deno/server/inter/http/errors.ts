@@ -28,6 +28,11 @@ function mapAppError(error: AppError): ApiError {
       return new AccessDenied(error.message);
     case "NOT_OWNER":
       return new NotOwner(error.message);
+    case "INVALID_INVITATION": {
+      const invalidInvitation = new ApiError(400, "INVALID_INVITATION", error.message);
+      invalidInvitation.log = false;
+      return invalidInvitation;
+    }
     default:
       return new InternalServerError(error);
   }

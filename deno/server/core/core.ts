@@ -22,6 +22,7 @@ import GetChannelReadReceipts from "./readReceipt/getChannel.ts";
 import UpdateReadReceipt from "./readReceipt/updateReadReceipt.ts";
 import ReactToMessage from "./message/react.ts";
 import CreateUser from "./user/create.ts";
+import CheckToken from "./user/checkToken.ts";
 import { Repository, storage } from "../infra/mod.ts";
 import { buildCommandCollection, EventFrom } from "./command.ts";
 import { Bus } from "./bus.ts";
@@ -67,6 +68,7 @@ export class Core {
     get: GetUser(this),
     getAll: GetAllUsers(this),
     getConfig: GetUserConfig(this),
+    checkToken: CheckToken(this),
   };
 
   message = {

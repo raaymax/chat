@@ -16,3 +16,16 @@
   margin-top: 5px;
   margin-bottom: 5px;
 }
+.register .big-err{
+  color: #aa0000;
+  font-size: 24px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+.register .back{
+  font-size: 16px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-align: center;
+}

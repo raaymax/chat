@@ -30,3 +30,9 @@ export class InvalidMessage extends AppError {
     super("INVALID_MESSAGE", msg);
   }
 }
+
+export class InvalidInvitation extends AppError {
+  constructor(msg = "Invalid invitation link") {
+    super("INVALID_INVITATION", msg);
+  }
+}

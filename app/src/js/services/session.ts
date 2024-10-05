@@ -35,6 +35,17 @@ export const login = async (value: {login: string, password: string}) => {
   return json;
 };
 
+export const checkRegistrationToken = async (value: { token: string }) => {
+  const ret = await fetch(`${API_URL}/api/users/token/${value.token}`, {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  return await ret.json();
+};
+
 export const register = async (value: { name: string, email: string, password: string, token: string }) => {
   const ret = await fetch(`${API_URL}/api/users/${value.token}`, {
     method: 'POST',
@@ -44,7 +55,10 @@ export const register = async (value: { name: string, email: string, password: s
     },
     body: JSON.stringify(value),
   });
-  return ret.json();
+  if (ret.status !== 200) {
+    throw await ret.json();
+  }
+  return await ret.json();
 };
 
 export const logout = async () => {

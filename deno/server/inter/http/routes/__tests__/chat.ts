@@ -112,6 +112,18 @@ export class Chat {
     return this;
   }
 
+  checkToken(tokenData: Arg<string>, test?: (body: any) => Promise<any> | any) {
+    this.steps.push(async () => {
+      const token = this.arg(tokenData);
+      const res = await this.agent.request()
+        .get(`/api/users/token/${token}`)
+        .expect(200);
+      const data = await res.json();
+      await test?.(data);
+    });
+    return this;
+  }
+
   register(
     { token, ...data }: RegistrationRequest,
     test?: (body: any) => Promise<any> | any,
@@ -122,7 +134,6 @@ export class Chat {
         .json(data)
         .expect(200);
       const body = await res.json();
-      await test?.(body);
       if (body.id) {
         this.cleanup.push(async () => {
           const user = await this.repo.user.get({ id: EntityId.from(body.id) });
@@ -130,6 +141,7 @@ export class Chat {
           await this.repo.user.remove({ id: EntityId.from(body.id) });
         });
       }
+      await test?.(body);
     });
     return this;
   }
