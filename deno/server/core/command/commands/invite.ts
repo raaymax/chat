@@ -4,6 +4,8 @@ import { CommandBody } from "../params.ts";
 
 export class InviteCommand {
   static commandName = "invite";
+  static prompt = "";
+  static description = "Generate an invitation link";
 
   static async execute(data: CommandBody, core: Core) {
     const { repo, bus, config } = core;

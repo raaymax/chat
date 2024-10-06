@@ -16,6 +16,7 @@ export const commandBodyValidator = v.required(
     ),
     context: v.object({
       channelId: Id,
+      appVersion: v.optional(v.string()),
     }),
   }),
   ["name", "text", "context"],

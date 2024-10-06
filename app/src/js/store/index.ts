@@ -8,7 +8,6 @@ export * from './hooks/useMethods';
 export * from './hooks/useEmojiFuse';
 export * from './hooks/useProgress';
 export * from './hooks/useBadges';
-export * from './hooks/useDirectChannel';
 export * from './hooks/useMainChannelId';
 export * from './hooks/useTyping';
 export * from './hooks/useUser';

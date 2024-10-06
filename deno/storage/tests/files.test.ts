@@ -28,6 +28,10 @@ const configs: Config["storage"][] = [
 ];
 
 for (const config of configs) {
+  if (config.type === 'gcs' && Deno.env.get('OFFLINE') === 'true' ) {
+    continue;
+  }
+
   const TYPE = config.type.toUpperCase();
 
   Deno.test(`[${TYPE}] text file upload and download`, async (t) => {

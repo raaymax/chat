@@ -21,48 +21,53 @@ Deno.test("/api/channels/* - unauthorized", async () => {
   }
 });
 
-Deno.test("/api/channels", async () =>
-  await Agent.test(
-    app,
-    { type: "handler" },
-    async (agent) =>
-      await Chat.init(repo, agent)
-        .login("admin")
-        .connectSSE()
-        .createChannel({ name: "test" })
-        .nextEvent((event: any) => {
-          assertEquals(event.type, "channel");
-          assertEquals(event.payload.name, "test");
-        })
-        .getChannel(async (channel: Channel) => {
-          assertEquals(channel.name, "test");
-          assertEquals(channel.private, false);
-          assertEquals(channel.direct, false);
-          assertEquals(channel.users.length, 1);
-          assertEquals(channel.channelType, "PUBLIC");
-        })
-        .getChannels(async (channels: Channel[]) => {
-          const channel = channels.find((c) => c.name === "test");
-          assert(channel);
-          assertEquals(channel.name, "test");
-        })
-        .removeChannel()
-        .end(),
-  ));
+Deno.test("/api/channels", async () => {
+  await Agent.test(app, { type: "handler" }, async (agent) => {
+    await Chat.init(repo, agent)
+      .login("admin")
+      .connectSSE()
+      .createChannel({ name: "test-channel-creation" })
+      .nextEvent((event: any) => {
+        assertEquals(event.type, "channel");
+        assertEquals(event.payload.name, "test-channel-creation");
+      })
+      .getChannel(async (channel) => {
+        assertEquals(channel.name, "test-channel-creation");
+        assertEquals(channel.private, false);
+        assertEquals(channel.direct, false);
+        assertEquals(channel.users.length, 1);
+        assertEquals(channel.channelType, "PUBLIC");
+      })
+      .getChannels(async (channels) => {
+        const channel = channels.find((c) =>
+          c.name === "test-channel-creation"
+        );
+        assert(channel);
+        assertEquals(channel.name, "test-channel-creation");
+      })
+      .removeChannel()
+      .end();
+  });
+});
 
 Deno.test("/api/channels - other user receives notification about channel", async () =>
   await Agent.test(app, { type: "handler" }, async (agent) => {
     const member = Chat.init(repo, agent).login("member");
     const admin = Chat.init(repo, agent).login("admin");
-    await member.connectSSE();
-    await admin.createChannel({ name: "test", users: [member.userIdR] });
-    await member
-      .nextEvent((event: any) => {
-        assertEquals(event.type, "channel");
-        assertEquals(event.payload.name, "test");
-      })
-      .end();
-
-    await member.end();
-    await admin.end();
+    try{
+      await member.connectSSE();
+      await admin.createChannel({
+        name: "test-channel-creation-2",
+        users: [member.userIdR],
+      });
+      await member
+        .nextEvent((event: any) => {
+          assertEquals(event.type, "channel");
+          assertEquals(event.payload.name, "test-channel-creation-2");
+        })
+        .end();
+    }finally{
+      await member.end();
+      await admin.end();
+    }
   }));

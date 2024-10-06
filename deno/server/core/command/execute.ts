@@ -4,20 +4,23 @@ import { ResourceNotFound } from "../errors.ts";
 import { EmojiCommand } from "./commands/emoji.ts";
 import { VersionCommand } from "./commands/version.ts";
 import { InviteCommand } from "./commands/invite.ts";
+import { AvatarCommand } from "./commands/avatar.ts";
 import { commandBodyValidator } from "./params.ts";
+
+const commands = [
+  EmojiCommand,
+  VersionCommand,
+  InviteCommand,
+  AvatarCommand,
+];
 
 export default createCommand({
   type: "command:execute",
   body: commandBodyValidator,
 }, async (msg, core) => {
-  if (msg.name === "emoji") {
-    return await EmojiCommand.execute(msg, core);
-  }
-  if (msg.name === "version") {
-    return await VersionCommand.execute(msg, core);
-  }
-  if (msg.name === "invite") {
-    return await InviteCommand.execute(msg, core);
+  const command = commands.find(command => command.commandName === msg.name);
+  if (command) {
+    return await command.execute(msg, core);
   }
   if (msg.name === "echo") {
     const response = {
@@ -30,6 +33,34 @@ export default createCommand({
     core.bus.direct(msg.userId, {
       type: "message",
       ...response,
+    });
+    return;
+  }
+
+  if (msg.name === "help") {
+    const commands = [
+      EmojiCommand,
+      VersionCommand,
+      InviteCommand,
+      AvatarCommand,
+    ];
+    core.bus.direct(msg.userId, {
+      type: "message",
+      channelId: msg.context.channelId,
+      flat: `Available commands: ${commands.map(command => '/' + command.commandName).join(", ")}`,
+      message: [
+        { line: `Available commands:` },
+        { bullet: [
+          ...commands.map(command => ({
+            item: [
+              {code: '/' + command.commandName + " " + command.prompt},
+              {text: ' - '}, 
+              {text: command.description}
+            ]
+          })),
+        ]},
+      ],
+      createdAt: new Date().toISOString(),
     });
     return;
   }

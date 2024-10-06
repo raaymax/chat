@@ -1,9 +1,47 @@
 import styled from 'styled-components';
 import {
-  useSelector, useBadges, useUserChannels, useActions, useDispatch,
+    useActions,
+  useBadges,
+  useSelector,
+  useUsers,
 } from '../../store';
-import { NavUserButton } from './NavUser';
+import { NavButton } from './NavButton';
+import { ClassNames, cn } from '../../utils';
+import { client } from '../../core';
+import { useDispatch } from 'react-redux';
+import { Progress, User } from '../../types';
+import { useDirectChannel } from '../contexts/useDirectChannel';
 
+type NavUserButtonProps = {
+  user: {
+    id: string;
+    name: string;
+    system?: boolean;
+    connected?: boolean;
+    lastSeen?: string;
+  };
+  size?: number;
+  badge: number;
+  className?: ClassNames;
+  onClick: () => void;
+};
+
+export const NavUserButton = ({
+  user, size, badge, className, onClick,
+}: NavUserButtonProps) => {
+  if (user.system) {
+    return (<NavButton className={className} size={size} data-id={user.id} onClick={onClick} icon='system-user' badge={badge}>{user.name}</NavButton>);
+  }
+  const active = user.lastSeen && new Date(user.lastSeen).getTime() > Date.now() - 1000 * 60 * 5;
+  return (<NavButton size={size}
+    className={cn('user', {
+      connected: user.connected ?? false,
+      offline: !user.connected,
+      recent: Boolean(active),
+      system: user.system ?? false,
+    }, className)}
+    data-id={user.id} onClick={onClick} icon='user' badge={badge}>{user.name}</NavButton>);
+};
 const ChannelsContainer = styled.div`
   .header {
     display: flex;
@@ -40,10 +78,28 @@ const ChannelsContainer = styled.div`
   }
 `;
 
-export const NavUsers = () => {
-  const dispatch = useDispatch();
+
+const NavUserContainer = ({user, badges, active}: {user: User, badges: Record<string, number>, active: boolean}) => {
   const actions = useActions();
-  const channels = useUserChannels();
+  const dispatch = useDispatch();
+  const channel = useDirectChannel(user.id);
+  console.log(badges, channel?.id);
+  return <NavUserButton
+    size={30}
+    user={user}
+    className={{ active }}
+    badge={channel ? badges[channel.id] : 0}
+    onClick={async () => {
+      const channel = await client.api.putDirectChannel(user.id);
+      console.log('channel', channel);
+      dispatch(actions.stream.open({ id: 'main', value: { type: 'live', channelId: channel.id } }));
+      dispatch(actions.view.set(null));
+    }}
+  />
+}
+
+export const NavUsers = () => {
+  const users = useUsers();
   const userId = useSelector((state) => state.me);
   const badges = useBadges(userId);
   const id = useSelector((state) => state.stream.mainChannelId);
@@ -52,18 +108,13 @@ export const NavUsers = () => {
       <div className='header'>
         <span className='title'>users</span>
       </div>
-      { channels && channels.map((c) => (
-        <NavUserButton
-          size={30}
-          channel={c}
-          className={{ active: id === c.id }}
-          key={c.id}
-          badge={badges[c.id]}
-          onClick={() => {
-            dispatch(actions.stream.open({ id: 'main', value: { type: 'live', channelId: c.id } }));
-            dispatch(actions.view.set(null));
-          }}
-        />
+      { users && users.map((user) => (
+        <NavUserContainer
+          key={user.id}
+          user={user}
+          active={id === user.id}
+          badges={badges}
+          />
       ))}
     </ChannelsContainer>
   );

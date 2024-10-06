@@ -18,6 +18,10 @@ export class EntityId {
     throw new Error("Invalid id type");
   }
 
+  static unique(ids: EntityId[]) {
+    return EntityId.fromArray([...new Set(ids.map((id) => id.value))]);
+  }
+
   eq(id: EntityId) {
     return this.value === id.value;
   }

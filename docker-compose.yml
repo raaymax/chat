@@ -17,6 +17,7 @@ services:
     ports:
       - 8080:8080
     environment:
+      APP_VERSION: 3.x.x
       DATABASE_URL: mongodb://chat:chat@mongo:27017/chat?authSource=admin
       PORT: 8080
     depends_on:

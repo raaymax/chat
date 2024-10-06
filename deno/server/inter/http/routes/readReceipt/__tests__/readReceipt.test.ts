@@ -42,7 +42,7 @@ Deno.test("/api/channels/:channelId/read-receipts - SSE", async () =>
       name: "test-read-receipts2",
       users: [member.userId],
     });
-    await member.gotoChannel("test-read-receipts2");
+    await member.openChannel("test-read-receipts2");
     await admin.sendMessage({
       flat: "Hello",
       message: { text: "Hello" },
@@ -79,7 +79,7 @@ Deno.test("/api/read-receipts", async () => {
       name: "test-read-receipts3",
       users: [member.userId],
     });
-    await member.gotoChannel("test-read-receipts3");
+    await member.openChannel("test-read-receipts3");
     await admin.sendMessage({
       flat: "Hello",
       message: { text: "Hello" },

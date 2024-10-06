@@ -1,5 +1,7 @@
 export class EmojiCommand {
   static commandName = "emoji";
+  static prompt = ":thumbsup: [image attachment]";
+  static description = "Create a new emoji";
 
   static validate(data: any) {
     if (!data.attachments || data.attachments.length === 0) {

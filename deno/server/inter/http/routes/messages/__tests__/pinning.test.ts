@@ -17,7 +17,7 @@ Deno.test("Pinning other user messsage", async (t) => {
       name: "test-messages-pin",
       users: [member.userId],
     });
-    await member.gotoChannel("test-messages-pin");
+    await member.openChannel("test-messages-pin");
     await admin.sendMessage({
       flat: "Hello",
       message: { text: "Hello" },

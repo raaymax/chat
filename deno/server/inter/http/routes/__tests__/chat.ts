@@ -46,6 +46,8 @@ export class Chat {
 
   cleanup: any[] = [];
 
+  appVersion = "client-version";
+
   static init(repo: Repository, agent: Agent) {
     return new Chat(repo, agent);
   }
@@ -53,6 +55,11 @@ export class Chat {
   get userIdR() {
     assert(this.userId);
     return this.userId;
+  }
+
+  get channelIdR() {
+    assert(this.channelId);
+    return this.channelId;
   }
 
   constructor(repo: Repository, agent: Agent, parent: Chat | null = null) {
@@ -87,10 +94,10 @@ export class Chat {
     return this;
   }
 
-  nextEvent(fn: (event: any) => any) {
+  nextEvent(fn: (event: any, chat: Chat) => any) {
     this.steps.push(async () => {
       const { event } = await this.eventSource?.next() || {};
-      await fn(JSON.parse(event?.data || "{}"));
+      await fn(JSON.parse(event?.data || "{}"), this);
     });
     return this;
   }
@@ -179,7 +186,51 @@ export class Chat {
     return this;
   }
 
-  gotoChannel(channelName: string) {
+  putDirectChannel(
+    data: Arg<{ userId: string }>,
+    test?: (channel: ReplaceEntityId<Channel>, chat: Chat) => Promise<any> | any,
+  ) {
+    this.steps.push(async () => {
+      const { userId } = this.arg(data);
+      const res = await this.agent.request()
+        .put(`/api/channels/direct/${userId}`)
+        .json({ })
+        .header("Authorization", `Bearer ${this.token}`)
+        .expect(200);
+      const body = await res.json();
+      this.channelId = body.id;
+      this.cleanup.push(async () => {
+        await this.repo.badge.removeMany({
+          channelId: EntityId.from(body.id),
+        });
+        await this.repo.message.removeMany({
+          channelId: EntityId.from(body.id),
+        });
+        await this.repo.channel.remove({ id: EntityId.from(body.id) });
+      });
+      await test?.(body, this);
+    });
+    return this;
+  }
+
+  openDirectChannel(
+    data: Arg<{ userId: string }>,
+    test?: (channel: ReplaceEntityId<Channel>, chat: Chat) => Promise<any> | any,
+  ) {
+    this.steps.push(async () => {
+      const { userId } = this.arg(data);
+      const res = await this.agent.request()
+        .get(`/api/channels/direct/${userId}`)
+        .header("Authorization", `Bearer ${this.token}`)
+        .expect(200);
+      const body = await res.json();
+      this.channelId = body.id;
+      await test?.(body, this);
+    });
+    return this;
+  }
+
+  openChannel(channelName: string) {
     this.steps.push(async () => {
       const res = await this.agent.request()
         .get("/api/channels")
@@ -211,14 +262,14 @@ export class Chat {
     return this;
   }
 
-  getChannel(fn: (channel: Channel) => Promise<any>) {
+  getChannel(fn: (channel: ReplaceEntityId<Channel>, chat: Chat) => Promise<any> | any) {
     this.steps.push(async () => {
       const res = await this.agent.request()
         .get(`/api/channels/${this.channelId}`)
         .header("Authorization", `Bearer ${this.token}`)
         .expect(200);
       const body = await res.json();
-      await fn(body);
+      await fn(body, this);
     });
     return this;
   }
@@ -409,7 +460,7 @@ export class Chat {
           attachments,
           context: {
             channelId: this.channelId,
-            appVersion: "1.0.0",
+            appVersion: this.appVersion,
           },
         })
         .header("Authorization", `Bearer ${this.token}`)

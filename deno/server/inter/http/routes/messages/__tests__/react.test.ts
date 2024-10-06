@@ -19,8 +19,8 @@ Deno.test("PUT /api/messages/:messageId/react - sending reacts to messages", asy
         state.messageId = msg.id;
       });
 
-    await admin.gotoChannel("test-messages-reactions");
-    await member.gotoChannel("test-messages-reactions");
+    await admin.openChannel("test-messages-reactions");
+    await member.openChannel("test-messages-reactions");
 
     await t.step("creating forst reaction", async () => {
       await admin.reactToMessage(({ state }) => ({
@@ -107,8 +107,8 @@ Deno.test("PUT /api/messages/:messageId/react - SSR about reactions", async (t) 
         state.messageId = msg.id;
       });
 
-    await admin.gotoChannel("test-messages-reactions");
-    await member.gotoChannel("test-messages-reactions")
+    await admin.openChannel("test-messages-reactions");
+    await member.openChannel("test-messages-reactions")
       .connectSSE();
 
     await t.step("creating reaction and listening for SSE", async () => {

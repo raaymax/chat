@@ -5,6 +5,13 @@ import { InvalidMessage, ResourceNotFound } from "../errors.ts";
 import { flatten } from "./flatten.ts";
 import { EntityId } from "../../types.ts";
 
+function filterUndefined(data:any){
+  return Object.fromEntries(
+    Object.entries(data).filter(([, v]) => v !== undefined),
+  );
+}
+
+
 export default createCommand({
   type: "message:create",
   body: v.required(
@@ -31,7 +38,8 @@ export default createCommand({
     }),
     ["userId", "channelId"],
   ),
-}, async (msg, { repo, services, bus }) => {
+}, async (msg, core) => {
+  const { repo, services, bus } = core;
   const channel = await repo.channel.get({
     id: msg.channelId,
     userId: msg.userId,
@@ -54,31 +62,7 @@ export default createCommand({
   if (!msg.clientId) {
     msg.clientId = crypto.randomUUID();
   }
-
-  async function createMessage(msg: any) {
-    const data = Object.fromEntries(
-      Object.entries(msg).filter(([, v]) => v !== undefined),
-    );
-    let id;
-    let dup = false;
-    try {
-      id = await repo.message.create(data);
-    } catch (err) {
-      if (err.code !== 11000) {
-        throw err;
-      }
-      dup = true;
-      const message = await repo.message.get({
-        clientId: msg.clientId,
-      });
-      if (message) {
-        id = message.id;
-      }
-    }
-    return { id, dup };
-  }
-
-  const { id, dup } = await createMessage({
+  const message = filterUndefined({
     message: msg.message,
     flat: msg.flat,
     pinned: msg.pinned,
@@ -98,31 +82,30 @@ export default createCommand({
     createdAt: new Date(),
   });
 
-  const usersToAdd = msg.mentions.filter((m: any) =>
-    !channel.users.some(u=>u.eq(m))
-  );
-  if (usersToAdd.length) {
-    const group = EntityId.fromArray([
-      ...new Set([...channel.users, ...usersToAdd].map(u=>u.toString())),
-    ]);
-    await repo.channel.update({ id: channel.id }, { users: group });
-    const c = await repo.channel.get({ id: msg.channelId });
-    bus.group(group, { type: "channel", ...c });
-    bus.direct(msg.userId, {
-      type: "message",
-      userId: "system",
-      priv: true,
-      channelId: msg.channelId,
-      flat: "User/s added to channel",
-      message: {
-        line: [
-          { text: "Added to channel: " },
-          usersToAdd.map((user) => ({ user: user.toString() })),
-        ],
-      },
-      createdAt: new Date().toISOString(),
+  const id: EntityId = await (async ()=>{
+    const existing = await repo.message.get({
+      channelId: channel.id,
+      userId: msg.userId,
+      clientId: msg.clientId,
     });
-  }
+    if(existing) {
+      await repo.message.update({id: existing.id}, message);
+    } else {
+      return await repo.message.create(message);
+    }
+    return existing.id;
+  })()
+
+
+  await core.dispatch({
+    type: 'channel:join',
+    body: {
+      channelId: msg.channelId.toString(),
+      userIds: msg.mentions.filter((m: any) =>
+        !channel.users.some(u=>u.eq(m))
+      ).map(u=>u.toString()),
+    }
+  });
 
   if (id && msg.parentId) {
     await repo.message.updateThread({
@@ -135,18 +118,15 @@ export default createCommand({
   }
 
   const created = await repo.message.get({ id });
-  if (!dup) {
-    bus.group(channel.users, { type: "message", ...created });
-    // await services.notifications.send(created, res);
-  }
-  if (id) {
-    await services.badge.messageSent({
-      channelId: channel.id,
-      parentId: msg.parentId,
-      messageId: id,
-      userId: msg.userId,
-    });
-  }
+  bus.group(channel.users, { type: "message", ...created });
+  await services.badge.messageSent({
+    channelId: channel.id,
+    parentId: msg.parentId,
+    messageId: id,
+    userId: msg.userId,
+  });
+
+  // await services.notifications.send(created, res);
   return id; // { id, duplicate: dup };
   /*
     if (msg.links?.length) {

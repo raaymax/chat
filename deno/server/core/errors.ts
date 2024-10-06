@@ -30,9 +30,22 @@ export class InvalidMessage extends AppError {
     super("INVALID_MESSAGE", msg);
   }
 }
+export class InvalidUser extends AppError {
+  userIds: string[];
+  constructor(msg = "Invalid user", userIds: string[]) {
+    super("INVALID_USER", msg);
+    this.userIds = userIds;
+  }
+}
 
 export class InvalidInvitation extends AppError {
   constructor(msg = "Invalid invitation link") {
     super("INVALID_INVITATION", msg);
+  }
+}
+
+export class InvalidChannelValue extends AppError {
+  constructor(msg = "Can not create channel") {
+    super("INVLID_CHANNEL_VALUE", msg);
   }
 }

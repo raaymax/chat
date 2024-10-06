@@ -1,12 +1,9 @@
 import * as v from "valibot";
 import { createCommand } from "../command.ts";
 import { Id, IdArr } from "../types.ts";
-
-enum ChannelType {
-  PUBLIC = "PUBLIC",
-  PRIVATE = "PRIVATE",
-  DIRECT = "DIRECT",
-}
+import { InvalidChannelValue } from "../errors.ts";
+import { usersExists } from "./validate.ts";
+import { ChannelType } from "../../types.ts";
 
 export default createCommand({
   type: "channel:create",
@@ -20,33 +17,26 @@ export default createCommand({
     ["userId", "name"],
   ),
 }, async (channel, { repo, bus }) => {
+  await usersExists(repo, channel.users);
+  if(channel.channelType === ChannelType.DIRECT){
+    throw new InvalidChannelValue("Direct channel can't be created this way");
+  }
   const {
     channelType,
     userId,
     users,
     name,
   } = channel;
-  if (channelType === "PUBLIC" || channelType === "PRIVATE") {
-    const existing = await repo.channel.get({ channelType, name, userId });
-    if (existing) {
-      return existing.id;
-    }
-  }
-  if (channelType === "DIRECT") {
-    const existing = await repo.channel.get({
-      channelType,
-      users: [userId, ...users],
-    });
-    if (existing) {
-      return existing.id;
-    }
+  const existing = await repo.channel.get({ channelType, name, userId });
+  if (existing) {
+    return existing.id;
   }
 
   const channelId = await repo.channel.create({
     name,
     channelType,
-    private: (channelType === "PRIVATE" || channelType === "DIRECT"),
-    direct: (channelType === "DIRECT"),
+    private: channelType === "PRIVATE",
+    direct: false,
     users: [userId, ...users],
   });
 

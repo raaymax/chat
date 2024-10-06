@@ -6,13 +6,8 @@ COPY ./package-lock.json ./package-lock.json
 COPY ./app/package.json ./app/package.json
 RUN npm install
 COPY ./app ./app
-
-ENV APP_VERSION=1.0.0
 ENV APP_NAME=quack
-
 RUN npm run build
-
-
 
 FROM denoland/deno:alpine-1.45.4
 RUN apk -U upgrade
@@ -30,7 +25,6 @@ COPY ./entrypoint.sh ./entrypoint.sh
 COPY --from=build /app/app/dist /app/public
 COPY --from=build /app/node_modules /app/node_modules
 
-ENV APP_VERSION=1.0.0
 ENV PUBLIC_DIR=/app/public
 ENV PORT=8080
 

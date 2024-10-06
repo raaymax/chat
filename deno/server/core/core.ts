@@ -23,6 +23,9 @@ import UpdateReadReceipt from "./readReceipt/updateReadReceipt.ts";
 import ReactToMessage from "./message/react.ts";
 import CreateUser from "./user/create.ts";
 import CheckToken from "./user/checkToken.ts";
+import PutDirectChannel from './channel/putDirect.ts'
+import JoinChannel from "./channel/join.ts";
+import GetDirectChannel from "./channel/getDirect.ts";
 import { Repository, storage } from "../infra/mod.ts";
 import { buildCommandCollection, EventFrom } from "./command.ts";
 import { Bus } from "./bus.ts";
@@ -42,6 +45,8 @@ const commands = buildCommandCollection([
   RemoveMessage,
   CreateUser,
   ReactToMessage,
+  PutDirectChannel,
+  JoinChannel,
 ]);
 
 export class Core {
@@ -57,6 +62,7 @@ export class Core {
 
   channel = {
     get: GetChannel(this),
+    getDirect: GetDirectChannel(this),
     getAll: GetAllChannels(this),
   };
 

@@ -1,4 +1,5 @@
 import { SSESource } from '@planigale/sse';
+import { Channel } from '../types';
 
 class API extends EventTarget {
   baseUrl: string;
@@ -79,6 +80,27 @@ class API extends EventTarget {
       seqId: opts.seqId,
       error: await res.json(),
     };
+  }
+
+  async putDirectChannel(userId: string): Promise<Channel> {
+    const res = await fetch(`${this.baseUrl}/api/channels/direct/${userId}`, {
+      method: 'PUT',
+      body: JSON.stringify({}),
+    });
+    return await res.json();
+  }
+
+  async getDirectChannel(userId: string): Promise<Channel> {
+    try{
+      const res = await fetch(`${this.baseUrl}/api/channels/direct/${userId}`, {
+        method: 'GET',
+      });
+      const json = await res.json();
+      return json;
+    }catch(e){
+      console.log(e)
+      throw e;
+    }
   }
 
   on = this.addEventListener.bind(this);

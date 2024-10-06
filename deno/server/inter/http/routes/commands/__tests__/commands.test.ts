@@ -95,3 +95,60 @@ Deno.test("command /invite", async () => {
       .end();
   });
 });
+
+
+Deno.test("command /avatar", async () => {
+  return await Agent.test(app, { type: "handler" }, async (agent) => {
+    await Chat.init(repo, agent)
+      .login("admin")
+      .createChannel({ name: "test-commands-avatar" })
+      .connectSSE()
+      .executeCommand("/avatar", [
+          {
+            id: "party-parrot",
+            fileName: "party-parrot.gif",
+            contentType: "image/gif",
+          },
+      ])
+      .nextEvent((event: any) => {
+        assertEquals(event.type, "user");
+        assertEquals(event.avatarFileId, "party-parrot");
+      })
+      .end();
+  });
+});
+
+Deno.test("command /version", async () => {
+  Deno.env.set("APP_VERSION", "server-version");
+  return await Agent.test(app, { type: "handler" }, async (agent) => {
+    await Chat.init(repo, agent)
+      .login("admin")
+      .createChannel({ name: "test-commands-version" })
+      .connectSSE()
+      .executeCommand("/version", [])
+      .nextEvent((event) => {
+        assertEquals(event.type, "message");
+        assertEquals(event.flat.includes("server-version"), true);
+        assertEquals(event.flat.includes("client-version"), true);
+      })
+      .end();
+  });
+});
+
+Deno.test("command /help", async () => {
+  return await Agent.test(app, { type: "handler" }, async (agent) => {
+    await Chat.init(repo, agent)
+      .login("admin")
+      .createChannel({ name: "test-commands-help" })
+      .connectSSE()
+      .executeCommand("/help", [])
+      .nextEvent((event) => {
+        assertEquals(event.type, "message");
+        assertEquals(event.flat.includes("/avatar"), true);
+        assertEquals(event.flat.includes("/emoji"), true);
+        assertEquals(event.flat.includes("/invite"), true);
+        assertEquals(event.flat.includes("/version"), true);
+      })
+      .end();
+  });
+});
