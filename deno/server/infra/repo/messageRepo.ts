@@ -52,6 +52,8 @@ export class MessageRepo extends Repo<MessageQuery, Message> {
       .limit(limit)
       .toArray();
 
+    console.debug("query", query, raw.length);
+
     return deserialize(raw);
   }
 

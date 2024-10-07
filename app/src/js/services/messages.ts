@@ -33,12 +33,28 @@ export const selectors = {
   getLatestDate: (stream: Stream, state: StateType) => {
     const data = getStreamMessages(stream, state.messages.data)
       .filter((m) => m.id !== stream.parentId);
-    return data.length ? data[0].createdAt : new Date().toISOString();
+
+    // FIXME: optimize this
+    const dates = data.map((m) => new Date(m.createdAt).getTime());
+    const max = Math.max(...dates);
+    try{
+      return new Date(max).toISOString();
+    }catch(e){
+      return new Date().toISOString();
+    }
   },
   getEarliestDate: (stream: Stream, state: StateType) => {
     const data = getStreamMessages(stream, state.messages.data)
       .filter((m) => m.id !== stream.parentId);
-    return data.length ? data[data.length - 1].createdAt : new Date().toISOString();
+    // FIXME: optimize this
+    const dates = data.map((m) => new Date(m.createdAt).getTime());
+    const min = Math.min(...dates);
+    try{
+      return new Date(min).toISOString();
+    }catch(e){
+      return new Date().toISOString();
+    }
+    //return data.length ? data[data.length - 1].createdAt : new Date().toISOString();
   },
   getMessage: (id: string, state: StateType): Message | null => state.messages.data
     .find((m) => m.id === id || m.clientId === id) || null,
