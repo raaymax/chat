@@ -13,7 +13,8 @@ export default createCommand({
     }),
     ["userIds"],
   ),
-}, async (body, { repo, bus }) => {
+}, async (body, core) => {
+  const { repo, bus } = core;
   if (body.userIds.length === 0) return null;
   await usersExists(repo, body.userIds);
 

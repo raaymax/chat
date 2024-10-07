@@ -23,14 +23,18 @@ Deno.test("command /echo <text>", async () =>
         .login("admin")
         .createChannel({ name: "test-commands" })
         .connectSSE()
-        .executeCommand("/echo Hello World!!",[], async ({ events, channelId }) => {
-          const { event: msg } = await events.next();
-          const msgJson = JSON.parse(msg?.data ?? "");
-          assertEquals(msgJson.type, "message");
-          assertEquals(msgJson.flat, "Hello World!!");
-          assertEquals(msgJson.message.text, "Hello World!!");
-          assertEquals(msgJson.channelId, channelId);
-        })
+        .executeCommand(
+          "/echo Hello World!!",
+          [],
+          async ({ events, channelId }) => {
+            const { event: msg } = await events.next();
+            const msgJson = JSON.parse(msg?.data ?? "");
+            assertEquals(msgJson.type, "message");
+            assertEquals(msgJson.flat, "Hello World!!");
+            assertEquals(msgJson.message.text, "Hello World!!");
+            assertEquals(msgJson.channelId, channelId);
+          },
+        )
         .end(),
   ));
 

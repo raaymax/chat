@@ -1,8 +1,9 @@
 import * as v from "valibot";
 import { hash, verify } from "@ts-rex/bcrypt";
 import { createCommand } from "../command.ts";
-import { ResourceNotFound } from "../errors.ts";
+import { AccessDenied, ResourceNotFound } from "../errors.ts";
 import { Id } from "../types.ts";
+import { ChannelType } from "../../types.ts";
 
 export default createCommand({
   type: "readReceipt:update",
@@ -10,20 +11,18 @@ export default createCommand({
     userId: Id,
     messageId: Id,
   }),
-}, async ({ userId, messageId }, { repo, bus }) => {
+}, async ({ userId, messageId }, core) => {
+  const { repo, bus } = core;
   const message = await repo.message.get({ id: messageId });
   if (!message) {
     throw new ResourceNotFound("Message not found");
   }
-  const { parentId } = message;
+  const parentId = message.parentId ?? null;
   const { channelId } = message;
-  const channel = await repo.channel.get({ id: message.channelId });
-  if (!channel) {
-    throw new ResourceNotFound("Channel not found");
-  }
-  // FIXME: Permission check
-  //
-  //
+
+  const channel = await core.channel.access({ id: message.channelId, userId })
+    .internal();
+
   const data = {
     lastMessageId: message.id,
     lastRead: message.createdAt,

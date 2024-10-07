@@ -34,7 +34,7 @@ Deno.test("/api/channels/:channelId/read-receipts - SSE", async () =>
   await Agent.test(app, { type: "handler" }, async (agent) => {
     const member = Chat.init(repo, agent);
     const admin = Chat.init(repo, agent);
-    try{
+    try {
       await member.login("member");
       await admin.login("admin");
       if (!member.userId) throw new Error("No member userId");

@@ -295,9 +295,9 @@ Deno.test("/api/channels/:channelId/messages - Sending to private channel", asyn
             flat: "test",
           })
           .header("Authorization", `Bearer ${memberToken}`)
-          .expect(404);
+          .expect(403);
         const body = await res.json();
-        assertEquals(body.errorCode, "RESOURCE_NOT_FOUND");
+        assertEquals(body.errorCode, "NO_ACCESS");
       },
     );
     await t.step(

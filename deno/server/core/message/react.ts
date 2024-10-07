@@ -10,10 +10,13 @@ export default createCommand({
     userId: Id,
     reaction: v.string(),
   }),
-}, async (body, { repo, bus }) => {
+}, async (body, core) => {
+  const { repo, bus } = core;
   const { id } = body;
   const message = await repo.message.get({ id });
   if (!message) throw new InvalidMessage();
+  await core.channel.access({ id: message.channelId, userId: body.userId })
+    .internal();
 
   message.reactions = message.reactions || [];
 

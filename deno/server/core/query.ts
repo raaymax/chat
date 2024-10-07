@@ -17,21 +17,34 @@ export function createQuery<A extends Definition, B>(
   def: A,
   fn: (body: v.InferOutput<A["body"]>, core: Core) => Promise<B>,
 ) {
-  const handler = (core: Core) => async (body: v.InferInput<A["body"]>) => {
-    try {
-      const args = v.parse(def.body, body);
-      const ret = await fn(args, core);
-      const r = serialize(ret);
-      // console.log(`[QUERY: ${def.type}] Ret: `, r)
-      return r;
-    } catch (err) {
-      if (err instanceof AppError) {
+  const handler = (core: Core) => {
+    const exec = (body: v.InferInput<A["body"]>) => {
+      try {
+        const args = v.parse(def.body, body);
+        const ret = fn(args, core);
+        // console.log(`[QUERY: ${def.type}] Ret: `, r)
+        return ret;
+      } catch (err) {
+        if (err instanceof AppError) {
+          throw err;
+        }
+        console.log(`[QUERY: ${def.type}] Error:`);
+        console.log(err);
         throw err;
       }
-      console.log(`[QUERY: ${def.type}] Error:`);
-      console.log(err);
-      throw err;
-    }
+    };
+
+    return (body: v.InferInput<A["body"]>) => ({
+      async internal() {
+        return await exec(body);
+      },
+      then(onfulfilled: (value: B) => any, onrejected: (reason: any) => any) {
+        return exec(body).then((ret) => serialize(ret)).then(
+          onfulfilled,
+          onrejected,
+        );
+      },
+    });
   };
   handler.def = def;
   handler.accepts = (evt: Event) => evt.type === def.type;

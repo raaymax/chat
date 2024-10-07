@@ -25,10 +25,11 @@ export class EmojiCommand {
       shortname,
       fileId: data.attachments[0].id,
     });
+    const emoji = await core.repo.emoji.get(id);
 
     core.bus.broadcast({
       type: "emoji",
-      ...(await core.repo.emoji.get(id)),
+      ...emoji,
     });
 
     core.bus.direct(data.userId, {

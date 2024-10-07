@@ -9,7 +9,7 @@ export default createQuery({
     userId: Id,
     messageId: Id,
   })),
-}, async ({ userId, messageId }, { repo }) => {
+}, async ({ userId, messageId }, { repo, channel }) => {
   // if (!channelId) throw new ResourceNotFound("Channel not found");
 
   // if (!await ChannelHelper.haveAccess(userId, channelId)) {
@@ -19,6 +19,8 @@ export default createQuery({
   const msg = await repo.message.get({
     id: messageId,
   });
+  if (!msg) throw new ResourceNotFound("Message not found");
+  await channel.access({ userId, id: msg.channelId }).internal();
 
   return msg;
 });

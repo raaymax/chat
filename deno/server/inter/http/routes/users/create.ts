@@ -1,5 +1,6 @@
-import { Res, Route } from "@planigale/planigale";
+import { InternalServerError, Res, Route } from "@planigale/planigale";
 import { Core } from "../../../../core/mod.ts";
+import { User } from "../../../../types.ts";
 
 export default (core: Core) =>
   new Route({
@@ -33,7 +34,12 @@ export default (core: Core) =>
           token: req.params.token,
         },
       });
-      const user = await core.user.get({ id: createdId });
+      const user: Partial<User> | null = await core.user.get({ id: createdId });
+      if (!user) {
+        throw new InternalServerError(
+          new Error("User not created, but no error thrown"),
+        );
+      }
       delete user.password;
       return Res.json(user);
     },

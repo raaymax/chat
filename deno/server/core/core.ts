@@ -19,17 +19,19 @@ import GetAllEmojis from "./emoji/getAll.ts";
 import CommandExecute from "./command/execute.ts";
 import GetAllReadReceipts from "./readReceipt/getAll.ts";
 import GetChannelReadReceipts from "./readReceipt/getChannel.ts";
-import UpdateReadReceipt from "./readReceipt/updateReadReceipt.ts";
+import UpdateReadReceipt from "./readReceipt/update.ts";
+import UpdateMessageReadReceipt from "./readReceipt/updateMessage.ts";
 import ReactToMessage from "./message/react.ts";
 import CreateUser from "./user/create.ts";
 import CheckToken from "./user/checkToken.ts";
 import PutDirectChannel from "./channel/putDirect.ts";
 import JoinChannel from "./channel/join.ts";
 import GetDirectChannel from "./channel/getDirect.ts";
+import CheckChannelAccess from "./channel/checkAccess.ts";
+
 import { Repository, storage } from "../infra/mod.ts";
 import { buildCommandCollection, EventFrom } from "./command.ts";
 import { Bus } from "./bus.ts";
-import BadgesService from "./badgesService.ts";
 import { Webhooks } from "./webhooks.ts";
 
 const commands = buildCommandCollection([
@@ -41,6 +43,7 @@ const commands = buildCommandCollection([
   UpdateMessage,
   CommandExecute,
   UpdateReadReceipt,
+  UpdateMessageReadReceipt,
   PinMessage,
   RemoveMessage,
   CreateUser,
@@ -61,6 +64,7 @@ export class Core {
   webhooks?: Webhooks;
 
   channel = {
+    access: CheckChannelAccess(this),
     get: GetChannel(this),
     getDirect: GetDirectChannel(this),
     getAll: GetAllChannels(this),
@@ -91,10 +95,6 @@ export class Core {
     getChannel: GetChannelReadReceipts(this),
   };
 
-  services = {
-    badge: new BadgesService(this),
-  };
-
   constructor(arg: {
     config: Config;
     repo?: Repository;
@@ -110,9 +110,9 @@ export class Core {
     }
   }
 
-  dispatch = async (evt: EventFrom<typeof commands[keyof typeof commands]>) =>
-    // deno-lint-ignore no-explicit-any
-    await (commands[evt.type] as any).handler(evt.body, this);
+  dispatch = (evt: EventFrom<typeof commands[keyof typeof commands]>) => (
+    (commands[evt.type] as any).handler(evt.body, this)
+  );
 
   close = async () => await this.repo.close();
 }

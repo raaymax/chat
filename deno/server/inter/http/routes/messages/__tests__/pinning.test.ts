@@ -13,6 +13,7 @@ Deno.test("Pinning other user messsage", async (t) => {
     try {
       await admin.login("admin");
       await member.login("member");
+      await member.login("other");
       if (!member.userId) throw new Error("member.userId is undefined");
       await admin.createChannel({
         name: "test-messages-pin",
@@ -26,14 +27,25 @@ Deno.test("Pinning other user messsage", async (t) => {
       }, (msg: any) => {
         pinMessageId = msg.id;
       });
-      await member.pinMessage(pinMessageId)
-        .getPinnedMessages((messages: any) => {
+      await t.step("pinning message", async () => {
+        await member.pinMessage({ messageId: pinMessageId })
+          .getPinnedMessages((messages: any) => {
+            assertEquals(messages.length, 1);
+            assertEquals(messages[0].id, pinMessageId);
+          });
+        await admin.getPinnedMessages((messages: any) => {
           assertEquals(messages.length, 1);
           assertEquals(messages[0].id, pinMessageId);
         });
-      await admin.getPinnedMessages((messages: any) => {
-        assertEquals(messages.length, 1);
-        assertEquals(messages[0].id, pinMessageId);
+      });
+      await t.step("unpinning message by other user", async () => {
+        await admin.pinMessage({ messageId: pinMessageId, pinned: false })
+          .getPinnedMessages((messages: any) => {
+            assertEquals(messages.length, 0);
+          });
+        await member.getPinnedMessages((messages: any) => {
+          assertEquals(messages.length, 0);
+        });
       });
     } finally {
       await admin.end();

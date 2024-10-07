@@ -484,11 +484,12 @@ export class Chat {
     return this;
   }
 
-  pinMessage(messageId: string) {
+  pinMessage(arg: Arg<{ messageId: string; pinned?: boolean }>) {
     this.steps.push(async () => {
+      const { messageId, pinned = true } = this.arg(arg);
       await this.agent.request()
         .put(`/api/messages/${messageId}/pin`)
-        .json({ pinned: true })
+        .json({ pinned })
         .header("Authorization", `Bearer ${this.token}`)
         .expect(204);
     });

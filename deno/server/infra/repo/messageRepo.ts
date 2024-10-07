@@ -25,6 +25,7 @@ export class MessageRepo extends Repo<MessageQuery, Message> {
       search,
       before,
       after,
+      parentId,
       ...rest
     } = serialize(data);
     return Object.fromEntries(
@@ -33,6 +34,9 @@ export class MessageRepo extends Repo<MessageQuery, Message> {
         ...(search ? { $text: { $search: search } } : {}),
         ...(before ? { createdAt: { $lte: before } } : {}),
         ...(after ? { createdAt: { $gte: after } } : {}),
+        ...(parentId === null
+          ? { parentId: { $not: { $ne: null } } }
+          : { parentId }),
       }).filter(([, v]) => v !== undefined),
     );
   }
@@ -42,7 +46,7 @@ export class MessageRepo extends Repo<MessageQuery, Message> {
     { limit = 50, offset = 0, order = 1 }: Pagination = {},
   ) {
     const { db } = await this.connect();
-    const query = { parentId: { $not: { $ne: null } }, ...this.makeQuery(arg) };
+    const query = this.makeQuery(arg);
 
     const raw = await db
       .collection(this.COLLECTION)

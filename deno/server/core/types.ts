@@ -25,11 +25,11 @@ import {
 } from "../types.ts";
 
 export const Id = v.pipe(
-  v.string(),
+  v.union([v.string(), v.instance(EntityId)]),
   v.transform((i: string) => EntityId.from(i)),
 );
 export const IdArr = v.pipe(
-  v.array(v.string()),
+  v.array(v.union([v.string(), v.instance(EntityId)])),
   v.transform((i: string[]) => i.map(EntityId.from)),
 );
 

@@ -18,7 +18,6 @@ export class Repo<Query, Model> {
 
   async create(data: Partial<Model>): Promise<EntityId> {
     const { db } = await this.connect();
-    // console.log('save', serialize(data));
     const ret = await db.collection(this.COLLECTION).insertOne(serialize(data));
     return deserialize(ret.insertedId);
   }

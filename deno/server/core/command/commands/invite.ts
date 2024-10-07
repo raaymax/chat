@@ -10,6 +10,10 @@ export class InviteCommand {
   static async execute(data: CommandBody, core: Core) {
     const { repo, bus, config } = core;
     const token = randomBytes(32).toString("hex");
+    await core.channel.access({
+      id: data.context.channelId,
+      userId: data.userId,
+    }).internal();
 
     await repo.invitation.removeOutdated();
     await repo.invitation.create({

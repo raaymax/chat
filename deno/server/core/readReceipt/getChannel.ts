@@ -10,12 +10,9 @@ export default createQuery({
     channelId: Id,
     parentId: v.optional(Id),
   }),
-}, async ({ userId: _userId, channelId, parentId }, { repo }) => {
-  const channel = await repo.channel.get({ id: channelId });
-  if (!channel) {
-    throw new ResourceNotFound("Channel not found");
-  }
-  // TODO: Permission check
-
-  return await repo.badge.getAll({ channelId: channel.id, parentId });
+}, async ({ userId: _userId, channelId, parentId }, core) => {
+  const channel = await core.channel.access({ id: channelId, userId: _userId })
+    .internal();
+  const all = await core.repo.badge.getAll({ channelId: channel.id, parentId });
+  return all;
 });

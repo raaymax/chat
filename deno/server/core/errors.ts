@@ -15,7 +15,7 @@ export class ResourceNotFound extends AppError {
 
 export class AccessDenied extends AppError {
   constructor() {
-    super("ACCESS_DENIED", "Access denied");
+    super("NO_ACCESS", "Access denied");
   }
 }
 

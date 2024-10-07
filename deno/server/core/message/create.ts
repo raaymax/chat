@@ -1,9 +1,9 @@
 import * as v from "valibot";
 import { createCommand } from "../command.ts";
 import { Id, IdArr } from "../types.ts";
-import { InvalidMessage, ResourceNotFound } from "../errors.ts";
+import { AccessDenied, InvalidMessage, ResourceNotFound } from "../errors.ts";
 import { flatten } from "./flatten.ts";
-import { EntityId } from "../../types.ts";
+import { ChannelType, EntityId } from "../../types.ts";
 
 function filterUndefined(data: any) {
   return Object.fromEntries(
@@ -38,14 +38,11 @@ export default createCommand({
     ["userId", "channelId"],
   ),
 }, async (msg, core) => {
-  const { repo, services, bus } = core;
-  const channel = await repo.channel.get({
+  const { repo, bus } = core;
+  const channel = await core.channel.access({
     id: msg.channelId,
     userId: msg.userId,
-  });
-  if (!channel) {
-    throw new ResourceNotFound("Channel not found");
-  }
+  }).internal();
 
   if (!msg.message && !msg.flat) {
     throw new InvalidMessage("Message or flat must be provided");
@@ -103,7 +100,7 @@ export default createCommand({
         !channel.users.some((u) => u.eq(m))
       ).map((u) => u.toString()),
     },
-  });
+  }).internal();
 
   if (id && msg.parentId) {
     await repo.message.updateThread({
@@ -117,12 +114,16 @@ export default createCommand({
 
   const created = await repo.message.get({ id });
   bus.group(channel.users, { type: "message", ...created });
-  await services.badge.messageSent({
-    channelId: channel.id,
-    parentId: msg.parentId,
-    messageId: id,
-    userId: msg.userId,
-  });
+
+  await core.dispatch({
+    type: "readReceipt:update:message",
+    body: {
+      channelId: channel.id,
+      parentId: msg.parentId,
+      messageId: id,
+      userId: msg.userId,
+    },
+  }).internal();
 
   // await services.notifications.send(created, res);
   return id; // { id, duplicate: dup };

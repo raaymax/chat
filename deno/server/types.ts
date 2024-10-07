@@ -167,7 +167,7 @@ export type Message = {
   message: MessageBody;
   channelId: EntityId;
   userId: EntityId;
-  parentId: EntityId;
+  parentId: EntityId | null;
   channel: string;
   clientId: string;
   emojiOnly: boolean;
