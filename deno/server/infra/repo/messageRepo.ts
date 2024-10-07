@@ -42,7 +42,7 @@ export class MessageRepo extends Repo<MessageQuery, Message> {
     { limit = 50, offset = 0, order = 1 }: Pagination = {},
   ) {
     const { db } = await this.connect();
-    const query = { parentId: { $exists: false }, ...this.makeQuery(arg) };
+    const query = { parentId: { $not: {$ne: null }}, ...this.makeQuery(arg) };
 
     const raw = await db
       .collection(this.COLLECTION)
@@ -51,8 +51,6 @@ export class MessageRepo extends Repo<MessageQuery, Message> {
       .skip(offset)
       .limit(limit)
       .toArray();
-
-    console.debug("query", query, raw.length);
 
     return deserialize(raw);
   }
