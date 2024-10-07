@@ -10,11 +10,11 @@ export default createQuery({
     targetUserId: Id,
   })),
 }, async (query, { repo }) => {
-  const users = EntityId.unique([query.userId, query.targetUserId])
+  const users = EntityId.unique([query.userId, query.targetUserId]);
   const channel = await repo.channel.get({
     channelType: ChannelType.DIRECT,
     users,
     usersCount: users.length,
-  })
+  });
   return channel;
 });

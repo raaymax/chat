@@ -1,7 +1,6 @@
 import type { Core } from "../../core.ts";
 import { CommandBody } from "../params.ts";
 
-
 export class AvatarCommand {
   static commandName = "avatar";
 
@@ -24,7 +23,7 @@ export class AvatarCommand {
     await core.repo.user.update({ id: data.userId }, { avatarFileId: id });
     const user = await core.repo.user.getR({ id: data.userId });
     core.bus.broadcast({
-      type: 'user',
+      type: "user",
       id: user.id,
       name: user.name,
       avatarFileId: user.avatarFileId,

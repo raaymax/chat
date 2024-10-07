@@ -188,13 +188,16 @@ export class Chat {
 
   putDirectChannel(
     data: Arg<{ userId: string }>,
-    test?: (channel: ReplaceEntityId<Channel>, chat: Chat) => Promise<any> | any,
+    test?: (
+      channel: ReplaceEntityId<Channel>,
+      chat: Chat,
+    ) => Promise<any> | any,
   ) {
     this.steps.push(async () => {
       const { userId } = this.arg(data);
       const res = await this.agent.request()
         .put(`/api/channels/direct/${userId}`)
-        .json({ })
+        .json({})
         .header("Authorization", `Bearer ${this.token}`)
         .expect(200);
       const body = await res.json();
@@ -215,7 +218,10 @@ export class Chat {
 
   openDirectChannel(
     data: Arg<{ userId: string }>,
-    test?: (channel: ReplaceEntityId<Channel>, chat: Chat) => Promise<any> | any,
+    test?: (
+      channel: ReplaceEntityId<Channel>,
+      chat: Chat,
+    ) => Promise<any> | any,
   ) {
     this.steps.push(async () => {
       const { userId } = this.arg(data);
@@ -262,7 +268,9 @@ export class Chat {
     return this;
   }
 
-  getChannel(fn: (channel: ReplaceEntityId<Channel>, chat: Chat) => Promise<any> | any) {
+  getChannel(
+    fn: (channel: ReplaceEntityId<Channel>, chat: Chat) => Promise<any> | any,
+  ) {
     this.steps.push(async () => {
       const res = await this.agent.request()
         .get(`/api/channels/${this.channelId}`)

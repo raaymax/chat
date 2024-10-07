@@ -54,7 +54,7 @@ Deno.test("/api/channels - other user receives notification about channel", asyn
   await Agent.test(app, { type: "handler" }, async (agent) => {
     const member = Chat.init(repo, agent).login("member");
     const admin = Chat.init(repo, agent).login("admin");
-    try{
+    try {
       await member.connectSSE();
       await admin.createChannel({
         name: "test-channel-creation-2",
@@ -66,7 +66,7 @@ Deno.test("/api/channels - other user receives notification about channel", asyn
           assertEquals(event.payload.name, "test-channel-creation-2");
         })
         .end();
-    }finally{
+    } finally {
       await member.end();
       await admin.end();
     }

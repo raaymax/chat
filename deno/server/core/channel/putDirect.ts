@@ -26,16 +26,15 @@ export default createCommand({
     channelType: ChannelType.DIRECT,
     users,
     usersCount: users.length,
-  })
+  });
 
-  if(!channel) {
+  if (!channel) {
     return await repo.channel.create({
       channelType: ChannelType.DIRECT,
       users,
       private: true,
       direct: true,
-
-    })
+    });
   }
   return channel.id;
 });

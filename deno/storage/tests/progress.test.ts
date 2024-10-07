@@ -15,8 +15,8 @@ const app = await buildApp(storage);
 const __dirname = new URL(".", import.meta.url).pathname;
 
 Deno.test({
-  name: "POST /files - with progress", 
-  ignore: Deno.env.get("OFFLINE") === 'true',
+  name: "POST /files - with progress",
+  ignore: Deno.env.get("OFFLINE") === "true",
   fn: async () => {
     const agent = new Agent(app);
     await agent.useServer();
@@ -68,5 +68,5 @@ Deno.test({
     } finally {
       await agent.close();
     }
-  }
+  },
 });

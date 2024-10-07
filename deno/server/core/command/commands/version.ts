@@ -9,7 +9,9 @@ export class VersionCommand {
       id: `sys:${Math.random().toString(10)}`,
       userId: (await core.repo.user.get({ name: "System" })).id,
       priv: true,
-      flat: `Server version: ${Deno.env.get("APP_VERSION") ?? "3.x.x"}\nClient version: ${data.context?.appVersion ?? "3.x.x"}`,
+      flat: `Server version: ${
+        Deno.env.get("APP_VERSION") ?? "3.x.x"
+      }\nClient version: ${data.context?.appVersion ?? "3.x.x"}`,
       message: [
         {
           line: [

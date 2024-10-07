@@ -16,7 +16,7 @@ export default (core: Core) =>
       },
     },
     handler: async (req) => {
-      const valid = await core.user.checkToken({ token: req.params.token});
-      return Res.json({valid});
+      const valid = await core.user.checkToken({ token: req.params.token });
+      return Res.json({ valid });
     },
   });

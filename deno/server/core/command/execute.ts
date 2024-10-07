@@ -18,7 +18,7 @@ export default createCommand({
   type: "command:execute",
   body: commandBodyValidator,
 }, async (msg, core) => {
-  const command = commands.find(command => command.commandName === msg.name);
+  const command = commands.find((command) => command.commandName === msg.name);
   if (command) {
     return await command.execute(msg, core);
   }
@@ -47,18 +47,22 @@ export default createCommand({
     core.bus.direct(msg.userId, {
       type: "message",
       channelId: msg.context.channelId,
-      flat: `Available commands: ${commands.map(command => '/' + command.commandName).join(", ")}`,
+      flat: `Available commands: ${
+        commands.map((command) => "/" + command.commandName).join(", ")
+      }`,
       message: [
         { line: `Available commands:` },
-        { bullet: [
-          ...commands.map(command => ({
-            item: [
-              {code: '/' + command.commandName + " " + command.prompt},
-              {text: ' - '}, 
-              {text: command.description}
-            ]
-          })),
-        ]},
+        {
+          bullet: [
+            ...commands.map((command) => ({
+              item: [
+                { code: "/" + command.commandName + " " + command.prompt },
+                { text: " - " },
+                { text: command.description },
+              ],
+            })),
+          ],
+        },
       ],
       createdAt: new Date().toISOString(),
     });

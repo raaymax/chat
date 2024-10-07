@@ -16,7 +16,7 @@ Deno.test("POST /api/users - user creation flow", async (t) => {
 
     await admin.login("admin")
       .createChannel({ name: "user-invite-test" })
-      .sendMessage({ flat: "secret" })
+      .sendMessage({ flat: "secret" });
 
     await t.step("creating invite", async () => {
       await admin.executeCommand("/invite", [], ({ json }: any) => {
@@ -28,12 +28,12 @@ Deno.test("POST /api/users - user creation flow", async (t) => {
     });
     await t.step("check valid token", async () => {
       await Chat.init(repo, agent)
-        .checkToken(token, ({valid}) => assert(valid))
+        .checkToken(token, ({ valid }) => assert(valid));
     });
 
     await t.step("register user", async () => {
       await Chat.init(repo, agent)
-        .checkToken(token, ({valid}) => assert(valid))
+        .checkToken(token, ({ valid }) => assert(valid))
         .register({
           token,
           name: "Jack",
@@ -47,11 +47,11 @@ Deno.test("POST /api/users - user creation flow", async (t) => {
         })
         .end();
     });
-  
+
     await t.step("check invalid token", async () => {
       await Chat.init(repo, agent)
-        .checkToken(token, ({valid}) => assert(!valid))
-        .end()
+        .checkToken(token, ({ valid }) => assert(!valid))
+        .end();
 
       await agent.request()
         .post(`/api/users/${token}`)
@@ -61,7 +61,10 @@ Deno.test("POST /api/users - user creation flow", async (t) => {
           email: "jack",
           password: "test123",
         })
-        .expect(400, {errorCode: "INVALID_INVITATION", message: "Invalid invitation link"})
+        .expect(400, {
+          errorCode: "INVALID_INVITATION",
+          message: "Invalid invitation link",
+        });
     });
 
     await admin.end();

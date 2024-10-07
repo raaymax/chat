@@ -18,7 +18,7 @@ export default createCommand({
   ),
 }, async (channel, { repo, bus }) => {
   await usersExists(repo, channel.users);
-  if(channel.channelType === ChannelType.DIRECT){
+  if (channel.channelType === ChannelType.DIRECT) {
     throw new InvalidChannelValue("Direct channel can't be created this way");
   }
   const {

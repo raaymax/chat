@@ -28,7 +28,7 @@ const configs: Config["storage"][] = [
 ];
 
 for (const config of configs) {
-  if (config.type === 'gcs' && Deno.env.get('OFFLINE') === 'true' ) {
+  if (config.type === "gcs" && Deno.env.get("OFFLINE") === "true") {
     continue;
   }
 

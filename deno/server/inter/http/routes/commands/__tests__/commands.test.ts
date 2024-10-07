@@ -96,7 +96,6 @@ Deno.test("command /invite", async () => {
   });
 });
 
-
 Deno.test("command /avatar", async () => {
   return await Agent.test(app, { type: "handler" }, async (agent) => {
     await Chat.init(repo, agent)
@@ -104,11 +103,11 @@ Deno.test("command /avatar", async () => {
       .createChannel({ name: "test-commands-avatar" })
       .connectSSE()
       .executeCommand("/avatar", [
-          {
-            id: "party-parrot",
-            fileName: "party-parrot.gif",
-            contentType: "image/gif",
-          },
+        {
+          id: "party-parrot",
+          fileName: "party-parrot.gif",
+          contentType: "image/gif",
+        },
       ])
       .nextEvent((event: any) => {
         assertEquals(event.type, "user");

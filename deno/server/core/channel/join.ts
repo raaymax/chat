@@ -14,10 +14,10 @@ export default createCommand({
     ["userIds"],
   ),
 }, async (body, { repo, bus }) => {
-  if(body.userIds.length === 0) return null;
+  if (body.userIds.length === 0) return null;
   await usersExists(repo, body.userIds);
 
-  const channel = await repo.channel.getR({id: body.channelId});
+  const channel = await repo.channel.getR({ id: body.channelId });
   const group = EntityId.unique([...channel.users, ...body.userIds]);
   await repo.channel.update({ id: channel.id }, { users: group });
   const c = await repo.channel.get({ id: body.channelId });

@@ -5,12 +5,11 @@ import { InvalidMessage, ResourceNotFound } from "../errors.ts";
 import { flatten } from "./flatten.ts";
 import { EntityId } from "../../types.ts";
 
-function filterUndefined(data:any){
+function filterUndefined(data: any) {
   return Object.fromEntries(
     Object.entries(data).filter(([, v]) => v !== undefined),
   );
 }
-
 
 export default createCommand({
   type: "message:create",
@@ -82,29 +81,28 @@ export default createCommand({
     createdAt: new Date(),
   });
 
-  const id: EntityId = await (async ()=>{
+  const id: EntityId = await (async () => {
     const existing = await repo.message.get({
       channelId: channel.id,
       userId: msg.userId,
       clientId: msg.clientId,
     });
-    if(existing) {
-      await repo.message.update({id: existing.id}, message);
+    if (existing) {
+      await repo.message.update({ id: existing.id }, message);
     } else {
       return await repo.message.create(message);
     }
     return existing.id;
-  })()
-
+  })();
 
   await core.dispatch({
-    type: 'channel:join',
+    type: "channel:join",
     body: {
       channelId: msg.channelId.toString(),
       userIds: msg.mentions.filter((m: any) =>
-        !channel.users.some(u=>u.eq(m))
-      ).map(u=>u.toString()),
-    }
+        !channel.users.some((u) => u.eq(m))
+      ).map((u) => u.toString()),
+    },
   });
 
   if (id && msg.parentId) {
