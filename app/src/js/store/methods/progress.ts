@@ -18,7 +18,7 @@ export const loadProgress = createMethod('progress/loadProgress', async (stream:
     });
     dispatch(actions.progress.add(data));
   } catch (err) {
-    // eslint-disable-next-line no-console
+     
     console.error(err);
   }
 });

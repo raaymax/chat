@@ -71,7 +71,7 @@ export const createEventListener = () => {
   const handlers: Record<string, EventListener[]> = {};
   const notify = (ev: string, ...args: unknown[]) => {
     if (!handlers[ev] || handlers[ev].length === 0) {
-      // eslint-disable-next-line no-console
+       
       console.log('Event not handled', ev, args);
     }
     return Promise.all(
@@ -80,7 +80,7 @@ export const createEventListener = () => {
           try {
             await listener(...args);
           } catch (err) {
-            // eslint-disable-next-line no-console
+             
             console.error(err);
           }
         }),

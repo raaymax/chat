@@ -19,7 +19,7 @@ export const uploadMany = createMethod('files/uploadMany', async ({ streamId, fi
   console.log('uploading many files', streamId, files);
   for (let i = 0, file; i < files.length; i++) {
     file = files.item(i);
-    // eslint-disable-next-line no-continue
+     
     if (!file) continue;
     dispatch(upload({ streamId, file }));
   }
@@ -72,7 +72,7 @@ export const upload = createMethod('files/upload', async ({ streamId, file }: Fi
         },
       }));
     }
-    // eslint-disable-next-line no-console
+     
     console.error(err);
   }
 });
@@ -87,7 +87,7 @@ export const abort = createMethod('files/abort', async (clientId: string, { disp
     if (aborts[clientId]) aborts[clientId]();
     dispatch(actions.files.remove(clientId));
   } catch (err) {
-    // eslint-disable-next-line no-console
+     
     console.error(err);
   }
 });

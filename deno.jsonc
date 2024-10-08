@@ -33,6 +33,7 @@
     "cache": "deno task -c ./deno/server/deno.jsonc cache",
     "dev": "deno task -c ./deno/server/deno.jsonc dev",
     "web": "npm run dev:web",
+    "lint": "deno lint && deno run -A npm:eslint .",
     "start": "deno task -c ./deno/server/deno.jsonc start",
     "build": "deno task -c ./packages/app/deno.jsonc build",
     "migrate": "deno run -A npm:migrate-mongo -- up",

@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+ 
 import { UserConfig } from '../types';
 import { client } from '../core';
 import { OutgoingUserPushSubscribe } from '../core/types';

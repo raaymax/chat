@@ -1,5 +1,5 @@
 import { ObjectId } from 'npm:mongodb';
-/* eslint-disable no-restricted-syntax */
+ 
 export async function up(db) {
   const cursor = await db.collection('messages')
     .find({});

@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-syntax */
+ 
 export async function up(db) {
   const cursor = await db.collection('channels').aggregate([{ $group: { _id: '$cid', count: { $sum: 1 } } }, { $match: { count: { $gt: 1 } } }]);
   for await (const fixItem of cursor) {

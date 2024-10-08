@@ -1,8 +1,8 @@
-/* eslint-disable import/no-extraneous-dependencies */
+ 
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
-// eslint-disable-next-line import/no-relative-packages
+ 
 import basicSsl from '@vitejs/plugin-basic-ssl';
 import proxy from 'vite-plugin-http2-proxy';
 import path from 'node:path';

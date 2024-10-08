@@ -171,7 +171,7 @@ export const sendCommand = createMethod('messages/sendCommand', async ({ stream,
   } catch (err) {
     try {
       dispatch(actions.messages.add({ ...notif, notifType: 'error', notif: `command "${msg.name}" error: ${err.res?.message ?? err.error?.message ?? err.message}` }));
-      // eslint-disable-next-line no-console
+       
       if (!isError(err)) return console.error(err);
     } catch (e) {
       console.log(e);

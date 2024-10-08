@@ -29,7 +29,7 @@ export const Login = ({ children }: LoginProps) => {
         setUser(null);
       }
     }).catch((e) => {
-      // eslint-disable-next-line no-console
+       
       console.error(e);
       setTimeout(validate, 1000);
     }), []);

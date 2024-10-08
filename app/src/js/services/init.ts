@@ -43,7 +43,7 @@ export const init = createMethod('init', async (_arg, { dispatch, actions }) => 
     await dispatch(initApp({}));
     tryCount = 1;
   } catch (err) {
-    // eslint-disable-next-line no-console
+     
     console.log(err);
     if (tryCount < 4) {
       setTimeout(() => {
