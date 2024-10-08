@@ -10,6 +10,20 @@ type ScalingOpts = {
 };
 
 class Files {
+  _sharp: any;
+  async getSharp() {
+    if (this._sharp === undefined) {
+      try {
+        this._sharp = await import("sharp");
+      } catch (e) {
+        console.warn("[WARNING] sharp not available", e);
+        this._sharp = null;
+      }
+    }
+    return this._sharp;
+  }
+
+
   static getFileId = (id: string, width = 0, height = 0) =>
     `${id}-${width}x${height}`;
 
@@ -17,6 +31,7 @@ class Files {
 
   constructor(config: Config) {
     this.init(config.storage);
+    this.getSharp();
   }
 
   init(config: Config["storage"]) {
@@ -48,8 +63,9 @@ class Files {
       throw new Error("FILE_NOT_FOUND");
     }
 
+    const sharp = await this.getSharp();
     const file = await this.service.get(id);
-    if (
+    if (!sharp ||
       !opts || !opts.width || !opts.height ||
       (file.contentType !== "image/jpeg" && file.contentType !== "image/png")
     ) {
