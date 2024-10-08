@@ -61,33 +61,33 @@ const ChannelsContainer = styled.div`
 
   }
 
-  .channel {
+  .user {
     padding: 5px 5px 5px 20px; 
     cursor: pointer;
   }
-  .channel .name {
+  .user .name {
     padding: 0px 10px; 
     cursor: pointer;
   }
-  .channel.active {
+  .user.active {
     background-color: var(--primary_active_mask);
   }
 
-  .channel:hover {
+  .user:hover {
     background-color: var(--primary_active_mask);
   }
 `;
 
 
-const NavUserContainer = ({user, badges, active}: {user: User, badges: Record<string, number>, active: boolean}) => {
+const NavUserContainer = ({user, badges}: {user: User, badges: Record<string, number>}) => {
   const actions = useActions();
   const dispatch = useDispatch();
   const channel = useDirectChannel(user.id);
-  console.log(badges, channel?.id);
+  const id = useSelector((state) => state.stream.main.channelId);
   return <NavUserButton
     size={30}
     user={user}
-    className={{ active }}
+    className={{ active: id === channel?.id }}
     badge={channel ? badges[channel.id] : 0}
     onClick={async () => {
       const channel = await client.api.putDirectChannel(user.id);
@@ -102,7 +102,6 @@ export const NavUsers = () => {
   const users = useUsers();
   const userId = useSelector((state) => state.me);
   const badges = useBadges(userId);
-  const id = useSelector((state) => state.stream.mainChannelId);
   return (
     <ChannelsContainer>
       <div className='header'>
@@ -112,7 +111,6 @@ export const NavUsers = () => {
         <NavUserContainer
           key={user.id}
           user={user}
-          active={id === user.id}
           badges={badges}
           />
       ))}
