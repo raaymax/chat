@@ -2,7 +2,6 @@ import type { Config } from "@quack/config";
 import { ResourceNotFound } from "@planigale/planigale";
 import { existsSync } from "jsr:@std/fs";
 import * as path from "jsr:@std/path";
-import { v4 as uuid } from "npm:uuid";
 import type { FileData, FileOpts } from "../types.ts";
 
 export const files = (config: Config["storage"]) => {
@@ -16,7 +15,7 @@ export const files = (config: Config["storage"]) => {
       options: FileOpts,
     ): Promise<string> => {
       let size = 0;
-      const id = options.id ?? uuid();
+      const id = options.id ?? crypto.randomUUID();
       Deno.mkdirSync(dir, { recursive: true });
       const file = await Deno.open(path.join(dir, id), {
         write: true,

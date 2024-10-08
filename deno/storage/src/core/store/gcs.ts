@@ -1,5 +1,4 @@
 /* eslint-disable class-methods-use-this */
-import { v4 as uuid } from "npm:uuid";
 import type { Config } from "@quack/config";
 import { GoogleAuth } from "npm:google-auth-library";
 import { ResourceNotFound } from "@planigale/planigale";
@@ -62,7 +61,7 @@ class Gcs {
   ): Promise<string> {
     const file = fileOpts ??
       { contentType: "application/octet-stream", filename: "file" };
-    const fileId = file?.id ?? uuid();
+    const fileId = file?.id ?? crypto.randomUUID();
     const token = await this.getAccessToken();
 
     const res = await fetch(this.getUploadUrl(fileId), {
