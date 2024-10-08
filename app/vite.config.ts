@@ -17,6 +17,11 @@ export default defineConfig({
     APP_NAME: JSON.stringify(process.env.APP_NAME),
     API_URL: JSON.stringify(''),
   },
+  server: {
+    hmr: {
+      overlay: false,
+    },
+  },
   plugins: [
     react(),
     basicSsl({

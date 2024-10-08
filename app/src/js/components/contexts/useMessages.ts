@@ -26,10 +26,10 @@ export const useMessages = () => {
   return {
     messages: useMemo(
       () => messages
-        .filter((m: Message) => m.channelId === stream.channelId
-    && (
-      ((!stream.parentId && !m.parentId) || (m.parentId === stream.parentId || m.id === stream.parentId))
-    || (!stream.parentId && m.parentId === m.id))),
+        .filter((m: Message) => m.channelId === stream.channelId 
+                && (m.parentId === stream.parentId 
+                  || (m.id && m.id === stream.parentId) 
+                  || (!m.parentId && !stream.parentId))),
       [stream, messages],
     ),
     next: () => dispatch(loadNext(stream)).unwrap(),
