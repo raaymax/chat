@@ -14,7 +14,8 @@ class Files {
   async getSharp() {
     if (this._sharp === undefined) {
       try {
-        this._sharp = await import("sharp");
+        const {default: sharp } = await import("sharp");
+        this._sharp = sharp;
       } catch (e) {
         console.warn("[WARNING] sharp not available", e);
         this._sharp = null;
