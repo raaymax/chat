@@ -103,6 +103,21 @@ class API extends EventTarget {
     }
   }
 
+  async sendMessage(msg: any): Promise<any> {
+    const res = await fetch(`${this.baseUrl}/api/channels/${msg.channelId}/messages`, {
+      method: 'POST',
+      body: JSON.stringify(msg),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.token}`,
+      },
+    });
+    if (res.status !== 200) {
+      throw await res.json();
+    }
+    return await res.json();
+  }
+
   on = this.addEventListener.bind(this);
 
   emit = this.dispatchEvent.bind(this);

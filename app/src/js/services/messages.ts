@@ -179,22 +179,26 @@ export const sendCommand = createMethod('messages/sendCommand', async ({ stream,
   }
 });
 
-type MessageInfo = null | {
+type MessageInfo = {
   msg: string;
   type: string;
   action?: string;
 }
 
-const sendMessage = createMethod('messages/sendMessage', async ({ payload: msg, info }: {payload: OutgoingMessageCreate, info: MessageInfo}, { dispatch, actions, getState }) => {
-  dispatch(actions.messages.add({ ...msg, userId: getState().me, pending: true }));
+const sendMessage = createMethod('messages/sendMessage', async ({ payload: msg}: {payload: OutgoingMessageCreate}, { dispatch, actions, getState }) => {
+  dispatch(actions.messages.add({ ...msg, userId: getState().me, pending: true, info: null }));
   try {
-    await client.req(msg);
+    await client.api.sendMessage(msg);
   } catch (err) {
     dispatch(actions.messages.add({
       clientId: msg.clientId,
       channelId: msg.channelId,
       parentId: msg.parentId,
-      info,
+      info: {
+        msg: 'Sending message failed - click here to resend',
+        type: 'error',
+        action: 'resend',
+      } as MessageInfo,
     }));
   }
 });
