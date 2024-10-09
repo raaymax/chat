@@ -56,7 +56,10 @@ export default createCommand({
           bullet: [
             ...commands.map((command) => ({
               item: [
-                { code: "/" + command.commandName +( command.prompt ? " " + command.prompt : "" )},
+                {
+                  code: "/" + command.commandName +
+                    (command.prompt ? " " + command.prompt : ""),
+                },
                 { text: " - " },
                 { text: command.description },
               ],

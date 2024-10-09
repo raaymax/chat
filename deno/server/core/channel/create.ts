@@ -28,15 +28,15 @@ export default createCommand({
     users,
     name,
   } = channel;
-  
-  if ( channelType === ChannelType.PRIVATE ) {
+
+  if (channelType === ChannelType.PRIVATE) {
     const existing = await repo.channel.get({ channelType, name, userId });
     if (existing) {
       return existing.id;
     }
   }
 
-  if ( channelType === ChannelType.PUBLIC ) {
+  if (channelType === ChannelType.PUBLIC) {
     const existing = await repo.channel.get({ channelType, name });
     if (existing) {
       await core.dispatch({

@@ -14,7 +14,7 @@ class Files {
   async getSharp() {
     if (this._sharp === undefined) {
       try {
-        const {default: sharp } = await import("sharp");
+        const { default: sharp } = await import("sharp");
         this._sharp = sharp;
       } catch (e) {
         console.warn("[WARNING] sharp not available", e);
@@ -23,7 +23,6 @@ class Files {
     }
     return this._sharp;
   }
-
 
   static getFileId = (id: string, width = 0, height = 0) =>
     `${id}-${width}x${height}`;
@@ -66,7 +65,8 @@ class Files {
 
     const sharp = await this.getSharp();
     const file = await this.service.get(id);
-    if (!sharp ||
+    if (
+      !sharp ||
       !opts || !opts.width || !opts.height ||
       (file.contentType !== "image/jpeg" && file.contentType !== "image/png")
     ) {

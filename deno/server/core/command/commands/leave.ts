@@ -11,8 +11,12 @@ export class LeaveCommand {
       return;
     }
     const prevChannelUsers = channel.users;
-    channel.users = channel.users.filter((user: EntityId) => user.neq(data.userId));
-    await core.repo.channel.update({id: channel.id}, {users: channel.users});
+    channel.users = channel.users.filter((user: EntityId) =>
+      user.neq(data.userId)
+    );
+    await core.repo.channel.update({ id: channel.id }, {
+      users: channel.users,
+    });
 
     core.bus.group(prevChannelUsers, {
       type: "channel",
@@ -26,7 +30,7 @@ export class LeaveCommand {
 
     core.bus.direct(data.userId, {
       type: "message",
-      id: 'sys:' + Math.random().toString(10),
+      id: "sys:" + Math.random().toString(10),
       channelId: data.context.channelId,
       flat: "You have left the channel",
       message: { text: "You have left the channel" },

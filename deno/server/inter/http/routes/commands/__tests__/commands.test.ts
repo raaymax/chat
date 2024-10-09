@@ -23,7 +23,7 @@ Deno.test("command /echo <text>", async () =>
         .login("admin")
         .createChannel({ name: "test-commands" })
         .connectSSE()
-        .executeCommand("/echo Hello World!!",[])
+        .executeCommand("/echo Hello World!!", [])
         .nextEvent((event, chat) => {
           assertEquals(event.type, "message");
           assert(event.id);
@@ -165,7 +165,10 @@ Deno.test("command /leave", async () => {
       .executeCommand("/leave", [])
       .nextEvent((event, chat) => {
         assertEquals(event.type, "channel");
-        assert(!event.users.find((u: any) => u === chat.userId), "Updated channel should not contain user");
+        assert(
+          !event.users.find((u: any) => u === chat.userId),
+          "Updated channel should not contain user",
+        );
       })
       .nextEvent((event, chat) => {
         assertEquals(event.type, "removeChannel");
@@ -186,10 +189,10 @@ Deno.test("command /leave", async () => {
 
 Deno.test("command /join", async () => {
   return await Agent.test(app, { type: "handler" }, async (agent) => {
-    const member = Chat.init(repo, agent)
+    const member = Chat.init(repo, agent);
     await member
       .login("admin")
-      .createChannel({ name: "test-commands-join" })
+      .createChannel({ name: "test-commands-join" });
     await Chat.init(repo, agent)
       .login("admin")
       .step((chat) => {
