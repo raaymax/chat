@@ -29,7 +29,7 @@ Deno.test("/api/channels", async () => {
       .createChannel({ name: "test-channel-creation" })
       .nextEvent((event: any) => {
         assertEquals(event.type, "channel");
-        assertEquals(event.payload.name, "test-channel-creation");
+        assertEquals(event.name, "test-channel-creation");
       })
       .getChannel(async (channel) => {
         assertEquals(channel.name, "test-channel-creation");
@@ -63,7 +63,7 @@ Deno.test("/api/channels - other user receives notification about channel", asyn
       await member
         .nextEvent((event: any) => {
           assertEquals(event.type, "channel");
-          assertEquals(event.payload.name, "test-channel-creation-2");
+          assertEquals(event.name, "test-channel-creation-2");
         })
         .end();
     } finally {

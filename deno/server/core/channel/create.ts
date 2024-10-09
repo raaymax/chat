@@ -16,7 +16,8 @@ export default createCommand({
     }),
     ["userId", "name"],
   ),
-}, async (channel, { repo, bus }) => {
+}, async (channel, core) => {
+  const { repo, bus } = core;
   await usersExists(repo, channel.users);
   if (channel.channelType === ChannelType.DIRECT) {
     throw new InvalidChannelValue("Direct channel can't be created this way");
@@ -27,9 +28,26 @@ export default createCommand({
     users,
     name,
   } = channel;
-  const existing = await repo.channel.get({ channelType, name, userId });
-  if (existing) {
-    return existing.id;
+  
+  if ( channelType === ChannelType.PRIVATE ) {
+    const existing = await repo.channel.get({ channelType, name, userId });
+    if (existing) {
+      return existing.id;
+    }
+  }
+
+  if ( channelType === ChannelType.PUBLIC ) {
+    const existing = await repo.channel.get({ channelType, name });
+    if (existing) {
+      await core.dispatch({
+        type: "channel:join",
+        body: {
+          channelId: existing.id,
+          userIds: [userId, ...users],
+        },
+      });
+      return existing.id;
+    }
   }
 
   const channelId = await repo.channel.create({
@@ -44,7 +62,7 @@ export default createCommand({
 
   bus.group(created?.users ?? [], {
     type: "channel",
-    payload: created,
+    ...created,
   });
 
   return channelId;

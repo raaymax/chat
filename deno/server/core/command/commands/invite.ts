@@ -26,6 +26,7 @@ export class InviteCommand {
     const link = `${config.baseUrl}/#/invite/${token}`;
     bus.direct(data.userId, {
       type: "message",
+      id: `sys:${Math.random().toString(10)}`,
       userId: "system",
       priv: true,
       channelId: data.context.channelId,

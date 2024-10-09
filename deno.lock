@@ -2,12 +2,18 @@
   "version": "3",
   "packages": {
     "specifiers": {
+      "jsr:@jd1378/another-cookiejar@^5.0.7": "jsr:@jd1378/another-cookiejar@5.0.7",
       "jsr:@planigale/body-parser": "jsr:@planigale/body-parser@0.2.0",
       "jsr:@planigale/planigale": "jsr:@planigale/planigale@0.6.3",
       "jsr:@planigale/planigale@^0.6.1": "jsr:@planigale/planigale@0.6.3",
       "jsr:@planigale/planigale@^0.6.2": "jsr:@planigale/planigale@0.6.3",
+      "jsr:@planigale/planigale@^0.6.3": "jsr:@planigale/planigale@0.6.3",
       "jsr:@planigale/schema": "jsr:@planigale/schema@0.1.3",
+      "jsr:@planigale/sse": "jsr:@planigale/sse@0.2.2",
       "jsr:@planigale/sse@^0.2.2": "jsr:@planigale/sse@0.2.2",
+      "jsr:@planigale/testing": "jsr:@planigale/testing@0.3.3",
+      "jsr:@std/assert@^1.0.0": "jsr:@std/assert@1.0.6",
+      "jsr:@std/assert@^1.0.1": "jsr:@std/assert@1.0.6",
       "jsr:@std/async@^1.0.0-rc.1": "jsr:@std/async@1.0.5",
       "jsr:@std/bytes@^1.0.0-rc.3": "jsr:@std/bytes@1.0.2",
       "jsr:@std/bytes@^1.0.2": "jsr:@std/bytes@1.0.2",
@@ -16,9 +22,11 @@
       "jsr:@std/fmt@^0.225.4": "jsr:@std/fmt@0.225.6",
       "jsr:@std/fs": "jsr:@std/fs@1.0.4",
       "jsr:@std/http@^0.224.5": "jsr:@std/http@0.224.5",
+      "jsr:@std/internal@^1.0.4": "jsr:@std/internal@1.0.4",
       "jsr:@std/io@^0.224.1": "jsr:@std/io@0.224.9",
       "jsr:@std/media-types@1.0.2": "jsr:@std/media-types@1.0.2",
       "jsr:@std/media-types@^1.0.0-rc.1": "jsr:@std/media-types@1.0.2",
+      "jsr:@std/media-types@^1.0.2": "jsr:@std/media-types@1.0.2",
       "jsr:@std/net@^0.224.3": "jsr:@std/net@0.224.5",
       "jsr:@std/path": "jsr:@std/path@1.0.6",
       "jsr:@std/path@1.0.0-rc.2": "jsr:@std/path@1.0.0-rc.2",
@@ -29,6 +37,7 @@
       "jsr:@std/streams@^0.224.5": "jsr:@std/streams@0.224.5",
       "jsr:@ts-rex/bcrypt@^1.0.3": "jsr:@ts-rex/bcrypt@1.0.3",
       "npm:@types/json-schema@^7.0.15": "npm:@types/json-schema@7.0.15",
+      "npm:@types/node": "npm:@types/node@18.16.19",
       "npm:ajv@^8.17.1": "npm:ajv@8.17.1",
       "npm:google-auth-library": "npm:google-auth-library@9.14.1",
       "npm:mongodb@^6.8.0": "npm:mongodb@6.9.0",
@@ -39,6 +48,9 @@
       "npm:web-push@^3.6.7": "npm:web-push@3.6.7"
     },
     "jsr": {
+      "@jd1378/another-cookiejar@5.0.7": {
+        "integrity": "788e22828dd428aaebaedc9acbed6ae7033cc240982a10fcfc34aa72dcf01088"
+      },
       "@planigale/body-parser@0.2.0": {
         "integrity": "0a0581bef81201d615b017cde9c460a7d380c315f4535b6b4d46509064641c8e",
         "dependencies": [
@@ -69,6 +81,23 @@
         "integrity": "ef8906183a0646f41e5d5a8f04d8a49a35143afa1122d1bc273f0ea57a86240c",
         "dependencies": [
           "jsr:@std/streams@^0.224.5"
+        ]
+      },
+      "@planigale/testing@0.3.3": {
+        "integrity": "02bcb67768c23960a8dc018de8ef8da14e579baf4bfb1644655123c51d3515f9",
+        "dependencies": [
+          "jsr:@jd1378/another-cookiejar@^5.0.7",
+          "jsr:@planigale/planigale@^0.6.3",
+          "jsr:@planigale/sse@^0.2.2",
+          "jsr:@std/assert@^1.0.0",
+          "jsr:@std/media-types@1.0.2",
+          "jsr:@std/path@1.0.1"
+        ]
+      },
+      "@std/assert@1.0.6": {
+        "integrity": "1904c05806a25d94fe791d6d883b685c9e2dcd60e4f9fc30f4fc5cf010c72207",
+        "dependencies": [
+          "jsr:@std/internal@^1.0.4"
         ]
       },
       "@std/async@1.0.5": {
@@ -104,6 +133,9 @@
           "jsr:@std/path@1.0.0-rc.2",
           "jsr:@std/streams@^0.224.5"
         ]
+      },
+      "@std/internal@1.0.4": {
+        "integrity": "62e8e4911527e5e4f307741a795c0b0a9e6958d0b3790716ae71ce085f755422"
       },
       "@std/io@0.224.9": {
         "integrity": "4414664b6926f665102e73c969cfda06d2c4c59bd5d0c603fd4f1b1c840d6ee3",
@@ -246,6 +278,10 @@
       },
       "@types/json-schema@7.0.15": {
         "integrity": "sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==",
+        "dependencies": {}
+      },
+      "@types/node@18.16.19": {
+        "integrity": "sha512-IXl7o+R9iti9eBW4Wg2hx1xQDig183jj7YLn8F7udNceyfkbn1ZxmzZXuak20gR40D7pIkIY1kYGx5VIGbaHKA==",
         "dependencies": {}
       },
       "@types/webidl-conversions@7.0.3": {

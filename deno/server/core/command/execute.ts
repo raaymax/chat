@@ -5,6 +5,8 @@ import { EmojiCommand } from "./commands/emoji.ts";
 import { VersionCommand } from "./commands/version.ts";
 import { InviteCommand } from "./commands/invite.ts";
 import { AvatarCommand } from "./commands/avatar.ts";
+import { LeaveCommand } from "./commands/leave.ts";
+import { JoinCommand } from "./commands/join.ts";
 import { commandBodyValidator } from "./params.ts";
 
 const commands = [
@@ -12,6 +14,8 @@ const commands = [
   VersionCommand,
   InviteCommand,
   AvatarCommand,
+  LeaveCommand,
+  JoinCommand,
 ];
 
 export default createCommand({
@@ -24,6 +28,7 @@ export default createCommand({
   }
   if (msg.name === "echo") {
     const response = {
+      id: `sys:${Math.random().toString(10)}`,
       channelId: msg.context.channelId,
       flat: msg.text,
       message: { text: msg.text },
@@ -38,14 +43,9 @@ export default createCommand({
   }
 
   if (msg.name === "help") {
-    const commands = [
-      EmojiCommand,
-      VersionCommand,
-      InviteCommand,
-      AvatarCommand,
-    ];
     core.bus.direct(msg.userId, {
       type: "message",
+      id: `sys:${Math.random().toString(10)}`,
       channelId: msg.context.channelId,
       flat: `Available commands: ${
         commands.map((command) => "/" + command.commandName).join(", ")
@@ -56,7 +56,7 @@ export default createCommand({
           bullet: [
             ...commands.map((command) => ({
               item: [
-                { code: "/" + command.commandName + " " + command.prompt },
+                { code: "/" + command.commandName +( command.prompt ? " " + command.prompt : "" )},
                 { text: " - " },
                 { text: command.description },
               ],

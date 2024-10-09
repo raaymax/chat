@@ -306,7 +306,7 @@ export class Chat {
     return this;
   }
 
-  getChannels(fn: (channels: Channel[]) => Promise<any>) {
+  getChannels(fn: (channels: Channel[]) => Promise<any> | any) {
     this.steps.push(async () => {
       const res = await this.agent.request()
         .get("/api/channels")
@@ -508,7 +508,7 @@ export class Chat {
     return this;
   }
 
-  debug(test: (chat: Chat) => any) {
+  step(test: (chat: Chat) => any) {
     this.steps.push(async () => {
       await test(this);
     });
