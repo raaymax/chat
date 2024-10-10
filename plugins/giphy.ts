@@ -135,5 +135,5 @@ export default (config) => async (app, core) => {
       }
     }
   })
-  core.ext.registerCommand(GiphyCommand);
+  core.registerUserCommand(GiphyCommand);
 }

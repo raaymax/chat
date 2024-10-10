@@ -13,7 +13,7 @@ export default createCommand({
   }
   if (msg.name === "echo") {
     const response = {
-      id: `sys:${Math.random().toString(10)}`,
+      clientId: `sys:${Math.random().toString(10)}`,
       channelId: msg.context.channelId,
       flat: msg.text,
       message: { text: msg.text },
@@ -51,7 +51,6 @@ export default createCommand({
             })),
           ],
         },
-        { button: {text: 'Button', action: 'test', payload: {data: 'funny', why:'test'}} }
       ],
       createdAt: new Date().toISOString(),
     });

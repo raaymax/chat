@@ -24,9 +24,10 @@ Deno.test("POST /api/interactions - dispatching interactions", async (t) => {
         assertEquals(interaction.parentId, undefined);
         assertEquals(interaction.clientId, 'clientId');
         assertEquals(interaction.action, 'test');
+        assertEquals(interaction.payload, {test: 'test'});
       })().then(resolve, reject)
       await admin
-        .interaction({action: 'test', clientId: 'clientId'})
+        .interaction({action: 'test', clientId: 'clientId', payload: {test: 'test'}})
         
       await promise;
     }finally {

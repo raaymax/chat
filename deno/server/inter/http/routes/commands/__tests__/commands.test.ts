@@ -26,7 +26,7 @@ Deno.test("command /echo <text>", async () =>
         .executeCommand("/echo Hello World!!", [])
         .nextEvent((event, chat) => {
           assertEquals(event.type, "message");
-          assert(event.id);
+          assert(event.clientId, "Event should have clientId");
           assertEquals(event.flat, "Hello World!!");
           assertEquals(event.message.text, "Hello World!!");
           assertEquals(event.channelId, chat.channelId);
@@ -57,7 +57,7 @@ Deno.test("command /emoji <name>", async () =>
         })
         .nextEvent((event: any) => {
           assertEquals(event.type, "message");
-          assert(event.id);
+          assert(event.clientId, "Event should have clientId");
           assertEquals(event.flat, "Emoji :party-parrot: created");
           assertEquals(event.message, {
             line: [{ text: "Emoji " }, { emoji: ":party-parrot:" }, {
@@ -85,7 +85,7 @@ Deno.test("command /invite", async () => {
       })
       .nextEvent((event: any) => {
         assertEquals(event.type, "message");
-        assert(event.id);
+        assert(event.clientId, "Event should have clientId");
         const m = event.flat.match("(https?://.*/invite/[0-9a-f]{64})");
         assert(m, "Result should contain invitation link");
         assertEquals(m[1], url);
@@ -125,7 +125,7 @@ Deno.test("command /version", async () => {
       .executeCommand("/version", [])
       .nextEvent((event) => {
         assertEquals(event.type, "message");
-        assert(event.id);
+        assert(event.clientId, "Event should have clientId");
         assertEquals(event.flat.includes("server-version"), true);
         assertEquals(event.flat.includes("client-version"), true);
       })
@@ -142,7 +142,7 @@ Deno.test("command /help", async () => {
       .executeCommand("/help", [])
       .nextEvent((event) => {
         assertEquals(event.type, "message");
-        assert(event.id);
+        assert(event.clientId, "Event should have clientId");
         assertEquals(event.flat.includes("/avatar"), true);
         assertEquals(event.flat.includes("/emoji"), true);
         assertEquals(event.flat.includes("/invite"), true);
@@ -176,7 +176,7 @@ Deno.test("command /leave", async () => {
       })
       .nextEvent((event) => {
         assertEquals(event.type, "message");
-        assert(event.id);
+        assert(event.clientId, "Event should have clientId");
         assertEquals(event.flat, "You have left the channel");
       })
       .getChannels((channels) => {
@@ -206,7 +206,7 @@ Deno.test("command /join", async () => {
       })
       .nextEvent((event) => {
         assertEquals(event.type, "message");
-        assert(event.id);
+        assert(event.clientId, "Event should have clientId");
         assertEquals(event.flat, "You have joined the channel");
       })
       .end();

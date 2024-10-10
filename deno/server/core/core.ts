@@ -69,9 +69,7 @@ export class Core {
 
   events: Events;
 
-  ext = { 
-    registerCommand,
-  };
+  registerUserCommand = registerCommand;
 
   channel = {
     access: CheckChannelAccess(this),

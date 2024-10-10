@@ -9,7 +9,7 @@ export default createCommand({
     channelId: Id, 
     parentId: v.optional(Id),
     clientId: v.string(),
-    appId: v.string(),
+    appId: v.optional(v.string()),
     action: v.string(),
     payload: v.optional(v.any()),
   }),
