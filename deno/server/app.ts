@@ -6,6 +6,11 @@ const core = new Core({
   config,
 });
 const http = new HttpInterface(core);
+await Promise.all(
+  config.plugins.map((
+    plugin: (app: HttpInterface, core: Core) => Promise<any> | any,
+  ) => plugin(http, core)),
+);
 
 http.onClose(async () => {
   await core.close();

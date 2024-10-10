@@ -28,11 +28,14 @@ import PutDirectChannel from "./channel/putDirect.ts";
 import JoinChannel from "./channel/join.ts";
 import GetDirectChannel from "./channel/getDirect.ts";
 import CheckChannelAccess from "./channel/checkAccess.ts";
+import InteractionWithMessage from "./message/interaction.ts";
+import { registerCommand } from "./command/repository.ts";
 
 import { Repository, storage } from "../infra/mod.ts";
 import { buildCommandCollection, EventFrom } from "./command.ts";
 import { Bus } from "./bus.ts";
 import { Webhooks } from "./webhooks.ts";
+import Events from "./events.ts";
 
 const commands = buildCommandCollection([
   CreateMessage,
@@ -50,6 +53,7 @@ const commands = buildCommandCollection([
   ReactToMessage,
   PutDirectChannel,
   JoinChannel,
+  InteractionWithMessage,
 ]);
 
 export class Core {
@@ -62,6 +66,10 @@ export class Core {
   config: Config;
 
   webhooks?: Webhooks;
+
+  events: Events;
+
+  registerUserCommand = registerCommand;
 
   channel = {
     access: CheckChannelAccess(this),
@@ -102,6 +110,7 @@ export class Core {
   }) {
     this.config = arg.config;
     this.bus = new Bus();
+    this.events = new Events();
     this.repo = arg.repo ?? new Repository(arg.config);
     this.storage = arg.fileStorage ?? storage.initStorage(arg.config);
 
@@ -114,5 +123,12 @@ export class Core {
     (commands[evt.type] as any).handler(evt.body, this)
   );
 
-  close = async () => await this.repo.close();
+  close = async () => {
+    this.events.dispatch({
+      type: "system:close",
+      payload: null,
+    });
+
+    await this.repo.close();
+  };
 }

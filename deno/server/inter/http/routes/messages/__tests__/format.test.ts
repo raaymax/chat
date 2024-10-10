@@ -29,6 +29,9 @@ Deno.test("Check all validations for message field", async (t) => {
           .expect(status)
           .then(async (res) => {
             await res.body?.cancel();
+            await repo.message.removeMany({
+              channelId: EntityId.from(channelId),
+            });
           }));
     await testPart(400, "Should return status 400 for empty", {});
     await testPart(200, "Should return status 200 for empty array", []);

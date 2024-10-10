@@ -1,22 +1,7 @@
 import { createCommand } from "../command.ts";
 import { ResourceNotFound } from "../errors.ts";
-
-import { EmojiCommand } from "./commands/emoji.ts";
-import { VersionCommand } from "./commands/version.ts";
-import { InviteCommand } from "./commands/invite.ts";
-import { AvatarCommand } from "./commands/avatar.ts";
-import { LeaveCommand } from "./commands/leave.ts";
-import { JoinCommand } from "./commands/join.ts";
+import { commands } from "./repository.ts";
 import { commandBodyValidator } from "./params.ts";
-
-const commands = [
-  EmojiCommand,
-  VersionCommand,
-  InviteCommand,
-  AvatarCommand,
-  LeaveCommand,
-  JoinCommand,
-];
 
 export default createCommand({
   type: "command:execute",
@@ -28,7 +13,7 @@ export default createCommand({
   }
   if (msg.name === "echo") {
     const response = {
-      id: `sys:${Math.random().toString(10)}`,
+      clientId: `sys:${Math.random().toString(10)}`,
       channelId: msg.context.channelId,
       flat: msg.text,
       message: { text: msg.text },
@@ -45,7 +30,7 @@ export default createCommand({
   if (msg.name === "help") {
     core.bus.direct(msg.userId, {
       type: "message",
-      id: `sys:${Math.random().toString(10)}`,
+      clientId: `sys:${Math.random().toString(10)}`,
       channelId: msg.context.channelId,
       flat: `Available commands: ${
         commands.map((command) => "/" + command.commandName).join(", ")

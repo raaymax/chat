@@ -1,4 +1,4 @@
-import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
+import { type AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 import {
   data, store, actions, AsyncMutation,
 } from './store';
@@ -18,7 +18,6 @@ data.methods = methods;
 
 export type MethodsType = typeof methods;
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 export const createMethod = <T, R>(name: string, handler: AsyncMutation<T, R, typeof methods>): AsyncThunk<R, T, {}> => createAsyncThunk(`method/${name}`, (a: T) => handler(a, {
   dispatch: Object.assign(store.dispatch, { actions, methods: data.methods }),
   getState: store.getState,

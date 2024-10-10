@@ -35,6 +35,15 @@ export class EntityId {
   }
 }
 
+export type Interaction = {
+  userId: EntityId;
+  channelId: EntityId;
+  parentId?: EntityId;
+  clientId: string;
+  action: string;
+  payload?: any;
+};
+
 export type Config = {
   appVersion: string;
   mainChannelId: EntityId;

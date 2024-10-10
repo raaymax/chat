@@ -54,6 +54,16 @@ export default createSlice({
       return newState;
     },
 
+    rm: (state, action) => {
+      const {channelId, clientId, userId, appId} = action.payload;
+      const newState = { ...state, data: [...state.data] };
+      const idx = newState.data.findIndex((m) => m.channelId === channelId && m.clientId === clientId && (m.userId === userId || m.appId === appId));
+      if (idx !== -1) {
+        newState.data.splice(idx, 1);
+      }
+      return newState;
+    },
+
     takeOldest: (state, action) => {
       const newState = { ...state, data: [...state.data] };
       const { stream: { channelId, parentId }, count } = action.payload;
