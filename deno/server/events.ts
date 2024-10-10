@@ -1,80 +1,80 @@
-import {Channel, Interaction, Message} from './types.ts';
+import { Channel, Interaction, Message } from "./types.ts";
 
 interface BaseEvent<T> {
   type: string;
-  payload: T,
+  payload: T;
 }
 
 // Message
 export interface MessageCreatedEvent extends BaseEvent<Message> {
-  type: 'message:created';
+  type: "message:created";
 }
 
 export interface MessageUpdatedEvent extends BaseEvent<Message> {
-  type: 'message:updated';
+  type: "message:updated";
 }
 
 export interface MessageRemovedEvent extends BaseEvent<Message> {
-  type: 'message:removed';
+  type: "message:removed";
 }
 
 export interface MessageInteractionEvent extends BaseEvent<Interaction> {
-  type: 'message:interaction';
+  type: "message:interaction";
 }
 
 // Channel
 export interface ChannelCreatedEvent extends BaseEvent<Channel> {
-  type: 'channel:created'
+  type: "channel:created";
 }
 
 export interface ChannelUpdatedEvent extends BaseEvent<Channel> {
-  type: 'channel:updated'
+  type: "channel:updated";
 }
 
 export interface ChannelUserJoinEvent extends BaseEvent<Channel> {
-  type: 'channel:user:join'
+  type: "channel:user:join";
 }
 
 export interface ChannelUserLeftEvent extends BaseEvent<Channel> {
-  type: 'channel:user:left'
+  type: "channel:user:left";
 }
 
 export interface ChannelRemovedEvent extends BaseEvent<Channel> {
-  type: 'channel:removed'
+  type: "channel:removed";
 }
 
 // User
 export interface UserCreatedEvent extends BaseEvent<Message> {
-  type: 'user:created';
+  type: "user:created";
 }
 
 export interface UserUpdatedEvent extends BaseEvent<Message> {
-  type: 'user:updated';
+  type: "user:updated";
 }
 
 export interface UserRemovedEvent extends BaseEvent<Message> {
-  type: 'user:removed';
+  type: "user:removed";
 }
 
 // Read Receipt
 export interface ReadReceiptCreatedEvent extends BaseEvent<Message> {
-  type: 'read_receipt:created';
+  type: "read_receipt:created";
 }
 
 export interface ReadReceiptUpdatedEvent extends BaseEvent<Message> {
-  type: 'read_receipt:updated';
+  type: "read_receipt:updated";
 }
 
 export interface ReadReceiptRemovedEvent extends BaseEvent<Message> {
-  type: 'read_receipt:removed';
+  type: "read_receipt:removed";
 }
 
 export interface SystemCloseEvent extends BaseEvent<null> {
-  type: 'system:close';
+  type: "system:close";
 }
 
-export type Event = (
-  MessageCreatedEvent
+export type Event =
+  | MessageCreatedEvent
   | MessageUpdatedEvent
   | MessageRemovedEvent
   | MessageInteractionEvent
@@ -89,5 +89,4 @@ export type Event = (
   | ReadReceiptCreatedEvent
   | ReadReceiptUpdatedEvent
   | ReadReceiptRemovedEvent
-  | SystemCloseEvent
-);
+  | SystemCloseEvent;

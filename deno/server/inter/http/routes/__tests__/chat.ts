@@ -391,13 +391,15 @@ export class Chat {
     return this;
   }
 
-  interaction(data: Arg<{
-    channelId?: string,
-    parentId?: string,
-    clientId: string,
-    payload?: any,
-    action: string,
-  }>) {
+  interaction(
+    data: Arg<{
+      channelId?: string;
+      parentId?: string;
+      clientId: string;
+      payload?: any;
+      action: string;
+    }>,
+  ) {
     this.steps.push(async () => {
       const interaction = this.arg(data);
       await this.agent.request()
@@ -405,7 +407,9 @@ export class Chat {
         .json({
           ...interaction,
           channelId: interaction.channelId ?? this.channelId,
-          ...(interaction.parentId ?? this.parentId ? { parentId: interaction.parentId ?? this.parentId } : {}),
+          ...(interaction.parentId ?? this.parentId
+            ? { parentId: interaction.parentId ?? this.parentId }
+            : {}),
         })
         .header("Authorization", `Bearer ${this.token}`)
         .expect(204);

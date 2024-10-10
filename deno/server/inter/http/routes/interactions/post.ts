@@ -1,4 +1,4 @@
-import { Route, Res } from "@planigale/planigale";
+import { Res, Route } from "@planigale/planigale";
 import { Core } from "../../../../core/mod.ts";
 
 export default (core: Core) =>
@@ -15,7 +15,7 @@ export default (core: Core) =>
           clientId: { type: "string" },
           appId: { type: "string" },
           action: { type: "string" },
-          payload: {}
+          payload: {},
         },
       },
     },
@@ -23,11 +23,11 @@ export default (core: Core) =>
       const userId = req.state.user.id;
 
       await core.dispatch({
-        type: 'message:interaction',
+        type: "message:interaction",
         body: {
           ...req.body,
           userId,
-        }
+        },
       });
 
       return Res.empty();

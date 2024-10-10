@@ -15,7 +15,7 @@ const build = (
   data: types.MessageBody,
   opts: {emojiOnly?: boolean} = {},
   key: string | number | undefined = undefined,
-): JSX.Element => {
+): React.ReactNode => {
   // FIXME: sanity check
   if (!data || typeof data === 'string') return data;
   if (Array.isArray(data)) {

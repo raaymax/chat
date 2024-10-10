@@ -11,7 +11,7 @@ export default (core: Core) =>
         type: "object",
         required: ["messageId"],
         properties: {
-          messageId: { type: "string", format: 'entity-id' },
+          messageId: { type: "string", format: "entity-id" },
         },
       },
     },

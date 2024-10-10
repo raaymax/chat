@@ -125,10 +125,10 @@ export class Core {
 
   close = async () => {
     this.events.dispatch({
-      type: 'system:close',
-      payload: null
-    })
+      type: "system:close",
+      payload: null,
+    });
 
     await this.repo.close();
-  }
+  };
 }

@@ -174,9 +174,9 @@ async function importScript(file: string): Promise<Config | null> {
     }
     const { default: config } = await import(absPath);
     return config as Config;
-  } catch(e) {
+  } catch (e) {
     if (Deno.env.get("DEBUG")) {
-      console.debug(e)
+      console.debug(e);
     }
     return null;
   }

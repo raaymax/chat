@@ -8,4 +8,3 @@ export const interactions = (core: Core) => {
   router.use(post(core));
   return router;
 };
-

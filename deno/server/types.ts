@@ -42,7 +42,7 @@ export type Interaction = {
   clientId: string;
   action: string;
   payload?: any;
-}
+};
 
 export type Config = {
   appVersion: string;

@@ -6,7 +6,7 @@ export default createCommand({
   type: "message:interaction",
   body: v.object({
     userId: Id,
-    channelId: Id, 
+    channelId: Id,
     parentId: v.optional(Id),
     clientId: v.string(),
     appId: v.optional(v.string()),

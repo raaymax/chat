@@ -9,8 +9,8 @@ export type CommandType = {
   commandName: string;
   prompt: string;
   description: string;
-  execute: (data: any, core: any) => Promise<any> | any
-}
+  execute: (data: any, core: any) => Promise<any> | any;
+};
 
 export const commands: CommandType[] = [
   EmojiCommand,
@@ -21,7 +21,6 @@ export const commands: CommandType[] = [
   JoinCommand,
 ];
 
-
 export const registerCommand = (command: CommandType) => {
   commands.push(command);
-}
+};
