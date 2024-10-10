@@ -34,7 +34,7 @@ export class EmojiCommand {
 
     core.bus.direct(data.userId, {
       type: "message",
-      id: `sys:${Math.random().toString(10)}`,
+      clientId: `sys:${Math.random().toString(10)}`,
       userId: "system",
       priv: true,
       channelId: data.context.channelId,

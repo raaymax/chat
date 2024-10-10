@@ -12,6 +12,7 @@ export type Config = {
   port: number;
   databaseUrl: string;
   cors: (string | RegExp)[];
+  plugins?: ((app: any, core: any) => Promise<any> | any)[];
   webhooks?: {
     url: string;
     events?: string[];
@@ -172,7 +173,10 @@ async function importScript(file: string): Promise<Config | null> {
     }
     const { default: config } = await import(absPath);
     return config as Config;
-  } catch {
+  } catch(e) {
+    if (Deno.env.get("DEBUG")) {
+      console.debug(e)
+    }
     return null;
   }
 }

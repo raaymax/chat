@@ -103,6 +103,18 @@ class API extends EventTarget {
     }
   }
 
+  async postInteraction(data: {channelId: string, parentId?: string, appId: string, clientId: string, action: string, payload: any}): Promise<void> {
+    const res = await fetch(`${this.baseUrl}/api/interactions`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.token}`,
+      },
+    });
+    await res.body?.cancel();
+  }
+
   async sendMessage(msg: any): Promise<any> {
     const res = await fetch(`${this.baseUrl}/api/channels/${msg.channelId}/messages`, {
       method: 'POST',

@@ -4,6 +4,7 @@ import { Link } from '../atoms/Link';
 import { ChannelLink } from './ChannelLink';
 import { UserMention } from './UserMention';
 import { ThreadLink } from './ThreadLink';
+import { ActionButton } from '../atoms/ActionButton';
 import * as types from '../../types';
 
 function is<T extends types.MessageBodyPart>(data: types.MessageBodyPart, key: string): data is T {
@@ -39,6 +40,7 @@ const build = (
   if (is<types.MessageBodyChannel>(data, 'channel')) return <ChannelLink key={key} channelId={data.channel} />;
   if (is<types.MessageBodyUser>(data, 'user')) return <UserMention key={key} userId={data.user} />;
   if (is<types.MessageBodyThread>(data, 'thread')) return <ThreadLink key={key} channelId={data.thread.channelId} parentId={data.thread.parentId} text={data.thread.text} />;
+  if (is<types.MessageBodyButton>(data, 'button')) return <ActionButton key={key} action={data.button.action} style={data.button.style} payload={data.button.payload}>{data.button.text}</ActionButton>
   return <>Unknown part: {JSON.stringify(data)}</>;
 };
 

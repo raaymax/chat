@@ -21,7 +21,7 @@ export class JoinCommand {
 
     core.bus.direct(data.userId, {
       type: "message",
-      id: "sys:" + Math.random().toString(10),
+      clientId: `sys:${Math.random().toString(10)}`,
       channelId: data.context.channelId,
       flat: "You have joined the channel",
       message: { text: "You have joined the channel" },
