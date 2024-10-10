@@ -62,6 +62,7 @@ const defaults: Partial<Config> = {
   cors: [
     /https?:\/\/localhost(:[0-9]{,4})?/,
   ],
+  plugins: [],
   storage: {
     type: "fs",
     directory: path.join(Deno.cwd(), "..", "..", "uploads"),
