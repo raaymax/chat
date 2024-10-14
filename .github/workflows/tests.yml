@@ -34,6 +34,6 @@ jobs:
       with:
         deno-version: '2.x'
     - run: npm i
-    - run: demo install --allow-scripts
+    - run: deno install --allow-scripts
     - run: npm exec migrate-mongo up
     - run: deno task check
