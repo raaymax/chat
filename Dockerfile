@@ -19,8 +19,8 @@ COPY ./deno ./deno
 COPY ./migrations ./migrations
 COPY ./deno.* ./
 COPY ./plugins ./plugins
-COPY ./migrate-mongo-config.js ./migrate-mongo-config.js
-RUN deno cache --allow-scripts npm:migrate-mongo
+#COPY ./migrate-mongo-config.js ./migrate-mongo-config.js
+#RUN deno cache --allow-scripts npm:migrate-mongo
 RUN deno cache --allow-scripts ./deno/server/main.ts
 COPY ./entrypoint.sh ./entrypoint.sh
 COPY --from=build /app/app/dist /app/public
