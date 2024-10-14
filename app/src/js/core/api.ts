@@ -1,59 +1,71 @@
 import { SSESource } from '@planigale/sse';
 import { Channel } from '../types';
 
+type RequestInit = (typeof fetch)['prototype']['init'];
+
 class API extends EventTarget {
   baseUrl: string;
 
   token: string;
 
-  source: SSESource;
+  source: SSESource | null;
+
+  abortController: AbortController;
 
   constructor(url: string, token: string) {
     super();
     this.baseUrl = url;
     this.token = token;
-    this.source = new SSESource(`${this.baseUrl}/api/sse`, {
-      fetch: (...args) => fetch(...args),
-      headers: {
-        Authorization: `Bearer ${this.token}`,
-      },
+    this.abortController = new AbortController();
+    this.source = null;
+    document.addEventListener('freeze', () => {
+      console.log('[SSE] App is frozen');
+      this.abortController.abort("App is frozen");
     });
-    this.listen();
+    document.addEventListener('resume', () => {
+      console.log('[SSE] App is resumed');
+      this.abortController = new AbortController();
+      this.reconnect(this.abortController.signal);
+    });
+    this.reconnect(this.abortController.signal);
   }
 
-  async reconnect() {
+  async reconnect(signal?: AbortSignal) {
     try {
-      console.log('events reconnecting');
-      await this.source.close();
       console.log('events reconnecting SSE');
+      await this.listen();
+    } catch (e) {
+      console.error('[API_SSE]',e);
+    } finally {
+      if(signal && !signal.aborted){
+        setTimeout(() => this.reconnect(signal), 1000);
+      }
+    }
+  }
+
+  async listen(signal?: AbortSignal) {
+    if(signal && signal.aborted) return;
+    try {
+      console.log('events listening');
       this.source = new SSESource(`${this.baseUrl}/api/sse`, {
-        fetch: (...args) => fetch(...args),
+        signal,
         headers: {
           Authorization: `Bearer ${this.token}`,
         },
       });
-      console.log('events reconnecting listen');
-      this.listen();
-    } catch (e) {
-      console.error('events tutaj', e);
-      setTimeout(() => this.reconnect(), 1000);
-    }
-  }
-
-  async listen() {
-    try {
-      console.log('events listening');
+      if (!this.source) return;
       for await (const event of this.source) {
         if (event.data === '') continue;
-        console.log('event raw', event);
         const data = JSON.parse(event.data);
-        console.log('event', data);
+        console.debug('[SSE]', data);
         this.dispatchEvent(new CustomEvent(data.type, { detail: data }));
       }
       console.log('event disconnected');
-      setTimeout(() => this.reconnect(), 1);
-    } catch (e) {
-      console.error(e);
+    } finally {
+      if (this.source){
+        await this.source.close();
+        this.source = null;
+      }
     }
   }
 
@@ -296,9 +308,9 @@ class API extends EventTarget {
   };
 
   req = async (msg: any): Promise<any> => {
-    console.log('req < ', msg);
+    console.debug('[API] req out', msg);
     const ret = await this.request(msg);
-    console.log('req > ', msg, ret);
+    console.debug('[API] req in', msg, ret);
     return ret;
   };
 }

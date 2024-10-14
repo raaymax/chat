@@ -1,3 +1,4 @@
+/* global NotificationEvent */
  
 import { precacheAndRoute } from 'workbox-precaching';
 import * as navigationPreload from 'workbox-navigation-preload';
