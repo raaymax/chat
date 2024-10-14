@@ -9,7 +9,7 @@ COPY ./app ./app
 ENV APP_NAME=quack
 RUN npm run build
 
-FROM denoland/deno:alpine-1.45.4
+FROM denoland/deno:alpine-2.0.0
 RUN apk -U upgrade
 run apk add vips-cpp build-base vips vips-dev
 ENV ENVIRONMENT=production
@@ -19,12 +19,12 @@ COPY ./deno ./deno
 COPY ./migrations ./migrations
 COPY ./deno.* ./
 COPY ./plugins ./plugins
-#COPY ./migrate-mongo-config.js ./migrate-mongo-config.js
-#RUN deno cache --allow-scripts npm:migrate-mongo
-RUN deno cache --allow-scripts ./deno/server/main.ts
-COPY ./entrypoint.sh ./entrypoint.sh
 COPY --from=build /app/app/dist /app/public
 COPY --from=build /app/node_modules /app/node_modules
+#COPY ./migrate-mongo-config.js ./migrate-mongo-config.js
+#RUN deno cache --allow-scripts npm:migrate-mongo
+RUN deno install --allow-scripts
+COPY ./entrypoint.sh ./entrypoint.sh
 
 ENV PUBLIC_DIR=/app/public
 ENV PORT=8080
