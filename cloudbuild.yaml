@@ -1,3 +1,6 @@
+options:
+  logging: CLOUD_LOGGING_ONLY
+
 steps:
   - id: build
     name: gcr.io/cloud-builders/docker
