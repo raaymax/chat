@@ -5,6 +5,8 @@ import { client } from './core';
 import { store, actions, methods } from './store';
 import { Notification } from './types';
 
+let sound = false;
+
 client
   .on('share', ({ data }) => store.dispatch(sendShareMessage(data)))
   .on('user', (msg) => store.dispatch(actions.users.add(msg)))
@@ -27,7 +29,12 @@ client
   .on('win.visible', () => store.dispatch(async (dispatch, getState) => {
     await dispatch(methods.messages.load(getState().stream.main));
   }))
-  .on('message', (msg) => store.dispatch(actions.messages.add({ ...msg, pending: false })))
+  .on('message', (msg) => {
+    if (sound) {
+      play();
+    }
+    store.dispatch(actions.messages.add({ ...msg, pending: false }));
+  })
   .on('message:remove', (msg) => store.dispatch(actions.messages.rm(msg)))
   .on('notification', () => { try { play(); } catch (err) { /* ignore */ } })
   .on('notification', () => { try { navigator.vibrate([100, 30, 100]); } catch (err) { /* ignore */ } })
@@ -43,3 +50,12 @@ client
       },
     }));
   });
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    sound = true;
+  } else {
+    sound = false;
+  }
+});
+
