@@ -1,0 +1,21 @@
+steps:
+  - id: build
+    name: gcr.io/cloud-builders/docker
+    args:
+      [
+        "build",
+        "-t",
+        "gcr.io/codecat-quack/github.com/raaymax/chat:${_APP_VERSION}",
+        "--build-arg=APP_VERSION=${_APP_VERSION}",
+        ".",
+      ]
+    env:
+      - "APP_VERSION=${_APP_VERSION}"
+
+  - id: push
+    name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/codecat-quack/github.com/raaymax/chat:${_APP_VERSION}"]
+
+
+images:
+  - "gcr.io/codecat-quack/github.com/raaymax/chat:${_APP_VERSION}"

@@ -6,7 +6,9 @@ COPY ./package-lock.json ./package-lock.json
 COPY ./app/package.json ./app/package.json
 RUN npm install
 COPY ./app ./app
+ARG APP_VERSION=3-rcX
 ENV APP_NAME=quack
+ENV APP_VERSION=${APP_VERSION}
 RUN npm run build
 
 FROM denoland/deno:alpine-2.0.0
