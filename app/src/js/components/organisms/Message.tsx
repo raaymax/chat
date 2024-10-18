@@ -110,13 +110,13 @@ const MessageContainer = styled.div`
     flex: 0 44px;
     width: 44px;
     min-width: 44px;
-    color: var(--primary_background);
+    color: transparent;
     font-weight: 200;
     font-size: .8em;
     text-align: center;
   }
   &:hover .side-time {
-    color: rgb(209,210,211);
+    color: ${(props) => props.theme.Labels};
   }
 
   & > .avatar {

@@ -10,7 +10,7 @@ const ListContainer = styled.div`
   display: flex;
   flex-direction: column-reverse;
   position: relative;
-  background-color: var(--primary_background);
+  background-color: ${(props) => props.theme.Chatbox.Background};
   overflow-y: scroll;
   overflow-x: hidden;
   flex: 1;
