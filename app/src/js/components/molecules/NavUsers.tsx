@@ -11,6 +11,7 @@ import { client } from '../../core';
 import { useDispatch } from 'react-redux';
 import { Progress, User } from '../../types';
 import { useDirectChannel } from '../contexts/useDirectChannel';
+import { ProfilePic } from '../atoms/ProfilePic';
 
 type NavUserButtonProps = {
   user: {
@@ -40,7 +41,12 @@ export const NavUserButton = ({
       recent: Boolean(active),
       system: user.system ?? false,
     }, className)}
-    data-id={user.id} onClick={onClick} icon='user' badge={badge}>{user.name}</NavButton>);
+    data-id={user.id} onClick={onClick} badge={badge}>
+    <ProfilePic type='status' userId={user.id} showStatus={true} className="pic-inline" />
+    <span className='name'>
+    {user.name}
+    </span>
+    </NavButton>);
 };
 const ChannelsContainer = styled.div`
   .header {
@@ -66,6 +72,7 @@ const ChannelsContainer = styled.div`
     cursor: pointer;
   }
   .user .name {
+    font-size: 16px;
     padding: 0px 10px; 
     cursor: pointer;
   }
@@ -75,6 +82,11 @@ const ChannelsContainer = styled.div`
 
   .user:hover {
     background-color: var(--primary_active_mask);
+  }
+
+  .pic-inline {
+    vertical-align: middle;
+    display: inline-block;
   }
 `;
 

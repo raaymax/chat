@@ -18,6 +18,7 @@ export default defineConfig({
     API_URL: JSON.stringify(''),
   },
   server: {
+    port: 3000,
     hmr: {
       overlay: false,
     },
@@ -31,7 +32,7 @@ export default defineConfig({
     }),
     proxy({
       '^/api/': {
-        target: 'http://localhost:8080',
+        target: 'http://localhost:3001',
       },
     }),
     VitePWA({

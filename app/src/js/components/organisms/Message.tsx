@@ -4,6 +4,7 @@ import { useActions, useDispatch } from '../../store';
 
 import { resend } from '../../services/messages';
 
+import { ProfilePic } from '../atoms/ProfilePic';
 import { LinkPreviewList } from '../atoms/LinkPreview';
 import { ReadReceipt } from '../molecules/ReadReceipt';
 import { UserCircle } from '../atoms/UserCircle';
@@ -21,7 +22,7 @@ import { useStream } from '../contexts/useStream';
 import { getUrl } from '../../services/file';
 
 import {
-  cn, ClassNames, formatTime, formatDateDetailed,
+  cn, ClassNames, formatTime, formatDateDetailed, isToday
 } from '../../utils';
 
 import { Message as MessageType } from '../../types';
@@ -42,14 +43,6 @@ export const Info = () => {
       {info.msg}
     </div>
   );
-};
-
-const isToday = (date: string): boolean => {
-  const someDate = new Date(date);
-  const today = new Date();
-  return someDate.getDate() === today.getDate()
-    && someDate.getMonth() === today.getMonth()
-    && someDate.getFullYear() === today.getFullYear();
 };
 
 const Container = styled.div`
@@ -101,6 +94,104 @@ export const ThreadInfo = () => {
   );
 };
 
+const MessageContainer = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  animation-name: fade;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  margin: 0;
+  padding: 0 16px;
+  line-height: 24px;
+  vertical-align: middle;
+
+  .side-time {
+    flex: 0 44px;
+    width: 44px;
+    min-width: 44px;
+    color: var(--primary_background);
+    font-weight: 200;
+    font-size: .8em;
+    text-align: center;
+  }
+  &:hover .side-time {
+    color: rgb(209,210,211);
+  }
+
+  & > .avatar {
+    flex: 0 48px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    border-radius: 5px;
+    overflow: hidden;
+    min-width: 44px;
+  }
+  .avatar img {
+    height: 100%;
+    width: 100%;
+  }
+
+  &.private{
+    border-left: 10px solid #a27321; 
+  }
+
+  .info {
+    line-height: 16px;
+    height: 16px;
+    padding: 0px 0px;
+    font-weight: 300;
+    vertical-align: middle;
+    font-size: .8em;
+  }
+
+  .header {
+    --line-height: 24px;
+    --padding-top: 5px;
+    --padding-bottom: 0px;
+  }
+  .author {
+    font-weight: bold;
+  }
+  .time {
+    font-weight: 200;
+    font-size: .8em;
+  }
+  .content {
+    font-weight: 300;
+  }
+  .content p{
+    white-space: break-spaces;
+    word-break: break-word;
+  }
+  .content.big-emoji {
+    font-size: 30px;
+    line-height: 35px;
+  }
+  .content.big-emoji .emoji {
+    font-size: 30px;
+    line-height: 35px;
+  }
+   .content.big-emoji .emoji  img !important {
+    height: 3em;
+    width: 3em;
+  }
+  .body {
+    flex: 1;
+    padding: 0;
+    padding-left: 16px;
+    line-break: auto;
+    hyphens: auto;
+    width: calc(100% - 75px);
+  }
+  &.private .avatar {
+    margin-left: 20px;
+  }
+  &:hover {
+      background-color: var(--primary_active_mask);
+  }
+`;
+
 type MessageBaseProps = {
   onClick?: (e?: React.MouseEvent) => void;
   sameUser?: boolean;
@@ -114,6 +205,7 @@ const MessageBase = ({ onClick, sameUser, ...props }: MessageBaseProps = {}) => 
     id, message, emojiOnly,
     createdAt, pinned,
     editing,
+    userId,
     linkPreviews,
   } = msg;
   const { onEnter, toggleHovered, onLeave } = useHoverCtrl(msg.id);
@@ -121,7 +213,7 @@ const MessageBase = ({ onClick, sameUser, ...props }: MessageBaseProps = {}) => 
   const user = useMessageUser();
 
   return (
-    <div
+    <MessageContainer
       onClick={(e) => {
         toggleHovered();
         if (onClick) onClick(e);
@@ -135,12 +227,7 @@ const MessageBase = ({ onClick, sameUser, ...props }: MessageBaseProps = {}) => 
       onMouseLeave={onLeave}
     >
       {!sameUser
-        ? <div className='avatar'>{(() => {
-          if (user?.avatarFileId) {
-            return <img src={getUrl(user?.avatarFileId)} alt='avatar' />;
-          }
-          return <img src="/avatar.png" alt='avatar' />;
-        })()}</div>
+        ? <ProfilePic type='regular' userId={userId} />
         : <div className='spacy side-time'>{formatTime(createdAt)}</div>
       }
       <div className='body'>
@@ -164,7 +251,7 @@ const MessageBase = ({ onClick, sameUser, ...props }: MessageBaseProps = {}) => 
         <ReadReceipt data={msg.progress} />
         <MessageToolbar />
       </div>
-    </div>
+    </MessageContainer>
   );
 };
 

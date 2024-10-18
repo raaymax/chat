@@ -115,7 +115,7 @@ export const MessageList = (props: MessageListProps) => {
 
   return (
     <ListContainer ref={element} onScroll={scroll} >
-      <div className='space'>&nbsp;</div>
+      <div className='v-space'>&nbsp;</div>
       <MessageListRenderer list={list} {...rest} />
     </ListContainer>
   );

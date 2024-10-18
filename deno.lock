@@ -3,6 +3,7 @@
   "specifiers": {
     "jsr:@jd1378/another-cookiejar@^5.0.7": "5.0.7",
     "jsr:@planigale/body-parser@*": "0.2.0",
+    "jsr:@planigale/planigale@*": "0.6.5",
     "jsr:@planigale/planigale@0.6.5": "0.6.5",
     "jsr:@planigale/planigale@~0.6.1": "0.6.5",
     "jsr:@planigale/planigale@~0.6.4": "0.6.5",
@@ -20,17 +21,23 @@
     "jsr:@std/crypto@^1.0.3": "1.0.3",
     "jsr:@std/encoding@1.0.0-rc.2": "1.0.0-rc.2",
     "jsr:@std/fmt@~0.225.4": "0.225.6",
+    "jsr:@std/fs@*": "1.0.4",
     "jsr:@std/http@~0.224.5": "0.224.5",
     "jsr:@std/internal@^1.0.4": "1.0.4",
     "jsr:@std/io@~0.224.1": "0.224.9",
     "jsr:@std/media-types@1.0.2": "1.0.2",
     "jsr:@std/media-types@^1.0.0-rc.1": "1.0.2",
     "jsr:@std/net@~0.224.3": "0.224.5",
+    "jsr:@std/path@*": "1.0.6",
+    "jsr:@std/path@1": "1.0.6",
     "jsr:@std/path@1.0.0-rc.2": "1.0.0-rc.2",
     "jsr:@std/path@1.0.1": "1.0.1",
+    "jsr:@std/path@^1.0.1": "1.0.6",
     "jsr:@std/path@^1.0.2": "1.0.6",
+    "jsr:@std/path@^1.0.6": "1.0.6",
     "jsr:@std/streams@~0.224.5": "0.224.5",
     "jsr:@std/uuid@^1.0.4": "1.0.4",
+    "jsr:@ts-rex/bcrypt@^1.0.3": "1.0.3",
     "npm:@babel/plugin-syntax-class-properties@7.12.13": "7.12.13_@babel+core@7.25.8",
     "npm:@babel/plugin-syntax-decorators@7.23.3": "7.23.3_@babel+core@7.25.8",
     "npm:@babel/plugin-syntax-jsx@7.23.3": "7.23.3_@babel+core@7.25.8",
@@ -152,6 +159,12 @@
     "@std/fmt@0.225.6": {
       "integrity": "aba6aea27f66813cecfd9484e074a9e9845782ab0685c030e453a8a70b37afc8"
     },
+    "@std/fs@1.0.4": {
+      "integrity": "2907d32d8d1d9e540588fd5fe0ec21ee638134bd51df327ad4e443aaef07123c",
+      "dependencies": [
+        "jsr:@std/path@^1.0.6"
+      ]
+    },
     "@std/http@0.224.5": {
       "integrity": "b03b5d1529f6c423badfb82f6640f9f2557b4034cd7c30655ba5bb447ff750a4",
       "dependencies": [
@@ -202,6 +215,9 @@
         "jsr:@std/bytes@^1.0.2",
         "jsr:@std/crypto"
       ]
+    },
+    "@ts-rex/bcrypt@1.0.3": {
+      "integrity": "1a172769df1a357032e78cc13205dc34cc13f2307a2b81458bf988904ec8db02"
     }
   },
   "npm": {

@@ -11,6 +11,23 @@ import { Workspace } from './pages/Workspace';
 import { useUser } from './contexts/useUser';
 
 const theme = {
+  ToggleButton: {
+    Default: '#737373',
+    Hover: '#E0E0E0',
+  },
+  Channels: {
+    Container: '#2B2D31',
+  },
+  Chatbox: {
+    Background: '#313338',
+  },
+  Input: {
+    Background: '#2B2D31',
+  },
+
+  Labels: '#737373',
+  Strokes: '#737373',
+  Text: '#E0E0E0',
   borderColor: '#565856',
   backgroundColor: '#1a1d21',
   highlightedBackgroundColor: '#2a2d31',

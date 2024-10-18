@@ -112,7 +112,7 @@ export type Message = {
 export type User = {
   id: string;
   name: string;
-  status: string;
+  status: 'active' | 'inactive' | 'away';
   avatar: string;
   avatarFileId: string;
   connected: boolean;
