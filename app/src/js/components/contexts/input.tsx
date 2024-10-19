@@ -182,7 +182,7 @@ export const InputProvider = (args: InputContextProps) => {
   const wrapMatching = useCallback((regex: RegExp, wrapperTagName: string) => {
     const selection = window.getSelection();
     if (!selection?.rangeCount) {
-      // eslint-disable-next-line no-console
+       
       console.warn('No text selected.');
       return;
     }
@@ -190,7 +190,7 @@ export const InputProvider = (args: InputContextProps) => {
     const { endContainer } = rang;
 
     if (endContainer.nodeType !== Node.TEXT_NODE) {
-      // eslint-disable-next-line no-console
+       
       console.warn('End container is not a text node.');
       return;
     }

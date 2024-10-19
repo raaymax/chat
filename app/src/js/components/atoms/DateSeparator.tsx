@@ -3,14 +3,27 @@ import { formatDateDetailed } from '../../utils';
 
 const StyledDateSeparator = styled.div`
   text-align: center;
-  line-height: 30px;
-  height: 50px;
-  display: block;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   flex: 0;
   position: relative;
-  background-color: #38393b;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  padding: 16px;
+  width: 100%;
+  flex: 0 0 44px;
+
+  .line {
+    flex: 1 auto;
+    height: 1px;
+    background-color: ${props => props.theme.Strokes};
+  }
+  .label {
+    flex: 0 auto;
+    padding: 0 8px;
+    font-size: 12px;
+    line-height: 12px;
+    color: ${props => props.theme.Labels};
+  }
 `;
 
 type DateSeparatorProps = {
@@ -19,6 +32,10 @@ type DateSeparatorProps = {
 
 export const DateSeparator = ({ date }: DateSeparatorProps) => (
   <StyledDateSeparator>
-    {formatDateDetailed(date)}
+    <div className='line'></div>
+    <div className='label'>
+      {formatDateDetailed(date)}
+    </div>
+    <div className='line'></div>
   </StyledDateSeparator>
 );

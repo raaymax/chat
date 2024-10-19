@@ -10,6 +10,7 @@ type Query = {
 }
 
 export const load = createMethod('messages/load', async (query: Query, { actions, client, dispatch }) => {
+  console.log('messages/load', query);
   const req = await client.req({
     limit: 50,
     ...query,
@@ -24,6 +25,7 @@ type Reaction = {
   id: string;
   text: string;
 }
+
 export const addReaction = createMethod('messages/addReaction', async (args: Reaction, { actions, client, dispatch }) => {
   const req = await client.req({
     type: 'message:react',

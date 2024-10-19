@@ -15,7 +15,6 @@
     "@types/node": "npm:@types/node@20.10.4",
     "concat-stream": "npm:concat-stream@2.0.0",
     "mongodb": "npm:mongodb@6.3.0",
-    "sharp": "npm:sharp@0.33.0",
-    "uuid": "npm:uuid@9.0.1"
+    "sharp": "npm:sharp@0.33.0"
   }
 }

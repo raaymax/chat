@@ -7,6 +7,4 @@ export default createQuery({
   body: v.object({
     userId: Id,
   }),
-}, async ({ userId }, { repo }) => {
-  return await repo.badge.getAll({ userId });
-});
+}, async ({ userId }, { repo }) => await repo.badge.getAll({ userId }));

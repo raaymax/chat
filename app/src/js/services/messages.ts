@@ -33,12 +33,28 @@ export const selectors = {
   getLatestDate: (stream: Stream, state: StateType) => {
     const data = getStreamMessages(stream, state.messages.data)
       .filter((m) => m.id !== stream.parentId);
-    return data.length ? data[0].createdAt : new Date().toISOString();
+
+    // FIXME: optimize this
+    const dates = data.map((m) => new Date(m.createdAt).getTime());
+    const max = Math.max(...dates);
+    try{
+      return new Date(max).toISOString();
+    }catch(e){
+      return new Date().toISOString();
+    }
   },
   getEarliestDate: (stream: Stream, state: StateType) => {
     const data = getStreamMessages(stream, state.messages.data)
       .filter((m) => m.id !== stream.parentId);
-    return data.length ? data[data.length - 1].createdAt : new Date().toISOString();
+    // FIXME: optimize this
+    const dates = data.map((m) => new Date(m.createdAt).getTime());
+    const min = Math.min(...dates);
+    try{
+      return new Date(min).toISOString();
+    }catch(e){
+      return new Date().toISOString();
+    }
+    //return data.length ? data[data.length - 1].createdAt : new Date().toISOString();
   },
   getMessage: (id: string, state: StateType): Message | null => state.messages.data
     .find((m) => m.id === id || m.clientId === id) || null,
@@ -153,32 +169,36 @@ export const sendCommand = createMethod('messages/sendCommand', async ({ stream,
     if (res.status === 'error') throw res;
     dispatch(actions.messages.add({ ...notif, notifType: 'success', notif: `${msg.name} executed successfully` }));
   } catch (err) {
-    try{
-    dispatch(actions.messages.add({ ...notif, notifType: 'error', notif: `command "${msg.name}" error: ${err.res?.message ?? err.error?.message ?? err.message}` }));
-    // eslint-disable-next-line no-console
-    if (!isError(err)) return console.error(err);
-    }catch(e){
+    try {
+      dispatch(actions.messages.add({ ...notif, notifType: 'error', notif: `command "${msg.name}" error: ${err.res?.message ?? err.error?.message ?? err.message}` }));
+       
+      if (!isError(err)) return console.error(err);
+    } catch (e) {
       console.log(e);
     }
   }
 });
 
-type MessageInfo = null | {
+type MessageInfo = {
   msg: string;
   type: string;
   action?: string;
 }
 
-const sendMessage = createMethod('messages/sendMessage', async ({ payload: msg, info }: {payload: OutgoingMessageCreate, info: MessageInfo}, { dispatch, actions, getState }) => {
-  dispatch(actions.messages.add({ ...msg, userId: getState().me, pending: true }));
+const sendMessage = createMethod('messages/sendMessage', async ({ payload: msg}: {payload: OutgoingMessageCreate}, { dispatch, actions, getState }) => {
+  dispatch(actions.messages.add({ ...msg, userId: getState().me, pending: true, info: null }));
   try {
-    await client.req(msg);
+    await client.api.sendMessage(msg);
   } catch (err) {
     dispatch(actions.messages.add({
       clientId: msg.clientId,
       channelId: msg.channelId,
       parentId: msg.parentId,
-      info,
+      info: {
+        msg: 'Sending message failed - click here to resend',
+        type: 'error',
+        action: 'resend',
+      } as MessageInfo,
     }));
   }
 });

@@ -3,15 +3,23 @@ import * as v from "valibot";
 export class EntityId {
   constructor(public value: string) {}
 
-  static from(id: string | EntityId) {
+  static fromArray(id: string | EntityId | string[] | EntityId[]): EntityId[] {
+    return [id].flat().map(EntityId.from);
+  }
+
+  static from(id: string | EntityId): EntityId {
     if (id instanceof EntityId) {
       return new EntityId(id.toString());
-    } else if (typeof id === "string") {
-      return new EntityId(id);
-    } else {
-      console.log(id);
-      throw new Error("Invalid id type");
     }
+    if (typeof id === "string") {
+      return new EntityId(id);
+    }
+    console.log(id);
+    throw new Error("Invalid id type");
+  }
+
+  static unique(ids: EntityId[]) {
+    return EntityId.fromArray([...new Set(ids.map((id) => id.value))]);
   }
 
   eq(id: EntityId) {
@@ -26,6 +34,15 @@ export class EntityId {
     return this.value;
   }
 }
+
+export type Interaction = {
+  userId: EntityId;
+  channelId: EntityId;
+  parentId?: EntityId;
+  clientId: string;
+  action: string;
+  payload?: any;
+};
 
 export type Config = {
   appVersion: string;
@@ -55,6 +72,7 @@ export type User = {
   name: string;
   avatarFileId: string;
   mainChannelId: EntityId;
+  status?: 'active' | 'inactive' | 'away';
 };
 
 export enum ChannelType {
@@ -103,6 +121,8 @@ export type Invitation = {
   id: EntityId;
   token: string;
   userId: EntityId;
+  channelId: EntityId;
+  expireAt: Date;
   createdAt: Date;
 };
 
@@ -157,7 +177,7 @@ export type Message = {
   message: MessageBody;
   channelId: EntityId;
   userId: EntityId;
-  parentId: EntityId;
+  parentId: EntityId | null;
   channel: string;
   clientId: string;
   emojiOnly: boolean;

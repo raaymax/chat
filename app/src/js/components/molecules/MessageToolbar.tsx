@@ -95,6 +95,7 @@ export const MessageToolbar = () => {
           ':thumbsdown:',
           ':tada:',
           ':eyes:',
+          ':white_check_mark:',
         ].map(reaction)}
         {view === 'delete' && [
           confirmDelete(),

@@ -10,7 +10,14 @@ type LoginProps = {
 export const Login = ({ children }: LoginProps) => {
   const [status, setStatus] = useState('pending');
   const [user, setUser] = useState<string | null>(null);
+  const [localMsg] = useState(localStorage.getItem('loginMessage'));
   const [msg, setMsg] = useState(null);
+
+  useEffect(() => {
+    localStorage.removeItem('loginMessage');
+  });
+
+
   const validate = useCallback(() => session.validate()
     .then(async ({ status: validationStatus, user: validatedUser }) => {
       console.log('validatedUser', validatedUser);
@@ -22,7 +29,7 @@ export const Login = ({ children }: LoginProps) => {
         setUser(null);
       }
     }).catch((e) => {
-      // eslint-disable-next-line no-console
+       
       console.error(e);
       setTimeout(validate, 1000);
     }), []);
@@ -56,15 +63,14 @@ export const Login = ({ children }: LoginProps) => {
 
   if (status === 'pending') return 'Auth - pending';
 
-  const loginMessage = localStorage.getItem('loginMessage');
   return user ? (
     <UserProvider value={user}>
       {children}
     </UserProvider>
   ) : (
     <div className='login' >
-      {loginMessage && <div className='message'>
-        {loginMessage}
+      {localMsg && <div className='message'>
+        {localMsg}
       </div>}
       <form onSubmit={onSubmit}>
         <input type='text' name='login' placeholder='user@example.com' />

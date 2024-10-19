@@ -6,15 +6,11 @@ COPY ./package-lock.json ./package-lock.json
 COPY ./app/package.json ./app/package.json
 RUN npm install
 COPY ./app ./app
-
-ENV APP_VERSION=1.0.0
 ENV APP_NAME=quack
+COPY ./version* ./
+RUN APP_VERSION=$(cat ./version 2>/dev/null || echo 3) npm run build
 
-RUN npm run build
-
-
-
-FROM denoland/deno:alpine-1.45.4
+FROM denoland/deno:alpine-2.0.0
 RUN apk -U upgrade
 run apk add vips-cpp build-base vips vips-dev
 ENV ENVIRONMENT=production
@@ -23,13 +19,14 @@ WORKDIR /app
 COPY ./deno ./deno
 COPY ./migrations ./migrations
 COPY ./deno.* ./
-COPY ./migrate-mongo-config.js ./migrate-mongo-config.js
-RUN deno cache npm:migrate-mongo
-RUN deno cache ./deno/server/main.ts
-COPY ./entrypoint.sh ./entrypoint.sh
+COPY ./plugins ./plugins
 COPY --from=build /app/app/dist /app/public
+COPY --from=build /app/node_modules /app/node_modules
+#COPY ./migrate-mongo-config.js ./migrate-mongo-config.js
+#RUN deno cache --allow-scripts npm:migrate-mongo
+RUN deno install --allow-scripts
+COPY ./entrypoint.sh ./entrypoint.sh
 
-ENV APP_VERSION=1.0.0
 ENV PUBLIC_DIR=/app/public
 ENV PORT=8080
 

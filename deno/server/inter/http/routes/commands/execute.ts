@@ -41,8 +41,8 @@ export default (core: Core) =>
       },
     },
     handler: async (req) => {
-      const body = req.body;
-      await core.dispatch({
+      const { body } = req;
+      const data = await core.dispatch({
         type: "command:execute",
         body: {
           userId: req.state.user.id,
@@ -52,6 +52,6 @@ export default (core: Core) =>
           context: body.context,
         },
       });
-      return Res.empty();
+      return Res.json({ status: "ok", data });
     },
   });

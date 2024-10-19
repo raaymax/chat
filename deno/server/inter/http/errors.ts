@@ -26,15 +26,34 @@ function mapAppError(error: AppError): ApiError {
       return new ResourceNotFound(error.message);
     case "ACCESS_DENIED":
       return new AccessDenied(error.message);
+    case "NO_ACCESS":
+      return new NoAccess(error.message);
     case "NOT_OWNER":
       return new NotOwner(error.message);
+    case "INVALID_INVITATION": {
+      const invalidInvitation = new ApiError(
+        400,
+        "INVALID_INVITATION",
+        error.message,
+      );
+      invalidInvitation.log = false;
+      return invalidInvitation;
+    }
     default:
       return new InternalServerError(error);
+  }
+}
+export class NoAccess extends ApiError {
+  log = false;
+
+  constructor(message: string) {
+    super(403, "NO_ACCESS", message);
   }
 }
 
 export class AccessDenied extends ApiError {
   log = false;
+
   constructor(message: string) {
     super(401, "ACCESS_DENIED", message);
   }
@@ -42,6 +61,7 @@ export class AccessDenied extends ApiError {
 
 export class NotOwner extends ApiError {
   log = false;
+
   constructor(message: string) {
     super(403, "NOT_OWNER", message);
   }

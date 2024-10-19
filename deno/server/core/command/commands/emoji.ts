@@ -1,5 +1,7 @@
 export class EmojiCommand {
-  static name = "emoji";
+  static commandName = "emoji";
+  static prompt = ":thumbsup: [image attachment]";
+  static description = "Create a new emoji";
 
   static validate(data: any) {
     if (!data.attachments || data.attachments.length === 0) {
@@ -15,21 +17,24 @@ export class EmojiCommand {
 
   static async execute(data: any, core: any) {
     EmojiCommand.validate(data);
-    const shortname = ":" +
-      data.text.trim().replace(/^:/, "").replace(/:$/, "") + ":";
+    const shortname = `:${
+      data.text.trim().replace(/^:/, "").replace(/:$/, "")
+    }:`;
 
     const id = await core.repo.emoji.create({
       shortname,
       fileId: data.attachments[0].id,
     });
+    const emoji = await core.repo.emoji.get(id);
 
     core.bus.broadcast({
       type: "emoji",
-      ...(await core.repo.emoji.get(id)),
+      ...emoji,
     });
 
     core.bus.direct(data.userId, {
       type: "message",
+      clientId: `sys:${Math.random().toString(10)}`,
       userId: "system",
       priv: true,
       channelId: data.context.channelId,

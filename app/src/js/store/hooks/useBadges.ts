@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useSelector } from './useSelector';
 
-export const useBadges = (userId: string | null | undefined) => {
+export const useBadges = (userId: string | null | undefined): Record<string, number> => {
   const progress = useSelector((state) => state.progress);
   return useMemo(() => progress
     .filter((p) => Boolean(p))

@@ -1,12 +1,12 @@
-/* eslint-disable import/no-extraneous-dependencies */
+ 
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
-// eslint-disable-next-line import/no-relative-packages
-import basicSsl from '@vitejs/plugin-basic-ssl'
-import proxy from "vite-plugin-http2-proxy";
+ 
+import basicSsl from '@vitejs/plugin-basic-ssl';
+import proxy from 'vite-plugin-http2-proxy';
 import path from 'node:path';
-import process from "node:process";
+import process from 'node:process';
 
 const __dirname = new URL('.', import.meta.url).pathname;
 const sslPath = path.join(__dirname, '../../ssl/');
@@ -17,6 +17,12 @@ export default defineConfig({
     APP_NAME: JSON.stringify(process.env.APP_NAME),
     API_URL: JSON.stringify(''),
   },
+  server: {
+    port: 3000,
+    hmr: {
+      overlay: false,
+    },
+  },
   plugins: [
     react(),
     basicSsl({
@@ -25,8 +31,8 @@ export default defineConfig({
       certDir: sslPath,
     }),
     proxy({
-      "^/api/": {
-        target: "http://localhost:8080",
+      '^/api/': {
+        target: 'http://localhost:3001',
       },
     }),
     VitePWA({
@@ -72,6 +78,6 @@ export default defineConfig({
           },
         },
       },
-    })
+    }),
   ],
 });

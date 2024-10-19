@@ -1,5 +1,5 @@
-import { Core } from "../../../../core/mod.ts";
 import { Res, Route } from "@planigale/planigale";
+import { Core } from "../../../../core/mod.ts";
 
 export default (core: Core) =>
   new Route({

@@ -1,8 +1,15 @@
 import * as v from "valibot";
 import { createCommand } from "../command.ts";
 import { Id, IdArr } from "../types.ts";
-import { InvalidMessage, ResourceNotFound } from "../errors.ts";
+import { AccessDenied, InvalidMessage, ResourceNotFound } from "../errors.ts";
 import { flatten } from "./flatten.ts";
+import { ChannelType, EntityId } from "../../types.ts";
+
+function filterUndefined(data: any) {
+  return Object.fromEntries(
+    Object.entries(data).filter(([, v]) => v !== undefined),
+  );
+}
 
 export default createCommand({
   type: "message:create",
@@ -18,7 +25,7 @@ export default createCommand({
       emojiOnly: v.optional(v.boolean(), false),
       debug: v.optional(v.string()),
       links: v.optional(v.array(v.string()), []),
-      mentions: v.optional(v.array(v.string()), []),
+      mentions: v.optional(IdArr, []),
       attachments: v.optional(
         v.array(v.object({
           id: v.string(),
@@ -30,14 +37,12 @@ export default createCommand({
     }),
     ["userId", "channelId"],
   ),
-}, async (msg, { repo, services, bus }) => {
-  const channel = await repo.channel.get({
+}, async (msg, core) => {
+  const { repo, bus } = core;
+  const channel = await core.channel.access({
     id: msg.channelId,
     userId: msg.userId,
-  });
-  if (!channel) {
-    throw new ResourceNotFound("Channel not found");
-  }
+  }).internal();
 
   if (!msg.message && !msg.flat) {
     throw new InvalidMessage("Message or flat must be provided");
@@ -53,31 +58,7 @@ export default createCommand({
   if (!msg.clientId) {
     msg.clientId = crypto.randomUUID();
   }
-
-  async function createMessage(msg: any) {
-    const data = Object.fromEntries(
-      Object.entries(msg).filter(([, v]) => v !== undefined),
-    );
-    let id;
-    let dup = false;
-    try {
-      id = await repo.message.create(data);
-    } catch (err) {
-      if (err.code !== 11000) {
-        throw err;
-      }
-      dup = true;
-      const message = await repo.message.get({
-        clientId: msg.clientId,
-      });
-      if (message) {
-        id = message.id;
-      }
-    }
-    return { id, dup };
-  }
-
-  const { id, dup } = await createMessage({
+  const message = filterUndefined({
     message: msg.message,
     flat: msg.flat,
     pinned: msg.pinned,
@@ -97,15 +78,29 @@ export default createCommand({
     createdAt: new Date(),
   });
 
-  const usersToAdd = msg.mentions.filter((m: any) =>
-    !channel.users.includes(m)
-  );
-  if (usersToAdd.length) {
-    const group = [...new Set([...channel.users, ...usersToAdd])];
-    //await repo.channel.update({ id: channel.id }, { users: group });
-    const c = await repo.channel.get({ id: msg.channelId });
-    bus.group(group, { type: "channel", ...c });
-  }
+  const id: EntityId = await (async () => {
+    const existing = await repo.message.get({
+      channelId: channel.id,
+      userId: msg.userId,
+      clientId: msg.clientId,
+    });
+    if (existing) {
+      await repo.message.update({ id: existing.id }, message);
+    } else {
+      return await repo.message.create(message);
+    }
+    return existing.id;
+  })();
+
+  await core.dispatch({
+    type: "channel:join",
+    body: {
+      channelId: msg.channelId.toString(),
+      userIds: msg.mentions.filter((m: any) =>
+        !channel.users.some((u) => u.eq(m))
+      ).map((u) => u.toString()),
+    },
+  }).internal();
 
   if (id && msg.parentId) {
     await repo.message.updateThread({
@@ -118,19 +113,20 @@ export default createCommand({
   }
 
   const created = await repo.message.get({ id });
-  if (!dup) {
-    bus.group(channel.users, { type: "message", ...created });
-    //await services.notifications.send(created, res);
-  }
-  if (id) {
-    await services.badge.messageSent({
+  bus.group(channel.users, { type: "message", ...created });
+
+  await core.dispatch({
+    type: "readReceipt:update:message",
+    body: {
       channelId: channel.id,
       parentId: msg.parentId,
       messageId: id,
       userId: msg.userId,
-    });
-  }
-  return id; //{ id, duplicate: dup };
+    },
+  }).internal();
+
+  // await services.notifications.send(created, res);
+  return id; // { id, duplicate: dup };
   /*
     if (msg.links?.length) {
       services.link.addPreview(

@@ -12,11 +12,11 @@ export function toWebStream(nodeStream: Readable) {
   const listeners = {} as ListenerInterface;
 
   function start(controller: any) {
-    listeners["data"] = onData;
-    listeners["end"] = onData;
-    listeners["end"] = onDestroy;
-    listeners["close"] = onDestroy;
-    listeners["error"] = onDestroy;
+    listeners.data = onData;
+    listeners.end = onData;
+    listeners.end = onDestroy;
+    listeners.close = onDestroy;
+    listeners.error = onDestroy;
     for (const name in listeners) {
       nodeStream.on(name, listeners[name as keyof ListenerInterface]);
     }
@@ -65,13 +65,16 @@ export function toWebStream(nodeStream: Readable) {
     if (nodeStream.destroy) nodeStream.destroy();
   }
 
-  return new ReadableStream({ start: start, pull: pull, cancel: cancel });
+  return new ReadableStream({ start, pull, cancel });
 }
 
 class NodeReadable extends Readable {
-  public bytesRead: number = 0;
+  public bytesRead = 0;
+
   public released = false;
+
   private reader: ReadableStreamDefaultReader<Uint8Array>;
+
   private pendingRead?: Promise<any>;
 
   constructor(stream: ReadableStream) {

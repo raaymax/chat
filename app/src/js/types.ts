@@ -42,13 +42,14 @@ export type MessageBodyEmoji = {emoji:string};
 export type MessageBodyChannel = {channel: string};
 export type MessageBodyUser = {user: string};
 export type MessageBodyThread = {thread: { channelId: string, parentId: string, text: string }};
+export type MessageBodyButton = {button: { action: string, text: string, style: string }};
 
 export type MessageBodyPart = MessageBodyBullet | MessageBodyOrdered | MessageBodyItem
   | MessageBodyCodeblock | MessageBodyBlockquote | MessageBodyCode
   | MessageBodyLine | MessageBodyBr | MessageBodyText | MessageBodyBold
   | MessageBodyItalic | MessageBodyUnderline | MessageBodyStrike
   | MessageBodyImg | MessageBodyLink | MessageBodyEmoji | MessageBodyChannel
-  | MessageBodyUser | MessageBodyThread;
+  | MessageBodyUser | MessageBodyThread | MessageBodyButton;
 
 export type MessageBody = MessageBodyPart[] | MessageBodyPart;
 
@@ -60,6 +61,7 @@ export type Message = {
   channelId: string;
   parentId: string;
   userId: string;
+  appId: string;
   emojiOnly: boolean;
   createdAt: string;
   updatedAt: string;
@@ -110,7 +112,7 @@ export type Message = {
 export type User = {
   id: string;
   name: string;
-  status: string;
+  status: 'active' | 'inactive' | 'away';
   avatar: string;
   avatarFileId: string;
   connected: boolean;

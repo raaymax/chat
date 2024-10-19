@@ -1,6 +1,6 @@
+import * as v from "valibot";
 import { Id } from "../types.ts";
 import { createQuery } from "../query.ts";
-import * as v from "valibot";
 
 export default createQuery({
   type: "channel:get",
@@ -8,6 +8,4 @@ export default createQuery({
     userId: Id,
     id: v.optional(Id),
   })),
-}, async (query, { repo }) => {
-  return await repo.channel.get(query);
-});
+}, async (query, { repo }) => await repo.channel.get(query));

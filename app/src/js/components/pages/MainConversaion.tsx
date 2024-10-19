@@ -15,8 +15,6 @@ import { useSidebar } from '../contexts/useSidebar';
 const StyledHeader = styled.div`
   display: flex;
   flex-direction: row;
-  background-color: var(--primary_background);
-  background-color: #1a1d21;
   border-bottom: 1px solid #565856;
   height: 51px;
 

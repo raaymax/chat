@@ -26,7 +26,13 @@ export const InputContainer = styled.div`
   &.default {
     border-top: 1px solid #565856;
   }
-  background-color: var(--secondary_background);
+  font-size: 16px;
+  margin: 0px 16px 16px 16px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid ${(props) => props.theme.Strokes};
+  background-color: ${(props) => props.theme.Input.Background};
+  --background-color: var(--secondary_background);
   display: flex;
   flex-direction: column;
 
@@ -126,7 +132,7 @@ export const InputContainer = styled.div`
   .input {
     flex: 1;
     border: 0;
-    padding: 5px 30px;
+    padding: 0px;
 
     .emoji img {
       width: 1.5em;
@@ -194,21 +200,18 @@ export const InputForm = ({ children }: InputFormProps) => {
 
   return (
     <InputContainer className={mode}>
-      <div
-        data-scope='root'
-        className='input'
-        ref={input}
-        contentEditable='true'
-        onPaste={onPaste}
-        onInput={onInput}
-        onKeyDown={(e) => onKeyDown(e)}
-      >{children}</div>
-      <Attachments />
-      <Toolbar className='controls' size={40}>
+      <Toolbar className='controls' size={32}>
+        <div
+          data-scope='root'
+          className='input'
+          ref={input}
+          contentEditable='true'
+          onPaste={onPaste}
+          onInput={onInput}
+          onKeyDown={(e) => onKeyDown(e)}
+        >{children}</div>
         <ButtonWithIcon icon="emojis" onClick={() => setShowEmojis(!showEmojis)} />
         <ButtonWithIcon icon="plus" onClick={addFile} />
-        <StatusLine />
-        <div className="separator" />
         {mode === 'edit' ? (
           <>
             <ButtonWithIcon icon="xmark" onClick={() => dispatch(actions.messages.editClose(messageId))} />
@@ -218,6 +221,8 @@ export const InputForm = ({ children }: InputFormProps) => {
           <ButtonWithIcon icon="send" onClick={send} />
         )}
       </Toolbar>
+      <StatusLine />
+      <Attachments />
       <ChannelSelector />
       <UserSelector />
       <EmojiSelector />

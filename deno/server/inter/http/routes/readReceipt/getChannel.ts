@@ -6,10 +6,19 @@ export default (core: Core) =>
     method: "GET",
     url: "/",
     public: false,
+    schema: {
+      params: {
+        type: "object",
+        required: ["channelId"],
+        properties: {
+          channelId: { type: "string", format: "entity-id" },
+          parentId: { type: "string", format: "entity-id" },
+        },
+      },
+    },
     handler: async (req) => {
       const userId = req.state.user.id;
-      const channelId = req.params.channelId;
-      const parentId = req.params?.parentId;
+      const { channelId, parentId } = req.params;
       const results = await core.readReceipt.getChannel({
         channelId,
         userId,

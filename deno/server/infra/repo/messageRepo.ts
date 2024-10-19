@@ -21,13 +21,22 @@ export class MessageRepo extends Repo<MessageQuery, Message> {
   COLLECTION = "messages";
 
   makeQuery(data: MessageQuery) {
-    const { search, before, after, ...rest } = serialize(data);
+    const {
+      search,
+      before,
+      after,
+      parentId,
+      ...rest
+    } = serialize(data);
     return Object.fromEntries(
       Object.entries({
         ...rest,
         ...(search ? { $text: { $search: search } } : {}),
         ...(before ? { createdAt: { $lte: before } } : {}),
         ...(after ? { createdAt: { $gte: after } } : {}),
+        ...(parentId === null
+          ? { parentId: { $not: { $ne: null } } }
+          : { parentId }),
       }).filter(([, v]) => v !== undefined),
     );
   }

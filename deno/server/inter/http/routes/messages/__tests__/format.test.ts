@@ -1,9 +1,10 @@
-Deno.env.set("ENV_TYPE", "test");
 import { Agent } from "@planigale/testing";
-import { login, usingChannel } from "../../__tests__/mod.ts";
 import { ObjectId } from "mongodb";
+import { login, usingChannel } from "../../__tests__/mod.ts";
 import { EntityId } from "../../../../../types.ts";
 import { createApp } from "../../__tests__/app.ts";
+
+Deno.env.set("ENV_TYPE", "test");
 const { app, repo, core } = createApp();
 
 const validId = new ObjectId().toHexString();
@@ -28,6 +29,9 @@ Deno.test("Check all validations for message field", async (t) => {
           .expect(status)
           .then(async (res) => {
             await res.body?.cancel();
+            await repo.message.removeMany({
+              channelId: EntityId.from(channelId),
+            });
           }));
     await testPart(400, "Should return status 400 for empty", {});
     await testPart(200, "Should return status 200 for empty array", []);

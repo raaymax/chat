@@ -11,13 +11,13 @@ export default (core: Core) =>
         type: "object",
         required: ["messageId"],
         properties: {
-          messageId: { type: "string" },
+          messageId: { type: "string", format: "entity-id" },
         },
       },
     },
     handler: async (req) => {
       const userId = req.state.user.id;
-      const messageId = req.body.messageId;
+      const { messageId } = req.body;
       const receiptId = await core.dispatch({
         type: "readReceipt:update",
         body: { userId, messageId },

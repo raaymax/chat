@@ -12,7 +12,7 @@ declare global {
 const initApp = createMethod('initApp', async (_arg, {
   dispatch, getState, methods, actions,
 }) => {
-  console.log('app init')
+  console.log('app init');
   if (navigator?.userAgentData?.mobile) {
     document.body.setAttribute('class', 'mobile');
   }
@@ -43,7 +43,7 @@ export const init = createMethod('init', async (_arg, { dispatch, actions }) => 
     await dispatch(initApp({}));
     tryCount = 1;
   } catch (err) {
-    // eslint-disable-next-line no-console
+     
     console.log(err);
     if (tryCount < 4) {
       setTimeout(() => {

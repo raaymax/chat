@@ -1,17 +1,18 @@
 /* eslint-disable class-methods-use-this */
-import { v4 as uuid } from "npm:uuid";
 import type { Config } from "@quack/config";
-import type { FileData, FileOpts } from "../types.ts";
 import { GoogleAuth } from "npm:google-auth-library";
 import { ResourceNotFound } from "@planigale/planigale";
+import type { FileData, FileOpts } from "../types.ts";
 
-//const API_URL = "http://localhost:8888";
+// const API_URL = "http://localhost:8888";
 const API_URL = "https://storage.googleapis.com";
 
 class Gcs {
   bucketName: string;
+
   accessToken: Promise<string | null | undefined> | null = null;
-  accessTokenExpires: number = 0;
+
+  accessTokenExpires = 0;
 
   auth = new GoogleAuth({
     scopes: "https://www.googleapis.com/auth/cloud-platform",
@@ -60,11 +61,11 @@ class Gcs {
   ): Promise<string> {
     const file = fileOpts ??
       { contentType: "application/octet-stream", filename: "file" };
-    const fileId = file?.id ?? uuid();
+    const fileId = file?.id ?? crypto.randomUUID();
     const token = await this.getAccessToken();
 
     const res = await fetch(this.getUploadUrl(fileId), {
-      //client: this.client,
+      // client: this.client,
       headers: {
         "Content-Type": file.contentType,
         Authorization: `Bearer ${token}`,
@@ -142,13 +143,11 @@ class Gcs {
     return {
       id: fileId,
       contentType: metadata.contentType || "application/octet-stream",
-      filename: typeof filename == "string" ? filename : "file",
+      filename: typeof filename === "string" ? filename : "file",
       size: parseInt(metadata.size, 10) || 0,
       stream: res.body,
     };
   };
 }
 
-export const files = (config: { bucket: string }) => {
-  return new Gcs(config);
-};
+export const files = (config: { bucket: string }) => new Gcs(config);

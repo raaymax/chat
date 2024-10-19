@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-syntax */
+ 
 
 const getChannelType = (channel) => {
   if (channel.direct) return 'DIRECT';

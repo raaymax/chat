@@ -1,4 +1,5 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { Message as MessageType } from '../../types';
 
 type MessagesState = {
@@ -50,6 +51,16 @@ export default createSlice({
         if (pos === -1 && newState.data.some((m) => m.createdAt > msg.createdAt)) pos = newState.data.length;
         newState.data.splice(pos, 0, msg);
       });
+      return newState;
+    },
+
+    rm: (state, action) => {
+      const {channelId, clientId, userId, appId} = action.payload;
+      const newState = { ...state, data: [...state.data] };
+      const idx = newState.data.findIndex((m) => m.channelId === channelId && m.clientId === clientId && (m.userId === userId || m.appId === appId));
+      if (idx !== -1) {
+        newState.data.splice(idx, 1);
+      }
       return newState;
     },
 

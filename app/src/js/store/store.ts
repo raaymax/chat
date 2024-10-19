@@ -1,4 +1,4 @@
-import { AsyncThunk, configureStore, createAsyncThunk } from '@reduxjs/toolkit';
+import { type AsyncThunk, configureStore, createAsyncThunk } from '@reduxjs/toolkit';
 import { client, Client } from '../core';
 import * as slices from './slices';
 
@@ -25,7 +25,6 @@ export type Api<M = any> = {
 export type AsyncMutation<T, R, M> = (arg: T, api: Api<M>) => Promise<R>;
 export type MutationMethod<R, M> = (api: Api<M>) => Promise<R>;
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 export const createMethod = <T, R>(name: string, handler: AsyncMutation<T, R, any>): AsyncThunk<R, T, {}> => createAsyncThunk(`method/${name}`, (a: T) => handler(a, {
   dispatch: Object.assign(store.dispatch, { actions, methods: data.methods }),
   getState: store.getState,

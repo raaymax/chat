@@ -6,6 +6,7 @@ declare global {
 
 export class Client {
   _api: Api;
+
   get api() {
     if (!this._api) {
       this._api = new Api(API_URL, localStorage.token);
@@ -24,11 +25,8 @@ export class Client {
   }
 
   emit(type: string, data: any) {
-    return this.api.emit(new CustomEvent(type, {detail: data}));
+    return this.api.emit(new CustomEvent(type, { detail: data }));
   }
-
 }
 
-
 export const client = new Client();
-

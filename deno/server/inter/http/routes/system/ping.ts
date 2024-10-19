@@ -6,7 +6,5 @@ export default (_core: Core) =>
     method: "GET",
     url: "/",
     public: true,
-    handler: () => {
-      return Response.json({ status: "ok" });
-    },
+    handler: () => Response.json({ status: "ok" }),
   });

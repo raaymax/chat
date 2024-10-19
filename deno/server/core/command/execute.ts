@@ -1,42 +1,19 @@
-import * as v from "valibot";
 import { createCommand } from "../command.ts";
-import { Id, IdArr } from "../types.ts";
 import { ResourceNotFound } from "../errors.ts";
-import { Message } from "../../types.ts";
-
-import { EmojiCommand } from "./commands/emoji.ts";
-import { VersionCommand } from "./commands/version.ts";
+import { commands } from "./repository.ts";
+import { commandBodyValidator } from "./params.ts";
 
 export default createCommand({
   type: "command:execute",
-  body: v.required(
-    v.object({
-      userId: Id,
-      name: v.string(),
-      text: v.string(),
-      attachments: v.optional(
-        v.array(v.object({
-          id: v.string(),
-          fileName: v.string(),
-          contentType: v.optional(v.string(), "application/octet-stream"),
-        })),
-        [],
-      ),
-      context: v.object({
-        channelId: Id,
-      }),
-    }),
-    ["name", "text", "context"],
-  ),
+  body: commandBodyValidator,
 }, async (msg, core) => {
-  if (msg.name === "emoji") {
-    return await EmojiCommand.execute(msg, core);
-  }
-  if (msg.name === "version") {
-    return await VersionCommand.execute(msg, core);
+  const command = commands.find((command) => command.commandName === msg.name);
+  if (command) {
+    return await command.execute(msg, core);
   }
   if (msg.name === "echo") {
     const response = {
+      clientId: `sys:${Math.random().toString(10)}`,
       channelId: msg.context.channelId,
       flat: msg.text,
       message: { text: msg.text },
@@ -50,5 +27,35 @@ export default createCommand({
     return;
   }
 
-  throw new ResourceNotFound(`command not found`);
+  if (msg.name === "help") {
+    core.bus.direct(msg.userId, {
+      type: "message",
+      clientId: `sys:${Math.random().toString(10)}`,
+      channelId: msg.context.channelId,
+      flat: `Available commands: ${
+        commands.map((command) => "/" + command.commandName).join(", ")
+      }`,
+      message: [
+        { line: `Available commands:` },
+        {
+          bullet: [
+            ...commands.map((command) => ({
+              item: [
+                {
+                  code: "/" + command.commandName +
+                    (command.prompt ? " " + command.prompt : ""),
+                },
+                { text: " - " },
+                { text: command.description },
+              ],
+            })),
+          ],
+        },
+      ],
+      createdAt: new Date().toISOString(),
+    });
+    return;
+  }
+
+  throw new ResourceNotFound("command not found");
 });

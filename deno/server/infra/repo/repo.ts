@@ -3,7 +3,7 @@ import { deserialize, serialize } from "./serializer.ts";
 import { EntityId } from "../../types.ts";
 
 export class Repo<Query, Model> {
-  COLLECTION: string = "";
+  COLLECTION = "";
 
   constructor(private db: Database) {}
 
@@ -18,7 +18,6 @@ export class Repo<Query, Model> {
 
   async create(data: Partial<Model>): Promise<EntityId> {
     const { db } = await this.connect();
-    // console.log('save', serialize(data));
     const ret = await db.collection(this.COLLECTION).insertOne(serialize(data));
     return deserialize(ret.insertedId);
   }
@@ -62,10 +61,16 @@ export class Repo<Query, Model> {
     if (!data) return null;
     const { db } = await this.connect();
     const query = this.makeQuery(data);
-    // console.log('query', query);
-    // console.log(await db.collection(this.COLLECTION).deleteMany({}));
-    // console.log(await db.collection(this.COLLECTION).find().toArray());
     const item = await db.collection(this.COLLECTION).findOne(query);
+    return deserialize(item);
+  }
+
+  async getR(data: Query): Promise<Model> {
+    if (!data) throw new Error("Not found");
+    const { db } = await this.connect();
+    const query = this.makeQuery(data);
+    const item = await db.collection(this.COLLECTION).findOne(query);
+    if (!item) throw new Error("Not found");
     return deserialize(item);
   }
 
@@ -76,6 +81,7 @@ export class Repo<Query, Model> {
     const items = await db.collection(this.COLLECTION).find(query).toArray();
     return deserialize(items);
   }
+
   async count(data: Query) {
     const { db } = await this.connect();
     const query = this.makeQuery(data);

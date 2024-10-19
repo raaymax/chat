@@ -24,7 +24,8 @@ export default createCommand({
       ),
     }),
   }),
-}, async (msg, { repo, bus }) => {
+}, async (msg, core) => {
+  const { repo } = core;
   const message = await repo.message.get({ id: msg.id });
   if (!message) {
     throw new ResourceNotFound("Message not found");

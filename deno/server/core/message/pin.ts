@@ -10,10 +10,13 @@ export default createCommand({
     userId: Id,
     pinned: v.optional(v.boolean()),
   }),
-}, async (msg, { repo }) => {
+}, async (msg, core) => {
+  const { repo } = core;
   const message = await repo.message.get({ id: msg.id });
   if (!message) {
     throw new ResourceNotFound("Message not found");
   }
+  await core.channel.access({ id: message.channelId, userId: msg.userId })
+    .internal();
   await repo.message.update({ id: msg.id }, { pinned: msg.pinned });
 });

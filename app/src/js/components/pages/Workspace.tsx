@@ -29,6 +29,8 @@ export const MainView = styled.div`
 
 export const Container = styled.div`
   display: flex;
+  background-color: ${(props) => props.theme.Chatbox.Background};
+  color: ${(props) => props.theme.Text};
   flex-direction: row;
   width: 100%;
   height: 100%;

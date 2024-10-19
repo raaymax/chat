@@ -1,5 +1,6 @@
 import { assertEquals } from "@std/assert";
 import { createApp } from "../../__tests__/app.ts";
+
 const { app, repo, core } = createApp();
 
 Deno.test("GET /api/ping", async () => {

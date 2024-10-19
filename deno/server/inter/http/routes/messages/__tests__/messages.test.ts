@@ -1,11 +1,12 @@
-Deno.env.set("ENV_TYPE", "test");
 import { Agent } from "@planigale/testing";
 import { assert, assertEquals } from "@std/assert";
-import { login, usingChannel } from "../../__tests__/mod.ts";
 import { ObjectId } from "mongodb";
+import { login, usingChannel } from "../../__tests__/mod.ts";
 import { ChannelType, EntityId } from "../../../../../types.ts";
 import { createApp } from "../../__tests__/app.ts";
 import { Chat } from "../../__tests__/chat.ts";
+
+Deno.env.set("ENV_TYPE", "test");
 const { app, repo, core } = createApp();
 
 const randomChannelId = "66a35e599c8d540997b97808";
@@ -38,7 +39,7 @@ Deno.test("/api/channels/:channelId/messages - Authorization failed", async (t) 
     "GET /api/messages/:messageId - should be authenticated",
     async () => {
       const res = await Agent.request(app)
-        .get(`/api/messages/messageId`)
+        .get("/api/messages/messageId")
         .expect(401);
       const body = await res.json();
       assertEquals(body.errorCode, "ACCESS_DENIED");
@@ -49,7 +50,7 @@ Deno.test("/api/channels/:channelId/messages - Authorization failed", async (t) 
     "PATCH /api/messages/:messageId - should be authenticated",
     async () => {
       const res = await Agent.request(app)
-        .patch(`/api/messages/messageId`)
+        .patch("/api/messages/messageId")
         .json({})
         .expect(401);
       const body = await res.json();
@@ -61,7 +62,7 @@ Deno.test("/api/channels/:channelId/messages - Authorization failed", async (t) 
     "DELETE /api/messages/:messageId - should be authenticated",
     async () => {
       const res = await Agent.request(app)
-        .delete(`/api/messages/messageId`)
+        .delete("/api/messages/messageId")
         .emptyBody()
         .expect(401);
       const body = await res.json();
@@ -97,7 +98,7 @@ Deno.test("/api/channels/:channelId/messages - Auth successful", async (t) => {
           .header("Authorization", `Bearer ${token}`)
           .expect(200);
         const body = await res.json();
-        assert(typeof body.id == "string");
+        assert(typeof body.id === "string");
       },
     );
     await t.step(
@@ -200,7 +201,7 @@ Deno.test("/api/channels/:channelId/messages - Access constraints", async (t) =>
           .header("Authorization", `Bearer ${token}`)
           .expect(200);
         const body = await res.json();
-        assert(typeof body.id == "string");
+        assert(typeof body.id === "string");
       },
     );
     await t.step(
@@ -294,9 +295,9 @@ Deno.test("/api/channels/:channelId/messages - Sending to private channel", asyn
             flat: "test",
           })
           .header("Authorization", `Bearer ${memberToken}`)
-          .expect(404);
+          .expect(403);
         const body = await res.json();
-        assertEquals(body.errorCode, "RESOURCE_NOT_FOUND");
+        assertEquals(body.errorCode, "NO_ACCESS");
       },
     );
     await t.step(
@@ -346,7 +347,7 @@ Deno.test("Messages server sent events", async () => {
       headers: { Authorization: `Bearer ${memberToken}` },
     });
     const { event } = await events.next();
-    assertEquals(JSON.parse(event?.data ?? ""), { "status": "connected" });
+    assertEquals(JSON.parse(event?.data ?? ""), { status: "connected" });
 
     const res = await agent.request()
       .post(`/api/channels/${channelId}/messages`)

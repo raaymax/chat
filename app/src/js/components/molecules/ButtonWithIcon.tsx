@@ -17,7 +17,7 @@ export const ButtonWithIcon = ({
   const $size = useSize(size);
   return (
     <Button size={$size} onClick={onClick} className={className}>
-      <Icon icon={icon} size={$size ? $size / 2.3 : $size} />
+      <Icon icon={icon} size={$size ? $size / 2 : $size} />
       {children}
     </Button>
   );

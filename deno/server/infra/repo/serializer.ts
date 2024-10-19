@@ -4,11 +4,14 @@ import { ObjectId } from "./db.ts";
 function recursiveDeserialize(obj: any): any {
   if (obj instanceof EntityId) {
     return EntityId.from(obj);
-  } else if (obj instanceof ObjectId) {
+  }
+  if (obj instanceof ObjectId) {
     return EntityId.from(obj.toHexString());
-  } else if (Array.isArray(obj)) {
+  }
+  if (Array.isArray(obj)) {
     return obj.map(recursiveDeserialize);
-  } else if (typeof obj === "object") {
+  }
+  if (typeof obj === "object") {
     for (const key in obj) {
       obj[key] = recursiveDeserialize(obj[key]);
     }
@@ -27,9 +30,11 @@ export function deserialize(data: any) {
 function recursiveSerialize(obj: any): any {
   if (obj instanceof EntityId) {
     return new ObjectId(obj.value);
-  } else if (Array.isArray(obj)) {
+  }
+  if (Array.isArray(obj)) {
     return obj.map(recursiveSerialize);
-  } else if (typeof obj === "object") {
+  }
+  if (typeof obj === "object") {
     for (const key in obj) {
       obj[key] = recursiveSerialize(obj[key]);
     }

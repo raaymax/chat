@@ -1,4 +1,5 @@
-/* eslint-disable no-restricted-syntax */
+/* global NotificationEvent */
+ 
 import { precacheAndRoute } from 'workbox-precaching';
 import * as navigationPreload from 'workbox-navigation-preload';
 // import { registerRoute } from 'workbox-routing';

@@ -1,21 +1,18 @@
 import styled from 'styled-components';
 import { UserCircle } from '../atoms/UserCircle';
+import { ProfilePic } from '../atoms/ProfilePic';
 
 const StyledReadReceipt = styled.div`
   position: relative;
   height: 0;
   width: 100%;
 
-  & div {
-    position: absolute;
-    bottom: -20px;
-    right: 0;
-
-    img {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
+  & > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    .avatar {
+      flex: 0 0 16px;
     }
   }
 `;
@@ -35,14 +32,14 @@ export const ReadReceipt = ({ data }: ReadReceiptProps) => {
 
   return (
     <StyledReadReceipt>
-      <div>
+      {data.length && <div>
         {
           data
             .map((p) => (
-              <UserCircle key={p.userId} userId={p.userId} />
+              <ProfilePic userId={p.userId} type='tiny' />
             ))
         }
-      </div>
+      </div>}
     </StyledReadReceipt>
   );
 };

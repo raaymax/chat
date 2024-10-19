@@ -9,6 +9,14 @@ export const cn = (...classes: ClassNames[]) => classes.flat().map((item) => {
   return item;
 }).filter(Boolean).join(' ');
 
+export const isToday = (date: string): boolean => {
+  const someDate = new Date(date);
+  const today = new Date();
+  return someDate.getDate() === today.getDate()
+    && someDate.getMonth() === today.getMonth()
+    && someDate.getFullYear() === today.getFullYear();
+};
+
 export const formatDate = (raw?: string): string => {
   const date = raw ? new Date(raw) : new Date();
   return date.toLocaleDateString('pl-PL');
@@ -71,7 +79,7 @@ export const createEventListener = () => {
   const handlers: Record<string, EventListener[]> = {};
   const notify = (ev: string, ...args: unknown[]) => {
     if (!handlers[ev] || handlers[ev].length === 0) {
-      // eslint-disable-next-line no-console
+       
       console.log('Event not handled', ev, args);
     }
     return Promise.all(
@@ -80,7 +88,7 @@ export const createEventListener = () => {
           try {
             await listener(...args);
           } catch (err) {
-            // eslint-disable-next-line no-console
+             
             console.error(err);
           }
         }),

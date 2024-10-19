@@ -53,7 +53,7 @@ export const NavChannels = ({ icon }: NavChannelsProps) => {
   const channels = useChannels();
   const userId = useSelector((state) => state.me);
   const badges = useBadges(userId);
-  const id = useSelector((state) => state.stream.mainChannelId);
+  const id = useSelector((state) => state.stream.main.channelId);
   return (
     <ChannelsContainer>
       <div className='header'>

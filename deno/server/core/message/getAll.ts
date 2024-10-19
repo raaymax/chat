@@ -1,7 +1,6 @@
+import * as v from "valibot";
 import { Id } from "../types.ts";
 import { createQuery } from "../query.ts";
-import * as v from "valibot";
-import { AccessDenied, ResourceNotFound } from "../errors.ts";
 
 export default createQuery({
   type: "message:getAll",
@@ -19,14 +18,12 @@ export default createQuery({
       search: v.optional(v.string()),
     }),
   })),
-}, async ({ userId, query: msg }, { repo }) => {
-  const { channelId, parentId } = msg;
+}, async ({ userId, query: msg }, core) => {
+  const { repo } = core;
+  const { channelId } = msg;
+  const parentId = msg.parentId ?? null;
 
-  if (!channelId) throw new ResourceNotFound("Channel not found");
-
-  //if (!await ChannelHelper.haveAccess(userId, channelId)) {
-  //  throw new AccessDenied();
-  //}
+  await core.channel.access({ id: channelId, userId }).internal();
 
   const msgs = await repo.message.getAll({
     channelId,

@@ -19,8 +19,8 @@ type UserCircleProps = {
 export const UserCircle = ({ userId, className }: UserCircleProps) => {
   const user = useSelector((state) => state.users[userId]);
   if (!user) return null;
-  if(user?.avatarFileId) {
-    return <Image className={cn(className, 'here')} x-attr={user?.avatarFileId} src={getUrl(user?.avatarFileId)} alt={user.name} />
+  if (user?.avatarFileId) {
+    return <Image className={cn(className, 'here')} x-attr={user?.avatarFileId} src={getUrl(user?.avatarFileId)} alt={user.name} />;
   }
-  return <Image className={cn(className, 'here')} src='/avatar.png' alt={user.name} />
+  return <Image className={cn(className, 'here')} src='/avatar.png' alt={user.name} />;
 };

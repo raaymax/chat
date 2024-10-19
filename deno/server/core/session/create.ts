@@ -1,6 +1,6 @@
 import * as v from "valibot";
-import { createCommand } from "../command.ts";
 import { hash, verify } from "@ts-rex/bcrypt";
+import { createCommand } from "../command.ts";
 
 export default createCommand({
   type: "session:create",

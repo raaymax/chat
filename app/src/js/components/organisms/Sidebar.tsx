@@ -11,6 +11,7 @@ import { useSidebar } from '../contexts/useSidebar';
 export const SideMenu = styled.div`
   flex: 0 0 200px;
   display: flex;
+  background-color: ${(props) => props.theme.Channels.Container};
   flex-direction: column;
   .slider {
     flex: 1 calc(100% - 50px);
@@ -55,8 +56,6 @@ export const SideMenu = styled.div`
       }
     }
   }
-  border-left: 1px solid ${(props) => props.theme.borderColor};
-  border-right: 1px solid ${(props) => props.theme.borderColor};
   &.hidden {
     flex: 0 0px;
     width: 0px;

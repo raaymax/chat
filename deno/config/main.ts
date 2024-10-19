@@ -12,6 +12,7 @@ export type Config = {
   port: number;
   databaseUrl: string;
   cors: (string | RegExp)[];
+  plugins?: ((app: any, core: any) => Promise<any> | any)[];
   webhooks?: {
     url: string;
     events?: string[];
@@ -47,10 +48,9 @@ export const generateSecrets = () => {
       };
       Deno.writeTextFileSync(SECRETS_FILE, JSON.stringify(secrets, null, 2));
       return secrets;
-    } else {
-      console.log("Error reading secrets file", e);
-      Deno.exit(1);
     }
+    console.log("Error reading secrets file", e);
+    Deno.exit(1);
   }
 };
 
@@ -62,6 +62,7 @@ const defaults: Partial<Config> = {
   cors: [
     /https?:\/\/localhost(:[0-9]{,4})?/,
   ],
+  plugins: [],
   storage: {
     type: "fs",
     directory: path.join(Deno.cwd(), "..", "..", "uploads"),
@@ -74,9 +75,8 @@ const secrets = generateSecrets();
 async function load(): Promise<Config> {
   if (ENV === "test") {
     return await importTestConfig();
-  } else {
-    return await loadConfig();
   }
+  return await loadConfig();
 }
 async function loadConfig(): Promise<Config> {
   let config;
@@ -159,11 +159,11 @@ async function importConfig(file: string): Promise<Config | null> {
   const ext = path.extname(file);
   if (ext === ".ts" || ext === ".js" || ext === ".mjs") {
     return await importScript(file);
-  } else if (ext === ".json") {
-    return await loadJSON(file);
-  } else {
-    throw new Error("Internal error: invalid config file extension " + ext);
   }
+  if (ext === ".json") {
+    return await loadJSON(file);
+  }
+  throw new Error(`Internal error: invalid config file extension ${ext}`);
 }
 
 async function importScript(file: string): Promise<Config | null> {
@@ -174,7 +174,10 @@ async function importScript(file: string): Promise<Config | null> {
     }
     const { default: config } = await import(absPath);
     return config as Config;
-  } catch {
+  } catch (e) {
+    if (Deno.env.get("DEBUG")) {
+      console.debug(e);
+    }
     return null;
   }
 }

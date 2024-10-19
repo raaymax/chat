@@ -1,8 +1,9 @@
-Deno.env.set("ENV_TYPE", "test");
 import { Agent } from "@planigale/testing";
 import { assert, assertEquals } from "@std/assert";
 import { login } from "../../__tests__/mod.ts";
 import { createApp } from "../../__tests__/app.ts";
+
+Deno.env.set("ENV_TYPE", "test");
 const { app, repo, core } = createApp();
 
 const testTextFilePath =

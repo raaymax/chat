@@ -19,7 +19,7 @@ export const uploadMany = createMethod('files/uploadMany', async ({ streamId, fi
   console.log('uploading many files', streamId, files);
   for (let i = 0, file; i < files.length; i++) {
     file = files.item(i);
-    // eslint-disable-next-line no-continue
+     
     if (!file) continue;
     dispatch(upload({ streamId, file }));
   }
@@ -28,7 +28,7 @@ export const uploadMany = createMethod('files/uploadMany', async ({ streamId, fi
 const isError = (err: unknown): err is Error => err instanceof Error;
 
 export const upload = createMethod('files/upload', async ({ streamId, file }: FileUpload, { dispatch, actions }) => {
-  console.log('uploading file', file.name, file.size, file.type)
+  console.log('uploading file', file.name, file.size, file.type);
   const local = {
     streamId,
     clientId: tempId(),
@@ -72,7 +72,7 @@ export const upload = createMethod('files/upload', async ({ streamId, file }: Fi
         },
       }));
     }
-    // eslint-disable-next-line no-console
+     
     console.error(err);
   }
 });
@@ -87,7 +87,7 @@ export const abort = createMethod('files/abort', async (clientId: string, { disp
     if (aborts[clientId]) aborts[clientId]();
     dispatch(actions.files.remove(clientId));
   } catch (err) {
-    // eslint-disable-next-line no-console
+     
     console.error(err);
   }
 });
@@ -111,23 +111,23 @@ async function uploadFile(args: UploadArgs): Promise<UploadResponse> {
     new TransformStream({
       async transform(chunk, controller) {
         uploadedSize += chunk.length;
-        console.log('uploadedSize', uploadedSize)
+        console.log('uploadedSize', uploadedSize);
         args.onProgress?.(uploadedSize / args.fileSize * 100);
         controller.enqueue(chunk);
       },
     }),
   );
   const res = await fetch(FILES_URL, {
-    method: "POST",
+    method: 'POST',
     get duplex() {
-      console.log('duplex')
+      console.log('duplex');
       return 'half';
     },
     headers: {
-      "Authorization": `Bearer ${localStorage.token}`,
-      "Content-Type": args.contentType || "application/octet-stream",
-      "Content-Length": args.fileSize.toString(),
-      "Content-Disposition": `attachment; filename="${args.fileName}"`,
+      Authorization: `Bearer ${localStorage.token}`,
+      'Content-Type': args.contentType || 'application/octet-stream',
+      'Content-Length': args.fileSize.toString(),
+      'Content-Disposition': `attachment; filename="${args.fileName}"`,
     },
     body: blobStream,
   });

@@ -149,11 +149,11 @@ type EmojiSearchProps = {
 export const EmojiSearch = ({ onSelect }: EmojiSearchProps) => {
   const [name, setName] = useState('');
   const [results, setResults] = useState<Record<string, DefinedEmoji[]>>({});
-  const emojis = useSelector((state) => state.emojis.data.filter((e) => !e.empty)) as DefinedEmoji[];
+  const emojis = useSelector((state) => state.emojis.data) as DefinedEmoji[];
   const fuse = useEmojiFuse();
 
   useEffect(() => {
-    let all: DefinedEmoji[] = emojis || [];
+    let all: DefinedEmoji[] = (emojis || []).filter((e) => !e.empty);
     if (name && fuse) {
       const ret = fuse.search(name, { limit: 100 });
       all = ret.map((r) => r.item).filter((e) => !e.empty) as DefinedEmoji[];
@@ -174,12 +174,12 @@ export const EmojiSearch = ({ onSelect }: EmojiSearchProps) => {
     <EmojiSearchContainer>
       <SearchBox onChange={(e) => setName(e.target.value)} value={name} />
       <EmojiScroll>
-        {Object.keys(CATEGORIES).filter((c: string) => results[c]).map((category: string, idx: number) => (
-          <EmojiCategory key={idx}>
+        {Object.keys(CATEGORIES).filter((c: string) => results[c]).map((category: string) => (
+          <EmojiCategory key={category}>
             <Label>{CATEGORIES[category]}</Label>
             <EmojiBlock>
-              {(results[category] || []).map((result, idx2) => (
-                <Tooltip text={result.shortname} key={idx2}>
+              {(results[category] || []).map((result) => (
+                <Tooltip text={result.shortname} key={result.shortname}>
                   <Emoji
                     fileId={result.fileId}
                     unicode={result.unicode}
