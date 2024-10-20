@@ -11,7 +11,6 @@ import { useSidebar } from '../contexts/useSidebar';
 import { ButtonWithIcon } from '../molecules/ButtonWithIcon';
 
 const StyledPins = styled.div`
-  width: 100vw;
   height: 100vh;
   flex: 0 100%;
   display: flex;
@@ -37,8 +36,6 @@ const StyledPins = styled.div`
 const StyledHeader = styled.div`
   display: flex;
   flex-direction: row;
-  background-color: var(--primary_background);
-  background-color: #1a1d21;
   border-bottom: 1px solid #565856;
   height: 51px;
 
@@ -112,7 +109,7 @@ export const Pins = () => {
   }, [navigation])
   const messages = useSelector((state) => channelId ? state.pins[channelId] : []);
   const gotoMessage = useCallback((msg: MessageType) => {
-    navigate(`/${msg.channelId}/${msg.id}`, {
+    navigate(`/${msg.channelId}`, {
       state: {
         type: 'archive',
         channelId: msg.channelId,

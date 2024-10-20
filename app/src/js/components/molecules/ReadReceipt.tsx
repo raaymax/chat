@@ -36,7 +36,7 @@ export const ReadReceipt = ({ data }: ReadReceiptProps) => {
         {
           data
             .map((p) => (
-              <ProfilePic userId={p.userId} type='tiny' />
+              <ProfilePic userId={p.userId} key={p.userId} type='tiny' />
             ))
         }
       </div>}

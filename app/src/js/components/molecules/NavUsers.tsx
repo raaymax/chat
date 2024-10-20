@@ -6,12 +6,13 @@ import {
   useUsers,
 } from '../../store';
 import { NavButton } from './NavButton';
-import { ClassNames, cn } from '../../utils';
+import { ClassNames, cn, isMobile } from '../../utils';
 import { client } from '../../core';
 import { useDispatch } from 'react-redux';
 import { Progress, User } from '../../types';
 import { useDirectChannel } from '../contexts/useDirectChannel';
 import { ProfilePic } from '../atoms/ProfilePic';
+import { useSidebar } from '../contexts/useSidebar';
 
 type NavUserButtonProps = {
   user: {
@@ -96,6 +97,7 @@ const NavUserContainer = ({user, badges}: {user: User, badges: Record<string, nu
   const dispatch = useDispatch();
   const channel = useDirectChannel(user.id);
   const id = useSelector((state) => state.stream.main.channelId);
+  const { hideSidebar } = useSidebar();
   return <NavUserButton
     size={30}
     user={user}
@@ -106,6 +108,9 @@ const NavUserContainer = ({user, badges}: {user: User, badges: Record<string, nu
       console.log('channel', channel);
       dispatch(actions.stream.open({ id: 'main', value: { type: 'live', channelId: channel.id } }));
       dispatch(actions.view.set(null));
+      if ( isMobile() ) {
+        hideSidebar();
+      }
     }}
   />
 }

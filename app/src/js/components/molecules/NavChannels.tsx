@@ -5,6 +5,8 @@ import {
 } from '../../store';
 import { ChannelCreate } from './ChannelCreate';
 import { Channel } from './NavChannel';
+import { useSidebar } from '../contexts/useSidebar';
+import { isMobile } from '../../utils';
 
 const ChannelsContainer = styled.div`
   .header {
@@ -54,6 +56,7 @@ export const NavChannels = ({ icon }: NavChannelsProps) => {
   const userId = useSelector((state) => state.me);
   const badges = useBadges(userId);
   const id = useSelector((state) => state.stream.main.channelId);
+  const { hideSidebar } = useSidebar();
   return (
     <ChannelsContainer>
       <div className='header'>
@@ -72,6 +75,9 @@ export const NavChannels = ({ icon }: NavChannelsProps) => {
           onClick={() => {
             dispatch(actions.stream.open({ id: 'main', value: { type: 'live', channelId: c.id } }));
             dispatch(actions.view.set(null));
+            if ( isMobile() ) {
+              hideSidebar();
+            }
           }}
         />
       ))}

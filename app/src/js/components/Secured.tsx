@@ -8,10 +8,7 @@ import {
 import { client } from '../core';
 import StoreProvider from '../store/components/provider';
 import { useUser } from './contexts/useUser';
-<<<<<<< HEAD
 import { Router } from './Router';
-=======
->>>>>>> v3.0
 
 const theme = {
   ToggleButton: {
@@ -26,6 +23,9 @@ const theme = {
   },
   Input: {
     Background: '#2B2D31',
+  },
+  Navbar: {
+    Background: '#1E1F22',
   },
 
   Labels: '#737373',
@@ -67,15 +67,6 @@ const Secured = () => {
     client.emit('auth:user', user);
   }, [user]);
 
-<<<<<<< HEAD
-=======
-  const router = createHashRouter([
-    {
-      path: '/*',
-      element: <Workspace />,
-    },
-  ]);
->>>>>>> v3.0
   return (
     <StoreProvider>
       <ThemeProvider theme={theme}>

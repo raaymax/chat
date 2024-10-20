@@ -18,8 +18,6 @@ import { useSidebar } from '../contexts/useSidebar';
 const StyledHeader = styled.div`
   display: flex;
   flex-direction: row;
-  background-color: var(--primary_background);
-  background-color: #1a1d21;
   border-bottom: 1px solid #565856;
   height: 51px;
 
@@ -62,7 +60,6 @@ const SearchSeparator = styled.div`
   display: block;
   flex: 0;
   position: relative;
-  background-color: #38393b;
   margin-top: 10px;
   margin-bottom: 10px;
   padding-left: 30px;
@@ -72,7 +69,6 @@ const StyledList = styled.div`
   display: flex;
   flex-direction: column-reverse;
   position: relative;
-  background-color: var(--primary_background);
   overflow-y: scroll;
   overflow-x: hidden;
   flex: 1 100%;
@@ -80,7 +76,6 @@ const StyledList = styled.div`
 `;
 
 const StyledSearch = styled.div`
-  width: 100vw;
   height: 100vh;
   flex: 0 100%;
   display: flex;
@@ -144,7 +139,7 @@ export function SearchResults() {
   const navigate = useNavigate();
   const results = useSelector((state) => state.search.results);
   const gotoMessage = useCallback((msg: MessageType) => {
-    navigate(`/${msg.channelId}/${msg.id}`, {
+    navigate(`/${msg.channelId}`, {
       state: {
         type: 'archive',
         channelId: msg.channelId,

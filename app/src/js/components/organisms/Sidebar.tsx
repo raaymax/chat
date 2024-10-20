@@ -9,7 +9,7 @@ import { useActions, useDispatch } from '../../store';
 import { useSidebar } from '../contexts/useSidebar';
 
 export const SideMenu = styled.div`
-  flex: 0 0 200px;
+  flex: 0 0 360px;
   display: flex;
   background-color: ${(props) => props.theme.Channels.Container};
   flex-direction: column;
@@ -21,15 +21,8 @@ export const SideMenu = styled.div`
     flex: 0 50px;
   }
   @media (max-width : 710px) {
-    flex: none;
     width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    widht: 100vw;
     height: 100vh;
-    z-index: 1000;
-    background-color: #1a1d21;
 
     & .channel {
       height: 40px;
@@ -65,11 +58,10 @@ export const SideMenu = styled.div`
 export const Sidebar = () => {
   const dispatch = useDispatch();
   const actions = useActions();
-  const { sidebar } = useSidebar();
-  if(!sidebar) return null;
+  const { toggleSidebar } = useSidebar();
   return (
     <SideMenu>
-      <Logo onClick={() => dispatch(actions.view.set('sidebar'))} />
+      <Logo onClick={toggleSidebar} />
       <div className='slider'>
         <NavChannels />
         <NavUsers />

@@ -9,6 +9,10 @@ export const cn = (...classes: ClassNames[]) => classes.flat().map((item) => {
   return item;
 }).filter(Boolean).join(' ');
 
+export const isMobile = () => {
+  return Boolean(navigator?.userAgentData?.mobile);
+}
+
 export const isToday = (date: string): boolean => {
   const someDate = new Date(date);
   const today = new Date();

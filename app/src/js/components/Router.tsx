@@ -1,9 +1,7 @@
-//import { Workspace } from './pages/Workspace';
-import { Main } from './pages/Main';
-import { MainConversation } from './pages/MainConversaion';
+import { Main } from './layout/Main';
+import { Discussion } from './pages/Discussion';
 import { Search } from './pages/Search';
 import { Pins } from './pages/Pins';
-import { Workspace } from './pages/Workspace';
 
 import {
   createHashRouter,
@@ -17,6 +15,10 @@ const router = createHashRouter([
     element: <Main><Outlet /></Main>,
     children: [
       {
+        path: "/:channelId",
+        element: <Discussion/>,
+      },
+      {
         path: "/:channelId/search",
         element: <Search />,
       },
@@ -24,11 +26,15 @@ const router = createHashRouter([
         path: "/:channelId/pins",
         element: <Pins />,
       },
+      {
+        path: "/:channelId/t/:messageId",
+        element: <Discussion/>,
+      },
     ]
   },
   {
     path: "/*",
-    element: <Workspace />,
+    element: <div>dupa</div>,
   },
 ]);
 
