@@ -29,8 +29,7 @@
     "bcrypt": "5.1.1",
     "express-session": "1.17.3",
     "migrate-mongo": "11.0.0",
-    "mongodb": "6.3.0",
-    "web-push": "3.6.6"
+    "mongodb": "6.3.0"
   },
   "devDependencies": {
     "cz-conventional-changelog": "3.3.0",

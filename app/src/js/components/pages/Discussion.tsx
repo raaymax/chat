@@ -7,7 +7,7 @@ import { Toolbar } from '../atoms/Toolbar';
 import { ButtonWithIcon } from '../molecules/ButtonWithIcon';
 import { useNavigate, useParams} from 'react-router-dom';
 import { useSidebar } from '../contexts/useSidebar';
-import { isMobile } from '../../utils';
+import { ClassNames, cn, isMobile } from '../../utils';
 import { useMessageListArgs } from '../contexts/useMessageListArgs';
 import { MessageListArgsProvider } from '../contexts/messageListArgs';
 
@@ -61,33 +61,11 @@ type HeaderProps = {
   parentId?: string;
 };
 
-const Header = ({ channelId, parentId, onClick }: HeaderProps) => {
-  const [stream, setStream] = useMessageListArgs();
+const Header = ({ channelId, onClick }: HeaderProps) => {
+  const [stream] = useMessageListArgs();
   const dispatch = useDispatch();
-  const message = useMessage(parentId);
   const navigate = useNavigate();
   const { toggleSidebar } = useSidebar();
-
-  if (parentId) {
-    return (
-      <StyledHeader>
-        <h1>Thread</h1>
-        <Channel onClick={onClick} channelId={channelId} />
-
-        <Toolbar className="toolbar" size={50}>
-          <ButtonWithIcon icon="back" onClick={() => {
-            setStream({
-              type: 'archive', selected: message?.id, date: message?.createdAt,
-            });
-          }} />
-          {stream.id !== 'main' && <ButtonWithIcon icon="xmark" onClick={() => {
-            navigate(".", { relative: "path", state: {
-            } });
-          }} />}
-        </Toolbar>
-      </StyledHeader>
-    );
-  }
 
   return (
     <StyledHeader>
@@ -102,9 +80,7 @@ const Header = ({ channelId, parentId, onClick }: HeaderProps) => {
           }} />
         )}
         <ButtonWithIcon icon="thumbtack" onClick={() => {
-          //dispatch(methods.pins.load(channelId));
           navigate("/"+ channelId + "/pins")
-          //dispatch(actions.view.set('pins'));
         }} />
         <ButtonWithIcon icon="search" onClick={() => navigate("/"+ channelId + "/search")} />
         <ButtonWithIcon icon="refresh" onClick={() => dispatch(init({}))} />
@@ -113,33 +89,6 @@ const Header = ({ channelId, parentId, onClick }: HeaderProps) => {
   );
 };
 
-const Container = styled.div`
-  flex: 1;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-`;
-
-type MainConversationProps = {
-  className?: string;
-  onClick?: () => void;
-  channelId: string;
-  parentId?: string;
-};
-
-export const MainConversation = ({ channelId, parentId, className, onClick }: MainConversationProps) => {
-  return (
-    <MessageListArgsProvider streamId='main'>
-      <Container className={className}>
-        <Header channelId={channelId} parentId={parentId} onClick={onClick} />
-        <Conversation channelId={channelId} parentId={parentId} />
-      </Container>
-    </MessageListArgsProvider>
-  );
-}
-
-
 type SideHeaderProps = {
   onClick?: () => void;
   channelId: string;
@@ -147,8 +96,6 @@ type SideHeaderProps = {
 };
 
 export const SideHeader = ({ channelId, parentId, onClick }: SideHeaderProps) => {
-  const dispatch = useDispatch();
-  const actions = useActions();
   const message = useMessage(parentId);
   const navigate = useNavigate();
 
@@ -171,6 +118,35 @@ export const SideHeader = ({ channelId, parentId, onClick }: SideHeaderProps) =>
   );
 };
 
+const Container = styled.div`
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
+type MainConversationProps = {
+  className?: ClassNames;
+  onClick?: () => void;
+  channelId: string;
+  parentId?: string;
+};
+
+export const MainConversation = ({ channelId, parentId, className, onClick }: MainConversationProps) => {
+  return (
+    <MessageListArgsProvider streamId='main'>
+      <Container className={cn('main-conversation', className)}>
+        <Header channelId={channelId} parentId={parentId} onClick={onClick} />
+        <Conversation channelId={channelId} parentId={parentId} />
+      </Container>
+    </MessageListArgsProvider>
+  );
+}
+
+
+
+
 const SideContainer = styled.div`
   flex: 1;
   width: 100%;
@@ -181,7 +157,7 @@ const SideContainer = styled.div`
 `;
 
 type SideConversationProps = {
-  className?: string;
+  className?: ClassNames
   channelId: string;
   parentId?: string;
 };
@@ -189,7 +165,7 @@ type SideConversationProps = {
 export const SideConversation = ({ channelId, parentId, className }: SideConversationProps) => {
   return (
     <MessageListArgsProvider streamId="side">
-      <SideContainer className={className}>
+      <SideContainer className={cn('side-conversation', className)}>
         <SideHeader channelId={channelId} parentId={parentId} />
         <Conversation channelId={channelId} parentId={parentId} />
       </SideContainer>
@@ -202,6 +178,35 @@ const DiscussionContainer = styled.div`
   flex-direction: row;
   width: 100%;
   height: 100%;
+
+  & .main-conversation {
+  }
+
+  & .side-conversation {
+  }
+  .sidebar-closed.side-stream & {
+    @media (max-width: 850px) {
+      & .main-conversation {
+        display: none;
+        flex: 0 0 0%;
+      }
+      & .side-conversation {
+        flex: 1 100%;
+      }
+    }
+  }
+
+  .sidebar-open.side-stream & {
+    @media (max-width: 1120px) {
+      & .main-conversation {
+        display: none;
+        flex: 0 0 0%;
+      }
+      & .side-conversation {
+        flex: 1 100%;
+      }
+    }
+  }
 `;
 
 type DiscussionProps = {

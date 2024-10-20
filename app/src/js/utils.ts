@@ -4,10 +4,10 @@ export type ClassNames = string | undefined | string[] | Record<string, boolean>
 
 export const cn = (...classes: ClassNames[]) => classes.flat().map((item) => {
   if (typeof item === 'object' && item !== null) {
-    return Object.entries(item).filter(([, value]) => value).map(([key]) => key);
+    return Object.entries(item).filter(([, value]) => Boolean(value)).map(([key]) => key);
   }
   return item;
-}).filter(Boolean).join(' ');
+}).flat().filter(Boolean).join(' ');
 
 export const isMobile = () => {
   if (localStorage.getItem('isMobile') === 'true') return true;

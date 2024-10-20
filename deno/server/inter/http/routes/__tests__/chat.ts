@@ -353,7 +353,7 @@ export class Chat {
     this.steps.push(async () => {
       const { parentId } = this.arg(queryData);
       let query = "";
-      if (parentId) {
+      if (typeof parentId !== "undefined") {
         query = `?parentId=${parentId}`;
       }
 

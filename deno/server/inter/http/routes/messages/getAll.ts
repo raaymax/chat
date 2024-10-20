@@ -17,7 +17,12 @@ export default (core: Core) =>
       query: {
         type: "object",
         properties: {
-          parentId: { type: "string", format: "entity-id" },
+          parentId: {
+            oneOf: [{ type: "string", format: "entity-id" }, {
+              type: "string",
+              pattern: "^null$",
+            }],
+          },
           pinned: { type: "boolean" },
           before: { type: "string" },
           after: { type: "string" },
@@ -29,11 +34,14 @@ export default (core: Core) =>
       },
     },
     handler: async (req) => {
+      const parentId = req.query.parentId === "null"
+        ? null
+        : req.query.parentId;
       const messages = await core.message.getAll({
         userId: req.state.user.id,
         query: {
           channelId: req.params.channelId,
-          parentId: req.params.messageId || req.query.parentId,
+          parentId: req.params.messageId || parentId,
           pinned: req.query.pinned,
           before: req.query.before,
           after: req.query.after,
