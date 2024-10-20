@@ -13,6 +13,7 @@ import { Toolbar } from '../atoms/Toolbar';
 import { ButtonWithIcon } from '../molecules/ButtonWithIcon';
 import { useNavigate } from 'react-router-dom';
 import { useSidebar } from '../contexts/useSidebar';
+import { isMobile } from '../../utils';
 
 const StyledHeader = styled.div`
   display: flex;
@@ -120,7 +121,6 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  border-right: 1px solid var(--primary_border_color);
 `;
 
 type MainConversationProps = {
@@ -214,7 +214,7 @@ const SideContainer = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  border-right: 1px solid var(--primary_border_color);
+  border-left: 1px solid var(--primary_border_color);
 `;
 
 type SideConversationProps = {
@@ -247,9 +247,9 @@ export const Discussion = ({ className }: DiscussionProps) => {
   const sideStream = useSideStream();
   return (
     <DiscussionContainer className={className}>
-      <StreamProvider value={[mainStream, (val) => dispatch(actions.stream.open({ id: 'main', value: val }))]}>
+      {!isMobile() || !sideStream && <StreamProvider value={[mainStream, (val) => dispatch(actions.stream.open({ id: 'main', value: val }))]}>
         <MainConversation />
-      </StreamProvider>
+      </StreamProvider>}
       {sideStream && 
         <StreamProvider value={[sideStream, (val) => dispatch(actions.stream.open({ id: 'side', value: val }))]}>
           <SideConversation />

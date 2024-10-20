@@ -116,7 +116,7 @@ export const Container = styled.div`
 
   body.mobile & {
     .side-menu {
-      flex: 0 0 100vh;
+      flex: 1 100vh;
       width: 100%;
     }
 

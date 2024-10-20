@@ -42,7 +42,7 @@ const Pic = styled.div`
     width: 16px;
     height: 16px;
     .image {
-      border-radius: 4px;
+      border-radius: 50%;
     }
   }
   &.with-status .image{
