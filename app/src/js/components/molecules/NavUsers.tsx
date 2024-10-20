@@ -32,7 +32,14 @@ export const NavUserButton = ({
   user, size, badge, className, onClick,
 }: NavUserButtonProps) => {
   if (user.system) {
-    return (<NavButton className={className} size={size} data-id={user.id} onClick={onClick} icon='system-user' badge={badge}>{user.name}</NavButton>);
+    return (
+      <NavButton className={cn('user', className)} size={size} data-id={user.id} onClick={onClick} badge={badge}>
+        <ProfilePic type='status' userId={user.id} showStatus={false} className="pic-inline" />
+        <span className='name'>
+        {user.name}
+        </span>
+      </NavButton>
+    );
   }
   const active = user.lastSeen && new Date(user.lastSeen).getTime() > Date.now() - 1000 * 60 * 5;
   return (<NavButton size={size}
@@ -43,10 +50,10 @@ export const NavUserButton = ({
       system: user.system ?? false,
     }, className)}
     data-id={user.id} onClick={onClick} badge={badge}>
-    <ProfilePic type='status' userId={user.id} showStatus={true} className="pic-inline" />
-    <span className='name'>
-    {user.name}
-    </span>
+      <ProfilePic type='status' userId={user.id} showStatus={true} className="pic-inline" />
+      <span className='name'>
+      {user.name}
+      </span>
     </NavButton>);
 };
 const ChannelsContainer = styled.div`

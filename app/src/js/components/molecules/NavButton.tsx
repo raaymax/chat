@@ -23,7 +23,7 @@ const StyledButtonWithIcon = styled(ButtonWithIcon)`
 type NavButtonProps = {
   size?: number;
   badge?: number;
-  icon: string;
+  icon?: string;
   onClick?: (e: React.MouseEvent) => void;
   className?: ClassNames;
   children: React.ReactNode;

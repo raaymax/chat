@@ -5,7 +5,7 @@ import { ClassNames } from '../../utils';
 
 interface ButtonWithIconProps {
   onClick?: (e: React.MouseEvent) => void;
-  icon: string;
+  icon?: string;
   size?: number;
   children?: React.ReactNode;
   className?: ClassNames;
@@ -17,7 +17,7 @@ export const ButtonWithIcon = ({
   const $size = useSize(size);
   return (
     <Button size={$size} onClick={onClick} className={className}>
-      <Icon icon={icon} size={$size ? $size / 2 : $size} />
+      {icon && <Icon icon={icon} size={$size ? $size / 2 : $size} />}
       {children}
     </Button>
   );
