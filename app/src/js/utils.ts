@@ -10,6 +10,7 @@ export const cn = (...classes: ClassNames[]) => classes.flat().map((item) => {
 }).filter(Boolean).join(' ');
 
 export const isMobile = () => {
+  if (localStorage.getItem('isMobile') === 'true') return true;
   return Boolean(navigator?.userAgentData?.mobile);
 }
 
