@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Conversation } from './Conversation';
+import { Conversation } from '../organisms/Conversation';
 import { useActions, useDispatch, useMessage } from '../../store';
 import { Channel } from '../molecules/NavChannel';
 import { useStream } from '../contexts/useStream';

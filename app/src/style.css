@@ -285,7 +285,7 @@ ul {
 .logo {
   display: flex;
   flex-direction: row;
-  height: 50px;
+  height: 51px;
   border-bottom: 1px solid #565856;
 }
 .logo .logo-img {

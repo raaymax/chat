@@ -1,14 +1,17 @@
 import styled from 'styled-components';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Channel } from '../molecules/NavChannel';
 import { useStream } from '../contexts/useStream';
-import { useActions, useDispatch, useSelector } from '../../store';
+import { useActions, useDispatch, useMainStream, useMethods, useSelector } from '../../store';
 import { HoverProvider } from '../contexts/hover';
 import { MessageList } from '../organisms/MessageListScroller';
 import { Message as MessageType } from '../../types';
+import { useNavigate, useNavigation, useParams } from 'react-router-dom';
+import { useSidebar } from '../contexts/useSidebar';
+import { ButtonWithIcon } from '../molecules/ButtonWithIcon';
+import { StreamProvider } from '../contexts/stream';
 
 const StyledPins = styled.div`
-  width: 100vw;
   height: 100vh;
   flex: 0 100%;
   display: flex;
@@ -34,19 +37,12 @@ const StyledPins = styled.div`
 const StyledHeader = styled.div`
   display: flex;
   flex-direction: row;
-  background-color: var(--primary_background);
-  background-color: #1a1d21;
   border-bottom: 1px solid #565856;
   height: 51px;
 
-  & * {
-    flex: 1;
-    height: 50px;
-    line-height: 50px;
-
-  }
 
   & .channel{
+    flex: 1;
     padding-left: 30px;
     vertical-align: middle;
     font-size: 20px;
@@ -83,15 +79,16 @@ const StyledHeader = styled.div`
 `;
 
 export const Header = () => {
-  const dispatch = useDispatch();
-  const actions = useActions();
+  const navigate = useNavigate();
+  const { toggleSidebar } = useSidebar();
   const [{ channelId }] = useStream();
 
   return (
     <StyledHeader>
+      <ButtonWithIcon size={50} icon="bars" onClick={toggleSidebar} />
       <Channel channelId={channelId} icon="fa-solid fa-thumbtack" />
       <div className='toolbar'>
-        <div className='tool' onClick={() => dispatch(actions.view.set('pins'))}>
+        <div className='tool' onClick={() => navigate('..', {relative: 'path'})}>
           <i className="fa-solid fa-xmark" />
         </div>
       </div>
@@ -99,21 +96,30 @@ export const Header = () => {
   );
 };
 
-export const Pins = () => {
-  const [{ channelId }, setStream] = useStream();
+export const PinsInner = () => {
+  const { channelId } = useParams()!;
   const dispatch = useDispatch();
-  const actions = useActions();
-  const messages = useSelector((state) => state.pins[channelId]);
+  const navigation = useNavigation();
+  const methods = useMethods();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!channelId) {
+      return navigate('/');
+    }
+    dispatch(methods.pins.load(channelId));
+  }, [navigation])
+  const messages = useSelector((state) => channelId ? state.pins[channelId] : []);
   const gotoMessage = useCallback((msg: MessageType) => {
-    dispatch(actions.view.set('pins'));
-    setStream({
-      type: 'archive',
-      channelId: msg.channelId,
-      parentId: msg.parentId,
-      selected: msg.id,
-      date: msg.createdAt,
+    navigate(`/${msg.channelId}`, {
+      state: {
+        type: 'archive',
+        channelId: msg.channelId,
+        parentId: msg.parentId,
+        selected: msg.id,
+        date: msg.createdAt,
+      }
     });
-  }, [actions, setStream, dispatch]);
+  }, [navigate]);
   return (
     <StyledPins className='pins'>
       <HoverProvider>
@@ -128,3 +134,14 @@ export const Pins = () => {
     </StyledPins>
   );
 };
+
+export const Pins = () => {
+  const dispatch = useDispatch();
+  const actions = useActions();
+  const mainStream = useMainStream();
+  return (
+    <StreamProvider value={[mainStream, (val) => dispatch(actions.stream.open({ id: 'main', value: val }))]}>
+      <PinsInner />
+    </StreamProvider>
+  );
+}

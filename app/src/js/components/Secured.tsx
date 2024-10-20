@@ -7,8 +7,8 @@ import {
 } from 'react-router-dom';
 import { client } from '../core';
 import StoreProvider from '../store/components/provider';
-import { Workspace } from './pages/Workspace';
 import { useUser } from './contexts/useUser';
+import { Router } from './Router';
 
 const theme = {
   ToggleButton: {
@@ -23,6 +23,9 @@ const theme = {
   },
   Input: {
     Background: '#2B2D31',
+  },
+  Navbar: {
+    Background: '#1E1F22',
   },
 
   Labels: '#737373',
@@ -64,16 +67,10 @@ const Secured = () => {
     client.emit('auth:user', user);
   }, [user]);
 
-  const router = createHashRouter([
-    {
-      path: '/*',
-      element: <Workspace />,
-    },
-  ]);
   return (
     <StoreProvider>
       <ThemeProvider theme={theme}>
-        <RouterProvider router={router} />
+        <Router />
       </ThemeProvider>
     </StoreProvider>
   );

@@ -1,4 +1,5 @@
 import { createMethod } from '../store';
+import { isMobile } from '../utils';
 import { initNotifications } from './notifications';
 
 declare global {
@@ -13,7 +14,7 @@ const initApp = createMethod('initApp', async (_arg, {
   dispatch, getState, methods, actions,
 }) => {
   console.log('app init');
-  if (navigator?.userAgentData?.mobile) {
+  if (isMobile()) {
     document.body.setAttribute('class', 'mobile');
   }
   dispatch(actions.connection.connected());

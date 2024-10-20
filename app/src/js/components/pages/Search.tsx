@@ -1,9 +1,11 @@
 import styled from 'styled-components';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useStream } from '../contexts/useStream';
 import { HoverProvider } from '../contexts/hover';
 import {
-  useSelector, useMethods, useActions, useDispatch,
+  useSelector, useMethods, useDispatch,
+  useActions,
+  useMainStream,
 } from '../../store';
 import { formatTime, formatDate } from '../../utils';
 
@@ -12,21 +14,16 @@ import { Message } from '../organisms/Message';
 import { Toolbar } from '../atoms/Toolbar';
 import { ButtonWithIcon } from '../molecules/ButtonWithIcon';
 import { Message as MessageType } from '../../types';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useSidebar } from '../contexts/useSidebar';
+import { StreamProvider } from '../contexts/stream';
 
 const StyledHeader = styled.div`
   display: flex;
   flex-direction: row;
-  background-color: var(--primary_background);
-  background-color: #1a1d21;
   border-bottom: 1px solid #565856;
   height: 51px;
 
-  & * {
-    flex: 1;
-    height: 50px;
-    line-height: 50px;
-
-  }
 
   & .channel{
     padding-left: 30px;
@@ -66,7 +63,6 @@ const SearchSeparator = styled.div`
   display: block;
   flex: 0;
   position: relative;
-  background-color: #38393b;
   margin-top: 10px;
   margin-bottom: 10px;
   padding-left: 30px;
@@ -76,7 +72,6 @@ const StyledList = styled.div`
   display: flex;
   flex-direction: column-reverse;
   position: relative;
-  background-color: var(--primary_background);
   overflow-y: scroll;
   overflow-x: hidden;
   flex: 1 100%;
@@ -84,7 +79,6 @@ const StyledList = styled.div`
 `;
 
 const StyledSearch = styled.div`
-  width: 100vw;
   height: 100vh;
   flex: 0 100%;
   display: flex;
@@ -105,15 +99,23 @@ const StyledSearch = styled.div`
 `;
 
 export const Header = () => {
+  const { channelId } = useParams()!;
   const dispatch = useDispatch();
   const methods = useMethods();
-  const actions = useActions();
-  const [stream] = useStream();
+  const { toggleSidebar } = useSidebar();
+  const navigate = useNavigate();
   const [value, setValue] = useState('');
 
+  useEffect(() => {
+    if(!channelId) {
+      return navigate('/');
+    }
+  }, [channelId, navigate]);
+
   const submit = useCallback(async () => {
-    dispatch(methods.search.find({ channelId: stream.channelId, text: value }));
-  }, [methods, stream, value, dispatch]);
+    if (!channelId) return;
+    dispatch(methods.search.find({ channelId, text: value }));
+  }, [methods, channelId, value, dispatch]);
 
   const onKeyDown = useCallback(async (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && e.shiftKey === false) {
@@ -124,32 +126,32 @@ export const Header = () => {
 
   return (
     <StyledHeader>
+      <ButtonWithIcon size={50} icon="bars" onClick={toggleSidebar} />
       <i className='fa-solid fa-magnifying-glass' />
       <SearchBox className='search-input' placeholder='search...' onKeyDown={onKeyDown} value={value} onChange={(e) => setValue(e.target.value)}/>
 
       <Toolbar className="toolbar" size={50}>
         <ButtonWithIcon icon="send" onClick={() => submit()} />
-        <ButtonWithIcon icon="xmark" onClick={() => dispatch(actions.view.set('search'))} />
+        <ButtonWithIcon icon="xmark" onClick={() => navigate('..', {relative: 'path'})} />
       </Toolbar>
     </StyledHeader>
   );
 };
 
 export function SearchResults() {
-  const [, setStream] = useStream();
+  const navigate = useNavigate();
   const results = useSelector((state) => state.search.results);
-  const dispatch = useDispatch();
-  const actions = useActions();
   const gotoMessage = useCallback((msg: MessageType) => {
-    dispatch(actions.view.set('search'));
-    setStream({
-      type: 'archive',
-      channelId: msg.channelId,
-      parentId: msg.parentId,
-      selected: msg.id,
-      date: msg.createdAt,
+    navigate(`/${msg.channelId}`, {
+      state: {
+        type: 'archive',
+        channelId: msg.channelId,
+        parentId: msg.parentId,
+        selected: msg.id,
+        date: msg.createdAt,
+      }
     });
-  }, [actions, setStream, dispatch]);
+  }, [navigate]);
   return (
     <StyledList>
       <div key='bottom' id='scroll-stop' />
@@ -176,11 +178,18 @@ export function SearchResults() {
   );
 }
 
-export const Search = () => (
-  <StyledSearch>
-    <HoverProvider>
-      <Header />
-      <SearchResults />
-    </HoverProvider>
-  </StyledSearch>
-);
+export const Search = () => {
+  const dispatch = useDispatch();
+  const actions = useActions();
+  const mainStream = useMainStream();
+  return (
+    <StreamProvider value={[mainStream, (val) => dispatch(actions.stream.open({ id: 'main', value: val }))]}>
+      <StyledSearch>
+        <HoverProvider>
+          <Header />
+          <SearchResults />
+        </HoverProvider>
+      </StyledSearch>
+    </StreamProvider>
+  );
+}
