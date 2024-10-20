@@ -1,4 +1,8 @@
 html {
+  --workspaces_width: 96px;
+
+
+
   --primary_border_color: #565856;
   --primary_background: #1a1d21;
   --pinned_background: #362b3e; 

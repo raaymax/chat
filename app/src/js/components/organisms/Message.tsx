@@ -106,6 +106,11 @@ const MessageContainer = styled.div`
   padding: 0 16px;
   line-height: 24px;
   vertical-align: middle;
+  min-width: 400px;
+
+  &.selected {
+    background-color: ${(props) => props.theme.Chatbox.Selected};
+  }
 
   .side-time {
     flex: 0 44px;
@@ -160,6 +165,11 @@ const MessageContainer = styled.div`
   }
   .content {
     font-weight: 300;
+  }
+
+  .content img {
+    max-width: 300px;
+    height: auto;
   }
   .content p{
     white-space: break-spaces;

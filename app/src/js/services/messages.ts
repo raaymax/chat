@@ -128,6 +128,7 @@ export const loadMessagesLive = createMethod('messages/loadMessagesLive', async 
 });
 
 export const loadMessages = createMethod('messages/loadMessages', async (stream: Stream, { dispatch }) => {
+  console.log('loadMessages', stream);
   if (stream.type === 'archive') {
     dispatch(loadMessagesArchive(stream));
   } else {
