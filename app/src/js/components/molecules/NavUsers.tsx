@@ -13,6 +13,7 @@ import { Progress, User } from '../../types';
 import { useDirectChannel } from '../contexts/useDirectChannel';
 import { ProfilePic } from '../atoms/ProfilePic';
 import { useSidebar } from '../contexts/useSidebar';
+import { useNavigate, useParams } from 'react-router-dom';
 
 type NavUserButtonProps = {
   user: {
@@ -100,10 +101,9 @@ const ChannelsContainer = styled.div`
 
 
 const NavUserContainer = ({user, badges}: {user: User, badges: Record<string, number>}) => {
-  const actions = useActions();
-  const dispatch = useDispatch();
   const channel = useDirectChannel(user.id);
-  const id = useSelector((state) => state.stream.main.channelId);
+  const navigate = useNavigate();
+  const {channelId: id} = useParams();
   const { hideSidebar } = useSidebar();
   return <NavUserButton
     size={30}
@@ -112,12 +112,10 @@ const NavUserContainer = ({user, badges}: {user: User, badges: Record<string, nu
     badge={channel ? badges[channel.id] : 0}
     onClick={async () => {
       const channel = await client.api.putDirectChannel(user.id);
-      console.log('channel', channel);
-      dispatch(actions.stream.open({ id: 'main', value: { type: 'live', channelId: channel.id } }));
-      dispatch(actions.view.set(null));
       if ( isMobile() ) {
         hideSidebar();
       }
+      navigate(`/${channel.id}`);
     }}
   />
 }

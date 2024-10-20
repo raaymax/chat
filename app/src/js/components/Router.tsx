@@ -27,7 +27,7 @@ const router = createHashRouter([
         element: <Pins />,
       },
       {
-        path: "/:channelId/t/:messageId",
+        path: "/:channelId/t/:parentId",
         element: <Discussion/>,
       },
     ]

@@ -5,12 +5,12 @@ import {
 } from '../../store';
 import { removeMessage } from '../../services/messages';
 import { useHovered } from '../contexts/useHovered';
-import { useStream } from '../contexts/useStream';
 import { useMessageUser } from '../contexts/useMessageUser';
 import { useMessageData } from '../contexts/useMessageData';
 import { Toolbar } from '../atoms/Toolbar';
 import { ButtonWithEmoji } from './ButtonWithEmoji';
 import { ButtonWithIcon } from './ButtonWithIcon';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export const Container = styled.div`
   position: absolute;
@@ -57,7 +57,8 @@ export const MessageToolbar = () => {
   const dispatch = useDispatch();
   const methods = useMethods();
   const actions = useActions();
-  const [stream] = useStream();
+  const {parentId} = useParams();
+  const navigate = useNavigate();
   const onDelete = useCallback(() => {
     if (id) dispatch(removeMessage({ id }));
   }, [dispatch, id]);
@@ -83,7 +84,9 @@ export const MessageToolbar = () => {
   const openReactions = () => <ButtonWithIcon key='reactions' icon="icons" onClick={() => setView('reactions')} />;
   const pinButton = () => <ButtonWithIcon key='pin' icon="thumbtack" onClick={() => dispatch(methods.pins.pin({ id, channelId }))} />;
   const unpinButton = () => <ButtonWithIcon key='unpin' icon="thumbtack" onClick={() => dispatch(methods.pins.unpin({ id, channelId }))} />;
-  const replyButton = () => <ButtonWithIcon key='reply' icon="reply" onClick={() => dispatch(actions.stream.open({ id: 'side', value: { type: 'live', channelId, parentId: id } }))} />;
+  const replyButton = () => <ButtonWithIcon key='reply' icon="reply" onClick={() => {
+    navigate(`/${channelId}/t/${id}`);
+  }} />;
 
   return (
     <Container>
@@ -106,7 +109,7 @@ export const MessageToolbar = () => {
           isMe && editButton(),
           isMe && deleteButton(),
           pinned ? unpinButton() : pinButton(),
-          !stream.parentId && replyButton(),
+          !parentId && replyButton(),
         ]}
 
       </Toolbar>

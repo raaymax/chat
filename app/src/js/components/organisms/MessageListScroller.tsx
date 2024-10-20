@@ -2,9 +2,9 @@ import {
   useRef, useEffect, useState, useCallback,
 } from 'react';
 import styled from 'styled-components';
-import { useStream } from '../contexts/useStream';
 import { MessageListRenderer, MessageListRendererProps } from './MessageListRenderer';
 import { Message as MessageType } from '../../types';
+import { useMessageListArgs } from '../contexts/useMessageListArgs';
 
 const ListContainer = styled.div`
   display: flex;
@@ -38,7 +38,7 @@ export const MessageList = (props: MessageListProps) => {
   const [oldList, setOldList] = useState<MessageType[]>([]);
   const [current, setCurrent] = useState<[Date | undefined, DOMRect | undefined]>([date, undefined]);
   const [selected, setSelected] = useState<string | undefined>();
-  const [stream] = useStream();
+  const [stream] = useMessageListArgs()
 
   const detectDate = useCallback((e: React.SyntheticEvent) => {
     const target = e.target as HTMLElement;

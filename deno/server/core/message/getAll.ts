@@ -8,7 +8,7 @@ export default createQuery({
     userId: Id,
     query: v.object({
       channelId: Id,
-      parentId: v.optional(Id),
+      parentId: v.optional(v.union([Id, v.null_()])),
       pinned: v.optional(v.boolean()),
       before: v.optional(v.pipe(v.string(), v.transform((v) => new Date(v)))),
       after: v.optional(v.pipe(v.string(), v.transform((v) => new Date(v)))),
@@ -20,8 +20,7 @@ export default createQuery({
   })),
 }, async ({ userId, query: msg }, core) => {
   const { repo } = core;
-  const { channelId } = msg;
-  const parentId = msg.parentId ?? null;
+  const { channelId, parentId } = msg;
 
   await core.channel.access({ id: channelId, userId }).internal();
 

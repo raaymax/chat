@@ -12,7 +12,6 @@ export * from './hooks/useMainChannelId';
 export * from './hooks/useTyping';
 export * from './hooks/useUser';
 export * from './hooks/useUsers';
-export * from './hooks/useStream';
 export * from './hooks/useMessage';
 export * from './hooks/useStreamMessages';
 export * from './hooks/useEmoji';

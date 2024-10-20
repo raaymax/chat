@@ -10,13 +10,11 @@ type Query = {
 }
 
 export const load = createMethod('messages/load', async (query: Query, { actions, client, dispatch }) => {
-  console.log('messages/load', query);
   const req = await client.req({
     limit: 50,
     ...query,
     type: 'message:getAll',
   });
-  console.log('load', req.data);
   dispatch(actions.messages.add(req.data));
   return req.data;
 });

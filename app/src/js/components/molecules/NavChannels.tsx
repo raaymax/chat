@@ -7,6 +7,7 @@ import { ChannelCreate } from './ChannelCreate';
 import { Channel } from './NavChannel';
 import { useSidebar } from '../contexts/useSidebar';
 import { isMobile } from '../../utils';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const ChannelsContainer = styled.div`
   .header {
@@ -50,12 +51,11 @@ type NavChannelsProps = {
 
 export const NavChannels = ({ icon }: NavChannelsProps) => {
   const [show, setShow] = useState(false);
-  const dispatch = useDispatch();
-  const actions = useActions();
   const channels = useChannels();
+  const navigate = useNavigate();
   const userId = useSelector((state) => state.me);
   const badges = useBadges(userId);
-  const id = useSelector((state) => state.stream.main.channelId);
+  const {channelId: id} = useParams();
   const { hideSidebar } = useSidebar();
   return (
     <ChannelsContainer>
@@ -73,11 +73,10 @@ export const NavChannels = ({ icon }: NavChannelsProps) => {
           icon={icon ?? 'hash'}
           badge={badges[c.id]}
           onClick={() => {
-            dispatch(actions.stream.open({ id: 'main', value: { type: 'live', channelId: c.id } }));
-            dispatch(actions.view.set(null));
             if ( isMobile() ) {
               hideSidebar();
             }
+            navigate(`/${c.id}`);
           }}
         />
       ))}

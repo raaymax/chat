@@ -1,23 +1,23 @@
 import { useCallback } from "react";
-import { useStream } from "../contexts/useStream";
 import { useMessageData } from "../contexts/useMessageData";
 import { client } from "../../core";
+import { useParams } from "react-router-dom";
 
 
 export const ActionButton = ({children, action, style, payload}: any)=> {
-  const [stream] = useStream();
+  const {channelId, parentId} = useParams();
   const m = useMessageData();
 
   const onClick = useCallback(() => {
     client.api.postInteraction({
-      channelId: stream.channelId,
-      parentId: stream.parentId,
+      channelId: channelId,
+      parentId: parentId,
       clientId: m.clientId,
       appId: m.appId,
       action,
       payload
     })
-  }, [action, payload, stream, m]);
+  }, [action, payload, channelId, parentId, m]);
   return (
     <button onClick={onClick}>{children}</button>
   );

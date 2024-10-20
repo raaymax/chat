@@ -23,7 +23,7 @@ Deno.test("sending messages to threads", async (t) => {
       })
       .sendMessage(({ state }) => ({ flat: "msg1", parentId: state.parentId }))
       .sendMessage(({ state }) => ({ flat: "msg2", parentId: state.parentId }))
-      .getMessages({}, (messages: any) => {
+      .getMessages({parentId: null}, (messages: any) => {
         assertEquals(messages.length, 3);
         assertEquals(messages[1].thread.length, 2);
       })

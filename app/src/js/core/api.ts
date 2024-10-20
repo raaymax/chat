@@ -206,10 +206,8 @@ class API extends EventTarget {
       if (msg.search) {
         query.search = msg.search;
       }
-      if (msg.parentId) {
-        query.parentId = msg.parentId;
-      }
-
+      query.parentId = msg.parentId || null;
+      console.log('query', query);
       const params = new URLSearchParams(query);
       return this.fetch(`/api/channels/${msg.channelId}/messages?${params.toString()}`, { seqId: msg.seqId, mapFn: (i: any) => ({ type: 'message', ...i }) });
     }

@@ -72,7 +72,7 @@ export type User = {
   name: string;
   avatarFileId: string;
   mainChannelId: EntityId;
-  status?: 'active' | 'inactive' | 'away';
+  status?: "active" | "inactive" | "away";
 };
 
 export enum ChannelType {
