@@ -48,6 +48,7 @@ export default createSlice({
   reducers: {
     open: (state, action) => {
       const { id, value } = action.payload;
+      console.log(id, value);
       if (id === 'main') saveStream({ channelId: state.mainChannelId, ...value });
       if (value) {
         return { ...state, [id]: { id, channelId: state.mainChannelId, ...value } };

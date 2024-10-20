@@ -163,19 +163,6 @@ export const SideView = ({children}: {children: React.ReactNode}) => {
   return (<div className="side-view">{children}</div>);
 }
 
-const MainView = ({children}: {children: React.ReactNode}) => {
-  const dispatch = useDispatch();
-  const actions = useActions();
-  const stream = useMainStream();
-  return (
-    <div className={cn('main-view')}>
-      <StreamProvider value={[stream, (val) => dispatch(actions.stream.open({ id: 'main', value: val }))]}>
-        {children}
-      </StreamProvider>
-    </div>
-  );
-}
-
 export const Desktop = ({children}: {children: React.ReactNode}) => {
   const sideStream = useSideStream();
   const { sidebar } = useSidebar();
@@ -187,9 +174,9 @@ export const Desktop = ({children}: {children: React.ReactNode}) => {
     })}>
       <Workspaces />
       {sidebar && <Sidebar />}
-      <MainView>
+      <div className={cn('main-view')}>
         {children}
-      </MainView>
+      </div>
     </Container>
   );
 };
@@ -221,9 +208,9 @@ export const Mobile = ({children}: {children: React.ReactNode}) => {
           <Sidebar />
         </Overlay>
       )}
-      <MainView>
+      <div className={cn('main-view')}>
         {children}
-      </MainView>
+      </div>
     </Container>
   );
 };

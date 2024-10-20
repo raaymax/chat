@@ -34,7 +34,7 @@ const router = createHashRouter([
   },
   {
     path: "/*",
-    element: <div>dupa</div>,
+    element: <Main><Discussion/></Main>,
   },
 ]);
 

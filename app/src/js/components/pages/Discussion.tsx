@@ -1,7 +1,9 @@
 import styled from 'styled-components';
+import { StreamProvider } from '../contexts/stream';
 import { Conversation } from '../organisms/Conversation';
 import {
-  useActions, useDispatch, useMessage, useMethods,
+  useActions, useDispatch, useMainStream, useMessage, useMethods,
+  useSideStream,
 } from '../../store';
 import { Channel } from '../molecules/NavChannel';
 import { init } from '../../services/init';
@@ -77,7 +79,7 @@ export const Header = ({ onClick }: HeaderProps) => {
 
         <Toolbar className="toolbar" size={50}>
           <ButtonWithIcon icon="back" onClick={() => {
-            navigate("..", { relative: "path" });
+            //navigate("..", { relative: "path" });
             setStream({
               channelId, type: 'archive', selected: message?.id, date: message?.createdAt,
             })
@@ -121,14 +123,138 @@ const Container = styled.div`
   border-right: 1px solid var(--primary_border_color);
 `;
 
-type DiscussionProps = {
+type MainConversationProps = {
   className?: string;
   onClick?: () => void;
 };
 
-export const Discussion = ({ className, onClick }: DiscussionProps) => (
+export const MainConversation = ({ className, onClick }: MainConversationProps) => (
   <Container className={className}>
     <Header onClick={onClick} />
     <Conversation />
   </Container>
 );
+
+
+const SideStyledHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid #565856;
+  height: 51px;
+
+  & h1 {
+    padding: 0;
+    margin: 0;
+    padding-left: 20px;
+    width: auto;
+    flex: 0;
+    font-size: 30px;
+    font-weight: 400;
+  }
+  & * {
+    flex: 1;
+    height: 50px;
+    line-height: 50px;
+
+  }
+
+  & .channel{
+    padding-left: 30px;
+    vertical-align: middle;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  & .channel i{
+    font-size: 1.3em;
+  }
+  & .channel .name{
+    padding-left: 10px;
+  }
+  & .toolbar {
+    flex: 0;
+    display:flex;
+    flex-direction: row;
+  }
+`;
+
+type SideHeaderProps = {
+  onClick?: () => void;
+};
+
+export const SideHeader = ({ onClick }: SideHeaderProps) => {
+  const [{ channelId, parentId }, setSideStream] = useStream();
+  const dispatch = useDispatch();
+  const actions = useActions();
+  const message = useMessage(parentId);
+
+  return (
+    <SideStyledHeader>
+      <h1>Thread</h1>
+      <Channel onClick={onClick} channelId={channelId} />
+
+      <Toolbar className="toolbar" size={50}>
+        <ButtonWithIcon icon='back' onClick={() => {
+          setSideStream(null);
+          dispatch(actions.stream.open({
+            id: 'main',
+            value: {
+              channelId, type: 'archive', selected: message?.id, date: message?.createdAt,
+            },
+          }));
+        }} />
+        <ButtonWithIcon icon='xmark' onClick={() => dispatch(actions.stream.open({ id: 'side', value: null }))} />
+      </Toolbar>
+    </SideStyledHeader>
+  );
+};
+
+const SideContainer = styled.div`
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--primary_border_color);
+`;
+
+type SideConversationProps = {
+  className?: string;
+};
+
+export const SideConversation = ({ className }: SideConversationProps) => (
+  <SideContainer className={className}>
+    <SideHeader />
+    <Conversation />
+  </SideContainer>
+);
+
+const DiscussionContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+`;
+
+type DiscussionProps = {
+  className?: string;
+};
+
+export const Discussion = ({ className }: DiscussionProps) => {
+  
+  const dispatch = useDispatch();
+  const actions = useActions();
+  const mainStream = useMainStream();
+  const sideStream = useSideStream();
+  return (
+    <DiscussionContainer className={className}>
+      <StreamProvider value={[mainStream, (val) => dispatch(actions.stream.open({ id: 'main', value: val }))]}>
+        <MainConversation />
+      </StreamProvider>
+      {sideStream && 
+        <StreamProvider value={[sideStream, (val) => dispatch(actions.stream.open({ id: 'side', value: val }))]}>
+          <SideConversation />
+        </StreamProvider>
+      }
+    </DiscussionContainer>
+  );
+}

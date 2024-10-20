@@ -4,6 +4,8 @@ import { useStream } from '../contexts/useStream';
 import { HoverProvider } from '../contexts/hover';
 import {
   useSelector, useMethods, useDispatch,
+  useActions,
+  useMainStream,
 } from '../../store';
 import { formatTime, formatDate } from '../../utils';
 
@@ -14,6 +16,7 @@ import { ButtonWithIcon } from '../molecules/ButtonWithIcon';
 import { Message as MessageType } from '../../types';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSidebar } from '../contexts/useSidebar';
+import { StreamProvider } from '../contexts/stream';
 
 const StyledHeader = styled.div`
   display: flex;
@@ -175,11 +178,18 @@ export function SearchResults() {
   );
 }
 
-export const Search = () => (
-  <StyledSearch>
-    <HoverProvider>
-      <Header />
-      <SearchResults />
-    </HoverProvider>
-  </StyledSearch>
-);
+export const Search = () => {
+  const dispatch = useDispatch();
+  const actions = useActions();
+  const mainStream = useMainStream();
+  return (
+    <StreamProvider value={[mainStream, (val) => dispatch(actions.stream.open({ id: 'main', value: val }))]}>
+      <StyledSearch>
+        <HoverProvider>
+          <Header />
+          <SearchResults />
+        </HoverProvider>
+      </StyledSearch>
+    </StreamProvider>
+  );
+}
