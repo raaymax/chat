@@ -4,10 +4,10 @@ import React, {
 import {
   useDispatch, useSelector, useMessage, useMethods, useActions,
 } from '../../store';
-import { useStream } from './useStream';
 import * as messageService from '../../services/messages';
 import { uploadMany } from '../../services/file';
 import { fromDom } from '../../serializer';
+import { useMessageListArgs } from './useMessageListArgs';
 
 declare global {
   interface Window {
@@ -54,14 +54,16 @@ type InputContextProps = {
   children: React.ReactNode;
   mode?: string;
   messageId?: string;
+  channelId: string;
+  parentId?: string;
 };
 
 export const InputProvider = (args: InputContextProps) => {
-  const { children, mode = 'default', messageId = null } = args;
+  const { children, mode = 'default', messageId = null, channelId, parentId } = args;
   const dispatch = useDispatch();
   const methods = useMethods();
   const actions = useActions();
-  const [stream] = useStream();
+  const [stream] = useMessageListArgs();
   const [currentText, setCurrentText] = useState('');
   const [scope, setScope] = useState<string>('');
   const [scopeContainer, setScopeContainer] = useState<HTMLElement>();
@@ -164,11 +166,11 @@ export const InputProvider = (args: InputContextProps) => {
     }
     payload.attachments = [...files.filter((f) => f.streamId === stream.id)];
     if (payload.flat.length === 0 && payload.attachments.length === 0) return;
-    payload.channelId = stream.channelId;
-    payload.parentId = stream.parentId;
+    payload.channelId = args.channelId;
+    payload.parentId = args.parentId;
 
     dispatch(actions.files.clear(stream.id));
-    dispatch(messageService.send({ stream, payload }));
+    dispatch(messageService.send({ stream: {channelId, parentId, ...stream}, payload }));
 
     if (mode === 'default') {
       input.current.innerHTML = '';
@@ -249,17 +251,17 @@ export const InputProvider = (args: InputContextProps) => {
     if (e.key === 'Enter' && !e.shiftKey && scope === 'root') {
       return send(e as any);
     }
-    dispatch.methods.typing.notify(stream);
+    dispatch.methods.typing.notify({ channelId: args.channelId, parentId: args.parentId });
     updateRange();
-  }, [dispatch, send, updateRange, scope, stream]);
+  }, [dispatch, send, updateRange, scope, args]);
 
   const emitKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey && scope === 'root') {
       return send(e);
     }
-    dispatch(methods.typing.notify({ channelId: stream.channelId, parentId: stream.parentId }));
+    dispatch(methods.typing.notify({ channelId: args.channelId, parentId: args.parentId }));
     updateRange();
-  }, [dispatch, methods, send, updateRange, scope, stream]);
+  }, [dispatch, methods, send, updateRange, scope, args]);
 
   const addFile = useCallback(() => {
     fileInput.current?.click();

@@ -1,10 +1,6 @@
 import styled from 'styled-components';
-import { 
-  useActions, useSideStream, useMainStream, useDispatch,
-  useUser, useSelector
-} from '../../store';
+import { useSelector } from '../../store';
 import { cn, isMobile } from '../../utils';
-import { StreamProvider } from '../contexts/stream';
 import { useSidebar } from '../contexts/useSidebar';
 import { SidebarProvider } from '../contexts/sidebar';
 import { ButtonWithIcon } from '../molecules/ButtonWithIcon';
@@ -164,12 +160,9 @@ export const SideView = ({children}: {children: React.ReactNode}) => {
 }
 
 export const Desktop = ({children}: {children: React.ReactNode}) => {
-  const sideStream = useSideStream();
   const { sidebar } = useSidebar();
   return (
     <Container className={cn({
-      'side-stream': Boolean(sideStream),
-      'main-stream': !sideStream,
       'sidebar-open': sidebar
     })}>
       <Workspaces />
@@ -194,12 +187,9 @@ const Overlay = styled.div`
 `;
 
 export const Mobile = ({children}: {children: React.ReactNode}) => {
-  const sideStream = useSideStream();
   const { sidebar } = useSidebar();
   return (
     <Container className={cn({
-      'side-stream': Boolean(sideStream), 
-      'main-stream': !sideStream,
       'sidebar-open': sidebar
     })}>
       {sidebar && (

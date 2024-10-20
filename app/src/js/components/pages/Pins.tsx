@@ -1,15 +1,14 @@
 import styled from 'styled-components';
 import { useCallback, useEffect } from 'react';
 import { Channel } from '../molecules/NavChannel';
-import { useStream } from '../contexts/useStream';
-import { useActions, useDispatch, useMainStream, useMethods, useSelector } from '../../store';
+import { useDispatch, useMethods, useSelector } from '../../store';
 import { HoverProvider } from '../contexts/hover';
 import { MessageList } from '../organisms/MessageListScroller';
 import { Message as MessageType } from '../../types';
 import { useNavigate, useNavigation, useParams } from 'react-router-dom';
 import { useSidebar } from '../contexts/useSidebar';
 import { ButtonWithIcon } from '../molecules/ButtonWithIcon';
-import { StreamProvider } from '../contexts/stream';
+import { MessageListArgsProvider } from '../contexts/messageListArgs';
 
 const StyledPins = styled.div`
   height: 100vh;
@@ -81,7 +80,7 @@ const StyledHeader = styled.div`
 export const Header = () => {
   const navigate = useNavigate();
   const { toggleSidebar } = useSidebar();
-  const [{ channelId }] = useStream();
+  const { channelId = '' } = useParams();
 
   return (
     <StyledHeader>
@@ -136,12 +135,9 @@ export const PinsInner = () => {
 };
 
 export const Pins = () => {
-  const dispatch = useDispatch();
-  const actions = useActions();
-  const mainStream = useMainStream();
   return (
-    <StreamProvider value={[mainStream, (val) => dispatch(actions.stream.open({ id: 'main', value: val }))]}>
+    <MessageListArgsProvider streamId="pins">
       <PinsInner />
-    </StreamProvider>
+    </MessageListArgsProvider>
   );
 }

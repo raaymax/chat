@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import styled from 'styled-components';
-import { useActions, useDispatch } from '../../store';
+import { useDispatch } from '../../store';
 
 import { resend } from '../../services/messages';
 
@@ -18,14 +18,14 @@ import { MessageProvider } from '../contexts/message';
 import { useMessageData } from '../contexts/useMessageData';
 import { useMessageUser } from '../contexts/useMessageUser';
 import { useHoverCtrl } from '../contexts/useHoverCtrl';
-import { useStream } from '../contexts/useStream';
-import { getUrl } from '../../services/file';
 
 import {
   cn, ClassNames, formatTime, formatDateDetailed, isToday
 } from '../../utils';
 
 import { Message as MessageType } from '../../types';
+import { useMessageListArgs } from '../contexts/useMessageListArgs';
+import { useNavigate } from 'react-router-dom';
 
 export const Info = () => {
   const { clientId, info } = useMessageData();
@@ -71,15 +71,16 @@ const Container = styled.div`
 
 export const ThreadInfo = () => {
   const msg = useMessageData();
-  const dispatch = useDispatch();
-  const actions = useActions();
-  const [stream] = useStream();
+  const navigate = useNavigate();
+  const [args] = useMessageListArgs();
   const {
     updatedAt, thread, channelId, id,
   } = msg;
-  if (!thread || stream.parentId) return null;
+  if (!thread || args.id === 'side') return null;
   return (
-    <Container onClick={() => dispatch(actions.stream.open({ id: 'side', value: { type: 'live', channelId, parentId: id } }))}>
+    <Container onClick={() => {
+      navigate(`/${channelId}/t/${id}`);
+    }}>
       {[...new Set(thread.map((t) => t.userId))]
         .map((userId) => (
           <UserCircle key={userId} userId={userId} />
@@ -209,7 +210,7 @@ const MessageBase = ({ onClick, sameUser, ...props }: MessageBaseProps = {}) => 
     linkPreviews,
   } = msg;
   const { onEnter, toggleHovered, onLeave } = useHoverCtrl(msg.id);
-  const [{ selected }] = useStream();
+  const [{ selected }] = useMessageListArgs();
   const user = useMessageUser();
 
   return (

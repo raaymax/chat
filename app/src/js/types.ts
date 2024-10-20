@@ -147,10 +147,13 @@ export type Notif = {
 }
 
 export type Stream = {
-  id?: string,
-  type: 'live' | 'archive',
   channelId: string,
   parentId?: string,
+};
+
+export type MessageListArgs = {
+  id: string,
+  type: 'live' | 'archive',
   selected?: string,
   date?: string,
 };

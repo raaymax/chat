@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from '../../store';
 import { abort } from '../../services/file';
-import { useStream } from '../contexts/useStream';
+import { useMessageListArgs } from '../contexts/useMessageListArgs';
 
 const Container = styled.div`
   .attachment {
@@ -83,9 +83,9 @@ export const Attachment = ({
 );
 
 export const Attachments = () => {
-  const [stream] = useStream();
+  const [args] = useMessageListArgs();
   const files = useSelector((state) => state.files);
-  const list = useMemo(() => files.filter((file) => file.streamId === stream.id), [files, stream.id]);
+  const list = useMemo(() => files.filter((file) => file.streamId === args.id), [files, args.id]);
   const dispatch = useDispatch();
 
   return (

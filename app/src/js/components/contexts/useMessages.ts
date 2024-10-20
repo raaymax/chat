@@ -4,12 +4,10 @@ import {
 import { useSelector, useDispatch, useMethods } from '../../store';
 import { loadMessages, loadNext, loadPrevious } from '../../services/messages';
 import { Message, Stream } from '../../types';
-import { useStream } from './useStream';
 
-export const useMessages = () => {
+export const useMessages = (stream: {channelId: string, parentId?:string } ) => {
   const dispatch = useDispatch();
   const methods = useMethods();
-  const [stream] = useStream();
   const messages = useSelector((state) => state.messages.data);
   const [prevStream, setPrevStream] = useState<Partial<Stream>>({});
 

@@ -47,13 +47,13 @@ export default createSlice({
   initialState: { main: loadStream(), side: null, mainChannelId: null } as StreamState,
   reducers: {
     open: (state, action) => {
-      const { id, value } = action.payload;
+      /*const { id, value } = action.payload;
       console.log(id, value);
       if (id === 'main') saveStream({ channelId: state.mainChannelId, ...value });
       if (value) {
         return { ...state, [id]: { id, channelId: state.mainChannelId, ...value } };
       }
-      return { ...state, [id]: null };
+      return { ...state, [id]: null };*/
     },
 
     setMain: (state, action) => {
