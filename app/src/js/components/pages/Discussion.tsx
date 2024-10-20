@@ -247,7 +247,7 @@ export const Discussion = ({ className }: DiscussionProps) => {
   const sideStream = useSideStream();
   return (
     <DiscussionContainer className={className}>
-      {!isMobile() || !sideStream && <StreamProvider value={[mainStream, (val) => dispatch(actions.stream.open({ id: 'main', value: val }))]}>
+      {(!isMobile() || !sideStream) && <StreamProvider value={[mainStream, (val) => dispatch(actions.stream.open({ id: 'main', value: val }))]}>
         <MainConversation />
       </StreamProvider>}
       {sideStream && 
