@@ -7,13 +7,16 @@ export const MessageListArgsContext = createContext<[MessageListArgs, SetMessage
 
 type MessageListArgsParams = {
   children: React.ReactNode;
+  value?: Partial<MessageListArgs>;
   streamId: string;
 };
 
-export const MessageListArgsProvider = ({ streamId, children}: MessageListArgsParams) => {
-  const [state, setState] = useState<MessageListArgs>({type: 'live', id: streamId});
+export const MessageListArgsProvider = ({ streamId, children, value = {}}: MessageListArgsParams) => {
+  const [state, setState] = useState<MessageListArgs>({type: 'live', ...value, id: streamId});
   return (
-    <MessageListArgsContext.Provider value={[state, (a) => setState({...a, id: streamId})]}>
+    <MessageListArgsContext.Provider value={[state, (a: Partial<MessageListArgs>) => {
+      setState({type: 'live', selected: state.selected, ...a, id: streamId})
+    }]}>
       {children}
     </MessageListArgsContext.Provider>
   );

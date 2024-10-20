@@ -94,6 +94,9 @@ export const MessageList = (props: MessageListProps) => {
       setTimeout(() => {
         found.scrollIntoView({ block: 'center' });
       }, 100);
+      setTimeout(() => {
+        found.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }, 500);
       setSelected(stream.selected);
     }
   }, [stream, list, selected, setSelected]);

@@ -9,6 +9,12 @@ export const cn = (...classes: ClassNames[]) => classes.flat().map((item) => {
   return item;
 }).flat().filter(Boolean).join(' ');
 
+export const same = (o1: any, o2: any, fields: string[]): boolean => {
+  return fields.every((field) => {
+    return o1 && o2 && o1[field] === o2[field];
+  });
+}
+
 export const isMobile = () => {
   if (localStorage.getItem('isMobile') === 'true') return true;
   return Boolean(navigator?.userAgentData?.mobile);

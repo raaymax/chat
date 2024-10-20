@@ -5,11 +5,12 @@ import { Channel } from '../molecules/NavChannel';
 import { init } from '../../services/init';
 import { Toolbar } from '../atoms/Toolbar';
 import { ButtonWithIcon } from '../molecules/ButtonWithIcon';
-import { useNavigate, useParams} from 'react-router-dom';
+import { useLocation, useNavigate, useParams} from 'react-router-dom';
 import { useSidebar } from '../contexts/useSidebar';
-import { ClassNames, cn, isMobile } from '../../utils';
+import { ClassNames, cn, isMobile, same } from '../../utils';
 import { useMessageListArgs } from '../contexts/useMessageListArgs';
 import { MessageListArgsProvider } from '../contexts/messageListArgs';
+import { useEffect } from 'react';
 
 const StyledHeader = styled.div`
   display: flex;
@@ -76,6 +77,8 @@ const Header = ({ channelId, onClick }: HeaderProps) => {
           <ButtonWithIcon icon='down' onClick = {() => {
             navigate(".", { relative: "path", state: {
               type: 'live',
+              selected: null,
+              date: null,
             } });
           }} />
         )}
@@ -98,13 +101,15 @@ type SideHeaderProps = {
 export const SideHeader = ({ channelId, parentId, onClick }: SideHeaderProps) => {
   const message = useMessage(parentId);
   const navigate = useNavigate();
+  const { toggleSidebar } = useSidebar();
 
   return (
     <StyledHeader>
-      <h1>Thread</h1>
-      <Channel onClick={onClick} channelId={channelId} />
 
       <Toolbar className="toolbar" size={50}>
+        <ButtonWithIcon icon="bars" onClick={toggleSidebar} />
+        <h1>Thread</h1>
+        <Channel onClick={onClick} channelId={channelId} />
         <ButtonWithIcon icon='back' onClick={() => {
           navigate(`/${channelId}`, {state: {
             type: 'archive', selected: message?.id, date: message?.createdAt,
@@ -133,9 +138,29 @@ type MainConversationProps = {
   parentId?: string;
 };
 
+export const UpdateArgs = () => {
+  const location = useLocation();
+  const {channelId } = useParams();
+  const [args, setArgs] = useMessageListArgs();
+  useEffect(() => {
+    console.log('YUODS{}APD{OISADIUASOIDUOI');
+    const state = location.state || {};
+    state.type = state.type ?? 'live';
+    if(!same(args, state, ['type', 'selected', 'date'])) {
+      console.log('YUODS{}APD{OISADIUASOIDUOI trigger');
+      setArgs(state);
+    }
+  }, [location.state, channelId]);
+
+  return null
+}
+
 export const MainConversation = ({ channelId, parentId, className, onClick }: MainConversationProps) => {
+  const location = useLocation();
+
   return (
-    <MessageListArgsProvider streamId='main'>
+    <MessageListArgsProvider streamId='main' value={location.state}>
+      <UpdateArgs />
       <Container className={cn('main-conversation', className)}>
         <Header channelId={channelId} parentId={parentId} onClick={onClick} />
         <Conversation channelId={channelId} parentId={parentId} />
@@ -185,7 +210,7 @@ const DiscussionContainer = styled.div`
   & .side-conversation {
   }
   .sidebar-closed.side-stream & {
-    @media (max-width: 850px) {
+    @media (max-width: 896px) {
       & .main-conversation {
         display: none;
         flex: 0 0 0%;
@@ -197,7 +222,7 @@ const DiscussionContainer = styled.div`
   }
 
   .sidebar-open.side-stream & {
-    @media (max-width: 1120px) {
+    @media (max-width: 1265px) {
       & .main-conversation {
         display: none;
         flex: 0 0 0%;

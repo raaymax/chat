@@ -109,11 +109,9 @@ export const PinsInner = () => {
   }, [navigation])
   const messages = useSelector((state) => channelId ? state.pins[channelId] : []);
   const gotoMessage = useCallback((msg: MessageType) => {
-    navigate(`/${msg.channelId}`, {
+    navigate(`/${msg.channelId}${(msg.parentId ? '/t/'+msg.parentId : '')}`, {
       state: {
         type: 'archive',
-        channelId: msg.channelId,
-        parentId: msg.parentId,
         selected: msg.id,
         date: msg.createdAt,
       }

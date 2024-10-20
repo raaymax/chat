@@ -1,15 +1,20 @@
 import {
   useMemo, useEffect, useState,
 } from 'react';
-import { useSelector, useDispatch, useMethods } from '../../store';
+import { useSelector, useDispatch, useMethods, useActions } from '../../store';
 import { loadMessages, loadNext, loadPrevious } from '../../services/messages';
-import { Message, Stream } from '../../types';
+import { Message, MessageListArgs, Stream } from '../../types';
+import { useMessageListArgs } from './useMessageListArgs';
 
-export const useMessages = (stream: {channelId: string, parentId?:string } ) => {
+export const useMessages = ({channelId, parentId}: {channelId: string, parentId?:string } ) => {
   const dispatch = useDispatch();
+  const [args] = useMessageListArgs();
+  const stream = useMemo(() => ({channelId, parentId, ...args}), [channelId, parentId, args]);
+  const actions = useActions();
   const methods = useMethods();
   const messages = useSelector((state) => state.messages.data);
-  const [prevStream, setPrevStream] = useState<Partial<Stream>>({});
+  const [prevStream, setPrevStream] = useState<Partial<Stream & MessageListArgs>>({});
+
 
   useEffect(() => {
     if (prevStream.channelId === stream.channelId
@@ -20,6 +25,18 @@ export const useMessages = (stream: {channelId: string, parentId?:string } ) => 
     dispatch(loadMessages(stream));
     dispatch(methods.progress.loadProgress(stream));
   }, [dispatch, methods, stream, prevStream]);
+
+  useEffect(() => {
+    console.log('change', stream);
+  }, [stream.type]);
+
+  useEffect(() => {
+    if (stream.type === 'live') {
+      console.log('changing to live');
+      dispatch(actions.messages.clear({ stream }));
+      dispatch(loadMessages(stream));
+    }
+  }, [stream.type]);
 
   return {
     messages: useMemo(

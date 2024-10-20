@@ -20,6 +20,7 @@ const theme = {
   },
   Chatbox: {
     Background: '#313338',
+    Selected: '#2B2D31', // added by me
   },
   Input: {
     Background: '#2B2D31',
