@@ -34,4 +34,9 @@ export default createCommand({
     throw new NotOwner();
   }
   await repo.message.update({ id: msg.id }, msg.data);
+
+  await core.events.dispatch({
+    type: "message:updated",
+    payload: await repo.message.getR({ id: msg.id }),
+  })
 });

@@ -112,7 +112,7 @@ export default createCommand({
     bus.group(channel.users, { type: "message", ...parent });
   }
 
-  const created = await repo.message.get({ id });
+  const created = await repo.message.getR({ id });
   bus.group(channel.users, { type: "message", ...created });
 
   await core.dispatch({
@@ -124,6 +124,12 @@ export default createCommand({
       userId: msg.userId,
     },
   }).internal();
+
+  
+  await core.events.dispatch({
+    type: "message:created",
+    payload: created,
+  });
 
   // await services.notifications.send(created, res);
   return id; // { id, duplicate: dup };

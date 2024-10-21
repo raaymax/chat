@@ -4,10 +4,22 @@ export default class Events {
   listeners: ((ev: Event) => Promise<void> | void)[] = [];
   onceListeners: ((ev: Event) => Promise<void> | void)[] = [];
 
+
+  wrapHandler(handler: (ev: Event) => Promise<void> | void): (ev: Event) => Promise<void> | void {
+    return async (ev: Event) => {
+      try {
+        return await handler(ev);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+  }
+
   once(handler: (ev: Event) => Promise<void> | void): () => void {
-    this.onceListeners.push(handler);
+    const wrappedHandler = this.wrapHandler(handler);
+    this.onceListeners.push(wrappedHandler);
     return () => {
-      const idx = this.onceListeners.indexOf(handler);
+      const idx = this.onceListeners.indexOf(wrappedHandler);
       this.onceListeners = [
         ...this.onceListeners.slice(0, idx),
         ...this.onceListeners.slice(idx + 1),
@@ -16,9 +28,10 @@ export default class Events {
   }
 
   on(handler: (ev: Event) => Promise<void> | void): () => void {
-    this.listeners.push(handler);
+    const wrappedHandler = this.wrapHandler(handler);
+    this.listeners.push(wrappedHandler);
     return () => {
-      const idx = this.listeners.indexOf(handler);
+      const idx = this.listeners.indexOf(wrappedHandler);
       this.listeners = [
         ...this.listeners.slice(0, idx),
         ...this.listeners.slice(idx + 1),
@@ -27,9 +40,13 @@ export default class Events {
   }
 
   async dispatch(int: Event): Promise<void> {
-    await Promise.all(this.onceListeners.map((listener) => listener(int)));
-    this.onceListeners = [];
-    await Promise.all(this.listeners.map((listener) => listener(int)));
+    try {
+      await Promise.all(this.onceListeners.map((listener) => listener(int)));
+      this.onceListeners = [];
+      await Promise.all(this.listeners.map((listener) => listener(int)));
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   async *[Symbol.asyncIterator](): AsyncGenerator<Event> {
