@@ -113,8 +113,8 @@ const MessageContainer = styled.div`
   }
 
   .side-time {
-    flex: 0 44px;
-    width: 44px;
+    flex: 0 48px;
+    width: 48px;
     min-width: 44px;
     color: transparent;
     font-weight: 200;
