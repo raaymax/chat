@@ -1,47 +1,95 @@
 import { useMemo } from 'react';
+import { filesize } from 'filesize';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from '../../store';
 import { abort } from '../../services/file';
 import { useMessageListArgs } from '../contexts/useMessageListArgs';
+import { cn } from '../../utils';
 
 const Container = styled.div`
+  .attachment-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding-top: 16px;
+  }
+
+
   .attachment {
+    flex: 0 0 224px;
     position: relative;
     height: 30px;
     padding: 0;
-    margin: 3px 15px;
-    display: flex;
-    flex-direction: row;
-    border: 1px solid var(--saf-0);
-    max-width: calc(100vw - 30px);
+    width: 224px;
+    height: 64px;
+
+    .attachment-box {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      padding: 8px;
+      border: 1px solid ${props => props.theme.Strokes};
+      overflow: hidden;
+      border-radius: 8px;
+      flex-direction: row;
+      display: flex;
+    }
 
     .type {
-      line-height: 30px;
-      width: 30px;
+      line-height: 48px;
+      width: 48px;
+      height: 48px;
       text-align: center;
       vertical-align: middle;
     }
-
-    .name {
-      padding: 0 10px;
-      line-height: 30px;
-      vertical-align: middle;
-      flex: 1;
-      white-space: nowrap;
+    .text {
+      flex: 1 100%;
       overflow: hidden;
-      text-overflow: ellipsis;
-    }
+      
 
+      .name {
+        padding-left: 10px;
+        line-height: 28px;
+        vertical-align: middle;
+        font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .description {
+        padding-left: 10px;
+        line-height: 20px;
+        vertical-align: middle;
+        font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: ${props => props.theme.Strokes};
+      }
+    }
+  
     .remove {
-      color: #852007;
+      display: none;
+      position: absolute;
+      top: -12px;
+      right: 9px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: ${props => props.theme.Strokes};
+      color: white;
+      line-height: 24px;
       cursor: pointer;
-      line-height: 30px;
-      width: 30px;
       text-align: center;
       vertical-align: middle;
       &:hover {
         background-color: var(--primary_active_mask);
       }
+    }
+
+    &:hover .remove {
+      display: block;
     }
 
     .progress {
@@ -56,12 +104,19 @@ const Container = styled.div`
       background-color: green;
     }
   }
+
+  .progress {
+    background-color: #216dad;
+    height: 3px;
+
+  }
 `;
 
 type AttachmentProps = {
   data: {
     fileName: string;
     contentType: string;
+    fileSize: number;
     progress: number;
     status: string;
   };
@@ -70,15 +125,20 @@ type AttachmentProps = {
 
 export const Attachment = ({
   data: {
-    fileName, contentType, progress, status,
+    fileName, contentType, progress, status, fileSize,
   },
   onDelete,
 }: AttachmentProps) => (
   <div className='attachment'>
-    <div className='type'><i className='fa-solid fa-file' /></div>
-    <div className='name'>{fileName} [{contentType}]</div>
+    <div className='attachment-box'>
+      <div className='type'><img src="/attachment.svg" /> </div>
+      <div className='text'>
+        <div className='name'>{fileName}</div>
+        <div className='description'>{contentType} {filesize(fileSize)}</div>
+      </div>
+      <div className={status === 'ok' ? 'progress done' : 'progress'} style={{ width: `${progress}%` }} />
+    </div>
     <div className='remove' onClick={onDelete}><i className='fa-solid fa-xmark' /></div>
-    <div className={status === 'ok' ? 'progress done' : 'progress'} style={{ width: `${progress}%` }} />
   </div>
 );
 
@@ -88,17 +148,26 @@ export const Attachments = () => {
   const list = useMemo(() => files.filter((file) => file.streamId === args.id), [files, args.id]);
   const dispatch = useDispatch();
 
+  //const totalSize = list.reduce((acc, file) => acc + file.fileSize, 1);
+  //const progress = list.reduce((acc, file) => acc + file.progress * file.fileSize, 1) / totalSize;
+  const hasFiles = list.length > 0;
+
   return (
     <Container>
-      {(list || []).map((file) => (
-        <Attachment
-          key={file.clientId}
-          data={{ ...file }}
-          onDelete={() => {
-            dispatch(abort(file.clientId));
-          }}
-        />
-      ))}
+      {hasFiles && 
+        <div className='attachment-list'>
+          {list.map((file) => (
+            <Attachment
+              key={file.clientId}
+              data={{ ...file }}
+              onDelete={() => {
+                dispatch(abort(file.clientId));
+              }}
+            />
+          ))}
+        </div>
+      }
+      {/*<div className={status === 'ok' ? 'progress done' : 'progress'} style={{ width: `${progress}%` }} />*/}
     </Container>
   );
 };

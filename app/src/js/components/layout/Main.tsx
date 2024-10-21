@@ -25,7 +25,7 @@ export const Container = styled.div`
   }
 
   .workspaces {
-    flex: 0 0 96px;
+    flex: 0 0 80px;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -41,7 +41,7 @@ export const Container = styled.div`
   }
 
   .side-menu {
-    flex: 0 0 360px;
+    flex: 0 0 356px;
     display: flex;
     background-color: ${(props) => props.theme.Channels.Container};
     flex-direction: column;

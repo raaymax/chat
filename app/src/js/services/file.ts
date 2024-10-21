@@ -33,6 +33,7 @@ export const upload = createMethod('files/upload', async ({ streamId, file }: Fi
     streamId,
     clientId: tempId(),
     fileName: file.name,
+    fileSize: file.size,
     contentType: file.type,
     progress: 0,
     status: 'uploading',
@@ -78,7 +79,12 @@ export const upload = createMethod('files/upload', async ({ streamId, file }: Fi
 });
 
 export const getUrl = (id: string) => `${FILES_URL}/${id}`;
-export const getThumbnail = (id: string) => `${getUrl(id)}?h=256&w=256`;
+export const getThumbnail = (id: string, size?: {w?: number, h?: number}) => {
+  const params = new URLSearchParams();
+  if(size?.w) params.set('w', size.w.toString());
+  if(size?.h) params.set('h', size.h.toString());
+  return `${getUrl(id)}?${params.toString()}`;
+}
 export const getDownloadUrl = (id: string) => `${getUrl(id)}?download=true`;
 const aborts: Record<string, (() => void)> = {};
 

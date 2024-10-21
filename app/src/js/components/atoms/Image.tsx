@@ -1,25 +1,28 @@
 import styled from 'styled-components';
 import { getUrl, getThumbnail } from '../../services/file';
+import { ClassNames, cn } from '../../utils';
 
 const ImageContainer = styled.div`
   cursor: pointer;
-  flex: 100%;
-  width: 100%;
-  height: 30px;
-  padding: 0;
-  margin: 3px 0px;
-  display: flex;
-  flex-direction: row;
-  border: 1px solid var(--saf-0);
-  height: auto;
-  width: 100%;
-  flex: 0;
+
+  img {
+    width: auto;
+    height: 240px;
+    min-width: 100px;
+    max-width: 100%;
+    object-fit: cover;
+    margin: 0 auto;
+    border-radius: 8px;
+  }
 
   img.raw-image {
     max-width: 400px;
     max-height: 400px;
   }
   &:hover {
+    img {
+      transform: scale(1.1);
+    }
     background-color: var(--primary_active_mask);
   }
 `;
@@ -30,6 +33,7 @@ const download = async (fileId: string) => {
 
 type ImageProps = {
   raw?: boolean;
+  className?: ClassNames
   data: {
     id?: string;
     clientId?: string;
@@ -37,12 +41,12 @@ type ImageProps = {
   };
 };
 
-export const Image = ({ raw, data: { fileName, id } }: ImageProps) => (
-  <ImageContainer className='file image' data-id={id} onClick={() => id && download(id)}>
+export const Image = ({ className, raw, data: { fileName, id } }: ImageProps) => (
+  <ImageContainer className={cn('file', 'image', className)} data-id={id} onClick={() => id && download(id)}>
     {
       raw
         ? <img className='raw-image' src={getUrl(id ?? '')} alt={fileName} />
-        : <img src={getThumbnail(id ?? '')} alt={fileName} />
+        : <img src={getThumbnail(id ?? '', {h: 240})} alt={fileName} />
     }
   </ImageContainer>
 );
