@@ -35,10 +35,9 @@ export const Files = ({ list }: FilesProps) => (
       {list
         .filter((file) => IMAGE_TYPES.includes(file.contentType))
         .map((file) => (
-          <div className='fli'>
+          <div className='fli' key={file.id || file.clientId}>
             <Image
               raw={RAW_IMAGE_TYPES.includes(file.contentType)}
-              key={file.id || file.clientId}
               data={file} />
           </div>
         ))}

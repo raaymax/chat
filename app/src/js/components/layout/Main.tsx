@@ -12,6 +12,7 @@ import { NavUsers } from '../molecules/NavUsers';
 import { NavButton } from '../molecules/NavButton';
 import { logout } from '../../services/session';
 import { useParams } from 'react-router-dom';
+import { useThemeControl } from '../contexts/useThemeControl';
 
 export const Container = styled.div`
   display: flex;
@@ -104,6 +105,8 @@ export const Container = styled.div`
 
 export const Sidebar = () => {
   const { toggleSidebar } = useSidebar();
+  const themeControl = useThemeControl();
+  const otherTheme = themeControl.themeNames.find((name) => name !== themeControl.theme);
   return (
     <div className='side-menu'>
       <Logo onClick={toggleSidebar} />
@@ -112,6 +115,7 @@ export const Sidebar = () => {
         <NavUsers />
       </div>
       <div className='bottom'>
+        <NavButton size={50} onClick={() => {if(otherTheme) themeControl.setTheme(otherTheme)}}>Theme</NavButton>
         <NavButton icon="logout" size={50} onClick={() => logout()}>Logout</NavButton>
       </div>
     </div>
