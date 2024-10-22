@@ -115,7 +115,7 @@ export const Sidebar = () => {
         <NavUsers />
       </div>
       <div className='bottom'>
-        <NavButton size={50} onClick={() => {if(otherTheme) themeControl.setTheme(otherTheme)}}>Theme</NavButton>
+        <NavButton icon="star" size={50} onClick={() => {if(otherTheme) themeControl.setTheme(otherTheme)}}>Theme</NavButton>
         <NavButton icon="logout" size={50} onClick={() => logout()}>Logout</NavButton>
       </div>
     </div>

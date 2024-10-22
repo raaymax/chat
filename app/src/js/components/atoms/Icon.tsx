@@ -17,6 +17,7 @@ const StyledIcon = styled.i`
 `;
 
 const iconMap: Record<string, string> = {
+  star: 'fa-solid fa-star',
   bars: 'fa-solid fa-bars',
   emojis: 'fa-solid fa-face-smile-beam',
   plus: 'fa-solid fa-plus',
