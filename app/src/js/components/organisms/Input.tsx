@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useActions, useDispatch } from '../../store';
 
 import { EmojiDescriptor } from '../../types';
-import { buildEmojiNode } from '../../utils';
+import { buildEmojiNode, cn } from '../../utils';
 import { getUrl } from '../../services/file';
 import { InputProvider } from '../contexts/input';
 import { useInput } from '../contexts/useInput';
@@ -21,20 +21,25 @@ import { EmojiSearch } from './EmojiSearch';
 
 export const InputContainer = styled.div`
   position: relative;
+  min-height: 80px;
+  font-size: 16px;
+  margin: 0px 16px 16px 16px;
+  display: flex;
+  padding: 0;
+  flex-direction: column;
+  color: ${(props) => props.theme.Labels};
+
+  & > .input-box {
+    border: 1px solid ${(props) => props.theme.Strokes};
+    background-color: ${(props) => props.theme.Input.Background};
+    padding: 12px 16px;
+    border-radius: 8px;
+  }
+
   &.edit {
   }
   &.default {
-    border-top: 1px solid #565856;
   }
-  font-size: 16px;
-  margin: 0px 16px 16px 16px;
-  padding: 12px 16px;
-  border-radius: 8px;
-  border: 1px solid ${(props) => props.theme.Strokes};
-  background-color: ${(props) => props.theme.Input.Background};
-  --background-color: var(--secondary_background);
-  display: flex;
-  flex-direction: column;
 
   & .toolbar {
     display: flex;
@@ -199,30 +204,33 @@ export const InputForm = ({ children }: InputFormProps) => {
   }, [input, ctrl]);
 
   return (
-    <InputContainer className={mode}>
-      <Toolbar className='controls' size={32}>
-        <div
-          data-scope='root'
-          className='input'
-          ref={input}
-          contentEditable='true'
-          onPaste={onPaste}
-          onInput={onInput}
-          onKeyDown={(e) => onKeyDown(e)}
-        >{children}</div>
-        <ButtonWithIcon icon="emojis" onClick={() => setShowEmojis(!showEmojis)} />
-        <ButtonWithIcon icon="plus" onClick={addFile} />
-        {mode === 'edit' ? (
-          <>
-            <ButtonWithIcon icon="xmark" onClick={() => dispatch(actions.messages.editClose(messageId))} />
-            <ButtonWithIcon icon="check" onClick={send} />
-          </>
-        ) : (
-          <ButtonWithIcon icon="send" onClick={send} />
-        )}
-      </Toolbar>
+    <InputContainer className={cn('input', mode)}>
+      <div className="input-box">
+        <Toolbar className='controls' size={32}>
+          <div
+            data-scope='root'
+            className='input'
+            ref={input}
+            contentEditable='true'
+            onPaste={onPaste}
+            onInput={onInput}
+            onKeyDown={(e) => onKeyDown(e)}
+          >{children}</div>
+          <ButtonWithIcon icon="emojis" onClick={() => setShowEmojis(!showEmojis)} />
+          <ButtonWithIcon icon="plus" onClick={addFile} />
+          {mode === 'edit' ? (
+            <>
+              <ButtonWithIcon icon="xmark" onClick={() => dispatch(actions.messages.editClose(messageId))} />
+              <ButtonWithIcon icon="check" onClick={send} />
+            </>
+          ) : (
+            <ButtonWithIcon icon="send" onClick={send} />
+          )}
+        </Toolbar>
+        <Attachments />
+      </div>
+
       <StatusLine />
-      <Attachments />
       <ChannelSelector />
       <UserSelector />
       <EmojiSelector />

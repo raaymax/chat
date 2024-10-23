@@ -18,7 +18,6 @@ html {
 
   font-family: 'Roboto', sans-serif;
   background-color: var(--primary_background);
-  color: rgb(209,210,211);
   --font-size: 1.1em;
 }
 body, html {
@@ -68,9 +67,6 @@ p{
   padding: 0;
 }
 
-a {
-  color: rgb(29,155,209);
-}
 
 a:link {
   text-decoration: none;
@@ -82,7 +78,6 @@ a:hover {
 code {
   padding: 2px 3px 1px;
   border-radius: 3px;
-  color: #e8912d;
   border: 1px solid var(--saf-0);
   background-color: rgba(var(--sk_foreground_min,29,28,29),.04);
 }
@@ -142,9 +137,6 @@ ul {
     padding-inline-start: 30px;
 }
 
-.danger {
-  color: red;
-}
 
 .v-space {
   flex: 0 0 16px
@@ -214,9 +206,6 @@ ul {
 }
 
 
-.info.error{
-  color: #852007;
-}
 
 .info.action:hover{
   --text-decoration: underline;
@@ -262,20 +251,16 @@ ul {
 }
 .notification.debug{
   border-left: 10px solid #277370;
-  color: #277370
 }
 .notification.warning{
   border-left: 74px solid #f2c94c;
-  color: #852007
 }
 .notification.error{
   border-left: 74px solid #852007; 
-  color: #852007
 }
 .notification:hover {
     background-color: rgba(249,249,249,0.05)
 }
-
 
 
 #scroll-stop {
@@ -320,20 +305,11 @@ ul {
   background-color: transparent;
   animation-name: fade;
 }
-.pins .message.pinned:hover .side-time {
-  color: var(--primary_background);
-}
 .message.pinned {
   background-color: var(--pinned_background);
   animation-name: fade-pinned;
   animation-duration: 1s;
   animation-iteration-count: 1;
-}
-.message.pinned .side-time{
-  color: var(--pinned_background);
-}
-.message.pinned:hover .side-time {
-  color: rgb(209,210,211);
 }
 
 .message.selected{
@@ -341,7 +317,6 @@ ul {
   animation-duration: 2s;
   animation-iteration-count: 1;
 }
-
 
 .message i.reaction {
   background-color: var(--secondary_active_mask);

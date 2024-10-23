@@ -10,7 +10,7 @@ const themes = {
   dark: {
     Text: '#E0E0E0',
     Labels: '#737373',
-    Strokes: '#737373',
+    Strokes: '#404040',
 
     SecondaryButton: {
       Hover: '#E0E0E0',
@@ -56,6 +56,7 @@ const themes = {
       Active: '#E0E0E0',
       Hover: '#E4E4E6',
       Inactive: '#8B8B8B',
+      TextHover: 'black',
     },
 
     User: {
@@ -96,7 +97,7 @@ const themes = {
   light: {
     Text: '#050505',
     Labels: '#8D8D8D',
-    Strokes: '#8D8D8D',
+    Strokes: '#BFBFBF',
 
     SecondaryButton: {
       Hover: '#050505',
@@ -140,6 +141,7 @@ const themes = {
 
     Channel: {
       Active: '#E0E0E0',
+      TextHover: 'black',
       Hover: '#E4E4E6',
       Inactive: '#8B8B8B',
     },

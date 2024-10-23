@@ -41,7 +41,9 @@ const ChannelsContainer = styled.div`
   }
 
   .channel:hover {
-    background-color: var(--primary_active_mask);
+    font-weight: bold;
+    background-color: ${(props) => props.theme.Channel.Hover};
+    color: ${(props)=> props.theme.Channel.TextHover}
   }
 `;
 

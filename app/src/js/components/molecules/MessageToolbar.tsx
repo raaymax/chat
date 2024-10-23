@@ -18,14 +18,16 @@ export const Container = styled.div`
   height: 42px;
   right: 10px;
   z-index: 50;
-  background-color: var(--primary_background);
+  background-color: ${({theme}) => theme.Chatbox.Background};
+  color: ${({theme}) => theme.SecondaryButton.Default}
   border: 1px solid #565856;
-  border-radius: 0.3em;
+  box-shadow: 0px 0px 4px 1px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
   padding: 0px;
   font-size: 0.9em;
   box-sizing: border-box;
 
-  body.mobile & {
+  body.mobi8px{
     width: 100%;
     top: -50px;
     right: 0;

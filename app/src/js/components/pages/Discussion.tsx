@@ -15,8 +15,8 @@ import { useEffect } from 'react';
 const StyledHeader = styled.div`
   display: flex;
   flex-direction: row;
-  border-bottom: 1px solid #565856;
-  height: 51px;
+  border-bottom: 1px solid ${(props) => props.theme.Strokes};
+  height: 64px;
 
   & h1 {
     padding: 0;
@@ -30,8 +30,8 @@ const StyledHeader = styled.div`
 
   & > * {
     flex: 1;
-    height: 50px;
-    line-height: 50px;
+    height: 64px;
+    line-height: 64px;
 
   }
 
@@ -70,7 +70,7 @@ const Header = ({ channelId, onClick }: HeaderProps) => {
 
   return (
     <StyledHeader>
-      <Toolbar className="toolbar" size={50}>
+      <Toolbar className="toolbar" size={64}>
         <ButtonWithIcon icon="bars" onClick={toggleSidebar} />
         <Channel onClick={onClick} channelId={channelId} />
         {stream.type === 'archive' && (
@@ -106,7 +106,7 @@ export const SideHeader = ({ channelId, parentId, onClick }: SideHeaderProps) =>
   return (
     <StyledHeader>
 
-      <Toolbar className="toolbar" size={50}>
+      <Toolbar className="toolbar" size={64}>
         <ButtonWithIcon icon="bars" onClick={toggleSidebar} />
         <h1>Thread</h1>
         <Channel onClick={onClick} channelId={channelId} />

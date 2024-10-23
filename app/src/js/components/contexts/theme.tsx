@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useCallback, useState } from 'react';
 import { ThemeProvider } from 'styled-components';
 
 export type ThemeControl = {
@@ -18,11 +18,17 @@ type ThemeSelectorContextProps = {
 };
 
 export const ThemeSelectorProvider = ({ children, themes, defaultTheme = 'dark' }: ThemeSelectorContextProps) => {
-  const [theme, setTheme] = useState(defaultTheme);
+  const savedTheme = localStorage.getItem('theme');
+  const [theme, setTheme] = useState(savedTheme || defaultTheme);
+  const setThemeAndSave = useCallback((theme: string) => {
+    setTheme(theme);
+    localStorage.setItem('theme', theme);
+  }, [setTheme])
 
-  const currentTheme = themes[theme];
+
+  const currentTheme = themes[theme] ?? themes[defaultTheme];
   return (
-    <ThemeSelectorContext.Provider value={{theme, setTheme, themeNames: Object.keys(themes)}}>
+    <ThemeSelectorContext.Provider value={{theme, setTheme: setThemeAndSave, themeNames: Object.keys(themes)}}>
       <ThemeProvider theme={currentTheme}>
         {children}
       </ThemeProvider>

@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import {
-    useActions,
   useBadges,
   useSelector,
   useUsers,
@@ -8,12 +7,56 @@ import {
 import { NavButton } from './NavButton';
 import { ClassNames, cn, isMobile } from '../../utils';
 import { client } from '../../core';
-import { useDispatch } from 'react-redux';
-import { Progress, User } from '../../types';
+import { User } from '../../types';
 import { useDirectChannel } from '../contexts/useDirectChannel';
 import { ProfilePic } from '../atoms/ProfilePic';
 import { useSidebar } from '../contexts/useSidebar';
 import { useNavigate, useParams } from 'react-router-dom';
+
+const UserListContainer = styled.div`
+  .header {
+    display: flex;
+    flex-direction: row;
+    padding: 5px 10px;
+    padding-top: 20px;
+    font-weight: bold;
+    .title {
+      flex: 1;
+    }
+
+    i {
+      cursor: pointer;
+      flex: 0 15px;
+      font-size: 19px;
+    }
+
+  }
+
+  .user {
+    padding: 5px 5px 5px 20px; 
+    cursor: pointer;
+  }
+  .user .name {
+    font-size: 16px;
+    padding: 0px 10px; 
+    cursor: pointer;
+  }
+  .user.active {
+    background-color: var(--primary_active_mask);
+  }
+
+  .user:hover {
+    font-weight: bold;
+    background-color: ${(props) => props.theme.Channel.Hover};
+    color: ${(props)=> props.theme.Channel.TextHover}
+  }
+
+  .pic-inline {
+    vertical-align: middle;
+    display: inline-block;
+  }
+`;
+
 
 type NavUserButtonProps = {
   user: {
@@ -57,48 +100,6 @@ export const NavUserButton = ({
       </span>
     </NavButton>);
 };
-const ChannelsContainer = styled.div`
-  .header {
-    display: flex;
-    flex-direction: row;
-    padding: 5px 10px;
-    padding-top: 20px;
-    font-weight: bold;
-    .title {
-      flex: 1;
-    }
-
-    i {
-      cursor: pointer;
-      flex: 0 15px;
-      font-size: 19px;
-    }
-
-  }
-
-  .user {
-    padding: 5px 5px 5px 20px; 
-    cursor: pointer;
-  }
-  .user .name {
-    font-size: 16px;
-    padding: 0px 10px; 
-    cursor: pointer;
-  }
-  .user.active {
-    background-color: var(--primary_active_mask);
-  }
-
-  .user:hover {
-    background-color: var(--primary_active_mask);
-  }
-
-  .pic-inline {
-    vertical-align: middle;
-    display: inline-block;
-  }
-`;
-
 
 const NavUserContainer = ({user, badges}: {user: User, badges: Record<string, number>}) => {
   const channel = useDirectChannel(user.id);
@@ -125,7 +126,7 @@ export const NavUsers = () => {
   const userId = useSelector((state) => state.me);
   const badges = useBadges(userId);
   return (
-    <ChannelsContainer>
+    <UserListContainer>
       <div className='header'>
         <span className='title'>users</span>
       </div>
@@ -136,6 +137,6 @@ export const NavUsers = () => {
           badges={badges}
           />
       ))}
-    </ChannelsContainer>
+    </UserListContainer>
   );
 };

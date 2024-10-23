@@ -15,7 +15,9 @@ const StyledButtonWithIcon = styled(ButtonWithIcon)`
     padding-left: 5px;
   }
   &:hover {
-    background-color: ${(props) => props.theme.highlightedBackgroundColor};
+    font-weight: bold;
+    background-color: ${(props) => props.theme.Channel.Hover};
+    color: ${(props)=> props.theme.Channel.TextHover}
   }
    
 `;

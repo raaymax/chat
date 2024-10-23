@@ -19,6 +19,7 @@ export const Container = styled.div`
   flex-direction: row;
   width: 100%;
   height: 100%;
+  color: ${(props) => props.theme.Text};
 
   .main-view {
     background-color: ${(props) => props.theme.Chatbox.Background};
@@ -33,6 +34,7 @@ export const Container = styled.div`
     width: 100%;
     height: 100%;
     padding: 16px 0;
+    background-color: ${(props) => props.theme.Navbar.Background};
     & > *{
       margin: 0 auto;
     }
@@ -40,12 +42,21 @@ export const Container = styled.div`
       flex: 1;
     }
   }
+  .side-menu-header {
+    flex: 0 0 64px;
+    height: 64px;
+    border-bottom: 1px solid ${(props) => props.theme.Strokes};
+    padding: 16px 24px;
+    font-size: 24px;
+  }
 
   .side-menu {
     flex: 0 0 356px;
     display: flex;
     background-color: ${(props) => props.theme.Channels.Container};
     flex-direction: column;
+  
+
     .slider {
       flex: 1 calc(100% - 50px);
       overflow-y: auto;
@@ -89,6 +100,18 @@ export const Container = styled.div`
 
   }
 
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 100vw;
+    height: 100vh;
+    background-color: ${(props) => props.theme.Navbar.Background};
+    display: flex;
+    flex-direction: row;
+  }
+
   body.mobile & {
     .side-menu {
       flex: 1 100vh;
@@ -101,6 +124,20 @@ export const Container = styled.div`
       overflow: hidden;
     }
   }
+
+  button {
+    color: inherit;
+    .icon {
+      color: ${({theme}) => theme.SecondaryButton.Default};
+    }
+    &:hover {
+      background-color: transparent;
+      .icon {
+        color: ${({theme}) => theme.SecondaryButton.Hover};
+
+      }
+    }
+  }
 `;
 
 export const Sidebar = () => {
@@ -109,7 +146,9 @@ export const Sidebar = () => {
   const otherTheme = themeControl.themeNames.find((name) => name !== themeControl.theme);
   return (
     <div className='side-menu'>
-      <Logo onClick={toggleSidebar} />
+      <div className='side-menu-header'>
+        Workspace
+      </div>
       <div className='slider'>
         <NavChannels />
         <NavUsers />
@@ -135,19 +174,6 @@ export const Workspaces = () => {
     </div>
   );
 }
-
-
-const Overlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000;
-  width: 100vw;
-  height: 100vh;
-  background-color: ${(props) => props.theme.Navbar.Background};
-  display: flex;
-  flex-direction: row;
-`;
 
 export const Desktop = ({children}: {children: React.ReactNode}) => {
   const { sidebar } = useSidebar();
@@ -177,10 +203,10 @@ export const Mobile = ({children}: {children: React.ReactNode}) => {
       'sidebar-closed': !sidebar
     })}>
       {sidebar && (
-        <Overlay>
+        <div className='overlay'>
           <Workspaces />
           <Sidebar />
-        </Overlay>
+        </div>
       )}
       <div className={cn('main-view')}>
         {children}

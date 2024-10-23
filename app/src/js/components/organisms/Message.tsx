@@ -27,73 +27,6 @@ import { Message as MessageType } from '../../types';
 import { useMessageListArgs } from '../contexts/useMessageListArgs';
 import { useNavigate } from 'react-router-dom';
 
-export const Info = () => {
-  const { clientId, info } = useMessageData();
-  const dispatch = useDispatch();
-
-  const onAction = useCallback(() => {
-    if (info?.action === 'resend') {
-      dispatch(resend(clientId));
-    }
-  }, [dispatch, clientId, info]);
-
-  if (!info) return null;
-  return (
-    <div onClick={onAction} className={['info', info.type, ...(info.action ? ['action'] : [])].join(' ')}>
-      {info.msg}
-    </div>
-  );
-};
-
-const Container = styled.div`
-  width: auto;
-  display: inline-block;
-  padding: 1px 11px;
-  span {
-    padding-left: 5px;
-  }
-
-  .replies {
-    color: ${(props) => props.theme.linkColor};
-  }
-  .date {
-    font-size: 0.7em;
-    font-weight: 300;
-  }
-  cursor: pointer;
-  &:hover {
-    padding: 0px 10px;
-    border: 1px solid ${(props) => props.theme.borderColor};
-    border-radius: 4px;
-    background-color: ${(props) => props.theme.frontHoverColor};
-  }
-`;
-
-export const ThreadInfo = () => {
-  const msg = useMessageData();
-  const navigate = useNavigate();
-  const [args] = useMessageListArgs();
-  const {
-    updatedAt, thread, channelId, id,
-  } = msg;
-  if (!thread || args.id === 'side') return null;
-  return (
-    <Container onClick={() => {
-      navigate(`/${channelId}/t/${id}`);
-    }}>
-      {[...new Set(thread.map((t) => t.userId))]
-        .map((userId) => (
-          <UserCircle key={userId} userId={userId} />
-        ))}
-      <span className='replies'>
-        {thread.length} {thread.length > 1 ? 'replies' : 'reply'}
-      </span>
-      <span className='date'>
-        {formatTime(updatedAt)} on {formatDateDetailed(updatedAt)}
-      </span>
-    </Container>
-  );
-};
 
 const MessageContainer = styled.div`
   position: relative;
@@ -187,6 +120,29 @@ const MessageContainer = styled.div`
     height: 3em;
     width: 3em;
   }
+  .thread-info {
+    width: auto;
+    display: inline-block;
+    padding: 1px 11px;
+    span {
+      padding-left: 5px;
+    }
+
+    .replies {
+      color: ${(props) => props.theme.linkColor};
+    }
+    .date {
+      font-size: 0.7em;
+      font-weight: 300;
+    }
+    cursor: pointer;
+    &:hover {
+      padding: 0px 10px;
+      border: 1px solid ${(props) => props.theme.borderColor};
+      border-radius: 4px;
+      background-color: ${(props) => props.theme.frontHoverColor};
+    }
+  }
   .body {
     flex: 1;
     padding: 0;
@@ -202,6 +158,50 @@ const MessageContainer = styled.div`
       background-color: var(--primary_active_mask);
   }
 `;
+
+const Info = () => {
+  const { clientId, info } = useMessageData();
+  const dispatch = useDispatch();
+
+  const onAction = useCallback(() => {
+    if (info?.action === 'resend') {
+      dispatch(resend(clientId));
+    }
+  }, [dispatch, clientId, info]);
+
+  if (!info) return null;
+  return (
+    <div onClick={onAction} className={['info', info.type, ...(info.action ? ['action'] : [])].join(' ')}>
+      {info.msg}
+    </div>
+  );
+};
+
+const ThreadInfo = () => {
+  const msg = useMessageData();
+  const navigate = useNavigate();
+  const [args] = useMessageListArgs();
+  const {
+    updatedAt, thread, channelId, id,
+  } = msg;
+  if (!thread || args.id === 'side') return null;
+  return (
+    <div className="thread-info" onClick={() => {
+      navigate(`/${channelId}/t/${id}`);
+    }}>
+      {[...new Set(thread.map((t) => t.userId))]
+        .map((userId) => (
+          <UserCircle key={userId} userId={userId} />
+        ))}
+      <span className='replies'>
+        {thread.length} {thread.length > 1 ? 'replies' : 'reply'}
+      </span>
+      <span className='date'>
+        {formatTime(updatedAt)} on {formatDateDetailed(updatedAt)}
+      </span>
+    </div>
+  );
+};
 
 type MessageBaseProps = {
   onClick?: (e?: React.MouseEvent) => void;
