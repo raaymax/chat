@@ -19,6 +19,21 @@ export const Container = styled.div<{$size?: number}>`
     padding-left: 10px;
     display: inline-block;
   }
+
+  button {
+    color: inherit;
+    .icon {
+      color: ${({theme}) => theme.SecondaryButton.Default};
+    }
+    &:hover {
+      background-color: transparent;
+      .icon {
+        color: ${({theme}) => theme.SecondaryButton.Hover};
+
+      }
+    }
+  }
+
 `;
 
 interface ToolbarProps {

@@ -17,7 +17,7 @@ const StyledButtonWithIcon = styled(ButtonWithIcon)`
   &:hover {
     font-weight: bold;
     background-color: ${(props) => props.theme.Channel.Hover};
-    color: ${(props)=> props.theme.Channel.TextHover}
+    color: ${(props)=> props.theme.Channel.TextHover};
   }
    
 `;

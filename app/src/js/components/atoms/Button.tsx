@@ -21,13 +21,11 @@ const StyledButton = styled.button<{ $size: number}>`
   border: none;
   box-sizing: border-box;
 
-  &:hover {
-    background-color: ${({ theme }): string => (theme as AppTheme).buttonHoverBackground};
-  }
-
   &:active {
     background-color: ${({ theme }) => (theme as AppTheme).buttonActiveBackground};
   }
+
+  color: inherit;
 `;
 
 export const Button = ({

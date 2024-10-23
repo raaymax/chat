@@ -124,20 +124,6 @@ export const Container = styled.div`
       overflow: hidden;
     }
   }
-
-  button {
-    color: inherit;
-    .icon {
-      color: ${({theme}) => theme.SecondaryButton.Default};
-    }
-    &:hover {
-      background-color: transparent;
-      .icon {
-        color: ${({theme}) => theme.SecondaryButton.Hover};
-
-      }
-    }
-  }
 `;
 
 export const Sidebar = () => {
