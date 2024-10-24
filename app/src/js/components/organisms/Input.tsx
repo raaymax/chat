@@ -27,7 +27,7 @@ export const InputContainer = styled.div`
   display: flex;
   padding: 0;
   flex-direction: column;
-  color: ${(props) => props.theme.Labels};
+  color: ${(props) => props.theme.Text};
 
   & > .input-box {
     border: 1px solid ${(props) => props.theme.Strokes};
