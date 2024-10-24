@@ -1,0 +1,10 @@
+test file
+progress line 2/10
+progress line 3/10
+progress line 4/10
+progress line 5/10
+progress line 6/10
+progress line 7/10
+progress line 8/10
+progress line 9/10
+progress line 10/10

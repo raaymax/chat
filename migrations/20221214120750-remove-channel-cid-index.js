@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-syntax */
+ 
 module.exports = {
   async up(db) {
     return db.collection('channels').dropIndex({ cid: 1 });

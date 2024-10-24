@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-syntax */
+ 
 module.exports = {
   async up(db) {
     const cursor = await db.collection('messages')
