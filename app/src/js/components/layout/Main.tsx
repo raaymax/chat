@@ -1,10 +1,10 @@
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { useSelector } from '../../store';
 import { cn, isMobile } from '../../utils';
 import { useSidebar } from '../contexts/useSidebar';
 import { SidebarProvider } from '../contexts/sidebar';
 import { ButtonWithIcon } from '../molecules/ButtonWithIcon';
-import { Logo, LogoPic } from '../atoms/Logo';
+import { LogoPic } from '../atoms/Logo';
 import { SizeProvider } from '../contexts/size';
 import { ProfilePic } from '../atoms/ProfilePic';
 import { NavChannels } from '../molecules/NavChannels';
@@ -13,6 +13,7 @@ import { NavButton } from '../molecules/NavButton';
 import { logout } from '../../services/session';
 import { useParams } from 'react-router-dom';
 import { useThemeControl } from '../contexts/useThemeControl';
+import { useEffect } from 'react';
 
 export const Container = styled.div`
   display: flex;
@@ -127,7 +128,6 @@ export const Container = styled.div`
 `;
 
 export const Sidebar = () => {
-  const { toggleSidebar } = useSidebar();
   const themeControl = useThemeControl();
   const otherTheme = themeControl.themeNames.find((name) => name !== themeControl.theme);
   return (
@@ -182,6 +182,11 @@ export const Desktop = ({children}: {children: React.ReactNode}) => {
 export const Mobile = ({children}: {children: React.ReactNode}) => {
   const { sidebar } = useSidebar();
   const { parentId } = useParams();
+  const theme = useTheme();
+  useEffect(() => {
+    document.querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', sidebar ? theme.Navbar.Background : theme.Chatbox.Background);
+  }, [sidebar, theme]);
   return (
     <Container className={cn({
       'side-stream': Boolean(parentId),
