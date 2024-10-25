@@ -62,6 +62,7 @@
     "npm:eslint-plugin-react@^7.33.2": "7.37.1_eslint@8.57.1",
     "npm:eslint@^8.55.0": "8.57.1",
     "npm:express-session@1.17.3": "1.17.3",
+    "npm:filesize@10.1.6": "10.1.6",
     "npm:fuse.js@7.0.0": "7.0.0",
     "npm:migrate-mongo@11.0.0": "11.0.0_mongodb@6.3.0",
     "npm:mongodb@6.3.0": "6.3.0",
@@ -2823,6 +2824,9 @@
       "dependencies": [
         "minimatch@5.1.6"
       ]
+    },
+    "filesize@10.1.6": {
+      "integrity": "sha512-sJslQKU2uM33qH5nqewAwVB2QgR6w1aMNsYUp3aN5rMRyXEwJGmZvaWzeJFNTOXWlHQyBFCWrdj3fV/fsTOX8w=="
     },
     "fill-range@7.1.1": {
       "integrity": "sha512-YsGpe3WHLK8ZYi4tWDg2Jy3ebRz2rXowDxnld4bkQB00cc/1Zw9AWnC0i9ztDJitivtQvaI9KaLyKrc+hBW0yg==",

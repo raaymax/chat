@@ -164,6 +164,11 @@ export const Workspaces = () => {
 export const Desktop = ({children}: {children: React.ReactNode}) => {
   const { sidebar } = useSidebar();
   const { parentId } = useParams();
+  const theme = useTheme();
+  useEffect(() => {
+    document.querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', theme.Navbar.Background);
+  }, [theme]);
   return (
     <Container className={cn({
       'side-stream': Boolean(parentId),
