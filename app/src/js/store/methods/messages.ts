@@ -3,20 +3,22 @@ import { createMethod } from '../store';
 type Query = {
   channelId: string;
   parentId?: string,
-  pinned?: string,
   before?: string,
   after?: string,
   limit?: number,
 }
 
 export const load = createMethod('messages/load', async (query: Query, { actions, client, dispatch }) => {
-  const req = await client.req({
-    limit: 50,
-    ...query,
-    type: 'message:getAll',
-  });
-  dispatch(actions.messages.add(req.data));
-  return req.data;
+  try{ 
+    const data = await client.messages.fetch({
+      limit: 50,
+      ...query,
+    });
+    dispatch(actions.messages.add(data));
+    return data;
+  }catch(e){
+    console.error(e);
+  }
 });
 
 type Reaction = {

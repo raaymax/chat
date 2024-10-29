@@ -2,6 +2,8 @@ import { Main } from './layout/Main';
 import { Discussion } from './pages/Discussion';
 import { Search } from './pages/Search';
 import { Pins } from './pages/Pins';
+import { redirect } from 'react-router-dom';
+import { client } from '../core'
 
 import {
   createHashRouter,
@@ -16,7 +18,15 @@ const router = createHashRouter([
     children: [
       {
         path: "/:channelId",
+        loader: async ({ params }) => {
+          const {channelId} = params;
+          if(!channelId) throw new Error('Page not found');
+          const channel = await client.api.getChannelById(channelId);
+          if (!channel) throw new Error('Page not found');
+          return null;
+        },
         element: <Discussion/>,
+        errorElement: <div>Page not found</div>
       },
       {
         path: "/:channelId/search",
@@ -34,7 +44,10 @@ const router = createHashRouter([
   },
   {
     path: "/*",
-    element: <Main><Discussion/></Main>,
+    loader: async () => {
+      const {mainChannelId} = await client.api.getUserConfig()
+      return redirect(`/${mainChannelId}`);
+    },
   },
 ]);
 

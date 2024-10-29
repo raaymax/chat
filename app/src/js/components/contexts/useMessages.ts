@@ -27,12 +27,7 @@ export const useMessages = ({channelId, parentId}: {channelId: string, parentId?
   }, [dispatch, methods, stream, prevStream]);
 
   useEffect(() => {
-    console.log('change', stream);
-  }, [stream.type]);
-
-  useEffect(() => {
     if (stream.type === 'live') {
-      console.log('changing to live');
       dispatch(actions.messages.clear({ stream }));
       dispatch(loadMessages(stream));
     }

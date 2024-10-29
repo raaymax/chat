@@ -143,11 +143,9 @@ export const UpdateArgs = () => {
   const {channelId } = useParams();
   const [args, setArgs] = useMessageListArgs();
   useEffect(() => {
-    console.log('YUODS{}APD{OISADIUASOIDUOI');
     const state = location.state || {};
     state.type = state.type ?? 'live';
     if(!same(args, state, ['type', 'selected', 'date'])) {
-      console.log('YUODS{}APD{OISADIUASOIDUOI trigger');
       setArgs(state);
     }
   }, [location.state, channelId]);

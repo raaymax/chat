@@ -3,6 +3,14 @@ import { Channel } from '../types';
 
 type RequestInit = (typeof fetch)['prototype']['init'];
 
+class ApiError extends Error {
+  payload: any;
+  constructor(msg: string, payload: any) {
+    super(msg);
+    this.payload = payload; 
+  }
+}
+
 class API extends EventTarget {
   baseUrl: string;
 
@@ -93,6 +101,30 @@ class API extends EventTarget {
       error: await res.json(),
     };
   }
+
+  getResource = async (url: string) => {
+    const res = await fetch(`${this.baseUrl}${url}`);
+    if (res.status === 404) {
+      return null;
+    }
+    if (res.status !== 200) {
+      throw new ApiError("Api error", await res.json())
+    }
+    return await res.json()
+  }
+
+  getUserConfig = async () => this.getResource(`/api/profile/config`);
+  getChannelById = async (channelId: string) => this.getResource(`/api/channels/${channelId}`);
+  getChannels = async () => this.getResource(`/api/channels`);
+
+  getMessages = async (q: {before?: string, after?: string, limit?: number, channelId: string, parentId?: string}) => {
+      const {channelId, ...query} = q;
+      const params = new URLSearchParams({
+        ...Object.fromEntries(Object.entries(query).filter(([_, v]) => typeof v !== 'undefined')),
+        parentId: query.parentId ?? null,
+      } as any);
+      return this.getResource(`/api/channels/${channelId}/messages?${params.toString()}`);
+  };
 
   async putDirectChannel(userId: string): Promise<Channel> {
     const res = await fetch(`${this.baseUrl}/api/channels/direct/${userId}`, {

@@ -20,8 +20,6 @@ export const Login = ({ children }: LoginProps) => {
 
   const validate = useCallback(() => session.validate()
     .then(async ({ status: validationStatus, user: validatedUser }) => {
-      console.log('validatedUser', validatedUser);
-      console.log('validationStatus', validationStatus);
       setStatus(validationStatus);
       if (validationStatus === 'ok') {
         setUser(validatedUser);
@@ -29,7 +27,6 @@ export const Login = ({ children }: LoginProps) => {
         setUser(null);
       }
     }).catch((e) => {
-       
       console.error(e);
       setTimeout(validate, 1000);
     }), []);

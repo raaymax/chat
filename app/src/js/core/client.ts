@@ -1,4 +1,5 @@
 import Api from './api.ts';
+import {MessageService} from './messages.ts';
 
 declare global {
   const API_URL: string;
@@ -6,6 +7,7 @@ declare global {
 
 export class Client {
   _api: Api;
+  messages: MessageService;
 
   get api() {
     if (!this._api) {
@@ -13,6 +15,10 @@ export class Client {
       setTimeout(() => this.emit('con:open', {}), 10);
     }
     return this._api;
+  }
+
+  constructor() {
+    this.messages = new MessageService(this);
   }
 
   req(...args: any[]) {
