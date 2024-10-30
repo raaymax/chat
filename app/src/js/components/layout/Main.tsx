@@ -13,7 +13,7 @@ import { NavButton } from '../molecules/NavButton';
 import { logout } from '../../services/session';
 import { useParams } from 'react-router-dom';
 import { useThemeControl } from '../contexts/useThemeControl';
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export const Container = styled.div`
   display: flex;
@@ -21,6 +21,27 @@ export const Container = styled.div`
   width: 100%;
   height: 100%;
   color: ${(props) => props.theme.Text};
+  --topbar-height: 64px;
+
+
+  .resizer {
+    flex: 0 0 8px;
+    cursor: ew-resize;
+    background-color: ${(props) => props.theme.Channels.Container};
+    border-right: 1px solid ${(props) => props.theme.Strokes};
+    &:hover {
+      border-right: 3px solid ${(props) => props.theme.PrimaryButton.Background};
+    }
+    &.dragging {
+      background-color: ${(props) => props.theme.PrimaryButton.Background};
+    }
+    &:after {
+      content: '';
+      display: block;
+      height: var(--topbar-height);
+      border-bottom: 1px solid ${(props) => props.theme.Strokes};
+    }
+  }
 
   .main-view {
     background-color: ${(props) => props.theme.Chatbox.Background};
@@ -127,11 +148,11 @@ export const Container = styled.div`
   }
 `;
 
-export const Sidebar = () => {
+export const Sidebar = ({style}) => {
   const themeControl = useThemeControl();
   const otherTheme = themeControl.themeNames.find((name) => name !== themeControl.theme);
   return (
-    <div className='side-menu'>
+    <div className='side-menu' style={style}>
       <div className='side-menu-header'>
         Workspace
       </div>
@@ -161,14 +182,46 @@ export const Workspaces = () => {
   );
 }
 
+export const Resizer = ({value, onChange}: {value: number, onChange: (v: number ) => void}) => {
+  const [prevPos, setPrevPos] = useState<number | null>(null);
+  const [dragging, setDragging] = useState<boolean>(false);
+  const startDrag = useCallback((e: React.DragEvent) => {
+    setDragging(true);
+    const img = document.getElementById('void') as HTMLImageElement;
+    e.dataTransfer.setDragImage(img, 0, 0);
+  }, [setDragging]);
+  const endDrag = useCallback(() => {
+    console.log('end')
+    setDragging(false);
+    setPrevPos(null);
+  }, [setDragging, setPrevPos]);
+  const resize = useCallback((e: React.DragEvent) => {
+    if (e.clientX === 0) return;
+    if (prevPos === null) return setPrevPos(e.clientX);
+    const deltaX = e.clientX - prevPos;
+    const newSize = Math.max(150, Math.min(500, value + deltaX));
+    onChange(newSize);
+    localStorage.setItem('sidebar-size', `${newSize}`);
+    setPrevPos(e.clientX);
+  }, [value, onChange, prevPos, setPrevPos]);
+
+  return (
+    <div className={cn('resizer', {dragging})} onDragStart={startDrag} onDragEnd={endDrag} onDrag={resize} draggable={true}>
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/ckM3ZIAAAAASUVORK5CYII=" id="void"/>
+    </div>
+  )
+}
+
 export const Desktop = ({children}: {children: React.ReactNode}) => {
   const { sidebar } = useSidebar();
   const { parentId } = useParams();
+  const [size, setSize] = useState(Number(localStorage.getItem('sidebar-size')) || 356);
   const theme = useTheme();
   useEffect(() => {
     document.querySelector('meta[name="theme-color"]')
       ?.setAttribute('content', theme.Navbar.Background);
   }, [theme]);
+    
   return (
     <Container className={cn({
       'side-stream': Boolean(parentId),
@@ -176,7 +229,8 @@ export const Desktop = ({children}: {children: React.ReactNode}) => {
       'sidebar-closed': !sidebar
     })}>
       <Workspaces />
-      {sidebar && <Sidebar />}
+      {sidebar && <Sidebar style={{flex: `0 0 ${size}px`}} />}
+      <Resizer value={size} onChange={setSize} />
       <div className={cn('main-view')}>
         {children}
       </div>
