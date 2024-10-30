@@ -25,17 +25,22 @@ export const Container = styled.div`
 
 
   .resizer {
+    position: relative;
     flex: 0 0 8px;
     cursor: ew-resize;
     background-color: ${(props) => props.theme.Channels.Container};
-    border-right: 1px solid ${(props) => props.theme.Strokes};
+    border-right: 0;
     &:hover {
-      border-right: 3px solid ${(props) => props.theme.PrimaryButton.Background};
+      border-right: 1px solid ${(props) => props.theme.PrimaryButton.Background};
     }
     &.dragging {
-      background-color: ${(props) => props.theme.PrimaryButton.Background};
+      border-right: 3px solid ${(props) => props.theme.PrimaryButton.Background};
     }
     &:after {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
       content: '';
       display: block;
       height: var(--topbar-height);
