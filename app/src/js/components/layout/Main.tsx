@@ -148,7 +148,8 @@ export const Container = styled.div`
   }
 `;
 
-export const Sidebar = ({style}) => {
+
+export const Sidebar = ({style}: {style?: {[key: string]: string}}) => {
   const themeControl = useThemeControl();
   const otherTheme = themeControl.themeNames.find((name) => name !== themeControl.theme);
   return (
