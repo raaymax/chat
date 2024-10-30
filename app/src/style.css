@@ -16,7 +16,7 @@ html {
   --border_color: #565856;
   --color_danger: #950000;
 
-  font-family: 'Roboto', sans-serif;
+  font-family: 'IBMPlexSans', 'Roboto', sans-serif;
   background-color: var(--primary_background);
   --font-size: 1.1em;
 }

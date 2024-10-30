@@ -1,47 +1,6 @@
 import { Message } from "../types";
 import type { Client } from "./client";
 
-
-// WIP: use this instead of combine function on every fetch
-class MessageStore {
-  _map: Map<string, Message> = new Map();
-  combineMessages: (m1: Message, m2: Message) => Message;
-  constructor(combine: (m1: Message, m2: Message) => Message) {
-    this.combineMessages = combine;
-  }
-
-  add(messages: Message[]) {
-    messages.forEach((m) => this._addOne(m));
-  }
-
-  _addOne(data: Message) {
-    let message: Message = data;
-    if (this._map.has(message.id || message.clientId)) {
-      const prev: Message = this._map.get(message.id || message.clientId)!;
-      message = this.combineMessages(prev, message);
-    }
-    if (message.id) { 
-      this._map.set(message.id, message);
-    }
-    if (message.clientId) { 
-      this._map.set(message.clientId, message);
-    }
-  }
-
-  removeByOwnerId(ownerId: string) {
-    this._map.forEach((m: any) => {
-      if(m._ownerId === ownerId) {
-        this._map.delete(m.id || m.clientId);
-      }
-    });
-  }
-
-  get(id: string) {
-    return this._map.get(id)
-  }
-}
-
-
 class MRange {
   _from: number | null;
   _to: number | null;
@@ -230,36 +189,6 @@ export class MessageService{
       return resolve(data);
     });
     return this.pending[key];
-  }
-}
-
-
-class MessageWindow {
-  service: MessageService;
-  range: MRange | null = null;
-
-  constructor(service: MessageService) {
-    this.service = service;
-  }
-
-  async initDate(date: Date) {
-    
-  }
-  async initId(date: Date) {
-    
-  }
-
-  async init() {
-    
-    
-  }
-
-  async prev() {
-
-  }
-
-  async next() {
-
   }
 }
 

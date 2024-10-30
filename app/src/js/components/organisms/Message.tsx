@@ -36,7 +36,7 @@ const MessageContainer = styled.div`
   animation-duration: 1s;
   animation-iteration-count: 1;
   margin: 0;
-  padding: 0 16px;
+  padding: 8px 16px 4px 16px;
   line-height: 24px;
   vertical-align: middle;
   min-width: 400px;
@@ -60,8 +60,7 @@ const MessageContainer = styled.div`
 
   & > .avatar {
     flex: 0 48px;
-    margin-top: 3px;
-    margin-bottom: 3px;
+    margin: 0px;
     border-radius: 5px;
     overflow: hidden;
     min-width: 44px;
@@ -85,19 +84,24 @@ const MessageContainer = styled.div`
   }
 
   .header {
-    --line-height: 24px;
+    height: 24px;
     --padding-top: 5px;
     --padding-bottom: 0px;
   }
   .author {
-    font-weight: bold;
+    font-size: 16px;
+    font-weight: 500;
   }
   .time {
-    font-weight: 200;
-    font-size: .8em;
+    color: ${({ theme }) => theme.Labels};
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
   }
   .content {
-    font-weight: 300;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
   }
 
   .content img {
