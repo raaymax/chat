@@ -106,7 +106,7 @@ const themes = {
     },
 
     PrimaryButton: {
-      Background: '#9747FF',
+      Background: '#FF8C00',
       Text: '#FAFAFA',
     },
 

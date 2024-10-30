@@ -32,7 +32,6 @@ const MessageContainer = styled.div`
   position: relative;
   display: flex;
   flex-direction: row;
-  animation-name: fade;
   animation-duration: 1s;
   animation-iteration-count: 1;
   margin: 0;
@@ -40,6 +39,32 @@ const MessageContainer = styled.div`
   line-height: 24px;
   vertical-align: middle;
   min-width: 400px;
+
+  &.short {
+    padding-left: 0px;
+    padding: 4px 16px 4px 16px;
+  }
+
+  .pins &.pinned {
+    background-color: transparent;
+  }
+  &.pinned {
+    background-color: rgb(from ${props => props.theme.PrimaryButton.Background} r g b / 10%);
+  }
+
+  &.pinned:hover {
+    background-color: rgb(from ${props => props.theme.PrimaryButton.Background} r g b / 15%);
+  }
+
+  & i.reaction {
+    background-color: var(--secondary_active_mask);
+    border-radius: 10px;
+    padding: 2px 5px;
+    margin-right: 5px;
+    border: 1px solid #565856;
+    font-style: normal;
+  }
+
 
   &.selected {
     background-color: ${(props) => props.theme.Chatbox.Selected};
@@ -159,7 +184,7 @@ const MessageContainer = styled.div`
     margin-left: 20px;
   }
   &:hover {
-      background-color: var(--primary_active_mask);
+      background-color: ${(props) => props.theme.Chatbox.Message.Hover};
   }
 `;
 
@@ -236,6 +261,7 @@ const MessageBase = ({ onClick, sameUser, ...props }: MessageBaseProps = {}) => 
       {...props}
       className={cn('message', {
         pinned,
+        short: sameUser,
         selected: selected === id,
       }, props.className)}
       onMouseEnter={onEnter}

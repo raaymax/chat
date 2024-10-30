@@ -167,8 +167,6 @@ ul {
 }
 #workspace-header {
   position: relative;
-  background-color: var(--primary_background);
-  background-color: #1a1d21;
   border-bottom: 1px solid #565856;
   height: 50px;
 }
@@ -198,7 +196,6 @@ ul {
   display: flex;
   flex-direction: column-reverse;
   position: relative;
-  background-color: var(--primary_background);
   overflow-y: scroll;
   overflow-x: hidden;
   flex: 1;
@@ -211,33 +208,6 @@ ul {
   --text-decoration: underline;
   cursor: pointer;
   font-weight: bold;
-}
-@keyframes fade {
-  from {
-    background-color: rgba(249,249,249,0.1)
-  }
-
-  to {
-    background-color: rgba(249,249,249,0)
-  }
-}
-@keyframes fade-pinned {
-  from {
-    background-color: rgba(249,249,249,0.1)
-  }
-
-  to {
-    background-color: var(--pinned_background);
-  }
-}
-@keyframes fade-selected {
-  from {
-    background-color: var(--selected_background);
-  }
-
-  to {
-    background-color: var(--primary_background);
-  }
 }
 
 .notification{
@@ -301,28 +271,3 @@ ul {
   width: 0px;
 }
 
-.pins .message.pinned {
-  background-color: transparent;
-  animation-name: fade;
-}
-.message.pinned {
-  background-color: var(--pinned_background);
-  animation-name: fade-pinned;
-  animation-duration: 1s;
-  animation-iteration-count: 1;
-}
-
-.message.selected{
-  animation-name: fade-selected;
-  animation-duration: 2s;
-  animation-iteration-count: 1;
-}
-
-.message i.reaction {
-  background-color: var(--secondary_active_mask);
-  border-radius: 10px;
-  padding: 2px 5px;
-  margin-right: 5px;
-  border: 1px solid #565856;
-  font-style: normal;
-}
