@@ -36,6 +36,7 @@ const StyledHeader = styled.div`
   }
 
   & .channel{
+    flex: 1;
     padding-left: 30px;
     vertical-align: middle;
     font-size: 20px;
