@@ -38,7 +38,6 @@ const MessageContainer = styled.div`
   padding: 8px 16px 4px 16px;
   line-height: 24px;
   vertical-align: middle;
-  min-width: 400px;
 
   &.short {
     padding-left: 0px;

@@ -36,7 +36,6 @@ const StyledHeader = styled.div`
   }
 
   & .channel{
-    flex: 1;
     padding-left: 30px;
     vertical-align: middle;
     font-size: 20px;
@@ -49,6 +48,7 @@ const StyledHeader = styled.div`
     padding-left: 10px;
   }
   & .toolbar {
+    max-width: 100%;
     flex: 1;
     flex-align: right;
     display:flex;

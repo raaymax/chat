@@ -7,7 +7,7 @@ import { cn, ClassNames } from '../../utils';
 const Container = styled.div`
   display: inline-block;
  .text {
-   padding: 0px 10px; 
+    padding: 0px 10px; 
   }
 `;
 
@@ -23,7 +23,7 @@ export const TextWithIcon = ({
 }: TextWithIconProps) => {
   const $size = useSize(size);
   return (
-    <Container className={cn(className)}>
+    <Container className={cn('text-with-icon', className)}>
       <Icon icon={icon} size={$size ? $size / 2.3 : $size} />
       <Text size={$size ? $size / 2.3 : $size}>{children}</Text>
     </Container>

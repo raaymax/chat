@@ -7,6 +7,13 @@ import { cn, ClassNames } from '../../utils';
 
 const Container = styled.div`
   cursor: pointer;
+  overflow: hidden;
+  .text-with-icon {
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
   &.active {
     background-color: var(--primary_active_mask);
   }
@@ -39,7 +46,7 @@ type InlineChannelProps = {
 export const InlineChannel = ({
   id, children, badge, className, onClick, icon = 'fa-solid fa-hashtag',
 }: InlineChannelProps) => (
-  <Container className={cn('channel', className)} data-id={id} onClick={onClick}>
+  <Container className={cn('channel', 'inline-channel', className)} data-id={id} onClick={onClick}>
     <TextWithIcon icon={icon}>{children}</TextWithIcon>
     {(badge && badge > 0) ? <Badge>{badge}</Badge> : null}
   </Container>

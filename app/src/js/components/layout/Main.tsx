@@ -13,7 +13,10 @@ import { NavButton } from '../molecules/NavButton';
 import { logout } from '../../services/session';
 import { useParams } from 'react-router-dom';
 import { useThemeControl } from '../contexts/useThemeControl';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
+const WORKSPACES_WIDTH = 80;
+const RESIZER_WIDTH = 8;
 
 export const Container = styled.div`
   display: flex;
@@ -26,7 +29,7 @@ export const Container = styled.div`
 
   .resizer {
     position: relative;
-    flex: 0 0 8px;
+    flex: 0 0 ${RESIZER_WIDTH}px;
     cursor: ew-resize;
     background-color: ${(props) => props.theme.Channels.Container};
     border-right: 0;
@@ -54,7 +57,7 @@ export const Container = styled.div`
   }
 
   .workspaces {
-    flex: 0 0 80px;
+    flex: 0 0 ${WORKSPACES_WIDTH}px;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -227,7 +230,10 @@ export const Desktop = ({children}: {children: React.ReactNode}) => {
     document.querySelector('meta[name="theme-color"]')
       ?.setAttribute('content', theme.Navbar.Background);
   }, [theme]);
-    
+  console.log(size, WORKSPACES_WIDTH, RESIZER_WIDTH)
+  const sideSize = useMemo(() => {
+    return size + WORKSPACES_WIDTH + RESIZER_WIDTH;
+  }, [size]);
   return (
     <Container className={cn({
       'side-stream': Boolean(parentId),
@@ -235,9 +241,12 @@ export const Desktop = ({children}: {children: React.ReactNode}) => {
       'sidebar-closed': !sidebar
     })}>
       <Workspaces />
-      {sidebar && <Sidebar style={{flex: `0 0 ${size}px`}} />}
+      {sidebar && <Sidebar style={{flex: `0 0 ${size}px`, maxWidth: `${size}px`}} />}
       <Resizer value={size} onChange={setSize} />
-      <div className={cn('main-view')}>
+      <div className={cn('main-view')} style={{
+        flex: `0 1 calc(100vw - ${sideSize}px)`,
+        maxWidth: `calc(100vw - ${sideSize}px)`
+      }}>
         {children}
       </div>
     </Container>
