@@ -5,6 +5,7 @@ import { useSidebar } from '../contexts/useSidebar';
 import { SidebarProvider } from '../contexts/sidebar';
 import { ButtonWithIcon } from '../molecules/ButtonWithIcon';
 import { LogoPic } from '../atoms/Logo';
+import { Resizer } from '../atoms/Resizer';
 import { SizeProvider } from '../contexts/size';
 import { ProfilePic } from '../atoms/ProfilePic';
 import { NavChannels } from '../molecules/NavChannels';
@@ -143,6 +144,11 @@ export const Container = styled.div`
   }
 
   body.mobile & {
+    .main-view {
+      flex: 1 100vh;
+      width: 100vh;
+      max-width: 100vh;
+    }
     .side-menu {
       flex: 1 100vh;
       width: 100%;
@@ -191,36 +197,6 @@ export const Workspaces = () => {
   );
 }
 
-export const Resizer = ({value, onChange}: {value: number, onChange: (v: number ) => void}) => {
-  const [prevPos, setPrevPos] = useState<number | null>(null);
-  const [dragging, setDragging] = useState<boolean>(false);
-  const startDrag = useCallback((e: React.DragEvent) => {
-    setDragging(true);
-    const img = document.getElementById('void') as HTMLImageElement;
-    e.dataTransfer.setDragImage(img, 0, 0);
-  }, [setDragging]);
-  const endDrag = useCallback(() => {
-    console.log('end')
-    setDragging(false);
-    setPrevPos(null);
-  }, [setDragging, setPrevPos]);
-  const resize = useCallback((e: React.DragEvent) => {
-    if (e.clientX === 0) return;
-    if (prevPos === null) return setPrevPos(e.clientX);
-    const deltaX = e.clientX - prevPos;
-    const newSize = Math.max(150, Math.min(500, value + deltaX));
-    onChange(newSize);
-    localStorage.setItem('sidebar-size', `${newSize}`);
-    setPrevPos(e.clientX);
-  }, [value, onChange, prevPos, setPrevPos]);
-
-  return (
-    <div className={cn('resizer', {dragging})} onDragStart={startDrag} onDragEnd={endDrag} onDrag={resize} draggable={true}>
-      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/ckM3ZIAAAAASUVORK5CYII=" id="void"/>
-    </div>
-  )
-}
-
 export const Desktop = ({children}: {children: React.ReactNode}) => {
   const { sidebar } = useSidebar();
   const { parentId } = useParams();
@@ -232,8 +208,9 @@ export const Desktop = ({children}: {children: React.ReactNode}) => {
   }, [theme]);
   console.log(size, WORKSPACES_WIDTH, RESIZER_WIDTH)
   const sideSize = useMemo(() => {
+    if (!sidebar) return WORKSPACES_WIDTH;
     return size + WORKSPACES_WIDTH + RESIZER_WIDTH;
-  }, [size]);
+  }, [size, sidebar]);
   return (
     <Container className={cn({
       'side-stream': Boolean(parentId),
@@ -242,7 +219,7 @@ export const Desktop = ({children}: {children: React.ReactNode}) => {
     })}>
       <Workspaces />
       {sidebar && <Sidebar style={{flex: `0 0 ${size}px`, maxWidth: `${size}px`}} />}
-      <Resizer value={size} onChange={setSize} />
+      {sidebar && <Resizer value={size} onChange={setSize} /> }
       <div className={cn('main-view')} style={{
         flex: `0 1 calc(100vw - ${sideSize}px)`,
         maxWidth: `calc(100vw - ${sideSize}px)`
