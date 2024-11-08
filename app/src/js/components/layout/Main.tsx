@@ -145,9 +145,8 @@ export const Container = styled.div`
 
   body.mobile & {
     .main-view {
-      flex: 1 100vh;
-      width: 100vh;
-      max-width: 100vh;
+      flex: 0 0 100%;
+      width: 100%;
     }
     .side-menu {
       flex: 1 100vh;
