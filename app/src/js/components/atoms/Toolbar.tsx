@@ -6,6 +6,7 @@ import { cn, ClassNames } from '../../utils';
 export const Container = styled.div<{$size?: number}>`
   display: flex;
   flex-direction: row;
+  width: 100%;
   .icon, .emoji {
     flex: 0;
   }
@@ -18,6 +19,14 @@ export const Container = styled.div<{$size?: number}>`
     flex: 1;
     padding-left: 10px;
     display: inline-block;
+  }
+
+  & > h1, & > h2, & > h3, & > h4, & > h5, {
+    flex: 1;
+    padding: 0px;
+    margin: 0;
+    line-height: ${(props) => props.$size}px;
+    height: ${(props) => props.$size}px;
   }
 
   button {
@@ -48,7 +57,7 @@ export const Toolbar = ({ children, size, className }: ToolbarProps) => {
     e.preventDefault();
   }, []);
   return (
-    <Container className={cn(className)} $size={size} onClick={stop}>
+    <Container className={cn('toolbar', className)} $size={size} onClick={stop}>
       <SizeProvider value={size}>
         {children}
       </SizeProvider>

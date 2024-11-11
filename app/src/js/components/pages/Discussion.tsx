@@ -11,28 +11,22 @@ import { ClassNames, cn, isMobile, same } from '../../utils';
 import { useMessageListArgs } from '../contexts/useMessageListArgs';
 import { MessageListArgsProvider } from '../contexts/messageListArgs';
 import { useEffect } from 'react';
+import { SearchBox } from '../atoms/SearchBox';
 
 const StyledHeader = styled.div`
-  display: flex;
-  flex-direction: row;
   border-bottom: 1px solid ${(props) => props.theme.Strokes};
   height: 64px;
+  padding: 16px 16px 15px 16px;
 
-  & h1 {
-    padding: 0;
-    margin: 0;
-    padding-left: 20px;
-    width: auto;
-    flex: 0;
-    font-size: 30px;
-    font-weight: 400;
-  }
+  & > .toolbar {
+    gap: 16px;
+    height: 32px;
+    line-height: 32px;
+    .icon {
+      line-height: 32px;
+      font-size: 32px;
 
-  & > * {
-    flex: 1;
-    height: 64px;
-    line-height: 64px;
-
+    }
   }
 
   & .channel{
@@ -71,9 +65,10 @@ const Header = ({ channelId, onClick }: HeaderProps) => {
 
   return (
     <StyledHeader>
-      <Toolbar className="toolbar" size={64}>
-        <ButtonWithIcon icon="bars" onClick={toggleSidebar} />
+      <Toolbar className="toolbar" size={32}>
+        {isMobile() && <ButtonWithIcon icon="bars" onClick={toggleSidebar} iconSize={24} />}
         <Channel onClick={onClick} channelId={channelId} />
+        { !isMobile() && <SearchBox /> }
         {stream.type === 'archive' && (
           <ButtonWithIcon icon='down' onClick = {() => {
             navigate(".", { relative: "path", state: {
@@ -81,13 +76,13 @@ const Header = ({ channelId, onClick }: HeaderProps) => {
               selected: null,
               date: null,
             } });
-          }} />
+          }} iconSize={24} />
         )}
         <ButtonWithIcon icon="thumbtack" onClick={() => {
           navigate("/"+ channelId + "/pins")
-        }} />
-        <ButtonWithIcon icon="search" onClick={() => navigate("/"+ channelId + "/search")} />
-        <ButtonWithIcon icon="refresh" onClick={() => dispatch(init({}))} />
+        }}  iconSize={24}/>
+        <ButtonWithIcon icon="search" onClick={() => navigate("/"+ channelId + "/search")}  iconSize={24}/>
+        <ButtonWithIcon icon="refresh" onClick={() => dispatch(init({}))} iconSize={24} />
       </Toolbar>
     </StyledHeader>
   );
@@ -107,18 +102,17 @@ export const SideHeader = ({ channelId, parentId, onClick }: SideHeaderProps) =>
   return (
     <StyledHeader>
 
-      <Toolbar className="toolbar" size={64}>
-        <ButtonWithIcon icon="bars" onClick={toggleSidebar} />
-        <h1>Thread</h1>
+      <Toolbar className="toolbar" size={32}>
+        <ButtonWithIcon icon="bars" onClick={toggleSidebar} iconSize={24} />
         <Channel onClick={onClick} channelId={channelId} />
         <ButtonWithIcon icon='back' onClick={() => {
           navigate(`/${channelId}`, {state: {
             type: 'archive', selected: message?.id, date: message?.createdAt,
           }});
-        }} />
+        }} iconSize={24} />
         <ButtonWithIcon icon='xmark' onClick={() => {
           navigate(`/${channelId}`);
-        }} />
+        }} iconSize={24} />
       </Toolbar>
     </StyledHeader>
   );
@@ -137,6 +131,7 @@ type MainConversationProps = {
   onClick?: () => void;
   channelId: string;
   parentId?: string;
+  children?: React.ReactNode;
 };
 
 export const UpdateArgs = () => {
@@ -154,7 +149,15 @@ export const UpdateArgs = () => {
   return null
 }
 
-export const MainConversation = ({ channelId, parentId, className, onClick }: MainConversationProps) => {
+export const MainConversationContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+
+`;
+
+export const MainConversation = ({ channelId, parentId, className, children, onClick }: MainConversationProps) => {
   const location = useLocation();
 
   return (
@@ -162,7 +165,10 @@ export const MainConversation = ({ channelId, parentId, className, onClick }: Ma
       <UpdateArgs />
       <Container className={cn('main-conversation', className)}>
         <Header channelId={channelId} parentId={parentId} onClick={onClick} />
-        <Conversation channelId={channelId} parentId={parentId} />
+        <MainConversationContainer>
+          <Conversation channelId={channelId} parentId={parentId} />
+          {children && <ContextBar>{children}</ContextBar>}
+        </MainConversationContainer>
       </Container>
     </MessageListArgsProvider>
   );
@@ -197,17 +203,32 @@ export const SideConversation = ({ channelId, parentId, className }: SideConvers
   );
 }
 
+const ContextBarContainer = styled.div`
+  background-color: ${(props) => props.theme.Channel.Background};
+  padding: 0px;
+  margin: 0px;
+  flex: 1 1 50%;
+`;
+
+type ContextBarProps = {
+  className?: ClassNames;
+  children?: React.ReactNode;
+};
+
+export const ContextBar = ({ className, children }: ContextBarProps) => {
+  return (
+    <ContextBarContainer className={cn(className)}>
+      {children}
+    </ContextBarContainer>
+  );
+}
+
 const DiscussionContainer = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
   height: 100%;
 
-  & .main-conversation {
-  }
-
-  & .side-conversation {
-  }
   .sidebar-closed.side-stream & {
     @media (max-width: 896px) {
       & .main-conversation {
@@ -235,13 +256,14 @@ const DiscussionContainer = styled.div`
 
 type DiscussionProps = {
   className?: string;
+  children?: React.ReactNode;
 };
 
-export const Discussion = ({ className }: DiscussionProps) => {
+export const Discussion = ({ className, children }: DiscussionProps) => {
   const {channelId='', parentId} = useParams();
   return (
     <DiscussionContainer className={className}>
-      {(!isMobile() || !parentId) && <MainConversation channelId={channelId} />}
+      {(!isMobile() || !parentId) && <MainConversation channelId={channelId}>{children}</MainConversation>}
       {parentId && <SideConversation channelId={channelId} parentId={parentId} />}
     </DiscussionContainer>
   );

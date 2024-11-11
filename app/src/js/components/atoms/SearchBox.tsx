@@ -3,8 +3,9 @@ import { cn, ClassNames } from '../../utils';
 
 const SearchBoxInput = styled.input`
   flex: 0 0 30px;
-  height: 30px;
-  margin: 15px 10px;
+  height: 32px;
+  border-radius: 8px;
+  box-sizing: border-box;
   padding: 0 15px;
   background-color: ${(props) => props.theme.searchBoxBackgroundColor};
   border: 1px solid ${(props) => props.theme.borderColor};

@@ -1,7 +1,7 @@
 import { Main } from './layout/Main';
-import { Discussion } from './pages/Discussion';
+import { Discussion } from './layout/Discussion';
 import { Search } from './pages/Search';
-import { Pins } from './pages/Pins';
+import { Pins } from './organisms/Pins';
 import { redirect } from 'react-router-dom';
 import { client } from '../core'
 
@@ -30,11 +30,11 @@ const router = createHashRouter([
       },
       {
         path: "/:channelId/search",
-        element: <Search />,
+        element: <Discussion><Search /></Discussion>,
       },
       {
         path: "/:channelId/pins",
-        element: <Pins />,
+        element: <Discussion><Pins /></Discussion>,
       },
       {
         path: "/:channelId/t/:parentId",

@@ -1,5 +1,20 @@
 import { useCallback, useState } from "react";
 import { cn } from "../../utils";
+import styled from "styled-components";
+
+const Container = styled.div`
+  position: relative;
+  flex: 0 0 8px;
+  cursor: ew-resize;
+  background-color: ${(props) => props.theme.Channels.Container};
+  border-right: 0;
+  &:hover {
+    border-right: 1px solid ${(props) => props.theme.PrimaryButton.Background};
+  }
+  &.dragging {
+    border-right: 3px solid ${(props) => props.theme.PrimaryButton.Background};
+  }
+`;
 
 export const Resizer = ({value, onChange}: {value: number, onChange: (v: number ) => void}) => {
   const [prevPos, setPrevPos] = useState<number | null>(null);
@@ -25,8 +40,8 @@ export const Resizer = ({value, onChange}: {value: number, onChange: (v: number 
   }, [value, onChange, prevPos, setPrevPos]);
 
   return (
-    <div className={cn('resizer', {dragging})} onDragStart={startDrag} onDragEnd={endDrag} onDrag={resize} draggable={true}>
+    <Container className={cn('resizer', {dragging})} onDragStart={startDrag} onDragEnd={endDrag} onDrag={resize} draggable={true}>
       <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/ckM3ZIAAAAASUVORK5CYII=" id="void"/>
-    </div>
+    </Container>
   )
 }

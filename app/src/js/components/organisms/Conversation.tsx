@@ -12,6 +12,7 @@ import { useMessages } from '../contexts/useMessages';
 import { LoadingIndicator } from '../molecules/LoadingIndicator';
 import { Message as MessageType } from '../../types';
 import { useMessageListArgs } from '../contexts/useMessageListArgs';
+import { ClassNames, cn } from '../../utils';
 
 const ReInit = styled.div`
   cursor: pointer;
@@ -41,12 +42,12 @@ export const InitFailedButton = ({ onClick }: InitFailedButtonProps) => (
 export const Container = styled.div`
   flex: 1;
   width: 100%;
-  height: calc(100% - 50px);
+  height: 100%;
   display: flex;
   flex-direction: column;
 `;
 
-export function Conversation({channelId, parentId}: {channelId: string, parentId?: string}) {
+export function Conversation({channelId, parentId, className}: {channelId: string, parentId?: string, className?: ClassNames}) {
   const [args, setArgs] = useMessageListArgs();
   const dispatch = useDispatch();
   const methods = useMethods();
@@ -80,7 +81,7 @@ export function Conversation({channelId, parentId}: {channelId: string, parentId
     };
   }, [bumpProgress]);
   return (
-    <Container onDrop={drop} onDragOver={dragOverHandler}>
+    <Container className={cn(className)} onDrop={drop} onDragOver={dragOverHandler}>
       <HoverProvider>
         <MessageList
           list={list}

@@ -53,6 +53,7 @@ const themes = {
     },
 
     Channel: {
+      Background: '#2B2D31',
       Active: '#E0E0E0',
       Hover: '#E4E4E6',
       Inactive: '#8B8B8B',
@@ -140,6 +141,7 @@ const themes = {
     },
 
     Channel: {
+      Background: '#F2F2F2',
       Active: '#E0E0E0',
       TextHover: 'black',
       Hover: '#E4E4E6',

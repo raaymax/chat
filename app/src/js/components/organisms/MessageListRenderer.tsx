@@ -15,6 +15,34 @@ export type MessageListRendererProps = {
 function isNotif(data: types.Message | types.Notif): data is types.Notif {
   return (data as types.Notif).notif !== undefined;
 }
+export const BaseRenderer = ({
+  list: messages, stream, context, onMessageClicked = (() => undefined),
+}: MessageListRendererProps) => {
+  let prev: types.Message | types.Notif;
+  return (<>
+    {[...messages].reverse().map((msg) => {
+      prev = msg;
+      return <React.Fragment key={`${msg.id}-${msg.clientId}`}>
+        {isNotif(msg)
+          ? <Notification
+            className={[msg.notifType]}>
+            {msg.notif}
+          </Notification>
+          : <Message
+            stream={stream}
+            context={context}
+            onClick={() => onMessageClicked(msg)}
+            className={msg.priv ? ['private'] : []}
+            data-id={msg.id}
+            data-date={msg.createdAt}
+            client-id={msg.clientId}
+            sameUser={false}
+            data={msg}
+          />}
+      </React.Fragment>;
+    }).reverse()}
+  </>);
+};
 
 export const MessageListRenderer = ({
   list: messages, stream, context, onMessageClicked = (() => undefined),

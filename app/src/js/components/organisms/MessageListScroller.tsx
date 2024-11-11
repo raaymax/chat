@@ -12,7 +12,7 @@ const ListContainer = styled.div`
   position: relative;
   overflow-y: scroll;
   overflow-x: hidden;
-  flex: 1;
+  flex: 1 1 100vh;
   overscroll-behavior: contain;
 
   .space {
@@ -24,6 +24,7 @@ const getMax = (list: MessageType[]) => list.reduce((acc, item) => Math.max(acc,
 
 type MessageListProps = MessageListRendererProps & {
   list: MessageType[];
+  renderer?: React.ComponentType<MessageListRendererProps>;
   onScrollTop?: () => void;
   onScrollBottom?: () => void;
   onDateChange?: (date: string) => void;
@@ -31,6 +32,7 @@ type MessageListProps = MessageListRendererProps & {
 };
 
 export const MessageList = (props: MessageListProps) => {
+  const Renderer = props.renderer ?? MessageListRenderer;
   const {
     list, onScrollTop, onScrollBottom, onDateChange, date, ...rest
   } = props;
@@ -116,9 +118,9 @@ export const MessageList = (props: MessageListProps) => {
   }, [detectDate, list, oldList, onScrollTop, onScrollBottom]);
 
   return (
-    <ListContainer ref={element} onScroll={scroll} >
+    <ListContainer ref={element} onScroll={scroll} className="message-list-scroll" >
       <div className='v-space'>&nbsp;</div>
-      <MessageListRenderer list={list} {...rest} />
+      <Renderer list={list} {...rest} />
     </ListContainer>
   );
 };
