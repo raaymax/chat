@@ -25,7 +25,7 @@ const router = createHashRouter([
           if (!channel) throw new Error('Page not found');
           return null;
         },
-        element: <Discussion/>,
+        element: <Discussion />,
         errorElement: <div>Page not found</div>
       },
       {

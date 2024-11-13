@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { MessageListRenderer, MessageListRendererProps } from './MessageListRenderer';
 import { Message as MessageType } from '../../types';
 import { useMessageListArgs } from '../contexts/useMessageListArgs';
+import { ClassNames, cn } from '../../utils';
 
 const ListContainer = styled.div`
   display: flex;
@@ -12,7 +13,6 @@ const ListContainer = styled.div`
   position: relative;
   overflow-y: scroll;
   overflow-x: hidden;
-  flex: 1 1 100vh;
   overscroll-behavior: contain;
 
   .space {
@@ -29,6 +29,7 @@ type MessageListProps = MessageListRendererProps & {
   onScrollBottom?: () => void;
   onDateChange?: (date: string) => void;
   date?: Date;
+  className?: ClassNames;
 };
 
 export const MessageList = (props: MessageListProps) => {
@@ -118,7 +119,7 @@ export const MessageList = (props: MessageListProps) => {
   }, [detectDate, list, oldList, onScrollTop, onScrollBottom]);
 
   return (
-    <ListContainer ref={element} onScroll={scroll} className="message-list-scroll" >
+    <ListContainer ref={element} onScroll={scroll} className={cn("message-list-scroll", props.className)} >
       <div className='v-space'>&nbsp;</div>
       <Renderer list={list} {...rest} />
     </ListContainer>

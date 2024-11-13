@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useActions, useDispatch } from '../../store';
 
 import { EmojiDescriptor } from '../../types';
-import { buildEmojiNode, cn } from '../../utils';
+import { ClassNames, buildEmojiNode, cn } from '../../utils';
 import { getUrl } from '../../services/file';
 import { InputProvider } from '../contexts/input';
 import { useInput } from '../contexts/useInput';
@@ -21,7 +21,9 @@ import { EmojiSearch } from './EmojiSearch';
 
 export const InputContainer = styled.div`
   position: relative;
-  min-height: 80px;
+  min-height: 64px;
+  max-height: 50%;
+  max-width: 100%;
   font-size: 16px;
   margin: 0px 16px 16px 16px;
   display: flex;
@@ -33,7 +35,14 @@ export const InputContainer = styled.div`
     border: 1px solid ${(props) => props.theme.Strokes};
     background-color: ${(props) => props.theme.Input.Background};
     padding: 12px 16px;
+    height: 100%;
     border-radius: 8px;
+    .controls {
+      height: 100%;
+      button {
+        height: 32px;
+      }
+    }
   }
 
   &.edit {
@@ -138,6 +147,14 @@ export const InputContainer = styled.div`
     flex: 1;
     border: 0;
     padding: 0px;
+    overflow: hidden;
+    height: 100%;
+    overflow: hidden;
+
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
 
     .emoji img {
       width: 1.5em;
@@ -169,9 +186,10 @@ export const InputContainer = styled.div`
 
 type InputFormProps = {
   children?: React.ReactNode,
+  className?: ClassNames,
 }
 
-export const InputForm = ({ children }: InputFormProps) => {
+export const InputForm = ({ children, className }: InputFormProps) => {
   const [showEmojis, setShowEmojis] = useState(false);
   const {
     mode, messageId,
@@ -204,7 +222,7 @@ export const InputForm = ({ children }: InputFormProps) => {
   }, [input, ctrl]);
 
   return (
-    <InputContainer className={cn('input', mode)}>
+    <InputContainer className={cn(className, mode)}>
       <div className="input-box">
         <Toolbar className='controls' size={32}>
           <div
@@ -252,10 +270,13 @@ type InputProps = {
   mode?: string;
   messageId?: string;
   children?: React.ReactNode,
+  className?: ClassNames,
+  channelId: string;
+  parentId?: string;
 };
 
-export const Input = ({ children, ...args }: InputProps) => (
+export const Input = ({ children, className, ...args }: InputProps) => (
   <InputProvider {...args} >
-    <InputForm>{children}</InputForm>
+    <InputForm className={className}>{children}</InputForm>
   </InputProvider>
 );

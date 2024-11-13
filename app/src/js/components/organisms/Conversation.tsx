@@ -45,6 +45,12 @@ export const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  & > .message-list-container {
+    flex: 0 100 100%;
+  }
+  & > .input-container {
+    flex: 100 0 auto;
+  }
 `;
 
 export function Conversation({channelId, parentId, className}: {channelId: string, parentId?: string, className?: ClassNames}) {
@@ -84,6 +90,7 @@ export function Conversation({channelId, parentId, className}: {channelId: strin
     <Container className={cn(className)} onDrop={drop} onDragOver={dragOverHandler}>
       <HoverProvider>
         <MessageList
+          className="message-list-container"
           list={list}
           onDateChange={(date) => setArgs({ ...args, date })}
           onScrollTop={async () => {
@@ -100,7 +107,7 @@ export function Conversation({channelId, parentId, className}: {channelId: strin
           }}
         />
         <LoadingIndicator />
-        <Input channelId={channelId} parentId={parentId}/>
+        <Input className="input-container" channelId={channelId} parentId={parentId}/>
         {initFailed && <InitFailedButton onClick={() => dispatch(reinit({}))} />}
       </HoverProvider>
     </Container>
