@@ -21,7 +21,7 @@ export const notify = createMethod('typing/notify', async ({ channelId, parentId
     return;
   }
   dispatch(actions.typing.set({ cooldown: true, queue: false }));
-  client.send({ type: 'user:typing', channelId, parentId });
+  await client.req({ type: 'user:typing', channelId, parentId });
   setTimeout(() => {
     dispatch(actions.typing.set({ cooldown: false }));
     if (getState().typing.queue) {

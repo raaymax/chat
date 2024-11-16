@@ -1,9 +1,7 @@
-import { useMemo } from 'react';
 import { useSelector } from './useSelector';
 
-export const useTyping = () => {
-  const channelId = useSelector((state) => state.stream?.main?.channelId);
-  const typing = useSelector((state) => state.typing[channelId]);
+export const useTyping = (channelId: string, parentId: string | null = null) => {
+  const typing = useSelector((state) => state.typing.typings);
   const users = useSelector((state) => state.users);
-  return useMemo(() => Object.keys(typing || {}).map((id) => users[id]), [typing, users]);
+  return [...new Set(typing.filter((t) => t.channelId === channelId && t.parentId === parentId).map((t) => users[t.userId]))];
 };

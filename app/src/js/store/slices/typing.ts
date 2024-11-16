@@ -1,40 +1,37 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 type TypingState = {
-  [channelId: string]: {
-    [userId: string]: string;
-  };
-} & {
+  typings: { userId: string, channelId: string, parentId: string, timestamp: string }[]
   cooldown: boolean;
   queue: boolean;
 };
 
 export default createSlice({
   name: 'typing',
-  initialState: { cooldown: false, queue: false } as TypingState,
+  initialState: { cooldown: false, queue: false, typings: [] } as TypingState,
   reducers: {
     add: (state, action) => {
-      const newState = { ...state };
-      [action.payload].flat().forEach(({ userId, channelId }) => {
-        newState[channelId] = newState[channelId] || {};
-        newState[channelId][userId] = new Date().toISOString();
-      });
-      return newState;
+      return {
+        ...state,
+        typings: [
+          ...state.typings,
+          {
+            userId: action.payload.userId,
+            channelId: action.payload.channelId,
+            parentId: action.payload.parentId ?? null,
+            timestamp: new Date().toISOString(),
+          }
+        ]
+      };
     },
-    clear: (state) => ({
-      ...Object.fromEntries(
-        Object.entries(state)
-          .map(([channelId, users]) => [
-            channelId,
-            Object.fromEntries(
-              Object.entries(users)
-                .filter(([, date]) => new Date(date) > new Date(Date.now() - 1000)),
-            ),
-          ]),
-      ) as {[channelId: string]: {[userId: string]: string}},
-      cooldown: false,
-      queue: false,
-    } as TypingState),
+    clear: (state) => {
+      return {
+        ...state,
+        cooldown: false,
+        queue: false,
+        typings: state.typings.filter(({ timestamp }) => new Date(timestamp) > new Date(Date.now() - 1000)),
+      };
+    },
     set: (state, action) => ({ ...state, ...action.payload }),
   },
 });

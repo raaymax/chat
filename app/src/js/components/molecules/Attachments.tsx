@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from '../../store';
 import { abort } from '../../services/file';
 import { useMessageListArgs } from '../contexts/useMessageListArgs';
-import { cn } from '../../utils';
+import { ClassNames, cn } from '../../utils';
 
 const Container = styled.div`
   .attachment-list {
@@ -142,7 +142,7 @@ export const Attachment = ({
   </div>
 );
 
-export const Attachments = () => {
+export const Attachments = ({className}: {className?:ClassNames}) => {
   const [args] = useMessageListArgs();
   const files = useSelector((state) => state.files);
   const list = useMemo(() => files.filter((file) => file.streamId === args.id), [files, args.id]);
@@ -153,7 +153,7 @@ export const Attachments = () => {
   const hasFiles = list.length > 0;
 
   return (
-    <Container>
+    <Container className={cn(className)}>
       {hasFiles && 
         <div className='attachment-list'>
           {list.map((file) => (

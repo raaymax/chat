@@ -59,12 +59,16 @@ export const Container = styled.div`
     height: 100%;
     overflow: hidden;
 
+
     .conversation-container {
       flex: 1;
-      width: 100%;
+      width: 50%;
       height: 100%;
       display: flex;
       flex-direction: column;
+      &:only-child {
+        width: 100%;
+      }
 
       & > .header {
         border-bottom: 1px solid ${(props) => props.theme.Strokes};

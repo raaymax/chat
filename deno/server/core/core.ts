@@ -29,6 +29,7 @@ import JoinChannel from "./channel/join.ts";
 import GetDirectChannel from "./channel/getDirect.ts";
 import CheckChannelAccess from "./channel/checkAccess.ts";
 import InteractionWithMessage from "./message/interaction.ts";
+import ChannelUserTyping from "./channel/userTyping.ts";
 import { registerCommand } from "./command/repository.ts";
 
 import { Repository, storage } from "../infra/mod.ts";
@@ -54,6 +55,7 @@ const commands = buildCommandCollection([
   PutDirectChannel,
   JoinChannel,
   InteractionWithMessage,
+  ChannelUserTyping,
 ]);
 
 export class Core {

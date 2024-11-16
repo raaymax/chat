@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useActions, useDispatch } from '../../store';
 
 import { EmojiDescriptor } from '../../types';
-import { ClassNames, buildEmojiNode, cn } from '../../utils';
+import { ClassNames, buildEmojiNode, cn, isMobile } from '../../utils';
 import { getUrl } from '../../services/file';
 import { InputProvider } from '../contexts/input';
 import { useInput } from '../contexts/useInput';
@@ -21,7 +21,6 @@ import { EmojiSearch } from './EmojiSearch';
 
 export const InputContainer = styled.div`
   position: relative;
-  min-height: 64px;
   max-height: 50%;
   max-width: 100%;
   font-size: 16px;
@@ -34,65 +33,67 @@ export const InputContainer = styled.div`
   & > .input-box {
     border: 1px solid ${(props) => props.theme.Strokes};
     background-color: ${(props) => props.theme.Input.Background};
-    padding: 12px 16px;
+    padding: 16px 16px;
     height: 100%;
     border-radius: 8px;
+    overflow-y: auto;
+
+    .cta {
+      color: ${(props) => props.theme.Labels};
+      position: absolute;
+      top: 20px;
+      left: 18px;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 24px;
+      pointer-events: none;
+    }
+
     .controls {
-      height: 100%;
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      width: auto;
+      height: 32px;
       button {
         height: 32px;
       }
     }
+    .scroller {
+      .input {
+        border: 0;
+        padding: 0px;
+        height: fit-content;
+        margin: 4px 0;
+        width: calc(100% - ${isMobile() ? 96 : 64}px);
+
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 24px;
+
+        &:focus-visible {
+          outline: none;
+        }
+      }
+
+      .input-attachments {
+        height: fit-content;
+        
+      }
+    }
   }
 
-  &.edit {
-  }
-  &.default {
-  }
-
-  & .toolbar {
-    display: flex;
-    flex-direction: row;
-  }
-
-  & .toolbar button:first-child {
-    margin-left: 30px;
-  }
-
-  & .toolbar button {
-    color: var(--secondary_foreground);
-    margin: 2px 0 2px 2px;
-    width: 25px;
-    height: 25px;
-    border: 0;
-    padding: 1px 3px;
-    background: none;
-  }
-
-  & .toolbar button:hover {
-    color: var(--primary_foreground);
-    background-color: var(--primary_active_mask);
-  }
-
-  & .actionbar {
-    display: flex;
-    flex-direction: row;
-    padding: 5px;
-    display: flex;
-    justify-content: flex-end;
-    flex-direction: row;
-    height: 40px;
-    margin-bottom: 5px;
-    margin-right: 5px;
-  }
-
-  & .info {
-    flex: 1;
-    line-height: 30px;
-    padding: 0px 10px;
+  .info {
+    position: absolute;
+    bottom: -16px;
+    left: 0;
+    line-height: 16px;
+    padding: 0px 16px;
     font-weight: 300;
     vertical-align: middle;
-    font-size: .8em;
+    font-size: 10px;
   }
 
   .info.error{
@@ -100,96 +101,34 @@ export const InputContainer = styled.div`
   }
 
   .info.action:hover{
-    --text-decoration: underline;
     cursor: pointer;
     font-weight: bold;
   }
 
-  & .actionbar .action {
-    flex: 0 0 30px;
-    width: auto;
-    height: 30px;
-    padding: 0 6px;
-    border-radius: 15px;
-    line-height: 30px;
-    align-items: center;
-    align-content: center;
-    justify-content: center;
-    text-align: center;
-    cursor: pointer;
-    line-break: normal;
-    hyphens: none;
-    
-    vertical-align: middle;
-    margin-left: 10px;
-  }
-  & .actionbar .action.green {
-    background-color: #1c780c;
-  }
-  & .actionbar .action.green:hover {
-    background-color: #2aa115;
-  }
-  & .actionbar .action.green:active {
-    background-color: #1c780c;
-  }
-
-  & .actionbar .action:hover {
-    background-color: rgba(249,249,249,0.05);
-  }
-  & .actionbar .action:active {
-    background-color: rgba(249,249,249,0.1);
-  }
-  & .actionbar .action.active {
-    background-color: rgba(249,249,249,0.1);
-  }
-
-  .input {
-    flex: 1;
-    border: 0;
-    padding: 0px;
-    overflow: hidden;
-    height: 100%;
-    overflow: hidden;
-
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 24px;
-
-    .emoji img {
-      width: 1.5em;
-      height: 1.5em;
-      display: inline-block;
-      vertical-align: bottom;
-    }
-
-    .user { 
-      color: ${(props) => props.theme.mentionsColor};
-    }
-  }
-  .input:focus-visible {
-    outline: none;
-  }
-
-  & .ql-toolbar.ql-snow{
-    border: 0;
-  }
-
-  & .ql-container.ql-snow {
-    border: 0;
-  }
-
-  & .channel {
+  .channel {
     color: #3080a0;
+  }
+
+  .emoji img {
+    width: 1.5em;
+    height: 1.5em;
+    display: inline-block;
+    vertical-align: bottom;
+  }
+
+  .user { 
+    color: ${(props) => props.theme.mentionsColor};
   }
 `;
 
 type InputFormProps = {
   children?: React.ReactNode,
   className?: ClassNames,
+  channelId: string,
+  parentId?: string,
 }
 
-export const InputForm = ({ children, className }: InputFormProps) => {
+export const InputForm = ({ children, className, channelId, parentId }: InputFormProps) => {
   const [showEmojis, setShowEmojis] = useState(false);
   const {
     mode, messageId,
@@ -224,7 +163,10 @@ export const InputForm = ({ children, className }: InputFormProps) => {
   return (
     <InputContainer className={cn(className, mode)}>
       <div className="input-box">
-        <Toolbar className='controls' size={32}>
+        <div className="scroller">
+          {!currentText && <div className="cta">
+            Write here..
+          </div>}
           <div
             data-scope='root'
             className='input'
@@ -233,22 +175,27 @@ export const InputForm = ({ children, className }: InputFormProps) => {
             onPaste={onPaste}
             onInput={onInput}
             onKeyDown={(e) => onKeyDown(e)}
-          >{children}</div>
+          ></div>
+          <Attachments className="input-attachments" />
+        </div>
+        <Toolbar className='controls' size={32}>
           <ButtonWithIcon icon="emojis" onClick={() => setShowEmojis(!showEmojis)} />
           <ButtonWithIcon icon="plus" onClick={addFile} />
-          {mode === 'edit' ? (
-            <>
+          {mode === 'edit' 
+            ? <>
               <ButtonWithIcon icon="xmark" onClick={() => dispatch(actions.messages.editClose(messageId))} />
               <ButtonWithIcon icon="check" onClick={send} />
             </>
-          ) : (
-            <ButtonWithIcon icon="send" onClick={send} />
-          )}
+            : (
+              isMobile() 
+                ? <ButtonWithIcon icon="send" onClick={send} />
+                : null
+            )
+          }
         </Toolbar>
-        <Attachments />
       </div>
 
-      <StatusLine />
+      <StatusLine channelId={channelId} parentId={parentId} />
       <ChannelSelector />
       <UserSelector />
       <EmojiSelector />
@@ -269,14 +216,13 @@ export const InputForm = ({ children, className }: InputFormProps) => {
 type InputProps = {
   mode?: string;
   messageId?: string;
-  children?: React.ReactNode,
   className?: ClassNames,
   channelId: string;
   parentId?: string;
 };
 
-export const Input = ({ children, className, ...args }: InputProps) => (
+export const Input = ({ className, ...args }: InputProps) => (
   <InputProvider {...args} >
-    <InputForm className={className}>{children}</InputForm>
+    <InputForm className={className} {...args}/>
   </InputProvider>
 );

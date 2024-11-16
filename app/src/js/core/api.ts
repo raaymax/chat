@@ -326,13 +326,22 @@ class API extends EventTarget {
         },
       });
     }
+    case 'user:typing': {
+      return this.fetch(`/api/channels/${msg.channelId}/typing`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ parentId: msg.parentId }),
+      });
+    }
     default:
       return {
         type: 'response',
-        status: 'ok',
+        status: 'error',
         seqId: msg.seqId,
         data: [],
-        warning: 'No handler for this message type',
+        error: 'No handler for this message type',
       };
     }
   };

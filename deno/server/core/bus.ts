@@ -39,15 +39,16 @@ export class Bus {
       {},
     );
 
-  group = (userIds: (EntityId | string)[], msg: any) => {
+  group = (userIds: (EntityId | string)[], msg: any, senderId?: EntityId) => {
     this.internalBus.emit("notif", {
       ...msg,
       _target: "group",
       _userIds: userIds.map((u) => u.toString()),
     });
-    (userIds ?? []).forEach((userId) =>
+    (userIds ?? []).forEach((userId) =>{
+      if (senderId && EntityId.from(userId).eq(senderId)) return;
       this.internalBus.emit(userId.toString(), { ...msg, _target: "group" })
-    );
+    });
   };
 
   direct = (userId: EntityId | string, msg: any) => {
