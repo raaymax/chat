@@ -36,3 +36,4 @@ export class Client {
 }
 
 export const client = new Client();
+export * from './api.ts';
