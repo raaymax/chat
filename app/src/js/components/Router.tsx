@@ -41,7 +41,7 @@ const router = createHashRouter([
         element: <Discussion/>,
       },
     ],
-    //errorElement: <ErrorBoundary/>,
+    errorElement: <ErrorBoundary/>,
   },
   {
     path: "/*",
@@ -63,6 +63,12 @@ function ErrorBoundary() {
           error - <button onClick={() => document.location.reload()}>try again</button>
         </div>
         <h2>{error.message}</h2>
+        <pre>
+          {error.url}
+        </pre>
+        <pre>
+          {error.stack}
+        </pre>
         <pre>
           {error.payload && JSON.stringify(error.payload, null, 2)}
         </pre>

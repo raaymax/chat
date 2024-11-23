@@ -5,8 +5,9 @@ type RequestInit = (typeof fetch)['prototype']['init'];
 
 export class ApiError extends Error {
   payload: any;
-  constructor(msg: string, payload: any) {
+  constructor(msg: string, url: string, payload: any) {
     super(msg);
+    this.url = url;
     this.payload = payload; 
   }
 }
@@ -109,7 +110,7 @@ class API extends EventTarget {
     }
 
     if (res.status >= 400) {
-      throw new ApiError("Api error", await res.json())
+      throw new ApiError("Api error", url, await res.json())
     }
     return await res.json()
   }
