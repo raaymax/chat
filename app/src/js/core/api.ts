@@ -3,7 +3,7 @@ import { Channel } from '../types';
 
 type RequestInit = (typeof fetch)['prototype']['init'];
 
-class ApiError extends Error {
+export class ApiError extends Error {
   payload: any;
   constructor(msg: string, payload: any) {
     super(msg);
@@ -107,7 +107,8 @@ class API extends EventTarget {
     if (res.status === 404) {
       return null;
     }
-    if (res.status !== 200) {
+
+    if (res.status >= 400) {
       throw new ApiError("Api error", await res.json())
     }
     return await res.json()

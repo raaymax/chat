@@ -2,8 +2,8 @@ import { Main } from './layout/Main';
 import { Discussion } from './layout/Discussion';
 import { Search } from './pages/Search';
 import { Pins } from './organisms/Pins';
-import { redirect } from 'react-router-dom';
-import { client } from '../core'
+import { redirect, useRouteError } from 'react-router-dom';
+import { client, ApiError } from '../core'
 
 import {
   createHashRouter,
@@ -26,7 +26,7 @@ const router = createHashRouter([
           return null;
         },
         element: <Discussion />,
-        errorElement: <div>Page not found</div>
+        errorElement: <ErrorBoundary/>,
       },
       {
         path: "/:channelId/search",
@@ -40,7 +40,8 @@ const router = createHashRouter([
         path: "/:channelId/t/:parentId",
         element: <Discussion/>,
       },
-    ]
+    ],
+    //errorElement: <ErrorBoundary/>,
   },
   {
     path: "/*",
@@ -48,8 +49,42 @@ const router = createHashRouter([
       const {mainChannelId} = await client.api.getUserConfig()
       return redirect(`/${mainChannelId}`);
     },
+    errorElement: <ErrorBoundary/>,
   },
 ]);
+
+function ErrorBoundary() {
+  let error = useRouteError();
+  console.error(error);
+  if (error instanceof ApiError) {
+    return (
+      <div>
+        <div>
+          error - <button onClick={() => document.location.reload()}>try again</button>
+        </div>
+        <h2>{error.message}</h2>
+        <pre>
+          {error.payload && JSON.stringify(error.payload, null, 2)}
+        </pre>
+      </div>
+    );
+  }
+  if (error instanceof Error) {
+    return (
+      <div>
+        <div>
+          error - <button onClick={() => document.location.reload()}>try again</button>
+        </div>
+        <h2>{error.message}</h2>
+        <pre>
+          {error.stack}
+        </pre>
+      </div>
+    );
+  }
+
+  return <div>error - <button onClick={() => document.location.reload()}>try again</button></div>;
+}
 
 export const Router= () => {
   return (
