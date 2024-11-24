@@ -1,9 +1,12 @@
 import styled from 'styled-components';
 import { getUrl, getThumbnail } from '../../services/file';
 import { ClassNames, cn } from '../../utils';
+import {filesize} from "filesize"
 
 const ImageContainer = styled.div`
   cursor: pointer;
+  min-width: 100px;
+  max-width: 400px;
 
   img {
     width: auto;
@@ -23,12 +26,24 @@ const ImageContainer = styled.div`
     img {
       transform: scale(1.1);
     }
-    background-color: var(--primary_active_mask);
   }
+  .caption {
+    color: ${(props) => props.theme.Labels};
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px; /* 166.667% */
 `;
 
 const download = async (fileId: string) => {
   window.open(getUrl(fileId));
+};
+
+type ImgProps = {
+  raw?: boolean;
+  fileName: string;
+  id?: string;
+  url?: string;
 };
 
 type ImageProps = {
@@ -38,15 +53,28 @@ type ImageProps = {
     id?: string;
     clientId?: string;
     fileName: string;
+    url?: string;
+    size?: number;
   };
 };
 
-export const Image = ({ className, raw, data: { fileName, id } }: ImageProps) => (
-  <ImageContainer className={cn('file', 'image', className)} data-id={id} onClick={() => id && download(id)}>
-    {
-      raw
-        ? <img className='raw-image' src={getUrl(id ?? '')} alt={fileName} />
-        : <img src={getThumbnail(id ?? '', {h: 240})} alt={fileName} />
-    }
-  </ImageContainer>
-);
+const Img = ({raw, fileName, id, url}: ImgProps) => {
+  if (url) {
+    return <img src={url} alt={fileName} />;
+  } else if (raw) {
+    return <img className='raw-image' src={getUrl(id ?? '')} alt={fileName} />;
+  } else {
+    return <img src={getThumbnail(id ?? '', {h: 240})} alt={fileName} />;
+  }
+}
+
+export const Image = ({ className, raw, data: { fileName, id, url, size} }: ImageProps) => {
+  const formattedSize = filesize(size ?? 0);
+
+  return (
+    <ImageContainer className={cn('file', 'image', className)} data-id={id} onClick={() => id && download(id)}>
+      <Img raw={raw} fileName={fileName} id={id} url={url} />
+      {(fileName || size) && <div className="caption">{[fileName, formattedSize].join(', ')}</div>}
+    </ImageContainer>
+  );
+}

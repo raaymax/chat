@@ -1,9 +1,9 @@
 import React from 'react';
 import { Message } from './Message';
-import { Notification } from '../atoms/Notification';
 import { DateSeparator } from '../atoms/DateSeparator';
-import { formatDate } from '../../utils';
+import { cn, formatDate } from '../../utils';
 import * as types from '../../types';
+import { useNavigate } from 'react-router-dom';
 
 export type MessageListRendererProps = {
   list: (types.Message| types.Notif)[];
@@ -18,17 +18,19 @@ function isNotif(data: types.Message | types.Notif): data is types.Notif {
 export const BaseRenderer = ({
   list: messages, stream, context, onMessageClicked = (() => undefined),
 }: MessageListRendererProps) => {
+    const navigate = useNavigate();
   let prev: types.Message | types.Notif;
   return (<>
     {[...messages].reverse().map((msg) => {
       prev = msg;
       return <React.Fragment key={`${msg.id}-${msg.clientId}`}>
         {isNotif(msg)
-          ? <Notification
-            className={[msg.notifType]}>
+          ? <div
+            className={cn('notification', msg.notifType)}>
             {msg.notif}
-          </Notification>
+          </div>
           : <Message
+            navigate={navigate}
             stream={stream}
             context={context}
             onClick={() => onMessageClicked(msg)}
@@ -47,6 +49,7 @@ export const BaseRenderer = ({
 export const MessageListRenderer = ({
   list: messages, stream, context, onMessageClicked = (() => undefined),
 }: MessageListRendererProps) => {
+    const navigate = useNavigate();
   let prev: types.Message | types.Notif;
   return (<>
     {[...messages].reverse().map((msg) => {
@@ -62,11 +65,12 @@ export const MessageListRenderer = ({
       prev = msg;
       return <React.Fragment key={`${msg.id}-${msg.clientId}`}>
         {isNotif(msg)
-          ? <Notification
-            className={[msg.notifType]}>
+          ? <div
+            className={cn('notification', msg.notifType)}>
             {msg.notif}
-          </Notification>
+          </div>
           : <Message
+            navigate={navigate}
             stream={stream}
             context={context}
             onClick={() => onMessageClicked(msg)}

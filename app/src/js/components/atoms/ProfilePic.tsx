@@ -45,6 +45,14 @@ const Pic = styled.div`
       border-radius: 50%;
     }
   }
+  &.reply {
+    width: 16px;
+    height: 16px;
+    .image {
+      border-radius: 4px;
+    }
+  }
+
   &.with-status .image{
     border-radius: 0;
     img {
@@ -75,7 +83,7 @@ const Pic = styled.div`
 type NotificationProps = {
   className?: ClassNames;
   userId: string;
-  type: 'regular' | 'status' | 'tiny';
+  type: 'regular' | 'status' | 'tiny' | 'reply';
   showStatus?: boolean;
 }
 

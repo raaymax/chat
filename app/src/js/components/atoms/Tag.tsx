@@ -1,22 +1,27 @@
 import styled from 'styled-components';
+import { ClassNames, cn } from '../../utils';
 
-const StyledTag = styled.span`
-  background-color: var(--secondary_active_mask);
-  border-radius: 10px;
-  padding: 2px 5px;
-  margin-right: 5px;
-  border: 1px solid #565856;
+const StyledTag = styled.div`
+  display: inline-block;
+  color: ${({theme}) => theme.Text};
+  background-color: ${({theme}) => theme.Chatbox.Message.ReactionButton};
+  border-radius: 4px;
+  padding: 0px 4px;
+  margin-right: 4px;
   font-style: normal;
   cursor: pointer;
+  line-height: 24px;
+  height: 24px;
 `;
 
 type TagProps = {
   onClick: () => void;
   children: React.ReactNode;
+  className?: ClassNames;
 };
 
-export const Tag = ({ onClick, children }: TagProps) => (
-  <StyledTag className='tag' onClick={onClick}>
+export const Tag = ({ className, onClick, children }: TagProps) => (
+  <StyledTag className={cn('tag', className)} onClick={onClick}>
     {children}
   </StyledTag>
 );

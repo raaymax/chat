@@ -50,7 +50,6 @@ body, html {
 	--sk_highlight: 29,155,209;
 	--sk_highlight_hover: 64,179,228;
 	color-scheme: dark;
-  overflow: hidden;
   width: 100%;
   height: 100%;
 }
@@ -211,14 +210,13 @@ ul {
 }
 
 .notification{
-  animation-name: fade;
-  animation-duration: 1s;
-  animation-iteration-count: 1;
   margin: 0;
   padding: 5px 10px;
+  padding-left: 80px;
   font-weight: 400;
   font-size: .7em;
 }
+
 .notification.debug{
   border-left: 10px solid #277370;
 }

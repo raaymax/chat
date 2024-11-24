@@ -139,3 +139,5 @@ export const Channel = ({
     </InlineChannel>
   );
 };
+
+export const NavChannel = Channel;

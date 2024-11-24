@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { UserCircle } from '../atoms/UserCircle';
 import { ProfilePic } from '../atoms/ProfilePic';
 
 const StyledReadReceipt = styled.div`

@@ -2,11 +2,6 @@ import styled from 'styled-components';
 import { useSize } from '../contexts/useSize';
 import { cn, ClassNames } from '../../utils';
 
-type IconProps = {
-  icon: string,
-  className?: ClassNames;
-  size?: number;
-}
 
 const StyledIcon = styled.i`
   margin: auto;
@@ -39,14 +34,21 @@ const iconMap: Record<string, string> = {
   logout: 'fa-solid fa-right-from-bracket',
   'system-user': 'fa-solid fa-user-gear',
   user: 'fa-solid fa-user',
-};
+  smile: 'fa-regular fa-face-smile',
+} as const;
 
 const getIcon = (icon: string) => {
   const [key, mod] = icon?.split(':') ?? [];
   return `${iconMap[key] ?? icon} ${mod ?? ''}`;
 };
 
-export const Icon = ({ size, className, icon }: IconProps) => {
+type IconProps = {
+  icon: keyof typeof iconMap,
+  className?: ClassNames;
+  size?: number;
+}
+
+export const Icon = ({ size, className, icon = 'star' }: IconProps) => {
   const $size = useSize(size);
   return (
     <StyledIcon className={cn('icon', getIcon(icon), className)} style={$size ? {

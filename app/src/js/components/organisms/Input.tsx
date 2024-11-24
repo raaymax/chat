@@ -33,7 +33,7 @@ export const InputContainer = styled.div`
   & > .input-box {
     border: 1px solid ${(props) => props.theme.Strokes};
     background-color: ${(props) => props.theme.Input.Background};
-    padding: 16px 16px;
+    padding: 16px;
     height: 100%;
     border-radius: 8px;
     overflow-y: auto;
@@ -119,6 +119,12 @@ export const InputContainer = styled.div`
   .user { 
     color: ${(props) => props.theme.mentionsColor};
   }
+  .cmp-emoji-search {
+    position: absolute;
+    bottom: 70px;
+    right: 16px;
+    z-index: 100;
+  }
 `;
 
 type InputFormProps = {
@@ -164,9 +170,6 @@ export const InputForm = ({ children, className, channelId, parentId }: InputFor
     <InputContainer className={cn(className, mode)}>
       <div className="input-box">
         <div className="scroller">
-          {!currentText && <div className="cta">
-            Write here..
-          </div>}
           <div
             data-scope='root'
             className='input'
@@ -176,6 +179,9 @@ export const InputForm = ({ children, className, channelId, parentId }: InputFor
             onInput={onInput}
             onKeyDown={(e) => onKeyDown(e)}
           ></div>
+          {!currentText && <div className="cta">
+            Write here..
+          </div>}
           <Attachments className="input-attachments" />
         </div>
         <Toolbar className='controls' size={32}>

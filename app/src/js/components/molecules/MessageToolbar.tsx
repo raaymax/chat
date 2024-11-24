@@ -10,7 +10,7 @@ import { useMessageData } from '../contexts/useMessageData';
 import { Toolbar } from '../atoms/Toolbar';
 import { ButtonWithEmoji } from './ButtonWithEmoji';
 import { ButtonWithIcon } from './ButtonWithIcon';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 export const Container = styled.div`
   position: absolute;
@@ -51,7 +51,7 @@ export const Container = styled.div`
   }
 `;
 
-export const MessageToolbar = () => {
+export const MessageToolbar = ({navigate}: {navigate: (path: string) => void}) => {
   const message = useMessageData();
   const user = useMessageUser();
   const { id, pinned, channelId } = message;
@@ -60,7 +60,6 @@ export const MessageToolbar = () => {
   const methods = useMethods();
   const actions = useActions();
   const {parentId} = useParams();
-  const navigate = useNavigate();
   const onDelete = useCallback(() => {
     if (id) dispatch(removeMessage({ id }));
   }, [dispatch, id]);

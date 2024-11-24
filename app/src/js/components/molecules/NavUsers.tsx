@@ -103,7 +103,8 @@ export const NavUserButton = ({
 
 const NavUserContainer = ({user, badges}: {user: User, badges: Record<string, number>}) => {
   const channel = useDirectChannel(user.id);
-  const navigate = useNavigate();
+  let navigate = (_path: string) => {};
+  try { navigate = useNavigate(); }catch {}
   const {channelId: id} = useParams();
   const { hideSidebar } = useSidebar();
   return <NavUserButton

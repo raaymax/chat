@@ -7,25 +7,26 @@ import { resend } from '../../services/messages';
 import { ProfilePic } from '../atoms/ProfilePic';
 import { LinkPreviewList } from '../atoms/LinkPreview';
 import { ReadReceipt } from '../molecules/ReadReceipt';
-import { UserCircle } from '../atoms/UserCircle';
 import { buildMessageBody } from '../molecules/MessageBody';
 import { Files } from '../molecules/Files';
 import { Reactions } from '../molecules/Reactions';
 import { MessageToolbar } from '../molecules/MessageToolbar';
 import { Input } from './Input';
+import { ThreadInfo } from '../molecules/ThreadInfo';
 
+import { MessageHeader } from '../atoms/MessageHeader';
 import { MessageProvider } from '../contexts/message';
 import { useMessageData } from '../contexts/useMessageData';
 import { useMessageUser } from '../contexts/useMessageUser';
 import { useHoverCtrl } from '../contexts/useHoverCtrl';
 
 import {
-  cn, ClassNames, formatTime, formatDateDetailed, isToday
+  cn, ClassNames, formatTime
 } from '../../utils';
 
 import { Message as MessageType } from '../../types';
 import { useMessageListArgs } from '../contexts/useMessageListArgs';
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
 
 
 const MessageContainer = styled.div`
@@ -35,9 +36,10 @@ const MessageContainer = styled.div`
   animation-duration: 1s;
   animation-iteration-count: 1;
   margin: 0;
-  padding: 8px 16px 4px 16px;
+  padding: 8px 16px 8px 16px;
   line-height: 24px;
   vertical-align: middle;
+  color: ${(props) => props.theme.Text};
 
   &.short {
     padding-left: 0px;
@@ -54,16 +56,6 @@ const MessageContainer = styled.div`
   &.pinned:hover {
     background-color: rgb(from ${props => props.theme.PrimaryButton.Background} r g b / 15%);
   }
-
-  & i.reaction {
-    background-color: var(--secondary_active_mask);
-    border-radius: 10px;
-    padding: 2px 5px;
-    margin-right: 5px;
-    border: 1px solid #565856;
-    font-style: normal;
-  }
-
 
   &.selected {
     background-color: ${(props) => props.theme.Chatbox.Selected};
@@ -82,46 +74,23 @@ const MessageContainer = styled.div`
     color: ${(props) => props.theme.Labels};
   }
 
-  & > .avatar {
-    flex: 0 48px;
-    margin: 0px;
-    border-radius: 5px;
-    overflow: hidden;
-    min-width: 44px;
-  }
-  .avatar img {
-    height: 100%;
-    width: 100%;
-  }
-
-  &.private{
-    border-left: 10px solid #a27321; 
+  &.ephemeral{
+    border-left: 4px solid ${(props) => props.theme.PrimaryButton.Background}; 
+    padding-left: 12px;
   }
 
   .info {
-    line-height: 16px;
-    height: 16px;
-    padding: 0px 0px;
-    font-weight: 300;
+    padding: 12px 0px;
     vertical-align: middle;
-    font-size: .8em;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px; /* 150% */
+    &.error {
+      color: ${(props) => props.theme.User.Inactive};
+    }
   }
 
-  .header {
-    height: 24px;
-    --padding-top: 5px;
-    --padding-bottom: 0px;
-  }
-  .author {
-    font-size: 16px;
-    font-weight: 500;
-  }
-  .time {
-    color: ${({ theme }) => theme.Labels};
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 400;
-  }
   .content {
     font-size: 16px;
     font-style: normal;
@@ -148,29 +117,6 @@ const MessageContainer = styled.div`
     height: 3em;
     width: 3em;
   }
-  .thread-info {
-    width: auto;
-    display: inline-block;
-    padding: 1px 11px;
-    span {
-      padding-left: 5px;
-    }
-
-    .replies {
-      color: ${(props) => props.theme.linkColor};
-    }
-    .date {
-      font-size: 0.7em;
-      font-weight: 300;
-    }
-    cursor: pointer;
-    &:hover {
-      padding: 0px 10px;
-      border: 1px solid ${(props) => props.theme.borderColor};
-      border-radius: 4px;
-      background-color: ${(props) => props.theme.frontHoverColor};
-    }
-  }
   .body {
     flex: 1;
     padding: 0;
@@ -179,11 +125,11 @@ const MessageContainer = styled.div`
     hyphens: auto;
     width: calc(100% - 75px);
   }
-  &.private .avatar {
-    margin-left: 20px;
-  }
   &:hover {
-      background-color: ${(props) => props.theme.Chatbox.Message.Hover};
+    background-color: ${(props) => props.theme.Chatbox.Message.Hover};
+  }
+  .cmp-thread-info, .cmp-link-preview-list, .cmp-files, .cmp-reactions {
+    margin-top: 4px;
   }
 `;
 
@@ -205,40 +151,16 @@ const Info = () => {
   );
 };
 
-const ThreadInfo = () => {
-  const msg = useMessageData();
-  const navigate = useNavigate();
-  const [args] = useMessageListArgs();
-  const {
-    updatedAt, thread, channelId, id,
-  } = msg;
-  if (!thread || args.id === 'side') return null;
-  return (
-    <div className="thread-info" onClick={() => {
-      navigate(`/${channelId}/t/${id}`);
-    }}>
-      {[...new Set(thread.map((t) => t.userId))]
-        .map((userId) => (
-          <UserCircle key={userId} userId={userId} />
-        ))}
-      <span className='replies'>
-        {thread.length} {thread.length > 1 ? 'replies' : 'reply'}
-      </span>
-      <span className='date'>
-        {formatTime(updatedAt)} on {formatDateDetailed(updatedAt)}
-      </span>
-    </div>
-  );
-};
 
 type MessageBaseProps = {
   onClick?: (e?: React.MouseEvent) => void;
   sameUser?: boolean;
   className?: ClassNames;
+  navigate: (path: string) => void;
   [key: string]: unknown;
 };
 
-const MessageBase = ({ onClick, sameUser, ...props }: MessageBaseProps = {}) => {
+const MessageBase = ({ onClick, sameUser, navigate = () => {}, ...props }: MessageBaseProps) => {
   const msg = useMessageData();
   const {
     id, message, emojiOnly,
@@ -246,9 +168,11 @@ const MessageBase = ({ onClick, sameUser, ...props }: MessageBaseProps = {}) => 
     editing,
     userId,
     linkPreviews,
+    reactions,
+    priv: ephemeral,
   } = msg;
   const { onEnter, toggleHovered, onLeave } = useHoverCtrl(msg.id);
-  const [{ selected }] = useMessageListArgs();
+  const [{ selected, id: streamName }] = useMessageListArgs();
   const user = useMessageUser();
 
   return (
@@ -259,9 +183,10 @@ const MessageBase = ({ onClick, sameUser, ...props }: MessageBaseProps = {}) => 
       }}
       {...props}
       className={cn('message', {
+        ephemeral: Boolean(ephemeral),
         pinned,
-        short: sameUser,
-        selected: selected === id,
+        short: Boolean(sameUser),
+        selected: Boolean(id) && selected === id,
       }, props.className)}
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
@@ -271,11 +196,7 @@ const MessageBase = ({ onClick, sameUser, ...props }: MessageBaseProps = {}) => 
         : <div className='spacy side-time'>{formatTime(createdAt)}</div>
       }
       <div className='body'>
-        {!sameUser && <div className='header'>
-          <span className='author'>{user?.name || 'Guest'}</span>
-          <span className='spacy time'>{formatTime(createdAt)}</span>
-          {!isToday(createdAt) && <span className='spacy time'>{formatDateDetailed(createdAt)}</span>}
-        </div>}
+        {!sameUser && <MessageHeader user={user} createdAt={createdAt} />}
         {editing
           ? <Input mode='edit' messageId={id}>{buildMessageBody(message, { emojiOnly })}</Input>
           : <div className={['content'].join(' ')}>
@@ -286,10 +207,10 @@ const MessageBase = ({ onClick, sameUser, ...props }: MessageBaseProps = {}) => 
         <Files list={msg.attachments || []} />
         <LinkPreviewList links={linkPreviews} />
         <Info />
-        <Reactions />
-        <ThreadInfo />
+        <Reactions messageId={id} reactions={reactions}/>
+        {streamName != 'side' && <ThreadInfo navigate={navigate} msg={msg}/>}
         <ReadReceipt data={msg.progress} />
-        <MessageToolbar />
+        <MessageToolbar navigate={navigate} />
       </div>
     </MessageContainer>
   );
@@ -297,6 +218,7 @@ const MessageBase = ({ onClick, sameUser, ...props }: MessageBaseProps = {}) => 
 
 type MessageProps = MessageBaseProps & {
   data: MessageType;
+  navigate?: (path: string) => void;
 };
 
 export const Message = ({ data, ...props }: MessageProps) => (

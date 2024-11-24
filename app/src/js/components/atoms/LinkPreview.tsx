@@ -75,10 +75,12 @@ type LinkPreviewListProps = {
   links: Link[];
 };
 
-export const LinkPreviewList = ({ links = [] }: LinkPreviewListProps) => (
-  <Container>
-    {links.map((link, key) => (
-      <LinkPreview link={link} key={key} />
-    ))}
-  </Container>
-);
+export const LinkPreviewList = ({ links = [] }: LinkPreviewListProps) => links.length > 0
+  ? (
+    <Container className="cmp-link-preview-list">
+      {links.map((link, key) => (
+        <LinkPreview link={link} key={key} />
+      ))}
+    </Container>
+  )
+  : null;

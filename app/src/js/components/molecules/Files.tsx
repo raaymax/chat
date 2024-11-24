@@ -29,23 +29,25 @@ type FilesProps = {
   }[];
 };
 
-export const Files = ({ list }: FilesProps) => (
-  <Container>
-    <div className='file-list'>
-      {list
-        .filter((file) => IMAGE_TYPES.includes(file.contentType))
-        .map((file) => (
-          <div className='fli' key={file.id || file.clientId}>
-            <Image
-              raw={RAW_IMAGE_TYPES.includes(file.contentType)}
-              data={file} />
-          </div>
-        ))}
-    </div>
-    <div className='file-list'>
-      {list
-        .filter((file) => !IMAGE_TYPES.includes(file.contentType))
-        .map((file) => <File key={file.id || file.clientId} data={file} />)}
-    </div>
-  </Container>
-);
+export const Files = ({ list }: FilesProps) => list.length > 0 
+  ? (
+    <Container className='cmp-files'>
+      <div className='file-list'>
+        {list
+          .filter((file) => IMAGE_TYPES.includes(file.contentType))
+          .map((file) => (
+            <div className='fli' key={file.id || file.clientId}>
+              <Image
+                raw={RAW_IMAGE_TYPES.includes(file.contentType)}
+                data={file} />
+            </div>
+          ))}
+      </div>
+      <div className='file-list'>
+        {list
+          .filter((file) => !IMAGE_TYPES.includes(file.contentType))
+          .map((file) => <File key={file.id || file.clientId} data={file} />)}
+      </div>
+    </Container>
+  )
+  : null;

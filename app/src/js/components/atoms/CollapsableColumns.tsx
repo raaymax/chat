@@ -1,5 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ClassNames, cn } from "../../utils";
+import styled from "styled-components";
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+
+`;
 
 type CollapsableColumnsProps = {
   className?: ClassNames;
@@ -26,9 +33,9 @@ export const CollapsableColumns = ({ className, columns, minSize }: CollapsableC
   const [Column1, Column2] = columns;
 
   return (
-    <div className={cn(className)} ref={container}>
+    <Container className={cn(className)} ref={container}>
       {(!Column2 || !oneColumn) && Column1}
       {Column2}
-    </div>
+    </Container>
   );
 }

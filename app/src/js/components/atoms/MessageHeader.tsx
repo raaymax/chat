@@ -1,13 +1,40 @@
+import styled from 'styled-components';
 import {
-  cn, ClassNames, formatTime, formatDateDetailed, isToday
+  formatTime, formatDateDetailed, isToday
 } from '../../utils';
 
-export const MessageHeader = ({ user, createdAt, sameUser }: MessageHeaderProps) => {
+const Container = styled.div`
+  .author {
+    color: ${(props) => props.theme.Text};
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+    padding-right: 4px;
+  }
+  .time {
+    color: ${(props) => props.theme.Labels};
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px; /* 166.667% */
+
+  }
+`;
+
+type MessageHeaderProps = {
+  user: {
+    name: string;
+  } | null,
+  createdAt: string;
+};
+
+export const MessageHeader = ({ user = {}, createdAt }: MessageHeaderProps) => {
   return (
-    <div className='header'>
+    <Container className='header'>
       <span className='author'>{user?.name || 'Unknown'}</span>
       <span className='spacy time'>{formatTime(createdAt)}</span>
       {!isToday(createdAt) && <span className='spacy time'>{formatDateDetailed(createdAt)}</span>}
-    </div>
+    </Container>
   );
 }
