@@ -3,6 +3,23 @@ import { Channel } from '../types';
 
 type RequestInit = (typeof fetch)['prototype']['init'];
 
+
+async function waitBeforeRetry(retry: number) {
+  switch (retry) {
+    case 0:
+      await new Promise((r) => setTimeout(r, 1000));
+      break;
+    case 1:
+      await new Promise((r) => setTimeout(r, 2000));
+      break;
+    default:
+      await new Promise((r) => setTimeout(r, 5000));
+      break;
+  }
+}
+
+
+
 export class ApiError extends Error {
   payload: any;
   constructor(msg: string, url: string, payload: any) {
@@ -78,7 +95,9 @@ class API extends EventTarget {
     }
   }
 
-  async fetch(url: string, opts: {seqId?: string, mapFn?: (i:any) => any} & RequestInit = {}): Promise<any> {
+  async fetch(url: string, opts: {seqId?: string, mapFn?: (i:any) => any, retry?: number, retries?: number} & RequestInit = {}): Promise<any> {
+    const retries = opts?.retries ?? 5;
+    const retry = opts?.retry ?? 0;
     const res = await fetch(`${this.baseUrl}${url}`, {
       ...opts,
       headers: {
@@ -95,6 +114,24 @@ class API extends EventTarget {
         data: [data].flat().map(opts.mapFn ?? ((a) => a)),
       };
     }
+
+    if (res.status >= 500) {
+      if (retries > 0) {
+        try{
+          console.log(await res.json());
+        }catch{}
+        await waitBeforeRetry(retry);
+        return this.fetch(url, { ...opts, retries: retries - 1, retry: retry + 1 });
+      } else {
+        return {
+          type: 'response',
+          status: 'error',
+          seqId: opts.seqId,
+          error: await res.json(),
+        };
+      }
+    }
+
     return {
       type: 'response',
       status: 'error',
@@ -103,10 +140,22 @@ class API extends EventTarget {
     };
   }
 
-  getResource = async (url: string) => {
+  getResource = async <T = any>(url: string, retries = 5, retry = 0): Promise<T | null> => {
     const res = await fetch(`${this.baseUrl}${url}`);
     if (res.status === 404) {
       return null;
+    }
+
+    if (res.status >= 500) {
+      if (retries > 0) {
+        try{
+          console.log(await res.json());
+        }catch{}
+        await waitBeforeRetry(retry);
+        return this.getResource(url, retries - 1, retry + 1);
+      } else {
+        throw new ApiError("Server error", url, await res.json());
+      }
     }
 
     if (res.status >= 400) {
