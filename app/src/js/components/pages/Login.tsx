@@ -9,7 +9,7 @@ type LoginProps = {
 
 export const Login = ({ children }: LoginProps) => {
   const [status, setStatus] = useState('pending');
-  const [user, setUser] = useState<string | null>(null);
+  const [userId, setUser] = useState<string | null>(null);
   const [localMsg] = useState(localStorage.getItem('loginMessage'));
   const [msg, setMsg] = useState(null);
 
@@ -60,8 +60,8 @@ export const Login = ({ children }: LoginProps) => {
 
   if (status === 'pending') return 'Auth - pending';
 
-  return user ? (
-    <UserProvider value={user}>
+  return userId ? (
+    <UserProvider value={userId}>
       {children}
     </UserProvider>
   ) : (

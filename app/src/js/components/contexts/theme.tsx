@@ -6,6 +6,7 @@ export type Themes = {
   [id: string]: {
     name: string, 
     icon: IconNames, 
+    logo: string,
     [prop: string]: any
   }
 };
@@ -22,6 +23,7 @@ const themes: Themes = {
   light: {
     name: "Light",
     icon: "sun",
+    logo: "/logo.svg",
     borderColor: "#565856",
     backgroundColor: "#1a1d21",
     highlightedBackgroundColor: "#2a2d31",
@@ -101,6 +103,7 @@ const themes: Themes = {
   test: {
     name: "Test",
     icon: "vail",
+    logo: "/logo_dark.svg",
     borderColor: "#565856",
     backgroundColor: "#1a1d21",
     highlightedBackgroundColor: "#2a2d31",
@@ -180,6 +183,7 @@ const themes: Themes = {
   dark: {
     name: "Dark",
     icon: "moon",
+    logo: "/logo_dark.svg",
     borderColor: "#565856",
     backgroundColor: "#1a1d21",
     highlightedBackgroundColor: "#2a2d31",
@@ -259,6 +263,7 @@ const themes: Themes = {
   "dark-orange-test": {
     name: "Dark Orange Test",
     icon: "carrot",
+    logo: "/logo_dark.svg",
     borderColor: "#565856",
     backgroundColor: "#1a1d21",
     highlightedBackgroundColor: "#2a2d31",

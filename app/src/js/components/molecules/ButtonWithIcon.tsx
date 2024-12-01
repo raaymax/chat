@@ -1,11 +1,11 @@
 import { Button } from '../atoms/Button';
-import { Icon } from '../atoms/Icon';
+import { Icon, IconNames } from '../atoms/Icon';
 import { useSize } from '../contexts/useSize';
 import { ClassNames } from '../../utils';
 
 interface ButtonWithIconProps {
   onClick?: (e: React.MouseEvent) => void;
-  icon?: string;
+  icon?: IconNames;
   size?: number;
   iconSize?: number;
   disabled?: boolean;

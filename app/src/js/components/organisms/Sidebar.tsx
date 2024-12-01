@@ -6,6 +6,7 @@ import { logout } from '../../services/session';
 import { ClassNames, cn } from "../../utils";
 import styled from "styled-components";
 import { ThemeButtonS } from "../atoms/ThemeButton";
+import { LoggedUser } from "../atoms/LoggedUser";
 
 
 const Container = styled.div`
@@ -76,7 +77,7 @@ export const Sidebar = ({style, className}: {style?: {[key: string]: string}, cl
       </div>
       <div className='bottom'>
         <ThemeButtonS />
-        <NavButton icon="logout" size={50} onClick={() => logout()}>Logout</NavButton>
+        <LoggedUser />
       </div>
     </Container>
   );

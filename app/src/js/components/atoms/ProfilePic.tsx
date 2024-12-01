@@ -27,6 +27,13 @@ const Pic = styled.div`
       border-radius: 8px;
     }
   }
+  &.personal {
+    width: 32px;
+    height: 32px;
+    .image {
+      border-radius: 8px;
+    }
+  }
   &.status {
     width: 24px;
     height: 24px;
@@ -83,7 +90,7 @@ const Pic = styled.div`
 type NotificationProps = {
   className?: ClassNames;
   userId: string;
-  type: 'regular' | 'status' | 'tiny' | 'reply';
+  type: 'regular' | 'status' | 'tiny' | 'reply' | 'personal';
   showStatus?: boolean;
 }
 

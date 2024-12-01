@@ -7,6 +7,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   gap: 12px;
+  cursor: pointer;
 
   &:hover {
     background-color: ${({ theme }) => theme.Channel.Hover};
@@ -64,7 +65,7 @@ export const ThemeButton = ({themes, active, onClick}: ThemeButtonProps) => {
   const current = themes[active];
   return (
     <Container onClick={onClick}>
-      <Icon icon={current?.icon ?? 'icons'} />
+      <Icon icon={current?.icon ?? 'icons'} size={32} />
       <div className="label">
         <div className="name">{current?.name ?? 'Unknown'}</div>
         <div className="cta">Click to change</div>

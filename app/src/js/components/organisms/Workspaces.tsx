@@ -29,9 +29,9 @@ export const Workspaces = () => {
     <Container className="workspaces">
       <SizeProvider value={64}>
         <LogoPic onClick={() => {}}/>
-        <ButtonWithIcon icon="bars"/>
+        {/*<ButtonWithIcon icon="bars"/>*/}
         <div className="spacer" />
-        {userId && <ProfilePic type='regular' userId={userId}/> }
+        {/*{userId && <ProfilePic type='regular' userId={userId}/> }*/}
       </SizeProvider>
     </Container>
   );
