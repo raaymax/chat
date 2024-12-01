@@ -1,24 +1,4 @@
-import { createContext, useCallback, useEffect, useState } from 'react';
-import { ThemeProvider } from 'styled-components';
-import { IconNames } from '../atoms/Icon';
-
-export type Themes = {
-  [id: string]: {
-    name: string, 
-    icon: IconNames, 
-    [prop: string]: any
-  }
-};
-
-export type ThemeControl = {
-  theme: string, 
-  themes: Themes,
-  themeNames: string[],
-  setTheme: (v: string) => void
-};
-export const ThemeSelectorContext = createContext<ThemeControl>({theme: 'dark', themeNames: ['dark'], themes: {dark: {name: 'Dark Theme', icon: 'moon'}}, setTheme: () => {}});
-
-const themes: Themes = {
+export const themes = {
   light: {
     name: "Light",
     icon: "sun",
@@ -336,35 +316,3 @@ const themes: Themes = {
     ActiveOverlay: "#0000000D",
   },
 };
-
-type ThemeSelectorContextProps = {
-  children: React.ReactNode;
-  defaultTheme?: string;
-  value?: string;
-};
-
-export const ThemeSelectorProvider = ({ children, defaultTheme = 'dark', value }: ThemeSelectorContextProps) => {
-  const savedTheme = localStorage.getItem('theme');
-  const [theme, setTheme] = useState(savedTheme || defaultTheme);
-  const setThemeAndSave = useCallback((theme: string) => {
-    setTheme(theme);
-    localStorage.setItem('theme', theme);
-  }, [setTheme])
-
-  useEffect(() => {
-    if (value) {
-      setThemeAndSave(value);
-    }
-  }, [value, setThemeAndSave]);
-
-  document.body.setAttribute('style', `--background-color: ${themes[theme].Chatbox.Background};`);
-
-  const currentTheme = themes[theme] ?? themes[defaultTheme];
-  return (
-    <ThemeSelectorContext.Provider value={{theme, setTheme: setThemeAndSave, themes: themes, themeNames: Object.keys(themes)}}>
-      <ThemeProvider theme={currentTheme}>
-        {children}
-      </ThemeProvider>
-    </ThemeSelectorContext.Provider>
-  );
-}

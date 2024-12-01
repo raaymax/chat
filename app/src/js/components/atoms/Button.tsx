@@ -12,15 +12,21 @@ const Container = styled.button`
   background-color: transparent;
   box-sizing: border-box;
   border: none;
+  color: ${({ theme }) => theme.Text};
 
   &:hover {
     background-color: ${({ theme }) => theme.Labels};
   }
 
+  &.disabled .icon{
+    cursor: not-allowed;
+    color: ${({ theme }) => theme.Labels} !important;
+  }
+
+
   &.primary {
     border: none;
     background-color: ${({ theme }) => theme.PrimaryButton.Background};
-    color: inherit;
 
     &:active {
       background-color: ${({ theme }) => theme.buttonActiveBackground};
@@ -29,7 +35,6 @@ const Container = styled.button`
 
   &.secondary {
     border: none;
-    color: ${({ theme }) => theme.Text};
     border: 1px solid ${({ theme }) => theme.SecondaryButton.Default};
     padding: 11px 16px;
 
@@ -47,6 +52,7 @@ const Container = styled.button`
   
 `;
 interface IconButtonProps {
+  disabled?: boolean;
   onClick?: (e: React.MouseEvent) => void;
   size?: number;
   children?: React.ReactNode;
@@ -56,26 +62,26 @@ interface IconButtonProps {
 }
 
 export const Button = ({
-  onClick, size, children, className, type = 'other', tooltip,
+  onClick, size, children, className, type = 'other', tooltip, disabled = false
 }: IconButtonProps) => {
   const $size = useSize(size);
   if (tooltip) {
     return (
       <Tooltip text={tooltip}>
-        <Container onClick={onClick} style={{
+        <Container onClick={(e) => !disabled && onClick?.(e)} style={{
           minWidth: $size + 'px',
           height: $size + 'px',
-        }} className={cn(className, type)}>
+        }} className={cn(className, type, {disabled})}>
           {children}
         </Container>
       </Tooltip>
     );
   }
   return (
-    <Container onClick={onClick} style={{
+    <Container onClick={(e) => !disabled && onClick?.(e)} style={{
       minWidth: $size + 'px',
       height: $size + 'px',
-    }} className={cn(className, type)}>
+    }} className={cn(className, type, {disabled})}>
       {children}
     </Container>
   );

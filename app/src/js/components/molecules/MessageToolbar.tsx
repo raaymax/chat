@@ -11,6 +11,7 @@ import { Toolbar } from '../atoms/Toolbar';
 import { ButtonWithEmoji } from './ButtonWithEmoji';
 import { ButtonWithIcon } from './ButtonWithIcon';
 import { useParams } from 'react-router-dom';
+import { Tooltip } from '../atoms/Tooltip';
 
 export const Container = styled.div`
   position: absolute;
@@ -81,7 +82,7 @@ export const MessageToolbar = ({navigate}: {navigate: (path: string) => void}) =
   const deleteButton = () => <ButtonWithIcon key='del' icon="delete" onClick={() => setView('delete')} />;
   const confirmDelete = () => <ButtonWithIcon key='confirm_del' icon="check:danger" onClick={onDelete} />;
   const cancelButton = () => <ButtonWithIcon key='cancel' icon="circle-xmark" onClick={() => setView(null)} />;
-  const editButton = () => <ButtonWithIcon key='edit' icon="edit" onClick={() => dispatch(actions.messages.toggleEdit(id))} />;
+  const editButton = () => <ButtonWithIcon disabled={true} tooltip="Not yet available" key='edit' icon="edit" onClick={() => dispatch(actions.messages.toggleEdit(id))} />
   const openReactions = () => <ButtonWithIcon key='reactions' icon="icons" onClick={() => setView('reactions')} />;
   const pinButton = () => <ButtonWithIcon key='pin' icon="thumbtack" onClick={() => dispatch(methods.pins.pin({ id, channelId }))} />;
   const unpinButton = () => <ButtonWithIcon key='unpin' icon="thumbtack" onClick={() => dispatch(methods.pins.unpin({ id, channelId }))} />;

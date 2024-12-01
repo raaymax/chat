@@ -6,7 +6,7 @@ const Container = styled.div`
   position: relative;
   flex: 0 0 8px;
   cursor: ew-resize;
-  background-color: ${(props) => props.theme.Channels.Container};
+  background-color: ${(props) => props.theme.Channel.Background};
   border-right: 0;
   &:hover {
     border-right: 1px solid ${(props) => props.theme.PrimaryButton.Background};

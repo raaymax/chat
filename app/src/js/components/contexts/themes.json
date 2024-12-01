@@ -1,0 +1,1051 @@
+{
+  "version": "1.0.4",
+  "metadata": {},
+  "collections": [
+    {
+      "name": "Variable collection",
+      "modes": [
+        {
+          "name": "Light",
+          "variables": [
+            {
+              "name": "Text",
+              "type": "color",
+              "isAlias": false,
+              "value": "#3C3B3B"
+            },
+            {
+              "name": "Labels",
+              "type": "color",
+              "isAlias": false,
+              "value": "#8D8C8C"
+            },
+            {
+              "name": "Buttons/Secondary Button (Icons)/Hover",
+              "type": "color",
+              "isAlias": false,
+              "value": "#262626"
+            },
+            {
+              "name": "Buttons/Secondary Button (Icons)/Default",
+              "type": "color",
+              "isAlias": false,
+              "value": "#595959"
+            },
+            {
+              "name": "Navbar/Background",
+              "type": "color",
+              "isAlias": false,
+              "value": "#E6E5E4"
+            },
+            {
+              "name": "Input/Background",
+              "type": "color",
+              "isAlias": false,
+              "value": "#F0EFED"
+            },
+            {
+              "name": "Strokes",
+              "type": "color",
+              "isAlias": false,
+              "value": "#BFBEBD"
+            },
+            {
+              "name": "Navbar/Icons",
+              "type": "color",
+              "isAlias": false,
+              "value": "#050505"
+            },
+            {
+              "name": "Chatbox/Background",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FAF9F7"
+            },
+            {
+              "name": "Buttons/Secondary Button (Icons)/Background",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FAF9F7"
+            },
+            {
+              "name": "Chatbox/Message/Hover",
+              "type": "color",
+              "isAlias": false,
+              "value": "#EAE8E6"
+            },
+            {
+              "name": "Chatbox/Message/Progress Indicator 100%",
+              "type": "color",
+              "isAlias": false,
+              "value": "#D9D9D9"
+            },
+            {
+              "name": "Chatbox/Message/Reaction button",
+              "type": "color",
+              "isAlias": false,
+              "value": "#E6E4E1"
+            },
+            {
+              "name": "Buttons/Primary Button/Background",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FF8C00"
+            },
+            {
+              "name": "Buttons/Primary Button/Text",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FAFAFA"
+            },
+            {
+              "name": "Toggle Buttons/Default",
+              "type": "color",
+              "isAlias": false,
+              "value": "#8D8C8A"
+            },
+            {
+              "name": "Channel/Active",
+              "type": "color",
+              "isAlias": false,
+              "value": "#E0DFDE"
+            },
+            {
+              "name": "Toggle Buttons/Hover",
+              "type": "color",
+              "isAlias": false,
+              "value": "#050505"
+            },
+            {
+              "name": "Channel/Hover",
+              "type": "color",
+              "isAlias": false,
+              "value": "#EBEAE9"
+            },
+            {
+              "name": "Channel/Inactive",
+              "type": "color",
+              "isAlias": false,
+              "value": "#8B8A89"
+            },
+            {
+              "name": "Channel/Background",
+              "type": "color",
+              "isAlias": false,
+              "value": "#F2F1F0"
+            },
+            {
+              "name": "User/Active",
+              "type": "color",
+              "isAlias": false,
+              "value": "#40BE44"
+            },
+            {
+              "name": "User/Inactive",
+              "type": "color",
+              "isAlias": false,
+              "value": "#EC0A0E"
+            },
+            {
+              "name": "User/AFK",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFB26F"
+            },
+            {
+              "name": "Navbar/Hover",
+              "type": "color",
+              "isAlias": false,
+              "value": "#D9D8D7"
+            },
+            {
+              "name": "Chatbox/Div",
+              "type": "color",
+              "isAlias": false,
+              "value": "#8C8C8B"
+            },
+            {
+              "name": "Channels/HoverText",
+              "type": "color",
+              "isAlias": false,
+              "value": "#747882"
+            },
+            {
+              "name": "Chatbox/Message/Input active",
+              "type": "color",
+              "isAlias": false,
+              "value": "#737270"
+            },
+            {
+              "name": "Icons/Static",
+              "type": "color",
+              "isAlias": false,
+              "value": "#050505"
+            },
+            {
+              "name": "Icons/Hover",
+              "type": "color",
+              "isAlias": false,
+              "value": "#050505"
+            },
+            {
+              "name": "Active overlay",
+              "type": "color",
+              "isAlias": false,
+              "value": "#0000000D"
+            }
+          ]
+        },
+        {
+          "name": "Test",
+          "variables": [
+            {
+              "name": "Text",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FAFAFA"
+            },
+            {
+              "name": "Labels",
+              "type": "color",
+              "isAlias": false,
+              "value": "#737272"
+            },
+            {
+              "name": "Buttons/Secondary Button (Icons)/Hover",
+              "type": "color",
+              "isAlias": false,
+              "value": "#0D0D0D"
+            },
+            {
+              "name": "Buttons/Secondary Button (Icons)/Default",
+              "type": "color",
+              "isAlias": false,
+              "value": "#737272"
+            },
+            {
+              "name": "Navbar/Background",
+              "type": "color",
+              "isAlias": false,
+              "value": "#110922"
+            },
+            {
+              "name": "Input/Background",
+              "type": "color",
+              "isAlias": false,
+              "value": "#313131"
+            },
+            {
+              "name": "Strokes",
+              "type": "color",
+              "isAlias": false,
+              "value": "#403F3F"
+            },
+            {
+              "name": "Navbar/Icons",
+              "type": "color",
+              "isAlias": false,
+              "value": "#E0E0E0"
+            },
+            {
+              "name": "Chatbox/Background",
+              "type": "color",
+              "isAlias": false,
+              "value": "#383837"
+            },
+            {
+              "name": "Buttons/Secondary Button (Icons)/Background",
+              "type": "color",
+              "isAlias": false,
+              "value": "#050505"
+            },
+            {
+              "name": "Chatbox/Message/Hover",
+              "type": "color",
+              "isAlias": false,
+              "value": "#313131"
+            },
+            {
+              "name": "Chatbox/Message/Progress Indicator 100%",
+              "type": "color",
+              "isAlias": false,
+              "value": "#262626"
+            },
+            {
+              "name": "Chatbox/Message/Reaction button",
+              "type": "color",
+              "isAlias": false,
+              "value": "#222221"
+            },
+            {
+              "name": "Buttons/Primary Button/Background",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FF8C00"
+            },
+            {
+              "name": "Buttons/Primary Button/Text",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FAFAFA"
+            },
+            {
+              "name": "Toggle Buttons/Default",
+              "type": "color",
+              "isAlias": false,
+              "value": "#737270"
+            },
+            {
+              "name": "Channel/Active",
+              "type": "color",
+              "isAlias": false,
+              "value": "#1F1E1E"
+            },
+            {
+              "name": "Toggle Buttons/Hover",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FAFAFA"
+            },
+            {
+              "name": "Channel/Hover",
+              "type": "color",
+              "isAlias": false,
+              "value": "#403F3F"
+            },
+            {
+              "name": "Channel/Inactive",
+              "type": "color",
+              "isAlias": false,
+              "value": "#8B8A89"
+            },
+            {
+              "name": "Channel/Background",
+              "type": "color",
+              "isAlias": false,
+              "value": "#333332"
+            },
+            {
+              "name": "User/Active",
+              "type": "color",
+              "isAlias": false,
+              "value": "#40BE44"
+            },
+            {
+              "name": "User/Inactive",
+              "type": "color",
+              "isAlias": false,
+              "value": "#EC0A0E"
+            },
+            {
+              "name": "User/AFK",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFB26F"
+            },
+            {
+              "name": "Navbar/Hover",
+              "type": "color",
+              "isAlias": false,
+              "value": "#292928"
+            },
+            {
+              "name": "Chatbox/Div",
+              "type": "color",
+              "isAlias": false,
+              "value": "#737272"
+            },
+            {
+              "name": "Channels/HoverText",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FAFAFA"
+            },
+            {
+              "name": "Chatbox/Message/Input active",
+              "type": "color",
+              "isAlias": false,
+              "value": "#A6A4A2"
+            },
+            {
+              "name": "Icons/Static",
+              "type": "color",
+              "isAlias": false,
+              "value": "#050505"
+            },
+            {
+              "name": "Icons/Hover",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF"
+            },
+            {
+              "name": "Active overlay",
+              "type": "color",
+              "isAlias": false,
+              "value": "#0000000D"
+            }
+          ]
+        },
+        {
+          "name": "Dark",
+          "variables": [
+            {
+              "name": "Text",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FAFAFA"
+            },
+            {
+              "name": "Labels",
+              "type": "color",
+              "isAlias": false,
+              "value": "#737373"
+            },
+            {
+              "name": "Buttons/Secondary Button (Icons)/Hover",
+              "type": "color",
+              "isAlias": false,
+              "value": "#F2F2F2"
+            },
+            {
+              "name": "Buttons/Secondary Button (Icons)/Default",
+              "type": "color",
+              "isAlias": false,
+              "value": "#BFBFBF"
+            },
+            {
+              "name": "Navbar/Background",
+              "type": "color",
+              "isAlias": false,
+              "value": "#201F22"
+            },
+            {
+              "name": "Input/Background",
+              "type": "color",
+              "isAlias": false,
+              "value": "#2E2C31"
+            },
+            {
+              "name": "Strokes",
+              "type": "color",
+              "isAlias": false,
+              "value": "#3C3940"
+            },
+            {
+              "name": "Navbar/Icons",
+              "type": "color",
+              "isAlias": false,
+              "value": "#E0E0E0"
+            },
+            {
+              "name": "Chatbox/Background",
+              "type": "color",
+              "isAlias": false,
+              "value": "#343238"
+            },
+            {
+              "name": "Buttons/Secondary Button (Icons)/Background",
+              "type": "color",
+              "isAlias": false,
+              "value": "#050505"
+            },
+            {
+              "name": "Chatbox/Message/Hover",
+              "type": "color",
+              "isAlias": false,
+              "value": "#2E2C31"
+            },
+            {
+              "name": "Chatbox/Message/Progress Indicator 100%",
+              "type": "color",
+              "isAlias": false,
+              "value": "#242226"
+            },
+            {
+              "name": "Chatbox/Message/Reaction button",
+              "type": "color",
+              "isAlias": false,
+              "value": "#201F22"
+            },
+            {
+              "name": "Buttons/Primary Button/Background",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FF8C00"
+            },
+            {
+              "name": "Buttons/Primary Button/Text",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FAFAFA"
+            },
+            {
+              "name": "Toggle Buttons/Default",
+              "type": "color",
+              "isAlias": false,
+              "value": "#6B6773"
+            },
+            {
+              "name": "Channel/Active",
+              "type": "color",
+              "isAlias": false,
+              "value": "#1D1C1F"
+            },
+            {
+              "name": "Toggle Buttons/Hover",
+              "type": "color",
+              "isAlias": false,
+              "value": "#E9E1FA"
+            },
+            {
+              "name": "Channel/Hover",
+              "type": "color",
+              "isAlias": false,
+              "value": "#3C3940"
+            },
+            {
+              "name": "Channel/Inactive",
+              "type": "color",
+              "isAlias": false,
+              "value": "#817D8B"
+            },
+            {
+              "name": "Channel/Background",
+              "type": "color",
+              "isAlias": false,
+              "value": "#2F2D32"
+            },
+            {
+              "name": "User/Active",
+              "type": "color",
+              "isAlias": false,
+              "value": "#40BE44"
+            },
+            {
+              "name": "User/Inactive",
+              "type": "color",
+              "isAlias": false,
+              "value": "#EC0A0E"
+            },
+            {
+              "name": "User/AFK",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFB26F"
+            },
+            {
+              "name": "Navbar/Hover",
+              "type": "color",
+              "isAlias": false,
+              "value": "#262529"
+            },
+            {
+              "name": "Chatbox/Div",
+              "type": "color",
+              "isAlias": false,
+              "value": "#6B6773"
+            },
+            {
+              "name": "Channels/HoverText",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FAFAFA"
+            },
+            {
+              "name": "Chatbox/Message/Input active",
+              "type": "color",
+              "isAlias": false,
+              "value": "#9B95A6"
+            },
+            {
+              "name": "Icons/Static",
+              "type": "color",
+              "isAlias": false,
+              "value": "#E0E0E0"
+            },
+            {
+              "name": "Icons/Hover",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF"
+            },
+            {
+              "name": "Active overlay",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF0D"
+            }
+          ]
+        },
+        {
+          "name": "Dark-Orange-Test",
+          "variables": [
+            {
+              "name": "Text",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FAFAFA"
+            },
+            {
+              "name": "Labels",
+              "type": "color",
+              "isAlias": false,
+              "value": "#737373"
+            },
+            {
+              "name": "Buttons/Secondary Button (Icons)/Hover",
+              "type": "color",
+              "isAlias": false,
+              "value": "#0D0C0B"
+            },
+            {
+              "name": "Buttons/Secondary Button (Icons)/Default",
+              "type": "color",
+              "isAlias": false,
+              "value": "#736E67"
+            },
+            {
+              "name": "Navbar/Background",
+              "type": "color",
+              "isAlias": false,
+              "value": "#22201F"
+            },
+            {
+              "name": "Input/Background",
+              "type": "color",
+              "isAlias": false,
+              "value": "#312F2C"
+            },
+            {
+              "name": "Strokes",
+              "type": "color",
+              "isAlias": false,
+              "value": "#403D39"
+            },
+            {
+              "name": "Navbar/Icons",
+              "type": "color",
+              "isAlias": false,
+              "value": "#E0E0E0"
+            },
+            {
+              "name": "Chatbox/Background",
+              "type": "color",
+              "isAlias": false,
+              "value": "#383532"
+            },
+            {
+              "name": "Buttons/Secondary Button (Icons)/Background",
+              "type": "color",
+              "isAlias": false,
+              "value": "#050505"
+            },
+            {
+              "name": "Chatbox/Message/Hover",
+              "type": "color",
+              "isAlias": false,
+              "value": "#312F2C"
+            },
+            {
+              "name": "Chatbox/Message/Progress Indicator 100%",
+              "type": "color",
+              "isAlias": false,
+              "value": "#262522"
+            },
+            {
+              "name": "Chatbox/Message/Reaction button",
+              "type": "color",
+              "isAlias": false,
+              "value": "#22201F"
+            },
+            {
+              "name": "Buttons/Primary Button/Background",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FF8C00"
+            },
+            {
+              "name": "Buttons/Primary Button/Text",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FAFAFA"
+            },
+            {
+              "name": "Toggle Buttons/Default",
+              "type": "color",
+              "isAlias": false,
+              "value": "#736E67"
+            },
+            {
+              "name": "Channel/Active",
+              "type": "color",
+              "isAlias": false,
+              "value": "#1F1D1C"
+            },
+            {
+              "name": "Toggle Buttons/Hover",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FAEFE1"
+            },
+            {
+              "name": "Channel/Hover",
+              "type": "color",
+              "isAlias": false,
+              "value": "#403D39"
+            },
+            {
+              "name": "Channel/Inactive",
+              "type": "color",
+              "isAlias": false,
+              "value": "#8B847D"
+            },
+            {
+              "name": "Channel/Background",
+              "type": "color",
+              "isAlias": false,
+              "value": "#33312E"
+            },
+            {
+              "name": "User/Active",
+              "type": "color",
+              "isAlias": false,
+              "value": "#40BE44"
+            },
+            {
+              "name": "User/Inactive",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FF3700"
+            },
+            {
+              "name": "User/AFK",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFB26F"
+            },
+            {
+              "name": "Navbar/Hover",
+              "type": "color",
+              "isAlias": false,
+              "value": "#292725"
+            },
+            {
+              "name": "Chatbox/Div",
+              "type": "color",
+              "isAlias": false,
+              "value": "#6B6773"
+            },
+            {
+              "name": "Channels/HoverText",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FAFAFA"
+            },
+            {
+              "name": "Chatbox/Message/Input active",
+              "type": "color",
+              "isAlias": false,
+              "value": "#A69E95"
+            },
+            {
+              "name": "Icons/Static",
+              "type": "color",
+              "isAlias": false,
+              "value": "#E0E0E0"
+            },
+            {
+              "name": "Icons/Hover",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF"
+            },
+            {
+              "name": "Active overlay",
+              "type": "color",
+              "isAlias": false,
+              "value": "#0000000D"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Typography",
+      "modes": [
+        {
+          "name": "Style",
+          "variables": [
+            {
+              "name": "Caption",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 12,
+                "fontFamily": "IBM Plex Sans",
+                "fontWeight": "Regular",
+                "lineHeight": 20,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Name",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 16,
+                "fontFamily": "IBM Plex Sans",
+                "fontWeight": "Medium",
+                "lineHeight": 24,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Body text",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 16,
+                "fontFamily": "IBM Plex Sans",
+                "fontWeight": "Regular",
+                "lineHeight": 24,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Chatbox navigation header",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 20,
+                "fontFamily": "IBM Plex Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 28,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Subheader",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 16,
+                "fontFamily": "IBM Plex Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 24,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "descriptions",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 16,
+                "fontFamily": "IBM Plex Sans",
+                "fontWeight": "Regular",
+                "lineHeight": 24,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "header",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 40,
+                "fontFamily": "IBM Plex Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 48,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Textbox",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 16,
+                "fontFamily": "IBM Plex Sans",
+                "fontWeight": "Medium",
+                "lineHeight": 24,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "textbox error",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 16,
+                "fontFamily": "IBM Plex Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 24,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "User name",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 16,
+                "fontFamily": "IBM Plex Sans",
+                "fontWeight": "Medium",
+                "lineHeight": 24,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Category",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 16,
+                "fontFamily": "IBM Plex Sans",
+                "fontWeight": "Medium",
+                "lineHeight": 24,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Category hoeri",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 16,
+                "fontFamily": "IBM Plex Sans",
+                "fontWeight": "Bold",
+                "lineHeight": 24,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "button",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 14,
+                "fontFamily": "IBM Plex Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 21,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 2,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "UPPER",
+                "textDecoration": "NONE"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Effects",
+      "modes": [
+        {
+          "name": "Style",
+          "variables": [
+            {
+              "name": "drop shadow default",
+              "type": "effect",
+              "isAlias": false,
+              "value": {
+                "effects": [
+                  {
+                    "type": "DROP_SHADOW",
+                    "color": {
+                      "r": 0,
+                      "g": 0,
+                      "b": 0,
+                      "a": 0.15
+                    },
+                    "offset": {
+                      "x": 0,
+                      "y": 0
+                    },
+                    "radius": 4,
+                    "spread": 0
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Drop shadow",
+              "type": "effect",
+              "isAlias": false,
+              "value": {
+                "effects": [
+                  {
+                    "type": "DROP_SHADOW",
+                    "color": {
+                      "r": 0,
+                      "g": 0,
+                      "b": 0,
+                      "a": 0.15
+                    },
+                    "offset": {
+                      "x": 0,
+                      "y": 0
+                    },
+                    "radius": 4,
+                    "spread": 1
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

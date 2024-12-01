@@ -8,19 +8,21 @@ interface ButtonWithIconProps {
   icon?: string;
   size?: number;
   iconSize?: number;
+  disabled?: boolean;
+  tooltip?: string | string[];
   children?: React.ReactNode;
   className?: ClassNames;
 }
 
 export const ButtonWithIcon = ({
-  onClick, size, icon, iconSize, children, className,
+  onClick, size, icon, iconSize, children, className, disabled, tooltip,
 }: ButtonWithIconProps) => {
   const $size = useSize(size);
   if (!iconSize) {
     iconSize = $size ? $size / 2 : $size;
   }
   return (
-    <Button size={$size} onClick={onClick} className={className}>
+    <Button disabled={disabled} size={$size} onClick={onClick} className={className} tooltip={tooltip}> 
       {icon && <Icon icon={icon} size={iconSize} />}
       {children}
     </Button>

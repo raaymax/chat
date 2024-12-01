@@ -5,12 +5,13 @@ import { NavUsers } from "../molecules/NavUsers";
 import { logout } from '../../services/session';
 import { ClassNames, cn } from "../../utils";
 import styled from "styled-components";
+import { ThemeButtonS } from "../atoms/ThemeButton";
 
 
 const Container = styled.div`
   flex: 0 0 356px;
   display: flex;
-  background-color: ${(props) => props.theme.Channels.Container};
+  background-color: ${(props) => props.theme.Channel.Background};
   flex-direction: column;
 
   .side-menu-header {
@@ -64,8 +65,6 @@ const Container = styled.div`
 
 `;
 export const Sidebar = ({style, className}: {style?: {[key: string]: string}, className?: ClassNames}) => {
-  const themeControl = useThemeControl();
-  const otherTheme = themeControl.themeNames.find((name) => name !== themeControl.theme);
   return (
     <Container className={cn('side-menu', className)} style={style}>
       <div className='side-menu-header'>
@@ -76,7 +75,7 @@ export const Sidebar = ({style, className}: {style?: {[key: string]: string}, cl
         <NavUsers />
       </div>
       <div className='bottom'>
-        <NavButton icon="star" size={50} onClick={() => {if(otherTheme) themeControl.setTheme(otherTheme)}}>Theme</NavButton>
+        <ThemeButtonS />
         <NavButton icon="logout" size={50} onClick={() => logout()}>Logout</NavButton>
       </div>
     </Container>

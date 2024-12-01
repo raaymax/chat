@@ -35,7 +35,13 @@ const iconMap: Record<string, string> = {
   'system-user': 'fa-solid fa-user-gear',
   user: 'fa-solid fa-user',
   smile: 'fa-regular fa-face-smile',
+  moon: "fa-regular fa-moon",
+  sun: "fa-regular fa-sun",
+  carrot: "fa-solid fa-carrot",
+  vail: "fa-solid fa-vial",
 } as const;
+
+export type IconNames = keyof typeof iconMap;
 
 const getIcon = (icon: string) => {
   const [key, mod] = icon?.split(':') ?? [];

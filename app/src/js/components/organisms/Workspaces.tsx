@@ -14,6 +14,7 @@ const Container = styled.div`
   height: 100%;
   padding: 16px 0;
   background-color: ${(props) => props.theme.Navbar.Background};
+  color: ${(props) => props.theme.Text};
   & > *{
     margin: 0 auto;
   }
