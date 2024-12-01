@@ -2,7 +2,8 @@
   "workspace": [
     "./deno/config",
     "./deno/server",
-    "./deno/storage"
+    "./deno/storage",
+    "./deno/migrate"
   ],
   "imports": {
     "@planigale/body-parser": "jsr:@planigale/body-parser",
@@ -39,7 +40,8 @@
     "lint": "deno lint && deno run -A npm:eslint .",
     "start": "deno task -c ./deno/server/deno.jsonc start",
     "build": "deno task -c ./packages/app/deno.jsonc build",
-    "migrate": "deno run -A npm:migrate-mongo -- up",
+    "migrate": "deno task -c ./deno/migrate/deno.json migrate",
+    "migrate:tests": "DATABASE_URL='mongodb://chat:chat@localhost:27017/tests?authSource=admin' deno task migrate",
     "test": "DATABASE_URL='mongodb://chat:chat@localhost:27017/tests?authSource=admin' deno test -A",
     "ssl": "mkdir -p ssl && openssl req -x509 -newkey rsa:4096 -keyout ssl/key.pem -out ssl/cert.pem -days 365 -nodes -subj '/CN=localhost'",
     "check": "deno run -A npm:eslint . && deno fmt && deno lint && npm run types && deno test -A"

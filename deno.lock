@@ -5285,6 +5285,12 @@
           "npm:web-push@3.6.7"
         ]
       },
+      "deno/migrate": {
+        "dependencies": [
+          "jsr:@std/path@^1.0.2",
+          "npm:mongodb@^6.8.0"
+        ]
+      },
       "deno/server": {
         "dependencies": [
           "jsr:@oak/oak@^16.1.0",

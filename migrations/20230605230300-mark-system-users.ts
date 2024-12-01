@@ -1,9 +1,6 @@
-module.exports = {
-  async up(db) {
+export async function up(db) {
     db.collection('users').updateMany({ login: { $in: ['system'] } }, { $set: { system: true } });
-  },
-
-  async down(db) {
+}
+export async function down(db) {
     db.collection('users').updateMany({ login: { $in: ['system'] } }, { $unset: { system: true } });
-  },
-};
+}

@@ -1,10 +1,7 @@
  
-module.exports = {
-  async up(db) {
+export async function up(db) {
     return db.collection('messages').createIndex({ flat: 'text' });
-  },
-
-  async down(db) {
+}
+export async function down(db) {
     return db.collection('messages').createIndex({ flat: 'text' });
-  },
-};
+}

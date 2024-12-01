@@ -1,9 +1,6 @@
-module.exports = {
-  async up(db, client) {
+export async function up(db, client) {
     await db.collection('users').updateOne({ login: 'system' }, { $set: { alias: 'system' } });
-  },
-
-  async down(db, client) {
+}
+export async function down(db, client) {
     await db.collection('users').updateOne({ login: 'system' }, { $unset: { alias: true } });
-  },
-};
+}
