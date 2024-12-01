@@ -68,6 +68,10 @@ export const update = (json: any): any  => {
 export const up = async (db) => {
 	const docs = await db.collection('messages').find({});
 	for await (const doc of docs) {
+    const newMessage = update(doc.message);
+    if (JSON.stringify(doc.message) === JSON.stringify(newMessage)) {
+      continue;
+    }
     console.log(doc._id);
 		await db.collection('messages').updateOne({ _id: doc._id }, { $set: { message: update(doc.message) } });
 	}
