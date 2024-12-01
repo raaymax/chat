@@ -4,12 +4,14 @@ import { Search } from './pages/Search';
 import { Pins } from './organisms/Pins';
 import { redirect, useRouteError } from 'react-router-dom';
 import { client, ApiError } from '../core'
+import { ErrorPageS } from './pages/ErrorPage';
 
 import {
   createHashRouter,
   Outlet,
   RouterProvider,
 } from "react-router-dom";
+import { PageNotFoundError } from './errors';
 
 
 const router = createHashRouter([
@@ -20,13 +22,13 @@ const router = createHashRouter([
         path: "/:channelId",
         loader: async ({ params }) => {
           const {channelId} = params;
-          if(!channelId) throw new Error('Page not found');
+          if(!channelId) throw new PageNotFoundError()
           const channel = await client.api.getChannelById(channelId);
-          if (!channel) throw new Error('Page not found');
+          if(!channel) throw new PageNotFoundError()
           return null;
         },
         element: <Discussion />,
-        errorElement: <ErrorBoundary/>,
+        errorElement: <ErrorPageS/>,
       },
       {
         path: "/:channelId/search",
@@ -41,7 +43,7 @@ const router = createHashRouter([
         element: <Discussion/>,
       },
     ],
-    errorElement: <ErrorBoundary/>,
+    errorElement: <ErrorPageS />,
   },
   {
     path: "/*",
@@ -49,48 +51,10 @@ const router = createHashRouter([
       const {mainChannelId} = await client.api.getUserConfig()
       return redirect(`/${mainChannelId}`);
     },
-    errorElement: <ErrorBoundary/>,
+    errorElement: <ErrorPageS />,
   },
 ]);
 
-function ErrorBoundary() {
-  let error = useRouteError();
-  console.error(error);
-  if (error instanceof ApiError) {
-    return (
-      <div>
-        <div>
-          error - <button onClick={() => document.location.reload()}>try again</button>
-        </div>
-        <h2>{error.message}</h2>
-        <pre>
-          {error.url}
-        </pre>
-        <pre>
-          {error.stack}
-        </pre>
-        <pre>
-          {error.payload && JSON.stringify(error.payload, null, 2)}
-        </pre>
-      </div>
-    );
-  }
-  if (error instanceof Error) {
-    return (
-      <div>
-        <div>
-          error - <button onClick={() => document.location.reload()}>try again</button>
-        </div>
-        <h2>{error.message}</h2>
-        <pre>
-          {error.stack}
-        </pre>
-      </div>
-    );
-  }
-
-  return <div>error - <button onClick={() => document.location.reload()}>try again</button></div>;
-}
 
 export const Router= () => {
   return (

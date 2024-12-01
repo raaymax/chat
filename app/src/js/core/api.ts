@@ -22,8 +22,11 @@ async function waitBeforeRetry(retry: number) {
 
 export class ApiError extends Error {
   payload: any;
-  constructor(msg: string, url: string, payload: any) {
+  url: string
+  status: number;
+  constructor(msg: string, status:number, url: string, payload: any) {
     super(msg);
+    this.status = status;
     this.url = url;
     this.payload = payload; 
   }
@@ -154,12 +157,12 @@ class API extends EventTarget {
         await waitBeforeRetry(retry);
         return this.getResource(url, retries - 1, retry + 1);
       } else {
-        throw new ApiError("Server error", url, await res.json());
+        throw new ApiError("Server error", res.status, url, await res.json());
       }
     }
 
     if (res.status >= 400) {
-      throw new ApiError("Api error", url, await res.json())
+      throw new ApiError("Api error", res.status, url, await res.json())
     }
     return await res.json()
   }
