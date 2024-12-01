@@ -169,6 +169,7 @@ const MessageBase = ({ onClick, sameUser, navigate = () => {}, ...props }: Messa
     userId,
     linkPreviews,
     reactions,
+    annotations,
     priv: ephemeral,
   } = msg;
   const { onEnter, toggleHovered, onLeave } = useHoverCtrl(msg.id);
@@ -211,6 +212,9 @@ const MessageBase = ({ onClick, sameUser, navigate = () => {}, ...props }: Messa
         {streamName != 'side' && <ThreadInfo navigate={navigate} msg={msg}/>}
         <ReadReceipt data={msg.progress} />
         <MessageToolbar navigate={navigate} />
+        {annotations && <div className='generated'>
+          {buildMessageBody(annotations)}
+        </div>}
       </div>
     </MessageContainer>
   );

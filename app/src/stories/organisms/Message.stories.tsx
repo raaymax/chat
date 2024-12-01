@@ -7,6 +7,7 @@ import { HoverProvider } from '../../js/components/contexts/hover.tsx';
 import { store, actions } from '../../js/store';
 import { useHoverCtrl } from '../../js/components/contexts/useHoverCtrl.ts';
 
+const LOREM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sollicitudin scelerisque nisl quis condimentum. Aliquam eget lacus eros. Vestibulum ac posuere massa, eget euismod enim. Nulla interdum magna tortor. Vestibulum sagittis, ex in maximus maximus, neque purus tempor magna, sit amet molestie sapien est id augue. Nulla imperdiet leo nec nisl commodo, nec fringilla leo vehicula. Suspendisse nibh orci, convallis at dictum ut, volutpat non orci. Nulla scelerisque sapien eget purus ullamcorper, eu pellentesque odio tincidunt. Vivamus quis maximus sapien, vitae placerat urna. Vestibulum finibus facilisis aliquam. Aliquam iaculis augue vel metus varius cursus.";
  
 const meta: Meta<typeof Message> = {
   component: Message,
@@ -70,9 +71,9 @@ const BaseMessage = {
 
 const LongTextMessage = {
   ...BaseMessage,
-  flat: 'nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?',
+  flat: LOREM,
   message: {
-    line: { text: 'nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?' },
+    line: { text: LOREM },
   }
 }
 
@@ -236,7 +237,7 @@ export const WithLinkPreview: Story = {
         {
           url: 'http://example.com',
           title: 'Example',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sollicitudin scelerisque nisl quis condimentum. Aliquam eget lacus eros. Vestibulum ac posuere massa, eget euismod enim. Nulla interdum magna tortor. Vestibulum sagittis, ex in maximus maximus, neque purus tempor magna, sit amet molestie sapien est id augue. Nulla imperdiet leo nec nisl commodo, nec fringilla leo vehicula. Suspendisse nibh orci, convallis at dictum ut, volutpat non orci. Nulla scelerisque sapien eget purus ullamcorper, eu pellentesque odio tincidunt. Vivamus quis maximus sapien, vitae placerat urna. Vestibulum finibus facilisis aliquam. Aliquam iaculis augue vel metus varius cursus.',
+          description: LOREM,
           images: ['https://picsum.photos/200'],
           videos: [],
           mediaType: 'website',
@@ -247,7 +248,7 @@ export const WithLinkPreview: Story = {
         },{
           url: 'http://example.com',
           title: 'Example',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sollicitudin scelerisque nisl quis condimentum. Aliquam eget lacus eros. Vestibulum ac posuere massa, eget euismod enim. Nulla interdum magna tortor. Vestibulum sagittis, ex in maximus maximus, neque purus tempor magna, sit amet molestie sapien est id augue. Nulla imperdiet leo nec nisl commodo, nec fringilla leo vehicula. Suspendisse nibh orci, convallis at dictum ut, volutpat non orci. Nulla scelerisque sapien eget purus ullamcorper, eu pellentesque odio tincidunt. Vivamus quis maximus sapien, vitae placerat urna. Vestibulum finibus facilisis aliquam. Aliquam iaculis augue vel metus varius cursus.',
+          description: LOREM,
           images: ['https://picsum.photos/200'],
           videos: [],
           mediaType: 'website',
@@ -258,6 +259,37 @@ export const WithLinkPreview: Story = {
         }
 
       ]
+    }
+  },
+};
+
+export const WithLinkAnnotations: Story = {
+  args: {
+    mode: 'default',
+    data: {
+      ...BaseMessage,
+      flat: 'http://example.com',
+      message: {link: {href: 'http://example.com', children: {text: 'http://example.com'}}},
+      links: ['http://example.com'],
+      annotations: [
+        {wrap: [
+          {
+            column: [
+              {line: {img: {src: 'https://picsum.photos/200', alt: 'title'}}},
+              {line: {bold: {text: 'title'}}},
+              {line: {italic: {text: LOREM}}}
+            ], 
+            width: 200
+
+          },
+          {column: [
+            {line: {img: {src: 'https://picsum.photos/200', alt: 'title'}}},
+            {line: {bold: {text: 'title'}}},
+            {line: {text: LOREM}}
+          ], 
+          width: 200}
+        ]}
+      ],
     }
   },
 };

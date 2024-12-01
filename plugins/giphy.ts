@@ -76,12 +76,12 @@ export default (config) => async (app, core) => {
           flat: 'Giphy search results',
           message: [
             { line: [{ text: `Giphy search results: ${(payload.idx+1)} / ${payload.count}`}] },
-            { line: { img: { src: payload.imageUrl, alt: payload.title } } },
+            { line: { img: payload.imageUrl, _alt: payload.title } },
             { line: [
-              { button: {text: "Send", action: 'giphy:send', payload } },
-              { button: {text: "Next", action: 'giphy:next', payload } },
-              { button: {text: "Previous", action: 'giphy:prev', payload } },
-              { button: {text: "Cancel", action: 'giphy:close' } },
+              { button: "Send", _action: 'giphy:send', _payload: payload },
+              { button: "Next", _action: 'giphy:next', _payload: payload },
+              { button: "Previous", _action: 'giphy:prev', _payload: payload },
+              { button: "Cancel", _action: 'giphy:close' },
             ]},
           ],
           createdAt: new Date().toISOString(),
@@ -104,7 +104,7 @@ export default (config) => async (app, core) => {
             flat: interaction.text,
             message: [
               { line: [ {text: "/giphy "}, {text: interaction.payload.text}]},
-              { line: { img: { src: interaction.payload.imageUrl, alt: interaction.text } } },
+              { line: { img: interaction.payload.imageUrl, _alt: interaction.text } },
             ],
           },
         });

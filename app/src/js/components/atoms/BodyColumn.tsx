@@ -1,13 +1,6 @@
 import styled from 'styled-components';
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  max-width: calc(100vw - 30px);
-  flex-wrap: wrap;
-`;
-
-const Link = styled.div<{$image: string}>`
+const ColumnContainer= styled.div<{$image: string}>`
   flex: 0 0 300px;
   display: block;
   max-width: 300px;
@@ -56,31 +49,18 @@ type Link = {
   images: string[];
 };
 
-type LinkPreviewProps = {
-  link: Link;
+type BodyColumnProps = {
+  link: string;
+  width: number;
+  children: React.ReactNode;
 };
 
-export const LinkPreview = ({ link }: LinkPreviewProps) => (
-  <Link className='link-preview' onClick={() => window.open(link.url, '_blank')?.focus()}
-    $image={link.images[0]}>
-    {link.images?.length && <div className='image' />}
-    <div className='text'>
-      <h3>{link.siteName} - {link.title}</h3>
-      <p>{link.description}</p>
-    </div>
-  </Link>
+export const BodyColumn = ({ link, width, children }: BodyColumnProps) => (
+  <ColumnContainer style={{
+    width: `${width}px`, 
+    flex: `0 0 ${width}px`
+  }} onClick={() => window.open(link, '_blank')?.focus()}>
+    {children}
+  </ColumnContainer>
 );
 
-type LinkPreviewListProps = {
-  links: Link[];
-};
-
-export const LinkPreviewList = ({ links = [] }: LinkPreviewListProps) => links.length > 0
-  ? (
-    <Container className="cmp-link-preview-list">
-      {links.map((link, key) => (
-        <LinkPreview link={link} key={key} />
-      ))}
-    </Container>
-  )
-  : null;

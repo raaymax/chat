@@ -19,15 +19,15 @@ export function flatten(tree: types.MessageBody): string {
     if (is<types.MessageBodyCode>(n, "code")) return n.code;
     if (is<types.MessageBodyCodeblock>(n, "codeblock")) return n.codeblock;
     if (is<types.MessageBodyEmoji>(n, "emoji")) return n.emoji;
-    if (is<types.MessageBodyImg>(n, "img")) return n.img.alt;
+    if (is<types.MessageBodyImg>(n, "img")) return n._alt;
     if (is<types.MessageBodyItalic>(n, "italic")) return flatten(n.italic);
     if (is<types.MessageBodyItem>(n, "item")) return flatten(n.item);
     if (is<types.MessageBodyLine>(n, "line")) return [flatten(n.line), "\n"];
-    if (is<types.MessageBodyLink>(n, "link")) return flatten(n.link.children);
+    if (is<types.MessageBodyLink>(n, "link")) return flatten(n.link);
     if (is<types.MessageBodyOrdered>(n, "ordered")) return flatten(n.ordered);
     if (is<types.MessageBodyStrike>(n, "strike")) return flatten(n.strike);
     if (is<types.MessageBodyText>(n, "text")) return n.text;
-    if (is<types.MessageBodyThread>(n, "thread")) return n.thread.text;
+    if (is<types.MessageBodyThread>(n, "thread")) return n.thread;
     if (is<types.MessageBodyUnderline>(n, "underline")) {
       return flatten(n.underline);
     }

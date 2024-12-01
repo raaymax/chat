@@ -104,15 +104,15 @@ export function flatten(tree: MessageBody): string {
     if (is<types.MessageBodyCode>(n, 'code')) return n.code;
     if (is<types.MessageBodyCodeblock>(n, 'codeblock')) return n.codeblock;
     if (is<types.MessageBodyEmoji>(n, 'emoji')) return n.emoji;
-    if (is<types.MessageBodyImg>(n, 'img')) return n.img.alt;
+    if (is<types.MessageBodyImg>(n, 'img')) return n._alt;
     if (is<types.MessageBodyItalic>(n, 'italic')) return flatten(n.italic);
     if (is<types.MessageBodyItem>(n, 'item')) return flatten(n.item);
     if (is<types.MessageBodyLine>(n, 'line')) return [flatten(n.line), '\n'];
-    if (is<types.MessageBodyLink>(n, 'link')) return flatten(n.link.children);
+    if (is<types.MessageBodyLink>(n, 'link')) return flatten(n.link);
     if (is<types.MessageBodyOrdered>(n, 'ordered')) return flatten(n.ordered);
     if (is<types.MessageBodyStrike>(n, 'strike')) return flatten(n.strike);
     if (is<types.MessageBodyText>(n, 'text')) return n.text;
-    if (is<types.MessageBodyThread>(n, 'thread')) return n.thread.text;
+    if (is<types.MessageBodyThread>(n, 'thread')) return n.thread;
     if (is<types.MessageBodyUnderline>(n, 'underline')) return flatten(n.underline);
     if (is<types.MessageBodyUser>(n, 'user')) return n.user;
      
@@ -122,18 +122,22 @@ export function flatten(tree: MessageBody): string {
 }
 
 const mapNodes = (dom: HTMLElement, info: SerializeInfo): MessageBody => (
+  console.log('mapNodes', dom),
   !dom.childNodes ? [] : ([...dom.childNodes] as HTMLElement[]).map((n): MessageBody => {
     if (n.nodeName === '#text') return processUrls(n.nodeValue ?? '', info);
     if (n.nodeName === 'U') return { underline: mapNodes(n, info) };
     if (n.nodeName === 'CODE') return { code: n.nodeValue ?? '' };
-    if (n.nodeName === 'A') return { link: { href: n.getAttribute('href') ?? '', children: mapNodes(n, info) } };
+    if (n.nodeName === 'A') {
+      console.log('link', n, { link: mapNodes(n, info), _href: n.getAttribute('href') ?? '' });
+      return { link: mapNodes(n, info), _href: n.getAttribute('href') ?? '' };
+    }
     if (n.nodeName === 'B') return { bold: mapNodes(n, info) };
     if (n.nodeName === 'I') return { italic: mapNodes(n, info) };
     if (n.nodeName === 'S') return { strike: mapNodes(n, info) };
     if (n.nodeName === 'DIV') return { line: mapNodes(n, info) };
     if (n.nodeName === 'UL') return { bullet: mapNodes(n, info) };
     if (n.nodeName === 'LI') return { item: mapNodes(n, info) };
-    if (n.nodeName === 'IMG') return { img: { src: n.getAttribute('src') ?? '', alt: n.getAttribute('alt') ?? '' } };
+    if (n.nodeName === 'IMG') return { img: n.getAttribute('src') ?? '', _alt: n.getAttribute('alt') ?? '' };
     if (n.nodeName === 'SPAN' && n.className === 'emoji') return { emoji: n.getAttribute('emoji') ?? '' };
     if (n.nodeName === 'SPAN' && n.className === 'channel') return { channel: n.getAttribute('channelId') ?? '' };
     if (n.nodeName === 'SPAN' && n.className === 'user') return processUser(n, info);
@@ -182,7 +186,7 @@ export function processUrls(text: string, info: SerializeInfo): MessageBody {
     info.links.push(m[0]);
     return [
       { text: parts[0] },
-      { link: { href: m[0], children: [{ text: m[0] }] } },
+      { link:[{ text: m[0] }], _href: m[0] },
       ...[processUrls(parts[1], info)].flat(),
     ];
   }

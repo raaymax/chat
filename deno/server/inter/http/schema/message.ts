@@ -95,25 +95,16 @@ export const messageSchema = {
       type: "object",
       required: ["img"],
       properties: {
-        img: {
-          type: "object",
-          required: ["src"],
-          properties: { src: { type: "string" }, alt: { type: "string" } },
-        },
+        img: { type: "string" },
+        _alt: { type: "string" },
       },
     },
     link: {
       type: "object",
-      required: ["link"],
+      required: ["link", "_href"],
       properties: {
-        link: {
-          type: "object",
-          required: ["href", "children"],
-          properties: {
-            href: { type: "string" },
-            children: { $ref: "message#/definitions/body" },
-          },
-        },
+        link: { $ref: "message#/definitions/body" },
+        _href: { type: "string" },
       },
     },
     emoji: {
@@ -133,17 +124,11 @@ export const messageSchema = {
     },
     thread: {
       type: "object",
-      required: ["thread"],
+      required: ["thread", "_channelId", "_parentId"],
       properties: {
-        thread: {
-          type: "object",
-          required: ["channelId", "parentId", "text"],
-          properties: {
-            channelId: { type: "string", format: "entity-id" },
-            parentId: { type: "string", format: "entity-id" },
-            text: { type: "string" },
-          },
-        },
+        thread: { type: "string" },
+        _channelId: { type: "string", format: "entity-id" },
+        _parentId: { type: "string", format: "entity-id" },
       },
     },
   },

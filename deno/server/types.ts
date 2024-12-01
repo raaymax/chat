@@ -139,14 +139,12 @@ export type MessageBodyBold = { bold: MessageBody };
 export type MessageBodyItalic = { italic: MessageBody };
 export type MessageBodyUnderline = { underline: MessageBody };
 export type MessageBodyStrike = { strike: MessageBody };
-export type MessageBodyImg = { img: { src: string; alt: string } };
-export type MessageBodyLink = { link: { href: string; children: MessageBody } };
+export type MessageBodyImg = { img: string; _alt: string };
+export type MessageBodyLink = { link: MessageBody; _href: string }
 export type MessageBodyEmoji = { emoji: string };
 export type MessageBodyChannel = { channel: string };
 export type MessageBodyUser = { user: string };
-export type MessageBodyThread = {
-  thread: { channelId: string; parentId: string; text: string };
-};
+export type MessageBodyThread = { thread: string; _channelId: string; _parentId: string };
 
 export type MessageBodyPart =
   | MessageBodyBullet
@@ -228,20 +226,12 @@ export const vMessageBodyPart: v.GenericSchema<MessageBodyPart> = v.union([
   v.object({ italic: v.lazy(() => vMessageBody) }),
   v.object({ underline: v.lazy(() => vMessageBody) }),
   v.object({ strike: v.lazy(() => vMessageBody) }),
-  v.object({ img: v.object({ src: v.string(), alt: v.string() }) }),
-  v.object({
-    link: v.object({ href: v.string(), children: v.lazy(() => vMessageBody) }),
-  }),
+  v.object({ img: v.string(), _alt: v.string() }),
+  v.object({ link: v.lazy(() => vMessageBody), _href: v.string() }),
   v.object({ emoji: v.string() }),
   v.object({ channel: v.string() }),
   v.object({ user: v.string() }),
-  v.object({
-    thread: v.object({
-      channelId: v.string(),
-      parentId: v.string(),
-      text: v.string(),
-    }),
-  }),
+  v.object({ thread: v.string(), _channelId: v.string(), _parentId: v.string() }),
 ]);
 
 export const vMessageBody: v.GenericSchema<MessageBody> = v.union([
