@@ -7,11 +7,12 @@ import {
   W,
   WriteConcern,
 } from "mongodb";
+import config from "@quack/config";
 
 export { ObjectId } from "mongodb";
 
 const __dirname = path.dirname(path.fromFileUrl(import.meta.url));
-const DATABASE_URL = Deno.env.get("DATABASE_URL") ?? "mongodb://chat:chat@localhost:27017/chat?authSource=admin";
+const DATABASE_URL = Deno.env.get("DATABASE_URL") ?? config.databaseUrl ?? "mongodb://chat:chat@localhost:27017/chat?authSource=admin";
 
 export class Database {
   db: Db | undefined = undefined;
