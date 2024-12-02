@@ -45,10 +45,10 @@ navigate to [http://localhost:8080](http://localhost:8080) and use default crede
 
 ## Configuration
 
-To override default settings `chat.config.js` file can be created in root directory of the project.
+To override default settings `chat.config.ts` file can be created in root directory of the project. You can use `chat.config.example.ts` as a template.
 File should export folowing object:
-```javascript
-type ChatConfig = {
+```typescript
+type Config = {
   port?: number // default `PORT` env otherwise `8080`
   sessionSecret?: string // auto generated on first run to `secrets.json` but can be overwritten here
   trustProxy?: bool | string | number // default `uniquelocal` ref: https://expressjs.com/en/guide/behind-proxies.html
@@ -58,7 +58,7 @@ type ChatConfig = {
   },
   databaseUrl?: string // default `DATABASE_URL` env
   cors?: string[] // by default [ 'https?://localhost(:[0-9]{,4})' ],
-  storage?: {
+  storage?: { // Where uploaded files should be stored
     type: 'memory' | 'gcs' | 'fs' // default `fs` / `memory` in tests
     directory: string // where to save files when type `fs`
     bucket: string // bucket name for `gcs`
@@ -92,6 +92,14 @@ Install dependencies and start the React app:
 cd ./app
 npm install
 npm run dev
+```
+
+### Storybook
+To start the storybook:
+```sh
+cd ./app
+npm install
+npm run storybook
 ```
 
 ## Files persistence

@@ -29,6 +29,8 @@ export type Config = {
   baseUrl: string;
 };
 
+export const defineConfig = (config: Config) => config;
+
 const __dirname = path.dirname(path.fromFileUrl(import.meta.url));
 const SECRETS_FILE: string = path.join(__dirname, "..", "..", "secrets.json");
 const PORT: number = parseInt(Deno.env.get("PORT") ?? "8080") || 8080;
