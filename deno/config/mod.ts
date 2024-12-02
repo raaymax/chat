@@ -1,35 +1,9 @@
 import webpush from "web-push";
 import * as path from "@std/path";
 import crypto from "node:crypto";
+import type { Config } from "./types.ts";
+export type { Config } from "./types.ts";
 
-export type Config = {
-  vapid: {
-    publicKey: string;
-    privateKey: string;
-  };
-  trustProxy: string | boolean;
-  sessionSecret: string;
-  port: number;
-  databaseUrl: string;
-  cors: (string | RegExp)[];
-  plugins?: ((app: any, core: any) => Promise<any> | any)[];
-  webhooks?: {
-    url: string;
-    events?: string[];
-  }[];
-  storage: {
-    type: "gcs";
-    bucket: string;
-  } | {
-    type: "fs";
-    directory: string;
-  } | {
-    type: "memory";
-  };
-  baseUrl: string;
-};
-
-export const defineConfig = (config: Config) => config;
 
 const __dirname = path.dirname(path.fromFileUrl(import.meta.url));
 const SECRETS_FILE: string = path.join(__dirname, "..", "..", "secrets.json");
@@ -110,23 +84,6 @@ async function loadConfig(): Promise<Config> {
   };
 }
 
-export const Config = {
-  from: async (path: string): Promise<Config> => {
-    const config = await importConfig(path);
-    if (config === null) {
-      console.warn("No config file found - using defaults");
-      return {
-        ...defaults,
-        ...secrets,
-      };
-    }
-    return {
-      ...defaults,
-      ...secrets,
-      ...config,
-    };
-  },
-};
 
 async function importTestConfig(): Promise<Config> {
   let config;

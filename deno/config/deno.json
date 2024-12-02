@@ -1,7 +1,10 @@
 {
   "name": "@quack/config",
   "version": "0.0.1",
-  "exports": "./main.ts",
+  "exports": {
+    ".": "./mod.ts",
+    "./define": "./define.ts"
+  },
   "tasks": {
     "dev": "deno run --watch main.ts"
   },
