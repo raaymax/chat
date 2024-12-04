@@ -2,16 +2,6 @@
 // const SESSION_URL = `${API_URL}/access`;
 const SESSION_URL = `${API_URL}/api/auth/session`;
 let fetch: any = window.fetch;
-console.log('window.isTauri', window.isTauri);
-console.log(await (await fetch('http://tauri.localhost/api/auth/session', {method: "POST", headers: {'content-type': 'application/json'}, body: JSON.stringify({login: 'admin', password: '123'})})).text());
-if(window.isTauri) {
-  
-  const http = await import('@tauri-apps/plugin-http');
-  console.log('http', http);
-  window.http = http;
-    
-  fetch = http.fetch;
-}
 
 export const isProbablyLogged = () => !!localStorage.token;
 

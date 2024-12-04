@@ -26,15 +26,10 @@ export default defineConfig({
     watch: {
       ignored: ["**/src-tauri/**"],
     },
-    proxy: {
-      '^/api/': {
-        target: 'http://localhost:3001',
-      },
-    },
   },
   plugins: [
     react(),
-    /*basicSsl({
+    basicSsl({
       name: 'test',
       domains: ['localhost'],
       certDir: sslPath,
@@ -43,7 +38,7 @@ export default defineConfig({
       '^/api/': {
         target: 'http://localhost:3001',
       },
-    }),*/
+    }),
     VitePWA({
       injectRegister: 'auto',
       strategies: 'injectManifest',
