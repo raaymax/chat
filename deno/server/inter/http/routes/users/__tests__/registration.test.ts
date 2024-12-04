@@ -11,7 +11,7 @@ Deno.test("POST /api/users - user creation flow", async (t) => {
   let url: string;
   let token: string;
   await ensureUser(repo, "admin", { name: "Admin" });
-  await Agent.test(app, { type: "handler" }, async (agent) => {
+  await Chat.test(app, { type: "handler" }, async (agent) => {
     const admin = Chat.init(repo, agent);
     try {
       await admin.login("admin")
@@ -28,7 +28,8 @@ Deno.test("POST /api/users - user creation flow", async (t) => {
       });
       await t.step("check valid token", async () => {
         await Chat.init(repo, agent)
-          .checkToken(token, ({ valid }) => assert(valid));
+          .checkToken(token, ({ valid }) => assert(valid))
+          .end();
       });
 
       await t.step("register user", async () => {

@@ -1,9 +1,19 @@
-import webpush from "web-push";
 import * as path from "@std/path";
 import crypto from "node:crypto";
 import type { Config } from "./types.ts";
 export type { Config } from "./types.ts";
 
+export const from = async (path: string): Promise<Config> => {
+  const config = await importConfig(path);
+  if (config === null) {
+    throw new Error("No config file found");
+  }
+  return {
+    ...defaults,
+    ...secrets,
+    ...config,
+  };
+};
 
 const __dirname = path.dirname(path.fromFileUrl(import.meta.url));
 const SECRETS_FILE: string = path.join(__dirname, "..", "..", "secrets.json");
@@ -17,9 +27,7 @@ export const generateSecrets = () => {
     return JSON.parse(data);
   } catch (e) {
     if (e instanceof Deno.errors.NotFound) {
-      const vapidKeys = webpush.generateVAPIDKeys();
       const secrets = {
-        vapid: vapidKeys,
         sessionSecret: crypto.randomBytes(64).toString("hex"),
       };
       Deno.writeTextFileSync(SECRETS_FILE, JSON.stringify(secrets, null, 2));
@@ -83,7 +91,6 @@ async function loadConfig(): Promise<Config> {
     ...config,
   };
 }
-
 
 async function importTestConfig(): Promise<Config> {
   let config;

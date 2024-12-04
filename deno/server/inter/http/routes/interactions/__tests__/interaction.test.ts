@@ -8,7 +8,7 @@ import { EntityId } from "../../../../../types.ts";
 const { app, repo, core } = createApp();
 
 Deno.test("POST /api/interactions - dispatching interactions", async (t) => {
-  await Agent.test(app, { type: "handler" }, async (agent) => {
+  await Chat.test(app, { type: "handler" }, async (agent) => {
     const admin = Chat.init(repo, agent);
     try {
       await admin
@@ -16,8 +16,10 @@ Deno.test("POST /api/interactions - dispatching interactions", async (t) => {
         .createChannel({ name: "test-messages-interactions" });
       const { promise, resolve, reject } = Promise.withResolvers<void>();
       (async () => {
-        const { done, event } = await core.events.next();
-        if (done || event.type !== "message:interaction") {
+        const event: any = await new Promise((resolve) =>
+          core.events.once(resolve)
+        );
+        if (event.type !== "message:interaction") {
           return reject(new Error("Wrong event type"));
         }
         const interaction = event.payload;
@@ -34,8 +36,6 @@ Deno.test("POST /api/interactions - dispatching interactions", async (t) => {
           clientId: "clientId",
           payload: { test: "test" },
         });
-
-      await promise;
     } finally {
       await admin.end();
     }
@@ -43,30 +43,20 @@ Deno.test("POST /api/interactions - dispatching interactions", async (t) => {
 });
 
 Deno.test("POST /api/interactions - graceful shutdown", async (t) => {
-  const { promise, resolve, reject } = Promise.withResolvers<void>();
-  await Agent.test(app, { type: "handler" }, async (agent) => {
+  await Chat.test(app, { type: "handler" }, async (agent) => {
     const admin = Chat.init(repo, agent);
     try {
       await admin
         .login("admin")
         .createChannel({ name: "test-messages-interactions" });
-      const listener = async () => {
-        for await (const int of core.events) {
-          // do nothing
-        }
-        resolve();
-      };
-      listener();
-      await admin
-        .interaction({ action: "test", clientId: "clientId" })
-        .interaction({ action: "test", clientId: "clientId" })
-        .interaction({ action: "test", clientId: "clientId" })
-        .interaction({ action: "test", clientId: "clientId" })
-        .interaction({ action: "test", clientId: "clientId" })
-        .interaction({ action: "test", clientId: "clientId" });
+      for (let i = 0; i < 5; i++) {
+        const { promise, resolve } = Promise.withResolvers<any>();
+        core.events.once(resolve);
+        await admin.interaction({ action: "test", clientId: "clientId" });
+        await promise;
+      }
     } finally {
       await admin.end();
     }
   });
-  await promise;
 });

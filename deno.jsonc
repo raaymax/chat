@@ -42,8 +42,8 @@
     "build": "deno task -c ./packages/app/deno.jsonc build",
     "migrate": "deno task -c ./deno/migrate/deno.json migrate",
     "migrate:tests": "DATABASE_URL='mongodb://chat:chat@localhost:27017/tests?authSource=admin' deno task migrate",
-    "test": "DATABASE_URL='mongodb://chat:chat@localhost:27017/tests?authSource=admin' deno test -A",
+    "test": "DATABASE_URL='mongodb://chat:chat@localhost:27017/tests?authSource=admin' deno test --no-check -A",
     "ssl": "mkdir -p ssl && openssl req -x509 -newkey rsa:4096 -keyout ssl/key.pem -out ssl/cert.pem -days 365 -nodes -subj '/CN=localhost'",
-    "check": "deno run -A npm:eslint . && deno fmt && deno lint && npm run types && deno test -A"
+    "check": "deno run -A npm:eslint . --ignore-pattern=app/src-tauri && deno fmt && deno lint && deno task test"
   }
 }

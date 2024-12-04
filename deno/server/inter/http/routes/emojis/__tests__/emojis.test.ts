@@ -16,7 +16,7 @@ Deno.test("GET /api/emojis - unauthorized", async () => {
 });
 
 Deno.test("GET /api/emojis - getAllEmojis empty list", async () => {
-  await Agent.test(app, { type: "handler" }, async (agent) => {
+  await Chat.test(app, { type: "handler" }, async (agent) => {
     await Chat.init(repo, agent)
       .login("member")
       .getEmojis(async (emojis: Emoji[]) => {
@@ -27,7 +27,7 @@ Deno.test("GET /api/emojis - getAllEmojis empty list", async () => {
 });
 
 Deno.test("Adding emojis and listing them", async () => {
-  await Agent.test(app, { type: "handler" }, async (agent) => {
+  await Chat.test(app, { type: "handler" }, async (agent) => {
     const fileId = crypto.randomUUID();
     try {
       await Chat.init(repo, agent)

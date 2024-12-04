@@ -18,13 +18,13 @@ const makeJSON = (json: any) => {
   return ret.length === 1 ? ret[0] : ret;
 };
 
-export abstract class MessageBodyPart<A extends Args = {}, C = any> {
+export abstract class MessageBodyPart<A extends Args = object, C = any> {
   static propName = "part";
-	static schema = {
-		[this.propName]: {$ref: '#body'},
-	}
-	static children = '#body';
-	static args = {};
+  static schema = {
+    [this.propName]: { $ref: "#body" },
+  };
+  static children = "#body";
+  static args = {};
 
   args: A;
   children: C;
@@ -48,11 +48,13 @@ export abstract class MessageBodyPart<A extends Args = {}, C = any> {
   static validate(json: any): ValidationResult {
     if (json === null || json === undefined || typeof json != "object") {
       return new ValidationResult(false, [{
-				message: "Invalid message part",
-				error: "INVALID_PART"
-			}]);
+        message: "Invalid message part",
+        error: "INVALID_PART",
+      }]);
     }
-    const props = Object.entries(json).filter(([key, _]) => !key.startsWith("_"));
+    const props = Object.entries(json).filter(([key, _]) =>
+      !key.startsWith("_")
+    );
 
     if (props.length != 1) {
       return new ValidationResult(false, [{
@@ -60,11 +62,14 @@ export abstract class MessageBodyPart<A extends Args = {}, C = any> {
         error: "MULTIPLE_KEYWORDS",
       }]);
     }
-		
-		return new ValidationResult(true);
+
+    return new ValidationResult(true);
   }
 
-  static parse<J extends { [key: string]: any }>(json: J, index: typeof Message): MessageBody {
+  static parse<J extends { [key: string]: any }>(
+    json: J,
+    index: typeof Message,
+  ): MessageBody {
     const args = Object.fromEntries(
       Object.entries(json)
         .filter(([key, _]) => key.startsWith("_"))
@@ -74,9 +79,9 @@ export abstract class MessageBodyPart<A extends Args = {}, C = any> {
     return new (this as any)(args, index.parsePart(json[this.propName]));
   }
 
-	static parseFromHtml(html: Element, parse): MessageBody | undefined {
-		return undefined;
-	}
+  static parseFromHtml(html: Element, parse): MessageBody | undefined {
+    return undefined;
+  }
 
   toString() {
     if (Array.isArray(this.children)) {
@@ -84,9 +89,12 @@ export abstract class MessageBodyPart<A extends Args = {}, C = any> {
     }
     return (this.children as any).toString?.() ?? this.children;
   }
-	toHtml(h: H): string {
-		const tagName = (this.constructor as any).propName;
-		return h(tagName, this.args, [this.children].flat().map(c=>(c as any).toHtml()));
-	}
+  toHtml(h: H): string {
+    const tagName = (this.constructor as any).propName;
+    return h(
+      tagName,
+      this.args,
+      [this.children].flat().map((c) => (c as any).toHtml()),
+    );
+  }
 }
-

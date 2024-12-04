@@ -249,82 +249,82 @@ Deno.test("/api/channels/:channelId/messages - Access constraints", async (t) =>
 });
 
 Deno.test("/api/channels/:channelId/messages - Sending to private channel", async (t) => {
-  const agent = await Agent.from(app);
-  const { token, userId } = await login(repo, agent);
-  const { token: memberToken, userId: memberUserId } = await login(
-    repo,
-    agent,
-    "member",
-  );
-  await usingChannel(repo, {
-    name: "test-messages-access",
-    users: [EntityId.from(userId)],
-    channelType: ChannelType.PRIVATE,
-    private: false,
-    direct: false,
-    cid: "test-messages",
-  }, async (channelId) => {
-    await t.step(
-      "POST /api/channels/:channelId/messages - createMessage success if not memeber of private channel",
-      async () => {
-        const res = await agent.request()
-          .post(`/api/channels/${channelId}/messages`)
-          .json({
-            message: {
-              text: "test",
-            },
-            clientId: new ObjectId().toHexString(),
-            flat: "test",
-          })
-          .header("Authorization", `Bearer ${token}`)
-          .expect(200);
-        const body = await res.json();
-        assert(body.id);
-      },
+  await Chat.test(app, { type: "handler" }, async (agent) => {
+    const { token, userId } = await login(repo, agent);
+    const { token: memberToken, userId: memberUserId } = await login(
+      repo,
+      agent,
+      "member",
     );
-    await t.step(
-      "POST /api/channels/:channelId/messages - createMessage fail if not memeber of private channel",
-      async () => {
-        const res = await agent.request()
-          .post(`/api/channels/${channelId}/messages`)
-          .json({
-            message: {
-              text: "test",
-            },
-            clientId: new ObjectId().toHexString(),
-            flat: "test",
-          })
-          .header("Authorization", `Bearer ${memberToken}`)
-          .expect(403);
-        const body = await res.json();
-        assertEquals(body.errorCode, "NO_ACCESS");
-      },
-    );
-    await t.step(
-      "POST /api/channels/:channelId/messages - createMessage duplicate information",
-      async () => {
-        await Chat.init(repo, agent)
-          .login("admin")
-          .createChannel({ name: "test-messages-duplicate" })
-          .sendMessage({
-            flat: "Hello",
-            message: { text: "Hello" },
-            clientId: "duplicate",
-          }, (msg, { state }) => {
-            state.messageId = msg.id;
-          })
-          .sendMessage({
-            flat: "Hello",
-            message: { text: "Hello" },
-            clientId: "duplicate",
-          }, (msg, { state }) => {
-            assertEquals(msg.id, state.messageId);
-          })
-          .end();
-      },
-    );
+    await usingChannel(repo, {
+      name: "test-messages-access",
+      users: [EntityId.from(userId)],
+      channelType: ChannelType.PRIVATE,
+      private: false,
+      direct: false,
+      cid: "test-messages",
+    }, async (channelId) => {
+      await t.step(
+        "POST /api/channels/:channelId/messages - createMessage success if not memeber of private channel",
+        async () => {
+          const res = await agent.request()
+            .post(`/api/channels/${channelId}/messages`)
+            .json({
+              message: {
+                text: "test",
+              },
+              clientId: new ObjectId().toHexString(),
+              flat: "test",
+            })
+            .header("Authorization", `Bearer ${token}`)
+            .expect(200);
+          const body = await res.json();
+          assert(body.id);
+        },
+      );
+      await t.step(
+        "POST /api/channels/:channelId/messages - createMessage fail if not memeber of private channel",
+        async () => {
+          const res = await agent.request()
+            .post(`/api/channels/${channelId}/messages`)
+            .json({
+              message: {
+                text: "test",
+              },
+              clientId: new ObjectId().toHexString(),
+              flat: "test",
+            })
+            .header("Authorization", `Bearer ${memberToken}`)
+            .expect(403);
+          const body = await res.json();
+          assertEquals(body.errorCode, "NO_ACCESS");
+        },
+      );
+      await t.step(
+        "POST /api/channels/:channelId/messages - createMessage duplicate information",
+        async () => {
+          await Chat.init(repo, agent)
+            .login("admin")
+            .createChannel({ name: "test-messages-duplicate" })
+            .sendMessage({
+              flat: "Hello",
+              message: { text: "Hello" },
+              clientId: "duplicate",
+            }, (msg, { state }) => {
+              state.messageId = msg.id;
+            })
+            .sendMessage({
+              flat: "Hello",
+              message: { text: "Hello" },
+              clientId: "duplicate",
+            }, (msg, { state }) => {
+              assertEquals(msg.id, state.messageId);
+            })
+            .end();
+        },
+      );
+    });
   });
-  await agent.close();
 });
 
 Deno.test("Messages server sent events", async () => {
@@ -520,7 +520,7 @@ Deno.test("Messages history", async (t) => {
 });
 
 Deno.test("auto generate message or flat fields if missing", async (t) => {
-  await Agent.test(app, { type: "handler" }, async (agent) => {
+  await Chat.test(app, { type: "handler" }, async (agent) => {
     await Chat.init(repo, agent)
       .login("admin")
       .createChannel({ name: "test-messages-partials" })

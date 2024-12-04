@@ -6,9 +6,9 @@ import { Chat } from "../../__tests__/chat.ts";
 const { app, repo, core } = createApp();
 
 Deno.test("[EVENTS] When message is sent message:created should be emitted", async (t) => {
-  await Agent.test(app, { type: "handler" }, async (agent) => {
-    const {promise, resolve} = Promise.withResolvers<Message>();
-    const admin = Chat.init(repo, agent)
+  await Chat.test(app, { type: "handler" }, async (agent) => {
+    const { promise, resolve } = Promise.withResolvers<Message>();
+    const admin = Chat.init(repo, agent);
     await admin.login("admin")
       .createChannel({
         name: "test-messages-events",
@@ -23,5 +23,6 @@ Deno.test("[EVENTS] When message is sent message:created should be emitted", asy
     });
     const msg = await promise;
     assertEquals(msg.flat, "Hello");
+    await admin.end();
   });
 });

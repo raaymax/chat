@@ -1,18 +1,15 @@
 import styled, { useTheme } from 'styled-components';
-import { cn } from '../../utils';
+import { cn , same } from '../../utils';
 import { Resizer } from '../atoms/Resizer';
-import { useParams } from 'react-router-dom';
+import { useParams , useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import { Workspaces } from '../organisms/Workspaces';
 import { Sidebar } from '../organisms/Sidebar';
 import { Conversation } from '../organisms/Conversation';
 import { useDispatch, useMessage } from '../../store';
 import { Channel } from '../molecules/NavChannel';
-import { init } from '../../services/init';
 import { Toolbar } from '../atoms/Toolbar';
 import { ButtonWithIcon } from '../molecules/ButtonWithIcon';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { same } from '../../utils';
 import { useMessageListArgs } from '../contexts/useMessageListArgs';
 import { MessageListArgsProvider } from '../contexts/messageListArgs';
 import { SearchBox } from '../atoms/SearchBox';
@@ -236,8 +233,8 @@ export const MainConversation = ({ channelId, children}: MainConversationProps) 
         <CollapsableColumns className={cn('conversation-with-context-bar', {'has-context-bar': Boolean(children)})} 
           minSize={300}
           columns={[
-            <Conversation className='conversation' channelId={channelId} />,
-            children && <div className='context-bar'>{children}</div>
+            <Conversation key='1' className='conversation' channelId={channelId} />,
+            children && <div key='2' className='context-bar'>{children}</div>
           ].filter(Boolean) as [React.ReactNode, React.ReactNode?]}
         />
       </div>
@@ -256,14 +253,14 @@ export const Discussion = ({ className, children }: DiscussionProps) => {
     <CollapsableColumns className={cn('discussion', className)} 
       minSize={400}
       columns={[
-        <MainConversation channelId={channelId}>{children}</MainConversation>,
-        parentId && <SideConversation channelId={channelId} parentId={parentId} />
+        <MainConversation key={1} channelId={channelId}>{children}</MainConversation>,
+        parentId && <SideConversation key={2} channelId={channelId} parentId={parentId} />
       ].filter(Boolean) as [React.ReactNode, React.ReactNode?]}
     />
   );
 }
 
-export default ({children}: {children: React.ReactNode}) => {
+export const Desktop = ({children}: {children: React.ReactNode}) => {
   const { parentId } = useParams();
   const [size, setSize] = useState(Number(localStorage.getItem('sidebar-size')) || 356);
   const theme = useTheme();
@@ -291,3 +288,4 @@ export default ({children}: {children: React.ReactNode}) => {
   );
 };
 
+export default Desktop;

@@ -24,7 +24,7 @@ Deno.test("webhook should be sent", async (t) => {
     onListen: () => {},
   });
 
-  await Agent.test(app, { type: "handler" }, async (agent) => {
+  await Chat.test(app, { type: "handler" }, async (agent) => {
     await Chat.init(repo, agent).login("admin")
       .createChannel({ name: "test-webhooks" })
       .sendMessage({ flat: "test" })
@@ -51,7 +51,7 @@ Deno.test("should not break if webhook is not responding", async (t) => {
     ],
   });
 
-  await Agent.test(app, { type: "handler" }, async (agent) => {
+  await Chat.test(app, { type: "handler" }, async (agent) => {
     await Chat.init(repo, agent).login("admin")
       .createChannel({ name: "test-webhooks" })
       .sendMessage({ flat: "test" })
@@ -84,7 +84,7 @@ Deno.test("webhook should be called once", async (t) => {
     onListen: () => {},
   });
 
-  await Agent.test(app, { type: "handler" }, async (agent) => {
+  await Chat.test(app, { type: "handler" }, async (agent) => {
     await Chat.init(repo, agent).login("admin")
       .createChannel({ name: "test-webhooks" })
       .sendMessage({ flat: "test" })

@@ -122,7 +122,7 @@ class API extends EventTarget {
       if (retries > 0) {
         try{
           console.log(await res.json());
-        }catch{}
+        }catch{/*ignore*/}
         await waitBeforeRetry(retry);
         return this.fetch(url, { ...opts, retries: retries - 1, retry: retry + 1 });
       } else {
@@ -153,7 +153,7 @@ class API extends EventTarget {
       if (retries > 0) {
         try{
           console.log(await res.json());
-        }catch{}
+        }catch{/*ignore*/}
         await waitBeforeRetry(retry);
         return this.getResource(url, retries - 1, retry + 1);
       } else {

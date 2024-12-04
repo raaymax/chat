@@ -38,5 +38,5 @@ export default createCommand({
   await core.events.dispatch({
     type: "message:updated",
     payload: await repo.message.getR({ id: msg.id }),
-  })
+  });
 });

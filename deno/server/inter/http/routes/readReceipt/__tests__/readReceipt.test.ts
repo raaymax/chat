@@ -6,7 +6,7 @@ import { createApp } from "../../__tests__/app.ts";
 const { app, repo, core } = createApp();
 
 Deno.test("/api/channels/:channelId/read-receipts", async () =>
-  await Agent.test(
+  await Chat.test(
     app,
     { type: "handler" },
     async (agent) =>
@@ -31,7 +31,7 @@ Deno.test("/api/channels/:channelId/read-receipts", async () =>
   ));
 
 Deno.test("/api/channels/:channelId/read-receipts - SSE", async () =>
-  await Agent.test(app, { type: "handler" }, async (agent) => {
+  await Chat.test(app, { type: "handler" }, async (agent) => {
     const member = Chat.init(repo, agent);
     const admin = Chat.init(repo, agent);
     try {
@@ -70,7 +70,7 @@ Deno.test("/api/channels/:channelId/read-receipts - SSE", async () =>
 
 Deno.test("/api/read-receipts", async () => {
   await repo.badge.removeMany({});
-  return await Agent.test(app, { type: "handler" }, async (agent) => {
+  return await Chat.test(app, { type: "handler" }, async (agent) => {
     const member = Chat.init(repo, agent);
     const admin = Chat.init(repo, agent);
     try {

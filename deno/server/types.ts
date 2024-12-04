@@ -140,11 +140,15 @@ export type MessageBodyItalic = { italic: MessageBody };
 export type MessageBodyUnderline = { underline: MessageBody };
 export type MessageBodyStrike = { strike: MessageBody };
 export type MessageBodyImg = { img: string; _alt: string };
-export type MessageBodyLink = { link: MessageBody; _href: string }
+export type MessageBodyLink = { link: MessageBody; _href: string };
 export type MessageBodyEmoji = { emoji: string };
 export type MessageBodyChannel = { channel: string };
 export type MessageBodyUser = { user: string };
-export type MessageBodyThread = { thread: string; _channelId: string; _parentId: string };
+export type MessageBodyThread = {
+  thread: string;
+  _channelId: string;
+  _parentId: string;
+};
 
 export type MessageBodyPart =
   | MessageBodyBullet
@@ -231,7 +235,11 @@ export const vMessageBodyPart: v.GenericSchema<MessageBodyPart> = v.union([
   v.object({ emoji: v.string() }),
   v.object({ channel: v.string() }),
   v.object({ user: v.string() }),
-  v.object({ thread: v.string(), _channelId: v.string(), _parentId: v.string() }),
+  v.object({
+    thread: v.string(),
+    _channelId: v.string(),
+    _parentId: v.string(),
+  }),
 ]);
 
 export const vMessageBody: v.GenericSchema<MessageBody> = v.union([

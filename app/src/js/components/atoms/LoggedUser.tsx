@@ -45,10 +45,7 @@ const Container = styled.div`
   }
 `;
 
-type LoggedUserProps = {
-};
-
-export const LoggedUser = ({}: LoggedUserProps) => {
+export const LoggedUser = () => {
   const userId = useLoggedUserId();
   const user = useUser(userId);
   if (!user) {

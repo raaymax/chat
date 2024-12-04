@@ -6,7 +6,7 @@ import { Chat } from "../../__tests__/chat.ts";
 const { app, repo } = createApp();
 
 Deno.test("PUT /api/messages/:messageId/react - sending reacts to messages", async (t) => {
-  await Agent.test(app, { type: "handler" }, async (agent) => {
+  await Chat.test(app, { type: "handler" }, async (agent) => {
     const admin = Chat.init(repo, agent);
     const member = Chat.init(repo, agent);
     try {
@@ -96,7 +96,7 @@ Deno.test("PUT /api/messages/:messageId/react - sending reacts to messages", asy
   });
 });
 Deno.test("PUT /api/messages/:messageId/react - SSR about reactions", async (t) => {
-  await Agent.test(app, { type: "handler" }, async (agent) => {
+  await Chat.test(app, { type: "handler" }, async (agent) => {
     const admin = Chat.init(repo, agent);
     const member = Chat.init(repo, agent);
     try {

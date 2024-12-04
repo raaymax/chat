@@ -2,15 +2,14 @@ import { Main } from './layout/Main';
 import { Discussion } from './layout/Discussion';
 import { Search } from './pages/Search';
 import { Pins } from './organisms/Pins';
-import { redirect, useRouteError } from 'react-router-dom';
-import { client, ApiError } from '../core'
-import { ErrorPageS } from './pages/ErrorPage';
-
-import {
+import { redirect, useRouteError ,
   createHashRouter,
   Outlet,
   RouterProvider,
-} from "react-router-dom";
+} from 'react-router-dom';
+import { client, ApiError } from '../core'
+import { ErrorPageS } from './pages/ErrorPage';
+
 import { PageNotFoundError } from './errors';
 
 

@@ -1,3 +1,3 @@
-import { Config } from './types.ts';
+import { Config } from "./types.ts";
 
 export const defineConfig = (config: Partial<Config>) => config;

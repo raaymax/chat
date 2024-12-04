@@ -45,9 +45,9 @@ export class Bus {
       _target: "group",
       _userIds: userIds.map((u) => u.toString()),
     });
-    (userIds ?? []).forEach((userId) =>{
+    (userIds ?? []).forEach((userId) => {
       if (senderId && EntityId.from(userId).eq(senderId)) return;
-      this.internalBus.emit(userId.toString(), { ...msg, _target: "group" })
+      this.internalBus.emit(userId.toString(), { ...msg, _target: "group" });
     });
   };
 

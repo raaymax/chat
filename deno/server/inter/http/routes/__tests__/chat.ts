@@ -9,6 +9,7 @@ import {
   Message,
   ReplaceEntityId,
 } from "../../../../types.ts";
+import { AsyncLocalStorage } from "node:async_hooks";
 
 export type RegistrationRequest = {
   token: string;
@@ -18,6 +19,7 @@ export type RegistrationRequest = {
 };
 
 type Arg<T extends Object> = T | ((chat: Chat) => T);
+const asyncLocalStorage = new AsyncLocalStorage<{ instances: Chat[] }>();
 
 export class Chat {
   repo: Repository;
@@ -48,8 +50,35 @@ export class Chat {
 
   appVersion = "client-version";
 
+  static async test(app, opts, fn) {
+    await Agent.test(app, opts, async (agent) => {
+      await asyncLocalStorage.run({ instances: [] }, async () => {
+        await fn(agent);
+        const count = asyncLocalStorage.getStore()?.instances.length ?? 0;
+        if (count > 0) {
+          throw new Error(`Chat instances are not cleaned up ${count}`);
+        }
+      });
+    });
+  }
+
   static init(repo: Repository, agent: Agent) {
     return new Chat(repo, agent);
+  }
+
+  _register() {
+    const store = asyncLocalStorage.getStore();
+    if (!store) {
+      throw new Error("Chat instance should be created in Chat.test");
+    }
+    store.instances.push(this);
+  }
+
+  _unregister() {
+    const store = asyncLocalStorage.getStore();
+    if (store) {
+      store.instances.splice(store.instances.indexOf(this), 1);
+    }
   }
 
   get userIdR() {
@@ -71,6 +100,7 @@ export class Chat {
     this.parentId = null; // parent and parentId are not related "parent" is a parent of this object
     this.token = "invalid";
     this.eventSource = null;
+    this._register();
   }
 
   arg<I extends Object>(arg: Arg<I>): I {
@@ -401,14 +431,14 @@ export class Chat {
     }>,
   ) {
     this.steps.push(async () => {
-      const interaction = this.arg(data);
+      const int = this.arg(data);
       await this.agent.request()
         .post(`/api/interactions`)
         .json({
-          ...interaction,
-          channelId: interaction.channelId ?? this.channelId,
-          ...(interaction.parentId ?? this.parentId
-            ? { parentId: interaction.parentId ?? this.parentId }
+          ...int,
+          channelId: int.channelId ?? this.channelId,
+          ...(int.parentId ?? this.parentId
+            ? { parentId: int.parentId ?? this.parentId }
             : {}),
         })
         .header("Authorization", `Bearer ${this.token}`)
@@ -534,6 +564,17 @@ export class Chat {
     return this;
   }
 
+  typing() {
+    this.steps.push(async () => {
+      await this.agent.request()
+        .post(`/api/channels/${this.channelId}/typing`)
+        .json({})
+        .header("Authorization", `Bearer ${this.token}`)
+        .expect(204);
+    });
+    return this;
+  }
+
   step(test: (chat: Chat) => any) {
     this.steps.push(async () => {
       await test(this);
@@ -565,6 +606,7 @@ export class Chat {
       for (const cleanup of this.cleanup) {
         await cleanup();
       }
+      this._unregister();
       resolve();
     } catch (e) {
       if (!cleanupStart) {

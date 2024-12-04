@@ -19,7 +19,7 @@ export const Tooltip = ({ children, text, className = '' }: TooltipProps) => {
     const left = sourceScreenPosition.left + sourceScreenPosition.width / 2;
     show(
       [left, top],
-      [text].flat().map((t) => [t, <br />]).flat().slice(0, -1),
+      [text].flat().map((t, i) => [t, <br key={i} />]).flat().slice(0, -1),
       source.current
     );
   }, [source, text, show]);

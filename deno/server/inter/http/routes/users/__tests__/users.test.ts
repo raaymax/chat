@@ -20,7 +20,7 @@ Deno.test("GET /api/channels - unauthorized", async () => {
 Deno.test("GET /api/users/:userId - getUser with an id and alias", async () => {
   await ensureUser(repo, "admin", { name: "Admin" });
   await ensureUser(repo, "member", { name: "Member" });
-  await Agent.test(app, { type: "handler" }, async (agent) => {
+  await Chat.test(app, { type: "handler" }, async (agent) => {
     await Chat.init(repo, agent)
       .login("admin")
       .getUsers(async (users: User[], { state }) => {
@@ -38,7 +38,7 @@ Deno.test("GET /api/users/:userId - getUser with an id and alias", async () => {
 Deno.test("GET /api/users - getAllUsers", async () => {
   await ensureUser(repo, "admin", { name: "Admin" });
   await ensureUser(repo, "member", { name: "Member" });
-  await Agent.test(app, { type: "handler" }, async (agent) => {
+  await Chat.test(app, { type: "handler" }, async (agent) => {
     await Chat.init(repo, agent)
       .login("admin")
       .getUsers(async (users: User[]) => {
@@ -55,7 +55,7 @@ Deno.test("GET /api/users - getAllUsers", async () => {
 Deno.test("POST /api/users - user creation flow", async () => {
   let url: string;
   await ensureUser(repo, "admin", { name: "Admin" });
-  await Agent.test(app, { type: "handler" }, async (agent) => {
+  await Chat.test(app, { type: "handler" }, async (agent) => {
     const admin = Chat.init(repo, agent);
     try {
       await admin.login("admin")

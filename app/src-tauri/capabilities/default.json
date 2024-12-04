@@ -1,0 +1,54 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "urls": [
+    "https://localhost:3000",
+    "http://localhost:3000",
+    "https://localhost:3001",
+    "http://localhost:3001"
+  ],
+  "description": "Capability for the main window",
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "core:default",
+    "shell:allow-open",
+    {
+      "identifier": "http:default",
+      "allow": [
+        {
+          "url": "https://localhost:3000"
+        },
+        {
+          "url": "http://localhost:3000"
+        },
+        {
+          "url": "https://localhost:3001"
+        },
+        {
+          "url": "http://localhost:3001"
+        },
+        {
+          "url": "http://tauri.localhost/*"
+        },
+        {
+          "url": "https://tauri.localhost/*"
+        }
+      ]
+    },
+    "http:allow-fetch",
+    "http:allow-fetch",
+    "http:allow-fetch-cancel",
+    "http:allow-fetch-read-body",
+    "http:allow-fetch-send",
+    "core:path:default",
+    "core:event:default",
+    "core:window:default",
+    "core:app:default",
+    "core:resources:default",
+    "core:menu:default",
+    "core:tray:default",
+    "core:window:allow-set-title"
+  ]
+}

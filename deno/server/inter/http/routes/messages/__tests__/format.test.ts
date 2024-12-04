@@ -9,6 +9,8 @@ const { app, repo, core } = createApp();
 
 const validId = new ObjectId().toHexString();
 
+const getRandomId = () => new ObjectId().toHexString();
+
 Deno.test("Check all validations for message field", async (t) => {
   const agent = await Agent.from(app);
   const { token, userId } = await login(repo, agent);
@@ -16,12 +18,12 @@ Deno.test("Check all validations for message field", async (t) => {
     name: "messages-formating-check",
     users: [EntityId.from(userId)],
   }, async (channelId) => {
-    const testPart = (status: number, name: string, message: any) =>
-      t.step(name, () =>
-        agent.request()
+    const testPart = async (status: number, name: string, message: any) =>
+      await t.step(name, async () =>
+        await agent.request()
           .post(`/api/channels/${channelId}/messages/`)
           .json({
-            clientId: "123",
+            clientId: getRandomId(),
             flat: "test",
             message,
           })
@@ -32,6 +34,12 @@ Deno.test("Check all validations for message field", async (t) => {
             await repo.message.removeMany({
               channelId: EntityId.from(channelId),
             });
+          }, async (err) => {
+            console.log("ERRETE", err);
+            await repo.message.removeMany({
+              channelId: EntityId.from(channelId),
+            });
+            throw err;
           }));
     await testPart(400, "Should return status 400 for empty", {});
     await testPart(200, "Should return status 200 for empty array", []);
@@ -80,11 +88,19 @@ Deno.test("Check all validations for message field", async (t) => {
     await testPart(200, "Should return status 200 for strike", {
       strike: { text: "Hello" },
     });
-    await testPart(200, "Should return status 200 for img", {
+    await testPart(400, "Should return status 400 for old img format", {
       img: { src: "Hello", alt: "World" },
     });
-    await testPart(200, "Should return status 200 for link", {
+    await testPart(200, "Should return status 200 for img", {
+      img: "Hello",
+      _alt: "World",
+    });
+    await testPart(400, "Should return status 400 for old link format", {
       link: { href: "Hello", children: { text: "World" } },
+    });
+    await testPart(200, "Should return status 200 for link", {
+      link: { text: "World" },
+      _href: "Hello",
     });
     await testPart(200, "Should return status 200 for emoji", { emoji: "👋" });
     await testPart(200, "Should return status 200 for channel", {
@@ -107,21 +123,28 @@ Deno.test("Check all validations for message field", async (t) => {
     await testPart(400, "Should return status 400 for invalid user id", {
       user: "invalid",
     });
-    await testPart(200, "Should return status 200 for thread", {
+    await testPart(400, "Should return status 400 for old thread format", {
       thread: { channelId: validId, parentId: validId, text: "Hello" },
     });
+    await testPart(200, "Should return status 200 for thread", {
+      thread: "Hello",
+      _channelId: validId,
+      _parentId: validId,
+    });
     await testPart(400, "Should return status 400 for invalid thread text", {
-      thread: { channelId: validId, parentId: validId },
+      thread: undefined,
+      _channelId: validId,
+      _parentId: validId,
     });
     await testPart(
       400,
       "Should return status 400 for invalid thread parentId",
-      { thread: { channelId: validId, parentId: "invalid", text: "Hello" } },
+      { thread: "Hello", _channelId: validId, _parentId: "invalid" },
     );
     await testPart(
       400,
       "Should return status 400 for invalid thread channelId",
-      { thread: { channelId: "invalid", parentId: validId, text: "Hello" } },
+      { thread: "Hello", _channelId: "invalid", _parentId: validId },
     );
   });
   await agent.close();

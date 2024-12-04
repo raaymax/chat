@@ -1,3 +1,3 @@
-export * from './MessageBody.ts';
-export * from './Message.ts';
-export * from './ValidationResult.ts';
+export * from "./MessageBody.ts";
+export * from "./Message.ts";
+export * from "./ValidationResult.ts";

@@ -4,6 +4,7 @@ import { InviteCommand } from "./commands/invite.ts";
 import { AvatarCommand } from "./commands/avatar.ts";
 import { LeaveCommand } from "./commands/leave.ts";
 import { JoinCommand } from "./commands/join.ts";
+import { MainCommand } from "./commands/main.ts";
 
 export type CommandType = {
   commandName: string;
@@ -19,6 +20,7 @@ export const commands: CommandType[] = [
   AvatarCommand,
   LeaveCommand,
   JoinCommand,
+  MainCommand,
 ];
 
 export const registerCommand = (command: CommandType) => {

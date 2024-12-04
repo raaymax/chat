@@ -4,8 +4,9 @@ export default class Events {
   listeners: ((ev: Event) => Promise<void> | void)[] = [];
   onceListeners: ((ev: Event) => Promise<void> | void)[] = [];
 
-
-  wrapHandler(handler: (ev: Event) => Promise<void> | void): (ev: Event) => Promise<void> | void {
+  wrapHandler(
+    handler: (ev: Event) => Promise<void> | void,
+  ): (ev: Event) => Promise<void> | void {
     return async (ev: Event) => {
       try {
         return await handler(ev);
@@ -47,29 +48,5 @@ export default class Events {
     } catch (err) {
       console.error(err);
     }
-  }
-
-  async *[Symbol.asyncIterator](): AsyncGenerator<Event> {
-    while (true) {
-      const { done, event } = await this.next();
-      if (done) {
-        break;
-      }
-      yield event;
-    }
-  }
-
-  next(): Promise<{ done: false; event: Event } | { done: true; event: null }> {
-    const { promise, resolve } = Promise.withResolvers<
-      { done: false; event: Event } | { done: true; event: null }
-    >();
-    const cb = (event: Event) => {
-      if (event.type === "system:close") {
-        return resolve({ done: true, event: null });
-      }
-      return resolve({ done: false, event });
-    };
-    this.once(cb);
-    return promise;
   }
 }

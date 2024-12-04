@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import {
-  useSelector, useBadges, useChannels, useActions, useDispatch,
+  useSelector, useBadges, useChannels,
 } from '../../store';
 import { ChannelCreate } from './ChannelCreate';
 import { Channel } from './NavChannel';
@@ -55,7 +55,7 @@ export const NavChannels = ({ icon }: NavChannelsProps) => {
   const [show, setShow] = useState(false);
   const channels = useChannels();
   let navigate = (_path: string) => {};
-  try { navigate = useNavigate(); }catch {}
+  try { navigate = useNavigate(); }catch {/* ignore */}
   const userId = useSelector((state) => state.me);
   const badges = useBadges(userId);
   console.log(badges);

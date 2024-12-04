@@ -11,11 +11,15 @@
     "types": "tsc --noEmit",
     "storybook": "storybook dev -p 6006 --no-open",
     "build-storybook": "storybook build",
-    "chromatic": "npx chromatic"
+    "chromatic": "npx chromatic",
+    "tauri": "tauri"
   },
   "dependencies": {
     "@planigale/sse": "npm:@jsr/planigale__sse@0.2.4",
     "@reduxjs/toolkit": "2.2.3",
+    "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-http": "^2",
+    "@tauri-apps/plugin-shell": "^2",
     "@vitejs/plugin-basic-ssl": "1.1.0",
     "filesize": "10.1.6",
     "fuse.js": "7.0.0",
@@ -43,6 +47,7 @@
     "@storybook/react": "8.4.4",
     "@storybook/react-vite": "8.4.4",
     "@storybook/test": "8.4.4",
+    "@tauri-apps/cli": "^2",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
     "@types/serviceworker": "0.0.85",

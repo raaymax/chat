@@ -15,7 +15,7 @@ Deno.test("POST /api/commands/execute - unauthorized", async () => {
 });
 
 Deno.test("command /echo <text>", async () =>
-  await Agent.test(
+  await Chat.test(
     app,
     { type: "handler" },
     async (agent) =>
@@ -35,7 +35,7 @@ Deno.test("command /echo <text>", async () =>
   ));
 
 Deno.test("command /emoji <name>", async () =>
-  await Agent.test(app, { type: "handler" }, async (agent) => {
+  await Chat.test(app, { type: "handler" }, async (agent) => {
     const state: any = {};
     try {
       await Chat.init(repo, agent)
@@ -74,7 +74,7 @@ Deno.test("command /emoji <name>", async () =>
 
 Deno.test("command /invite", async () => {
   await repo.invitation.removeMany({});
-  return await Agent.test(app, { type: "handler" }, async (agent) => {
+  return await Chat.test(app, { type: "handler" }, async (agent) => {
     let url: string | null = null;
     await Chat.init(repo, agent)
       .login("admin")
@@ -95,7 +95,7 @@ Deno.test("command /invite", async () => {
 });
 
 Deno.test("command /avatar", async () => {
-  return await Agent.test(app, { type: "handler" }, async (agent) => {
+  return await Chat.test(app, { type: "handler" }, async (agent) => {
     await Chat.init(repo, agent)
       .login("admin")
       .createChannel({ name: "test-commands-avatar" })
@@ -117,7 +117,7 @@ Deno.test("command /avatar", async () => {
 
 Deno.test("command /version", async () => {
   Deno.env.set("APP_VERSION", "server-version");
-  return await Agent.test(app, { type: "handler" }, async (agent) => {
+  return await Chat.test(app, { type: "handler" }, async (agent) => {
     await Chat.init(repo, agent)
       .login("admin")
       .createChannel({ name: "test-commands-version" })
@@ -134,7 +134,7 @@ Deno.test("command /version", async () => {
 });
 
 Deno.test("command /help", async () => {
-  return await Agent.test(app, { type: "handler" }, async (agent) => {
+  return await Chat.test(app, { type: "handler" }, async (agent) => {
     await Chat.init(repo, agent)
       .login("admin")
       .createChannel({ name: "test-commands-help" })
@@ -153,7 +153,7 @@ Deno.test("command /help", async () => {
 });
 
 Deno.test("command /leave", async () => {
-  return await Agent.test(app, { type: "handler" }, async (agent) => {
+  return await Chat.test(app, { type: "handler" }, async (agent) => {
     await Chat.init(repo, agent)
       .login("admin")
       .createChannel({ name: "test-commands-leave" })
@@ -188,7 +188,7 @@ Deno.test("command /leave", async () => {
 });
 
 Deno.test("command /join", async () => {
-  return await Agent.test(app, { type: "handler" }, async (agent) => {
+  return await Chat.test(app, { type: "handler" }, async (agent) => {
     const member = Chat.init(repo, agent);
     await member
       .login("admin")
@@ -208,6 +208,22 @@ Deno.test("command /join", async () => {
         assertEquals(event.type, "message");
         assert(event.clientId, "Event should have clientId");
         assertEquals(event.flat, "You have joined the channel");
+      })
+      .end();
+    await member.end();
+  });
+});
+
+Deno.test("command /main", async () => {
+  return await Chat.test(app, { type: "handler" }, async (agent) => {
+    const admin = Chat.init(repo, agent);
+    await admin
+      .login("admin")
+      .createChannel({ name: "test-commands-main" });
+    await admin
+      .executeCommand("/main", [])
+      .getConfig(async (config) => {
+        assertEquals(config.mainChannelId, admin.channelId);
       })
       .end();
   });

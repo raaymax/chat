@@ -12,7 +12,8 @@ import config from "@quack/config";
 export { ObjectId } from "mongodb";
 
 const __dirname = path.dirname(path.fromFileUrl(import.meta.url));
-const DATABASE_URL = Deno.env.get("DATABASE_URL") ?? config.databaseUrl ?? "mongodb://chat:chat@localhost:27017/chat?authSource=admin";
+const DATABASE_URL = Deno.env.get("DATABASE_URL") ?? config.databaseUrl ??
+  "mongodb://chat:chat@localhost:27017/chat?authSource=admin";
 
 export class Database {
   db: Db | undefined = undefined;
@@ -103,49 +104,54 @@ export class Repository {
   }
 
   async getMigrations() {
-    const {db} = await this.db.connect();
+    const { db } = await this.db.connect();
     return db.collection("migrations").find().toArray();
   }
 
-
   async push(fileName) {
-    const {db} = await this.db.connect();
-    await db.collection("migrations").insertOne({ fileName, createdAt: new Date() });
+    const { db } = await this.db.connect();
+    await db.collection("migrations").insertOne({
+      fileName,
+      createdAt: new Date(),
+    });
   }
-  
+
   async pop() {
-    const {db} = await this.db.connect();
-    const migration = await db.collection("migrations").findOne({}, { sort: { createdAt: -1 } });
+    const { db } = await this.db.connect();
+    const migration = await db.collection("migrations").findOne({}, {
+      sort: { createdAt: -1 },
+    });
     if (!migration) return;
     await db.collection("migrations").deleteOne({ _id: migration._id });
     return migration.fileName;
   }
-
 
   async close() {
     await this.db.disconnect();
   }
 }
 
-
 const repo = new Repository({ databaseUrl: DATABASE_URL });
 
 export class Migrations {
-  
   async up() {
-    const {db} = await repo.db.connect();
+    const { db } = await repo.db.connect();
     const migrations = await repo.getMigrations();
     const files: string[] = [];
-    for await (const file of Deno.readDir(path.join(__dirname, "../../migrations"))) {
+    for await (
+      const file of Deno.readDir(path.join(__dirname, "../../migrations"))
+    ) {
       if (file.isFile) {
-        if( migrations.find(m => m.fileName === file.name)) continue;
-        console.log('up', file.name);
+        if (migrations.find((m) => m.fileName === file.name)) continue;
+        console.log("up", file.name);
         files.push(file.name);
       }
     }
     files.sort();
     for (const file of files) {
-      const migration = await import(path.join(__dirname, "../../migrations", file));
+      const migration = await import(
+        path.join(__dirname, "../../migrations", file)
+      );
       await repo.db.withTransaction(async () => {
         await migration.up(db);
       });

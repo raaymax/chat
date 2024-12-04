@@ -1,8 +1,8 @@
 
 import styled, { useTheme } from 'styled-components';
-import { cn, isMobile } from '../../utils';
+import { cn, isMobile , ClassNames,same } from '../../utils';
 import { useSidebar } from '../contexts/useSidebar';
-import { useParams } from 'react-router-dom';
+import { useParams , useLocation, useNavigate} from 'react-router-dom';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Workspaces } from '../organisms/Workspaces';
 import { Sidebar } from '../organisms/Sidebar';
@@ -12,8 +12,6 @@ import { Channel } from '../molecules/NavChannel';
 import { init } from '../../services/init';
 import { Toolbar } from '../atoms/Toolbar';
 import { ButtonWithIcon } from '../molecules/ButtonWithIcon';
-import { useLocation, useNavigate} from 'react-router-dom';
-import { ClassNames,same } from '../../utils';
 import { useMessageListArgs } from '../contexts/useMessageListArgs';
 import { MessageListArgsProvider } from '../contexts/messageListArgs';
 import { SearchBox } from '../atoms/SearchBox';
@@ -342,7 +340,7 @@ export const Discussion = ({ className, children }: DiscussionProps) => {
   );
 }
 
-export default ({children}: {children: React.ReactNode}) => {
+export const Mobile = ({children}: {children: React.ReactNode}) => {
   const { sidebar } = useSidebar();
   const { parentId } = useParams();
   const theme = useTheme();
@@ -370,3 +368,4 @@ export default ({children}: {children: React.ReactNode}) => {
   );
 };
 
+export default Mobile;

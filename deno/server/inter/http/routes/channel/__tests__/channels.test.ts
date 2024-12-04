@@ -22,7 +22,7 @@ Deno.test("/api/channels/* - unauthorized", async () => {
 });
 
 Deno.test("/api/channels", async () => {
-  await Agent.test(app, { type: "handler" }, async (agent) => {
+  await Chat.test(app, { type: "handler" }, async (agent) => {
     await Chat.init(repo, agent)
       .login("admin")
       .connectSSE()
@@ -51,7 +51,7 @@ Deno.test("/api/channels", async () => {
 });
 
 Deno.test("/api/channels - other user receives notification about channel", async () =>
-  await Agent.test(app, { type: "handler" }, async (agent) => {
+  await Chat.test(app, { type: "handler" }, async (agent) => {
     const member = Chat.init(repo, agent).login("member");
     const admin = Chat.init(repo, agent).login("admin");
     try {

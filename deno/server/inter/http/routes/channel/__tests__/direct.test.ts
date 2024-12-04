@@ -8,7 +8,7 @@ const { app, repo, core } = createApp();
 
 Deno.test("/api/channels/direct/:userId", async () => {
   await repo.channel.removeMany({ channelType: ChannelType.DIRECT });
-  await Agent.test(app, { type: "handler" }, async (agent) => {
+  await Chat.test(app, { type: "handler" }, async (agent) => {
     const member = Chat.init(repo, agent);
     const admin = Chat.init(repo, agent);
 
@@ -44,7 +44,7 @@ Deno.test("/api/channels/direct/:userId", async () => {
 });
 
 Deno.test("/api/channels/direct/:userId - self channel", async () => {
-  await Agent.test(app, { type: "handler" }, async (agent) => {
+  await Chat.test(app, { type: "handler" }, async (agent) => {
     const admin = Chat.init(repo, agent)
       .login("admin")
       .putDirectChannel(

@@ -125,7 +125,6 @@ export default createCommand({
     },
   }).internal();
 
-  
   await core.events.dispatch({
     type: "message:created",
     payload: created,

@@ -13,6 +13,6 @@ type Story = StoryObj<typeof CollapsableColumns>;
 export const Primary: Story = {
   args: {
     minSize: 200,
-    columns: [<div>Column 1</div>, <div>Column 2</div>],
+    columns: [<div key={1}>Column 1</div>, <div key={2}>Column 2</div>],
   },
 };

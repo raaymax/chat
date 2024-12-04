@@ -1,4 +1,4 @@
-
+/*
 type Element = {
 	nodeName: string;
 	nodeValue?: string;
@@ -22,4 +22,4 @@ const mapNodes = (dom: HTMLElement, info: SerializeInfo): MessageBody => (
     if (n.nodeName === 'SPAN' && n.className === 'emoji') return { emoji: n.getAttribute('emoji') ?? '' };
     if (n.nodeName === 'SPAN' && n.className === 'channel') return { channel: n.getAttribute('channelId') ?? '' };
 																																	 }
-
+*/

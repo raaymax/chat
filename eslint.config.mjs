@@ -32,6 +32,11 @@ const config = [
       files: [
         "app/src/sw.[jt]s",
       ],
+      ignores: [
+        "app/dist/**/*",
+        "app/src-tauri/**/*",
+        "app/.storybook/**/*",
+      ],
       languageOptions: {
           ecmaVersion: 2022,
           sourceType: "module",
@@ -53,6 +58,11 @@ const config = [
       files: [
         "app/tests/**/*.js",
         "app/**/*.spec.js",
+      ],
+      ignores: [
+        "app/dist/**/*",
+        "app/src-tauri/**/*",
+        "app/.storybook/**/*",
       ],
       languageOptions: {
           ecmaVersion: 2022,
@@ -90,6 +100,8 @@ const config = [
       ],
       ignores: [
         "app/dist/**/*",
+        "app/src-tauri/**/*",
+        "app/.storybook/**/*",
       ],
       rules: {
         "import/no-named-as-default": "off",
@@ -113,6 +125,8 @@ const config = [
       ignores: [
         "app/src/sw.[jt]s",
         "app/dist/**/*",
+        "app/src-tauri/**/*",
+        "app/.storybook/**/*",
       ],
       rules: {
         "@typescript-eslint/no-empty-function": "warn",

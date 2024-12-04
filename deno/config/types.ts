@@ -1,4 +1,3 @@
-
 export type Config = {
   vapid: {
     publicKey: string;

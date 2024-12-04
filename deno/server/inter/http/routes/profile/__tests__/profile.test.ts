@@ -1,7 +1,6 @@
 import { assert, assertEquals } from "@std/assert";
 import { Agent } from "@planigale/testing";
 import config from "@quack/config";
-import { ensureUser, login } from "../../__tests__/mod.ts";
 
 import { createApp } from "../../__tests__/app.ts";
 import { Chat } from "../../__tests__/chat.ts";
@@ -20,12 +19,14 @@ Deno.test("GET /api/profile/config - unauthorized", async () => {
 });
 
 Deno.test("GET /api/profile/config - getConfig", async () => {
-  await Agent.test(app, { type: "handler" }, async (agent) => {
-    await Chat.init(repo, agent)
-      .login("admin")
+  await Chat.test(app, { type: "handler" }, async (agent) => {
+    const admin = Chat.init(repo, agent);
+    await admin.login("admin")
+      .createChannel({ name: "Test" });
+    await admin.executeCommand("/main", [])
       .getConfig(async (body: any) => {
         assertEquals(body.appVersion, "1.2.3");
-        assertEquals(body.mainChannelId, "Test");
+        assertEquals(body.mainChannelId, admin.channelId);
         assertEquals(body.vapidPublicKey, config.vapid.publicKey);
       })
       .end();

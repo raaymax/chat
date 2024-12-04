@@ -1,4 +1,4 @@
-import { Config } from "@quack/config";
+import * as Config from "@quack/config";
 import { HttpInterface } from "../../mod.ts";
 import { Core } from "../../../../core/mod.ts";
 import { Repository } from "../../../../infra/mod.ts";

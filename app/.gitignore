@@ -25,3 +25,6 @@ dist-ssr
 dev-dist
 
 *storybook.log
+
+target/
+src-tauri/gen/

@@ -1,4 +1,8 @@
-import { Args, MessageBody, MessageBodyPartConstructor } from "./MessageBody.ts";
+import {
+  Args,
+  MessageBody,
+  MessageBodyPartConstructor,
+} from "./MessageBody.ts";
 import { ValidationResult } from "./ValidationResult.ts";
 import * as parts from "./MessageParts.ts";
 import { MessageParts } from "./MessageParts.ts";
@@ -28,22 +32,24 @@ export class Message {
 
   static validate(json: any): ValidationResult {
     if (Array.isArray(json)) {
-      return ValidationResult.combine(json.map(item => Message.validate(item)));
+      return ValidationResult.combine(
+        json.map((item) => Message.validate(item)),
+      );
     }
     if (json === null || json === undefined || typeof json != "object") {
       return new ValidationResult(false, [{
-				message: "Invalid message",
-				error: "INVALID_MESSAGE"
-			}]);
+        message: "Invalid message",
+        error: "INVALID_MESSAGE",
+      }]);
     }
     const part = MessageParts.find((p) => (json as any)[p.propName]);
-		if (!part) {
-			return new ValidationResult(false, [{
-				message: "Invalid message part",
-				error: "INVALID_PART"
-			}]);
-		}
-		return part.validate(json);
+    if (!part) {
+      return new ValidationResult(false, [{
+        message: "Invalid message part",
+        error: "INVALID_PART",
+      }]);
+    }
+    return part.validate(json);
   }
 
   static parsePart(json: unknown): MessageBody {
@@ -56,7 +62,10 @@ export class Message {
     if (json === null || json === undefined || typeof json != "object") {
       return new parts.Text({}, String(json));
     }
-    const part = MessageParts.find((p) => (json as any)[p.propName])?.parse(json, this);
+    const part = MessageParts.find((p) => (json as any)[p.propName])?.parse(
+      json,
+      this,
+    );
     if (!part) throw new Error(`Invalid message part: ${JSON.stringify(json)}`);
     return part;
   }
@@ -65,12 +74,11 @@ export class Message {
     return new Message(Message.parsePart(json));
   }
 
-	static create= <
-		P extends MessageBodyPartConstructor,
-		A extends Args,
-		C extends [],
-	>(Class: P, args: A, ...children: C) => {
-		return new Class(args, children);
-	};
+  static create = <
+    P extends MessageBodyPartConstructor,
+    A extends Args,
+    C extends [],
+  >(Class: P, args: A, ...children: C) => {
+    return new Class(args, children);
+  };
 }
-

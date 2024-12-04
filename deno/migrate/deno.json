@@ -4,6 +4,6 @@
   },
   "imports": {
     "@std/path": "jsr:@std/path@^1.0.2",
-    "mongodb": "npm:mongodb@^6.8.0",
+    "mongodb": "npm:mongodb@^6.8.0"
   }
 }

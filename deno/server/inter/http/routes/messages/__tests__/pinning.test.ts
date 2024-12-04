@@ -6,7 +6,7 @@ import { Chat } from "../../__tests__/chat.ts";
 const { app, repo } = createApp();
 
 Deno.test("Pinning other user messsage", async (t) => {
-  await Agent.test(app, { type: "handler" }, async (agent) => {
+  await Chat.test(app, { type: "handler" }, async (agent) => {
     let pinMessageId = "";
     const admin = Chat.init(repo, agent);
     const member = Chat.init(repo, agent);

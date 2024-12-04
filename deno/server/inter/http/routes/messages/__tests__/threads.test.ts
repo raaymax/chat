@@ -6,7 +6,7 @@ import { Chat } from "../../__tests__/chat.ts";
 const { app, repo } = createApp();
 
 Deno.test("sending messages to threads", async (t) => {
-  await Agent.test(app, { type: "handler" }, async (agent) => {
+  await Chat.test(app, { type: "handler" }, async (agent) => {
     await Chat.init(repo, agent)
       .login("admin")
       .createChannel({ name: "test-messages-threads" })
@@ -23,7 +23,7 @@ Deno.test("sending messages to threads", async (t) => {
       })
       .sendMessage(({ state }) => ({ flat: "msg1", parentId: state.parentId }))
       .sendMessage(({ state }) => ({ flat: "msg2", parentId: state.parentId }))
-      .getMessages({parentId: null}, (messages: any) => {
+      .getMessages({ parentId: null }, (messages: any) => {
         assertEquals(messages.length, 3);
         assertEquals(messages[1].thread.length, 2);
       })
