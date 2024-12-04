@@ -1,2 +1,6 @@
+deno/server/uploads
+.git
 node_modules
+**/node_modules
 dist
+app/src-tauri

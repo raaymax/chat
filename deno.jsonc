@@ -1,0 +1,49 @@
+{
+  "workspace": [
+    "./deno/config",
+    "./deno/server",
+    "./deno/storage",
+    "./deno/migrate"
+  ],
+  "imports": {
+    "@planigale/body-parser": "jsr:@planigale/body-parser",
+    "@planigale/planigale": "jsr:@planigale/planigale@0.6.5",
+    "@planigale/testing": "jsr:@planigale/testing@0.3.3",
+    "@planigale/schema": "jsr:@planigale/schema",
+    "@planigale/sse": "jsr:@planigale/sse",
+    "@std/assert": "jsr:@std/assert@^1.0.1",
+    "@std/path": "jsr:@std/path@^1.0.2",
+    "@std/uuid": "jsr:@std/uuid@^1.0.4",
+    "mongodb": "npm:mongodb@^6.8.0",
+    "valibot": "npm:valibot@^0.36.0"
+  },
+  "fmt": {
+    "include": [
+      "deno/**"
+    ],
+    "exclude": [
+      "deno/server/uploads/**"
+    ]
+  },
+  "lint": {
+    "include": ["deno/"],
+    "exclude": ["packages/", "deno/**/__tests__/*", "deno/server/uploads/**"],
+    "rules": {
+      "tags": ["recommended"],
+      "exclude": ["no-unused-vars", "no-explicit-any"]
+    }
+  },
+  "tasks": {
+    "cache": "deno task -c ./deno/server/deno.jsonc cache",
+    "dev": "deno task -c ./deno/server/deno.jsonc dev",
+    "web": "npm run dev:web",
+    "lint": "deno lint && deno run -A npm:eslint .",
+    "start": "deno task -c ./deno/server/deno.jsonc start",
+    "build": "deno task -c ./packages/app/deno.jsonc build",
+    "migrate": "deno task -c ./deno/migrate/deno.json migrate",
+    "migrate:tests": "DATABASE_URL='mongodb://chat:chat@localhost:27017/tests?authSource=admin' deno task migrate",
+    "test": "DATABASE_URL='mongodb://chat:chat@localhost:27017/tests?authSource=admin' deno test --no-check -A",
+    "ssl": "mkdir -p ssl && openssl req -x509 -newkey rsa:4096 -keyout ssl/key.pem -out ssl/cert.pem -days 365 -nodes -subj '/CN=localhost'",
+    "check": "deno run -A npm:eslint . --ignore-pattern=app/src-tauri && deno fmt && deno lint && deno task test"
+  }
+}

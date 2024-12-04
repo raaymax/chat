@@ -1,0 +1,242 @@
+/*
+ Roboto-Black.ttf
+ Roboto-BlackItalic.ttf
+ Roboto-Bold.ttf
+ Roboto-BoldItalic.ttf
+ Roboto-Italic.ttf
+ Roboto-Light.ttf
+ Roboto-LightItalic.ttf
+ Roboto-Medium.ttf
+ Roboto-MediumItalic.ttf
+ Roboto-Regular.ttf
+ Roboto-Thin.ttf
+ Roboto-ThinItalic.ttf
+*/
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-ThinItalic.ttf') format('truetype');
+  font-weight: 100;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-LightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-MediumItalic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-BlackItalic.ttf') format('truetype');
+  font-weight: 900;
+  font-style: italic;
+}
+
+/*
+ *            IBMPlexSans-Bold.ttf
+           IBMPlexSans-BoldItalic.ttf
+           IBMPlexSans-ExtraLight.ttf
+           IBMPlexSans-ExtraLightItalic.ttf
+           IBMPlexSans-Italic.ttf
+           IBMPlexSans-Light.ttf
+           IBMPlexSans-LightItalic.ttf
+           IBMPlexSans-Medium.ttf
+           IBMPlexSans-MediumItalic.ttf
+           IBMPlexSans-Regular.ttf
+           IBMPlexSans-SemiBold.ttf
+           IBMPlexSans-SemiBoldItalic.ttf
+           IBMPlexSans-Thin.ttf
+           IBMPlexSans-ThinItalic.ttf
+*/
+
+@font-face {
+  font-family: 'IBMPlexSans';
+  src: url('./fonts/IBM_Plex_Sans/IBMPlexSans-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IBMPlexSans';
+  src: url('./fonts/IBM_Plex_Sans/IBMPlexSans-ThinItalic.ttf') format('truetype');
+  font-weight: 100;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'IBMPlexSans';
+  src: url('./fonts/IBM_Plex_Sans/IBMPlexSans-ExtraLight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IBMPlexSans';
+  src: url('./fonts/IBM_Plex_Sans/IBMPlexSans-ExtraLightItalic.ttf') format('truetype');
+  font-weight: 200;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'IBMPlexSans';
+  src: url('./fonts/IBM_Plex_Sans/IBMPlexSans-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IBMPlexSans';
+  src: url('./fonts/IBM_Plex_Sans/IBMPlexSans-LightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'IBMPlexSans';
+  src: url('./fonts/IBM_Plex_Sans/IBMPlexSans-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IBMPlexSans';
+  src: url('./fonts/IBM_Plex_Sans/IBMPlexSans-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'IBMPlexSans';
+  src: url('./fonts/IBM_Plex_Sans/IBMPlexSans-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IBMPlexSans';
+  src: url('./fonts/IBM_Plex_Sans/IBMPlexSans-MediumItalic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'IBMPlexSans';
+  src: url('./fonts/IBM_Plex_Sans/IBMPlexSans-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IBMPlexSans';
+  src: url('./fonts/IBM_Plex_Sans/IBMPlexSans-SemiBoldItalic.ttf') format('truetype');
+  font-weight: 600;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'IBMPlexSans';
+  src: url('./fonts/IBM_Plex_Sans/IBMPlexSans-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IBMPlexSans';
+  src: url('./fonts/IBM_Plex_Sans/IBMPlexSans-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'IBMPlexSans';
+  src: url('./fonts/IBM_Plex_Sans/IBMPlexSans-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IBMPlexSans';
+  src: url('./fonts/IBM_Plex_Sans/IBMPlexSans-ExtraBoldItalic.ttf') format('truetype');
+  font-weight: 800;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'IBMPlexSans';
+  src: url('./fonts/IBM_Plex_Sans/IBMPlexSans-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IBMPlexSans';
+  src: url('./fonts/IBM_Plex_Sans/IBMPlexSans-BlackItalic.ttf') format('truetype');
+  font-weight: 900;
+  font-style: italic;
+}
+
+

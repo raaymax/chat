@@ -1,5 +1,8 @@
 <p align="center">
-  <img src="quack.png" title="hover text">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="app/public/dark.png">
+  <img alt="Quack the best chat app on the market" src="app/public/light.png">
+</picture>
 </p>
 
 [![Tests](https://github.com/raaymax/chat/actions/workflows/release.yml/badge.svg)](https://github.com/raaymax/chat/actions/workflows/release.yml)
@@ -10,22 +13,45 @@
 
 Welcome to the Quack - private chatting application.
 
-Quack is a free and open-source chat application designed for private use. 
-With its easy-to-use interface and seamless integration with web browsers, Quack is a Progressive Web Application that can be accessed from any platform that has a web browser, such as Chrome.
+Welcome to Quack, a free and open-source chat application designed for private use. Quack offers an easy-to-use interface and seamless integration with web browsers, making it a Progressive Web Application accessible from any platform with a web browser, such as Chrome.
 
 <p align="center">
-  <img src="quack_lorem.png" width="350" title="screenshot">
+  <img src="quack_lorem.png" width="350" title="Quack Screenshot">
 </p>
 
-Quack is inspired by Slack, but is more affordable for private use. Although it doesn't have any unique features, it combines the best features from other communicators.
-Quack prioritizes privacy and security by allowing users to host their own app, ensuring that they have complete control over their data.
+Inspired by Slack but more affordable for private use, Quack combines the best features from other communicators while prioritizing privacy and security. Users can host their own app, ensuring complete control over their data.
+
+## Features
+
+- Progressive Web Application (PWA)
+- Self-hosted for privacy and security
+- Multi-channel support
+- Direct messaging
+- Pinning messages
+- Message search
+- File sharing
+- Emoji reactions
+- Custom emojis
+- Message threading
+- User mentions
+- Link previews
+- Customizable notifications
+- Plugin system for extensibility
+
+## Quick Start
+
+The fastest way to get started is to use the Docker compose. Using following command will start the application with default settings in no time.
+```
+docker compose up -d
+```
+navigate to [http://localhost:8080](http://localhost:8080) and use default credentials to login `admin / 123`.
 
 ## Configuration
 
-To override default settings `chat.config.js` file can be created in root directory of the project.
+To override default settings `chat.config.ts` file can be created in root directory of the project. You can use `chat.config.example.ts` as a template.
 File should export folowing object:
-```javascript
-type ChatConfig = {
+```typescript
+type Config = {
   port?: number // default `PORT` env otherwise `8080`
   sessionSecret?: string // auto generated on first run to `secrets.json` but can be overwritten here
   trustProxy?: bool | string | number // default `uniquelocal` ref: https://expressjs.com/en/guide/behind-proxies.html
@@ -35,7 +61,7 @@ type ChatConfig = {
   },
   databaseUrl?: string // default `DATABASE_URL` env
   cors?: string[] // by default [ 'https?://localhost(:[0-9]{,4})' ],
-  storage?: {
+  storage?: { // Where uploaded files should be stored
     type: 'memory' | 'gcs' | 'fs' // default `fs` / `memory` in tests
     directory: string // where to save files when type `fs`
     bucket: string // bucket name for `gcs`
@@ -49,10 +75,35 @@ type ChatConfig = {
 
 `GOOGLE_APPLICATION_CREDENTIALS` [string] - (optional) when gcs storage method is used
 
-## Requirements
-- MongoDB
-- (optional) google cloud key for GCS
+## Running the Project
 
+### Pre-requisites
+- Install [Deno](https://deno.land/)
+- Node.js and npm (for managing frontend dependencies and running React)
+- MongoDB
+
+### Backend
+To start the server:
+```sh
+cd ./deno/server
+deno task dev
+```
+
+### Frontend
+Install dependencies and start the React app:
+```sh
+cd ./app
+npm install
+npm run dev
+```
+
+### Storybook
+To start the storybook:
+```sh
+cd ./app
+npm install
+npm run storybook
+```
 
 ## Files persistence
 Currently supporting Google Cloud Storage. To enable it set `fileStorage` in config file to `gcs` specify `gcsBucket`
@@ -76,14 +127,6 @@ Chat have plugin system. Example plugin can be found in `plugins/example`.
 How to use plugins and plugin hook points TBA.
 
 
-## Local development setup
-
-```bash
-pnpm i
-docker-compose up -d
-pnpm run dev
-```
-
 ## Default credentials
 
 ```
@@ -91,6 +134,9 @@ admin / 123
 ```
 New users can be invited with `/invite` command which will generate single use link for user registration.
 
+## Contributing
+
+Contributions are welcome. For major changes, please open an issue first to discuss what you would like to change. Ensure to update tests as appropriate.
 
 ## License
 

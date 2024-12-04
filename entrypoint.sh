@@ -1,4 +1,6 @@
 #!/bin/sh
-. .envrc
-npx migrate-mongo up
-npm start
+if [ -f ".envrc" ]; then
+  . .envrc
+fi
+deno task migrate
+deno task start
