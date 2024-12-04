@@ -24,11 +24,13 @@ const configs: Config["storage"][] = [
   {
     type: "gcs",
     bucket: "codecat-quack-integration-test",
+    ignore: Deno.env.get("local") !== "true" ||
+      Deno.env.get("OFFLINE") === "true",
   },
 ];
 
 for (const config of configs) {
-  if (config.type === "gcs" && Deno.env.get("OFFLINE") === "true") {
+  if (config.ignore) {
     continue;
   }
 
