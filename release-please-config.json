@@ -1,6 +1,0 @@
-{
-  "bootstrap-sha": "0cb9b72583f881a3e0ba0cbe7e1a14132e4251cb",
-  "release-type": "node",
-  "pull-request-title-pattern": "chore${scope}: release${component} ${version}",
-  "group-pull-request-title-pattern": "chore${scope}: release${component} ${version}"
-}
