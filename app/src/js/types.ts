@@ -168,5 +168,4 @@ export type Notification = {
 export type UserConfig = {
   appVersion: string,
   mainChannelId: string,
-  vapidPublicKey: string,
 }

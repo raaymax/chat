@@ -1,5 +1,4 @@
 import * as v from "valibot";
-import config from "@quack/config";
 import { createQuery } from "../query.ts";
 import { Id } from "../types.ts";
 import { ResourceNotFound } from "../errors.ts";
@@ -18,6 +17,5 @@ export default createQuery({
   return {
     appVersion: Deno.env.get("APP_VERSION"),
     mainChannelId: user?.mainChannelId ?? channel?.id,
-    vapidPublicKey: config.vapid.publicKey,
   };
 });

@@ -47,7 +47,6 @@ export type Interaction = {
 export type Config = {
   appVersion: string;
   mainChannelId: EntityId;
-  vapidPublicKey: string;
 };
 
 export type Webhook = {

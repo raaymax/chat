@@ -2,6 +2,7 @@ import { assert, assertEquals } from "@std/assert";
 import { Agent } from "@planigale/testing";
 import { createApp } from "../../__tests__/app.ts";
 import { Chat } from "../../__tests__/chat.ts";
+import { ensureUser } from "../../__tests__/users.ts";
 
 const { app, repo } = createApp();
 
@@ -116,6 +117,8 @@ Deno.test("command /avatar", async () => {
 });
 
 Deno.test("command /version", async () => {
+  await ensureUser(repo, "system", { name: "System" });
+
   Deno.env.set("APP_VERSION", "server-version");
   return await Chat.test(app, { type: "handler" }, async (agent) => {
     await Chat.init(repo, agent)
