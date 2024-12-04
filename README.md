@@ -1,5 +1,8 @@
 <p align="center">
-  <img src="quack.png" title="hover text">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="app/public/dark.png">
+  <img alt="Quack the best chat app on the market" src="app/public/light.png">
+</picture>
 </p>
 
 [![Tests](https://github.com/raaymax/chat/actions/workflows/release.yml/badge.svg)](https://github.com/raaymax/chat/actions/workflows/release.yml)
