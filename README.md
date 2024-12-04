@@ -14,9 +14,10 @@ Welcome to the Quack - private chatting application.
 
 Welcome to Quack, a free and open-source chat application designed for private use. Quack offers an easy-to-use interface and seamless integration with web browsers, making it a Progressive Web Application accessible from any platform with a web browser, such as Chrome.
 
-<p align="center">
-  <img src="quack_lorem.png" width="350" title="Quack Screenshot">
-</p>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="app/public/screenshot-dark.png">
+  <img alt="Quack the best chat app on the market" src="app/public/screenshot-light.png">
+</picture>
 
 Inspired by Slack but more affordable for private use, Quack combines the best features from other communicators while prioritizing privacy and security. Users can host their own app, ensuring complete control over their data.
 
