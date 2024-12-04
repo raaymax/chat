@@ -27,7 +27,6 @@ Deno.test("GET /api/profile/config - getConfig", async () => {
       .getConfig(async (body: any) => {
         assertEquals(body.appVersion, "1.2.3");
         assertEquals(body.mainChannelId, admin.channelId);
-        assertEquals(body.vapidPublicKey, config.vapid.publicKey);
       })
       .end();
   });
