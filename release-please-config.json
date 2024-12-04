@@ -3,11 +3,4 @@
   "release-type": "node",
   "pull-request-title-pattern": "chore${scope}: release${component} ${version}",
   "group-pull-request-title-pattern": "chore${scope}: release${component} ${version}",
-  "packages": {
-    ".": {
-      "component": "quack",
-      "pull-request-title-pattern": "chore${scope}: release${component} ${version}",
-      "group-pull-request-title-pattern": "chore${scope}: release${component} ${version}"
-    }
-  }
 }
