@@ -1,10 +1,11 @@
 import { assert, assertEquals } from "@std/assert";
 import { Agent } from "@planigale/testing";
 import { createApp } from "../../__tests__/app.ts";
+import { ensureUser } from "../../__tests__/users.ts";
 
 Deno.env.set("ENV_TYPE", "test");
 
-const { app, core } = createApp();
+const { app, repo, core } = createApp();
 
 Deno.test("GET /auth/session - No session", async () => {
   const request = new Request("http://localhost/api/auth/session");
@@ -30,6 +31,7 @@ Deno.test("POST /auth/session - wrong params", async () => {
 Deno.test("Login/logout", async (t) => {
   let token: any = null;
   let userId: any = null;
+  await ensureUser(repo, "admin");
 
   await t.step("POST /auth/session - Create session", async () => {
     const res = await Agent.request(app)
