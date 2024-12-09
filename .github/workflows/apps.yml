@@ -39,20 +39,13 @@ jobs:
         java-version: '17'
 
     - name: Setup Android SDK
-      if: matrix.android
       uses: android-actions/setup-android@v3
-    - name: Setup Android NDK
-      if: matrix.android
-      uses: nttld/setup-ndk@v1
-      id: setup-ndk
-      with:
-        ndk-version: r26d
-        link-to-sdk: true
 
     - uses: nttld/setup-ndk@v1
       id: setup-ndk
       with:
         ndk-version: r26d
+        link-to-sdk: true
         add-to-path: false
 
     - run: deno install --allow-scripts
