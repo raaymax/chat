@@ -31,6 +31,24 @@ jobs:
       with:
         deno-version: '2.x'
 
+    - name: Setup Java
+      if: matrix.android
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+
+    - name: Setup Android SDK
+      if: matrix.android
+      uses: android-actions/setup-android@v3
+    - name: Setup Android NDK
+      if: matrix.android
+      uses: nttld/setup-ndk@v1
+      id: setup-ndk
+      with:
+        ndk-version: r26d
+        link-to-sdk: true
+
     - uses: nttld/setup-ndk@v1
       id: setup-ndk
       with:
@@ -41,9 +59,17 @@ jobs:
 
     - run: npm i
 
+    - name: init android
+      env:
+        NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+      run: |
+        cd ./app
+        pnpm add -D @tauri-apps/cli
+        pnpm tauri android init
+
     - name: setup Android signing
       run: |
-        cd app/src-tauri/gen/android
+        cd ./app/src-tauri/gen/android
         echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" > keystore.properties
         echo "password=${{ secrets.ANDROID_KEY_PASSWORD }}" >> keystore.properties
         base64 -d <<< "${{ secrets.ANDROID_KEY_BASE64 }}" > $RUNNER_TEMP/keystore.jks

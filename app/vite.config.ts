@@ -15,7 +15,7 @@ export default defineConfig({
   define: {
     APP_VERSION: JSON.stringify(process.env.APP_VERSION),
     APP_NAME: JSON.stringify(process.env.APP_NAME),
-    API_URL: JSON.stringify(process.env.APP_URL || 'http://localhost:3001'),
+    API_URL: JSON.stringify(process.env.API_URL || 'http://localhost:3001'),
   },
   server: {
     port: 3000,
