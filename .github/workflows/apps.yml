@@ -19,7 +19,8 @@ jobs:
 
     - uses: actions-rust-lang/setup-rust-toolchain@v1
       with:
-        target: aarch64-linux-android
+        targets: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android,aarch64-apple-ios
+
 
     - name: Use Node.js 20.x
       uses: actions/setup-node@v3
