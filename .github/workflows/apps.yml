@@ -28,8 +28,10 @@ jobs:
         deno-version: '2.x'
 
     - uses: nttld/setup-ndk@v1
+      id: setup-ndk
       with:
         ndk-version: r26d
+        add-to-path: false
 
     - run: deno install --allow-scripts
 
@@ -44,6 +46,8 @@ jobs:
         echo "storeFile=$RUNNER_TEMP/keystore.jks" >> keystore.properties
 
     - run: deno task android:build
+      env:
+        NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
 
     - name: Archive production artifacts
       uses: actions/upload-artifact@v4
