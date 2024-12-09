@@ -6,15 +6,12 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
-
-env:
-  REGISTRY: index.docker.io
-  IMAGE_NAME: codecat/quack
-  DOCKERHUB_USER: codecat
 
 jobs:
   build-android-app:
+    runs-on: ubuntu-latest
+
+    steps:
     - uses: actions/checkout@v3
 
     - uses: actions-rust-lang/setup-rust-toolchain@v1
