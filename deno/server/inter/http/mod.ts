@@ -43,13 +43,16 @@ export class HttpInterface extends Planigale {
       this.use(errorHandler);
       this.use(bodyParser);
       this.use(async (req, next) => {
-        console.log(req.headers)
-        console.log(req.method, req.url, req.body);
+        if (Deno.env.get("DEBUG") === "true") {
+          console.log(req.method, req.url, req.body);
+        }
         try{ 
           return await next();
         }catch(e){
-          console.error(e);
-          console.log(e.errors)
+          if (Deno.env.get("DEBUG") === "true") {
+            console.error(e);
+            console.log(e?.errors)
+          }
           throw e;
         }
       });
