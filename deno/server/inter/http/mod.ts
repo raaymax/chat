@@ -40,12 +40,19 @@ export class HttpInterface extends Planigale {
         },
       });
       schema.addSchema(messageSchema);
-      this.use(async (req, next) => {
-        //console.log(req.method, req.url);
-        return await next();
-      });
       this.use(errorHandler);
       this.use(bodyParser);
+      this.use(async (req, next) => {
+        console.log(req.headers)
+        console.log(req.method, req.url, req.body);
+        try{ 
+          return await next();
+        }catch(e){
+          console.error(e);
+          console.log(e.errors)
+          throw e;
+        }
+      });
       this.use(authMiddleware(core));
       this.use(schema.middleware);
       this.use("/api/ping", ping(core));
