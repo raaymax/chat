@@ -27,6 +27,10 @@ jobs:
       with:
         deno-version: '2.x'
 
+    - uses: nttld/setup-ndk@v1
+      with:
+        ndk-version: r26d
+
     - run: deno install --allow-scripts
 
     - run: npm i
