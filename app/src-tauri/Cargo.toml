@@ -18,7 +18,7 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 tauri-build = { version = "2", features = [] }
 
 [dependencies]
-reqwest = { version = "0.12", default-features = false }
+reqwest = { version = "0.12", default-features = false, features = [  "rustls-tls", "http2", "charset", "macos-system-configuration"] }
 tauri = { version = "2", features = [] }
 tauri-plugin-shell = "2"
 tauri-plugin-http= {version = "2", features = ['tracing', 'cookies'] }
