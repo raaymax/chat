@@ -16,6 +16,8 @@
     "start": "migrate-mongo up && npm run -w=@quack/server start ",
     "build": "npm run -w=@quack/app build",
     "dev": "npm run -w=@quack/app dev",
+    "android:build": "npm run -w=@quack/app tauri android build",
+    "desktop:build": "npm run -w=@quack/app tauri build",
     "lint": "FORCE_COLOR=true eslint --fix .",
     "lint:ci": "eslint .",
     "types": "npm run -w=@quack/app types"

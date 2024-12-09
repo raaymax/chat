@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import * as session from '../../services/session';
 import { UserProvider } from '../contexts/user';
 import '../../../assets/styles/login.css';
+import { client } from '../../core'
 
 type LoginProps = {
   children: React.ReactNode;
@@ -18,7 +18,7 @@ export const Login = ({ children }: LoginProps) => {
   });
 
 
-  const validate = useCallback(() => session.validate()
+  const validate = useCallback(() => client.api.validateSession()
     .then(async ({ status: validationStatus, user: validatedUser }) => {
       setStatus(validationStatus);
       if (validationStatus === 'ok') {
@@ -32,7 +32,7 @@ export const Login = ({ children }: LoginProps) => {
     }), []);
 
   const fastAccess = useCallback(() => {
-    const myuser = session.me();
+    const myuser = client.api.me();
     if (myuser) {
       setStatus('ok');
       setUser(myuser);
@@ -50,7 +50,7 @@ export const Login = ({ children }: LoginProps) => {
     e.stopPropagation();
     const fd = new FormData(e.target as HTMLFormElement);
     const value = Object.fromEntries(fd.entries()) as { login: string, password: string };
-    const ret = await session.login(value);
+    const ret = await client.api.login(value);
     if (ret.status === 'ok') {
       window.location.reload();
     } else {

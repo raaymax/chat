@@ -1,4 +1,5 @@
-use tauri::Manager;
+use tauri_plugin_http::reqwest;
+use tauri::{Manager, Theme};
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
@@ -23,3 +24,4 @@ pub fn run() {
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
+

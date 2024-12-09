@@ -1,6 +1,7 @@
 import { SSESource } from '@planigale/sse';
 import { Channel } from '../types';
 
+
 type RequestInit = (typeof fetch)['prototype']['init'];
 
 
@@ -35,18 +36,43 @@ export class ApiError extends Error {
 class API extends EventTarget {
   baseUrl: string;
 
-  token: string;
+  _http: any;
+  _token: string | undefined;
+
+  userId: string | undefined;
 
   source: SSESource | null;
 
+  tokenInit: () => void;
+
   abortController: AbortController;
 
-  constructor(url: string, token: string) {
+  set token(value: any) {
+    if (typeof value === 'string' && value.trim() !== '') {
+        this._token = value;
+        this.tokenInit();
+    }
+  }
+
+  get token() {
+    return this._token;
+  }
+
+  constructor(url: string) {
     super();
-    this.baseUrl = url;
-    this.token = token;
+    this.baseUrl = window.isTauri ? url : '';
     this.abortController = new AbortController();
     this.source = null;
+    this.tokenInit = () => {
+      this.abortController.abort("App is frozen");
+      this.abortController = new AbortController();
+      this.reconnect(this.abortController.signal);
+    };
+    this.userId = localStorage.userId;
+    this.token = localStorage.token;
+  }
+
+  init = () => {
     document.addEventListener('freeze', () => {
       console.log('[SSE] App is frozen');
       this.abortController.abort("App is frozen");
@@ -73,16 +99,25 @@ class API extends EventTarget {
   }
 
   async listen(signal?: AbortSignal) {
+    let fetch = window.fetch;
+    if(window.isTauri) {
+      if(!this._http){
+        this._http = import('@tauri-apps/plugin-http');
+      }
+      fetch = (await this._http).fetch;
+    }
     if(signal && signal.aborted) return;
     try {
-      console.log('events listening');
+      console.log(`events listening ${this.baseUrl}/api/sse`);
       this.source = new SSESource(`${this.baseUrl}/api/sse`, {
         signal,
+        fetch: fetch,
         headers: {
           Authorization: `Bearer ${this.token}`,
         },
       });
       if (!this.source) return;
+      this.emit(new CustomEvent('con:open', { detail: {}}));
       for await (const event of this.source) {
         if (event.data === '') continue;
         const data = JSON.parse(event.data);
@@ -91,6 +126,7 @@ class API extends EventTarget {
       }
       console.log('event disconnected');
     } finally {
+      this.emit(new CustomEvent('con:close', { detail: {}}));
       if (this.source){
         await this.source.close();
         this.source = null;
@@ -98,16 +134,36 @@ class API extends EventTarget {
     }
   }
 
-  async fetch(url: string, opts: {seqId?: string, mapFn?: (i:any) => any, retry?: number, retries?: number} & RequestInit = {}): Promise<any> {
-    const retries = opts?.retries ?? 5;
-    const retry = opts?.retry ?? 0;
-    const res = await fetch(`${this.baseUrl}${url}`, {
+  async fetch(url: string, opts: RequestInit = {}): Promise<any>{
+    let fetch = window.fetch;
+    if(window.isTauri) {
+      if(!this._http){
+        this._http = import('@tauri-apps/plugin-http');
+      }
+      fetch = (await this._http).fetch;
+    }
+    return await fetch(`${this.baseUrl}${url}`, this.token ? {
+      credentials: 'include',
       ...opts,
       headers: {
+        'Content-Type': 'application/json',
         ...opts.headers || {},
         Authorization: `Bearer ${this.token}`,
       },
+    }: {
+      credentials: 'include',
+      ...opts,
+      headers: {
+        'Content-Type': 'application/json',
+        ...opts.headers || {},
+      },
     });
+  }
+
+  async callApi(url: string, opts: {seqId?: string, mapFn?: (i:any) => any, retry?: number, retries?: number} & RequestInit = {}): Promise<any> {
+    const retries = opts?.retries ?? 5;
+    const retry = opts?.retry ?? 0;
+    const res = await this.fetch(url, opts);
     if (res.status == 200 || res.status == 204) {
       const data = res.status === 200 ? await res.json() : {};
       return {
@@ -124,7 +180,7 @@ class API extends EventTarget {
           console.log(await res.json());
         }catch{/*ignore*/}
         await waitBeforeRetry(retry);
-        return this.fetch(url, { ...opts, retries: retries - 1, retry: retry + 1 });
+        return this.callApi(url, { ...opts, retries: retries - 1, retry: retry + 1 });
       } else {
         return {
           type: 'response',
@@ -144,7 +200,7 @@ class API extends EventTarget {
   }
 
   getResource = async <T = any>(url: string, retries = 5, retry = 0): Promise<T | null> => {
-    const res = await fetch(`${this.baseUrl}${url}`);
+    const res = await this.fetch(url);
     if (res.status === 404) {
       return null;
     }
@@ -181,7 +237,7 @@ class API extends EventTarget {
   };
 
   async putDirectChannel(userId: string): Promise<Channel> {
-    const res = await fetch(`${this.baseUrl}/api/channels/direct/${userId}`, {
+    const res = await this.fetch(`/api/channels/direct/${userId}`, {
       method: 'PUT',
       body: JSON.stringify({}),
     });
@@ -190,7 +246,7 @@ class API extends EventTarget {
 
   async getDirectChannel(userId: string): Promise<Channel> {
     try{
-      const res = await fetch(`${this.baseUrl}/api/channels/direct/${userId}`, {
+      const res = await this.fetch(`/api/channels/direct/${userId}`, {
         method: 'GET',
       });
       const json = await res.json();
@@ -202,25 +258,17 @@ class API extends EventTarget {
   }
 
   async postInteraction(data: {channelId: string, parentId?: string, appId: string, clientId: string, action: string, payload: any}): Promise<void> {
-    const res = await fetch(`${this.baseUrl}/api/interactions`, {
+    const res = await this.fetch(`/api/interactions`, {
       method: 'POST',
       body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.token}`,
-      },
     });
     await res.body?.cancel();
   }
 
   async sendMessage(msg: any): Promise<any> {
-    const res = await fetch(`${this.baseUrl}/api/channels/${msg.channelId}/messages`, {
+    const res = await this.fetch(`/api/channels/${msg.channelId}/messages`, {
       method: 'POST',
       body: JSON.stringify(msg),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.token}`,
-      },
     });
     if (res.status !== 200) {
       throw await res.json();
@@ -235,25 +283,25 @@ class API extends EventTarget {
   request = async (msg: any): Promise<any> => {
     switch (msg.type) {
     case 'user:config': {
-      return this.fetch('/api/profile/config', { seqId: msg.seqId });
+      return this.callApi('/api/profile/config', { seqId: msg.seqId });
     }
     case 'channel:get': {
-      return this.fetch(`/api/channels/${msg.id}`, { seqId: msg.seqId });
+      return this.callApi(`/api/channels/${msg.id}`, { seqId: msg.seqId });
     }
     case 'channels:load': {
-      return this.fetch('/api/channels', { seqId: msg.seqId, mapFn: (i: any) => ({ type: 'channel', ...i }) });
+      return this.callApi('/api/channels', { seqId: msg.seqId, mapFn: (i: any) => ({ type: 'channel', ...i }) });
     }
     case 'user:getAll': {
-      return this.fetch('/api/users', { seqId: msg.seqId, mapFn: (i: any) => ({ type: 'user', ...i }) });
+      return this.callApi('/api/users', { seqId: msg.seqId, mapFn: (i: any) => ({ type: 'user', ...i }) });
     }
     case 'user:get': {
-      return this.fetch(`/api/users/${msg.id}`, { seqId: msg.seqId });
+      return this.callApi(`/api/users/${msg.id}`, { seqId: msg.seqId });
     }
     case 'emoji:getAll': {
-      return this.fetch('/api/emojis', { seqId: msg.seqId, mapFn: (i: any) => ({ type: 'emoji', ...i }) });
+      return this.callApi('/api/emojis', { seqId: msg.seqId, mapFn: (i: any) => ({ type: 'emoji', ...i }) });
     }
     case 'channel:create': {
-      return await this.fetch('/api/channels', {
+      return await this.callApi('/api/channels', {
         method: 'POST',
         body: JSON.stringify({ name: msg.name, users: msg.users, channelType: msg.channelType }),
         headers: {
@@ -262,7 +310,7 @@ class API extends EventTarget {
       });
     }
     case 'message:create': {
-      const createRes = await this.fetch(`/api/channels/${msg.channelId}/messages`, {
+      const createRes = await this.callApi(`/api/channels/${msg.channelId}/messages`, {
         method: 'POST',
         body: JSON.stringify(msg),
         headers: {
@@ -270,7 +318,7 @@ class API extends EventTarget {
         },
       });
 
-      return await this.fetch(`/api/messages/${createRes.data[0].id}`, { method: 'GET' });
+      return await this.callApi(`/api/messages/${createRes.data[0].id}`, { method: 'GET' });
     }
     case 'message:getAll': {
       const query: any = {};
@@ -295,7 +343,7 @@ class API extends EventTarget {
       query.parentId = msg.parentId || null;
       console.log('query', query);
       const params = new URLSearchParams(query);
-      return this.fetch(`/api/channels/${msg.channelId}/messages?${params.toString()}`, { seqId: msg.seqId, mapFn: (i: any) => ({ type: 'message', ...i }) });
+      return this.callApi(`/api/channels/${msg.channelId}/messages?${params.toString()}`, { seqId: msg.seqId, mapFn: (i: any) => ({ type: 'message', ...i }) });
     }
     case 'message:pins': {
       const query: any = { pinned: true };
@@ -319,25 +367,25 @@ class API extends EventTarget {
       }
 
       const params = new URLSearchParams(query);
-      return this.fetch(`/api/channels/${msg.channelId}/messages?${params.toString()}`, { seqId: msg.seqId, mapFn: (i: any) => ({ type: 'message', ...i }) });
+      return this.callApi(`/api/channels/${msg.channelId}/messages?${params.toString()}`, { seqId: msg.seqId, mapFn: (i: any) => ({ type: 'message', ...i }) });
     }
     case 'message:remove': {
-      return await this.fetch(`/api/messages/${msg.id}`, {
+      return await this.callApi(`/api/messages/${msg.id}`, {
         method: 'DELETE',
       });
     }
     case 'message:pin': {
-      await this.fetch(`/api/messages/${msg.id}/pin`, {
+      await this.callApi(`/api/messages/${msg.id}/pin`, {
         method: 'PUT',
         body: JSON.stringify({ pinned: msg.pinned }),
         headers: {
           'Content-Type': 'application/json',
         },
       });
-      return await this.fetch(`/api/messages/${msg.id}`, { method: 'GET' });
+      return await this.callApi(`/api/messages/${msg.id}`, { method: 'GET' });
     }
     case 'command:execute': {
-      return this.fetch('/api/commands/execute', {
+      return this.callApi('/api/commands/execute', {
         method: 'POST',
         body: JSON.stringify(msg),
         headers: {
@@ -346,24 +394,24 @@ class API extends EventTarget {
       });
     }
     case 'message:search':
-      return this.fetch(`/api/channels/${msg.channelId}/messages?q=${msg.text}`, {
+      return this.callApi(`/api/channels/${msg.channelId}/messages?q=${msg.text}`, {
         seqId: msg.seqId,
         mapFn: (i: any) => ({ type: 'search', ...i }),
       });
     case 'readReceipt:getOwn': {
-      return this.fetch('/api/read-receipts', {
+      return this.callApi('/api/read-receipts', {
         seqId: msg.seqId,
         mapFn: (i: any) => ({ type: 'badge', ...i }),
       });
     }
     case 'readReceipt:getChannel': {
-      return this.fetch(`/api/channels/${msg.channelId}/read-receipts`, {
+      return this.callApi(`/api/channels/${msg.channelId}/read-receipts`, {
         seqId: msg.seqId,
         mapFn: (i: any) => ({ type: 'badge', ...i }),
       });
     }
     case 'readReceipt:update': {
-      return this.fetch('/api/read-receipts', {
+      return this.callApi('/api/read-receipts', {
         method: 'POST',
         body: JSON.stringify({ messageId: msg.messageId }),
         headers: {
@@ -372,7 +420,7 @@ class API extends EventTarget {
       });
     }
     case 'message:react': {
-      return this.fetch(`/api/messages/${msg.id}/react`, {
+      return this.callApi(`/api/messages/${msg.id}/react`, {
         method: 'PUT',
         body: JSON.stringify({ reaction: msg.reaction }),
         headers: {
@@ -381,7 +429,7 @@ class API extends EventTarget {
       });
     }
     case 'user:typing': {
-      return this.fetch(`/api/channels/${msg.channelId}/typing`, {
+      return this.callApi(`/api/channels/${msg.channelId}/typing`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -406,6 +454,69 @@ class API extends EventTarget {
     console.debug('[API] req in', msg, ret);
     return ret;
   };
+
+  async validateSession() {
+    const ret = await this.fetch('/api/auth/session');
+    const user = await ret.json();
+    if (user.status === 'ok') {
+      localStorage.setItem('userId', user.user);
+      this.token = user.token;
+      localStorage.setItem('token', user.token); // TODO: remove
+    }
+    return user;
+  };
+  async login(value: {login: string, password: string}) {
+    const ret = await this.fetch('/api/auth/session', {
+      method: 'POST',
+      body: JSON.stringify(value),
+    });
+    const json = await ret.json();
+    this.token = json.token;
+    localStorage.setItem('token', json.token); // TODO: remove
+    return json;
+  };
+  async logout() {
+    localStorage.removeItem('token'); // TODO: remove
+    localStorage.removeItem('userId');
+
+    const ret = await this.fetch('/api/auth/session', {
+      method: 'DELETE',
+      body: '{}',
+    });
+    await ret.body?.cancel();
+    window.location.reload();
+  };
+  async checkRegistrationToken(value: { token: string }) {
+    const ret = await this.fetch(`/api/users/token/${value.token}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return await ret.json();
+  };
+
+  async register(value: { name: string, email: string, password: string, token: string }) {
+    const ret = await this.fetch(`/api/users/${value.token}`, {
+      method: 'POST',
+      body: JSON.stringify(value),
+    });
+    if (ret.status !== 200) {
+      throw await ret.json();
+    }
+    return await ret.json();
+  };
+
+  me(): string {
+    return this.userId;
+  };
+
+  isProbablyLogged(): Boolean{
+    return !!this.token; // TODO: remove
+  };
 }
+
+
+
 
 export default API;

@@ -25,6 +25,5 @@ dist-ssr
 dev-dist
 
 *storybook.log
+quack.keystore
 
-target/
-src-tauri/gen/

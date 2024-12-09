@@ -11,8 +11,7 @@ export class Client {
 
   get api() {
     if (!this._api) {
-      this._api = new Api(API_URL, localStorage.token);
-      setTimeout(() => this.emit('con:open', {}), 10);
+      this._api = new Api(API_URL);
     }
     return this._api;
   }

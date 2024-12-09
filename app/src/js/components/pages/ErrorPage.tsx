@@ -82,7 +82,7 @@ export const ErrorPage = ({title, debug, buttons=['back']}: ErrorPageProps) => {
       <div className="spacer" />
 
       <div className="title">
-        {title ?? 'Ops!'}
+        {title ?? 'Oops!'}
       </div>
 
       <div className="message">

@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "identifier": "io.codecat.chat.app",
   "build": {
-    "devUrl": "http://localhost:3000",
+    "beforeDevCommand": "npm run build",
     "beforeBuildCommand": "npm run build",
     "frontendDist": "../dist"
   },
@@ -12,32 +12,35 @@
     "windows": [
       {
         "title": "quack",
+        "titleBarStyle": "Transparent",
+        "decorations": true,
+        "dragDropEnabled": false,
         "width": 800,
         "height": 600
       }
     ],
     "security": {
-      "csp": null
+      "csp": {
+        "default-src": "'self' customprotocol: asset:",
+        "connect-src": "ipc: https://ipc.localhost",
+        "img-src": "'self' asset: https://asset.localhost blob: data:",
+        "style-src": "'unsafe-inline' 'self' asset: https://asset.localhost"
+      }
     }
   },
   "plugins": {
-    "@tauri-apps/plugin-http": {
-      "proxy": {
-        "all": {
-          "url": "http://localhost:3001"
-        }
-      }
-    }
+    "@tauri-apps/plugin-http": {},
+    "@tauri-apps/plugin-log": {}
   },
   "bundle": {
     "active": true,
     "targets": "all",
     "icon": [
-      "icons/32x32.png",
-      "icons/128x128.png",
-      "icons/128x128@2x.png",
-      "icons/icon.icns",
-      "icons/icon.ico"
+      "../public/icons/icon_32x32.png",
+      "../public/icons/icon_128x128.png",
+      "../public/icons/icon_128x128@2x.png",
+      "../public/icon.icns",
+      "../public/favicon.ico"
     ]
   }
 }

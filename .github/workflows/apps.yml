@@ -1,0 +1,53 @@
+
+name: Create and publish a Docker image
+
+on:
+  release:
+    tags:
+      - v*
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  REGISTRY: index.docker.io
+  IMAGE_NAME: codecat/quack
+  DOCKERHUB_USER: codecat
+
+jobs:
+  build-android-app:
+    - uses: actions/checkout@v3
+
+    - uses: actions-rust-lang/setup-rust-toolchain@v1
+
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20.x
+        cache: 'npm'
+
+    - uses: denoland/setup-deno@v2
+      with:
+        deno-version: '2.x'
+
+    - run: deno install --allow-scripts
+
+    - run: npm i
+
+    - name: setup Android signing
+      run: |
+        cd src-tauri/gen/android
+        echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" > keystore.properties
+        echo "password=${{ secrets.ANDROID_KEY_PASSWORD }}" >> keystore.properties
+        base64 -d <<< "${{ secrets.ANDROID_KEY_BASE64 }}" > $RUNNER_TEMP/keystore.jks
+        echo "storeFile=$RUNNER_TEMP/keystore.jks" >> keystore.properties
+
+    - run: deno task build:android
+
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: android-app
+        path: |
+          app/src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release.apk

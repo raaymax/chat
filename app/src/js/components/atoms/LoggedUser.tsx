@@ -3,7 +3,7 @@ import { ProfilePic } from './ProfilePic';
 import { useUser } from '../../store';
 import { useLoggedUserId } from '../contexts/useLoggedUserId';
 import { ButtonWithIcon } from '../molecules/ButtonWithIcon';
-import { logout } from '../../services/session';
+import { client } from '../../core';
 
 const Container = styled.div`
   display: flex;
@@ -62,7 +62,7 @@ export const LoggedUser = () => {
         <div className="status">Online</div>
       </div>
       <div className="user-actions">
-        <ButtonWithIcon className="logout-button" icon="logout" size={32} onClick={() => logout()}/>
+        <ButtonWithIcon className="logout-button" icon="logout" size={32} onClick={() => client.api.logout()}/>
       </div>
     </Container>
   );

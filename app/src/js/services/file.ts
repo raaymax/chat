@@ -140,3 +140,25 @@ async function uploadFile(args: UploadArgs): Promise<UploadResponse> {
 
   return await res.json();
 }
+
+function uploadFileOld(args: UploadArgs): Promise<UploadResponse> {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', () => {
+      const data = JSON.parse(xhr.responseText);
+      resolve(data);
+    }, { once: true });
+    xhr.upload.addEventListener('progress', (e) => {
+      if (e.lengthComputable) {
+        args.onProgress((e.loaded / e.total) * 100);
+      }
+    });
+    xhr.addEventListener('error', (e) => reject(e), { once: true });
+    xhr.open('POST', FILES_URL, true);
+
+    const formData = new FormData();
+    formData.append('file', args.stream);
+    aborts[clientId] = () => xhr.abort();
+    xhr.send(formData);
+  });
+}

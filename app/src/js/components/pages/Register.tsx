@@ -1,6 +1,6 @@
 import { useCallback, useState, useEffect } from 'react';
-import * as session from '../../services/session';
 import '../../../assets/styles/register.css';
+import { client } from '../../core'
 
 export const Register = () => {
   const url = new URL(window.location.toString());
@@ -12,7 +12,7 @@ export const Register = () => {
 
   useEffect(() => {
     if (!token) return setError('Invalid invitation link');
-    session.checkRegistrationToken({ token }).then(({valid}: {valid: boolean}) => {
+    client.api.checkRegistrationToken({ token }).then(({valid}: {valid: boolean}) => {
       if (!valid) {
         setError('Invalid invitation link');
       }else{
@@ -32,7 +32,7 @@ export const Register = () => {
     };
     if (!token) return;
     try {
-      await session.register({
+      await client.api.register({
         name: name.value,
         email: email.value,
         password: password.value,

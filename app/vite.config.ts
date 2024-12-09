@@ -9,13 +9,13 @@ import path from 'node:path';
 import process from 'node:process';
 
 const __dirname = new URL('.', import.meta.url).pathname;
-const sslPath = path.join(__dirname, '../../ssl/');
+const sslPath = path.join(__dirname, '../ssl/');
 
 export default defineConfig({
   define: {
     APP_VERSION: JSON.stringify(process.env.APP_VERSION),
     APP_NAME: JSON.stringify(process.env.APP_NAME),
-    API_URL: JSON.stringify(''),
+    API_URL: JSON.stringify(process.env.APP_URL || 'http://localhost:3001'),
   },
   server: {
     port: 3000,

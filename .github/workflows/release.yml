@@ -1,9 +1,7 @@
 name: Create and publish a Docker image
 
 on:
-  push:
-    branches:
-      - main
+  release:
     tags:
       - v*
 
@@ -50,7 +48,9 @@ jobs:
     - run: deno task migrate:tests
     - run: deno task check
 
+
   build-and-push-image:
+    needs: tests
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -89,6 +89,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: ${{ github.event.release.tag_name }}
       
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v2

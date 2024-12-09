@@ -29,7 +29,8 @@ COPY ./entrypoint.sh ./entrypoint.sh
 
 ENV PUBLIC_DIR=/app/public
 ENV PORT=8080
-
+ARG APP_VERSION=3.x.x
+ENV APP_VERSION=$APP_VERSION
 RUN chmod +x ./entrypoint.sh
 EXPOSE 8080
 CMD sh ./entrypoint.sh
