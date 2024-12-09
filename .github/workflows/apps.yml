@@ -51,14 +51,6 @@ jobs:
 
     - run: npm i
 
-    - name: init android
-      env:
-        NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
-      run: |
-        cd ./app
-        pnpm add -D @tauri-apps/cli
-        pnpm tauri android init
-
     - name: setup Android signing
       run: |
         cd ./app/src-tauri/gen/android
