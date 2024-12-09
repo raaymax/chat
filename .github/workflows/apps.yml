@@ -32,7 +32,6 @@ jobs:
         deno-version: '2.x'
 
     - name: Setup Java
-      if: matrix.android
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
