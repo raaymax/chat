@@ -1,8 +1,9 @@
 
-name: Create and publish a Docker image
+name: Native apps
 
 on:
-  workflow_dispatch:
+  pull_request:
+    branches: [ main ]
 
 permissions:
   contents: write
@@ -14,7 +15,12 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - run: sudo apt install libssl-dev
+
     - uses: actions-rust-lang/setup-rust-toolchain@v1
+      with:
+        target: aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android
+
 
     - name: Use Node.js 20.x
       uses: actions/setup-node@v3
@@ -26,19 +32,39 @@ jobs:
       with:
         deno-version: '2.x'
 
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+
+    - uses: nttld/setup-ndk@v1
+      id: setup-ndk
+      with:
+        ndk-version: r26d
+        link-to-sdk: true
+        add-to-path: false
+
     - run: deno install --allow-scripts
 
     - run: npm i
 
     - name: setup Android signing
       run: |
-        cd src-tauri/gen/android
+        cd ./app/src-tauri/gen/android
         echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" > keystore.properties
         echo "password=${{ secrets.ANDROID_KEY_PASSWORD }}" >> keystore.properties
         base64 -d <<< "${{ secrets.ANDROID_KEY_BASE64 }}" > $RUNNER_TEMP/keystore.jks
         echo "storeFile=$RUNNER_TEMP/keystore.jks" >> keystore.properties
 
-    - run: deno task build:android
+    - run: deno task android:build
+      env:
+        NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+        AR: ${{ steps.setup-ndk.outputs.ndk-path }}/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-ar
+        RANLIB: ${{ steps.setup-ndk.outputs.ndk-path }}/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-ranlib
 
     - name: Archive production artifacts
       uses: actions/upload-artifact@v4
