@@ -99,7 +99,7 @@ class API extends EventTarget {
   }
 
   async listen(signal?: AbortSignal) {
-    let fetch = window.fetch;
+    let fetch = window.fetch.bind(window);
     if(window.isTauri) {
       if(!this._http){
         this._http = import('@tauri-apps/plugin-http');
@@ -135,7 +135,7 @@ class API extends EventTarget {
   }
 
   async fetch(url: string, opts: RequestInit = {}): Promise<any>{
-    let fetch = window.fetch;
+    let fetch = window.fetch.bind(window);
     if(window.isTauri) {
       if(!this._http){
         this._http = import('@tauri-apps/plugin-http');
