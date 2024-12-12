@@ -203,9 +203,6 @@ export const Login = ({ children }: LoginProps) => {
         <div className='form'>
           <h1>Welcome back!</h1>
           <p>Log-in to your quack account</p>
-          {localMsg && <div className='message'>
-            {localMsg}
-          </div>}
           <form onSubmit={onSubmit}>
             <div className='form-group'>
               <label htmlFor="login">E-mail</label>
