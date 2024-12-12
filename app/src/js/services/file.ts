@@ -140,7 +140,7 @@ async function uploadFile(args: UploadArgs): Promise<UploadResponse> {
 
   return await res.json();
 }
-
+/*
 function uploadFileOld(args: UploadArgs): Promise<UploadResponse> {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
@@ -162,3 +162,4 @@ function uploadFileOld(args: UploadArgs): Promise<UploadResponse> {
     xhr.send(formData);
   });
 }
+*/
