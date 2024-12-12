@@ -105,7 +105,7 @@ export class Repository {
 
   async getMigrations() {
     const { db } = await this.db.connect();
-    return db.collection("migrations").find().sort({createdAt: 1}).toArray();
+    return db.collection("migrations").find().sort({ createdAt: 1 }).toArray();
   }
 
   async push(fileName) {
@@ -182,7 +182,7 @@ export class Migrations {
 }
 
 const migrations = new Migrations();
-switch(Deno.args[0]){
+switch (Deno.args[0]) {
   case "up":
     console.log(await migrations.up());
     break;

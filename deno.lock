@@ -78,7 +78,6 @@
     "npm:@tauri-apps/api@2": "2.1.1",
     "npm:@tauri-apps/cli@2": "2.1.0",
     "npm:@tauri-apps/plugin-http@2": "2.0.1",
-    "npm:@tauri-apps/plugin-log@^2.0.1": "2.0.1",
     "npm:@tauri-apps/plugin-shell@2": "2.0.1",
     "npm:@types/json-schema@^7.0.15": "7.0.15",
     "npm:@types/node@20.10.4": "20.10.4",
@@ -2038,12 +2037,6 @@
     },
     "@tauri-apps/plugin-http@2.0.1": {
       "integrity": "sha512-j6IA3pVBybSCwPpsihpX4z8bs6PluuGtr06ahL/xy4D8HunNBTmRmadJrFOQi0gOAbaig4MkQ15nzNLBLy8R1A==",
-      "dependencies": [
-        "@tauri-apps/api"
-      ]
-    },
-    "@tauri-apps/plugin-log@2.0.1": {
-      "integrity": "sha512-zFT3S/Q5liMKIjPPdUZL8aNbjvhHvyfkhuqct3/MQ6/7rk4ODstcUPu320KJBjZrNNH/UM+kaQBGrioIwtmP/Q==",
       "dependencies": [
         "@tauri-apps/api"
       ]
