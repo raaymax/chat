@@ -42,7 +42,7 @@ const StyledLoader = styled.div`
 export const Loader = () => (
   <StyledLoader>
     <div>
-      <Spinner />
+      <Spinner className="loading-indicator" />
     </div>
   </StyledLoader>
 );
