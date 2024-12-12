@@ -63,12 +63,10 @@ jobs:
     - run: deno task android:build
       env:
         NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
-        AR: ${{ steps.setup-ndk.outputs.ndk-path }}/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-ar
-        RANLIB: ${{ steps.setup-ndk.outputs.ndk-path }}/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-ranlib
 
+    - run: mv app/src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release.apk quack.apk
     - name: Archive production artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: android-app
-        path: |
-          app/src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release.apk
+        name: quack-android-app
+        path: quack.apk

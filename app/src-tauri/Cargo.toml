@@ -18,10 +18,11 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 tauri-build = { version = "2", features = [] }
 
 [dependencies]
-reqwest = { version = "0.12", default-features = false, features = [  "rustls-tls", "http2", "charset", "macos-system-configuration"] }
-tauri = { version = "2", features = [] }
+reqwest = { version = "0.12", default-features = false, features = [  "rustls-tls", "http2", "charset", "cookies", "macos-system-configuration"] }
+tauri = { version = "2", features = ["tracing", "rustls-tls"] }
 tauri-plugin-shell = "2"
-tauri-plugin-http= {version = "2", features = ['tracing', 'cookies'] }
+tauri-plugin-http= {version = "2", features = ["rustls-tls", 'tracing', 'cookies'] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+tauri-plugin-log = "2"
 

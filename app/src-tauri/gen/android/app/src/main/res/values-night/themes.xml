@@ -1,6 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
+  <style name="quackTopBar">
+    <item name="colorPrimaryDark">#ffffff</item>
+  </style>
     <style name="Theme.quack" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
+      <item name="actionBarStyle">@style/quackTopBar</item>
     </style>
 </resources>

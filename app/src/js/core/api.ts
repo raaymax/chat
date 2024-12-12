@@ -98,20 +98,23 @@ class API extends EventTarget {
     }
   }
 
-  async listen(signal?: AbortSignal) {
-    let fetch = window.fetch;
-    if(window.isTauri) {
+  async getFetch() {
+    if(false && window.isTauri) {
       if(!this._http){
         this._http = import('@tauri-apps/plugin-http');
       }
-      fetch = (await this._http).fetch;
+      return (await this._http).fetch;
     }
+    return fetch.bind(window);
+  }
+
+  async listen(signal?: AbortSignal) {
     if(signal && signal.aborted) return;
     try {
       console.log(`events listening ${this.baseUrl}/api/sse`);
       this.source = new SSESource(`${this.baseUrl}/api/sse`, {
         signal,
-        fetch: fetch,
+        fetch: await this.getFetch(),
         headers: {
           Authorization: `Bearer ${this.token}`,
         },
@@ -135,14 +138,8 @@ class API extends EventTarget {
   }
 
   async fetch(url: string, opts: RequestInit = {}): Promise<any>{
-    let fetch = window.fetch;
-    if(window.isTauri) {
-      if(!this._http){
-        this._http = import('@tauri-apps/plugin-http');
-      }
-      fetch = (await this._http).fetch;
-    }
-    return await fetch(`${this.baseUrl}${url}`, this.token ? {
+    const thisFetch = await this.getFetch();
+    return await thisFetch(`${this.baseUrl}${url}`, this.token ? {
       credentials: 'include',
       ...opts,
       headers: {
@@ -463,6 +460,16 @@ class API extends EventTarget {
       this.token = user.token;
       localStorage.setItem('token', user.token); // TODO: remove
     }
+    if (window.isTauri) {
+      await fetch(`${this.baseUrl}/api/auth/session`, {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.token}`,
+        },
+      })
+    }
+
     return user;
   };
   async login(value: {login: string, password: string}) {

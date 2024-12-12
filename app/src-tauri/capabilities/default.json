@@ -11,14 +11,36 @@
     {
       "identifier": "http:default",
       "allow": [
-        { "url": "https://**" },
-        { "url": "http://**" },
-        { "url": "http://localhost:3000/**" },
-        { "url": "https://localhost:3000/**" },
-        { "url": "https://localhost:3001/**" },
-        { "url": "http://localhost:3001/**" },
-        { "url": "http://tauri.localhost/**" },
-        { "url": "https://tauri.localhost/**" }
+        {
+          "url": "https://**"
+        },
+        {
+          "url": "http://**"
+        },
+        {
+          "url": "http://localhost:3000/**"
+        },
+        {
+          "url": "https://localhost:3000/**"
+        },
+        {
+          "url": "https://localhost:3001/**"
+        },
+        {
+          "url": "http://localhost:3001/**"
+        },
+        {
+          "url": "http://tauri.localhost/**"
+        },
+        {
+          "url": "https://tauri.localhost/**"
+        },
+        {
+          "url": "http://chat.codecat.io/**"
+        },
+        {
+          "url": "https://chat.codecat.io/**"
+        }
       ]
     },
     "http:allow-fetch",
@@ -33,6 +55,7 @@
     "core:tray:default",
     "core:window:allow-set-title",
     "core:window:default",
-    "core:window:allow-start-dragging"
+    "core:window:allow-start-dragging",
+    "log:default"
   ]
 }
