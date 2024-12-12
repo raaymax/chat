@@ -38,9 +38,10 @@ const Container = styled.div`
       flex-direction: column;
       margin: auto;
       gap: 12px;
-      width: 380px;
+      max-width: 380px;
       margin-top: 50vh;
       transform: translateY(-50%);
+      padding: 16px;
       form, .form-group {
         display: flex;
         flex-direction: column;
@@ -95,6 +96,32 @@ const Container = styled.div`
     margin-top: 24px;
     background: var(--brand-color, #FF8C00);
   }
+
+  @media (max-width: 720px) {
+    flex-direction: column;
+    height: 100vh
+    max-height: 100vh;
+    gap: 24px;
+    .image-container {
+      flex: 0 200px;
+      .image {
+        margin-top: 24px;
+        transform: translateY(0);
+        img {
+          width: 60%;
+        }
+      }
+    }
+    .form-container {
+      flex: 1 50%;
+      .form {
+        margin-top: 0;
+        transform: translateY(0);
+      }
+    }
+
+  } 
+  
 `
 
 export const Login = ({ children }: LoginProps) => {
