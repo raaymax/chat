@@ -1,17 +1,108 @@
 import { useCallback, useEffect, useState } from 'react';
 import { UserProvider } from '../contexts/user';
-import '../../../assets/styles/login.css';
 import { client } from '../../core'
+import styled, { useTheme } from 'styled-components';
+import { useThemeControl } from '../contexts/useThemeControl';
 
 type LoginProps = {
   children: React.ReactNode;
 };
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100vw;
+  background-color: ${({theme}) => theme.Chatbox.Background};
+  color: ${({theme}) => theme.Text};
+
+  .image-container {
+    flex: 1;
+    .image{
+      vertical-align: middle;
+      text-align: center;
+      margin-top: 50vh;
+      transform: translateY(-50%);
+      img {
+        width: 80%;
+        height: auto;
+      }
+    }
+  }
+
+
+  .form-container {
+    flex: 1;
+    .form {
+      display: flex;
+      flex-direction: column;
+      margin: auto;
+      gap: 12px;
+      width: 380px;
+      margin-top: 50vh;
+      transform: translateY(-50%);
+      form, .form-group {
+        display: flex;
+        flex-direction: column;
+      }
+      form {
+        gap: 16px;
+      }
+    }
+  }
+
+  h1 {
+    color: ${({theme}) => theme.Text};
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 48px; /* 120% */
+    align-self: stretch;
+    padding: 0;
+    margin: 0;
+  }
+
+  p {
+    color: ${({theme}) => theme.Labels};
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px; /* 150% */
+  }
+
+  label {
+    color: ${({theme}) => theme.Text};
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px; /* 150% */
+    padding: 0px 16px;
+    margin-bottom: 5px;
+  }
+  input {
+    border-radius: 8px;
+    color: ${({theme}) => theme.Text};
+    border: 1px solid ${({theme}) => theme.Strokes};
+    background: ${({theme}) => theme.Input.Background};
+    height: 48px;
+    padding: 8px 16px;
+  }
+  input::placeholder {
+    color: ${({theme}) => theme.Labels};
+  }
+
+  .submit {
+    margin-top: 24px;
+    background: var(--brand-color, #FF8C00);
+  }
+`
 
 export const Login = ({ children }: LoginProps) => {
   const [status, setStatus] = useState('pending');
   const [userId, setUser] = useState<string | null>(null);
   const [localMsg] = useState(localStorage.getItem('loginMessage'));
   const [msg, setMsg] = useState(null);
+  const theme = useTheme();
 
   useEffect(() => {
     localStorage.removeItem('loginMessage');
@@ -65,18 +156,35 @@ export const Login = ({ children }: LoginProps) => {
       {children}
     </UserProvider>
   ) : (
-    <div className='login' >
-      {localMsg && <div className='message'>
-        {localMsg}
-      </div>}
-      <form onSubmit={onSubmit}>
-        <input type='text' name='login' placeholder='user@example.com' />
-        <input type='password' name='password' placeholder='password' />
-        <input type='submit' value='Login' />
-      </form>
-      {msg && <div className='err'>
-        {msg}
-      </div>}
-    </div>
+    <Container >
+      <div className='image-container'>
+        <div className='image'>
+          <img src={theme.loginIlustration} alt='logo' />
+        </div>
+      </div>
+      <div className='form-container'>
+        <div className='form'>
+          <h1>Welcome back!</h1>
+          <p>Log-in to your quack account</p>
+          {localMsg && <div className='message'>
+            {localMsg}
+          </div>}
+          <form onSubmit={onSubmit}>
+            <div className='form-group'>
+              <label htmlFor="login">E-mail</label>
+              <input id="login" type='text' name='login' placeholder='user@example.com' />
+            </div>
+            <div className='form-group'>
+              <label htmlFor="password">Password</label>
+              <input id="password" type='password' name='password' placeholder='password' />
+            </div>
+            <input className="submit" type='submit' value='LOG-IN' />
+          </form>
+          {msg && <div className='err'>
+            {msg}
+          </div>}
+        </div>
+      </div>
+    </Container>
   );
 };

@@ -1,7 +1,8 @@
-import { createRoot } from 'react-dom/client';
-import { Suspense, lazy } from 'react';
-import { Register } from './pages/Register';
-import { Login } from './pages/Login';
+import { createRoot } from "react-dom/client";
+import { Suspense, lazy } from "react";
+import { Register } from "./pages/Register";
+import { Login } from "./pages/Login";
+import { ThemeSelectorProvider } from "./contexts/theme";
 
 declare global {
   interface Navigator {
@@ -11,27 +12,29 @@ declare global {
   }
 }
 
-const Secured = lazy(() => import('./Secured'));
+const Secured = lazy(() => import("./Secured"));
 
-if ('virtualKeyboard' in navigator) {
+if ("virtualKeyboard" in navigator) {
   navigator.virtualKeyboard.overlaysContent = true;
 }
 
 export const App = () => {
   const url = new URL(window.location.toString());
   const { hash } = url;
-  if (hash.startsWith('#/invite')) {
+  if (hash.startsWith("#/invite")) {
     return <Register />;
   }
 
   return (
-    <Login>
-      <Suspense fallback={<div>loading secured page...</div>}>
-        <Secured />
-      </Suspense>
-    </Login>
+    <ThemeSelectorProvider>
+      <Login>
+        <Suspense fallback={<div>loading secured page...</div>}>
+          <Secured />
+        </Suspense>
+      </Login>
+    </ThemeSelectorProvider>
   );
 };
 
-const root = createRoot(document.getElementById('root') as HTMLElement);
+const root = createRoot(document.getElementById("root") as HTMLElement);
 root.render(<App />);

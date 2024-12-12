@@ -2,13 +2,16 @@ import { createContext, useCallback, useEffect, useState } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { IconNames } from '../atoms/Icon';
 
-export type Themes = {
-  [id: string]: {
+export type Theme = {
     name: string, 
     icon: IconNames, 
     logo: string,
+    loginIlustration: string,
     [prop: string]: any
-  }
+};
+
+export type Themes = {
+  [id: string]: Theme
 };
 
 export type ThemeControl = {
@@ -17,10 +20,10 @@ export type ThemeControl = {
   themeNames: string[],
   setTheme: (v: string) => void
 };
-export const ThemeSelectorContext = createContext<ThemeControl>({theme: 'dark', themeNames: ['dark'], themes: {dark: {name: 'Dark Theme', icon: 'moon'}}, setTheme: () => {}});
 
 const themes: Themes = {
   light: {
+    loginIlustration: '/login_ilustration_light.svg',
     name: "Light",
     icon: "sun",
     logo: "/logo.svg",
@@ -103,6 +106,7 @@ const themes: Themes = {
   test: {
     name: "Test",
     icon: "vail",
+    loginIlustration: '/login_ilustration_dark.svg',
     logo: "/logo_dark.svg",
     borderColor: "#565856",
     backgroundColor: "#1a1d21",
@@ -184,6 +188,7 @@ const themes: Themes = {
     name: "Dark",
     icon: "moon",
     logo: "/logo_dark.svg",
+    loginIlustration: '/login_ilustration_dark.svg',
     borderColor: "#565856",
     backgroundColor: "#1a1d21",
     highlightedBackgroundColor: "#2a2d31",
@@ -264,6 +269,7 @@ const themes: Themes = {
     name: "Dark Orange Test",
     icon: "carrot",
     logo: "/logo_dark.svg",
+    loginIlustration: '/login_ilustration_dark.svg',
     borderColor: "#565856",
     backgroundColor: "#1a1d21",
     highlightedBackgroundColor: "#2a2d31",
@@ -341,6 +347,8 @@ const themes: Themes = {
     ActiveOverlay: "#0000000D",
   },
 };
+
+export const ThemeSelectorContext = createContext<ThemeControl>({theme: 'dark', themeNames: ['dark'], themes: themes.dark, setTheme: () => {}});
 
 type ThemeSelectorContextProps = {
   children: React.ReactNode;
