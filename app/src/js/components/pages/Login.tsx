@@ -97,6 +97,16 @@ const Container = styled.div`
     background: var(--brand-color, #FF8C00);
   }
 
+  .err {
+    color:  ${({theme}) => theme.User.Inactive};
+    padding: 0 16px;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px; /* 166.667% */
+    height: 20px;
+  }
+
   @media (max-width: 720px) {
     flex-direction: column;
     height: 100vh
@@ -207,9 +217,9 @@ export const Login = ({ children }: LoginProps) => {
             </div>
             <input className="submit" type='submit' value='LOG-IN' />
           </form>
-          {msg && <div className='err'>
+          <div className='err'>
             {msg}
-          </div>}
+          </div>
         </div>
       </div>
     </Container>
