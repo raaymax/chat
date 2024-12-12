@@ -11,7 +11,7 @@ export default (core: Core) =>
       params: {
         type: "object",
         properties: {
-          token: { type: "string", minLength: 64 },
+          token: { type: "string", minLength: 32 },
         },
       },
       body: {

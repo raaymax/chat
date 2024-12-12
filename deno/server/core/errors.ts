@@ -49,3 +49,9 @@ export class InvalidChannelValue extends AppError {
     super("INVLID_CHANNEL_VALUE", msg);
   }
 }
+
+export class UserAlreadyExists extends AppError {
+  constructor(msg = "User already exists") {
+    super("USER_ALREADY_EXISTS", msg);
+  }
+}

@@ -31,6 +31,8 @@ function mapAppError(error: AppError): ApiError {
       return new NoAccess(error.message);
     case "NOT_OWNER":
       return new NotOwner(error.message);
+    case "USER_ALREADY_EXISTS":
+      return new ApiError(409, "USER_ALREADY_EXISTS", error.message);
     case "INVALID_INVITATION": {
       const invalidInvitation = new ApiError(
         400,

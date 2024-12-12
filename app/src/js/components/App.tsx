@@ -22,7 +22,11 @@ export const App = () => {
   const url = new URL(window.location.toString());
   const { hash } = url;
   if (hash.startsWith("#/invite")) {
-    return <Register />;
+    return (
+      <ThemeSelectorProvider>
+        <Register />
+      </ThemeSelectorProvider>
+    );
   }
 
   return (

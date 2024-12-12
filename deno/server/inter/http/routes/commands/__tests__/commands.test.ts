@@ -87,7 +87,7 @@ Deno.test("command /invite", async () => {
       .nextEvent((event: any) => {
         assertEquals(event.type, "message");
         assert(event.clientId, "Event should have clientId");
-        const m = event.flat.match("(https?://.*/invite/[0-9a-f]{64})");
+        const m = event.flat.match("(https?://.*/invite/[0-9a-f]{32})");
         assert(m, "Result should contain invitation link");
         assertEquals(m[1], url);
       })

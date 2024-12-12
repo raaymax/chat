@@ -7,6 +7,7 @@ export type Theme = {
     icon: IconNames, 
     logo: string,
     loginIlustration: string,
+    registerIlustration: string,
     [prop: string]: any
 };
 
@@ -24,6 +25,7 @@ export type ThemeControl = {
 const themes: Themes = {
   light: {
     loginIlustration: '/login_ilustration_light.svg',
+    registerIlustration: '/register_light.svg',
     name: "Light",
     icon: "sun",
     logo: "/avatar.svg",
@@ -107,6 +109,7 @@ const themes: Themes = {
     name: "Test",
     icon: "vail",
     loginIlustration: '/login_ilustration_dark.svg',
+    registerIlustration: '/register_dark.svg',
     logo: "/avatar.svg",
     borderColor: "#565856",
     backgroundColor: "#1a1d21",
@@ -189,6 +192,7 @@ const themes: Themes = {
     icon: "moon",
     logo: "/avatar.svg",
     loginIlustration: '/login_ilustration_dark.svg',
+    registerIlustration: '/register_dark.svg',
     borderColor: "#565856",
     backgroundColor: "#1a1d21",
     highlightedBackgroundColor: "#2a2d31",
@@ -270,6 +274,7 @@ const themes: Themes = {
     icon: "carrot",
     logo: "/avatar.svg",
     loginIlustration: '/login_ilustration_dark.svg',
+    registerIlustration: '/register_dark.svg',
     borderColor: "#565856",
     backgroundColor: "#1a1d21",
     highlightedBackgroundColor: "#2a2d31",

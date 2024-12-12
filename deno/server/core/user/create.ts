@@ -1,7 +1,7 @@
 import * as v from "valibot";
 import { hash } from "@ts-rex/bcrypt";
 import { createCommand } from "../command.ts";
-import { InvalidInvitation } from "../errors.ts";
+import { InvalidInvitation, UserAlreadyExists } from "../errors.ts";
 
 export default createCommand({
   type: "user:create",
@@ -23,7 +23,7 @@ export default createCommand({
   }
 
   const existing = await repo.user.get({ login });
-  if (existing) throw new Error("Login already exists");
+  if (existing) throw new UserAlreadyExists();
 
   const userId = await repo.user.create({
     name,

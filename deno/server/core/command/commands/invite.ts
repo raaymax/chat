@@ -9,7 +9,7 @@ export class InviteCommand {
 
   static async execute(data: CommandBody, core: Core) {
     const { repo, bus, config } = core;
-    const token = randomBytes(32).toString("hex");
+    const token = randomBytes(16).toString("hex");
     await core.channel.access({
       id: data.context.channelId,
       userId: data.userId,
@@ -27,7 +27,7 @@ export class InviteCommand {
     bus.direct(data.userId, {
       type: "message",
       clientId: `sys:${Math.random().toString(10)}`,
-      userId: "system",
+      userId: (await core.repo.user.get({ login: "system" }))?.id,
       priv: true,
       channelId: data.context.channelId,
       flat:

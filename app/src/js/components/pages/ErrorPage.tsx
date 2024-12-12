@@ -69,10 +69,11 @@ const Container = styled.div`
 type ErrorPageProps = {
   title?: string;
   debug?: any;
-  buttons?: ('retry' | 'back')[];
+  buttons?: ('retry' | 'back' | 'home')[];
+  description?: string | string[];
 }
 
-export const ErrorPage = ({title, debug, buttons=['back']}: ErrorPageProps) => {
+export const ErrorPage = ({title, debug, buttons=['back'], description}: ErrorPageProps) => {
   return (
     <Container>
       <div className="image">
@@ -84,17 +85,21 @@ export const ErrorPage = ({title, debug, buttons=['back']}: ErrorPageProps) => {
       <div className="title">
         {title ?? 'Oops!'}
       </div>
-
-      <div className="message">
-        That means something went wrong,<br />
-        would you like to take a step back?
-      </div>
+  
+      {description
+        ? (<div className="message">{[description].flat().map((l, idx) => (<p key={idx}>{l}</p>))}</div>)
+        : (<div className="message">
+          That means something went wrong,<br />
+          would you like to take a step back?
+        </div>)}
 
       <div className="action">
         {buttons?.includes('retry') 
           && <Button className="retry-button" onClick={() => document.location.reload()}>Try again</Button>}
         {buttons?.includes('back') 
           && <Button className="back-button" type="primary" onClick={() => window.history.back()}>Take me back</Button>}
+        {buttons?.includes('home') 
+          && <Button className="back-button" type="primary" onClick={() => document.location = '/'}>Take me home</Button>}
       </div>
       <div className="spacer" />
       {debug && <div className="debug-info">

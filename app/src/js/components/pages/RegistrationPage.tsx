@@ -1,6 +1,5 @@
 import styled, { useTheme } from 'styled-components';
 import { Loader } from '../atoms/Loader';
-import { useEffect, useState } from 'react';
 
 const Container = styled.div`
   display: flex;
@@ -145,41 +144,41 @@ const Container = styled.div`
 
 `
 
-type LoginProps = {
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  error?: string | null;
+type RegistrationProps = {
   disabled?: boolean;
+  onSubmit: (e: React.SyntheticEvent) => void;
+  error?: string | null;
 }
 
-export const LoginPage = ({ onSubmit, error = null, disabled = false }: LoginProps) => {
+export const RegistrationPage = ({ onSubmit, error = null, disabled = false }: RegistrationProps) => {
   const theme = useTheme();
-  const [localMsg] = useState(localStorage.getItem('loginMessage'));
-  useEffect(() => {
-    localStorage.removeItem('loginMessage');
-  });
 
   return (
     <Container>
       <div className='image-container'>
         <div className='image'>
-          <img src={theme.loginIlustration} alt='logo' />
+          <img src={theme.registerIlustration} alt='logo' />
         </div>
       </div>
       <div className='form-container'>
         <div className='form'>
-          <h1>Welcome!</h1>
-          <p>{localMsg ?? 'Log-in to your quack account'}</p>
+          <h1>Join Quack</h1>
+          <p>free and open-source chat application</p>
           <form onSubmit={onSubmit}>
             <div className='form-group'>
               <label htmlFor="login">E-mail</label>
-              <input id="login" type='text' name='login' placeholder='user@example.com' disabled={disabled} />
+              <input id="login" type='text' name='email' placeholder='user@example.com' disabled={disabled} />
+            </div>
+            <div className='form-group'>
+              <label htmlFor="name">Visible name</label>
+              <input id="name" type='text' name='name' placeholder='John Doe' disabled={disabled} />
             </div>
             <div className='form-group'>
               <label htmlFor="password">Password</label>
               <input id="password" type='password' name='password' placeholder='password' disabled={disabled} />
             </div>
             <div className='form-group'>
-              <input className="submit" type='submit' value='LOG-IN' disabled={disabled} />
+              <input className="submit" type='submit' value='REGISTER' disabled={disabled} />
               {disabled && <div className='loader'><Loader /></div>}
             </div>
           </form>
@@ -192,4 +191,4 @@ export const LoginPage = ({ onSubmit, error = null, disabled = false }: LoginPro
   );
 };
 
-export default LoginPage;
+export default RegistrationPage;

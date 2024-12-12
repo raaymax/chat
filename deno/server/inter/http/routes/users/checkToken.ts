@@ -11,7 +11,7 @@ export default (core: Core) =>
         type: "object",
         required: ["token"],
         properties: {
-          token: { type: "string" },
+          token: { type: "string", minLength: 32 },
         },
       },
     },
