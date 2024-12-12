@@ -105,7 +105,7 @@ export class Repository {
 
   async getMigrations() {
     const { db } = await this.db.connect();
-    return db.collection("migrations").find().toArray();
+    return db.collection("migrations").find().sort({createdAt: 1}).toArray();
   }
 
   async push(fileName) {
@@ -158,10 +158,41 @@ export class Migrations {
       await repo.push(file);
     }
   }
+
+  async down() {
+    const { db } = await repo.db.connect();
+    const migrations = await repo.getMigrations();
+    const last = migrations[migrations.length - 1];
+    console.log("down", last.fileName);
+    if (!last) return;
+    const migration = await import(
+      path.join(__dirname, "../../migrations", last.fileName)
+    );
+    await repo.db.withTransaction(async () => {
+      await migration.down(db);
+    });
+    await repo.pop();
+  }
+
+  async list() {
+    const { db } = await repo.db.connect();
+    const migrations = await repo.getMigrations();
+    migrations.forEach((m) => console.log(m.fileName));
+  }
 }
 
 const migrations = new Migrations();
-
-console.log(await migrations.up());
+switch(Deno.args[0]){
+  case "up":
+    console.log(await migrations.up());
+    break;
+  case "down":
+    console.log(await migrations.down());
+    break;
+  case "list":
+  default:
+    console.log(await migrations.list());
+    break;
+}
 
 await repo.close();

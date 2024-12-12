@@ -5,10 +5,11 @@ const transform = (json: any, prop: string) => {
 	};
 }
 const transformText = (json: any) => {
-	return json.text;
+	return json;
 }
 
 const transformImage = (json: any) => {
+  if(json._alt) return json;
 	return {
 		img: json.img.src,
 		_alt: json.img.alt
@@ -16,6 +17,7 @@ const transformImage = (json: any) => {
 }
 
 const transformLink = (json: any) => {
+  if(json._href) return json;
 	return {
 		link: json.link.children,
 		_href: json.link.href,
@@ -23,6 +25,7 @@ const transformLink = (json: any) => {
 }
 
 const transformThread = (json: any) => {
+  if(json._channel) return json;
 	return {
 		thread: json.thread.text,
 		_channelId: json.thread.channelId,
@@ -31,6 +34,7 @@ const transformThread = (json: any) => {
 }
 
 const transformButton = (json: any) => {
+  if(json._action) return json;
 	return {
 		button: json.button.text,
 		_action: json.button.action,
@@ -68,12 +72,12 @@ export const update = (json: any): any  => {
 export const up = async (db) => {
 	const docs = await db.collection('messages').find({});
 	for await (const doc of docs) {
-    const newMessage = update(doc.message);
+    const newMessage = [doc.message].flat().map(m => update(m));
     if (JSON.stringify(doc.message) === JSON.stringify(newMessage)) {
       continue;
     }
     console.log(doc._id);
-		await db.collection('messages').updateOne({ _id: doc._id }, { $set: { message: update(doc.message) } });
+		await db.collection('messages').updateOne({ _id: doc._id }, { $set: { message: newMessage } });
 	}
 };
 
