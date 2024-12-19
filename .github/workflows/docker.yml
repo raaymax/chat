@@ -1,7 +1,7 @@
 name: Create and publish a Docker image
 
 on:
-  release:
+  push:
     tags:
       - v*
 
@@ -35,10 +35,10 @@ jobs:
       DATABASE_URL: 'mongodb://chat:chat@localhost:27017/tests?authSource=admin'
     steps:
     - uses: actions/checkout@v3
-    - name: Use Node.js 20.x
+    - name: Use Node.js 22.x
       uses: actions/setup-node@v3
       with:
-        node-version: 20.x
+        node-version: 22.x
         cache: 'npm'
     - uses: denoland/setup-deno@v2
       with:
@@ -89,7 +89,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: ${{ github.event.release.tag_name }}
+          build-args: APP_VERSION=${{ github.event.release.tag_name }}
       
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v2
