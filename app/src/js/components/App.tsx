@@ -32,9 +32,7 @@ export const App = () => {
   return (
     <ThemeSelectorProvider>
       <Login>
-        <Suspense fallback={<div>loading page...</div>}>
-          <Secured />
-        </Suspense>
+        <Secured />
       </Login>
     </ThemeSelectorProvider>
   );
