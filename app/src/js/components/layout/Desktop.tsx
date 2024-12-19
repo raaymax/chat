@@ -2,7 +2,7 @@ import styled, { useTheme } from 'styled-components';
 import { cn , same } from '../../utils';
 import { Resizer } from '../atoms/Resizer';
 import { useParams , useLocation, useNavigate } from 'react-router-dom';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Workspaces } from '../organisms/Workspaces';
 import { Sidebar } from '../organisms/Sidebar';
 import { Conversation } from '../organisms/Conversation';
@@ -203,8 +203,12 @@ type MainConversationProps = {
 export const MainConversation = ({ channelId, children}: MainConversationProps) => {
   const location = useLocation();
   const [stream] = useMessageListArgs();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const onSearch = useCallback((search: string) => {
+    console.log('searching', search);
+    navigate("/"+ channelId + "/search", {state: {search}});
+  } , [channelId, navigate]);
+  const searchTerm = location.state?.search;
 
   return (
     <MessageListArgsProvider streamId='main' value={location.state}>
@@ -213,7 +217,7 @@ export const MainConversation = ({ channelId, children}: MainConversationProps) 
         <div className='header'>
           <Toolbar className="toolbar" size={32}>
             <Channel channelId={channelId} />
-            <SearchBox />
+            <SearchBox onSearch={onSearch} defaultValue={searchTerm} />
             {stream.type === 'archive' && (
               <ButtonWithIcon icon='down' onClick = {() => {
                 navigate(".", { relative: "path", state: {
